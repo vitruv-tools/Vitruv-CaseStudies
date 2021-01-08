@@ -19,6 +19,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import org.eclipse.emf.ecore.util.EcoreUtil
+import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
  * Mapping transformation for primitive data types
@@ -31,17 +32,17 @@ import org.eclipse.emf.ecore.util.EcoreUtil
  * char		 char
  * long      long		
  */
-class DataTypeCorrespondenceHelper { // FIXME TS this seems to be a utility class with state, maybe we can implement this differently
-
-	private new() {
-	}
+@Utility
+class DataTypeCorrespondenceHelper {
 
 	static final Logger logger = Logger.getLogger(DataTypeCorrespondenceHelper.simpleName)
 
-	static var ClaimableMap<PrimitiveTypeEnum, Type> primitveTypeMappingMap;
+	static val ClaimableMap<PrimitiveTypeEnum, Type> primitveTypeMappingMap = new ClaimableHashMap<PrimitiveTypeEnum, Type>()
 
 	private def static initPrimitiveTypeMap() {
-		primitveTypeMappingMap = new ClaimableHashMap<PrimitiveTypeEnum, Type>()
+		if (!primitveTypeMappingMap.empty) {
+			return
+		}
 		val stringClassifier = ClassifiersFactory.eINSTANCE.createClass
 		stringClassifier.setName("String")
 		primitveTypeMappingMap.put(PrimitiveTypeEnum.BOOL, TypesFactory.eINSTANCE.createBoolean)
@@ -54,9 +55,7 @@ class DataTypeCorrespondenceHelper { // FIXME TS this seems to be a utility clas
 	}
 
 	synchronized def static Type claimJaMoPPTypeForPrimitiveDataType(PrimitiveDataType pdt) {
-		if (null === primitveTypeMappingMap) {
-			initPrimitiveTypeMap()
-		}
+		initPrimitiveTypeMap()
 		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
 	}
 
@@ -71,9 +70,8 @@ class DataTypeCorrespondenceHelper { // FIXME TS this seems to be a utility clas
 		} else if (type instanceof ConcreteClassifier) {
 			return createNamespaceClassifierReference(type)
 		}
-		logger.warn(
-			"found type " + type +
-				"is neither a TypeReference nor a ConcreteClassifier - could not create and return TypeReference")
+		logger.warn("found type " + type +
+			"is neither a TypeReference nor a ConcreteClassifier - could not create and return TypeReference")
 		return TypesFactory.eINSTANCE.createClassifierReference
 	}
 

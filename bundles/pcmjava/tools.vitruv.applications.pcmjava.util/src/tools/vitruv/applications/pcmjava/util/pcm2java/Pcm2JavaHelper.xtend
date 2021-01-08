@@ -15,25 +15,28 @@ import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 @Utility
 class Pcm2JavaHelper {
 
-    def static TypeReference createTypeReference(DataType originalDataType, Optional<Class> correspondingJavaClassIfExisting) {
-        if (null === originalDataType) {
-            return TypesFactory.eINSTANCE.createVoid
-        }
-        var TypeReference innerDataTypeReference = null
-        if (originalDataType instanceof PrimitiveDataType) {
-            val type = EcoreUtil.copy(DataTypeCorrespondenceHelper.claimJaMoPPTypeForPrimitiveDataType(originalDataType))
-            if (type instanceof TypeReference) {
-                innerDataTypeReference = type
-            } else if (type instanceof ConcreteClassifier) {
-                innerDataTypeReference = createNamespaceClassifierReference(type)
-            } else {
-                // This cannot be since the claimForPrimitiveType function does only return TypeReference or ConcreteClassifier
-            }
-        } else if (correspondingJavaClassIfExisting.present) {
-            innerDataTypeReference = createNamespaceClassifierReference(correspondingJavaClassIfExisting.get)
-        } else {
-            throw new IllegalArgumentException("Either the dataType must be primitive or a correspondingJavaClass must be specified")
-        }
-        return innerDataTypeReference
-    }
+	def static TypeReference createTypeReference(DataType originalDataType,
+		Optional<Class> correspondingJavaClassIfExisting) {
+		if (null === originalDataType) {
+			return TypesFactory.eINSTANCE.createVoid
+		}
+		var TypeReference innerDataTypeReference = null
+		if (originalDataType instanceof PrimitiveDataType) {
+			val type = EcoreUtil.copy(
+				DataTypeCorrespondenceHelper.claimJaMoPPTypeForPrimitiveDataType(originalDataType))
+			if (type instanceof TypeReference) {
+				innerDataTypeReference = type
+			} else if (type instanceof ConcreteClassifier) {
+				innerDataTypeReference = createNamespaceClassifierReference(type)
+			} else {
+				// This cannot be since the claimForPrimitiveType function does only return TypeReference or ConcreteClassifier
+			}
+		} else if (correspondingJavaClassIfExisting.present) {
+			innerDataTypeReference = createNamespaceClassifierReference(correspondingJavaClassIfExisting.get)
+		} else {
+			throw new IllegalArgumentException(
+				"Either the dataType must be primitive or a correspondingJavaClass must be specified")
+		}
+		return innerDataTypeReference
+	}
 }

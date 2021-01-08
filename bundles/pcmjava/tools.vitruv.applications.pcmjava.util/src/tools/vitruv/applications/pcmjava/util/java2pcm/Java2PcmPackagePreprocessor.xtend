@@ -20,58 +20,60 @@ class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification
 	new() {
 		super(new JavaDomainProvider().domain, new PcmDomainProvider().domain)
 	}
-	
+
 	override doesHandleChange(TransactionalChange change, CorrespondenceModel correspondenceModel) {
 		if (change instanceof ConcreteChange && change.getEChanges.size == 1) {
-    		val eChange = change.getEChanges.get(0);
-        	return eChange instanceof InsertRootEObject<?> || eChange instanceof JavaReplaceSingleValuedEAttribute<?,?>;
-        }
-        return false;
+			val eChange = change.getEChanges.get(0)
+			return eChange instanceof InsertRootEObject<?> ||
+				eChange instanceof JavaReplaceSingleValuedEAttribute<?, ?>
+		}
+		return false
 	}
-	
-    private def void prepareRenamePackageInfos(JavaReplaceSingleValuedEAttribute<?,?> updateSingleValuedEAttribute,
-            VURI vuri) {
-        if (updateSingleValuedEAttribute.getOldAffectedEObject() instanceof Package
-                && updateSingleValuedEAttribute.getAffectedEObject() instanceof Package) {
-            val Package oldPackage = updateSingleValuedEAttribute.getOldAffectedEObject() as Package;
-            val Package newPackage = updateSingleValuedEAttribute.getAffectedEObject() as Package;
-            this.attachPackageToResource(oldPackage, vuri);
-            var String newVURIKey = vuri.toString();
-            val String oldPackagePath = oldPackage.getName().replace(".", "/");
-            val String newPackagePath = newPackage.getName().replace(".", "/");
-            newVURIKey = newVURIKey.replace(oldPackagePath, newPackagePath);
-            val VURI newVURI = VURI.getInstance(newVURIKey);
-            this.attachPackageToResource(newPackage, newVURI);
-        }
-    }
 
-    private def void attachPackageToResource(EObject eObject, VURI vuri) {
-        if (eObject instanceof Package) {
-            val Package newPackage = eObject
-            // attach the package to a resource in order to enable the calculation of
-            // a Tuid in the transformations
-            val ResourceSet resourceSet = new ResourceSetImpl();
-            val Resource resource = resourceSet.createResource(vuri.getEMFUri());
-            resource.getContents().add(newPackage);
-        }
-    }
-	
-	/**
-     * Special treatment for packages: we have to use the package-info file as input for the
-     * transformation and make sure that the packages have resources attached
-     *
-     * @param change
-     *            the change that may contain the newly created package
-     */	
-	override propagateChange(TransactionalChange change, CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
-		if (doesHandleChange(change, correspondenceModel)) {
-    		val eChange = change.getEChanges.get(0);
-        	if (eChange instanceof InsertRootEObject<?>) {
-	            attachPackageToResource(eChange.newValue, change.getURI());
-        	} else if (eChange instanceof JavaReplaceSingleValuedEAttribute<?,?>) {
-	            prepareRenamePackageInfos(eChange, change.getURI());
-        	} // TODO: package deletion
-        }
+	private def void prepareRenamePackageInfos(JavaReplaceSingleValuedEAttribute<?, ?> updateSingleValuedEAttribute,
+		VURI vuri) {
+		if (updateSingleValuedEAttribute.getOldAffectedEObject() instanceof Package &&
+			updateSingleValuedEAttribute.getAffectedEObject() instanceof Package) {
+			val Package oldPackage = updateSingleValuedEAttribute.getOldAffectedEObject() as Package
+			val Package newPackage = updateSingleValuedEAttribute.getAffectedEObject() as Package
+			this.attachPackageToResource(oldPackage, vuri)
+			var String newVURIKey = vuri.toString()
+			val String oldPackagePath = oldPackage.getName().replace(".", "/")
+			val String newPackagePath = newPackage.getName().replace(".", "/")
+			newVURIKey = newVURIKey.replace(oldPackagePath, newPackagePath)
+			val VURI newVURI = VURI.getInstance(newVURIKey)
+			this.attachPackageToResource(newPackage, newVURI)
+		}
 	}
-				
+
+	private def void attachPackageToResource(EObject eObject, VURI vuri) {
+		if (eObject instanceof Package) {
+			val Package newPackage = eObject
+			// attach the package to a resource in order to enable the calculation of
+			// a Tuid in the transformations
+			val ResourceSet resourceSet = new ResourceSetImpl()
+			val Resource resource = resourceSet.createResource(vuri.getEMFUri())
+			resource.getContents().add(newPackage)
+		}
+	}
+
+	/**
+	 * Special treatment for packages: we have to use the package-info file as input for the
+	 * transformation and make sure that the packages have resources attached
+	 * 
+	 * @param change
+	 *            the change that may contain the newly created package
+	 */
+	override propagateChange(TransactionalChange change, CorrespondenceModel correspondenceModel,
+		ResourceAccess resourceAccess) {
+		if (doesHandleChange(change, correspondenceModel)) {
+			val eChange = change.getEChanges.get(0)
+			if (eChange instanceof InsertRootEObject<?>) {
+				attachPackageToResource(eChange.newValue, change.getURI())
+			} else if (eChange instanceof JavaReplaceSingleValuedEAttribute<?, ?>) {
+				prepareRenamePackageInfos(eChange, change.getURI())
+			} // TODO: package deletion
+		}
+	}
+
 }
