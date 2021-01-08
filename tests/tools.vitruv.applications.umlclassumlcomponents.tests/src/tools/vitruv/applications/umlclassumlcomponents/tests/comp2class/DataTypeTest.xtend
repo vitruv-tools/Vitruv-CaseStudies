@@ -23,7 +23,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
 	@Test
 	def void testCreateClassForDataType() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
-		saveAndSynchronizeChanges(compDataType)
+		propagate
 		
 		assertClassAndPackage(compDataType, DATATYPE_NAME, CLASS_DATATYPES_PACKAGE_NAME, false)			
 	}
@@ -31,14 +31,14 @@ class DataTypeTest extends AbstractComp2ClassTest{
 	@Test
 	def void testAddPropertyToDataType(){
 		val compDataType = createDataType(DATATYPE_NAME, 1)
-		saveAndSynchronizeChanges(compDataType)
+		propagate
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compDataType]).flatten		
 		val umlClass = (correspondingElements.get(0) as Class)
 		val compProperty = UMLFactory.eINSTANCE.createProperty()
 		compProperty.name = PROPERTY_NAME
 		compDataType.ownedAttributes += compProperty
-		saveAndSynchronizeChanges(compDataType)
+		propagate
 		
 		assertEquals(1, umlClass.ownedAttributes.size)		
 		val classProperty = umlClass.ownedAttributes.get(0)
@@ -49,18 +49,18 @@ class DataTypeTest extends AbstractComp2ClassTest{
 	@Test
     def void testRenameDataTypeProperty() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
-		saveAndSynchronizeChanges(compDataType)
+		propagate
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compDataType]).flatten		
 		val umlClass = (correspondingElements.get(0) as Class)
 		val compProperty = UMLFactory.eINSTANCE.createProperty()
 		compProperty.name = "Old"
 		compDataType.ownedAttributes += compProperty
-		saveAndSynchronizeChanges(compDataType)
+		propagate
 		
 		//Change name:
 		compProperty.name = "New"
-		saveAndSynchronizeChanges(compProperty)
+		propagate
 		
 		//Check if rename happened in Class Property:
 		val classProperty = umlClass.ownedAttributes.get(0)
@@ -70,14 +70,14 @@ class DataTypeTest extends AbstractComp2ClassTest{
 	@Test
 	def void testAddOperationToDataType(){
 		val compDataType = createDataType(DATATYPE_NAME, 1)
-		saveAndSynchronizeChanges(compDataType)
+		propagate
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compDataType]).flatten		
 		val umlClass = (correspondingElements.get(0) as Class)
 		val compOperation = UMLFactory.eINSTANCE.createOperation()
 		compOperation.name = OPERATION_NAME
 		compDataType.ownedOperations += compOperation
-		saveAndSynchronizeChanges(compDataType)		
+		propagate		
 		
 		assertEquals(1, umlClass.ownedOperations.size)		
 		val classOperation = umlClass.ownedOperations.get(0)
@@ -88,18 +88,18 @@ class DataTypeTest extends AbstractComp2ClassTest{
 	@Test
     def void testRenameDataTypeOperation() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
-		saveAndSynchronizeChanges(compDataType)
+		propagate
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compDataType]).flatten		
 		val umlClass = (correspondingElements.get(0) as Class)
 		val compOperation = UMLFactory.eINSTANCE.createOperation()
 		compOperation.name = "Old"
 		compDataType.ownedOperations += compOperation
-		saveAndSynchronizeChanges(compDataType)
+		propagate
 		
 		//Change name:
 		compOperation.name = "New"
-		saveAndSynchronizeChanges(compOperation)
+		propagate
 		
 		//Check if rename happened in Class Operation:
 		val classOperation = umlClass.ownedOperations.get(0)

@@ -40,7 +40,7 @@ class DataTypeTest extends AbstractClass2CompTest {
 		val classProperty = UMLFactory.eINSTANCE.createProperty()
 		classProperty.name = PROPERTY_NAME
 		classDataType.ownedAttributes += classProperty
-		saveAndSynchronizeChanges(classDataType)
+		propagate
 		
 		assertEquals(1, compDataType.ownedAttributes.size)		
 		val compProperty = compDataType.ownedAttributes.get(0)
@@ -57,11 +57,11 @@ class DataTypeTest extends AbstractClass2CompTest {
 		val classProperty = UMLFactory.eINSTANCE.createProperty()
 		classProperty.name = "Old"
 		classDataType.ownedAttributes += classProperty
-		saveAndSynchronizeChanges(classDataType)
+		propagate
 		
 		//Change name:
 		classProperty.name = "New"
-		saveAndSynchronizeChanges(classDataType)
+		propagate
 		
 		//Check if rename happened in Component Property:
 		val compProperty = compDataType.ownedAttributes.get(0)
@@ -78,7 +78,7 @@ class DataTypeTest extends AbstractClass2CompTest {
 		val classOperation = UMLFactory.eINSTANCE.createOperation()
 		classOperation.name = OPERATION_NAME
 		classDataType.ownedOperations += classOperation
-		saveAndSynchronizeChanges(classDataType)		
+		propagate		
 		
 		assertEquals(1, compDataType.ownedOperations.size)		
 		val compOperation = compDataType.ownedOperations.get(0)
@@ -95,11 +95,11 @@ class DataTypeTest extends AbstractClass2CompTest {
 		val classOperation = UMLFactory.eINSTANCE.createOperation()
 		classOperation.name = "Old"
 		classDataType.ownedOperations += classOperation
-		saveAndSynchronizeChanges(classDataType)
+		propagate
 		
 		//Change name:
 		classOperation.name = "New"
-		saveAndSynchronizeChanges(classOperation)
+		propagate
 		
 		//Check if rename happened in Component Operation:
 		val compOperation = compDataType.ownedOperations.get(0)

@@ -19,7 +19,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 	@Test
 	def void testCreateClassForComponent() {
 		val umlComp = createComponent(COMP_NAME)
-		saveAndSynchronizeChanges(umlComp)
+		propagate
 		
 		assertClassAndPackage(umlComp, COMP_NAME)
 	}
@@ -27,11 +27,11 @@ class ComponentTest extends AbstractComp2ClassTest{
 	@Test
     def void testRenameComponent() {
     	val umlComp = createComponent("Old")
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		//Change name:
 		umlComp.name = "New"
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		//Check if rename happened in Class & Package:
 		assertClassAndPackage(umlComp, "New")
@@ -40,7 +40,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 	@Test
     def void testDeleteComponentWithPackage() {
     	val umlComp = createComponent(COMP_NAME)	 
-		saveAndSynchronizeChanges(umlComp)
+		propagate
 		
 		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
 		val classPackage = (umlClass as Class).package
@@ -50,7 +50,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 		assertTrue(rootElement.packagedElements.contains(umlComp))
 		umlComp.destroy()
 		assertFalse(rootElement.packagedElements.contains(umlComp))
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		//Check if Class or Package exists:		
 		assertFalse(classPackage.packagedElements.contains(umlClass))
@@ -61,7 +61,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 	@Test
     def void testDeleteComponentWithoutPackage() {
     	val umlComp = createComponent(COMP_NAME)    	
-		saveAndSynchronizeChanges(umlComp)
+		propagate
 		
 		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
 		val classPackage = (umlClass as Class).package
@@ -93,7 +93,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 	@Test
     def void testDeleteComponentWithPackageAndContents() {
     	val umlComp = createComponent(COMP_NAME)    	
-		saveAndSynchronizeChanges(umlComp)
+		propagate
 		
 		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
 		val classPackage = (umlClass as Class).package
@@ -126,7 +126,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 	def void testCreate2ClassFor2Component() {
 		val umlComp1 = createComponent(COMP_NAME)
 		val umlComp2 = createComponent(COMP_NAME2)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		assertClassAndPackage(umlComp1, COMP_NAME)
 		assertClassAndPackage(umlComp2, COMP_NAME2)
 	}	
