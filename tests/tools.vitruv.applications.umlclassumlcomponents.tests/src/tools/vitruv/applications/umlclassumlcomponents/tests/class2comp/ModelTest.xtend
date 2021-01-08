@@ -12,12 +12,11 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import java.nio.file.Path
 
 class ModelTest extends AbstractClass2CompTest {
-	
+
 	/*******
-	*Model:*
-	********/
-	//Model creation currently unused due to usage of one singular Model
-	
+	 * Model:*
+	 ********/
+	// Model creation currently unused due to usage of one singular Model
 	@Test
 	def void testModelCreation() {
 		val modelUri = getUri(Path.of(FOLDER_NAME).resolve(MODEL_NAME + "." + MODEL_FILE_EXTENSION))
@@ -27,5 +26,5 @@ class ModelTest extends AbstractClass2CompTest {
 		val umlModel = correspondingElements.get(0)
 		assertTypeAndName(umlModel, Model, MODEL_NAME)
 	}
-	
+
 }

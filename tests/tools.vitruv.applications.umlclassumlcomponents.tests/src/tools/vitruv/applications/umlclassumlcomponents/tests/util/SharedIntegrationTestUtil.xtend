@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.resource.Resource
+import edu.kit.ipd.sdq.activextendannotations.Utility
 
+@Utility
 class SharedIntegrationTestUtil {
 	public static val OUTPUT_NAME = "model/model.uml"
 

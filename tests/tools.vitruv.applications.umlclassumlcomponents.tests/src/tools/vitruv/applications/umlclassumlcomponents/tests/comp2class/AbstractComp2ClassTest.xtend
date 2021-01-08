@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 abstract class AbstractComp2ClassTest extends LegacyVitruvApplicationTest {
-	
+
 	protected def Model getRootElement() {
 		return Model.from(MODEL_NAME.projectModelPath)
 	}
@@ -29,13 +29,13 @@ abstract class AbstractComp2ClassTest extends LegacyVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
 		return #[new UmlComp2UmlClassChangePropagation()]
 	}
-	
-	//SaveAndSynchronize & commit all pending userInteractions
+
+	// SaveAndSynchronize & commit all pending userInteractions
 	protected def saveAndSynchronizeWithInteractions(EObject object) {
 		sendCollectedUserInteractionSelections(this.userInteraction)
 		propagate
 	}
-	
+
 	@BeforeEach
 	def protected setup() {
 		initializeTestModel()
@@ -50,28 +50,24 @@ abstract class AbstractComp2ClassTest extends LegacyVitruvApplicationTest {
 		]
 		propagate
 	}
-	
+
 	private def Path getProjectModelPath(String modelName) {
 		Path.of(FOLDER_NAME).resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}
-	
-				
+
 	/*****************
-	*Creation Helper:*
-	******************/		
-		
+	 * Creation Helper:*
+	 ******************/
 	protected def Component createComponent(String name) {
 		val umlComponent = UMLFactory.eINSTANCE.createComponent()
 		umlComponent.name = name
 		rootElement.packagedElements += umlComponent
 		return umlComponent
 	}
-	
-		
-	/***************
-	*Assert Helper:*
-	****************/	
 
+	/***************
+	 * Assert Helper:*
+	 ****************/
 	protected def Class assertClass(PackageableElement compElement, String name) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compElement]).flatten.filter(Class)
 		assertEquals(1, correspondingElements.size)
@@ -79,33 +75,33 @@ abstract class AbstractComp2ClassTest extends LegacyVitruvApplicationTest {
 		assertTypeAndName(umlClass, Class, name)
 		return umlClass
 	}
-	
+
 	protected def Class assertClassAndPackage(Component umlComp, String name) {
 		return assertClassAndPackage(umlComp, name, name + PACKAGE_SUFFIX, true)
 	}
-	
-	protected def Class assertClassAndPackage(PackageableElement compElement, String name, String packageName, Boolean packageCorrCheck) {
+
+	protected def Class assertClassAndPackage(PackageableElement compElement, String name, String packageName,
+		Boolean packageCorrCheck) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compElement]).flatten
-		
-		//Check Class
+
+		// Check Class
 		val umlClass = correspondingElements.filter(Class).get(0)
-		
-		assertTypeAndName(umlClass, Class, name)		
-		//Check Package
+
+		assertTypeAndName(umlClass, Class, name)
+		// Check Package
 		val classPackage = umlClass.package
 		assertEquals(packageName, classPackage.name)
 		val packageOwnedTypes = classPackage.ownedTypes
 		assertTrue(packageOwnedTypes.size >= 1)
 		val classFromPackage = packageOwnedTypes.get(0)
 		assertTypeAndName(classFromPackage, Class, name)
-		
+
 		if (packageCorrCheck) {
-			//Check Package correspondence 
-			val classPackageFromCorrespondence = correspondingElements.filter(Package).get(0)		
-			assertTypeAndName(classPackageFromCorrespondence, Package, name + PACKAGE_SUFFIX)		
+			// Check Package correspondence 
+			val classPackageFromCorrespondence = correspondingElements.filter(Package).get(0)
+			assertTypeAndName(classPackageFromCorrespondence, Package, name + PACKAGE_SUFFIX)
 		}
 		return umlClass
-	}	
-	
-}
+	}
 
+}
