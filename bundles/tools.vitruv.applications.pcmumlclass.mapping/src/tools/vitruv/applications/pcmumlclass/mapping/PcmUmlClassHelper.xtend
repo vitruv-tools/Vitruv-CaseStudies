@@ -20,7 +20,6 @@ import tools.vitruv.framework.userinteraction.UserInteractor
 
 @Utility
 class PcmUmlClassHelper { // TODO this is a direct copy of the non-mapping PcmUmlClassHelper
-
 	def static PrimitiveType mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
 		Iterable<PrimitiveType> umlPredifinedPrimitiveTypes) {
 		return switch (pcmPredefinedPrimitiveType.type) {

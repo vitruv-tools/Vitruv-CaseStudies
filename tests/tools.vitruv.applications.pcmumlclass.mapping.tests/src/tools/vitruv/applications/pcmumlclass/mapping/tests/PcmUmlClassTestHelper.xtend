@@ -87,7 +87,7 @@ class PcmUmlClassTestHelper {
 	 * @return the object instance in the ResourceSet of this test
 	 */
 	def <T extends EObject> getModifiableInstance(T original) {
-		val originalURI = EcoreUtil.getURI(original) 
+		val originalURI = EcoreUtil.getURI(original)
 		return resourceRetriever.apply(originalURI.trimFragment).getEObject(originalURI.fragment) as T
 	}
 

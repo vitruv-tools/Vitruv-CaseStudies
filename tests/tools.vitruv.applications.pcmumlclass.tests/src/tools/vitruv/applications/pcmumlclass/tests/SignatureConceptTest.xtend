@@ -30,13 +30,15 @@ import java.nio.file.Path
 class SignatureConceptTest extends PcmUmlClassApplicationTest {
 
 	static val TEST_SIGNATURE_NAME = "testSignature"
-	
+
 	def static void checkSignatureConcept(
-			CorrespondenceModel cm, 
-			OperationSignature pcmSignature, 
-			Operation umlOperation
+		CorrespondenceModel cm,
+		OperationSignature pcmSignature,
+		Operation umlOperation
 	) {
-		val returnParam = umlOperation.ownedParameters.findFirst[param | param.direction === ParameterDirectionKind.RETURN_LITERAL]
+		val returnParam = umlOperation.ownedParameters.findFirst [ param |
+			param.direction === ParameterDirectionKind.RETURN_LITERAL
+		]
 		assertNotNull(pcmSignature)
 		assertNotNull(umlOperation)
 		assertNotNull(returnParam)
@@ -44,18 +46,21 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(corresponds(cm, pcmSignature, returnParam, TagLiterals.SIGNATURE__RETURN_PARAMETER))
 		assertTrue(pcmSignature.entityName == umlOperation.name)
 		// the name needs to be set, so that its TUID is distinct and the object is not confused with new instances
-		assertTrue(returnParam.name == DefaultLiterals.RETURN_PARAM_NAME) 
+		assertTrue(returnParam.name == DefaultLiterals.RETURN_PARAM_NAME)
 		// return types of both model elements should correspond to each other if they are set
-		assertTrue(isCorrect_DataType_Parameter_Correspondence(cm, pcmSignature.returnType__OperationSignature, returnParam))
+		assertTrue(
+			isCorrect_DataType_Parameter_Correspondence(cm, pcmSignature.returnType__OperationSignature, returnParam))
 		// should both be contained in corresponding interfaces
-		assertTrue(corresponds(cm, pcmSignature.interface__OperationSignature, umlOperation.interface, TagLiterals.INTERFACE_TO_INTERFACE))
+		assertTrue(
+			corresponds(cm, pcmSignature.interface__OperationSignature, umlOperation.interface,
+				TagLiterals.INTERFACE_TO_INTERFACE))
 	}
-	
+
 	def protected checkSignatureConcept(OperationSignature pcmSignature) {
 		val umlOperation = helper.getModifiableCorr(pcmSignature, Operation, TagLiterals.SIGNATURE__OPERATION)
 		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
 	}
-	
+
 	def protected checkSignatureConcept(Operation umlOperation) {
 		val pcmSignature = helper.getModifiableCorr(umlOperation, OperationSignature, TagLiterals.SIGNATURE__OPERATION)
 		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
@@ -67,95 +72,100 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		helper.createCompositeDataType(pcmRepository)
 		var pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
 		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
-		
+
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		
-		return pcmRepository.clearResourcesAndReloadRoot 
+
+		return pcmRepository.clearResourcesAndReloadRoot
 	}
-	
+
 	private def _testCreateSignatureConcept_UML() {
 		var pcmRepository = createRepositoryWithInterface()
 		var umlInterface = helper.getUmlInterface(pcmRepository)
 		startRecordingChanges(umlInterface)
-		
+
 		var umlOperation = umlInterface.createOwnedOperation(TEST_SIGNATURE_NAME, null, null)
-		
+
 		propagate
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlInterface = helper.getUmlInterface(pcmRepository)
 		umlInterface.startRecordingChanges
-		
+
 		umlOperation = umlInterface.ownedOperations.head
 		assertNotNull(umlOperation)
 		assertTrue(umlOperation.name == TEST_SIGNATURE_NAME)
 		checkSignatureConcept(umlOperation)
 		return pcmRepository
 	}
-	
+
 	private def _testReturnTypePropagation_UML(Repository inPcmRepository, Type umlType, int lower, int upper) {
 		var pcmRepository = inPcmRepository
 		var umlInterface = helper.getUmlInterface(pcmRepository)
 		var umlOperation = umlInterface.ownedOperations.head
-		var umlReturnParameter = umlOperation.ownedParameters.findFirst[param | param.direction === ParameterDirectionKind.RETURN_LITERAL]
-		
+		var umlReturnParameter = umlOperation.ownedParameters.findFirst [ param |
+			param.direction === ParameterDirectionKind.RETURN_LITERAL
+		]
+
 		umlReturnParameter.type = umlType
 		umlReturnParameter.lower = lower
 		umlReturnParameter.upper = upper
-		
+
 		propagate
 		umlInterface.clearResourcesAndReloadRoot
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		
+
 		umlInterface = helper.getUmlInterface(pcmRepository)
 		umlOperation = umlInterface.ownedOperations.head
-		
+
 		checkSignatureConcept(umlOperation)
 		var reloadedUmlType = helper.getModifiableInstance(umlType)
 		assertNotNull(reloadedUmlType, "The DataType should not be null after reload")
 		assertTrue(EcoreUtil.equals(umlOperation.type, reloadedUmlType))
 		assertEquals(lower, umlOperation.lower)
 		assertEquals(upper, umlOperation.upper)
-		assertEquals(1, umlOperation.ownedParameters.size,
+		assertEquals(
+			1,
+			umlOperation.ownedParameters.size,
 			"The Operation should have only a return parameter, since no other parameters were supposed to be added by this test."
 		)
 	}
-	
-	@Test 
+
+	@Test
 	def void testCreateSignatureConcept_UML_primitiveReturnType() {
 		var pcmRepository = _testCreateSignatureConcept_UML
 		assertNotNull(helper.UML_STRING, "Initialization of PrimitiveTypes seems to have failed")
 		_testReturnTypePropagation_UML(pcmRepository, helper.UML_STRING, 1, 1)
 	}
-	
+
 	@Test
 	def void testCreateSignatureConcept_UML_compositeReturnType() {
 		var pcmRepository = _testCreateSignatureConcept_UML
 		_testReturnTypePropagation_UML(pcmRepository, helper.getUmlCompositeDataTypeClass(pcmRepository), 1, 1)
 	}
-	
+
 	@Test
 	def void testCreateSignatureConcept_UML_collectionReturnType() {
 		var pcmRepository = _testCreateSignatureConcept_UML
-		_testReturnTypePropagation_UML(pcmRepository, helper.getUmlCompositeDataTypeClass_2(pcmRepository), 0, LiteralUnlimitedNatural.UNLIMITED)
+		_testReturnTypePropagation_UML(pcmRepository, helper.getUmlCompositeDataTypeClass_2(pcmRepository), 0,
+			LiteralUnlimitedNatural.UNLIMITED)
 	}
-	
+
 	private def _testCreateSignatureConcept_PCM_withReturnType(Repository inPcmRepository, DataType pcmType) {
 		var pcmRepository = inPcmRepository
 		var pcmInterface = helper.getPcmOperationInterface(pcmRepository)
-		
+
 		var pcmSignature = RepositoryFactory.eINSTANCE.createOperationSignature
 		pcmSignature.entityName = TEST_SIGNATURE_NAME
 		pcmSignature.returnType__OperationSignature = pcmType
 		pcmInterface.signatures__OperationInterface += pcmSignature
 		propagate
-		
+
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
-		
+
 		pcmSignature = pcmInterface.signatures__OperationInterface.head
 		assertNotNull(pcmSignature)
 		checkSignatureConcept(pcmSignature)
@@ -163,25 +173,27 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		val reloadedPcmType = helper.getModifiableInstance(pcmType)
 		assertNotNull(reloadedPcmType, "The DataType should not be null after reload")
 		assertTrue(EcoreUtil.equals(pcmSignature.returnType__OperationSignature, reloadedPcmType))
-		
-		assertEquals(0, pcmSignature.parameters__OperationSignature.size,
+
+		assertEquals(
+			0,
+			pcmSignature.parameters__OperationSignature.size,
 			"The Signature should have no parameter, since none were supposed to be added by this test."
 		)
 	}
-	
+
 	@Test
 	def void testCreateSignatureConcept_PCM_primitiveReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
 		assertNotNull(helper.PCM_STRING, "Initialization of PrimitiveTypes seems to have failed")
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.PCM_STRING)
 	}
-	
+
 	@Test
 	def void testCreateSignatureConcept_PCM_compositeReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.getPcmCompositeDataType(pcmRepository))
 	}
-	
+
 	@Test
 	def void testCreateSignatureConcept_PCM_collectionReturnType() {
 		var pcmRepository = createRepositoryWithInterface()

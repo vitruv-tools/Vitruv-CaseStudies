@@ -15,44 +15,46 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 
-class MediaStoreRepositoryTest extends PcmUmlClassTest{
+class MediaStoreRepositoryTest extends PcmUmlClassTest {
 
-	static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_noSEFF.repository" 
+	static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_noSEFF.repository"
 	static val UML_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_repository_noSEFF_unedited.uml"
-	 
+
 	static val UML_GENERATED_MEDIA_STORE_MODEL_PATH = "model-gen/ms_repository.uml"
 	static val PCM_GENERATED_MEDIA_STORE_MODEL_PATH = "model-gen/ms_repository.repository"
 	static val UML_GENERATED_MEDIA_STORE_MODEL_PATH_2 = "model-gen/ms_repository_backward.uml"
 	static val PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2 = "model-gen/ms_repository_backward.repository"
 
 	@Test
-	@Disabled  //skip until needed because of performance
+	@Disabled // skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML() {
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
 		val pcmMsRepositoryResource = uri.testResource
 		assertNotNull(pcmMsRepositoryResource)
 		val pcmMsRepository = pcmMsRepositoryResource.contents.head as Repository
 		assertNotNull(pcmMsRepository)
-		
-		simulateRepositoryInsertion_PCM(pcmMsRepository, PCM_GENERATED_MEDIA_STORE_MODEL_PATH, UML_GENERATED_MEDIA_STORE_MODEL_PATH)
-		
+
+		simulateRepositoryInsertion_PCM(pcmMsRepository, PCM_GENERATED_MEDIA_STORE_MODEL_PATH,
+			UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 	}
-	
+
 	@Test
-	@Disabled //skip until needed because of performance
+	@Disabled // skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_UML2PCM() {
 		val uri = URI.createURI(UML_MEDIA_STORE_REPOSITORY_PATH)
 		val umlMsRepositoryResource = uri.testResource
 		assertNotNull(umlMsRepositoryResource)
 		val umlMsModel = umlMsRepositoryResource.contents.head as Model
 		assertNotNull(umlMsModel)
-		simulateRepositoryInsertion_UML(umlMsModel, UML_GENERATED_MEDIA_STORE_MODEL_PATH, PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
+		simulateRepositoryInsertion_UML(umlMsModel, UML_GENERATED_MEDIA_STORE_MODEL_PATH,
+			PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 	}
-	
+
 	@Test
-	@Disabled //skip until needed because of performance
+	@Disabled // skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML2PCM() {
 		// forwards
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
@@ -60,34 +62,39 @@ class MediaStoreRepositoryTest extends PcmUmlClassTest{
 		assertNotNull(pcmMsRepositoryResource)
 		val pcmMsRepository = pcmMsRepositoryResource.contents.head as Repository
 		assertNotNull(pcmMsRepository)
-		
-		simulateRepositoryInsertion_PCM(pcmMsRepository, PCM_GENERATED_MEDIA_STORE_MODEL_PATH, UML_GENERATED_MEDIA_STORE_MODEL_PATH)
-		
+
+		simulateRepositoryInsertion_PCM(pcmMsRepository, PCM_GENERATED_MEDIA_STORE_MODEL_PATH,
+			UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
-		
+
 		// backwards 
 		val umlMsRepositoryResource = getUri(Path.of(UML_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource
 		assertNotNull(umlMsRepositoryResource)
 		val umlMsModel = umlMsRepositoryResource.contents.head as Model
 		assertNotNull(umlMsModel)
-		simulateRepositoryInsertion_UML(umlMsModel, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		
+		simulateRepositoryInsertion_UML(umlMsModel, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2,
+			PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		
+
 		val comparison = compare(
-			URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH), 
+			URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH),
 			getUri(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2))
 		)
-		assertEquals(0, comparison.differences.size, "Encountered differences after round-trip batch creation. That was kind of expected."
-			+ "\nLast manual check looked good with 245 differences"
+		assertEquals(
+			0,
+			comparison.differences.size,
+			"Encountered differences after round-trip batch creation. That was kind of expected." +
+				"\nLast manual check looked good with 245 differences"
 		)
-		// expected (and found deltas):
-		//	- each PCM element has a different id since it is unique and those are newly generated elements
-		//	- FailureType is lost, because it is not propagated (limited scope of this master's thesis)
+	// expected (and found deltas):
+	// - each PCM element has a different id since it is unique and those are newly generated elements
+	// - FailureType is lost, because it is not propagated (limited scope of this master's thesis)
 	}
-	
+
 	@Test
 	@Disabled
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_PCM2UML2PCM() {
@@ -100,22 +107,25 @@ class MediaStoreRepositoryTest extends PcmUmlClassTest{
 		pcmCompositeType.innerDeclaration_CompositeDataType += pcmInnerDeclaration
 		pcmInnerDeclaration.entityName = "testAttribute"
 		pcmInnerDeclaration.datatype_InnerDeclaration = helper.PCM_INT
-		
-		pcmRepo_forward = simulateRepositoryInsertion_PCM(pcmRepo_forward, PCM_GENERATED_MEDIA_STORE_MODEL_PATH, UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+
+		pcmRepo_forward = simulateRepositoryInsertion_PCM(pcmRepo_forward, PCM_GENERATED_MEDIA_STORE_MODEL_PATH,
+			UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
-		
+
 		val umlRepo_backward = getUri(Path.of(UML_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource.contents.head as Model
-		simulateRepositoryInsertion_UML(umlRepo_backward, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		
+		simulateRepositoryInsertion_UML(umlRepo_backward, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2,
+			PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		
-		//expect 3 differences because of id changes
+
+		// expect 3 differences because of id changes
 		val comparison = compare(PCM_GENERATED_MEDIA_STORE_MODEL_PATH, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		assertEquals(3, comparison.differences.size, "Encountered differences after round-trip batch creation (that was kind of expected).")
+		assertEquals(3, comparison.differences.size,
+			"Encountered differences after round-trip batch creation (that was kind of expected).")
 	}
-	
+
 	@Test
 	@Disabled
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_UML2PCM2UML() {
@@ -126,19 +136,23 @@ class MediaStoreRepositoryTest extends PcmUmlClassTest{
 		umlRepoPkg.createNestedPackage(DefaultLiterals.CONTRACTS_PACKAGE_NAME)
 		val umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass("TestCompositeType", false)
 		umlCompositeTypeClass.createOwnedAttribute("testAttribute", helper.UML_INT)
-		
-		umlRepo_forward = simulateRepositoryInsertion_UML(umlRepo_forward, UML_GENERATED_MEDIA_STORE_MODEL_PATH, PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
+
+		umlRepo_forward = simulateRepositoryInsertion_UML(umlRepo_forward, UML_GENERATED_MEDIA_STORE_MODEL_PATH,
+			PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
-		
-		val pcmRepo_forward = getUri(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource.contents.head as Repository
-		simulateRepositoryInsertion_PCM(pcmRepo_forward, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+
+		val pcmRepo_forward = getUri(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource.contents.
+			head as Repository
+		simulateRepositoryInsertion_PCM(pcmRepo_forward, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2,
+			UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		
-		//expect 0 differences because there are no changed IDs on the uml side
+
+		// expect 0 differences because there are no changed IDs on the uml side
 		val comparison = compare(UML_GENERATED_MEDIA_STORE_MODEL_PATH, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		assertEquals(0, comparison.differences.size, "Encountered differences after round-trip batch creation (that was kind of expected).")
+		assertEquals(0, comparison.differences.size,
+			"Encountered differences after round-trip batch creation (that was kind of expected).")
 	}
-		
+
 }

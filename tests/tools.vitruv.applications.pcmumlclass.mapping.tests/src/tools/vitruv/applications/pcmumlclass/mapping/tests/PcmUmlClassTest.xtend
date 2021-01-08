@@ -70,7 +70,7 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		testResourceSet = new ResourceSetImpl();
 		helper = new PcmUmlClassTestHelper(correspondenceModel, [uri|uri.resourceAt])
 	}
-	
+
 	def protected void assertModelExists(String modelPathWithinProject) {
 		val modelUri = getUri(Path.of(modelPathWithinProject))
 		assertThat(modelUri, isResource)
@@ -85,7 +85,7 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		stopRecordingChanges(modelElement.eResource)
 		val resourceURI = modelElement.eResource.URI
 		renewResourceCache
-		
+
 		val rootElement = EObject.from(resourceURI) as O
 		if (rootElement !== null) {
 			startRecordingChanges(rootElement)
@@ -139,119 +139,125 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlParam,
 			TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 		val collectionTypeCorrespondenceIsCorrect = if (pcmDatatype instanceof CollectionDataType)
-				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype,
-					umlParam.type, umlParam.lower, umlParam.upper)
+				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower,
+					umlParam.upper)
 			else
 				null
 		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}
-	
-	
-		/* Because of transitive change propagation between the Pcm and Uml domains, it is necessary to stepwise simulate
+
+	/* Because of transitive change propagation between the Pcm and Uml domains, it is necessary to stepwise simulate
 	 * the insertion of Uml-models and reload the view, in oder to achieve the wanted propagation of a correct ComponentRepository.
 	 * In a editor based creation process, this would automatically be done if the synchronization is called often enough (enough saves).
 	 * Because of the necessary reloads, the model is loaded (while the out-of-synch elements remain) and registered with new IDs in the UUID resolver.
 	 * This might make it necessary to provide the VM that runs the tests with additional heap space.
 	 */
-	protected def simulateRepositoryInsertion_PCM(Repository originalRepository, String pcmOutputPath, String umlOutputPath) {
+	protected def simulateRepositoryInsertion_PCM(Repository originalRepository, String pcmOutputPath,
+		String umlOutputPath) {
 		userInteraction.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
 		resourceAt(Path.of(pcmOutputPath)).startRecordingChanges => [
 			contents += originalRepository
 		]
 		propagate
 		var generatedRepository = originalRepository.clearResourcesAndReloadRoot
-		return generatedRepository 
+		return generatedRepository
 	}
-	
+
 	private def simulateDataTypeInsertion_UML(Model umlRepositoryModel, PackageableElement umlDataType) {
 		val repositoryPackage = umlRepositoryModel.nestedPackages.head
 		assertNotNull(repositoryPackage)
-		val datatypesPackage = repositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME]
+		val datatypesPackage = repositoryPackage.nestedPackages.findFirst [
+			it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME
+		]
 		assertNotNull(datatypesPackage)
-		
+
 		datatypesPackage.packagedElements += umlDataType
 		propagate
-		return umlRepositoryModel.clearResourcesAndReloadRoot 
+		return umlRepositoryModel.clearResourcesAndReloadRoot
 	}
-	
-	private def simulateContractsPackageElementInsertion_UML(Model umlRepositoryModel, PackageableElement originalContractsPackageElement) {
+
+	private def simulateContractsPackageElementInsertion_UML(Model umlRepositoryModel,
+		PackageableElement originalContractsPackageElement) {
 		var repositoryPackage = umlRepositoryModel.nestedPackages.head
 		assertNotNull(repositoryPackage)
-		var contractsPackage = repositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
+		var contractsPackage = repositoryPackage.nestedPackages.findFirst [
+			it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME
+		]
 		assertNotNull(contractsPackage)
-		
+
 		if (!(originalContractsPackageElement instanceof Interface)) {
 			contractsPackage.packagedElements += originalContractsPackageElement
 			return umlRepositoryModel
 		}
 		val originalInterface = originalContractsPackageElement as Interface
-		
+
 		// add each operation without its parameters because at least the returnParameters will be already generated
 		val originalOperationParameterMapping = new HashMap<String, List<Parameter>>()
 		for (originalOperation : originalInterface.ownedOperations) {
-			originalOperationParameterMapping.put(originalOperation.name, originalOperation.ownedParameters.clone.toList)
+			originalOperationParameterMapping.put(originalOperation.name,
+				originalOperation.ownedParameters.clone.toList)
 			originalOperation.ownedParameters.clear
 		}
 		contractsPackage.packagedElements += originalInterface
 		propagate
 		var generatedModel = umlRepositoryModel.clearResourcesAndReloadRoot
-		
-		//retrieve elements after reload
+
+		// retrieve elements after reload
 		repositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(repositoryPackage)
-		contractsPackage = repositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
+		contractsPackage = repositoryPackage.nestedPackages.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
 		assertNotNull(contractsPackage)
-		var generatedInterface = contractsPackage.packagedElements
-			.filter(Interface).findFirst[it.name == originalInterface.name]
+		var generatedInterface = contractsPackage.packagedElements.filter(Interface).findFirst [
+			it.name == originalInterface.name
+		]
 		assertNotNull(generatedInterface)
-		
+
 		// merge each Parameter from the originalOperation with the generated Operation's parameters
 		for (generatedOperation : generatedInterface.ownedOperations) {
-			for (originalParameter : originalOperationParameterMapping.getOrDefault(generatedOperation.name, new ArrayList<Parameter>)) {
+			for (originalParameter : originalOperationParameterMapping.getOrDefault(generatedOperation.name,
+				new ArrayList<Parameter>)) {
 				val generatedParameter = generatedOperation.ownedParameters.findFirst[it.name == originalParameter.name]
 				if (generatedParameter !== null) {
 					mergeElements(originalParameter, generatedParameter, "name")
-				}
-				else {
+				} else {
 					generatedOperation.ownedParameters += originalParameter
 				}
 			}
 		}
-		
+
 		propagate
 		return generatedModel.clearResourcesAndReloadRoot
 	}
-	
-	
-	private def simulateComponentInsertion_UML(Model inUmlRepositoryModel, Package originalComponentPackage, int userDisambigutationComponentType) {
+
+	private def simulateComponentInsertion_UML(Model inUmlRepositoryModel, Package originalComponentPackage,
+		int userDisambigutationComponentType) {
 		var generatedModel = inUmlRepositoryModel
 		var generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
-		
+
 		// Simulate adding a Component via round-trip by adding the components package.
 		// For that, first remove the implementation from the original package to avoid duplication.
 		val originalComponentImpl = originalComponentPackage.packagedElements.filter(Class).head
 		assertNotNull(originalComponentImpl)
 		originalComponentPackage.packagedElements -= originalComponentImpl
 		assertTrue(originalComponentPackage.packagedElements.empty)
-		
+
 		userInteraction.addNextSingleSelection(userDisambigutationComponentType)
-		generatedRepositoryPackage.nestedPackages += originalComponentPackage //throws UUID error when tested on its own
-		propagate //should generate generatedComponentImpl
-		generatedModel = generatedModel.clearResourcesAndReloadRoot 
-		
+		generatedRepositoryPackage.nestedPackages += originalComponentPackage // throws UUID error when tested on its own
+		propagate // should generate generatedComponentImpl
+		generatedModel = generatedModel.clearResourcesAndReloadRoot
+
 		generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
-		var generatedComponentPackage = generatedRepositoryPackage.nestedPackages
-			.findFirst[it.name == originalComponentPackage.name]
+		var generatedComponentPackage = generatedRepositoryPackage.nestedPackages.findFirst [
+			it.name == originalComponentPackage.name
+		]
 		assertNotNull(generatedComponentPackage)
-		var generatedComponentImpl = generatedComponentPackage.packagedElements
-			.filter(Class).findFirst[it.name == originalComponentImpl.name]
+		var generatedComponentImpl = generatedComponentPackage.packagedElements.filter(Class).findFirst [
+			it.name == originalComponentImpl.name
+		]
 		assertNotNull(generatedComponentImpl)
-		
+
 		// merge everything except operations which are separately handled, because some of the constructor parameters will be generated.
 		mergeElements(originalComponentImpl, generatedComponentImpl, "ownedOperation", "interfaceRealization")
 		for (originalRealization : originalComponentImpl.interfaceRealizations.clone) {
@@ -259,21 +265,25 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 			originalRealization.clients -= originalComponentImpl // needs to be manually cleared, or else originalComponentImpl is still set as a client and causes UUID error
 			generatedComponentImpl.interfaceRealizations += originalRealization
 		}
-		
-		propagate //should generate the constructor Parameters corresponding to RequiredRoles
-		generatedModel = generatedModel.clearResourcesAndReloadRoot 
+
+		propagate // should generate the constructor Parameters corresponding to RequiredRoles
+		generatedModel = generatedModel.clearResourcesAndReloadRoot
 		generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
-		generatedComponentPackage = generatedRepositoryPackage.nestedPackages
-			.findFirst[it.name == originalComponentPackage.name]
+		generatedComponentPackage = generatedRepositoryPackage.nestedPackages.findFirst [
+			it.name == originalComponentPackage.name
+		]
 		assertNotNull(generatedComponentPackage)
-		generatedComponentImpl = generatedComponentPackage.packagedElements
-			.filter(Class).findFirst[it.name == originalComponentImpl.name]
+		generatedComponentImpl = generatedComponentPackage.packagedElements.filter(Class).findFirst [
+			it.name == originalComponentImpl.name
+		]
 		assertNotNull(generatedComponentImpl)
-		
+
 		// merge the original with the generated constructor
 		val originalConstructor = originalComponentImpl.ownedOperations.findFirst[it.name == originalComponentImpl.name]
-		val generatedConstructor = generatedComponentImpl.ownedOperations.findFirst[it.name == originalComponentImpl.name]
+		val generatedConstructor = generatedComponentImpl.ownedOperations.findFirst [
+			it.name == originalComponentImpl.name
+		]
 		assertNotNull(originalConstructor)
 		assertNotNull(generatedConstructor)
 		mergeElements(originalConstructor, generatedConstructor, "ownedParameter")
@@ -281,33 +291,38 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 			val generatedParameter = generatedConstructor.ownedParameters.findFirst[it.name == originalParameter.name]
 			if (generatedParameter !== null) {
 				mergeElements(originalParameter, generatedParameter, "name")
-			}
-			else {
+			} else {
 				generatedConstructor.ownedParameters += originalParameter
 			}
 		}
 		// move/copy the remaining operations
-		for (originalOperation : originalComponentImpl.ownedOperations.clone.filter[it.name != originalComponentImpl.name]) {
+		for (originalOperation : originalComponentImpl.ownedOperations.clone.filter [
+			it.name != originalComponentImpl.name
+		]) {
 			generatedComponentImpl.ownedOperations += originalOperation
 		}
-		
+
 		propagate
-		generatedModel = generatedModel.clearResourcesAndReloadRoot 
+		generatedModel = generatedModel.clearResourcesAndReloadRoot
 		return generatedModel
 	}
-	
-	protected def simulateRepositoryInsertion_UML(Model originalRepositoryModel, String umlOutputPath, String pcmOutputPath) {
+
+	protected def simulateRepositoryInsertion_UML(Model originalRepositoryModel, String umlOutputPath,
+		String pcmOutputPath) {
 		assertNotNull(originalRepositoryModel)
 		val umlRepositoryPackage = originalRepositoryModel.nestedPackages.head
 		assertNotNull(umlRepositoryPackage)
-		val originalContractsPackage = umlRepositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
-		val originalDatatypesPackage = umlRepositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME]
-		val originalComponentPackages = umlRepositoryPackage.nestedPackages
-			.filter[it !== originalContractsPackage && it !== originalDatatypesPackage].toList
+		val originalContractsPackage = umlRepositoryPackage.nestedPackages.findFirst [
+			it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME
+		]
+		val originalDatatypesPackage = umlRepositoryPackage.nestedPackages.findFirst [
+			it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME
+		]
+		val originalComponentPackages = umlRepositoryPackage.nestedPackages.filter [
+			it !== originalContractsPackage && it !== originalDatatypesPackage
+		].toList
 		umlRepositoryPackage.nestedPackages.clear
-		
+
 //		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // rootelement is supposed to be a repository
 //		userInteraction.addNextTextInput(pcmOutputPath) // answers where to save the corresponding .pcm model
 		userInteraction.addNextTextInput(pcmOutputPath) // answers where to save the corresponding .pcm model
@@ -316,23 +331,24 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		]
 		propagate
 		var generatedModel = originalRepositoryModel.clearResourcesAndReloadRoot
-		
+
 		// Create copies of the lists outside the model so that containment is irrelevant
 		// and that the loops do not iterate over a changing List.
 		for (originalDatatype : originalDatatypesPackage.packagedElements.clone) {
-			generatedModel = simulateDataTypeInsertion_UML(generatedModel, originalDatatype) 
+			generatedModel = simulateDataTypeInsertion_UML(generatedModel, originalDatatype)
 		}
 		for (originalContractsPackageElement : originalContractsPackage.packagedElements.clone) {
-			generatedModel = simulateContractsPackageElementInsertion_UML(generatedModel, originalContractsPackageElement)
+			generatedModel = simulateContractsPackageElementInsertion_UML(generatedModel,
+				originalContractsPackageElement)
 		}
 		for (originalComponentPackage : originalComponentPackages) {
-			generatedModel = simulateComponentInsertion_UML(generatedModel, originalComponentPackage, DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT)
+			generatedModel = simulateComponentInsertion_UML(generatedModel, originalComponentPackage,
+				DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT)
 		}
 		return generatedModel
 	}
-	
-	
-		/**
+
+	/**
 	 * Compare the root elements of the Resources at the specified project-relative paths, 
 	 * by first loading them into a temporary ResourceSet to make sure they are consistent with the disk state.
 	 * 
@@ -348,7 +364,7 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		val generatedUri = getUri(Path.of(generatedWithinProjektPath))
 		return compare(originalUri, generatedUri)
 	}
-	
+
 	/**
 	 * Compare the root elements at the specified URIs, by first loading them into a temporary ResourceSet 
 	 * to make sure they are consistent with the disk state.
@@ -366,7 +382,7 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		val generated = resourceSet.getResource(generatedUri, true).contents.head
 		return compare(original, generated)
 	}
-	
+
 	/**
 	 * This directly applies the default EMFCompare comparator to the passed elements. 
 	 * It does not ensure that the compared elements are in sync with the disk state.  
@@ -376,8 +392,7 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		val scope = new DefaultComparisonScope(original, generated, original)
 		return comparator.compare(scope);
 	}
-	
-	
+
 	/**
 	 * Copy the attributes and move the references from the original element to the target element.
 	 * The container feature is always ignored, to avoid moving the target element to the original's container.
@@ -391,13 +406,9 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 	 */
 	def mergeElements(EObject original, EObject generated, String ... skipFeatures) {
 		for (feature : original.eClass.EAllStructuralFeatures) {
-			if(
-				!feature.derived 
-				&& feature.changeable 
-				&& original.eIsSet(feature) 
-				&& !(feature instanceof EReference && (feature as EReference).isContainer) 
-				&& !skipFeatures.contains(feature.name)
-			) {
+			if (!feature.derived && feature.changeable && original.eIsSet(feature) &&
+				!(feature instanceof EReference && (feature as EReference).isContainer) &&
+				!skipFeatures.contains(feature.name)) {
 				generated.eSet(feature, original.eGet(feature))
 			}
 		}
