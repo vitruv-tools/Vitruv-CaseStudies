@@ -33,62 +33,65 @@ abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
 	protected static val OPERATION_NAME = "fooOperation"
 	protected static val PARAMETER_NAME = "fooParameter"
 	protected static val PARAMETER_NAME_2 = "barParameter"
-		
+
 	protected static val UML_TYPE_BOOL = "Boolean"
 	protected static val UML_TYPE_INT = "Integer"
 	protected static val UML_TYPE_REAL = "Real"
-	protected static val UML_TYPE_STRING = "String"	
-	
+	protected static val UML_TYPE_STRING = "String"
+
 	private def Path getProjectModelPath(String modelName) {
 		Path.of("model").resolve(modelName + "." + MODEL_FILE_EXTENSION);
 	}
-	
+
 	protected def Model getRootElement() {
 		return Model.from(MODEL_NAME.getProjectModelPath);
 	}
-	
+
 	override protected getChangePropagationSpecifications() {
-		return #[new UmlToPcmComponentsChangePropagationSpecification()]; 
+		return #[new UmlToPcmComponentsChangePropagationSpecification()];
 	}
-	
-	protected def initializeTestModel() {
-		val umlModel = UMLFactory.eINSTANCE.createModel();
-		umlModel.name = MODEL_NAME;
-		createAndSynchronizeModel(MODEL_NAME.getProjectModelPath.toString, umlModel);
+
+	protected def void initializeTestModel() {
+		resourceAt(MODEL_NAME.projectModelPath).startRecordingChanges => [
+			contents += UMLFactory.eINSTANCE.createModel() => [
+				name = MODEL_NAME
+			]
+		]
+		propagate
 	}
-	
+
 	@BeforeEach
 	def protected setup() {
 		this.initializeTestModel()
 	}
-	
+
 	protected def importPrimitiveTypes() {
-		//val resourceSet = rootElement.eResource.resourceSet
+		// val resourceSet = rootElement.eResource.resourceSet
 		val resourceSet = new ResourceSetImpl()
 		resourceSet.createResource(URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI))
 		val primitiveTypesUri = URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI).appendFragment("_0")
 		val primitiveTypes = resourceSet.getEObject(primitiveTypesUri, true)
 		val package = primitiveTypes as Package
 		rootElement.createPackageImport(package)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		return package
 	}
-	
+
 	protected def int getDataTypeUserSelection(String umlTypeName) {
 		val pcmType = UmlToPcmTypesUtil.getDataTypeEnumValue(umlTypeName)
 		return Arrays.asList(PrimitiveTypeEnum.values).indexOf(pcmType) % PrimitiveTypeEnum.values.length + 1
 	}
-	
+
 	protected def Iterable<EObject> correspondingElements(EObject element) {
 		return correspondenceModel.getCorrespondingEObjects(#[element]).flatten
 	}
-	
+
 	protected def <T> EList<T> toEList(List<T> elements) {
 		val eList = new BasicEList<T>()
 		eList.addAll(elements)
 		return eList
 	}
-	
+
 	protected def Repository claimCorrespondingRepository(EObject rootElement) {
 		rootElement.correspondingElements.size == 2
 		val potentialRepositories = rootElement.correspondingElements.filter(Repository)

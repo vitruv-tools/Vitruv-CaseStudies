@@ -21,7 +21,7 @@ class ModelTest extends AbstractUmlPcmTest {
 	def void testRepositoryRename() {
 		val newName = 'foo';
 		rootElement.name = newName;
-		saveAndSynchronizeChanges(rootElement);
+		propagate
 		val pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(newName, pcmRepository.entityName);
 	}

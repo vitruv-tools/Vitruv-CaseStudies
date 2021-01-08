@@ -74,14 +74,14 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 	def void createCollectionTypeTest() {
 		val innerType = PrimitiveTypeEnum.BOOL
 		val collectionType = createCollectionType(innerType)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		var umlModel = rootElement.correspondingElements.head as Model
 		assertTrue(umlModel.packagedElements.filter[t | t instanceof org.eclipse.uml2.uml.DataType].empty)
 		assertFalse(collectionType.correspondingElements.empty)
 		
 		val innerDeclaration = createDataTypeWithInnerDeclaration(collectionType)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		umlModel = rootElement.correspondingElements.head as Model
 		val umlTypes = umlModel.packagedElements.filter[t | t instanceof org.eclipse.uml2.uml.DataType]
@@ -102,14 +102,14 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 		innerType.entityName = innerTypeName
 		rootElement.dataTypes__Repository += innerType
 		val collectionType = createCollectionType(innerTypeName.collectionTypeName, innerType)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		var umlModel = rootElement.correspondingElements.head as Model
 		assertFalse(collectionType.correspondingElements.empty)
 		assertFalse(innerType.correspondingElements.empty)
 		
 		val innerDeclaration = createDataTypeWithInnerDeclaration(collectionType)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		umlModel = rootElement.correspondingElements.head as Model
 		val umlTypes = umlModel.packagedElements.filter[t | t instanceof org.eclipse.uml2.uml.DataType]
@@ -136,7 +136,7 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 		val collectionType = createCollectionType(nestedType.entityName.collectionTypeName, nestedType)
 		
 		val innerDeclaration = createDataTypeWithInnerDeclaration(collectionType)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		val umlAttribute = innerDeclaration.correspondingElements.head as org.eclipse.uml2.uml.Property
 		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(innerType), umlAttribute.type.name)
@@ -155,11 +155,11 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 		val collectionType = createCollectionType(innerType.entityName.collectionTypeName, innerType)
 		val pcmAttribute = createDataTypeWithInnerDeclaration(collectionType)
 		val pcmParameter = createInterfaceWithParameterizedOperation(collectionType)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		val newInnerType = getPrimitiveType(PrimitiveTypeEnum.STRING)
 		collectionType.innerType_CollectionDataType = newInnerType
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		val umlInnerType = newInnerType.correspondingElements.head as org.eclipse.uml2.uml.DataType
 		var umlAttribute = pcmAttribute.correspondingElements.head as org.eclipse.uml2.uml.Property
@@ -184,10 +184,10 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 		val collectionType = createCollectionType(innerType.entityName.collectionTypeName, innerType)
 		val pcmAttribute = createDataTypeWithInnerDeclaration(collectionType)
 		val pcmParameter = createInterfaceWithParameterizedOperation(collectionType)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		collectionType.innerType_CollectionDataType = null
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		var umlAttribute = pcmAttribute.correspondingElements.head as org.eclipse.uml2.uml.Property
 		assertEquals(1, umlAttribute.lowerBound)
@@ -211,13 +211,13 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 		val collectionType = createCollectionType(innerType.entityName.collectionTypeName, innerType)
 		val pcmAttribute = createDataTypeWithInnerDeclaration(collectionType)
 		val pcmParameter = createInterfaceWithParameterizedOperation(collectionType)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		val newInnerType = getPrimitiveType(PrimitiveTypeEnum.BOOL)
 		
 		pcmAttribute.datatype_InnerDeclaration = newInnerType
 		pcmParameter.dataType__Parameter = newInnerType
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		val umlInnerType = newInnerType.correspondingElements.head as org.eclipse.uml2.uml.DataType
 		var umlAttribute = pcmAttribute.correspondingElements.head as org.eclipse.uml2.uml.Property

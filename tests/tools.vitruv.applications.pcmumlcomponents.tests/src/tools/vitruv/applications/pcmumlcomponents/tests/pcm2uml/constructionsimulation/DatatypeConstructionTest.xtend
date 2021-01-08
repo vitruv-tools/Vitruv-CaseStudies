@@ -1,14 +1,18 @@
 package tools.vitruv.applications.pcmumlcomponents.tests.pcm2uml.constructionsimulation
 
-import org.eclipse.emf.ecore.resource.Resource
 import org.junit.jupiter.api.Test
+import org.eclipse.emf.ecore.EObject
+import static extension tools.vitruv.applications.pcmumlcomponents.tests.util.ExistingModelUtil.loadModel
 
 class DatatypeConstructionTest extends ModelConstructionTest {
 	
 	@Test
 	def void dataTypeTest() {
-		val Resource resource = loadModel("model/datatype.repository")
-		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.rootElement)
+		val originalResource = loadModel("model/datatype.repository")
+		resourceAt(TARGET_MODEL_PATH).startRecordingChanges => [
+			contents += EObject.from(originalResource)
+		]
+		propagate
 	}
 	
 }

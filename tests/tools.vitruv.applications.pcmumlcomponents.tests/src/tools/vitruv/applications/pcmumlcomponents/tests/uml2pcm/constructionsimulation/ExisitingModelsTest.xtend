@@ -1,12 +1,13 @@
 package tools.vitruv.applications.pcmumlcomponents.tests.uml2pcm.constructionsimulation
 
 import org.junit.jupiter.api.Test
+import org.eclipse.emf.ecore.EObject
+import static extension tools.vitruv.applications.pcmumlcomponents.tests.util.ExistingModelUtil.loadModel
 
 class ExisitingModelsTest extends ModelConstructionTest {
 	
 	@Test
 	def void mediastoreTest() {
-		val resource = loadModel("model/mediastore.uml")
 		userInteraction.addNextSingleSelection(1)
         userInteraction.addNextSingleSelection(1)
         userInteraction.addNextSingleSelection(1)
@@ -16,12 +17,15 @@ class ExisitingModelsTest extends ModelConstructionTest {
         userInteraction.addNextSingleSelection(1)
         userInteraction.addNextSingleSelection(1)
         userInteraction.addNextSingleSelection(1)
-		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.rootElement)
+        val originalResource = loadModel("model/mediastore.uml")
+		resourceAt(TARGET_MODEL_PATH).startRecordingChanges => [
+			contents += EObject.from(originalResource)
+		]
+		propagate
 	}
 	
 	@Test
 	def void mediastoreRoundtripTest() {
-		val resource = loadModel("model/mediastore_generated.uml")
 		userInteraction.addNextSingleSelection(1)
 		userInteraction.addNextSingleSelection(1)
 		userInteraction.addNextSingleSelection(1)
@@ -32,16 +36,23 @@ class ExisitingModelsTest extends ModelConstructionTest {
 		userInteraction.addNextSingleSelection(1)
 		userInteraction.addNextSingleSelection(1)
 		userInteraction.addNextSingleSelection(3)
-		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.rootElement)
+		val originalResource = loadModel("model/mediastore_generated.uml")
+		resourceAt(TARGET_MODEL_PATH).startRecordingChanges => [
+			contents += EObject.from(originalResource)
+		]
+		propagate
 	}
 	
 	@Test
 	def void smallExampleRoundtripTest() {
-		val resource = loadModel("model/small_example.uml")
 		userInteraction.addNextSingleSelection(1)
 		userInteraction.addNextSingleSelection(1)
 		userInteraction.addNextSingleSelection(1)
 		userInteraction.addNextSingleSelection(1)
-		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.rootElement)
+		val originalResource = loadModel("model/small_example.uml")
+		resourceAt(TARGET_MODEL_PATH).startRecordingChanges => [
+			contents += EObject.from(originalResource)
+		]
+		propagate
 	}
 }

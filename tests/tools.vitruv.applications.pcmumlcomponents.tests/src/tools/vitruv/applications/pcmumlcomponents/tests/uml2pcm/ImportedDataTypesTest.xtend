@@ -30,7 +30,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		assertNotNull(umlTypes.getOwnedMember(UMLTYPE_BOOL))
 		val umlType = umlTypes.getOwnedMember(UMLTYPE_BOOL) as DataType
 		val pcmRepository = rootElement.claimCorrespondingRepository
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		val pcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, null, correspondenceModel)
 		assertNotNull(pcmType)
 		assertTrue(pcmType instanceof PrimitiveDataType)
@@ -45,7 +45,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		umlType.name = umlTypeName
 		userInteraction.addNextSingleSelection(PrimitiveTypeEnum.BYTE_VALUE)
 		rootElement.packagedElements += umlType
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		val pcmRepository = rootElement.claimCorrespondingRepository
 		val pcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, null, correspondenceModel) as PrimitiveDataType
 		assertEquals(PrimitiveTypeEnum.BYTE, pcmType.type)
@@ -59,7 +59,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		umlType.name = umlTypeName
 		userInteraction.addNextSingleSelection(PrimitiveTypeEnum.values.length)
 		rootElement.packagedElements += umlType
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		val pcmType = umlType.correspondingElements.head
 		assertTrue(pcmType instanceof CompositeDataType)
 		assertEquals(umlTypeName, (pcmType as CompositeDataType).entityName)
@@ -72,7 +72,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		val umlInterface = UMLFactory.eINSTANCE.createInterface()
 		umlInterface.createOwnedOperation(OPERATION_NAME, new BasicEList<String>(), new BasicEList<Type>(), umlType)
 		rootElement.packagedElements += umlInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		val pcmInterface = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten.head as OperationInterface
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(UMLTYPE_BOOL),
 					 (pcmInterface.signatures__OperationInterface.head.returnType__OperationSignature as PrimitiveDataType).type)

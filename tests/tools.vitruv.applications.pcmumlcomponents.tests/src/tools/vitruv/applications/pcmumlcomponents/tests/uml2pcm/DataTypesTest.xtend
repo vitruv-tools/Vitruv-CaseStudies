@@ -22,7 +22,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		val primitiveType = UMLFactory.eINSTANCE.createPrimitiveType()
 		primitiveType.name = UML_TYPE_BOOL
 		rootElement.packagedElements += primitiveType
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[primitiveType]).flatten
 		assertEquals(1, correspondingElements.length)
 		val pcmType = correspondingElements.get(0)
@@ -38,7 +38,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		val nrOwnedTypesBefore = rootElement.ownedTypes.length
 		rootElement.packagedElements += dataType
 		userInteraction.addNextSingleSelection(1)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		assertEquals(nrOwnedTypesBefore + 1, rootElement.ownedTypes.length)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[dataType]).flatten
 		assertEquals(1, correspondingElements.length)
@@ -60,7 +60,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		property.name = propertyName
 		property.type = propertyType
 		dataType.ownedAttributes += property
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[dataType]).flatten
 		val pcmType = (correspondingElements.get(0) as CompositeDataType)
 		assertEquals(1, pcmType.innerDeclaration_CompositeDataType.length)
@@ -74,7 +74,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		dataType.name = DATATYPE_NAME
 		rootElement.packagedElements += dataType
 		userInteraction.addNextSingleSelection(1)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		return dataType
 	}
 	
@@ -86,7 +86,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		property.name = name
 		property.type = propertyType
 		umlType.ownedAttributes += property
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		return property
 	}
 	
@@ -108,7 +108,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		val newPropertyName = PARAMETER_NAME_2
 		umlProperty.name = newPropertyName
 		
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		var pcmType = (getCorrespondingDataType(umlType) as CompositeDataType)
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(newType.name),
@@ -125,7 +125,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		
 		umlType.ownedAttributes -= property1
 		
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		var pcmType = (getCorrespondingDataType(umlType) as CompositeDataType)
 		assertEquals(1, pcmType.innerDeclaration_CompositeDataType.length())
