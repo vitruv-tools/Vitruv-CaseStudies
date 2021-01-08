@@ -36,14 +36,14 @@ class JavaToUmlInterfaceMethodTest extends JavaToUmlTransformationTest {
         typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_NAME)
         jMeth = createJavaInterfaceMethod(IOPERATION_NAME, null, null)
         jInterface.members += jMeth
-        saveAndSynchronizeChanges(jInterface)
+        propagate
     }
     
     @Test
     def void testCreateInterfaceMethod() {
         val interfaceMethod = createJavaInterfaceMethod(STANDARD_IOPERATION_NAME, null, null)
         jInterface.members += interfaceMethod
-        saveAndSynchronizeChanges(jInterface)
+        propagate
         
         val uOperation = getCorrespondingMethod(interfaceMethod)
         val uInterface = getCorrespondingInterface(jInterface)
@@ -55,7 +55,7 @@ class JavaToUmlInterfaceMethodTest extends JavaToUmlTransformationTest {
     @Test
     def void testRenameInterfaceMethod() {
         jMeth.name = IOPERATION_RENAME
-        saveAndSynchronizeChanges(jMeth)
+        propagate
 
         val uOperation = getCorrespondingMethod(jMeth)
         val uInterface = getCorrespondingInterface(jInterface)
@@ -69,7 +69,7 @@ class JavaToUmlInterfaceMethodTest extends JavaToUmlTransformationTest {
     def testDeleteInterfaceMethod() {
         assertNotNull(getCorrespondingMethod(jMeth))
         EcoreUtil.delete(jMeth)
-        saveAndSynchronizeChanges(jInterface)
+        propagate
         
         val uInterface = getCorrespondingInterface(jInterface)
         assertUmlInterfaceDontHaveOperation(uInterface, IOPERATION_NAME)
@@ -78,7 +78,7 @@ class JavaToUmlInterfaceMethodTest extends JavaToUmlTransformationTest {
     @Test
     def testChangeInterfaceMethodReturnType() {
         jMeth.typeReference = createNamespaceReferenceFromClassifier(typeClass)
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         val uOperation = getCorrespondingMethod(jMeth)
         val utypeClass = getCorrespondingClass(typeClass)
@@ -90,7 +90,7 @@ class JavaToUmlInterfaceMethodTest extends JavaToUmlTransformationTest {
     def testCreateInterfaceParameter() {
         val jParam = createJavaParameter(PARAMETER_NAME, createNamespaceReferenceFromClassifier(typeClass))
         jMeth.parameters += jParam
-        saveAndSynchronizeChanges(jMeth)
+        propagate
 
         val uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_NAME)

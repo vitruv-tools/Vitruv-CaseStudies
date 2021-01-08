@@ -47,7 +47,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
         typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_CLASS)
         jAttr = createJavaAttribute(ATTRIBUTE_NAME, createJavaPrimitiveType(JavaStandardType.INT), JavaVisibility.PRIVATE, false, false)
         jClass.members += jAttr
-        saveAndSynchronizeChanges(jClass);
+        propagate
     }
     
     /**
@@ -60,7 +60,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
         jClass.members += attr
         val getter = createJavaGetterForAttribute(attr, JavaVisibility.PRIVATE)
         jClass.members += getter
-        saveAndSynchronizeChanges(jClass)
+        propagate
         
         val uAttr = getCorrespondingAttribute(attr)
         val uClass = getCorrespondingClass(jClass)
@@ -78,7 +78,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
     def testCreateAttribute() {
         val attr = createJavaAttribute(STANDARD_ATTRIBUTE_NAME, createNamespaceReferenceFromClassifier(typeClass), JavaVisibility.PRIVATE, false, false)
         jClass.members += attr
-        saveAndSynchronizeChanges(jClass)
+        propagate
         
         val uAttr = getCorrespondingAttribute(attr)
         val uClass = getCorrespondingClass(jClass)
@@ -94,7 +94,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
     @Test
     def void testRenameAttribute() {
         jAttr.name = ATTRIBUTE_RENAME
-        saveAndSynchronizeChanges(jAttr)
+        propagate
         
         val uAttr = getCorrespondingAttribute(jAttr)
         val uClass = getCorrespondingClass(jClass)
@@ -111,7 +111,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
         assertNotNull(getCorrespondingAttribute(jAttr))
         
         EcoreUtil.delete(jAttr)
-        saveAndSynchronizeChanges(jClass);
+        propagate
 
         val uClass = getCorrespondingClass(jClass)
         assertUmlClassDontHaveOperation(uClass, ATTRIBUTE_NAME)
@@ -123,7 +123,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
     @Test
     def testChangeAttributeType() {
         jAttr.typeReference = createNamespaceReferenceFromClassifier(typeClass)
-        saveAndSynchronizeChanges(jAttr)
+        propagate
         
         val uAttr = getCorrespondingAttribute(jAttr)
         val uClass = getCorrespondingClass(jClass)
@@ -139,7 +139,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
     @Test
     def testStaticAttribute() {
         jAttr.static = true
-        saveAndSynchronizeChanges(jAttr);
+        propagate
          
         val uAttr = getCorrespondingAttribute(jAttr)
         assertTrue(uAttr.static)
@@ -151,7 +151,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
     @Test
     def testFinalAttribute() {
         jAttr.final = true
-        saveAndSynchronizeChanges(jAttr);
+        propagate
          
         val uAttr = getCorrespondingAttribute(jAttr)
         assertTrue(uAttr.readOnly)
@@ -164,14 +164,14 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
     @Test
     def testAttributeVisibility() {
         jAttr.makePublic
-        saveAndSynchronizeChanges(jAttr);
+        propagate
          
         var uAttr = getCorrespondingAttribute(jAttr)
         assertUmlNamedElementHasVisibility(uAttr, VisibilityKind.PUBLIC_LITERAL)
         assertAttributeEquals(uAttr, jAttr)
         
         jAttr.makeProtected
-        saveAndSynchronizeChanges(jAttr);
+        propagate
          
         uAttr = getCorrespondingAttribute(jAttr)
         assertUmlNamedElementHasVisibility(uAttr, VisibilityKind.PROTECTED_LITERAL)

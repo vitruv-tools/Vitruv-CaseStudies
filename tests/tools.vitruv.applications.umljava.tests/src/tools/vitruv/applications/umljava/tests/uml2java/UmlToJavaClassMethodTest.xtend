@@ -54,7 +54,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
         uClass.ownedOperations += uOperation;
         rootElement.packagedElements += uClass;
         rootElement.packagedElements += typeClass;
-        saveAndSynchronizeChanges(rootElement);
+        propagate
     }
     
     /**
@@ -64,7 +64,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     @Test
     def void testCreateClassMethod() {
         val operation = uClass.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jMethod = getCorrespondingClassMethod(operation)
         val jClass = getCorrespondingClass(uClass)
@@ -81,7 +81,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     @Test
     def void testChangeReturnType() {
         uOperation.type = typeClass;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
         
         val jMethod = getCorrespondingClassMethod(uOperation)
         val jTypeClass = getCorrespondingClass(typeClass)
@@ -95,7 +95,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     @Test
     def testRenameMethod() {
         uOperation.name = OPERATION_RENAME;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
         
         val jMethod = getCorrespondingClassMethod(uOperation)
         val jClass = getCorrespondingClass(uClass)
@@ -110,7 +110,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     @Test
     def testDeleteMethod() {
         uOperation.destroy;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
@@ -122,7 +122,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     @Test
     def testStaticMethod() {
         uOperation.isStatic = true;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
         
         val jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableStatic(jMethod, true)
@@ -135,7 +135,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     @Test
     def testFinalMethod() {
         uOperation.isLeaf = true;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
         
         val jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableFinal(jMethod, true)
@@ -148,7 +148,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     @Test
     def testAbstractMethod() {
         uOperation.isAbstract = true;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
         
         val jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableAbstract(jMethod, true)
@@ -161,14 +161,14 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     @Test
     def testMethodVisibility() {
         uOperation.visibility = VisibilityKind.PRIVATE_LITERAL;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
         
         var jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PRIVATE)
         assertClassMethodEquals(uOperation, jMethod)
         
         uOperation.visibility = VisibilityKind.PROTECTED_LITERAL;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
         
         jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PROTECTED)
@@ -183,7 +183,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     def testCreateConstructor() {
         val uConstr = createSimpleUmlOperation(uClass.name)
         uClass.ownedOperations += uConstr
-        saveAndSynchronizeChanges(uClass)
+        propagate
         val jConstr = getCorrespondingConstructor(uConstr)
         assertNotNull(jConstr)
     }
@@ -195,7 +195,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     def void testCreateMethodInDataType() {
         val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
         val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
-        saveAndSynchronizeChanges(rootElement);
+        propagate
         
         val jMethod = getCorrespondingClassMethod(operation)
         val jClass = getCorrespondingClass(dataType)
@@ -213,13 +213,13 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
     def void testDeleteMethodInDataType() {
         val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
         val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
-        saveAndSynchronizeChanges(rootElement);
+        propagate
         
         var jMethod = getCorrespondingClassMethod(operation)
         assertNotNull(jMethod)
         
         operation.destroy
-        saveAndSynchronizeChanges(dataType)
+        propagate
         
         val jClass = getCorrespondingClass(dataType)
         assertJavaMemberContainerDontHaveMember(jClass, STANDARD_OPERATION_NAME)

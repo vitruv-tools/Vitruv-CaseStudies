@@ -56,7 +56,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
     @Test
     def void testRenameEnum() {
         jEnum.name = ENUM_RENAME
-        saveAndSynchronizeChanges(jEnum)
+        propagate
         
         val uEnum = getCorrespondingEnum(jEnum)
         assertEquals(ENUM_RENAME, uEnum.name)
@@ -66,10 +66,10 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
     @Test
     def void testDeleteEnum() {
         assertNotNull(jEnum)
-        val comp = jEnum.containingCompilationUnit
+        jEnum.containingCompilationUnit
 
         EcoreUtil.delete(jEnum)
-        saveAndSynchronizeChanges(comp)
+        propagate
         val uEnum = getUmlPackagedElementsbyName(org.eclipse.uml2.uml.Enumeration, ENUM_NAME).head
         assertNull(uEnum)
     }
@@ -77,7 +77,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
     @Test
     def void testAddEnumConstant() {
         jEnum.constants += createJavaEnumConstant(CONSTANT_NAME)
-        saveAndSynchronizeChanges(jEnum)
+        propagate
         
         val uEnum = getCorrespondingEnum(jEnum)
         assertUmlEnumHasLiteral(uEnum, createUmlEnumerationLiteral(CONSTANT_NAME))
@@ -87,7 +87,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
     @Test
     def void testDeleteEnumConstant() {
         EcoreUtil.delete(jEnum.constants.remove(0))
-        saveAndSynchronizeChanges(jEnum)
+        propagate
         
         val uEnum = getCorrespondingEnum(jEnum)
         assertUmlEnumDontHaveLiteral(uEnum, createUmlEnumerationLiteral(ENUM_LITERAL_NAMES_1.head))
@@ -99,7 +99,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
         val jMethod = createJavaClassMethod(OPERATION_NAME, TypesFactory.eINSTANCE.createVoid, JavaVisibility.PUBLIC,
             false, false, null)
         jEnum.members += jMethod
-        saveAndSynchronizeChanges(jEnum)
+        propagate
         
         val uOperation = getCorrespondingMethod(jMethod)
         val uEnum = getCorrespondingEnum(jEnum)
@@ -113,7 +113,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
         val typeClass = createJavaClassWithCompilationUnit(TYPECLASS, JavaVisibility.PUBLIC, false, false)
         val jAttr = createJavaAttribute(ATTRIBUTE_NAME, createNamespaceReferenceFromClassifier(typeClass), JavaVisibility.PRIVATE, false, false)
         jEnum.members += jAttr
-        saveAndSynchronizeChanges(jEnum)
+        propagate
         
         val uAttr = getCorrespondingAttribute(jAttr)
         val uTypeClass = getCorrespondingClass(typeClass)

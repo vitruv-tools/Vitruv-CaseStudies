@@ -40,10 +40,13 @@ abstract class UmlToJavaTransformationTest extends AbstractUmlJavaTest {
 	}
 
 	@BeforeEach
-    def protected setup() {
+    def protected void setup() {
         val umlModel = UMLFactory.eINSTANCE.createModel();
         umlModel.name = MODEL_NAME;
-        createAndSynchronizeModel(MODEL_NAME.projectModelPath.toString, umlModel);
+        resourceAt(MODEL_NAME.projectModelPath).startRecordingChanges => [
+        	contents += umlModel
+        ]
+        propagate
     }
 
 	def protected assertJavaFileExists(String fileName, String[] namespaces) {

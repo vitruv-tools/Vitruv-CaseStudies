@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertEquals
+import java.nio.file.Path
 
 /**
  * A Test class to test classes and their traits.
@@ -58,7 +59,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	@Test
 	def testRenameClass() {
 		jClass.name = CLASS_RENAMED;
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		val uClass = getCorrespondingClass(jClass);
 		assertEquals(CLASS_RENAMED, uClass.name)
@@ -72,10 +73,10 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	@Test
 	def testDeleteClass() {
 		assertNotNull(getCorrespondingClass(jClass))
-		val comp = jClass.containingCompilationUnit
+		jClass.containingCompilationUnit
 
 		EcoreUtil.delete(jClass)
-		saveAndSynchronizeChanges(comp)
+		propagate
 
 		val uClass = getUmlPackagedElementsbyName(Class, CLASS_NAME).head
 		assertNull(uClass)
@@ -89,8 +90,10 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	def testDeleteCompilationUnit() {
 		val compUnitFilePath = buildJavaFilePath(jClass.containingCompilationUnit)
 		assertNotNull(getCorrespondingClass(jClass))
-		deleteAndSynchronizeModel(compUnitFilePath)
-
+		resourceAt(Path.of(compUnitFilePath)).propagate [
+			delete(null)
+		]
+		
 		assertTrue(getUmlPackagedElementsbyName(Class, CLASS_NAME).nullOrEmpty)
 	}
 
@@ -100,14 +103,14 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	@Test
 	def testChangeClassVisibility() {
 		jClass.makeProtected;
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		var uClass = getCorrespondingClass(jClass);
 		assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PROTECTED_LITERAL)
 		assertClassEquals(uClass, jClass)
 
 		jClass.makePrivate;
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		uClass = getCorrespondingClass(jClass);
 		assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PRIVATE_LITERAL)
@@ -120,14 +123,14 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	@Test
 	def testChangeAbstractClass() {
 		jClass.abstract = true
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		var uClass = getCorrespondingClass(jClass)
 		assertTrue(uClass.abstract)
 		assertClassEquals(uClass, jClass)
 
 		jClass.abstract = false
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		uClass = getCorrespondingClass(jClass)
 		assertFalse(uClass.abstract)
@@ -141,14 +144,14 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	@Test
 	def testChangeFinalClass() {
 		jClass.final = true
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		var uClass = getCorrespondingClass(jClass)
 		assertTrue(uClass.finalSpecialization)
 		assertClassEquals(uClass, jClass)
 
 		jClass.final = false
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		uClass = getCorrespondingClass(jClass)
 		assertFalse(uClass.finalSpecialization)
@@ -162,7 +165,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	def testSuperClassChanged() {
 		val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME);
 		jClass.extends = createNamespaceReferenceFromClassifier(superClass);
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		val uClass = getCorrespondingClass(jClass)
 		val uSuperClass = getCorrespondingClass(superClass)
@@ -178,14 +181,14 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	def testRemoveSuperClass() {
 		val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME)
 		jClass.extends = createNamespaceReferenceFromClassifier(superClass);
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		var uClass = getCorrespondingClass(jClass)
 		val uSuperClass = getCorrespondingClass(superClass)
 		assertUmlClassifierHasSuperClassifier(uClass, uSuperClass)
 
 		EcoreUtil.delete(jClass.extends)
-		saveAndSynchronizeChanges(jClass)
+		propagate
 		uClass = getCorrespondingClass(jClass)
 		assertUmlClassifierDontHaveSuperClassifier(uClass, uSuperClass)
 	}
@@ -206,7 +209,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	def testAddClassImplement() {
 		val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME);
 		jClass.implements += createNamespaceReferenceFromClassifier(implInterface);
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		val uClass = getCorrespondingClass(jClass)
 		val uInterface = getCorrespondingInterface(implInterface)
@@ -232,7 +235,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 		val implInterface2 = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME2)
 		jClass.implements += createNamespaceReferenceFromClassifier(implInterface)
 		jClass.implements += createNamespaceReferenceFromClassifier(implInterface2)
-		saveAndSynchronizeChanges(jClass);
+		propagate
 
 		var uClass = getCorrespondingClass(jClass)
 		var uInterface = getCorrespondingInterface(implInterface)
@@ -241,7 +244,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 		assertUmlClassHasImplement(uClass, uInterface2)
 
 		jClass.implements.remove(0)
-		saveAndSynchronizeChanges(jClass)
+		propagate
 
 		uClass = getCorrespondingClass(jClass)
 		assertUmlClassDontHaveImplement(uClass, uInterface)

@@ -39,14 +39,14 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 	@BeforeEach
 	def void before() {
 		uEnum = createUmlEnumAndAddToPackage(rootElement, ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, enumLiterals1)
-		saveAndSynchronizeChanges(uEnum)
+		propagate
 	}
 	
 	@Test
 	def void testCreateEnum() {
 		val enumeration = createUmlEnumAndAddToPackage(rootElement, STANDARD_ENUM_NAME, VisibilityKind.PRIVATE_LITERAL,
 			enumLiterals2)
-	    saveAndSynchronizeChanges(enumeration)
+	    propagate
 	    
 	    assertJavaFileExists(STANDARD_ENUM_NAME, #[])
 	    val jEnum = getCorrespondingEnum(enumeration)
@@ -57,7 +57,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 	@Test
 	def void testRenameEnum() {
 		uEnum.name = ENUM_RENAME
-		saveAndSynchronizeChanges(uEnum)
+		propagate
 		
 		assertJavaFileExists(ENUM_RENAME, #[])
 		assertJavaFileNotExists(ENUM_NAME, #[])
@@ -69,7 +69,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 	@Test
 	def void testDeleteEnum() {
 		uEnum.destroy
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		assertJavaFileNotExists(ENUM_NAME, #[])
 	}
@@ -77,7 +77,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 	@Test
 	def void testAddEnumLiteral() {
 		uEnum.createOwnedLiteral(LITERAL_NAME)
-		saveAndSynchronizeChanges(uEnum)
+		propagate
 		
 		val jEnum = getCorrespondingEnum(uEnum)
 		assertJavaEnumHasConstant(jEnum, LITERAL_NAME)
@@ -87,7 +87,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 	@Test
 	def void testDeleteEnumLiteral() {
 		uEnum.ownedLiterals.remove(0)
-		saveAndSynchronizeChanges(uEnum)
+		propagate
 		
 		val jEnum = getCorrespondingEnum(uEnum)
 		assertJavaEnumDontHaveConstant(jEnum, ENUM_LITERAL_NAMES_1.head)
@@ -98,7 +98,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 	def void testAddEnumMethod() {
 	    val uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, null)
 	    uEnum.ownedOperations += uOperation
-	    saveAndSynchronizeChanges(rootElement)
+	    propagate
 	    
 	    val jMethod = getCorrespondingClassMethod(uOperation)
 	    val jEnum = getCorrespondingEnum(uEnum)
@@ -111,7 +111,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
     def testAddEnumAttribute() {
         val typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS)
         val attr = uEnum.createOwnedAttribute(ATTRIBUTE_NAME, typeClass);
-        saveAndSynchronizeChanges(rootElement);
+        propagate
            
         val jEnum = getCorrespondingEnum(uEnum)
         val jTypeClass = getCorrespondingClass(typeClass)
