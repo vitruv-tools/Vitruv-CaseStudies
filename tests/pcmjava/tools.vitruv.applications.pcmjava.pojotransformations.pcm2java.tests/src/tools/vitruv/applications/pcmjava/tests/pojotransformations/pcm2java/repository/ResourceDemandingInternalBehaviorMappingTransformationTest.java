@@ -52,7 +52,7 @@ public class ResourceDemandingInternalBehaviorMappingTransformationTest extends 
 				.createResourceDemandingInternalBehaviour();
 		// resourceDemandingInternalBehaviour.setEntityName(resourceDemandingInternalBehaviourName);
 		// basicComponent.getResourceDemandingInternalBehaviours__BasicComponent().add(resourceDemandingInternalBehaviour);
-		this.saveAndSynchronizeChanges(basicComponent);
+		propagate();
 		return resourceDemandingInternalBehaviour;
 	}
 }

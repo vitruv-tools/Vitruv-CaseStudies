@@ -28,7 +28,7 @@ public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransfo
         final OperationSignature opSig = this.createAndSyncRepoInterfaceAndOperationSignature();
 
         opSig.setEntityName(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME);
-        super.saveAndSynchronizeChanges(opSig);
+        propagate();
 
         this.assertOperationSignatureCorrespondence(opSig);
     }
@@ -40,7 +40,7 @@ public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransfo
         final Repository repo = opSig.getInterface__OperationSignature().getRepository__Interface();
         final PrimitiveDataType pdt = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
         opSig.setReturnType__OperationSignature(pdt);
-        super.saveAndSynchronizeChanges(opSig);
+        propagate();
 
         this.assertOperationSignatureCorrespondence(opSig);
     }
@@ -59,7 +59,7 @@ public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransfo
         opSig.setReturnType__OperationSignature(pdt);
         opSig.setInterface__OperationSignature(opInterface);
         // trigger synchronization execution
-        super.saveAndSynchronizeChanges(opInterface);
+        propagate();
 
         // assert the signature
         this.assertOperationSignatureCorrespondence(opSig);

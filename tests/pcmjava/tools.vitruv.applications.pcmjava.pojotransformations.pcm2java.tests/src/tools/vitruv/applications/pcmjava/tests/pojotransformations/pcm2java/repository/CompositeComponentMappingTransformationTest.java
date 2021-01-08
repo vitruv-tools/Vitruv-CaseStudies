@@ -85,7 +85,7 @@ public class CompositeComponentMappingTransformationTest extends Pcm2JavaTransfo
         final CompositeComponent cc = RepositoryFactory.eINSTANCE.createCompositeComponent();
         cc.setEntityName(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
         cc.setRepository__RepositoryComponent(repo);
-        super.saveAndSynchronizeChanges(repo);
+        propagate();
         return cc;
     }
 

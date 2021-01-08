@@ -35,7 +35,7 @@ public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformatio
         final Parameter param = this.createAndSyncRepoOpSigAndParameter();
 
         PcmParameterUtil.setParameterName(param, Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
-        super.saveAndSynchronizeChanges(param);
+        propagate();
 
         this.assertParameterCorrespondences(param);
     }
@@ -47,7 +47,7 @@ public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformatio
         final Repository repo = param.getOperationSignature__Parameter().getInterface__OperationSignature().getRepository__Interface();
         final PrimitiveDataType pdt = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
         param.setDataType__Parameter(pdt);
-        super.saveAndSynchronizeChanges(param);
+        propagate();
 
         this.assertParameterCorrespondences(param);
     }
@@ -67,7 +67,7 @@ public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformatio
         this.assertParameterCorrespondences(param);
         final OperationSignature opSig = param.getOperationSignature__Parameter();
         EcoreUtil.remove(param);
-        saveAndSynchronizeChanges(opSig);
+        propagate();
         
         this.assertCorrectSignatureMappingWithParameters(opSig, 0);
     }
@@ -105,7 +105,7 @@ public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformatio
         this.assertParameterCorrespondences(param3);
         
         EcoreUtil.remove(param2);
-        saveAndSynchronizeChanges(opSig);
+        propagate();
         this.assertCorrectSignatureMappingWithParameters(opSig, 2);
     }
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.classifiers.Classifier;
@@ -184,7 +185,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		final OperationSignature opSig = RepositoryFactory.eINSTANCE.createOperationSignature();
 		opSig.setEntityName(operationSignatureName);
 		opSig.setInterface__OperationSignature(opInterface);
-		this.saveAndSynchronizeChanges(repo);
+		propagate();
 		return opSig;
 	}
 
@@ -200,13 +201,13 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	protected OperationInterface renameInterfaceAndSync(final OperationInterface opInterface) throws Throwable {
 		final String newValue = opInterface.getEntityName() + Pcm2JavaTestUtils.RENAME;
 		opInterface.setEntityName(newValue);
-		this.saveAndSynchronizeChanges(opInterface);
+		propagate();
 		return opInterface;
 	}
 
 	protected BasicComponent addBasicComponentAndSync(final Repository repo, final String name) throws Throwable {
 		final BasicComponent basicComponent = Pcm2JavaTestUtils.createBasicComponent(repo, name);
-		this.saveAndSynchronizeChanges(repo);
+		propagate();
 		return basicComponent;
 	}
 
@@ -219,17 +220,20 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		final OperationInterface opInterface = RepositoryFactory.eINSTANCE.createOperationInterface();
 		opInterface.setRepository__Interface(repo);
 		opInterface.setEntityName(interfaceName);
-		this.saveAndSynchronizeChanges(repo);
+		propagate();
 		return opInterface;
 	}
 
-	protected String createRepositoryPathInProject(final String repositoryName) {
-		return "model/" + repositoryName + "." + PcmNamespace.REPOSITORY_FILE_EXTENSION;
+	protected Path createRepositoryPathInProject(final String repositoryName) {
+		return Path.of("model").resolve(repositoryName + "." + PcmNamespace.REPOSITORY_FILE_EXTENSION);
 	}
 
 	protected Repository createAndSyncRepository(final String repositoryName) throws IOException {
 		final Repository repo = Pcm2JavaTestUtils.createRepository(repositoryName);
-		createAndSynchronizeModel(createRepositoryPathInProject(repositoryName), repo);
+		final Resource resource = resourceAt(createRepositoryPathInProject(repositoryName));
+		startRecordingChanges(resource);
+		resource.getContents().add(repo);
+		propagate();
 		return repo;
 	}
 
@@ -263,14 +267,14 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		param.setModifier__Parameter(ParameterModifier.IN);
 		param.setOperationSignature__Parameter(opSig);
 		opSig.getParameters__OperationSignature().add(param);
-		this.saveAndSynchronizeChanges(opSig);
+		propagate();
 		return param;
 	}
 
 	protected CompositeDataType createAndSyncCompositeDataType(final Repository repo, final String name)
 			throws Throwable {
 		final CompositeDataType cdt = this.createCompositeDataType(repo, name);
-		this.saveAndSynchronizeChanges(repo);
+		propagate();
 		return cdt;
 	}
 
@@ -305,7 +309,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 		final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
 		final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
-		this.saveAndSynchronizeChanges(repo);
+		propagate();
 		return innerDec;
 	}
 
@@ -337,7 +341,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 				.setEntityName(interfaceProvidingEntity.getEntityName() + "_provides_" + opInterface.getEntityName());
 		operationProvidedRole.setProvidedInterface__OperationProvidedRole(opInterface);
 		operationProvidedRole.setProvidingEntity_ProvidedRole(interfaceProvidingEntity);
-		this.saveAndSynchronizeChanges(opInterface);
+		propagate();
 		return operationProvidedRole;
 	}
 
@@ -358,17 +362,21 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		operationRequiredRole.setEntityName(opInterface.getEntityName().toLowerCase());
 		operationRequiredRole.setRequiredInterface__OperationRequiredRole(opInterface);
 		operationRequiredRole.setRequiringEntity_RequiredRole(iprovidingRequiringEntity);
-		this.saveAndSynchronizeChanges(iprovidingRequiringEntity);
+		propagate();
 		return operationRequiredRole;
 	}
 
-	protected String createSystemPathInProject(final String systemName) {
-		return "model/" + systemName + "." + PcmNamespace.SYSTEM_FILE_EXTENSION;
+	protected Path createSystemPathInProject(final String systemName) {
+		return Path.of("model").resolve(systemName + "." + PcmNamespace.SYSTEM_FILE_EXTENSION);
+		//return "model/" + systemName + "." + PcmNamespace.SYSTEM_FILE_EXTENSION;
 	}
 
 	protected System createAndSyncSystem(final String systemName) throws Throwable {
 		final System system = Pcm2JavaTestUtils.createSystem(systemName);
-		createAndSynchronizeModel(createSystemPathInProject(systemName), system);
+		final Resource resource = resourceAt(createSystemPathInProject(systemName));
+		startRecordingChanges(resource);
+		resource.getContents().add(system);
+		propagate();
 		return system;
 	}
 
@@ -379,14 +387,14 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		assemblyContext.setEntityName(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME);
 		assemblyContext.setEncapsulatedComponent__AssemblyContext(basicComponent);
 		assemblyContext.setParentStructure__AssemblyContext(composedProvidingRequiringEntity);
-		this.saveAndSynchronizeChanges(composedProvidingRequiringEntity);
+		propagate();
 		return assemblyContext;
 	}
 
 	protected CompositeComponent createAndSyncCompositeComponent(final Repository repo, final String name)
 			throws Throwable {
 		final CompositeComponent compositeComponent = Pcm2JavaTestUtils.createCompositeComponent(repo, name);
-		this.saveAndSynchronizeChanges(repo);
+		propagate();
 		return compositeComponent;
 	}
 
@@ -559,7 +567,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		final ResourceDemandingSEFF rdSEFF = SeffFactory.eINSTANCE.createResourceDemandingSEFF();
 		rdSEFF.setBasicComponent_ServiceEffectSpecification(basicComponent);
 		rdSEFF.setDescribedService__SEFF(describedSignature);
-		this.saveAndSynchronizeChanges(basicComponent);
+		propagate();
 		return rdSEFF;
 
 	}
@@ -656,7 +664,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		if (null != innerType) {
 			cdt.setInnerType_CollectionDataType(innerType);
 		}
-		super.saveAndSynchronizeChanges(repo);
+		propagate();
 		return cdt;
 	}
 

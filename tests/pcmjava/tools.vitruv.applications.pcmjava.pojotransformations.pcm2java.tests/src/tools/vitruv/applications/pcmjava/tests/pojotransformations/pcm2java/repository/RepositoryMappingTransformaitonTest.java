@@ -35,7 +35,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
         // Test
         repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
         EcoreResourceBridge.saveResource(repo.eResource());
-        super.saveAndSynchronizeChanges(repo);
+        propagate();
 
         // check
         this.assertRepositoryCorrespondences(repo);
@@ -50,7 +50,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
         // Test
         repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
         EcoreResourceBridge.saveResource(repo.eResource());
-        super.saveAndSynchronizeChanges(repo);
+        propagate();
 
         // check
         this.assertRepositoryCorrespondences(repo);

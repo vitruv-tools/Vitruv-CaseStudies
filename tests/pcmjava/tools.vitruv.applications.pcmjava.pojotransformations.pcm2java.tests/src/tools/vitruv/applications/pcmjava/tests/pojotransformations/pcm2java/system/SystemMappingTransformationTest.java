@@ -1,6 +1,9 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system;
 
+import java.util.Collections;
+
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
@@ -23,7 +26,7 @@ public class SystemMappingTransformationTest extends Pcm2JavaTransformationTest 
         final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
 
         system.setEntityName(Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME);
-        super.saveAndSynchronizeChanges(system);
+        propagate();
 
         this.assertSystem(system);
     }
@@ -33,7 +36,9 @@ public class SystemMappingTransformationTest extends Pcm2JavaTransformationTest 
         final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
         this.assertSystem(system);
         
-        deleteAndSynchronizeModel(createSystemPathInProject(system.getEntityName()));
+        Resource resource = resourceAt(createSystemPathInProject(system.getEntityName()));
+        resource.delete(Collections.emptyMap());
+        propagate();
         
         assertEmptyCorrespondence(system);
         assertCompilationUnitForSystemDeleted(system);

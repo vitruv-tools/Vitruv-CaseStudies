@@ -28,7 +28,7 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
 
         cdt.setEntityName(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME);
-        super.saveAndSynchronizeChanges(cdt);
+        propagate();
 
         this.assertDataTypeCorrespondence(cdt);
     }
@@ -37,10 +37,10 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
     public void testAddCompositeDataTypeWithInnerTypes() throws Throwable {
         final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createCompositeDataType(repo, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME);
-        super.saveAndSynchronizeChanges(repo);
+        propagate();
 
         final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
-        super.saveAndSynchronizeChanges(repo);
+        propagate();
 
         this.getVirtualModel().executeCommand(new Callable<Void>() {
 
@@ -74,7 +74,7 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
         innerDec.setDatatype_InnerDeclaration(cdt2);
         innerDec.setCompositeDataType_InnerDeclaration(cdt);
         cdt.getInnerDeclaration_CompositeDataType().add(innerDec);
-        super.saveAndSynchronizeChanges(cdt);
+        propagate();
 
         this.assertDataTypeCorrespondence(cdt);
     }
