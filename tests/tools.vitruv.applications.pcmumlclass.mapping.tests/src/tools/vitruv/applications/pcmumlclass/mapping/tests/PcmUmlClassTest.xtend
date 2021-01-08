@@ -81,11 +81,12 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		assertThat(modelUri, isNoResource)
 	}
 
-	protected def EObject reloadResourceAndReturnRoot(EObject modelElement) {
-		stopRecordingChanges(modelElement)
+	protected def <O extends EObject> O clearResourcesAndReloadRoot(O modelElement) {
+		stopRecordingChanges(modelElement.eResource)
 		val resourceURI = modelElement.eResource.URI
-		modelElement.eResource.unload
-		val rootElement = resourceAt(resourceURI).contents.head
+		renewResourceCache
+		
+		val rootElement = EObject.from(resourceURI) as O
 		if (rootElement !== null) {
 			startRecordingChanges(rootElement)
 		}
@@ -152,11 +153,13 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 	 * Because of the necessary reloads, the model is loaded (while the out-of-synch elements remain) and registered with new IDs in the UUID resolver.
 	 * This might make it necessary to provide the VM that runs the tests with additional heap space.
 	 */
-	protected def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath) {
-		val originalRepository = inOriginalRepository
+	protected def simulateRepositoryInsertion_PCM(Repository originalRepository, String pcmOutputPath, String umlOutputPath) {
 		userInteraction.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
-		createAndSynchronizeModel(pcmOutputPath, originalRepository)
-		var generatedRepository = reloadResourceAndReturnRoot(originalRepository) as Repository
+		resourceAt(Path.of(pcmOutputPath)).startRecordingChanges => [
+			contents += originalRepository
+		]
+		propagate
+		var generatedRepository = originalRepository.clearResourcesAndReloadRoot
 		return generatedRepository 
 	}
 	
@@ -168,8 +171,8 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		assertNotNull(datatypesPackage)
 		
 		datatypesPackage.packagedElements += umlDataType
-		saveAndSynchronizeChanges(umlRepositoryModel)
-		return reloadResourceAndReturnRoot(umlRepositoryModel) as Model 
+		propagate
+		return umlRepositoryModel.clearResourcesAndReloadRoot 
 	}
 	
 	private def simulateContractsPackageElementInsertion_UML(Model umlRepositoryModel, PackageableElement originalContractsPackageElement) {
@@ -192,8 +195,8 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 			originalOperation.ownedParameters.clear
 		}
 		contractsPackage.packagedElements += originalInterface
-		saveAndSynchronizeChanges(umlRepositoryModel)
-		var generatedModel = reloadResourceAndReturnRoot(umlRepositoryModel) as Model
+		propagate
+		var generatedModel = umlRepositoryModel.clearResourcesAndReloadRoot
 		
 		//retrieve elements after reload
 		repositoryPackage = generatedModel.nestedPackages.head
@@ -218,8 +221,8 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 			}
 		}
 		
-		saveAndSynchronizeChanges(generatedModel)
-		return reloadResourceAndReturnRoot(generatedModel) as Model
+		propagate
+		return generatedModel.clearResourcesAndReloadRoot
 	}
 	
 	
@@ -237,8 +240,8 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		
 		userInteraction.addNextSingleSelection(userDisambigutationComponentType)
 		generatedRepositoryPackage.nestedPackages += originalComponentPackage //throws UUID error when tested on its own
-		saveAndSynchronizeChanges(generatedModel) //should generate generatedComponentImpl
-		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
+		propagate //should generate generatedComponentImpl
+		generatedModel = generatedModel.clearResourcesAndReloadRoot 
 		
 		generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
@@ -257,8 +260,8 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 			generatedComponentImpl.interfaceRealizations += originalRealization
 		}
 		
-		saveAndSynchronizeChanges(generatedModel) //should generate the constructor Parameters corresponding to RequiredRoles
-		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
+		propagate //should generate the constructor Parameters corresponding to RequiredRoles
+		generatedModel = generatedModel.clearResourcesAndReloadRoot 
 		generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
 		generatedComponentPackage = generatedRepositoryPackage.nestedPackages
@@ -288,8 +291,8 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 			generatedComponentImpl.ownedOperations += originalOperation
 		}
 		
-		saveAndSynchronizeChanges(generatedModel)
-		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
+		propagate
+		generatedModel = generatedModel.clearResourcesAndReloadRoot 
 		return generatedModel
 	}
 	
@@ -307,8 +310,12 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		
 //		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // rootelement is supposed to be a repository
 //		userInteraction.addNextTextInput(pcmOutputPath) // answers where to save the corresponding .pcm model
-		createAndSynchronizeModel(umlOutputPath, originalRepositoryModel)
-		var generatedModel = reloadResourceAndReturnRoot(originalRepositoryModel) as Model
+		userInteraction.addNextTextInput(pcmOutputPath) // answers where to save the corresponding .pcm model
+		resourceAt(Path.of(umlOutputPath)).startRecordingChanges => [
+			contents += originalRepositoryModel
+		]
+		propagate
+		var generatedModel = originalRepositoryModel.clearResourcesAndReloadRoot
 		
 		// Create copies of the lists outside the model so that containment is irrelevant
 		// and that the loops do not iterate over a changing List.
