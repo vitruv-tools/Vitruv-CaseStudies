@@ -37,39 +37,41 @@ import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.fail
+import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
  * Util class for assertions that works bidirectional.
  * 
  */
+@Utility
 class TestUtil {
-	
+
 	static val logger = Logger.getLogger(TestUtil)
-	
-	private new() {
-		
-	}
-	
+
 	/**
 	 * Does not compare the methods and attributes of the classes
 	 */
-	def static void assertClassEquals(org.eclipse.uml2.uml.Class uClass, org.emftext.language.java.classifiers.Class jClass) {
+	def static void assertClassEquals(org.eclipse.uml2.uml.Class uClass,
+		org.emftext.language.java.classifiers.Class jClass) {
 		assertEquals(uClass.name, jClass.name)
 		assertAbstractClassEquals(uClass, jClass)
 		assertFinalClassEquals(uClass, jClass)
 		assertVisibilityEquals(uClass, jClass)
-		assertPackageEquals(uClass.namespace as org.eclipse.uml2.uml.Package, (jClass.eContainer as CompilationUnit).namespaces)
+		assertPackageEquals(uClass.namespace as org.eclipse.uml2.uml.Package,
+			(jClass.eContainer as CompilationUnit).namespaces)
 	}
-	
+
 	/**
-     * Does not compare the methods and attributes of the interfaces
-     */
-	def static void assertInterfaceEquals(org.eclipse.uml2.uml.Interface uInterface, org.emftext.language.java.classifiers.Interface jInterface) {
+	 * Does not compare the methods and attributes of the interfaces
+	 */
+	def static void assertInterfaceEquals(org.eclipse.uml2.uml.Interface uInterface,
+		org.emftext.language.java.classifiers.Interface jInterface) {
 		assertEquals(uInterface.name, jInterface.name)
 		assertVisibilityEquals(uInterface, jInterface)
-		assertPackageEquals(uInterface.namespace as org.eclipse.uml2.uml.Package, (jInterface.eContainer as CompilationUnit).namespaces)
+		assertPackageEquals(uInterface.namespace as org.eclipse.uml2.uml.Package,
+			(jInterface.eContainer as CompilationUnit).namespaces)
 	}
-	
+
 	def static void assertAttributeEquals(Property uAttribute, Field jAttribute) {
 		assertEquals(uAttribute.name, jAttribute.name)
 		assertVisibilityEquals(uAttribute, jAttribute)
@@ -77,37 +79,41 @@ class TestUtil {
 		assertStaticEquals(uAttribute, jAttribute)
 		assertTypeEquals(uAttribute.type, jAttribute.typeReference)
 	}
-	
+
 	/**
-     * Does not compare the package contents
-     */
-	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage, org.emftext.language.java.containers.Package jPackage) {
+	 * Does not compare the package contents
+	 */
+	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage,
+		org.emftext.language.java.containers.Package jPackage) {
 		assertEquals(uPackage.name, jPackage.name)
-	    assertEquals(getUmlParentNamespaceAsStringList(uPackage), jPackage.namespaces)
+		assertEquals(getUmlParentNamespaceAsStringList(uPackage), jPackage.namespaces)
 	}
-	
-	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage, List<String> packageStringList) {
-	    assertThat(getUmlNamespaceAsStringList(uPackage), is(packageStringList));
+
+	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage,
+		List<String> packageStringList) {
+		assertThat(getUmlNamespaceAsStringList(uPackage), is(packageStringList))
 	}
-	
+
 	def static dispatch void assertPackageEquals(Model uModel, java.lang.Void empty) {
-	    //Do Nothing, assertion passed (Default package)
+		// Do Nothing, assertion passed (Default package)
 	}
-	
+
 	def static dispatch void assertPackageEquals(Model uModel, List<String> list) {
-        assertTrue(list.nullOrEmpty)
-    }
-	
+		assertTrue(list.nullOrEmpty)
+	}
+
 	/**
-     * It does compare enum literals of the enums
-     */
-	def static void assertEnumEquals(org.eclipse.uml2.uml.Enumeration uEnum, org.emftext.language.java.classifiers.Enumeration jEnum) {
+	 * It does compare enum literals of the enums
+	 */
+	def static void assertEnumEquals(org.eclipse.uml2.uml.Enumeration uEnum,
+		org.emftext.language.java.classifiers.Enumeration jEnum) {
 		assertEquals(uEnum.name, jEnum.name)
 		assertVisibilityEquals(uEnum, jEnum)
 		assertEnumConstantListEquals(uEnum.ownedLiterals, jEnum.constants)
 	}
-	
-	def static void assertEnumConstantListEquals(List<EnumerationLiteral> uEnumLiteralList, List<EnumConstant> jEnumConstantList) {
+
+	def static void assertEnumConstantListEquals(List<EnumerationLiteral> uEnumLiteralList,
+		List<EnumConstant> jEnumConstantList) {
 		assertEquals(uEnumLiteralList.size, jEnumConstantList.size)
 		for (uLiteral : uEnumLiteralList) {
 			val jConstants = jEnumConstantList.filter[name == uLiteral.name]
@@ -120,14 +126,14 @@ class TestUtil {
 			}
 		}
 	}
-	
+
 	def static void assertEnumConstantEquals(EnumerationLiteral uLiteral, EnumConstant jConstant) {
 		assertEquals(uLiteral.name, jConstant.name)
 	}
-	
+
 	/**
-     * It does compare the parameter of the methods
-     */
+	 * It does compare the parameter of the methods
+	 */
 	def static void assertClassMethodEquals(Operation uMethod, ClassMethod jMethod) {
 		assertEquals(uMethod.name, jMethod.name)
 		assertStaticEquals(uMethod, jMethod)
@@ -137,20 +143,20 @@ class TestUtil {
 		assertTypeEquals(uMethod.type, jMethod.typeReference)
 		assertParameterListEquals(uMethod.ownedParameters, jMethod.parameters)
 	}
-	
+
 	/**
 	 * Interface methods = methods without body.
 	 * Also checks if uMethod is abstract.
 	 * 
 	 */
 	def static void assertInterfaceMethodEquals(Operation uMethod, InterfaceMethod jMethod) {
-        assertEquals(uMethod.name, jMethod.name)
-        assertTrue(uMethod.abstract) //jMethod is always implicitly abstract
-        assertUmlNamedElementHasVisibility(uMethod, VisibilityKind.PUBLIC_LITERAL) //JMehod is always implicitly public
-        assertTypeEquals(uMethod.type, jMethod.typeReference)
-        assertParameterListEquals(uMethod.ownedParameters, jMethod.parameters)
-    }
-	
+		assertEquals(uMethod.name, jMethod.name)
+		assertTrue(uMethod.abstract) // jMethod is always implicitly abstract
+		assertUmlNamedElementHasVisibility(uMethod, VisibilityKind.PUBLIC_LITERAL) // JMehod is always implicitly public
+		assertTypeEquals(uMethod.type, jMethod.typeReference)
+		assertParameterListEquals(uMethod.ownedParameters, jMethod.parameters)
+	}
+
 	def static void assertStaticEquals(Feature uElement, AnnotableAndModifiable jElement) {
 		if (uElement.static) {
 			assertTrue(jElement.hasModifier(Static))
@@ -158,15 +164,16 @@ class TestUtil {
 			assertFalse(jElement.hasModifier(Static))
 		}
 	}
-	
-	def static void assertFinalClassEquals(org.eclipse.uml2.uml.Class uClass, org.emftext.language.java.classifiers.Class jClass) {
+
+	def static void assertFinalClassEquals(org.eclipse.uml2.uml.Class uClass,
+		org.emftext.language.java.classifiers.Class jClass) {
 		if (uClass.finalSpecialization) {
 			assertTrue(jClass.hasModifier(Final))
 		} else {
 			assertFalse(jClass.hasModifier(Final))
 		}
 	}
-	
+
 	def static void assertFinalAttributeEquals(Property uAttribute, Field jAttribute) {
 		if (uAttribute.readOnly) {
 			assertTrue(jAttribute.hasModifier(Final))
@@ -174,23 +181,24 @@ class TestUtil {
 			assertFalse(jAttribute.hasModifier(Final))
 		}
 	}
-	
-	def static void assertAbstractClassEquals(org.eclipse.uml2.uml.Class uClass, org.emftext.language.java.classifiers.Class jClass) {
+
+	def static void assertAbstractClassEquals(org.eclipse.uml2.uml.Class uClass,
+		org.emftext.language.java.classifiers.Class jClass) {
 		if (uClass.abstract) {
 			assertTrue(jClass.hasModifier(Abstract))
 		} else {
 			assertFalse(jClass.hasModifier(Abstract))
 		}
 	}
-	
+
 	def static void assertFinalMethodEquals(Operation uMethod, Method jMethod) {
-        if (uMethod.isLeaf) {
-            assertTrue(jMethod.hasModifier(Final))
-        } else {
-            assertFalse(jMethod.hasModifier(Final))
-        }
-    }
-	
+		if (uMethod.isLeaf) {
+			assertTrue(jMethod.hasModifier(Final))
+		} else {
+			assertFalse(jMethod.hasModifier(Final))
+		}
+	}
+
 	def static void assertAbstractMethodEquals(Operation uMethod, Method jMethod) {
 		if (uMethod.abstract) {
 			assertTrue(jMethod.hasModifier(Abstract))
@@ -198,44 +206,52 @@ class TestUtil {
 			assertFalse(jMethod.hasModifier(Abstract))
 		}
 	}
-	
-	def static void assertVisibilityEquals(org.eclipse.uml2.uml.NamedElement uElement, AnnotableAndModifiable jElement) {
+
+	def static void assertVisibilityEquals(org.eclipse.uml2.uml.NamedElement uElement,
+		AnnotableAndModifiable jElement) {
 		val jVisibility = getJavaVisibilityConstantFromUmlVisibilityKind(uElement.visibility)
 		assertJavaModifiableHasVisibility(jElement, jVisibility)
 	}
-	
+
 	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Type uType, TypeReference jTypeReference) {
-		throw new IllegalArgumentException("The java TypeReference " + jTypeReference + " is neither a PrimitiveType nor a NamespaceClassifierReference")
+		throw new IllegalArgumentException("The java TypeReference " + jTypeReference +
+			" is neither a PrimitiveType nor a NamespaceClassifierReference")
 	}
-	
-	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Interface uInterface, NamespaceClassifierReference namespaceRef) {
+
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Interface uInterface,
+		NamespaceClassifierReference namespaceRef) {
 		assertEquals(uInterface.name, getInterfaceFromTypeReference(namespaceRef).name)
 	}
-	
-	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Class uClass, NamespaceClassifierReference namespaceRef) {
-	    assertEquals(uClass.name, getClassifierFromTypeReference(namespaceRef).name)
+
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Class uClass,
+		NamespaceClassifierReference namespaceRef) {
+		assertEquals(uClass.name, getClassifierFromTypeReference(namespaceRef).name)
 	}
-	
+
 	def static dispatch void assertTypeEquals(java.lang.Void nullReference, Void voidType) {
-        //umlType is null, javaType is void -> Do nothing, assertion passed.
-    }
-    
-    // IMPORTANT EXCEPTION: String is NOT a primitive in the Java model, which means this dispatch case needs to exist:
-    def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType, NamespaceClassifierReference namespaceRef) {
+		// umlType is null, javaType is void -> Do nothing, assertion passed.
+	}
+
+	// IMPORTANT EXCEPTION: String is NOT a primitive in the Java model, which means this dispatch case needs to exist:
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
+		NamespaceClassifierReference namespaceRef) {
 		assertNotNull(uPrimType)
 		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
 		assertFalse(jTypeMapped instanceof Void) // if the uml type is non null and supported by the transformations, then it should not be mapped to void
-		assertEquals(getClassifierFromTypeReference(jTypeMapped).name, getClassifierFromTypeReference(namespaceRef).name)
-    }
-	
-	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType, org.emftext.language.java.types.PrimitiveType jPrimType) {
+		assertEquals(getClassifierFromTypeReference(jTypeMapped).name,
+			getClassifierFromTypeReference(namespaceRef).name)
+	}
+
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
+		org.emftext.language.java.types.PrimitiveType jPrimType) {
 		assertNotNull(uPrimType)
 		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
 		assertFalse(jTypeMapped instanceof Void) // if the uml type is non null and supported by the transformations, then it should not be mapped to void
 		assertEquals(jTypeMapped.class, jPrimType.class)
-    }
-	
-	def static void assertParameterListEquals(List<org.eclipse.uml2.uml.Parameter> uParamList, List<org.emftext.language.java.parameters.Parameter> jParamList) {
+	}
+
+	def static void assertParameterListEquals(List<org.eclipse.uml2.uml.Parameter> uParamList,
+		List<org.emftext.language.java.parameters.Parameter> jParamList) {
 		val uParamListWithoutReturn = uParamList.filter[direction != ParameterDirectionKind.RETURN_LITERAL]
 		if (uParamListWithoutReturn === null) {
 			assertNull(jParamList)
@@ -253,12 +269,11 @@ class TestUtil {
 			}
 		}
 	}
-	
-	def static void assertParameterEquals(org.eclipse.uml2.uml.Parameter uParameter, org.emftext.language.java.parameters.Parameter jParameter) {
-		assertEquals(uParameter.name , jParameter.name)
+
+	def static void assertParameterEquals(org.eclipse.uml2.uml.Parameter uParameter,
+		org.emftext.language.java.parameters.Parameter jParameter) {
+		assertEquals(uParameter.name, jParameter.name)
 		assertTypeEquals(uParameter.type, jParameter.typeReference)
 	}
-	
-	
-	
+
 }
