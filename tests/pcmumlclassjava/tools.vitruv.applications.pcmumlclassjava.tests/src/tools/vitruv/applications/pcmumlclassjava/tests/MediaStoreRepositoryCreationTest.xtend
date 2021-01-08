@@ -16,6 +16,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 import static org.junit.jupiter.api.Assertions.assertNotNull
+import java.nio.file.Path
 
 /**
  * Model creation tests, to test the set of transformations as a whole. 
@@ -154,12 +155,15 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		
 		val pcmPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME + DefaultLiterals.PCM_REPOSITORY_EXTENSION
 		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
-		createAndSynchronizeModel(pcmPath, pcmRepo)
+		resourceAt(Path.of(pcmPath)).startRecordingChanges => [
+			contents += pcmRepo
+		]
+		propagate
 		assertModelExists(pcmPath)
 		assertModelExists(umlPath)
 		
 		pcmSignature2.returnType__OperationSignature = pcmCompositeType_Collection
-		saveAndSynchronizeChanges(pcmRepo)
+		propagate
 	}
 	
 	@Test
@@ -197,7 +201,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // the package should correspond to a repository
 		userInteraction.addNextTextInput("model/repository.repository") // pcm repository file
 		var jPkg_Repo = createJavaPackageAsModel(REPOSITORY_PKG_NAME, null)
-		saveAndSynchronizeChanges(jPkg_Repo)
+		propagate
 		
 		var jPkg_datatypes = getJavaPackage(REPOSITORY_PKG_NAME, DATATYPES_PKG_NAME)
 		var jDt_FileContent = createJavaClassInPackage(jPkg_datatypes, DATATYPE_NAME_FileContent, JavaVisibility.PUBLIC, false, false)
@@ -208,7 +212,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		var jAtt_Size = createJavaAttribute(ATTRIBUTE_NAME_Size, createJavaPrimitiveType(JavaStandardType.INT), JavaVisibility.PUBLIC, false, false)
 		jDt_AudioCollectionRequest.members += jAtt_Count
 		jDt_AudioCollectionRequest.members += jAtt_Size
-		saveAndSynchronizeChanges(jDt_AudioCollectionRequest)
+		propagate
 		
 		var jPkg_contracts = getJavaPackage(REPOSITORY_PKG_NAME, CONTRACTS_PKG_NAME)
 		var jI_IFileStorage = createJavaInterfaceInPackage(jPkg_contracts, INTERFACE_NAME_IFileStorage, #[])
@@ -217,21 +221,21 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		var jDtRef_FileContent = createNamespaceReferenceFromClassifier(jDt_FileContent)
 		var jMeth_getFile = createJavaInterfaceMethod(METHOD_NAME_getFile, jDtRef_FileContent, #[jParam_audioRequest])
 		jI_IFileStorage.members += jMeth_getFile
-		saveAndSynchronizeChanges(jI_IFileStorage)
+		propagate
 		var jI_IMediaAccess = createJavaInterfaceInPackage(jPkg_contracts, INTERFACE_NAME_IMediaAccess, #[])
 		jDtRef_FileContent = createNamespaceReferenceFromClassifier(jDt_FileContent)
 		var jParam_file = createJavaParameter(PARAMETER_NAME_file, jDtRef_FileContent)
 		var jMeth_upload = createJavaInterfaceMethod(METHOD_NAME_upload, null, #[jParam_file])
 		jI_IMediaAccess.members += jMeth_upload
-		saveAndSynchronizeChanges(jI_IMediaAccess)
+		propagate
 		
 		// TODO java -> uml -> pcm test error
 		// At the moment it is possible to create a pcm::BasicComponent by inserting a package into the repository-package.
 		// But it is not possible to edit the generated ComponentImpl-java::Class, because the containing CompilationUnit
 		// can not be loaded/UUID-registered in the view-ResourceSet. 
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT) // the package should correspond to a BasicComponent
-		var jPkg_mediaAccess = createJavaPackageAsModel(COMPONENT_PKG_NAME, jPkg_Repo)
-		saveAndSynchronizeChanges(jPkg_mediaAccess)
+		createJavaPackageAsModel(COMPONENT_PKG_NAME, jPkg_Repo)
+		propagate
 		var jClass_MediaAccessImpl = getJavaClassFromCompilationUnit(COMPONENT_IMPL_NAME, REPOSITORY_PKG_NAME, COMPONENT_PKG_NAME) // TODO here it fails
 		assertNotNull(jClass_MediaAccessImpl)
 		var jIRef_IFileStorage = createNamespaceReferenceFromClassifier(jI_IFileStorage)// required
@@ -239,7 +243,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		jClass_MediaAccessImpl.implements += jIRef_IMediaAccess
 		var jAtt_requiredIFileStorage = createJavaAttribute(ATTRIBUTE_NAME, jIRef_IFileStorage, JavaVisibility.PRIVATE, false, false)
 		jClass_MediaAccessImpl.members += jAtt_requiredIFileStorage
-		saveAndSynchronizeChanges(jClass_MediaAccessImpl)
+		propagate
 	}
 	
 	// REMARK: Only for manual test execution
@@ -248,10 +252,13 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 	def void testMediaStoreCreation_PcmInserted() {
 		setInteractiveUserInteractor
 		
-		var pcmRepo_forward = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH).testResource.contents.head as Repository
+		val pcmRepo_forward = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH).testResource.contents.head as Repository
 		
 		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION // the default output if no input is given to the UserInteractor
-		createAndSynchronizeModel(PCM_GENERATED_MEDIA_STORE_MODEL_PATH, pcmRepo_forward)
+		resourceAt(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)).startRecordingChanges => [
+			contents += pcmRepo_forward
+		]
+		propagate
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(umlPath)	
 	}
@@ -262,10 +269,13 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 	def void testMinimalRepository_PcmUmlJava() {
 		setInteractiveUserInteractor
 		
-		var pcmRepo_forward = createRepository
+		val pcmRepo_forward = createRepository
 		val pcmPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME + DefaultLiterals.PCM_REPOSITORY_EXTENSION
 		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
-		createAndSynchronizeModel(pcmPath, pcmRepo_forward)
+		resourceAt(Path.of(pcmPath)).startRecordingChanges => [
+			contents += pcmRepo_forward
+		]
+		propagate
 		assertModelExists(pcmPath)
 		assertModelExists(umlPath)
 	}
