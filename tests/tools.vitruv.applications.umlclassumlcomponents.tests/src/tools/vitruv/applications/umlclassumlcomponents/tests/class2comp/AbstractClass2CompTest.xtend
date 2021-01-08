@@ -30,7 +30,7 @@ abstract class AbstractClass2CompTest extends LegacyVitruvApplicationTest {
 	//SaveAndSynchronize & commit all pending userInteractions
 	protected def saveAndSynchronizeWithInteractions(EObject object) {
 		sendCollectedUserInteractionSelections(this.userInteraction)
-		saveAndSynchronizeChanges(object)
+		propagate
 	}
 	
 	@BeforeEach
@@ -38,10 +38,14 @@ abstract class AbstractClass2CompTest extends LegacyVitruvApplicationTest {
 		initializeTestModel()
 	}
 		
-	protected def initializeTestModel() {
-		val umlModel = UMLFactory.eINSTANCE.createModel()
-		umlModel.name = MODEL_NAME
-		createAndSynchronizeModel(MODEL_NAME.projectModelPath.toString, umlModel)
+	protected def void initializeTestModel() {
+		val umlModel = UMLFactory.eINSTANCE.createModel() => [
+			name = MODEL_NAME
+		]
+		resourceAt(MODEL_NAME.projectModelPath).startRecordingChanges => [
+			contents += umlModel
+		]
+		propagate
 	}
 		
 	private def Path getProjectModelPath(String modelName) {

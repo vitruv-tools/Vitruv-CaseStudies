@@ -1,7 +1,6 @@
 package tools.vitruv.applications.umlclassumlcomponents.tests.comp2class
 
 import java.util.Collections
-import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
@@ -12,13 +11,15 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.Interface
 
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedIntegrationTestUtil.*
+import static extension tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedIntegrationTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.tests.util.UserInteractionTestUtil.*
 import org.eclipse.uml2.uml.Component
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 
 import static org.junit.jupiter.api.Assertions.assertTrue
+import java.nio.file.Path
+import org.eclipse.emf.ecore.EObject
 
 class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	
@@ -27,9 +28,11 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	}
 	
 	def Model integrationTest(String fileName) {		
-		val Resource inputResource = getTestModelResource(fileName)
 		sendCollectedUserInteractionSelections(this.userInteraction)
-		createAndSynchronizeModel(OUTPUT_NAME, inputResource.allContents.head)
+		resourceAt(Path.of(OUTPUT_NAME)).startRecordingChanges => [
+			contents += EObject.from(fileName.testModelResource)
+		]
+		propagate
 		
 		val umlModel = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model).get(0)
 		umlModel.eResource.save(Collections.EMPTY_MAP)

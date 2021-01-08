@@ -28,7 +28,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		val compInterface = createInterface(INTERFACE_NAME)
 		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
 		compIFRealization.suppliers += compInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		//Assert Class
 		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)		
@@ -52,7 +52,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		val compInterface = createInterface(INTERFACE_NAME)
 		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
 		compIFRealization.suppliers += compInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		
 		//Get Class and Class InterfaceRealization:
@@ -61,7 +61,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		
 		//Remove Component interfaceRealization and check if the corresponding one is removed, too
 		compIFRealization.destroy
-		saveAndSynchronizeChanges(rootElement)		
+		propagate		
 		assertFalse(umlClass.interfaceRealizations.contains(classIFRealization))
 	}
 	
@@ -75,7 +75,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		val compInterface = createInterface(INTERFACE_NAME)
 		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
 		compIFRealization.suppliers += compInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		//Assert Class
 		val umlClass1 = assertClassAndPackage(umlComp, COMP_NAME)		
@@ -98,7 +98,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		val compUsage = createUsage(USAGE_NAME, umlComp2)
 		compUsage.suppliers += compInterface	
 		
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		//Assert Class
 		val umlClass2 = assertClassAndPackage(umlComp2, COMP_NAME2)
@@ -127,7 +127,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		val compInterface = createInterface(INTERFACE_NAME)
 		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
 		compIFRealization.suppliers += compInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 
 		//***Now add uses Relationship***
 		
@@ -137,7 +137,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		val compUsage = createUsage(USAGE_NAME, umlComp2)
 		compUsage.suppliers += compInterface	
 		
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		//***Now delete the Usage***
 		
@@ -147,7 +147,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		
 		//Remove Usage and check if the corresponding InterfaceRealization is removed, too
 		compUsage.destroy
-		saveAndSynchronizeChanges(rootElement)		
+		propagate		
 		assertFalse(umlClass2.interfaceRealizations.contains(classIFRealization2))
 	}
 	
@@ -161,7 +161,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		val compInterface = createInterface(INTERFACE_NAME)
 		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
 		compIFRealization.suppliers += compInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		//Assert Class
 		val umlClass1 = assertClassAndPackage(umlComp, COMP_NAME)		
@@ -190,7 +190,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 		val compUsage2 = createUsage(USAGE_NAME2, umlComp3)
 		compUsage2.suppliers += compInterface	
 		
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		//Assert Classes
 		val umlClass2 = assertClassAndPackage(umlComp2, COMP_NAME2)

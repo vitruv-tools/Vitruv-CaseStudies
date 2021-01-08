@@ -27,11 +27,11 @@ class VisibilityTest extends AbstractComp2ClassTest{
 	def void testVisibilityChange() {
 		val umlComp = createComponent(COMP_NAME)
 		umlComp.visibility = VisibilityKind.PRIVATE_LITERAL
-		saveAndSynchronizeChanges(umlComp)		
+		propagate		
 		assertVisibility(umlComp)
 		
 		umlComp.visibility = VisibilityKind.PUBLIC_LITERAL
-		saveAndSynchronizeChanges(umlComp)		
+		propagate		
 		assertVisibility(umlComp)
 	}			
 	
