@@ -7,7 +7,7 @@ import tools.vitruv.framework.applications.AbstractVitruvApplication;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 
 public class PcmUmlComponentsApplication extends AbstractVitruvApplication {
-	
+
 	@Override
 	public Set<ChangePropagationSpecification> getChangePropagationSpecifications() {
 		Set<ChangePropagationSpecification> specs = new HashSet<ChangePropagationSpecification>();

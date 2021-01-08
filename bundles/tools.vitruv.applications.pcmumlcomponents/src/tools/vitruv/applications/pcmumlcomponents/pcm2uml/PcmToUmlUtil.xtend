@@ -20,7 +20,9 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorrespondence
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionsCorrespondenceModelViewFactory
+import edu.kit.ipd.sdq.activextendannotations.Utility
 
+@Utility
 class PcmToUmlUtil {
 
 	public static val COLLECTION_TYPE_TAG = "Collection"
@@ -82,8 +84,7 @@ class PcmToUmlUtil {
 
 	protected static def ReactionsCorrespondence createTaggedCorrespondence(CorrespondenceModel correspondenceModel,
 		EObject elementA, EObject elementB, String tag) {
-		val correspondence = correspondenceModel.reactionsView.
-			createAndAddCorrespondence(#[elementA], #[elementB])
+		val correspondence = correspondenceModel.reactionsView.createAndAddCorrespondence(#[elementA], #[elementB])
 		correspondence.tag = tag
 		return correspondence
 	}

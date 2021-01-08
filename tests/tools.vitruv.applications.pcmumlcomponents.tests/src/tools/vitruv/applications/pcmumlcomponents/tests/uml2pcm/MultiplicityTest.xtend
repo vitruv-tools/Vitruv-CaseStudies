@@ -50,7 +50,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		val compositeType = umlDataType.correspondingElements.head as CompositeDataType
 		assertEquals(collectionType, compositeType.innerDeclaration_CompositeDataType.head.datatype_InnerDeclaration)
 
-		val pcmInnerType = pcmRepository.dataTypes__Repository.findFirst [t |
+		val pcmInnerType = pcmRepository.dataTypes__Repository.findFirst [ t |
 			t instanceof CompositeDataType && (t as CompositeDataType).entityName == INNER_DATATYPE_NAME
 		]
 		assertEquals(pcmInnerType, (collectionType as CollectionDataType).innerType_CollectionDataType)
@@ -77,14 +77,15 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 
 		assertEquals(collectionType, pcmParameter.dataType__Parameter)
 	}
-	
+
 	@Test
 	def void returnTypeMultiplicityTest() {
 		val returnType = createInnerDataType()
 		val umlInterface = UMLFactory.eINSTANCE.createInterface()
 		umlInterface.name = INTERFACE_NAME
 		rootElement.packagedElements += umlInterface
-		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, new BasicEList<String>(), new BasicEList<Type>(), returnType)
+		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, new BasicEList<String>(),
+			new BasicEList<Type>(), returnType)
 		val umlParameter = umlOperation.ownedParameters.head
 		umlParameter.lower = 0
 		propagate
@@ -106,7 +107,8 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		val umlDataType = UMLFactory.eINSTANCE.createDataType()
 		umlDataType.name = "fooType"
 		rootElement.packagedElements += umlDataType
-		val umlAttribute = umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 1, UnlimitedNaturalLiteralExp.UNLIMITED)
+		val umlAttribute = umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 1,
+			UnlimitedNaturalLiteralExp.UNLIMITED)
 		propagate
 
 		umlAttribute.upperValue = null
@@ -115,19 +117,20 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		assertEquals(1, umlAttribute.lowerBound)
 		assertEquals(umlAttribute.upper, umlAttribute.upperBound)
 		assertEquals(umlAttribute.lowerBound, umlAttribute.upperBound)
-		
+
 		val pcmInnerDeclaration = umlAttribute.correspondingElements.head as InnerDeclaration
 		assertTrue(pcmInnerDeclaration.datatype_InnerDeclaration instanceof CompositeDataType)
-		assertEquals(INNER_DATATYPE_NAME, (pcmInnerDeclaration.datatype_InnerDeclaration as CompositeDataType).entityName)
+		assertEquals(INNER_DATATYPE_NAME,
+			(pcmInnerDeclaration.datatype_InnerDeclaration as CompositeDataType).entityName)
 	}
-	
+
 	@Test
 	def void deleteMultiplicityType() {
 		val innerDataType = createInnerDataType()
 		propagate
 		var pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(1, pcmRepository.dataTypes__Repository.length)
-		
+
 		val umlDataType = UMLFactory.eINSTANCE.createDataType()
 		umlDataType.name = "fooType"
 		rootElement.packagedElements += umlDataType
@@ -135,12 +138,12 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		propagate
 		pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(3, pcmRepository.dataTypes__Repository.length)
-		
+
 		rootElement.packagedElements -= umlDataType
 		propagate
 		pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(2, pcmRepository.dataTypes__Repository.length)
-		
+
 		rootElement.packagedElements -= innerDataType
 		propagate
 		pcmRepository = rootElement.claimCorrespondingRepository

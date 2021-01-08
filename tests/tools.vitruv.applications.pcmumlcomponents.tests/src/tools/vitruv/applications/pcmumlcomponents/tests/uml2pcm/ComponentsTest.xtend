@@ -15,24 +15,24 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 class ComponentsTest extends AbstractUmlPcmTest {
-	
+
 	protected static val USAGE_NAME = "testUsage"
 	protected static val INTERFACE_REALIZATION_NAME = "testInterfaceRealization"
-		
+
 	protected def Component createUmlComponent(String name, Boolean isComposable) {
 		val umlComponent = UMLFactory.eINSTANCE.createComponent()
 		umlComponent.name = name
 		rootElement.packagedElements += umlComponent
-		val componentMode = if (isComposable) 0 else 1
+		val componentMode = if(isComposable) 0 else 1
 		userInteraction.addNextSingleSelection(componentMode)
 		propagate
 		return umlComponent
 	}
-	
+
 	protected def Component createUmlComponent(String name) {
 		createUmlComponent(name, false)
 	}
-	
+
 	protected def Interface createUmlInterface(String name) {
 		val umlInterface = UMLFactory.eINSTANCE.createInterface()
 		umlInterface.name = name
@@ -40,22 +40,22 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		propagate
 		return umlInterface
 	}
-	
+
 	protected def CompositeComponent getCorrespondingCompositeComponent(Component umlComponent) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
 		return (correspondingElements.get(0) as CompositeComponent)
 	}
-	
+
 	protected def BasicComponent getCorrespondingBasicComponent(Component umlComponent) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
 		return (correspondingElements.get(0) as BasicComponent)
 	}
-	
+
 	protected def OperationInterface getCorrespondingInterface(Interface umlInterface) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten
 		return (correspondingElements.get(0) as OperationInterface)
 	}
-	
+
 	@Test
 	def void testCreateBasicComponent() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
@@ -65,7 +65,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(umlComponent.name, pcmComponent.entityName)
 	}
-	
+
 	@Test
 	def void testAddProvidedInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
@@ -75,7 +75,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		interfaceRealization.suppliers += umlInterface
 		umlComponent.interfaceRealizations += interfaceRealization
 		propagate
-		
+
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(1, pcmComponent.providedRoles_InterfaceProvidingEntity.length)
 		val pcmRole = (pcmComponent.providedRoles_InterfaceProvidingEntity.get(0) as OperationProvidedRole)
@@ -83,7 +83,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		val pcmInterface = getCorrespondingInterface(umlInterface)
 		assertEquals(pcmInterface, pcmRole.providedInterface__OperationProvidedRole)
 	}
-	
+
 	@Test
 	def void testChangeProvidedInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
@@ -93,12 +93,12 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		interfaceRealization.suppliers += umlInterface1
 		umlComponent.interfaceRealizations += interfaceRealization
 		propagate
-		
+
 		val umlInterface2 = createUmlInterface(INTERFACE_NAME + "2")
 		interfaceRealization.suppliers.clear()
 		interfaceRealization.suppliers += umlInterface2
 		propagate
-		
+
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(1, pcmComponent.providedRoles_InterfaceProvidingEntity.length)
 		val pcmRole = (pcmComponent.providedRoles_InterfaceProvidingEntity.get(0) as OperationProvidedRole)
@@ -106,7 +106,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		val pcmInterface = getCorrespondingInterface(umlInterface2)
 		assertEquals(pcmInterface, pcmRole.providedInterface__OperationProvidedRole)
 	}
-	
+
 	@Test
 	def void testRemoveProvidedInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
@@ -116,14 +116,14 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		interfaceRealization.suppliers += umlInterface
 		umlComponent.interfaceRealizations += interfaceRealization
 		propagate
-		
+
 		umlComponent.interfaceRealizations -= interfaceRealization
 		propagate
-		
+
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(0, pcmComponent.providedRoles_InterfaceProvidingEntity.length)
 	}
-	
+
 	@Test
 	def void testAddRequiredInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
@@ -133,7 +133,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		usage.suppliers += umlInterface
 		umlComponent.packagedElements += usage
 		propagate
-		
+
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.length)
 		val pcmRole = (pcmComponent.requiredRoles_InterfaceRequiringEntity.get(0) as OperationRequiredRole)
@@ -141,7 +141,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		val pcmInterface = getCorrespondingInterface(umlInterface)
 		assertEquals(pcmInterface, pcmRole.requiredInterface__OperationRequiredRole)
 	}
-	
+
 	@Test
 	def void testChangeRequiredInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
@@ -151,13 +151,13 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		usage.suppliers += umlInterface1
 		umlComponent.packagedElements += usage
 		propagate
-		
+
 		val umlInterface2 = createUmlInterface(INTERFACE_NAME + "2")
 		// usage.suppliers.clear()
 		// usage.suppliers += #[umlInterface2]
 		usage.suppliers.set(0, umlInterface2)
 		propagate
-		
+
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.length)
 		val pcmRole = (pcmComponent.requiredRoles_InterfaceRequiringEntity.get(0) as OperationRequiredRole)
@@ -165,7 +165,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		val pcmInterface = getCorrespondingInterface(umlInterface2)
 		assertEquals(pcmInterface, pcmRole.requiredInterface__OperationRequiredRole)
 	}
-	
+
 	@Test
 	def void testRemoveRequiredInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
@@ -175,14 +175,14 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		usage.suppliers += umlInterface
 		umlComponent.packagedElements += usage
 		propagate
-		
+
 		umlComponent.packagedElements -= usage
 		propagate
-		
+
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(0, pcmComponent.requiredRoles_InterfaceRequiringEntity.length)
 	}
-	
+
 	@Test
 	def void testCreateCompositeComponent() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME, true)
@@ -192,5 +192,5 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		val pcmComponent = getCorrespondingCompositeComponent(umlComponent)
 		assertEquals(umlComponent.name, pcmComponent.entityName)
 	}
-	
+
 }

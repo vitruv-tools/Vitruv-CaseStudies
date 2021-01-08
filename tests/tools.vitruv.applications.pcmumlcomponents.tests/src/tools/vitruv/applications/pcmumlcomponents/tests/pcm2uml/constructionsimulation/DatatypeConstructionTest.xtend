@@ -5,7 +5,7 @@ import org.eclipse.emf.ecore.EObject
 import static extension tools.vitruv.applications.pcmumlcomponents.tests.util.ExistingModelUtil.loadModel
 
 class DatatypeConstructionTest extends ModelConstructionTest {
-	
+
 	@Test
 	def void dataTypeTest() {
 		val originalResource = loadModel("model/datatype.repository")
@@ -14,5 +14,5 @@ class DatatypeConstructionTest extends ModelConstructionTest {
 		]
 		propagate
 	}
-	
+
 }

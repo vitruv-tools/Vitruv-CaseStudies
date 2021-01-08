@@ -22,7 +22,7 @@ class UmlModelTest extends AbstractPcmUmlTest {
 		assertTrue(umlModel instanceof Model);
 		assertEquals(MODEL_NAME, (umlModel as Model).name);
 	}
-	
+
 	@Test
 	def void testModelRename() {
 		val newName = 'foo';
