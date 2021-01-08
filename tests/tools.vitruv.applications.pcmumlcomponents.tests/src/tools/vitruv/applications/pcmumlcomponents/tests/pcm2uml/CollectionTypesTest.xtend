@@ -7,7 +7,7 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.Parameter
-import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
+import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 

@@ -26,8 +26,8 @@ import tools.vitruv.applications.pcmumlcomponents.UmlToPcmComponentsChangePropag
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil
 
 abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
-	protected static val MODEL_FILE_EXTENSION = "uml";
-	protected static val MODEL_NAME = "model";
+	protected static val MODEL_FILE_EXTENSION = "uml"
+	protected static val MODEL_NAME = "model"
 	protected static val COMPONENT_NAME = "TestComponent"
 	protected static val INTERFACE_NAME = "TestInterface"
 	protected static val OPERATION_NAME = "fooOperation"
@@ -40,15 +40,15 @@ abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
 	protected static val UML_TYPE_STRING = "String"
 
 	private def Path getProjectModelPath(String modelName) {
-		Path.of("model").resolve(modelName + "." + MODEL_FILE_EXTENSION);
+		Path.of("model").resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}
 
 	protected def Model getRootElement() {
-		return Model.from(MODEL_NAME.getProjectModelPath);
+		return Model.from(MODEL_NAME.getProjectModelPath)
 	}
 
 	override protected getChangePropagationSpecifications() {
-		return #[new UmlToPcmComponentsChangePropagationSpecification()];
+		return #[new UmlToPcmComponentsChangePropagationSpecification()]
 	}
 
 	protected def void initializeTestModel() {
@@ -99,7 +99,7 @@ abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
 		assertEquals(1, potentialRepositories.size)
 		assertEquals(1, potentialClasses.size)
 		assertEquals(UMLPackage.eINSTANCE.model, potentialClasses.get(0))
-		return potentialRepositories.get(0);
+		return potentialRepositories.get(0)
 	}
 
 }

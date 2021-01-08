@@ -79,7 +79,7 @@ class PcmToUmlUtil {
 	}
 
 	private static def getReactionsView(CorrespondenceModel correspondenceModel) {
-		return correspondenceModel.getEditableView(ReactionsCorrespondenceModelViewFactory.getInstance());
+		return correspondenceModel.getEditableView(ReactionsCorrespondenceModelViewFactory.getInstance())
 	}
 
 	protected static def ReactionsCorrespondence createTaggedCorrespondence(CorrespondenceModel correspondenceModel,

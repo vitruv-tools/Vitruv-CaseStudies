@@ -36,7 +36,7 @@ class UmlToPcmTypesUtil {
 	)
 
 	private static def getReactionsView(CorrespondenceModel correspondenceModel) {
-		return correspondenceModel.getEditableView(ReactionsCorrespondenceModelViewFactory.instance);
+		return correspondenceModel.getEditableView(ReactionsCorrespondenceModelViewFactory.instance)
 	}
 
 	static def PrimitiveTypeEnum getDataTypeEnumValue(String typeName) {
@@ -92,7 +92,7 @@ class UmlToPcmTypesUtil {
 			createTaggedCorrespondence(correspondenceModel, umlType, pcmCollectionType, COLLECTION_TYPE_TAG)
 			return pcmCollectionType
 		} else if (correspondingType === null) {
-			throw new IllegalStateException("No corresponding type was found for: " + umlType);
+			throw new IllegalStateException("No corresponding type was found for: " + umlType)
 		}
 		return correspondingType
 	}

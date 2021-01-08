@@ -29,7 +29,7 @@ abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
 			new UmlToJavaChangePropagationSpecification,
 			new JavaToUmlChangePropagationSpecification
-		];  
+		]  
 	}
 	
 	@BeforeEach

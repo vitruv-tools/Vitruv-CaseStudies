@@ -16,8 +16,8 @@ import tools.vitruv.testutils.LegacyVitruvApplicationTest
 import tools.vitruv.applications.pcmumlcomponents.PcmToUmlComponentsChangePropagationSpecification
 
 abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
-	protected static val MODEL_FILE_EXTENSION = "repository";
-	protected static val MODEL_NAME = "model";
+	protected static val MODEL_FILE_EXTENSION = "repository"
+	protected static val MODEL_NAME = "model"
 	// private static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
 	static val PRIMITIVETYPES_URI = "pathmap://PCM_MODELS/PrimitiveTypes.repository"
 
@@ -39,7 +39,7 @@ abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
 	}
 
 	override protected getChangePropagationSpecifications() {
-		return #[new PcmToUmlComponentsChangePropagationSpecification()];
+		return #[new PcmToUmlComponentsChangePropagationSpecification()]
 	}
 
 	protected def void initializeTestModel() {
