@@ -16,6 +16,7 @@ import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
+import java.nio.file.Path
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -82,14 +83,17 @@ class RepositoryComponentConceptTest extends TransitiveChangeTest {
      * Initialize a pcm::Repository and its corresponding uml-counterparts.
      */
     def private Repository createRepository() {
-        var pcmRepository = helper.createRepository()
+        val pcmRepository = helper.createRepository()
 
         userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+        	contents += pcmRepository
+        ]
+        propagate
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-        return reloadResourceAndReturnRoot(pcmRepository) as Repository
+        return pcmRepository.clearResourcesAndReloadRoot
     }
 
     @Test
@@ -100,8 +104,8 @@ class RepositoryComponentConceptTest extends TransitiveChangeTest {
         pcmComponent.entityName = COMPONENT_NAME
         pcmRepository.components__Repository += pcmComponent
 
-        saveAndSynchronizeChanges(pcmComponent)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         pcmComponent = pcmRepository.components__Repository.head as CompositeComponent
 
         checkRepositoryComponentConcept(pcmComponent)
@@ -117,9 +121,9 @@ class RepositoryComponentConceptTest extends TransitiveChangeTest {
         var umlComponentPkg = umlRepositoryPkg.createNestedPackage(COMPONENT_NAME)
 
         userInteraction.addNextSingleSelection(0)
-        saveAndSynchronizeChanges(umlComponentPkg)
-        reloadResourceAndReturnRoot(umlComponentPkg)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        umlComponentPkg.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
 
         umlComponentPkg = umlRepositoryPkg.nestedPackages.findFirst[it.name == COMPONENT_NAME]

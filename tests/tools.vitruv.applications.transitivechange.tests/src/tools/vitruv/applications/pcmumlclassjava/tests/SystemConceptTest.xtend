@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmumlclassjava.tests
 
 import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
@@ -16,6 +15,7 @@ import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
+import java.nio.file.Path
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -77,8 +77,9 @@ class SystemConceptTest extends TransitiveChangeTest {
 
     @Test
     def void testCreateSystemConcept_PCM() {
-        var pcmSystem = SystemFactory.eINSTANCE.createSystem
-        pcmSystem.entityName = SYSTEM_NAME
+        val pcmSystem = SystemFactory.eINSTANCE.createSystem => [
+        	entityName = SYSTEM_NAME
+        ]
 
         // Always required
         userInteraction.addNextTextInput(UML_MODEL_FILE)
@@ -88,20 +89,27 @@ class SystemConceptTest extends TransitiveChangeTest {
         userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING)
         userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
 
-        createAndSynchronizeModel(PCM_MODEL_FILE, pcmSystem)
-        pcmSystem = reloadResourceAndReturnRoot(pcmSystem) as System
+        resourceAt(Path.of(PCM_MODEL_FILE)).startRecordingChanges => [
+        	contents += pcmSystem
+        ]
+        propagate
+        val reloadedPcmSystem = pcmSystem.clearResourcesAndReloadRoot
 
-        checkSystemConcept(pcmSystem)
-        assertTrue(pcmSystem.entityName == SYSTEM_NAME)
+        checkSystemConcept(reloadedPcmSystem)
+        assertTrue(reloadedPcmSystem.entityName == SYSTEM_NAME)
     }
 
     @Test
     def void testCreateSystemConcept_UML() {
-        var umlModel = UMLFactory.eINSTANCE.createModel
-        umlModel.name = MODEL_NAME
+        val umlModel = UMLFactory.eINSTANCE.createModel => [
+        	name = MODEL_NAME
+        ]
 
         userInteraction.addNextTextInput(PCM_MODEL_FILE)
-        createAndSynchronizeModel(UML_MODEL_FILE, umlModel)
+        resourceAt(Path.of(UML_MODEL_FILE)).startRecordingChanges => [
+        	contents += umlModel
+        ]
+        propagate
 
         var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME)
 
@@ -113,10 +121,9 @@ class SystemConceptTest extends TransitiveChangeTest {
         userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
         userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
 
-        saveAndSynchronizeChanges(umlSystemPkg)
-        umlModel = reloadResourceAndReturnRoot(umlModel) as Model
-
-        umlSystemPkg = umlModel.nestedPackages.findFirst[it.name == SYSTEM_NAME.toFirstLower]
+        propagate
+        
+        umlSystemPkg = umlModel.clearResourcesAndReloadRoot.nestedPackages.findFirst[it.name == SYSTEM_NAME.toFirstLower]
         assertNotNull(umlSystemPkg)
         checkSystemConcept(umlSystemPkg)
     }

@@ -14,6 +14,7 @@ import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
+import java.nio.file.Path
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -60,11 +61,14 @@ class AttributeConceptTest extends LinearTransitiveChangeTest {
         helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
         userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
         userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
-        createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+        	contents += pcmRepository
+        ]
+        propagate
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-        return reloadResourceAndReturnRoot(pcmRepository) as Repository
+        return pcmRepository.clearResourcesAndReloadRoot
     }
 
     private def void testCreateAttributeConcept_PCM(Repository inPcmRepository, DataType pcmType) {
@@ -76,8 +80,8 @@ class AttributeConceptTest extends LinearTransitiveChangeTest {
         pcmAttribute.datatype_InnerDeclaration = pcmType
         pcmCompositeType.innerDeclaration_CompositeDataType += pcmAttribute
         userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
-        saveAndSynchronizeChanges(pcmAttribute)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
 
         pcmAttribute = pcmCompositeType.innerDeclaration_CompositeDataType.findFirst[it.entityName == TEST_ATTRIBUTE]
@@ -121,9 +125,9 @@ class AttributeConceptTest extends LinearTransitiveChangeTest {
         umlAttribute.type = umlType
         umlAttribute.upper = upper
 
-        saveAndSynchronizeChanges(umlAttribute)
-        reloadResourceAndReturnRoot(umlAttribute)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        umlAttribute.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
         umlAttribute = helper.getUmlCompositeDataTypeClass(pcmRepository).ownedAttributes.findFirst[it.name == TEST_ATTRIBUTE]
         assertNotNull(umlAttribute)

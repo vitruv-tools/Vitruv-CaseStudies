@@ -18,6 +18,7 @@ import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
+import java.nio.file.Path
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -75,7 +76,7 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
     }
 
     def private Repository createRepositoryWithInterface() {
-        var pcmRepository = helper.createRepository()
+        val pcmRepository = helper.createRepository()
         helper.createOperationInterface(pcmRepository)
         helper.createCompositeDataType(pcmRepository)
         var pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
@@ -83,9 +84,12 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
 
         userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
         userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION)
-        createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+        	contents += pcmRepository
+        ]
+        propagate
 
-        return reloadResourceAndReturnRoot(pcmRepository) as Repository
+        return pcmRepository.clearResourcesAndReloadRoot
     }
 
     private def _testCreateSignatureConcept_UML() {
@@ -95,10 +99,10 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
 
         var umlOperation = umlInterface.createOwnedOperation(TEST_SIGNATURE_NAME, null, null)
 
-        saveAndSynchronizeChanges(umlInterface)
-        reloadResourceAndReturnRoot(umlInterface)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         umlInterface = helper.getUmlInterface(pcmRepository)
+        umlInterface.startRecordingChanges
 
         umlOperation = umlInterface.ownedOperations.head
         assertNotNull(umlOperation)
@@ -118,9 +122,9 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
         umlReturnParameter.upper = upper
 
         userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION)
-        saveAndSynchronizeChanges(umlInterface)
-        reloadResourceAndReturnRoot(umlInterface)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        umlInterface.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
         umlInterface = helper.getUmlInterface(pcmRepository)
         umlOperation = umlInterface.ownedOperations.head
@@ -166,9 +170,9 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
         pcmSignature.returnType__OperationSignature = pcmType
         pcmInterface.signatures__OperationInterface += pcmSignature
         userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
-        saveAndSynchronizeChanges(pcmSignature)
+        propagate
 
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 
         pcmSignature = pcmInterface.signatures__OperationInterface.head
