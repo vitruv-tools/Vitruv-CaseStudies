@@ -9,13 +9,15 @@
 
 4) + Operations with parameters for interface operation signatures.
 
-5) + Properties, constructors and operations (both with parameters), and interface implementations for provided and required roles.
+5) + Interface implementation for provided roles.
+
+6) + Properties, constructors and operations (both with parameters) for required roles.
 TODO
 
-6) + Classes inheriting from Collection types and multi-valued properties for CollectionDataTypes.
+7) + Classes inheriting from Collection types and multi-valued properties for CollectionDataTypes.
 TODO
 * The MediaStore PCM repository doesn't actually contain CollectionDataTypes..
 
-7) + Classes with properties and constructors for CompositeComponents and their AssemblyContexts.
+8) + Classes with properties and constructors for CompositeComponents and their AssemblyContexts.
 TODO
 * The MediaStore PCM repository doesn't actually contain CompositeComponents..
