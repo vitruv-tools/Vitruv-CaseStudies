@@ -12,6 +12,7 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvid
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsProvider
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlMediaStoreTestModels_5_ProvidedRoles
 
 class MediaStoreTest extends CBSCommonalitiesExecutionTest {
 
@@ -29,11 +30,15 @@ class MediaStoreTest extends CBSCommonalitiesExecutionTest {
 		val umlModels4 = new DomainModelsProvider('UML (4_OperationSignatures)') [
 			new UmlMediaStoreTestModels_4_OperationSignatures(it)
 		]
+		val umlModels5 = new DomainModelsProvider('UML (5_ProvidedRoles)') [
+			new UmlMediaStoreTestModels_5_ProvidedRoles(it)
+		]
 		return #[
 			#[pcmModels, umlModels1],
 			#[pcmModels, umlModels2],
 			#[pcmModels, umlModels3],
-			#[pcmModels, umlModels4]
+			#[pcmModels, umlModels4],
+			#[pcmModels, umlModels5]
 		]
 	}
 
