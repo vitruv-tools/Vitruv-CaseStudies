@@ -148,11 +148,20 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return UriMode.PLATFORM_URIS;
 	}
 
-	private void refreshAndBuild() {
+	private void refreshAndBuildProject() {
 		try {
 			refreshAndBuildIncrementally(testEclipseProject);
 		} catch (IllegalStateException e) {
 			fail("Failure during project reload and build");
+		}
+	}
+	
+	private void refreshProject() {
+		try {
+			testEclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			String message = "Could not refresh project " + testEclipseProject.getName();
+			logger.error(message, e);
 		}
 	}
 
@@ -225,7 +234,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		// Trigger a final build and close the project to ensure that monitoring is
 		// stopped and no resources are still in use by pending operations, which makes
 		// the cleanup of the test view (deleting test files) fail
-		refreshAndBuild();
+		refreshAndBuildProject();
 		getIJavaProject().close();
 		// If there have been further unexpected synchronizations (either during the
 		// final build or even before), something went wrong
@@ -247,7 +256,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				+ ". Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: "
 				+ expectedNumberOfSyncs);
 		// Trigger the build to start change propagation
-		refreshAndBuild();
+		refreshAndBuildProject();
 		try {
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
@@ -265,6 +274,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		} catch (InterruptedException e) {
 			fail("An interrupt occurred unexpectedly");
 		}
+		refreshProject();
 		logger.debug("Finished waiting for synchronization in project " + testEclipseProject.getName());
 	}
 
