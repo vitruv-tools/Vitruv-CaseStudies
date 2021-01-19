@@ -92,10 +92,12 @@ import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
 import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
+import tools.vitruv.domains.java.ui.builder.VitruviusJavaBuilder;
 import tools.vitruv.framework.change.description.ConcreteChange;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
+import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.VURI;
@@ -187,12 +189,12 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	private void removeJavaBuilder() {
-		Set<VitruvProjectBuilderApplicator> builderApplicators = VitruvProjectBuilderApplicator
-				.getApplicatorsForVitruvDomain(new JavaDomainProvider().getDomain());
-		for (VitruvProjectBuilderApplicator applicator : builderApplicators) {
-			applicator.setPropagateAfterBuild(true);
-			applicator.removeBuilder(getCurrentTestProject());
-		}
+		// Explicitly remove the correct builder instead of using the extension point
+		// (like in the setup) to enforce a required dependency to the Vitruv domain UI
+		// project
+		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl(
+				VitruviusJavaBuilder.BUILDER_ID);
+		applicator.removeBuilder(getCurrentTestProject());
 	}
 
 	private void initializeJamopp() {

@@ -19,6 +19,7 @@ Require-Bundle: org.apache.log4j,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  tools.vitruv.domains.java;visibility:=reexport,
+ tools.vitruv.domains.java.ui,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.framework.domains.ui,
  org.eclipse.core.resources;visibility:=reexport
