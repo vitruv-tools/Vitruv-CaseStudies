@@ -92,7 +92,7 @@ import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
 import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
-import tools.vitruv.domains.java.ui.builder.VitruviusJavaBuilder;
+import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
 import tools.vitruv.framework.change.description.ConcreteChange;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
@@ -193,7 +193,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		// (like in the setup) to enforce a required dependency to the Vitruv domain UI
 		// project
 		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl(
-				VitruviusJavaBuilder.BUILDER_ID);
+				VitruvJavaBuilder.BUILDER_ID);
 		applicator.removeBuilder(getCurrentTestProject());
 	}
 
