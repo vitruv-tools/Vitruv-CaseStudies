@@ -17,7 +17,6 @@ Require-Bundle: tools.vitruv.dsls.reactions,
  tools.vitruv.framework.tuid,
  tools.vitruv.framework.uuid,
  tools.vitruv.framework.util,
- tools.vitruv.extensions.emf,
  tools.vitruv.domains.pcm,
  tools.vitruv.domains.uml,
  tools.vitruv.domains.java
