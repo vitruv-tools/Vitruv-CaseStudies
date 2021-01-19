@@ -131,7 +131,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	protected Package mainPackage;
 	protected Package secondPackage;
-	private int expectedNumberOfSyncs;
+	private volatile int expectedNumberOfSyncs;
 
 	private IProject testEclipseProject;
 
@@ -240,7 +240,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		CompilationUnitManipulatorHelper.editCompilationUnit(cu, this, edits);
 	}
 
-	public synchronized void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
+	public void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
 		expectedNumberOfSyncs += numberOfExpectedSynchronizationCalls;
 		logger.debug("Starting to wait for finished synchronization in test " + testEclipseProject.getName()
 				+ ". Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: "
@@ -250,7 +250,9 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		try {
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
-				wait(MAXIMUM_SYNC_WAITING_TIME);
+				synchronized (this) {
+					wait(MAXIMUM_SYNC_WAITING_TIME);
+				}
 				wakeups++;
 				// If we had more wakeups than expected synchronization calls, we had a timeout
 				// and so the synchronization has not finished as expected
@@ -266,23 +268,27 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	@Override
-	public synchronized void startedChangePropagation() {
+	public void startedChangePropagation() {
 	}
 
 	@Override
-	public synchronized void finishedChangePropagation() {
+	public void finishedChangePropagation() {
 		expectedNumberOfSyncs--;
 		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
 				+ expectedNumberOfSyncs);
-		this.notifyAll();
+		synchronized (this) {
+			this.notifyAll();
+		}
 	}
 
 	@Override
-	public synchronized void abortedChangePropagation(ChangePropagationAbortCause cause) {
+	public void abortedChangePropagation(ChangePropagationAbortCause cause) {
 		expectedNumberOfSyncs--;
 		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
 				+ expectedNumberOfSyncs);
-		this.notifyAll();
+		synchronized (this) {
+			this.notifyAll();
+		}
 	}
 
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
