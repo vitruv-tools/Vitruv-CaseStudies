@@ -87,13 +87,14 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
+import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
-import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator;
 import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
 import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
 import tools.vitruv.framework.change.description.ConcreteChange;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
+import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.VURI;
@@ -110,7 +111,7 @@ import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static tools.vitruv.framework.ui.monitorededitor.ProjectBuildUtils.refreshAndBuildIncrementally;;
+import static tools.vitruv.framework.util.ProjectBuildUtils.refreshAndBuildIncrementally;
 
 /**
  * Test class that contains utility methods that can be used by JaMoPP2PCM
@@ -160,16 +161,27 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	private void addJavaBuilder() {
-		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
-		javaBuilderApplicator.addToProject(getCurrentTestProject(), getVirtualModel().getFolder(),
-				Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
-		refreshAndBuild();
+		// We could also instantiate the applicator without using the extension point,
+		// but since this is a system anyway it also tests whether the extension is
+		// properly registered
+		Set<VitruvProjectBuilderApplicator> builderApplicators = VitruvProjectBuilderApplicator
+				.getApplicatorsForVitruvDomain(new JavaDomainProvider().getDomain());
+		assertEquals(1, builderApplicators.size());
+		for (VitruvProjectBuilderApplicator applicator : builderApplicators) {
+			applicator.setPropagateAfterBuild(true);
+			applicator.addBuilder(getCurrentTestProject(), getVirtualModel().getFolder(),
+					Collections.singleton(PcmNamespace.REPOSITORY_FILE_EXTENSION));
+		}
 		logger.info("Finished adding and initializing builder to project " + testEclipseProject.getName());
 	}
 
 	private void removeJavaBuilder() {
-		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
-		javaBuilderApplicator.removeBuilderFromProject(this.getCurrentTestProject());
+		Set<VitruvProjectBuilderApplicator> builderApplicators = VitruvProjectBuilderApplicator
+				.getApplicatorsForVitruvDomain(new JavaDomainProvider().getDomain());
+		for (VitruvProjectBuilderApplicator applicator : builderApplicators) {
+			applicator.setPropagateAfterBuild(true);
+			applicator.removeBuilder(getCurrentTestProject());
+		}
 	}
 
 	private void initializeJamopp() {
@@ -214,6 +226,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		logger.debug("Starting to wait for finished synchronization in test " + testEclipseProject.getName()
 				+ ". Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: "
 				+ expectedNumberOfSyncs);
+		// Trigger the build to start change propagation
+		refreshAndBuild();
 		try {
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
@@ -229,7 +243,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		} catch (InterruptedException e) {
 			fail("An interrupt occurred unexpectedly");
 		}
-		refreshAndBuild();
 		logger.debug("Finished waiting for synchronization in project " + testEclipseProject.getName());
 	}
 
