@@ -160,7 +160,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		IProjectUtil.configureAsJavaProject(testEclipseProject);
 		disableAutoBuild(testEclipseProject);
 	}
-	
+
 	private void disableAutoBuild(IProject project) {
 		IWorkspaceDescription copiedDescription = ResourcesPlugin.getWorkspace().getDescription();
 		copiedDescription.setAutoBuilding(false);
@@ -219,13 +219,19 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	@AfterEach
 	public void afterTest() {
-		getVirtualModel().removeChangePropagationListener(this);
 		removeJavaBuilder();
+		// Trigger a final build to ensure that monitoring is stopped and no resources
+		// are still in use by pending/ operations, which makes the cleanup of the test
+		// view (deleting test files) fail
+		refreshAndBuild();
+		// If there have been further unexpected synchronizations (either during the
+		// final build or even before), something went wrong
 		if (expectedNumberOfSyncs < 0) {
 			logger.fatal("There have been more change notifications than expected in project "
 					+ testEclipseProject.getName());
 			fail("There have been more change notifications than expected");
 		}
+		getVirtualModel().removeChangePropagationListener(this);
 	}
 
 	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits) throws JavaModelException {
