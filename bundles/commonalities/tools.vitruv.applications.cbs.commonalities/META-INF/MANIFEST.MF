@@ -9,9 +9,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: tools.vitruv.applications.cbs.commonalities,
  tools.vitruv.applications.cbs.commonalities.cbs,
  tools.vitruv.applications.cbs.commonalities.oo
-Require-Bundle: tools.vitruv.extensions.dslsruntime.commonalities,
- tools.vitruv.domains.uml,
- tools.vitruv.domains.java,
- tools.vitruv.domains.pcm,
- tools.vitruv.applications.cbs.commonalities.util,
+Require-Bundle: tools.vitruv.applications.cbs.commonalities.util,
  tools.vitruv.framework.applications
