@@ -220,12 +220,13 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	@AfterEach
-	public void afterTest() {
+	public void afterTest() throws JavaModelException, CoreException {
 		removeJavaBuilder();
-		// Trigger a final build to ensure that monitoring is stopped and no resources
-		// are still in use by pending/ operations, which makes the cleanup of the test
-		// view (deleting test files) fail
+		// Trigger a final build and close the project to ensure that monitoring is
+		// stopped and no resources are still in use by pending operations, which makes
+		// the cleanup of the test view (deleting test files) fail
 		refreshAndBuild();
+		getIJavaProject().close();
 		// If there have been further unexpected synchronizations (either during the
 		// final build or even before), something went wrong
 		if (expectedNumberOfSyncs < 0) {
