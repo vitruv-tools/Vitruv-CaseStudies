@@ -33,11 +33,11 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
 	static val STANDARD_PARAMETER_NAME = "standardParameterName"
 	static val PARAMETER_RENAME = "parameterRenamed"
 
-	static var Class uClass
-	static var Class typeClass
-	static var Parameter uParam
-	static var PrimitiveType pType
-	static var Operation uOperation
+	var Class uClass
+	var Class typeClass
+	var Parameter uParam
+	var PrimitiveType pType
+	var Operation uOperation
 
 	@BeforeEach
 	def void before() {

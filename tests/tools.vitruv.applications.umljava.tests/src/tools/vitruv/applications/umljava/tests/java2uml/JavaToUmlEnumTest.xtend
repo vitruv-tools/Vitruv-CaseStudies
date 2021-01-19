@@ -34,9 +34,9 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
 	static val OPERATION_NAME = "operationName"
 	static val ATTRIBUTE_NAME = "attributeName"
 	static val TYPECLASS = "TypeClass"
-	static var Enumeration jEnum
-	static val enumConstants1 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_1)
-	static val enumConstants2 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2)
+	var Enumeration jEnum
+	val enumConstants1 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_1)
+	val enumConstants2 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2)
 
 	@BeforeEach
 	def void before() {

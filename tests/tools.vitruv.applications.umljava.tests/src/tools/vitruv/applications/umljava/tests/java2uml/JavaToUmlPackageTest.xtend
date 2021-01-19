@@ -28,8 +28,8 @@ class JavaToUmlPackageTest extends JavaToUmlTransformationTest {
 	static val CLASS_NAME = "ClassName"
 	static val CLASS_NAME2 = "ClassName2"
 
-	static var org.emftext.language.java.containers.Package jPackageLevel1
-	static var Class jClass
+	var org.emftext.language.java.containers.Package jPackageLevel1
+	var Class jClass
 
 	@BeforeEach
 	def void testSetup() {

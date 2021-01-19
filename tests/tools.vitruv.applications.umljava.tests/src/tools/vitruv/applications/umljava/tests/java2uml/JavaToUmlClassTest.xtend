@@ -33,7 +33,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	static val INTERFACE_NAME = "InterfaceName"
 	static val INTERFACE_NAME2 = "InterfaceName2"
 
-	static var org.emftext.language.java.classifiers.Class jClass
+	var org.emftext.language.java.classifiers.Class jClass
 
 	@BeforeEach
 	def void before() {

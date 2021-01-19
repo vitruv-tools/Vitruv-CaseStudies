@@ -22,7 +22,7 @@ import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
  * @author Fei
  */
 abstract class UmlToJavaTransformationTest extends AbstractUmlJavaTest {
-	protected static val Logger logger = Logger.getLogger(typeof(UmlToJavaTransformationTest).simpleName)
+	protected static val Logger logger = Logger.getLogger(UmlToJavaTransformationTest)
 
 	static val MODEL_FILE_EXTENSION = "uml"
 	static val MODEL_NAME = "model" // name of the uml rootmodel
