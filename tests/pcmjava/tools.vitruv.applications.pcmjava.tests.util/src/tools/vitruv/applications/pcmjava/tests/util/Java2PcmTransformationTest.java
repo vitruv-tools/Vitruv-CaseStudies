@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -157,7 +158,17 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		String projectName = testProjectFolder.getFileName().toString();
 		testEclipseProject = IProjectUtil.createProjectAt(projectName, testProjectFolder);
 		IProjectUtil.configureAsJavaProject(testEclipseProject);
-		ResourcesPlugin.getWorkspace().getDescription().setAutoBuilding(false);
+		disableAutoBuild(testEclipseProject);
+	}
+	
+	private void disableAutoBuild(IProject project) {
+		IWorkspaceDescription copiedDescription = ResourcesPlugin.getWorkspace().getDescription();
+		copiedDescription.setAutoBuilding(false);
+		try {
+			ResourcesPlugin.getWorkspace().setDescription(copiedDescription);
+		} catch (CoreException e) {
+			throw new IllegalStateException("Auto building could not be disabled");
+		}
 	}
 
 	private void addJavaBuilder() {
