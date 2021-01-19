@@ -35,12 +35,12 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 	static val PARAMETER_NAME2 = "parameterName2"
 	static val PARAMETER_RENAME = "parameterRenamed"
 
-	static var Class jClass
-	static var Class typeClass
-	static var Class typeClass2
-	static var ClassMethod jMeth
-	static var ClassMethod jParamMeth
-	static var OrdinaryParameter jParam
+	var Class jClass
+	var Class typeClass
+	var Class typeClass2
+	var ClassMethod jMeth
+	var ClassMethod jParamMeth
+	var OrdinaryParameter jParam
 
 	/**
 	 * Initializes and synchronizes three classes. One class has two methods.

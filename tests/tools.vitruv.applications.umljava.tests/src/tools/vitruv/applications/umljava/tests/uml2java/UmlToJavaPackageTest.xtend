@@ -25,7 +25,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 	static val PACKAGE_RENAMED = "packagerenamed"
 	static val CLASS_NAME = "ClassName"
 
-	static var Package uPackageLevel1
+	var Package uPackageLevel1
 
 	@BeforeEach
 	def void before() {

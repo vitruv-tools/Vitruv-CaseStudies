@@ -24,8 +24,8 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 	static val CLASSNAME_1 = "ClassName1"
 	static val CLASSNAME_2 = "ClassName2"
 
-	static var org.eclipse.uml2.uml.Class uClass1
-	static var org.eclipse.uml2.uml.Class uClass2
+	var org.eclipse.uml2.uml.Class uClass1
+	var org.eclipse.uml2.uml.Class uClass2
 
 	@BeforeEach
 	def void before() {

@@ -26,9 +26,9 @@ class JavaToUmlInterfaceMethodTest extends JavaToUmlTransformationTest {
 	static val IOPERATION_RENAME = "interfaceMethodRenamed"
 	static val PARAMETER_NAME = "parameterName"
 
-	static var org.emftext.language.java.classifiers.Interface jInterface
-	static var org.emftext.language.java.classifiers.Class typeClass
-	static var org.emftext.language.java.members.InterfaceMethod jMeth
+	var org.emftext.language.java.classifiers.Interface jInterface
+	var org.emftext.language.java.classifiers.Class typeClass
+	var org.emftext.language.java.members.InterfaceMethod jMeth
 
 	@BeforeEach
 	def void before() {

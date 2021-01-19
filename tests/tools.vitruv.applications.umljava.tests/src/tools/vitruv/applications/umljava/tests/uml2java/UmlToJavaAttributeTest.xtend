@@ -33,10 +33,10 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 	static val CLASS_NAME = "ClassName"
 	static val TYPE_CLASS = "TypeClass"
 
-	static var Property uAttr
-	static var Class uClass
-	static var Class typeClass
-	static var PrimitiveType pType
+	var Property uAttr
+	var Class uClass
+	var Class typeClass
+	var PrimitiveType pType
 
 	@BeforeEach
 	def void before() {
