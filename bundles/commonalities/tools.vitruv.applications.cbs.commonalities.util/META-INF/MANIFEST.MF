@@ -6,12 +6,11 @@ Bundle-SymbolicName: tools.vitruv.applications.cbs.commonalities.util
 Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities.util
 Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.eclipse.xtend.lib,
- edu.kit.ipd.sdq.activextendannotations,
- tools.vitruv.extensions.dslsruntime.commonalities,
- tools.vitruv.domains.uml,
- tools.vitruv.domains.pcm,
- tools.vitruv.domains.java
+Require-Bundle: edu.kit.ipd.sdq.activextendannotations,
+ tools.vitruv.extensions.dslsruntime.commonalities;visibility:=reexport,
+ tools.vitruv.domains.uml;visibility:=reexport,
+ tools.vitruv.domains.pcm;visibility:=reexport,
+ tools.vitruv.domains.java;visibility:=reexport
 Export-Package: tools.vitruv.applications.cbs.commonalities.util.common,
  tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute,
  tools.vitruv.applications.cbs.commonalities.util.common.operators.condition,
