@@ -10,7 +10,7 @@
 		<relativePath>../tools.vitruv.applications.cbs.parent</relativePath>
 	</parent>
 	
-	<artifactId>tools.vitruv.domains.updatesite</artifactId>
+	<artifactId>tools.vitruv.applications.cbs.updatesite</artifactId>
 	<name>Vitruv Applications for CBS Update Site</name>
 	<packaging>eclipse-repository</packaging>
 	
