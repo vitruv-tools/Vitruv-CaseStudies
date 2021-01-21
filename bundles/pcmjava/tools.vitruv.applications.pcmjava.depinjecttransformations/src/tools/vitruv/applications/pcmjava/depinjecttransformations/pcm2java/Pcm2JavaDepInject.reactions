@@ -16,7 +16,6 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.hasSame
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.framework.^correspondence.CorrespondenceModelUtil.*
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -124,7 +123,7 @@ routine addedProvidedDelegationConnector(pcm::ProvidedDelegationConnector provid
 			}
 			systemClass.implements += namespaceClassifierRef;
 			val classifierImport = addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface);
-			correspondenceModel.createAndAddCorrespondence(pcmSystem.toList, #[namespaceClassifierRef, classifierImport]);
+			correspondenceModel.createAndAddCorrespondence(#[pcmSystem], #[namespaceClassifierRef, classifierImport]);
 		}
 	}
 }
@@ -148,7 +147,7 @@ routine pcm2javaCommon::createJavaClass(pcm::NamedElement sourceElementMappedToC
 			} else if (sourceElementMappedToClass instanceof System) {
 				addGuiceModuleInterfaceToClass(javaClass);
 				val method = addConfigureMethodToModule(javaClass);
-				correspondenceModel.createAndAddCorrespondence(#[sourceElementMappedToClass], method.toList);
+				correspondenceModel.createAndAddCorrespondence(#[sourceElementMappedToClass], #[method]);
 			}
 		}
 		// depInject: end
