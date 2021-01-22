@@ -102,6 +102,14 @@
 									</outputConfigurations>
 								</language>
 								<language>
+									<setup>tools.vitruv.dsls.commonalities.CommonalitiesLanguageStandaloneSetup</setup>
+									<outputConfigurations>
+										<outputConfiguration>
+											<outputDirectory>${project.basedir}/src-gen</outputDirectory>
+										</outputConfiguration>
+									</outputConfigurations>
+								</language>
+								<language>
 									<setup>org.eclipse.xtend.core.XtendStandaloneSetup</setup>
 									<outputConfigurations>
 										<outputConfiguration>
