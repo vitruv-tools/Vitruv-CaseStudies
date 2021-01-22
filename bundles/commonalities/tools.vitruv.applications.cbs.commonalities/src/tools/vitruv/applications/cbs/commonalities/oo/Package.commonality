@@ -1,6 +1,5 @@
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaPackageResourcePathFromNameOperator
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.reference.JavaPackageCompilationUnitsOperator
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.reference.JavaSubPackagesOperator
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute._
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.reference._
 
 concept ObjectOrientedDesign
 

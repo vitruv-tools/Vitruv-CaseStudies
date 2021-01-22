@@ -1,5 +1,5 @@
-import tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute.OOTypeReferenceOperator
-import tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute.PcmDataTypeReferenceOperator
+import tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute.ooTypeReference
+import tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute.pcmDataTypeReference
 
 concept ComponentBasedSystems
 

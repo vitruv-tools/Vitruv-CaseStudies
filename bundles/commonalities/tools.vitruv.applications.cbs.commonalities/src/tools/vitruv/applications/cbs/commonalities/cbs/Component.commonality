@@ -1,10 +1,10 @@
-import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.FirstUpperOperator
-import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.PrefixOperator
-import tools.vitruv.applications.cbs.commonalities.util.common.operators.condition.SuffixConditionOperator
+import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.firstUpper
+import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.prefix
+import tools.vitruv.applications.cbs.commonalities.util.common.operators.condition.hasSuffix
 
-import tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute.OOTypeReferencesOperator
+import tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute.ooTypeReferences
 
-import tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute.PcmProvidedRolesOperator
+import tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute.pcmProvidedRoles
 
 concept ComponentBasedSystems
 
