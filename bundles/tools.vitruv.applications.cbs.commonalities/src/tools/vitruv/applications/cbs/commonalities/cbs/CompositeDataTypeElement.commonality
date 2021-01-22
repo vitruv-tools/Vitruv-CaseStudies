@@ -1,0 +1,30 @@
+import tools.vitruv.applications.cbs.commonalities.oo.operators._
+import tools.vitruv.applications.cbs.commonalities.pcm.operators._
+
+concept ComponentBasedSystems
+
+// Externally contained by ComponentBasedSystems:CompositeDataType.elements
+referenced commonality CompositeDataTypeElement {
+
+	// Externally contained by PCM:CompositeDataType.innerDeclaration_CompositeDataType
+	with PCM:InnerDeclaration
+
+	// Externally contained by ObjectOrientedDesign:Class.properties
+	// TODO: Getter and setter methods, externally contained by ObjectOrientedDesign:Class.methods
+	with ObjectOrientedDesign:Property
+	whereat {
+		Property.visibility = "PRIVATE"
+	}
+
+	has name {
+		= PCM:InnerDeclaration.entityName
+
+		= ObjectOrientedDesign:Property.name
+	}
+
+	has type {
+		= pcmDataTypeReference(PCM:InnerDeclaration.datatype_InnerDeclaration, "ComponentBasedSystems")
+
+		= ooTypeReference(ObjectOrientedDesign:Property.type, "ComponentBasedSystems")
+	}
+}

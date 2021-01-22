@@ -21,7 +21,7 @@
 		<module>tools.vitruv.applications.pcmumlcomponents</module>
 		<module>tools.vitruv.applications.umlclassumlcomponents</module>
 		<module>tools.vitruv.applications.umljava</module>
-		<module>commonalities</module>
+		<module>tools.vitruv.applications.cbs.commonalities</module>
 		<module>tools.vitruv.applications.util.temporary</module>
 	</modules>
 
