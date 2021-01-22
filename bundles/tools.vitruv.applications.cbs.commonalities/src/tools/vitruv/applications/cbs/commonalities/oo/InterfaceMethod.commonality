@@ -1,0 +1,56 @@
+import tools.vitruv.applications.cbs.commonalities.domaincommon.operators._
+import tools.vitruv.applications.cbs.commonalities.java.operators._
+import tools.vitruv.applications.cbs.commonalities.uml.operators._
+
+concept ObjectOrientedDesign
+
+// Externally contained by ObjectOrientedDesign:Interface.methods
+referenced commonality InterfaceMethod {
+
+	// Externally contained by UML:Interface.ownedOperation
+	with UML:Operation
+	whereat {
+		-> Operation.visibility isUmlVisibility "PUBLIC"
+	}
+
+	// Externally contained by Java:Interface.members
+	with Java:InterfaceMethod
+	whereat {
+		-> InterfaceMethod.annotationsAndModifiers hasJavaVisibility "PUBLIC"
+		// Note: We do not need to add an abstract modifier or a default Void return type here,
+		// because those get already set up when the attribute mappings get invoked initially.
+	}
+
+	has name {
+		= UML:Operation.name
+
+		= Java:InterfaceMethod.name
+	}
+
+	// Note: No mapping for UML:Operation.visibility, because Java Interface methods are always public.
+	// Note: No mapping for UML:Operation.isLeaf, because Java Interface methods are never final.
+	// Note: No mapping for UML:Operation.isAbstract, because interface methods are expected to always be abstract
+	// (unless they are static).
+
+	// Note: We automatically set and unset the method's 'abstract' attribute depending on whether it is static or not.
+	has ^static {
+		= UML:Operation.isStatic
+		-> inverse(UML:Operation.isAbstract)
+
+		= javaStaticModifier(Java:InterfaceMethod.annotationsAndModifiers, Java:InterfaceMethod)
+		-> javaInverseAbstractModifier(Java:InterfaceMethod.annotationsAndModifiers, Java:InterfaceMethod)
+	}
+
+	has returnType {
+		= umlReturnType(UML:Operation.ownedParameter, "ObjectOrientedDesign", UML:Operation)
+
+		= javaTypeReference(Java:InterfaceMethod.typeReference, "ObjectOrientedDesign")
+	}
+
+	has parameters referencing ObjectOrientedDesign:MethodParameter {
+		// Note: The referenced participation only accepts input parameters.
+		= UML:Operation.ownedParameter
+
+		= Java:InterfaceMethod.parameters
+	}
+}

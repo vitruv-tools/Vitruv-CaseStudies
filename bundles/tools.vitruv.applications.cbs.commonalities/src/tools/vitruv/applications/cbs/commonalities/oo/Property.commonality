@@ -1,0 +1,54 @@
+import tools.vitruv.applications.cbs.commonalities.java.operators._
+import tools.vitruv.applications.cbs.commonalities.uml.operators._
+
+concept ObjectOrientedDesign
+
+// Externally contained by ObjectOrientedDesign:Class.properties
+referenced commonality Property {
+
+	// Externally contained by UML:Class.ownedAttribute
+	with UML:Property
+	whereat {
+		// TODO We only support single-valued properties currently.
+		-> Property.lower = 1,
+		-> Property.upper = 1
+	}
+
+	// Externally contained by Java:Class.members
+	with Java:Field
+
+	has name {
+		= UML:Property.name
+
+		= Java:Field.name
+	}
+
+	has visibility {
+		= umlVisibility(UML:Property.visibility)
+
+		= javaVisibility(Java:Field.annotationsAndModifiers, Java:Field)
+	}
+
+	has ^static {
+		= UML:Property.isStatic
+
+		= javaStaticModifier(Java:Field.annotationsAndModifiers, Java:Field)
+	}
+
+	has final {
+		= UML:Property.isReadOnly
+
+		= javaFinalModifier(Java:Field.annotationsAndModifiers, Java:Field)
+	}
+
+	has type {
+		= umlTypeReference(UML:Property.type, "ObjectOrientedDesign")
+
+		= javaTypeReference(Java:Field.typeReference, "ObjectOrientedDesign")
+	}
+
+	// TODO multiplicity, i.e. multi-valued vs single-valued
+	// TODO mutli-valued collection type (list, set, ..): UML has modifiers for ordered, sequence, unique, etc.
+	// TODO implicit getters and setters for UML properties? Also need to propagate type changes then
+	// TODO default values
+}
