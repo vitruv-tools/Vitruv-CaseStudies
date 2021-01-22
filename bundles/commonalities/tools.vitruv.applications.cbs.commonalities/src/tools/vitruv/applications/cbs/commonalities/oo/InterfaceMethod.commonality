@@ -1,13 +1,10 @@
-import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.InverseOperator
+import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.inverse
 
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaInverseAbstractModifierOperator
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaStaticModifierOperator
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaTypeReferenceOperator
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.condition.JavaVisibilityConditionOperator
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute._
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.condition.hasJavaVisibility
 
-import tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute.UmlReturnTypeOperator
-import tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute.UmlTypeReferenceOperator
-import tools.vitruv.applications.cbs.commonalities.util.uml.operators.condition.UmlVisibilityConditionOperator
+import tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute._
+import tools.vitruv.applications.cbs.commonalities.util.uml.operators.condition.isUmlVisibility
 
 concept ObjectOrientedDesign
 

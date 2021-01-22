@@ -1,8 +1,8 @@
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaVisibilityOperator
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.condition.JavaContainerNameConditionOperator
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.javaVisibility
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.condition.isJavaContainerName
 
-import tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute.UmlVisibilityOperator
-import tools.vitruv.applications.cbs.commonalities.util.uml.operators.condition.UmlContainerNameConditionOperator
+import tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute.umlVisibility
+import tools.vitruv.applications.cbs.commonalities.util.uml.operators.condition.isUmlContainerName
 
 concept ObjectOrientedDesign
 
