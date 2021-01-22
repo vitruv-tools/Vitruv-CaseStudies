@@ -13,20 +13,9 @@ import org.eclipse.emf.common.util.URI
 import java.nio.file.Path
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import tools.vitruv.applications.cbs.commonalities.CbsCommonalitiesApplication
 
 abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest {	
-	static val COMMONALITY_FILE_EXTENSION = '.commonality'
-	static val OO_COMMONALITIES_PACKAGE = 'tools/vitruv/applications/cbs/commonalities/oo'
-	static val CBS_COMMONALITIES_PACKAGE = 'tools/vitruv/applications/cbs/commonalities/cbs'
-
-	private static def String ooCommonalityFile(String fileName) {
-		return '''/«OO_COMMONALITIES_PACKAGE»/«fileName»«COMMONALITY_FILE_EXTENSION»''' 
-	}
-
-	private static def String cbsCommonalityFile(String fileName) {
-		return '''/«CBS_COMMONALITIES_PACKAGE»/«fileName»«COMMONALITY_FILE_EXTENSION»'''
-	}
-	
 	def <T> T getModels(DomainModelsProvider<T> modelsProvider) {
 		return modelsProvider.getModels(vitruvApplicationTestAdapter)
 	}
@@ -41,11 +30,11 @@ abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest
 	}
 	
 	override protected getChangePropagationSpecifications() {
-		getOrCreateCompiler().changePropagationSpecifications
+		new CbsCommonalitiesApplication().changePropagationSpecifications
 	}
 
 	@Accessors(PROTECTED_GETTER)
-	val vitruvApplicationTestAdapter = new VitruvApplicationTestAdapter() {
+	val VitruvApplicationTestAdapter vitruvApplicationTestAdapter = new VitruvApplicationTestAdapter() {
 		/**
 		 * Returns a resource from the runtime test project
 		 */
@@ -64,7 +53,7 @@ abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest
 			val resource = resourceAt(Path.of(modelPathInProject)).startRecordingChanges => [
 				contents += rootElement
 			]
-			propagate
+			propagate()
 			// This is a necessary hack, because the transformations recreate elements, such that the resulting models are the same but new UUIDs are assigned.
 			// Starting recording again reloads the UUIDs
 			startRecordingChanges(resource)
