@@ -14,6 +14,7 @@ Require-Bundle: tools.vitruv.framework.applications,
  tools.vitruv.extensions.dslsruntime.commonalities,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.domains.uml;visibility:=reexport,
- tools.vitruv.domains.java;visibility:=reexport
+ tools.vitruv.domains.java;visibility:=reexport,
+ edu.kit.ipd.sdq.activextendannotations
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities
