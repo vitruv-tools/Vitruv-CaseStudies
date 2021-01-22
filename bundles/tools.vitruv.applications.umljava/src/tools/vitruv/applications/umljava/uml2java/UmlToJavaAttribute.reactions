@@ -1,5 +1,5 @@
-import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Property
+import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.members.Field
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
@@ -96,8 +96,8 @@ routine deleteJavaAttribute(uml::Property umlAttr) {
     }
     action {
         call {
-        	val uClassifier = umlAttr.eContainer
-        	if (uClassifier !== null && uClassifier instanceof Class){
+        	val jClassifier = jAttr.eContainer
+        	if (jClassifier !== null && jClassifier instanceof Class){
 	            removeJavaGettersOfAttribute(jAttr)
 	            removeJavaSettersOfAttribute(jAttr)
             }
