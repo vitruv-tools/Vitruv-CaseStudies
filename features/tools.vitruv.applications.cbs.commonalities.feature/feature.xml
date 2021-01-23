@@ -39,13 +39,6 @@
    </requires>
 
    <plugin
-         id="tools.vitruv.applications.cbs.commonalities.util"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="tools.vitruv.applications.cbs.commonalities"
          download-size="0"
          install-size="0"

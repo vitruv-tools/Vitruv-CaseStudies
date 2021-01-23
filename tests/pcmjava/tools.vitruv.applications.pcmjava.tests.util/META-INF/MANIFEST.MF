@@ -14,12 +14,14 @@ Require-Bundle: org.apache.log4j,
  org.eclipse.text,
  tools.vitruv.testutils,
  tools.vitruv.domains.java.echange,
- tools.vitruv.domains.java.monitorededitor,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  tools.vitruv.domains.java;visibility:=reexport,
- tools.vitruv.domains.pcm;visibility:=reexport
+ tools.vitruv.domains.java.ui,
+ tools.vitruv.domains.pcm;visibility:=reexport,
+ tools.vitruv.framework.domains.ui,
+ org.eclipse.core.resources;visibility:=reexport
 Export-Package: tools.vitruv.applications.pcmjava.tests.util
 Bundle-Vendor: vitruv.tools

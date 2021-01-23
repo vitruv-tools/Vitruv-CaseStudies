@@ -24,7 +24,7 @@
 		<module>tools.vitruv.applications.umlclassumlcomponents.tests</module>
 		<module>tools.vitruv.applications.umljava.tests</module>
 		<module>tools.vitruv.applications.transitivechange.tests</module>
-		<!--<module>commonalities</module>-->
+		<module>tools.vitruv.applications.cbs.commonalities.tests</module>
 	</modules>
 	
 </project>

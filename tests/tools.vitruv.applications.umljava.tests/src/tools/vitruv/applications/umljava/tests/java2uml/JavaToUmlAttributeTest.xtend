@@ -34,9 +34,9 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 	static val CLASS_NAME = "ClassName"
 	static val TYPE_CLASS = "TypeClass"
 
-	static var Field jAttr
-	static var Class jClass
-	static var Class typeClass
+	var Field jAttr
+	var Class jClass
+	var Class typeClass
 
 	/**
 	 * Initializes two java classes. One class contains an attribute.

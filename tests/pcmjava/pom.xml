@@ -21,17 +21,4 @@
 		<module>tools.vitruv.applications.pcmjava.tests.util</module>
 	</modules>
 	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>
-					<useUIHarness>true</useUIHarness>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
 </project>

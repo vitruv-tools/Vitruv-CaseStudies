@@ -24,9 +24,9 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
 	static val STANDARD_IOPERATION_NAME = "standardInterfaceMethod"
 	static val IOPERATION_RENAME = "interfaceMethodRenamed"
 
-	static var org.eclipse.uml2.uml.Interface uInterface
-	static var org.eclipse.uml2.uml.Class typeClass
-	static var org.eclipse.uml2.uml.Operation uOperation
+	var org.eclipse.uml2.uml.Interface uInterface
+	var org.eclipse.uml2.uml.Class typeClass
+	var org.eclipse.uml2.uml.Operation uOperation
 
 	@BeforeEach
 	def void before() {

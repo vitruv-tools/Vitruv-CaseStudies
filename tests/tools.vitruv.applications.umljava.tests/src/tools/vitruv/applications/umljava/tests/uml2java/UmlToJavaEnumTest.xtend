@@ -32,9 +32,9 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 	static val OPERATION_NAME = "operationName"
 	static val TYPE_CLASS = "TypeClass"
 	static val ATTRIBUTE_NAME = "attributeName"
-	static var Enumeration uEnum
-	static val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
-	static val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
+	var Enumeration uEnum
+	val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
+	val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
 
 	@BeforeEach
 	def void before() {

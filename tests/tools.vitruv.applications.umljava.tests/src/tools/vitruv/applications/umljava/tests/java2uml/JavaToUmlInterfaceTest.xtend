@@ -26,7 +26,7 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
 	static val SUPERINTERFACENAME_1 = "SuperInterfaceOne"
 	static val SUPERINTERFACENAME_2 = "SuperInterfaceTwo"
 
-	static var Interface jInterface
+	var Interface jInterface
 
 	@BeforeEach
 	def void before() {

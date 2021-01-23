@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -87,13 +88,16 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
+import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
-import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator;
 import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
 import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
+import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
 import tools.vitruv.framework.change.description.ConcreteChange;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
+import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
+import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.VURI;
@@ -110,7 +114,7 @@ import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static tools.vitruv.framework.ui.monitorededitor.ProjectBuildUtils.refreshAndBuildIncrementally;;
+import static tools.vitruv.framework.util.ProjectBuildUtils.refreshAndBuildIncrementally;
 
 /**
  * Test class that contains utility methods that can be used by JaMoPP2PCM
@@ -123,11 +127,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
 
-	private static int MAXIMUM_SYNC_WAITING_TIME = 10000;
+	private static int MAXIMUM_SYNC_WAITING_TIME = 15000;
 
 	protected Package mainPackage;
 	protected Package secondPackage;
-	private int expectedNumberOfSyncs;
+	private volatile int expectedNumberOfSyncs;
 
 	private IProject testEclipseProject;
 
@@ -144,11 +148,20 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return UriMode.PLATFORM_URIS;
 	}
 
-	private void refreshAndBuild() {
+	private void refreshAndBuildProject() {
 		try {
 			refreshAndBuildIncrementally(testEclipseProject);
 		} catch (IllegalStateException e) {
 			fail("Failure during project reload and build");
+		}
+	}
+	
+	private void refreshProject() {
+		try {
+			testEclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			String message = "Could not refresh project " + testEclipseProject.getName();
+			logger.error(message, e);
 		}
 	}
 
@@ -156,20 +169,41 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		String projectName = testProjectFolder.getFileName().toString();
 		testEclipseProject = IProjectUtil.createProjectAt(projectName, testProjectFolder);
 		IProjectUtil.configureAsJavaProject(testEclipseProject);
-		ResourcesPlugin.getWorkspace().getDescription().setAutoBuilding(false);
+		disableAutoBuild(testEclipseProject);
+	}
+
+	private void disableAutoBuild(IProject project) {
+		IWorkspaceDescription copiedDescription = ResourcesPlugin.getWorkspace().getDescription();
+		copiedDescription.setAutoBuilding(false);
+		try {
+			ResourcesPlugin.getWorkspace().setDescription(copiedDescription);
+		} catch (CoreException e) {
+			throw new IllegalStateException("Auto building could not be disabled");
+		}
 	}
 
 	private void addJavaBuilder() {
-		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
-		javaBuilderApplicator.addToProject(getCurrentTestProject(), getVirtualModel().getFolder(),
-				Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
-		refreshAndBuild();
+		// We could also instantiate the applicator without using the extension point,
+		// but since this is a system anyway it also tests whether the extension is
+		// properly registered
+		Set<VitruvProjectBuilderApplicator> builderApplicators = VitruvProjectBuilderApplicator
+				.getApplicatorsForVitruvDomain(new JavaDomainProvider().getDomain());
+		assertEquals(1, builderApplicators.size());
+		for (VitruvProjectBuilderApplicator applicator : builderApplicators) {
+			applicator.setPropagateAfterBuild(true);
+			applicator.addBuilder(getCurrentTestProject(), getVirtualModel().getFolder(),
+					Collections.singleton(PcmNamespace.REPOSITORY_FILE_EXTENSION));
+		}
 		logger.info("Finished adding and initializing builder to project " + testEclipseProject.getName());
 	}
 
 	private void removeJavaBuilder() {
-		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
-		javaBuilderApplicator.removeBuilderFromProject(this.getCurrentTestProject());
+		// Explicitly remove the correct builder instead of using the extension point
+		// (like in the setup) to enforce a required dependency to the Vitruv domain UI
+		// project
+		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl(
+				VitruvJavaBuilder.BUILDER_ID);
+		applicator.removeBuilder(getCurrentTestProject());
 	}
 
 	private void initializeJamopp() {
@@ -195,29 +229,40 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	@AfterEach
-	public void afterTest() {
-		getVirtualModel().removeChangePropagationListener(this);
+	public void afterTest() throws JavaModelException, CoreException {
 		removeJavaBuilder();
+		// Trigger a final build and close the project to ensure that monitoring is
+		// stopped and no resources are still in use by pending operations, which makes
+		// the cleanup of the test view (deleting test files) fail
+		refreshAndBuildProject();
+		getIJavaProject().close();
+		// If there have been further unexpected synchronizations (either during the
+		// final build or even before), something went wrong
 		if (expectedNumberOfSyncs < 0) {
 			logger.fatal("There have been more change notifications than expected in project "
 					+ testEclipseProject.getName());
 			fail("There have been more change notifications than expected");
 		}
+		getVirtualModel().removeChangePropagationListener(this);
 	}
 
 	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits) throws JavaModelException {
 		CompilationUnitManipulatorHelper.editCompilationUnit(cu, this, edits);
 	}
 
-	public synchronized void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
+	public void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
 		expectedNumberOfSyncs += numberOfExpectedSynchronizationCalls;
 		logger.debug("Starting to wait for finished synchronization in test " + testEclipseProject.getName()
 				+ ". Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: "
 				+ expectedNumberOfSyncs);
+		// Trigger the build to start change propagation
+		refreshAndBuildProject();
 		try {
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
-				wait(MAXIMUM_SYNC_WAITING_TIME);
+				synchronized (this) {
+					wait(MAXIMUM_SYNC_WAITING_TIME);
+				}
 				wakeups++;
 				// If we had more wakeups than expected synchronization calls, we had a timeout
 				// and so the synchronization has not finished as expected
@@ -229,28 +274,32 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		} catch (InterruptedException e) {
 			fail("An interrupt occurred unexpectedly");
 		}
-		refreshAndBuild();
+		refreshProject();
 		logger.debug("Finished waiting for synchronization in project " + testEclipseProject.getName());
 	}
 
 	@Override
-	public synchronized void startedChangePropagation() {
+	public void startedChangePropagation() {
 	}
 
 	@Override
-	public synchronized void finishedChangePropagation() {
+	public void finishedChangePropagation() {
 		expectedNumberOfSyncs--;
 		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
 				+ expectedNumberOfSyncs);
-		this.notifyAll();
+		synchronized (this) {
+			this.notifyAll();
+		}
 	}
 
 	@Override
-	public synchronized void abortedChangePropagation(ChangePropagationAbortCause cause) {
+	public void abortedChangePropagation(ChangePropagationAbortCause cause) {
 		expectedNumberOfSyncs--;
 		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
 				+ expectedNumberOfSyncs);
-		this.notifyAll();
+		synchronized (this) {
+			this.notifyAll();
+		}
 	}
 
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
