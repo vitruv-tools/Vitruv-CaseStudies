@@ -17,11 +17,12 @@ import java.util.HashMap
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import java.util.Set
 import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder.VariantOptions
+import java.util.Collection
 
 @FinalFieldsConstructor
 package class DefaultEquivalenceTestBuilder implements EquivalenceTestBuilder {
 	val ExtensionContext parentContext
-	val List<ChangePropagationSpecification> changePropagationSpecifications
+	val Collection<ChangePropagationSpecification> changePropagationSpecifications
 	val UriMode uriMode
 	val ModelComparisonSettings modelComparisonSettings
 	/* both maps always contain lists for all domains */
@@ -31,7 +32,7 @@ package class DefaultEquivalenceTestBuilder implements EquivalenceTestBuilder {
 
 	package new(
 		ExtensionContext parentContext,
-		List<ChangePropagationSpecification> changePropagationSpecifications,
+		Collection<ChangePropagationSpecification> changePropagationSpecifications,
 		UriMode uriMode,
 		ModelComparisonSettings modelComparisonSettings
 	) {

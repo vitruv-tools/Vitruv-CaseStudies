@@ -13,13 +13,14 @@ import tools.vitruv.applications.cbs.testutils.equivalencetest.ParameterizedEqui
 import tools.vitruv.applications.cbs.testutils.equivalencetest.ParameterizedEquivalenceTestBuilder.Parameter2
 import org.eclipse.xtend.lib.annotations.Delegate
 import org.junit.jupiter.api.DynamicNode
+import java.util.Collection
 
 @FinalFieldsConstructor
 package class DefaultParameterizedEquivalenceTestBuilder implements ParameterizedEquivalenceTestBuilder {
 	@Delegate
 	extension val DefaultParametersBuilder parametersBuilder = new DefaultParametersBuilder
 	val ExtensionContext templateMethodContext
-	val List<ChangePropagationSpecification> changePropagationSpecifications
+	val Collection<ChangePropagationSpecification> changePropagationSpecifications
 	val UriMode uriMode
 	val ModelComparisonSettings modelComparisonSettings
 

@@ -19,7 +19,8 @@ Require-Bundle: tools.vitruv.testutils,
  org.junit.jupiter.params,
  org.junit.platform.engine,
  org.junit.platform.commons,
- org.opentest4j
+ org.opentest4j,
+ tools.vitruv.framework.applications;visibility:=reexport
 Export-Package: tools.vitruv.applications.cbs.testutils,
  tools.vitruv.applications.cbs.testutils.equivalencetest,
  tools.vitruv.applications.cbs.testutils.junit

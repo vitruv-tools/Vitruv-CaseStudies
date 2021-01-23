@@ -20,7 +20,7 @@ class EquivalenceTestExtension implements ParameterResolver {
 		].orElseThrow [
 			new ParameterResolutionException('''Please annotate the test method or class with «EquivalenceTest.simpleName»!''')
 		]
-		val changeSpecs = config.value.mapFixed[instantiate()]
+		val changeSpecs = config.application.instantiate().changePropagationSpecifications
 		val comparisonSettings = switch (config.comparisonSettings.length) {
 			case 0: ModelComparisonSettings.NONE
 			case 1: config.comparisonSettings.get(0).instantiate()

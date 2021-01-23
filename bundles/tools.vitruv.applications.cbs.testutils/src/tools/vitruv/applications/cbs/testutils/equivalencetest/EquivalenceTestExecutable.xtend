@@ -48,6 +48,8 @@ import tools.vitruv.testutils.printing.ModelPrinting
 import org.eclipse.emf.common.util.URI
 import tools.vitruv.testutils.printing.CombinedModelPrinter
 import tools.vitruv.testutils.printing.UriReplacingPrinter
+import tools.vitruv.testutils.printing.DefaultPrintIdProvider
+import java.util.Collection
 
 @FinalFieldsConstructor
 package class EquivalenceTestExecutable implements Executable, AutoCloseable {
@@ -55,7 +57,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	val DomainStep testStep
 	val Map<VitruvDomain, List<DomainStep>> dependencySteps
 	val Map<VitruvDomain, DomainStep> referenceSteps
-	val List<ChangePropagationSpecification> changePropagationSpecifications
+	val Collection<ChangePropagationSpecification> changePropagationSpecifications
 	val UriMode uriMode
 	val ModelComparisonSettings comparisonSettings
 	val EquivalenceTestExtensionContext extensionContext
@@ -238,7 +240,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		val TestView referenceView
 		val Set<VitruvDomain> referenceDomains
 		var Set<Path> testFiles
-		val idProvider = new PrintIdProvider
+		val PrintIdProvider idProvider = new DefaultPrintIdProvider()
 
 		override describeTo(Description description) {
 			description.appendText("exactly these resource paths to exist in the test view: ")
