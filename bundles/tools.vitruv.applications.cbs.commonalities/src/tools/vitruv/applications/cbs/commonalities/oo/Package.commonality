@@ -45,7 +45,7 @@ commonality Package {
 		// TODO Explicitly pass the referenced Java:Resource? Currently the operator retrieves it from the correspondence model.
 		// TODO Allow the operator to update the resource path after the name or namespaces have changed, but the attribute reference still holds?
 		// -> might better fit an attribute mapping
-		= Java:Package.javaSubPackages(ref Package.namespaces, Package.namespaces, Package.name)
+		= Java:Package.javaSubPackages(ref Package.namespaces, Package.namespaces, Package.name) 
 	}
 
 	has classes referencing ObjectOrientedDesign:Class {
@@ -59,6 +59,6 @@ commonality Package {
 		// Note: Any elements that are not of type UML:Interface are implicitly ignored.
 		= UML:Package.packagedElement
 		// Note: Any compilation units that don't correspond to an ObjectOrientedDesign:Interface are implicitly ignored.
-		= Java:Package.javaPackageCompilationUnits(ref CompilationUnit.namespaces, Package.namespaces, Package.name)
+		= Java:Package.javaPackageCompilationUnits(ref CompilationUnit.namespaces, Package.namespaces, Package.name) 
 	}
 }
