@@ -9,9 +9,9 @@ commonality Repository {
 	}
 
 	with ObjectOrientedDesign:(
-		Package called "RepositoryPackage",
-		Package called "ContractsPackage",
-		Package called "DatatypesPackage"
+		(Package as RepositoryPackage),
+		(Package as ContractsPackage),
+		(Package as DatatypesPackage)
 	)
 	whereat {
 		ContractsPackage in RepositoryPackage,
