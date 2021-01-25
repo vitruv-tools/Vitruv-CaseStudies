@@ -119,17 +119,17 @@ abstract class RepositoryEquivalenceTemplate {
 		dependsOn [creation(it)]
 
 		stepFor(pcm.domain) [ extension view |
-			resourceAt('model/Test'.repository).propagate[delete(emptyMap())]
+			resourceAt('model/Test'.repository).propagate [delete(emptyMap())]
 		]
 
 		stepFor(java.domain) [ extension view |
-			resourceAt('src/test/package-info'.java).propagate[delete(emptyMap())]
-			resourceAt('src/test/contracts/package-info'.java).propagate[delete(emptyMap())]
-			resourceAt('src/test/datatypes/package-info'.java).propagate[delete(emptyMap())]
+			resourceAt('src/test/package-info'.java).propagate [delete(emptyMap())]
+			resourceAt('src/test/contracts/package-info'.java).propagate [delete(emptyMap())]
+			resourceAt('src/test/datatypes/package-info'.java).propagate [delete(emptyMap())]
 		]
 
 		inputVariantFor(java.domain, 'deleting only the root package') [ extension view |
-			resourceAt('src/test/package-info'.java).propagate[delete(emptyMap())]
+			resourceAt('src/test/package-info'.java).propagate [delete(emptyMap())]
 		].alsoCompareToMainStepOfSameDomain()
 
 		return testsThatStepsAreEquivalent
