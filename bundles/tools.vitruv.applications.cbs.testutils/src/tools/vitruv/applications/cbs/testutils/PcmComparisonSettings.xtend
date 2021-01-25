@@ -8,7 +8,7 @@ import java.util.List
 
 class PcmComparisonSettings implements ModelComparisonSettings {
 
-	override getEqualityFeatureFiltersForDomain(VitruvDomain domain) {
+	override getEqualityOptionsForDomain(VitruvDomain domain) {
 		if (domain == pcm.domain) List.of(ignoringFeatures(IDENTIFIER__ID)) else emptyList
 	}
 }

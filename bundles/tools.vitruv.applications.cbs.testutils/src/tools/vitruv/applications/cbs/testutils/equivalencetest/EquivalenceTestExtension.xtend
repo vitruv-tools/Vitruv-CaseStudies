@@ -44,7 +44,7 @@ class EquivalenceTestExtension implements ParameterResolver {
 	}
 
 	def private static <T> instantiate(Class<? extends T> clazz) {
-		checkNotNull(clazz.constructors.findFirst[parameterCount == 0], '''«clazz» has no zero-arg constructor!''').
-			newInstance() as T
+		checkNotNull(clazz.constructors.findFirst[parameterCount == 0], '''«clazz» has no zero-arg constructor!''')
+			.newInstance() as T
 	}
 }

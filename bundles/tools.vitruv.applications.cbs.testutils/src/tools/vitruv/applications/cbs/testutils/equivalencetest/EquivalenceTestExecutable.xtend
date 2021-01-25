@@ -162,7 +162,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 				referenceDomains.findFirst[referenceResource.belongsTo(it)],
 				'''Cannot find domain of «referenceResource»!'''
 			)
-			val filters = comparisonSettings.getEqualityFeatureFiltersForDomain(referenceDomain)
+			val filters = comparisonSettings.getEqualityOptionsForDomain(referenceDomain)
 
 			assertThat(testView.resourceAt(model), containsModelOf(referenceResource, filters))
 		]

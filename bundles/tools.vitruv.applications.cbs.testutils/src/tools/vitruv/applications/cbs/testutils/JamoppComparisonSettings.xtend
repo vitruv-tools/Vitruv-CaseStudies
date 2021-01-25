@@ -7,7 +7,7 @@ import tools.vitruv.framework.domains.VitruvDomain
 import java.util.List
 
 class JamoppComparisonSettings implements ModelComparisonSettings {
-	override getEqualityFeatureFiltersForDomain(VitruvDomain domain) {
+	override getEqualityOptionsForDomain(VitruvDomain domain) {
 		if (domain == java.domain) List.of(ignoringFeaturesOfType(LAYOUT_INFORMATION)) else emptyList
 	}
 }
