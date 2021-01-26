@@ -1,0 +1,50 @@
+concept ComponentBasedSystems
+
+commonality Repository {
+
+	with PCM:(Repository in Resource)
+	whereat {
+		-> Resource.path = "model/",
+		Resource.fileExtension = "repository"
+	}
+
+	with ObjectOrientedDesign:(
+		(Package as RepositoryPackage),
+		(Package as ContractsPackage),
+		(Package as DatatypesPackage)
+	)
+	whereat {
+		ContractsPackage in RepositoryPackage,
+		ContractsPackage.name = "contracts",
+
+		DatatypesPackage in RepositoryPackage,
+		DatatypesPackage.name = "datatypes"
+	}
+
+	has name {
+		= PCM:Repository.entityName
+		-> PCM:Resource.name
+
+		= ObjectOrientedDesign:RepositoryPackage.name
+	}
+
+	has components referencing ComponentBasedSystems:Component {
+		= PCM:Repository.components__Repository
+
+		// Note: We assume that the contracts and datatypes packages do not contain classes which match the Component
+		// participation. Otherwise these packages would need to be ignored here.
+		= ObjectOrientedDesign:RepositoryPackage.subPackages
+	}
+
+	has componentInterfaces referencing ComponentBasedSystems:ComponentInterface {
+		= PCM:Repository.interfaces__Repository
+
+		= ObjectOrientedDesign:ContractsPackage.interfaces
+	}
+
+	has compositeDataTypes referencing ComponentBasedSystems:CompositeDataType {
+		= PCM:Repository.dataTypes__Repository
+
+		= ObjectOrientedDesign:DatatypesPackage.classes
+	}
+}
