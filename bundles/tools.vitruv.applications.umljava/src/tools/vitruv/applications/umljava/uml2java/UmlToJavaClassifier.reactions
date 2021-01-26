@@ -113,20 +113,23 @@ reaction UmlClassifierInserted {
 
 routine moveJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackage) {
 	match {
-		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+		retrieve java::ConcreteClassifier corresponding to umlClassifier
+		val javaPackage = retrieve optional java::Package corresponding to umlPackage
 		val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier 
-		val javaPackage = retrieve java::Package corresponding to umlPackage
-			with !javaPackage.compilationUnits.contains(javaCompilationUnit)
+			with !javaPackage.isPresent || !javaPackage.get.compilationUnits.contains(javaCompilationUnit)
 	}
 	action {
 		update javaCompilationUnit {
 			javaCompilationUnit.namespaces.clear
-			javaCompilationUnit.namespaces += javaPackage.javaPackageAsStringList
+			javaPackage.ifPresent [
+				javaCompilationUnit.namespaces += javaPackageAsStringList
+			]
 			persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+			
 		}
-		update javaPackage {
-			javaPackage.compilationUnits += javaCompilationUnit
-		}
+		call javaPackage.ifPresent [
+			compilationUnits += javaCompilationUnit
+		]
     }
 }
 
@@ -155,6 +158,27 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
         }
         call jPackage.ifPresent[compilationUnits += javaCompilationUnit]
     }
+}
+
+reaction UmlClassifierDetached {
+	after element uml::Classifier removed from uml::Package[packagedElement]
+	call detachJavaClassifier(oldValue, affectedEObject)
+}
+
+routine detachJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackage) {
+	match {
+		retrieve java::ConcreteClassifier corresponding to umlClassifier
+		val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier
+		val javaPackage = retrieve optional java::Package corresponding to umlPackage
+	}
+	action {
+		update javaCompilationUnit {
+			javaCompilationUnit.namespaces.clear
+		}
+		call javaPackage.ifPresent [
+			compilationUnits -= javaCompilationUnit
+		]
+	}
 }
 
 reaction UmlClassifierDeleted {
