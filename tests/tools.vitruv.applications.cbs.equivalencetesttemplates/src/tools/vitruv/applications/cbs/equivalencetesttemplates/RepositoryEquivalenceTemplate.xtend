@@ -94,12 +94,12 @@ abstract class RepositoryEquivalenceTemplate {
 			]
 
 			resourceAt('src/test/contracts/package-info'.java).propagate [
-				moveTo('src/renamed/contracts/package.info'.java)
+				moveTo('src/renamed/contracts/package-info'.java)
 				Package.from(it).namespaces.set(0, 'renamed')
 			]
 
 			resourceAt('src/test/datatypes/package-info'.java).propagate [
-				moveTo('src/renamed/datatypes/package.info'.java)
+				moveTo('src/renamed/datatypes/package-info'.java)
 				Package.from(it).namespaces.set(0, 'renamed')
 			]
 		]
