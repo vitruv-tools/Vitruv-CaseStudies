@@ -104,11 +104,20 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		uPackage.packagedElements += uClass
 		propagate
 		
-		val jClass = getCorrespondingClass(uClass)
+		var jClass = getCorrespondingClass(uClass)
 		assertJavaFileExists(CLASS_NAME, #[uPackage.name])
 		assertJavaFileNotExists(CLASS_NAME, #[])
 		assertClassEquals(uClass, jClass)
 		assertEquals(jClass.containingPackageName.join("."), uPackage.name)
+		
+		rootElement.packagedElements += uClass
+		propagate
+		
+		jClass = getCorrespondingClass(uClass)
+		assertJavaFileNotExists(CLASS_NAME, #[uPackage.name])
+		assertJavaFileExists(CLASS_NAME, #[])
+		assertClassEquals(uClass, jClass)
+		assertEquals(jClass.containingPackageName.join("."), "")
 	}
 
 	@Test
