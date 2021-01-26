@@ -16,8 +16,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceDescription;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -68,6 +66,7 @@ import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.types.TypeReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
@@ -103,6 +102,7 @@ import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.VURI;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationAbortCause;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationListener;
+import tools.vitruv.testutils.DisableAutoBuild;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 import tools.vitruv.testutils.UriMode;
@@ -122,12 +122,13 @@ import static tools.vitruv.framework.util.ProjectBuildUtils.refreshAndBuildIncre
  *
  */
 @SuppressWarnings("restriction")
+@ExtendWith(DisableAutoBuild.class)
 public abstract class Java2PcmTransformationTest extends LegacyVitruvApplicationTest
 		implements ChangePropagationListener, SynchronizationAwaitCallback {
 
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
 
-	private static int MAXIMUM_SYNC_WAITING_TIME = 10000;
+	private static int MAXIMUM_SYNC_WAITING_TIME = 15000;
 
 	protected Package mainPackage;
 	protected Package secondPackage;
@@ -169,17 +170,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		String projectName = testProjectFolder.getFileName().toString();
 		testEclipseProject = IProjectUtil.createProjectAt(projectName, testProjectFolder);
 		IProjectUtil.configureAsJavaProject(testEclipseProject);
-		disableAutoBuild(testEclipseProject);
-	}
-
-	private void disableAutoBuild(IProject project) {
-		IWorkspaceDescription copiedDescription = ResourcesPlugin.getWorkspace().getDescription();
-		copiedDescription.setAutoBuilding(false);
-		try {
-			ResourcesPlugin.getWorkspace().setDescription(copiedDescription);
-		} catch (CoreException e) {
-			throw new IllegalStateException("Auto building could not be disabled");
-		}
 	}
 
 	private void addJavaBuilder() {

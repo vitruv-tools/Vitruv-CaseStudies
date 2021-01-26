@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Vitruv CBS Commonalities Application
+Bundle-SymbolicName: tools.vitruv.applications.cbs.commonalities;singleton:=true
+Bundle-Version: 0.2.0.qualifier
+Bundle-Vendor: vitruv.tools
+Export-Package: tools.vitruv.applications.cbs.commonalities,
+ tools.vitruv.applications.cbs.commonalities.cbs,
+ tools.vitruv.applications.cbs.commonalities.java,
+ tools.vitruv.applications.cbs.commonalities.oo,
+ tools.vitruv.applications.cbs.commonalities.pcm,
+ tools.vitruv.applications.cbs.commonalities.uml
+Require-Bundle: tools.vitruv.framework.applications,
+ tools.vitruv.extensions.dslsruntime.commonalities,
+ tools.vitruv.domains.pcm;visibility:=reexport,
+ tools.vitruv.domains.uml;visibility:=reexport,
+ tools.vitruv.domains.java;visibility:=reexport,
+ edu.kit.ipd.sdq.activextendannotations
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities

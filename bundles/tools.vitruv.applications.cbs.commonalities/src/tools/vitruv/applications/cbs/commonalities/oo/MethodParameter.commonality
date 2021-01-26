@@ -1,0 +1,39 @@
+import tools.vitruv.applications.cbs.commonalities.java.operators._
+import tools.vitruv.applications.cbs.commonalities.uml.operators._
+
+concept ObjectOrientedDesign
+
+// Externally contained by ObjectOrientedDesign:InterfaceMethod.parameters
+// and ObjectOrientedDesign:ClassMethod.parameters
+// and ObjectOrientedDesign:Constructor.parameters
+referenced commonality MethodParameter {
+
+	// Externally contained by UML:Operation.ownedParameter
+	with UML:Parameter
+	whereat {
+		Parameter.direction isUmlParameterDirection "in",
+		// TODO require name !== null?
+		// TODO We only support single-valued parameters currently.
+		-> Parameter.lower = 1,
+		-> Parameter.upper = 1
+	}
+
+	// Externally contained by Java:InterfaceMethod.parameters
+	// and Java:ClassMethod.parameters
+	// and Java:Constructor.parameters
+	with Java:OrdinaryParameter
+	whereat {
+	}
+
+	has name {
+		= UML:Parameter.name
+
+		= Java:OrdinaryParameter.name
+	}
+
+	has type {
+		= umlTypeReference(UML:Parameter.type, "ObjectOrientedDesign")
+
+		= javaTypeReference(Java:OrdinaryParameter.typeReference, "ObjectOrientedDesign")
+	}
+}

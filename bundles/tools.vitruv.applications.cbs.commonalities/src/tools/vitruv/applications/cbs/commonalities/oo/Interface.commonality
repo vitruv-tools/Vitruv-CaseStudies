@@ -1,0 +1,62 @@
+import tools.vitruv.applications.cbs.commonalities.java.operators._
+import tools.vitruv.applications.cbs.commonalities.uml.operators._
+
+concept ObjectOrientedDesign
+
+// Optionally externally contained by ObjectOrientedDesign:Package.interfaces
+commonality Interface {
+
+	// Optionally externally contained by UML:Package.packagedElement
+	with UML:(Interface, single Model, Resource)
+	whereat {
+		Interface in Model,
+		Model in Resource,
+		// TODO Use a condition operator to ask the user for the model name and path
+		// TODO Duplication with specification in ObjectOrientedDesign:Package
+		-> Model.name = "model",
+		-> Resource.path = "model/",
+		-> Resource.name = "model",
+		Resource.fileExtension = "uml",
+		-> Interface.visibility isUmlVisibility "PUBLIC"
+	}
+
+	// Optionally externally contained by Java:Package.javaPackageCompilationUnits
+	// Note: We only support one classifier per compilation unit currently. Supporting multiple classifiers would
+	// require use to have a separate commonality to represent the CompilationUnit.
+	with Java:(Interface, CompilationUnit, Resource)
+	whereat {
+		Interface in CompilationUnit.classifiers,
+		CompilationUnit in Resource,
+		-> Resource.path = "src/",
+		Resource.fileExtension = "java",
+		-> Interface.annotationsAndModifiers hasJavaVisibility "PUBLIC"
+	}
+
+	has name {
+		= UML:Interface.name
+
+		= Java:Interface.name
+		// CompilationUnit name schema: '<dot-separated-namespaces>.<name>.java'
+		-> javaCompilationUnitName(Java:CompilationUnit.name, Java:CompilationUnit)
+		-> Java:Resource.name
+	}
+
+	has superInterfaces {
+		// TODO We do no react to changes of the 'general' reference currently.
+		= umlGeneralizations(UML:Interface.generalization, "ObjectOrientedDesign")
+
+		= javaTypeReferences(Java:Interface.^extends, "ObjectOrientedDesign")
+	}
+
+	has methods referencing ObjectOrientedDesign:InterfaceMethod {
+		= UML:Interface.ownedOperation
+
+		// Note: Any elements that are not of type Java:InterfaceMethod are implicitly ignored.
+		= Java:Interface.members
+	}
+
+	// TODO Support non-public visibilities?
+	// Top level interfaces can also be package-private, inner interfaces can also be protected and private.
+
+	// TODO (minor) static final fields
+}

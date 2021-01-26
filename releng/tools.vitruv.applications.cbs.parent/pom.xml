@@ -6,15 +6,11 @@
 	<parent>
 		<groupId>tools.vitruv</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.1.0</version>
 	</parent>
 	<artifactId>applications-cbs-parent</artifactId>
 	<version>0.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
-	<properties>
-		<tycho.version>2.2.0</tycho.version>
-	</properties>
 
 	<repositories>
 		<repository>
@@ -49,12 +45,16 @@
 						<artifactId>maven-clean-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>xtext-gen-clean</id>
-								<phase>clean</phase>
+								<id>src-gen-clean</id>
+								<!-- Mappings and Commonalities generate Reactions, but those Reactions must not be
+								 	 part of the Xtext build. Because of that, we always need to clean the generated
+								 	 directory for a correct build, regardless of whether clean was requested -->
+								<phase>initialize</phase>
 								<goals>
 									<goal>clean</goal>
 								</goals>
 								<configuration>
+									<excludeDefaultDirectories>true</excludeDefaultDirectories>
 									<filesets>
 										<fileset>
 											<directory>src-gen</directory>
@@ -99,6 +99,14 @@
 								</language>
 								<language>
 									<setup>tools.vitruv.dsls.mappings.MappingsLanguageStandaloneSetup</setup>
+									<outputConfigurations>
+										<outputConfiguration>
+											<outputDirectory>${project.basedir}/src-gen</outputDirectory>
+										</outputConfiguration>
+									</outputConfigurations>
+								</language>
+								<language>
+									<setup>tools.vitruv.dsls.commonalities.CommonalitiesLanguageStandaloneSetup</setup>
 									<outputConfigurations>
 										<outputConfiguration>
 											<outputDirectory>${project.basedir}/src-gen</outputDirectory>

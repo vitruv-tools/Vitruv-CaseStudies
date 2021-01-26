@@ -1,0 +1,32 @@
+import tools.vitruv.applications.cbs.commonalities.oo.operators._
+import tools.vitruv.applications.cbs.commonalities.pcm.operators._
+
+concept ComponentBasedSystems
+
+// Externally contained by ComponentBasedSystems:ComponentInterface.operations
+referenced commonality Operation {
+
+	// Externally contained by PCM:OperationInterface.signatures__OperationInterface
+	with PCM:OperationSignature
+
+	// Externally contained by ObjectOrientedDesign:Interface.methods
+	with ObjectOrientedDesign:InterfaceMethod
+
+	has name {
+		= PCM:OperationSignature.entityName
+
+		= ObjectOrientedDesign:InterfaceMethod.name
+	}
+
+	has returnType {
+		= pcmDataTypeReference(PCM:OperationSignature.returnType__OperationSignature, "ComponentBasedSystems")
+
+		= ooTypeReference(ObjectOrientedDesign:InterfaceMethod.returnType, "ComponentBasedSystems")
+	}
+
+	has parameters referencing ComponentBasedSystems:OperationParameter {
+		= PCM:OperationSignature.parameters__OperationSignature
+
+		= ObjectOrientedDesign:InterfaceMethod.parameters
+	}
+}
