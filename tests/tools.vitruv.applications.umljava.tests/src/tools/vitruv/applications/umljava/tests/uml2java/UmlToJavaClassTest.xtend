@@ -97,6 +97,19 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		assertJavaFileNotExists(CLASS_NAME, #[])
 		assertClassEquals(uClass, jClass)
 	}
+	
+	@Test
+	def testMoveClass() {
+		val uPackage = createUmlPackageAndAddToSuperPackage("package", rootElement)
+		uPackage.packagedElements += uClass
+		propagate
+		
+		val jClass = getCorrespondingClass(uClass)
+		assertJavaFileExists(CLASS_NAME, #[uPackage.name])
+		assertJavaFileNotExists(CLASS_NAME, #[])
+		assertClassEquals(uClass, jClass)
+		assertEquals(jClass.containingPackageName.join("."), uPackage.name)
+	}
 
 	@Test
 	def testChangeFinalClass() {
@@ -182,5 +195,20 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		assertEquals(DATATYPE_NAME, jClass.name)
 		assertJavaFileExists(DATATYPE_NAME, #[])
 	}
-
+	
+	@Test
+	def testMoveDataType() {
+		val uDataType = createUmlDataType(rootElement, DATATYPE_NAME)
+		propagate
+		
+		val uPackage = createUmlPackageAndAddToSuperPackage("package", rootElement)
+		uPackage.packagedElements += uDataType
+		propagate
+		
+		val jDataType = getCorrespondingClass(uDataType)
+		assertJavaFileExists(DATATYPE_NAME, #[uPackage.name])
+		assertJavaFileNotExists(DATATYPE_NAME, #[])
+		assertEquals(DATATYPE_NAME, jDataType.name)
+		assertEquals(jDataType.containingPackageName.join("."), uPackage.name)
+	}
 }
