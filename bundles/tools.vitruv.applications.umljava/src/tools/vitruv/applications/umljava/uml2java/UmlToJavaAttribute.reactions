@@ -1,5 +1,4 @@
 import org.eclipse.uml2.uml.Property
-import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.members.Field
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
@@ -82,25 +81,25 @@ routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttrib
 
 reaction UmlAttributeDeletedFromClass {
     after element uml::Property deleted and removed from uml::Class[ownedAttribute]
-    call deleteJavaAttribute(oldValue)
+    call deleteJavaAttribute(oldValue, affectedEObject)
 }
 
 reaction UmlAttributeDeletedFromDataType {
     after element uml::Property deleted and removed from uml::DataType[ownedAttribute]
-    call deleteJavaAttribute(oldValue)
+    call deleteJavaAttribute(oldValue, affectedEObject)
 }
 
-routine deleteJavaAttribute(uml::Property umlAttr) {
+routine deleteJavaAttribute(uml::Property umlAttr, uml::Classifier umlClassifier) {
     match {
         val jAttr = retrieve java::Field corresponding to umlAttr
+        val jClass = retrieve optional java::Class corresponding to umlClassifier
     }
     action {
         call {
-        	val jClassifier = jAttr.eContainer
-        	if (jClassifier !== null && jClassifier instanceof Class){
-	            removeJavaGettersOfAttribute(jAttr)
+        	jClass.ifPresent [
+        		removeJavaGettersOfAttribute(jAttr)
 	            removeJavaSettersOfAttribute(jAttr)
-            }
+        	]
         }
         delete jAttr
     }
