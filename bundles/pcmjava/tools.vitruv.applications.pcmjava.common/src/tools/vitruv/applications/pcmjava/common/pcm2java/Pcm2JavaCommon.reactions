@@ -123,6 +123,29 @@ routine renamePackageForRepository(pcm::Repository repository) {
 	}
 }
 
+reaction RepositoryDeleted {
+	after element pcm::Repository deleted and removed as root
+	call {
+		for (component : oldValue.components__Repository.filter(BasicComponent)) {
+			deleteJavaClassifier(component)
+			deleteJavaPackage(component, "")
+		}
+		for (interface : oldValue.interfaces__Repository.filter(OperationInterface)) {
+			deleteJavaClassifier(interface)
+		}
+		for (dataType : oldValue.dataTypes__Repository.filter(CompositeDataType)) {
+			deleteJavaClassifier(dataType)
+		}
+		for (dataType : oldValue.dataTypes__Repository.filter(CollectionDataType)) {
+			deleteJavaClassifier(dataType);
+		}
+		deleteJavaPackage(oldValue, "repository_root")
+		deleteJavaPackage(oldValue, "contracts")
+		deleteJavaPackage(oldValue, "datatypes")
+	}
+}
+
+
 // ################################################################################
 // ############################# COMPOSED STRUCTURES ##############################
 
@@ -154,7 +177,7 @@ reaction DeletedSystem {
 	after element pcm::System deleted and removed as root
 	call {
 		val system = oldValue;
-		deleteJavaPackage(system, system.entityName, "root_system");
+		deleteJavaPackage(system, "root_system");
 		deleteJavaClassifier(system);
 	}
 }
@@ -374,7 +397,7 @@ reaction DeletedComponent {
 	after element pcm::RepositoryComponent deleted and removed from pcm::Repository[components__Repository]
 	call {
 		deleteJavaClassifier(oldValue);
-		deleteJavaPackage(oldValue, oldValue.entityName, "");
+		deleteJavaPackage(oldValue, "");
 	}
 }
 
@@ -705,7 +728,7 @@ routine renameJavaPackage(pcm::NamedElement sourceElementMappedToPackage, java::
 	}
 }
 
-routine deleteJavaPackage(pcm::NamedElement sourceElementMappedToPackage, String packageName, String expectedTag) {
+routine deleteJavaPackage(pcm::NamedElement sourceElementMappedToPackage, String expectedTag) {
 	match {
 		val javaPackage = retrieve java::Package corresponding to sourceElementMappedToPackage tagged with expectedTag
 	}
