@@ -24,13 +24,13 @@ public final class DefaultLiterals {
 
 	public static final String INPUT_REQUEST_MODEL_PATH = "Please enter where to save the corresponding Uml-Model, e.g. \"model/repository.uml\"";
 
-	public static final String INPUT_REQUEST_NEW_MODEL_PATH = "Please enter where to save the new corresponding model, e.g. \"model/<file-name>\"";
+	public static final String INPUT_REQUEST_NEW_MODEL_PATH = "Please enter where to save the corresponding PCM model, e.g. \"model/<file-name>\"";
 
 	public static final String INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL = "Do you want to delete the UML model associated with this PCM repository?";
 
 	public static final String USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__REQUEST = "This package can correspond to a new RepositoryComponent. Please select the component type you want to create:";
 	public static final List<String> USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__OPTIONS = Arrays
-			.asList("BasicComponent", "CompositeComponent", "SubSystem", "No Correspondence");
+		.asList("BasicComponent", "CompositeComponent", "SubSystem", "No Correspondence");
 	public static final int USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT = 0;
 	public static final int USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT = 1;
 	public static final int USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__SUB_SYSTEM = 2;
@@ -38,7 +38,7 @@ public final class DefaultLiterals {
 
 	public static final String USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REQUEST = "This package can correspond to a PCM::Repository or a PCM::System model. Please select the correspondence you want to create:";
 	public static final List<String> USER_DISAMBIGUATE_REPOSITORY_SYSTEM__OPTIONS = Arrays.asList("Repository",
-			"System", "No Correspondence");
+		"System", "No Correspondence");
 	public static final int USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY = 0;
 	public static final int USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM = 1;
 	public static final int USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING = 2;
