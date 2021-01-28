@@ -124,6 +124,8 @@ routine moveJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackag
 			javaPackage.ifPresent [
 				javaCompilationUnit.namespaces += javaPackageAsStringList
 			]
+			//TODO: updating the compilation unit's name should not be needed 
+			//it is currently necessary as the name is incorrectly resolved to <oldPackageName>.<correctName> after the classifier got removed from its old package
 			javaCompilationUnit.name = javaClassifier.name + ".java"
 			persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
 			
