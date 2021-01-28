@@ -14,7 +14,7 @@ import tools.vitruv.framework.applications.VitruvApplication
 @Inherited
 @ExtendWith(EquivalenceTestExtension)
 annotation EquivalenceTest {
-	val Class<? extends VitruvApplication> application
+	val Class<? extends VitruvApplication>[] applications
 	val Class<? extends ModelComparisonSettings>[] comparisonSettings = #[]
 	val UriMode uriMode = FILE_URIS
 }

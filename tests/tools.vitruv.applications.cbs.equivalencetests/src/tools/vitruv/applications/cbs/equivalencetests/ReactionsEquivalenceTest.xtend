@@ -10,18 +10,24 @@ import tools.vitruv.applications.cbs.testutils.JamoppModelPrinter
 import tools.vitruv.applications.cbs.testutils.PcmModelPrinter
 import tools.vitruv.applications.cbs.testutils.JamoppComparisonSettings
 import tools.vitruv.applications.cbs.testutils.PcmComparisonSettings
-import tools.vitruv.applications.pcmjava.pojotransformations.PcmJavaPojoApplication
+import tools.vitruv.applications.umljava.UmlJavaApplication
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassApplication
+import tools.vitruv.testutils.RegisterMetamodelsInStandalone
+import tools.vitruv.testutils.printing.UnsetFeaturesHidingModelPrinter
 
 @Target(TYPE)
 @Retention(RUNTIME)
 @EquivalenceTest(
-	application = PcmJavaPojoApplication,
+	applications = #[
+		UmlJavaApplication,
+		PcmUmlClassApplication
+	],
 	comparisonSettings = #[
 		JamoppComparisonSettings,
 		PcmComparisonSettings
 	]
 )
-@ExtendWith(ModelPrinterChange)
-@UseModelPrinter(JamoppModelPrinter, PcmModelPrinter)
+@ExtendWith(ModelPrinterChange, RegisterMetamodelsInStandalone)
+@UseModelPrinter(UnsetFeaturesHidingModelPrinter, JamoppModelPrinter, PcmModelPrinter)
 annotation ReactionsEquivalenceTest {
 }

@@ -4,6 +4,7 @@ import tools.vitruv.framework.domains.VitruvDomain
 import tools.vitruv.testutils.TestView
 import java.util.function.Consumer
 import org.junit.jupiter.api.DynamicNode
+import tools.vitruv.testutils.TestUserInteraction
 
 /**
  * Constructs an equivalence test, i.e. a test that executes steps in different domains and checks that if propagated,
@@ -28,6 +29,12 @@ interface EquivalenceTestBuilder {
 	 * tests created by this builder will only run if the other steps can be executed successfully before.
 	 */
 	def void dependsOn((EquivalenceTestBuilder)=>void otherTest)
+	
+	/**
+	 * Calls the provided {@code interactionsProvider} before starting the test run, allowing the lambda to
+	 * configure the user interations
+	 */
+	def void userInteractions((TestUserInteraction)=>void interactionsProvider)
 
 	def Iterable<? extends DynamicNode> testsThatStepsAreEquivalent()
 

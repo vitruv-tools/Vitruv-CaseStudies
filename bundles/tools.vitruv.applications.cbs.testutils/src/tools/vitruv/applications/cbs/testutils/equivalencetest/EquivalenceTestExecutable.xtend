@@ -50,6 +50,7 @@ import tools.vitruv.testutils.printing.CombinedModelPrinter
 import tools.vitruv.testutils.printing.UriReplacingPrinter
 import tools.vitruv.testutils.printing.DefaultPrintIdProvider
 import java.util.Collection
+import tools.vitruv.testutils.TestUserInteraction
 
 @FinalFieldsConstructor
 package class EquivalenceTestExecutable implements Executable, AutoCloseable {
@@ -66,6 +67,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		val testView = setupTestView()
 		val referenceView = setupReferenceView()
 		val printerChange = installViewDirectoryUriReplacement(testView, referenceView)
+		
 		execute(this, printerChange, setupTestView(), setupReferenceView())
 	}
 
@@ -76,11 +78,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		@CloseResource DirectoryTestView referenceView
 	) throws Throwable {
 		try {
-			dependencySteps.get(testStep.targetDomain).forEach[executeIn(testView)]
-			referenceDomains.forEach [ referenceDomain |
-				dependencySteps.get(referenceDomain).forEach[executeIn(referenceView)]
-			]
-			verifyDependencyResults()
+			executeDependencies(testView, referenceView)
 
 			testStep.executeIn(testView)
 			referenceSteps.values.forEach[executeIn(referenceView)]
@@ -97,15 +95,15 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
 		TuidManager.instance.reinitialize()
 		val changePropagationSpecifications = this.changePropagationSpecifications
-		var interactionProvider = UserInteractionFactory.instance.createPredefinedInteractionResultProvider(null)
-		var userInteractor = UserInteractionFactory.instance.createUserInteractor(interactionProvider)
+		val userInteraction = new TestUserInteraction
+		var userInteractor = UserInteractionFactory.instance.createUserInteractor(new TestUserInteraction.ResultProvider(userInteraction))
 		val vsum = new VirtualModelImpl(vsumDirectory.toFile(), userInteractor, new VirtualModelConfiguration => [
 			changePropagationSpecifications.flatMap[List.of(sourceDomain, targetDomain)].toSet //
 			.forEach[domain|addMetamodel(domain)]
 			changePropagationSpecifications.forEach[spec|addChangePropagationSpecification(spec)]
 		])
 		new DirectoryTestView(
-			new ChangePublishingTestView(viewDirectory, interactionProvider, uriMode, vsum),
+			new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum),
 			viewDirectory
 		)
 	}
@@ -118,8 +116,17 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		newBasicView(testProjectManager.getProject("", extensionContext))
 	}
 
-	def private verifyDependencyResults() throws TestAbortedException {
+	def private executeDependencies(TestView testView, TestView referenceView) throws TestAbortedException {
 		try {
+			for (dependencyTestStep : dependencySteps.get(testStep.targetDomain)) {
+				dependencyTestStep.executeIn(testView)
+			}
+			for (referenceDomain : referenceDomains) {
+				for (dependencyReferenceStep : dependencySteps.get(referenceDomain)) {
+					dependencyReferenceStep.executeIn(referenceView)
+				}
+			}
+
 			verifyTestDomainResults()
 		} catch (AssertionError failure) {
 			throw abortedException(

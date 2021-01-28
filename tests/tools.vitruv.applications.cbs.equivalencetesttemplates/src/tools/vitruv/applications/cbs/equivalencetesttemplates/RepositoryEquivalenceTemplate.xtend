@@ -5,6 +5,7 @@ import org.junit.jupiter.api.TestFactory
 import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder
 import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
 import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
+import static extension tools.vitruv.applications.cbs.testutils.UmlCreators.*
 import org.palladiosimulator.pcm.repository.Repository
 import org.emftext.language.java.containers.Package
 import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
@@ -56,6 +57,32 @@ abstract class RepositoryEquivalenceTemplate {
 			resourceAt('src/test/package-info'.java).propagate [
 				contents += java.containers.Package => [
 					name = 'test'
+				]
+			]
+		].alsoCompareToMainStepOfSameDomain()
+		
+		stepFor(uml.domain) [ extension view |
+			resourceAt('model/Test'.uml).propagate [
+				contents += uml.Model => [
+					packagedElements += uml.Package => [
+						name = 'test'
+						packagedElements += uml.Package => [
+							name = 'contracts'
+						]
+						packagedElements += uml.Package => [
+							name = 'datatypes'
+						]
+					]
+				]
+			]
+		]
+		
+		inputVariantFor(uml.domain, 'creating only the root package') [ extension view |
+			resourceAt('model/Test'.uml).propagate [
+				contents += uml.Model => [
+					packagedElements += uml.Package => [
+						name = 'test'
+					]
 				]
 			]
 		].alsoCompareToMainStepOfSameDomain()

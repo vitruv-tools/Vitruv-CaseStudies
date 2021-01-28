@@ -18,17 +18,97 @@ import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import java.util.Set
 import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder.VariantOptions
 import java.util.Collection
+import tools.vitruv.testutils.TestUserInteraction
+
+abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
+	/* both maps always contain lists for all domains */
+	protected val Map<VitruvDomain, List<DomainStep>> dependencySteps
+	protected val Map<VitruvDomain, List<DomainStep>> steps
+	protected var (TestUserInteraction)=>void userInteractionConfiguration = null
+	protected val checks = new Checks(this)
+	
+	protected new(Set<VitruvDomain> targetDomains) {
+		this.dependencySteps = mapForDomains(targetDomains)
+		this.steps = mapForDomains(targetDomains)
+	}
+	
+	def private static mapForDomains(Set<VitruvDomain> domains) {
+		val result = new HashMap<VitruvDomain, List<DomainStep>>(domains.size)
+		for (domain : domains) {
+			result.put(domain, new LinkedList)
+		}
+		return result
+	}
+	
+	def protected modifyIfNecessary(DomainStep domainStep) {
+		if (userInteractionConfiguration !== null) {
+			new StepWithUserInteractionSetup(domainStep, userInteractionConfiguration)
+		} else {
+			domainStep
+		}
+	}
+	
+	override userInteractions((TestUserInteraction)=>void interactionsProvider) {
+		checks.forUserInteractionConfiguration()
+		this.userInteractionConfiguration = interactionsProvider
+	}
+
+	@FinalFieldsConstructor
+	protected static class Checks {
+		val DefaultBuilderCommon target
+		var active = true
+
+		def forStep(VitruvDomain domain) {
+			checkArgument(
+				target.steps.containsKey(domain),
+				'''No registered «ChangePropagationSpecification.simpleName» has «domain» as source domain!'''
+			)
+			checkActive()
+		}
+
+		def forVariant(VitruvDomain domain, String name) {
+			forStep(domain)
+			checkState(
+				!target.steps.get(domain).isEmpty,
+				'''You must first register a proper step in «domain.name» before registering a variant!'''
+			)
+			checkArgument(name !== null && !name.isBlank(), '''You must provide a name for a variant!''')
+		}
+
+		def forDependency() {
+			checkActive()
+		}
+
+		def private checkActive() {
+			checkState(
+				active,
+				'''You have already requested the tests from this builder. No more steps can be added.'''
+			)
+		}
+		
+		def forUserInteractionConfiguration() {
+			checkState(
+				target.userInteractionConfiguration === null,
+				"User interactions have already been configured!"
+			)
+		}
+
+		def forFinalizing() {
+			checkState(
+				target.steps.filter[_, stepList|!stepList.isEmpty].size >= 2,
+				'Please register steps for at least two domains!'
+			)
+			active = false
+		}
+	}
+}
 
 @FinalFieldsConstructor
-package class DefaultEquivalenceTestBuilder implements EquivalenceTestBuilder {
+package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon implements EquivalenceTestBuilder {
 	val ExtensionContext parentContext
 	val Collection<ChangePropagationSpecification> changePropagationSpecifications
 	val UriMode uriMode
 	val ModelComparisonSettings modelComparisonSettings
-	/* both maps always contain lists for all domains */
-	val Map<VitruvDomain, List<DomainStep>> dependencySteps
-	val Map<VitruvDomain, List<DomainStep>> steps
-	val Checks checks
 
 	package new(
 		ExtensionContext parentContext,
@@ -36,14 +116,11 @@ package class DefaultEquivalenceTestBuilder implements EquivalenceTestBuilder {
 		UriMode uriMode,
 		ModelComparisonSettings modelComparisonSettings
 	) {
+		super(changePropagationSpecifications.map[sourceDomain].toSet)
 		this.parentContext = parentContext
 		this.changePropagationSpecifications = changePropagationSpecifications
 		this.uriMode = uriMode
 		this.modelComparisonSettings = modelComparisonSettings
-		val targetDomains = changePropagationSpecifications.map[sourceDomain].toSet
-		this.dependencySteps = mapForDomains(targetDomains)
-		this.steps = mapForDomains(targetDomains)
-		this.checks = new Checks(steps)
 	}
 
 	override dependsOn((EquivalenceTestBuilder)=>void otherTest) {
@@ -64,13 +141,14 @@ package class DefaultEquivalenceTestBuilder implements EquivalenceTestBuilder {
 
 	override testsThatStepsAreEquivalent() {
 		checks.forFinalizing()
-
+		
 		steps.entrySet.flatMap [ entry |
 			val testDomain = entry.key
 			val testSteps = entry.value
 			testSteps.indexed.map [ args |
 				val testIndex = args.key
-				val testStep = args.value
+				val testStep = modifyIfNecessary(args.value)
+					
 				val referenceSteps = testStep.determineReferenceSteps(steps)
 				var testName = '''«testDomain.name» «'\u2192' /* right arrow */ » {«FOR rd : referenceSteps.keySet SEPARATOR ', '»«rd.name»«ENDFOR»}'''
 				if (testStep.name !== null) {
@@ -86,75 +164,24 @@ package class DefaultEquivalenceTestBuilder implements EquivalenceTestBuilder {
 			]
 		]
 	}
+	
+	override userInteractions((TestUserInteraction)=>void interactionsProvider) {
+		checks.forUserInteractionConfiguration()
+		this.userInteractionConfiguration = interactionsProvider
+	}
 
 	def private static <T extends DomainStep> operator_add(Map<VitruvDomain, List<DomainStep>> steps, T domainStep) {
 		steps.get(domainStep.targetDomain) += domainStep
 		return domainStep
 	}
 
-	def private static mapForDomains(Set<VitruvDomain> domains) {
-		val result = new HashMap<VitruvDomain, List<DomainStep>>(domains.size)
-		for (domain : domains) {
-			result.put(domain, new LinkedList)
-		}
-		return result
-	}
-
-	@FinalFieldsConstructor
-	private static class Checks {
-		val Map<VitruvDomain, List<DomainStep>> steps
-		var active = true
-
-		def private forStep(VitruvDomain domain) {
-			checkArgument(
-				steps.containsKey(domain),
-				'''No registered «ChangePropagationSpecification.simpleName» has «domain» as source domain!'''
-			)
-			checkActive()
-		}
-
-		def private forVariant(VitruvDomain domain, String name) {
-			forStep(domain)
-			checkState(
-				!steps.get(domain).isEmpty,
-				'''You must first register a proper step in «domain.name» before registering a variant!'''
-			)
-			checkArgument(name !== null && !name.isBlank(), '''You must provide a name for a variant!''')
-		}
-
-		def private forDependency() {
-			checkActive()
-		}
-
-		def private checkActive() {
-			checkState(
-				active,
-				'''You have already requested the tests from this builder. No more steps can be added.'''
-			)
-		}
-
-		def private forFinalizing() {
-			checkState(
-				steps.filter[_, stepList|!stepList.isEmpty].size >= 2,
-				'Please register steps for at least two domains!'
-			)
-			active = false
-		}
-	}
-
-	private static class DependencyBuilder implements EquivalenceTestBuilder {
-		// we cannot merge dependency steps and steps directly, because the checks would then be incorrect.
-		val Map<VitruvDomain, List<DomainStep>> dependencySteps
-		val Map<VitruvDomain, List<DomainStep>> steps
-		val Checks checks
+	private static class DependencyBuilder extends DefaultBuilderCommon implements EquivalenceTestBuilder  {
 		static val mockVariantOptions = new VariantOptions() {
 			override alsoCompareToMainStepOfSameDomain() { this }
 		}
 
 		new(Set<VitruvDomain> targetDomains) {
-			this.dependencySteps = mapForDomains(targetDomains)
-			this.steps = mapForDomains(targetDomains)
-			this.checks = new Checks(steps)
+			super(targetDomains)
 		}
 
 		override dependsOn((EquivalenceTestBuilder)=>void otherTest) {
@@ -179,10 +206,12 @@ package class DefaultEquivalenceTestBuilder implements EquivalenceTestBuilder {
 			checks.forFinalizing()
 			emptyList()
 		}
-
+		
 		def getAllDependencySteps() {
 			checks.forFinalizing()
-			steps.forEach[domain, steps|dependencySteps.get(domain) += steps]
+			steps.forEach [domain, steps |
+				dependencySteps.get(domain) += steps.map [modifyIfNecessary()]
+			]
 			return dependencySteps
 		}
 	}

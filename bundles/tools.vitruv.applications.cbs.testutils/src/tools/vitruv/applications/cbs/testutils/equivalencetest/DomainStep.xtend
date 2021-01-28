@@ -7,6 +7,8 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import tools.vitruv.testutils.TestView
 import java.util.Map
 import java.util.Collection
+import org.eclipse.xtend.lib.annotations.Delegate
+import tools.vitruv.testutils.TestUserInteraction
 
 package interface DomainStep {
 	def VitruvDomain getTargetDomain()
@@ -62,3 +64,15 @@ package class VariantStep implements DomainStep, EquivalenceTestBuilder.VariantO
 		].mapValues[get(0)]
 	}
 }
+
+@FinalFieldsConstructor
+package class StepWithUserInteractionSetup implements DomainStep {
+	@Delegate val DomainStep delegate
+	val (TestUserInteraction)=>void userInteractionSetup
+	
+	override executeIn(TestView testView) {
+		userInteractionSetup.apply(testView.userInteraction)
+		delegate.executeIn(testView)
+		testView.userInteraction.clearResponses()
+	}
+} 

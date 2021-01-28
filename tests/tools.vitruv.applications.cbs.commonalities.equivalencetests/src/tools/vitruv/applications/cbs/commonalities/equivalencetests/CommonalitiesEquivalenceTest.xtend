@@ -16,7 +16,7 @@ import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 @Target(TYPE)
 @Retention(RUNTIME)
 @EquivalenceTest(
-	application = CbsCommonalitiesApplication,
+	applications = CbsCommonalitiesApplication,
 	comparisonSettings = #[
 		JamoppComparisonSettings,
 		PcmComparisonSettings
