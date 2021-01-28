@@ -22,7 +22,31 @@ execute actions in PCM
 
 reaction RepositoryComponentPackageInserted {
 	after element uml::Package inserted in uml::Package[packagedElement]
-	call insertCorrespondingRepositoryComponent(newValue, affectedEObject)
+	call {
+		detectDatatypesSubpackage(newValue, affectedEObject)
+		detectContractsSubpackage(newValue, affectedEObject)
+		insertCorrespondingRepositoryComponent(newValue, affectedEObject)
+	}
+}
+
+routine detectDatatypesSubpackage(uml::Package umlPackage, uml::Package umlParentPackage) {
+	match {
+		check umlPackage.name == DefaultLiterals.DATATYPES_PACKAGE_NAME
+		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPackage tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+	}
+	action {
+		add correspondence between umlPackage and pcmRepository tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+	}
+}
+
+routine detectContractsSubpackage(uml::Package umlPackage, uml::Package umlParentPackage) {
+	match {
+		check umlPackage.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME
+		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPackage tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+	}
+	action {
+		add correspondence between umlPackage and pcmRepository tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+	}
 }
 
 routine insertCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package umlParentPkg) {
