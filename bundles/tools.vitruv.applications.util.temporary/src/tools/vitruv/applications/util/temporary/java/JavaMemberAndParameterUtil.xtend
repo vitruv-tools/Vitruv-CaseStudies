@@ -354,26 +354,27 @@ class JavaMemberAndParameterUtil {
      * Checks the containing class of the given attribute for existing setters with the old attribute name.
      * Renames the setters to the new attribute name.
      * 
-     * @param jAttributeWithOldName the Attribute with the new name
+     * @param jAttributeWithNewName the Attribute with the new name
      * @param the name of jAttribute before it was renamed
      */
-    def static renameSettersOfAttribute(Field jAttributeWithnewName, String oldName) {
-        val setters = getJavaSettersOfAttribute(jAttributeWithnewName.containingConcreteClassifier, oldName)
+    def static renameSettersOfAttribute(Field jAttributeWithNewName, String oldName) {
+        val setters = getJavaSettersOfAttribute(jAttributeWithNewName.containingConcreteClassifier, oldName)
         for (setter : setters) {
-            renameSetter(setter, jAttributeWithnewName, oldName)
+            renameSetter(setter, jAttributeWithNewName, oldName)
         }
 
     }
 
     /**
      * Renames the given setter so that it matches the name of the given attribute
-     * @param oldNaem new Setter name without set-Prefix
+     * @param oldName the name of jAttribute before it was renamed
      */
     def static renameSetter(ClassMethod setter, Field jAttribute, String oldName) {
         setter.name = buildSetterName(jAttribute.name)
+        setter.parameters.head?.setName(jAttribute.name.toFirstLower)
         for (expStatement : setter.statements.filter(ExpressionStatement)) {
             val selfReference = getAttributeSelfReferenceInExpressionStatement(expStatement, oldName)
-            if (selfReference !== null) selfReference.target = jAttribute
+            selfReference?.setTarget(jAttribute)
         }
 
     }
