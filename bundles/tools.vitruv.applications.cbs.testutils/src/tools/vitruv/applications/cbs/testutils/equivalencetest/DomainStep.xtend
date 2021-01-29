@@ -35,7 +35,7 @@ package class MainStep implements DomainStep {
 
 	override Map<VitruvDomain, DomainStep> determineReferenceSteps(
 		Map<VitruvDomain, ? extends Collection<? extends DomainStep>> availableSteps) {
-		availableSteps.filter[_, steps|!steps.isEmpty].mapValues[get(0)]
+		availableSteps.filter [_, steps|!steps.isEmpty].mapValues [get(0)]
 	}
 }
 
@@ -61,7 +61,7 @@ package class VariantStep implements DomainStep, EquivalenceTestBuilder.VariantO
 		Map<VitruvDomain, ? extends Collection<? extends DomainStep>> availableSteps) {
 		availableSteps.filter [ domain, steps |
 			!steps.isEmpty && (includeSameDomain || domain != targetDomain)
-		].mapValues[get(0)]
+		].mapValues [get(0)]
 	}
 }
 
