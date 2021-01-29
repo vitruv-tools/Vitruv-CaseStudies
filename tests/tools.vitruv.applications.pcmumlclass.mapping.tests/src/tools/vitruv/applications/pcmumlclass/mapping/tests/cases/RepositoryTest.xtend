@@ -52,12 +52,9 @@ class RepositoryTest extends PcmUmlClassTest {
 
 	def protected checkPcmRepository(Repository pcmRepository) {
 		assertTrue(pcmRepository !== null)
-		val umlRepositoryPkg = helper.getModifiableCorr(pcmRepository, Package,
-			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
-		val umlContractsPkg = helper.getModifiableCorr(pcmRepository, Package,
-			TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
-		val umlDatatypesPkg = helper.getModifiableCorr(pcmRepository, Package,
-			TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
+		val umlRepositoryPkg = helper.getCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
+		val umlContractsPkg = helper.getCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
+		val umlDatatypesPkg = helper.getCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
 		assertTrue(umlRepositoryPkg !== null)
 		assertTrue(umlContractsPkg !== null)
 		assertTrue(umlDatatypesPkg !== null)

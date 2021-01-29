@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv PCM-UML Class Application
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass;singleton:=true
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.3.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Eclipse-ExtensibleAPI: true
@@ -69,8 +69,8 @@ Export-Package: mir.reactions.combinedPcmToUmlClassReactions;x-internal:=true,
  mir.routines.umlReturnAndRegularParameterTypeReactions;x-internal:=true,
  mir.routines.umlSignatureOperationReactions;x-internal:=true,
  tools.vitruv.applications.pcmumlclass,
- tools.vitruv.applications.pcmumlclass.pcm;x-internal:=true,
- tools.vitruv.applications.pcmumlclass.uml;x-internal:=true
+ tools.vitruv.applications.pcmumlclass.pcm2uml;x-internal:=true,
+ tools.vitruv.applications.pcmumlclass.uml2pcm;x-internal:=true
 Require-Bundle: tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.framework.applications,

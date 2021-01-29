@@ -105,7 +105,7 @@ class PcmUmlClassTestHelper {
 	def <T extends EObject> T getModifiableCorr(EObject source, java.lang.Class<T> typeFilter, String tag) {
 		val correspondence = getCorr(source, typeFilter, tag)
 		if(correspondence === null) return null
-		return getModifiableInstance(getCorr(source, typeFilter, tag))
+		return getModifiableInstance(correspondence)
 	}
 
 	// Repository

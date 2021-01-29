@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>tools.vitruv</groupId>
 		<artifactId>tests</artifactId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.3.0-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
 	<artifactId>pcmjava-tests</artifactId>
@@ -14,9 +14,9 @@
 	<name>PCM-Java Application Tests</name>
 
 	<modules>
-		<module>tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests</module>
-		<module>tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests</module>
-		<module>tools.vitruv.applications.pcmjava.ejbtransformations.tests</module>
+		<module>tools.vitruv.applications.pcmjava.pojotransformations.tests</module>
+		<module>tools.vitruv.applications.pcmjava.pojotransformations.editortests</module>
+		<module>tools.vitruv.applications.pcmjava.ejbtransformations.editortests</module>
 		<module>tools.vitruv.applications.pcmjava.tests</module>
 		<module>tools.vitruv.applications.pcmjava.tests.util</module>
 	</modules>

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>tools.vitruv</groupId>
 		<artifactId>bundles</artifactId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.3.0-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
 	<artifactId>pcmjava</artifactId>
@@ -18,8 +18,6 @@
 		<module>tools.vitruv.applications.pcmjava.depinjecttransformations</module>
 		<module>tools.vitruv.applications.pcmjava.ejbtransformations</module>
 		<module>tools.vitruv.applications.pcmjava.pojotransformations</module>
-		<module>tools.vitruv.applications.pcmjava.pojotransformations.java2pcm</module>
-		<module>tools.vitruv.applications.pcmjava.pojotransformations.pcm2java</module>
 		<module>tools.vitruv.applications.pcmjava.util</module>
 	</modules>
 

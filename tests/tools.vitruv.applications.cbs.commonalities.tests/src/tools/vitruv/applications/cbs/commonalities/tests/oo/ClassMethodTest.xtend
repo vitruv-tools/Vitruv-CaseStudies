@@ -10,7 +10,6 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModel
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import org.junit.jupiter.api.Disabled
 
 class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
@@ -209,7 +208,6 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	@Disabled
 	def void classMethodWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithStringReturnCreation.createAndSynchronize()

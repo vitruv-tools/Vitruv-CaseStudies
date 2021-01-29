@@ -12,7 +12,6 @@ import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.Interface
 
 import static extension tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedIntegrationTestUtil.*
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.UserInteractionTestUtil.*
 import org.eclipse.uml2.uml.Component
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
@@ -28,7 +27,6 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	}
 
 	def Model integrationTest(String fileName) {
-		sendCollectedUserInteractionSelections(this.userInteraction)
 		resourceAt(Path.of(OUTPUT_NAME)).startRecordingChanges => [
 			contents += EObject.from(fileName.testModelResource)
 		]
@@ -58,10 +56,11 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
 	@Test
 	def void integrationTestWithComponentAnd2DataTypes() {
-		// Decide to create a Class for the first DataType:
-		queueUserInteractionSelections(1)
-		// Decide to create a Class for the second DataType:
-		queueUserInteractionSelections(1)
+		userInteraction
+			// Decide to create a Class for the first DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("No")
+			// Decide to create a Class for the second DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		val umlModel = integrationTest("TestModelWith2DataTypesAndComponent.uml")
 
@@ -76,10 +75,11 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
 	@Test
 	def void integrationTestWithComponentAndDataTypeWithoutClassRepresentation() {
-		// Decide to create no corresponding Class for the first DataType:
-		queueUserInteractionSelections(0)
-		// Decide to create a Class for the second DataType:
-		queueUserInteractionSelections(1)
+		userInteraction
+			// Decide to create no corresponding Class for the first DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
+			// Decide to create a Class for the second DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		val umlModel = integrationTest("TestModelWith2DataTypesAndComponent.uml")
 
@@ -94,8 +94,9 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
 	@Test
 	def void integrationTestWithDataTypeWithPropertyAndOperation() {
-		// Decide to create a Class for the DataType:
-		queueUserInteractionSelections(1)
+		userInteraction
+			// Decide to create a Class for the DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		val umlModel = integrationTest("TestModelDataTypeWithPropertyAndOperation.uml")
 
@@ -175,10 +176,11 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	@Disabled
 	@Test
 	def void integrationTestAllCombined() {
-		// Decide to create a Class for the first DataType:
-		queueUserInteractionSelections(1)
-		// Decide to create no corresponding Class for the second DataType:
-		queueUserInteractionSelections(0)
+		userInteraction
+			// Decide to create a Class for the first DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("No")
+			// Decide to create no corresponding Class for the second DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
 
 		val umlModel = integrationTest("TestModelAllCombined.uml")
 
@@ -224,12 +226,13 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	@Test
 	def void integrationTestMatthiasSmallExampleComponentResult() {
 		// This model was retrieved out of the BA PCM->Comp as the result of an integration
-		// Decide to create a Class for the first DataType:
-		queueUserInteractionSelections(1)
-		// Decide to create a Class for the second DataType:
-		queueUserInteractionSelections(1)
-		// Decide to create a Class for the third DataType:
-		queueUserInteractionSelections(1)
+		userInteraction
+			// Decide to create a Class for the first DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("No")
+			// Decide to create a Class for the second DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("No")
+			// Decide to create a Class for the third DataType:
+			.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		integrationTest("Matthias_small_example_Component_Result.uml")
 

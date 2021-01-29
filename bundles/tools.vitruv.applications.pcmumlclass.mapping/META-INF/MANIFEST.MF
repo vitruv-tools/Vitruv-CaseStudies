@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv PCM-UML Class Mappings Application
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.mapping
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.3.0.qualifier
 Export-Package: mir.reactions.combinedPcmToUml,
  mir.reactions.combinedUmlToPcm,
  mir.reactions.pcmCollectionDataTypeReactions;x-internal:=true,

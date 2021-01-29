@@ -4,7 +4,7 @@ Bundle-Name: Vitruv Temporary Utils
 Comment: This project is only temporary, as the utils will be moved to their respective domains!
 Bundle-SymbolicName: tools.vitruv.applications.util.temporary
 Automatic-Module-Name: tools.vitruv.applications.util.temporary
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.3.0.qualifier
 Require-Bundle: tools.vitruv.domains.uml,
  tools.vitruv.domains.java,
  tools.vitruv.domains.pcm,

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Disabled
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType.INFORMATION
 
 class PackageTest extends AbstractClass2CompTest {
 
@@ -85,7 +86,10 @@ class PackageTest extends AbstractClass2CompTest {
 	@Test
 	def void testCreatePackageWithLinkButNoComponent() {
 		// Create Package and try to link it no non-existing Component
-		val classPackage = createPackage(PACKAGE_NAME, 0, 0)
+		val classPackage = createPackage(PACKAGE_NAME, 0, -1)
+		userInteraction.acknowledgeNotification [
+			notificationType == INFORMATION && message == "No available Component found"
+		]
 		saveAndSynchronizeWithInteractions(classPackage)
 
 		// No links should exist:

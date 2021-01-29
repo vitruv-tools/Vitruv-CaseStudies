@@ -4,19 +4,19 @@ import org.junit.platform.runner.JUnitPlatform;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.runner.RunWith;
 
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbClassMappingTest;
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbFieldMappingTest;
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbInterfaceMappingTest;
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbImplementsMappingTest;
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbPackageMappingTest;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm.ClassMappingTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm.ClassMethodMappingTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm.FieldMappingTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm.InterfaceMappingTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm.JaMoPPParameterMappingTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm.MethodMappingTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm.PackageMappingTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm.TypeReferenceMappingTransformationTest;
+import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.ClassMappingTransformationTest;
+import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.ClassMethodMappingTransformationTest;
+import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.FieldMappingTransformationTest;
+import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.InterfaceMappingTransformationTest;
+import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.JaMoPPParameterMappingTransformationTest;
+import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.MethodMappingTransformationTest;
+import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.PackageMappingTransformationTest;
+import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.TypeReferenceMappingTransformationTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbClassMappingTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbFieldMappingTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbImplementsMappingTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbInterfaceMappingTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbPackageMappingTest;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.DataTypeCorrespondenceHelperTest;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository.BasicComponentMappingTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository.CollectionDataTypeMappingTransformationTest;
@@ -38,7 +38,7 @@ import tools.vitruv.applications.pcmjava.tests.transformations.JavaUtilsTest;
 
 @RunWith(JUnitPlatform.class)
 
-@SelectClasses({ 
+@SelectClasses({
 	JaMoPPTest.class,
 	JavaUtilsTest.class,
 	// PCM2Java-POJO Tests
@@ -73,7 +73,7 @@ import tools.vitruv.applications.pcmjava.tests.transformations.JavaUtilsTest;
 	EjbImplementsMappingTest.class,
 	EjbInterfaceMappingTest.class,
 	EjbPackageMappingTest.class
-	})
+})
 public class PcmJavaTestSuite {
 
 }

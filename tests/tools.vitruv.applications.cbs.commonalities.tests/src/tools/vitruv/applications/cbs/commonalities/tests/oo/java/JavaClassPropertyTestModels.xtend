@@ -10,7 +10,6 @@ import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.cbs.commonalities.tests.oo.ClassPropertyTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsBase
-import tools.vitruv.domains.java.util.JavaModificationUtil
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.*
 
@@ -197,7 +196,7 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
 				members += newJavaField => [
 					name = STRING_PROPERTY_NAME
-					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+					typeReference = referenceJamoppType(String)
 				]
 			])
 			return #[

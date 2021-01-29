@@ -48,13 +48,13 @@ class ParameterTest extends PcmUmlClassTest {
 	}
 
 	def protected checkParameterConcept(Parameter pcmParam) {
-		val mUmlParam = helper.getModifiableCorr(pcmParam, org.eclipse.uml2.uml.Parameter,
+		val mUmlParam = helper.getCorr(pcmParam, org.eclipse.uml2.uml.Parameter,
 			TagLiterals.PARAMETER__REGULAR_PARAMETER)
 		checkParameterConcept(correspondenceModel, pcmParam, mUmlParam)
 	}
 
 	def protected checkParameterConcept(org.eclipse.uml2.uml.Parameter umlParam) {
-		val mPcmParam = helper.getModifiableCorr(umlParam, Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
+		val mPcmParam = helper.getCorr(umlParam, Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
 		checkParameterConcept(correspondenceModel, mPcmParam, umlParam)
 	}
 

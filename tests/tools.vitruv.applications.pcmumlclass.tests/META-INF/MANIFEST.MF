@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv PCM-UML Class Application Tests
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.tests
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.3.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.testutils,

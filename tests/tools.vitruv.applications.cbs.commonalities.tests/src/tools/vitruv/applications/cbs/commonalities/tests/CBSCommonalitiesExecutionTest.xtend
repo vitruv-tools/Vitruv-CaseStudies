@@ -48,6 +48,10 @@ abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest
 		override getTestResource(String resourcePathInExecutingProject) {
 			validationResourceSet.getResource(URI.createURI(resourcePathInExecutingProject), true)
 		}
+		
+		override <T extends EObject> T at(Class<T> type, URI uri) {
+			type.cast(validationResourceSet.getEObject(uri, true))
+		}
 
 		override createAndSynchronizeModel(String modelPathInProject, EObject rootElement) {
 			val resource = resourceAt(Path.of(modelPathInProject)).startRecordingChanges => [

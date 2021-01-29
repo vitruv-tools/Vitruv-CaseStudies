@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius Application PCM-Java Utilities
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.util
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.util
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.xtend.lib,
  org.apache.log4j,

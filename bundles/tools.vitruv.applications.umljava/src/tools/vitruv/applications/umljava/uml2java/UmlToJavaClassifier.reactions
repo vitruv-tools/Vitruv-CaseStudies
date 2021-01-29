@@ -10,10 +10,10 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.Notificatio
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
+import static extension tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static extension tools.vitruv.framework.util.bridges.JavaHelper.claimOneOrNone
@@ -106,6 +106,36 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
     }
 }
 
+reaction UmlClassifierInserted {
+    after element uml::Classifier inserted in uml::Package[packagedElement]
+    call moveJavaClassifier(newValue, affectedEObject)
+}
+
+routine moveJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackage) {
+	match {
+		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+		val javaPackage = retrieve optional java::Package corresponding to umlPackage
+		val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier 
+			with !javaPackage.isPresent || !javaPackage.get.compilationUnits.contains(javaCompilationUnit)
+	}
+	action {
+		update javaCompilationUnit {
+			javaCompilationUnit.namespaces.clear
+			javaPackage.ifPresent [
+				javaCompilationUnit.namespaces += javaPackageAsStringList
+			]
+			//TODO: updating the compilation unit's name should not be needed 
+			//it is currently necessary as the name is incorrectly resolved to <oldPackageName>.<correctName> after the classifier got removed from its old package
+			javaCompilationUnit.name = javaClassifier.name + ".java"
+			persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+			
+		}
+		call javaPackage.ifPresent [
+			compilationUnits += javaCompilationUnit
+		]
+    }
+}
+
 reaction UmlClassifierRenamed {
     after attribute replaced at uml::Classifier[name]
     call renameJavaClassifier(affectedEObject)
@@ -116,6 +146,7 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
         val jPackage = retrieve optional java::Package corresponding to umlClassifier.eContainer
         val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
         val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier
+        check umlClassifier.name != javaClassifier.name
     }
     action {
         update javaClassifier {
@@ -560,11 +591,12 @@ reaction UmlPackageRenamed {
 routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
     match {
         val jPackage = retrieve java::Package corresponding to uPackage
+        check uPackage.name != jPackage.name || uPackage.umlParentNamespaceAsStringList != jPackage.namespaces
     }
     action {
         update jPackage {
             jPackage.namespaces.clear
-            jPackage.namespaces += getUmlParentNamespaceAsStringList(uPackage)
+            jPackage.namespaces += uPackage.umlParentNamespaceAsStringList
             jPackage.name = uPackage.name
             persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
         }

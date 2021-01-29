@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius PCM-Java Tests Utilities
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.tests.util
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.tests.util
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.apache.log4j,
  org.junit.jupiter.api,
@@ -15,7 +15,7 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.testutils,
  tools.vitruv.domains.java.echange,
  tools.vitruv.applications.pcmjava.util,
- tools.vitruv.applications.pcmjava.pojotransformations.java2pcm,
+ tools.vitruv.applications.pcmjava.pojotransformations,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  tools.vitruv.domains.java;visibility:=reexport,
@@ -23,5 +23,6 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.framework.domains.ui,
  org.eclipse.core.resources;visibility:=reexport
-Export-Package: tools.vitruv.applications.pcmjava.tests.util
+Export-Package: tools.vitruv.applications.pcmjava.tests.util.java2pcm,
+  tools.vitruv.applications.pcmjava.tests.util.pcm2java
 Bundle-Vendor: vitruv.tools

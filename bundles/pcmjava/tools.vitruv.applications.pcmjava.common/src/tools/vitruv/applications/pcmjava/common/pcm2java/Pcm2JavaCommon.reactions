@@ -992,6 +992,10 @@ routine addRequiredRole(pcm::OperationRequiredRole requiredRole) {
 
 routine addParameterAndAssignmentToConstructor(pcm::NamedElement parameterCorrespondenceSource, java::Constructor constructor,
 		java::NamespaceClassifierReference typeReference, java::Field fieldToBeAssigned, String parameterName) {
+	match {
+		val existingParameters = retrieve many java::OrdinaryParameter corresponding to parameterCorrespondenceSource
+		check !existingParameters.exists [name == parameterName] 
+	}	
 	action {
 		val newParameter = create java::OrdinaryParameter and initialize {
 			newParameter.name = parameterName;
