@@ -133,8 +133,8 @@ routine changeNameOfCorrespondingRepositoryPackage(pcm::Repository pcmRepo) {
 }
 
 reaction RepositoryDeleted {
-	after element pcm::Repository removed as root
-	call deleteCorrespondingRepositoryPackages(oldValue)
+	after element pcm::Repository deleted
+	call deleteCorrespondingRepositoryPackages(affectedEObject)
 }
 
 routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo) {
