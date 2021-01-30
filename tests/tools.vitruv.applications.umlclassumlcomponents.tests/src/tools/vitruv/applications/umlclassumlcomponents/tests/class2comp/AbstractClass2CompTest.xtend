@@ -10,7 +10,6 @@ import tools.vitruv.applications.umlclassumlcomponents.class2comp.UmlClass2UmlCo
 
 import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.util.SharedUtil.*
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.UserInteractionTestUtil.*
 import org.junit.jupiter.api.BeforeEach
 import tools.vitruv.testutils.LegacyVitruvApplicationTest
 import java.nio.file.Path
@@ -29,8 +28,8 @@ abstract class AbstractClass2CompTest extends LegacyVitruvApplicationTest {
 
 	// SaveAndSynchronize & commit all pending userInteractions
 	protected def saveAndSynchronizeWithInteractions(EObject object) {
-		sendCollectedUserInteractionSelections(this.userInteraction)
-		propagate
+		propagate()
+		userInteraction.assertAllInteractionsOccurred()
 	}
 
 	@BeforeEach
@@ -88,34 +87,37 @@ abstract class AbstractClass2CompTest extends LegacyVitruvApplicationTest {
 		return umlClass
 	}
 
-	package def Class createClass(String name, int createNoComponent) {
+	package def Class createClass(String name, int createComponent) {
 		val classPackage = createPackage(name + PACKAGE_SUFFIX)
-		return createClass(name, classPackage, createNoComponent)
+		return createClass(name, classPackage, createComponent)
 	}
 
-	package def Class createClass(String name, Package classPackage, int createNoComponent) {
+	package def Class createClass(String name, Package classPackage, int createComponent) {
 		val umlClass = createClassWithoutInteraction(name, classPackage)
 
 		// Decide whether to create corresponding Component or not:
-		queueUserInteractionSelections(createNoComponent)
+		userInteraction.onMultipleChoiceSingleSelection [message.contains('''Should '«name»' be represented by a Component?''')]
+			.respondWithChoiceAt(createComponent)
 
 		return umlClass
 	}
 
 	package def Package createPackage(String name) {
-		createPackage(name, 1, 0)
+		createPackage(name, 1, -1)
 	}
 
-	package def Package createPackage(String name, int linkToNoComponent, int componentSelection) {
+	package def Package createPackage(String name, int createComponent, int componentSelection) {
 		val classPackage = UMLFactory.eINSTANCE.createPackage()
 		classPackage.name = name + PACKAGE_SUFFIX
 		rootElement.packagedElements += classPackage
 
 		// Decide whether to link this Package to an existing Component
-		if (linkToNoComponent == 1)
-			queueUserInteractionSelections(linkToNoComponent)
-		else
-			queueUserInteractionSelections(linkToNoComponent, componentSelection)
+		userInteraction.onMultipleChoiceSingleSelection [message.contains('''link this Package '«classPackage.name»' to an existing Component''')]
+			.respondWithChoiceAt(createComponent)
+		if (componentSelection >= 0) {
+			userInteraction.onMultipleChoiceSingleSelection [message.contains('''Choose an existing Component''')]
+				.respondWithChoiceAt(componentSelection)
+		}
 
 		return classPackage
 	}

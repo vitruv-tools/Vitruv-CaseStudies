@@ -109,7 +109,7 @@ class DataTypeTest extends AbstractClass2CompTest {
 	 * Creation Helper:*
 	 ******************/
 	private def Class createDataTypeClass(String name) {
-		val dataTypePackage = createPackage(CLASS_DATATYPES_PACKAGE, 0, 0)
+		val dataTypePackage = createPackage(CLASS_DATATYPES_PACKAGE)
 		val classDataType = createClassWithoutInteraction(name, dataTypePackage)
 		return classDataType
 	}

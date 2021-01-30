@@ -3,7 +3,6 @@ package tools.vitruv.applications.umlclassumlcomponents.tests.comp2class
 import org.eclipse.uml2.uml.UMLFactory
 
 import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.UserInteractionTestUtil.*
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -76,7 +75,9 @@ class ComponentTest extends AbstractComp2ClassTest {
 
 		// Remove Component		
 		assertTrue(rootElement.packagedElements.contains(umlComp))
-		queueUserInteractionSelections(1) // Decide to not delete Package
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains("Delete the corresponding Package") && message.contains("and all its contained elements")
+		].respondWith("No")
 		umlComp.destroy()
 		assertFalse(rootElement.packagedElements.contains(umlComp))
 		saveAndSynchronizeWithInteractions(rootElement)
@@ -108,7 +109,9 @@ class ComponentTest extends AbstractComp2ClassTest {
 
 		// Remove Component		
 		assertTrue(rootElement.packagedElements.contains(umlComp))
-		queueUserInteractionSelections(0) // Decide to delete Package and Contents
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains("Delete the corresponding Package") && message.contains("and all its contained elements")
+		].respondWith("Yes")
 		umlComp.destroy()
 		assertFalse(rootElement.packagedElements.contains(umlComp))
 		saveAndSynchronizeWithInteractions(rootElement)
