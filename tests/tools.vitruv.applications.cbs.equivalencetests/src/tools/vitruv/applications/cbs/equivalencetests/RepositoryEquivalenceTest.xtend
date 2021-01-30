@@ -22,7 +22,7 @@ class RepositoryEquivalenceTest extends RepositoryEquivalenceTemplate {
 			onTextInput [message.contains("where to save the corresponding PCM model")]
 				.respondWith("model/Test")
 			onMultipleChoiceSingleSelection [message.contains("a PCM::Repository or a PCM::System")]
-				.respondWithChoiceMatching[_, it | contains("Repository")]
+				.respondWithChoiceMatching [contains("Repository")]
 		]
 		
 		super.creation(builder)

@@ -10,9 +10,6 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.junit.jupiter.api.function.Executable
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 import tools.vitruv.framework.tuid.TuidManager
-import tools.vitruv.framework.userinteraction.UserInteractionFactory
-import tools.vitruv.framework.vsum.VirtualModelConfiguration
-import tools.vitruv.framework.vsum.VirtualModelImpl
 import tools.vitruv.testutils.ChangePublishingTestView
 import tools.vitruv.testutils.TestProjectManager
 import tools.vitruv.testutils.TestView
@@ -51,6 +48,10 @@ import tools.vitruv.testutils.printing.UriReplacingPrinter
 import tools.vitruv.testutils.printing.DefaultPrintIdProvider
 import java.util.Collection
 import tools.vitruv.testutils.TestUserInteraction
+import tools.vitruv.framework.domains.repository.VitruvDomainRepositoryImpl
+import tools.vitruv.framework.vsum.VirtualModelBuilder
+import tools.vitruv.framework.domains.repository.VitruvDomainRepository
+import edu.kit.ipd.sdq.activextendannotations.Lazy
 
 @FinalFieldsConstructor
 package class EquivalenceTestExecutable implements Executable, AutoCloseable {
@@ -62,6 +63,9 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	val UriMode uriMode
 	val ModelComparisonSettings comparisonSettings
 	val EquivalenceTestExtensionContext extensionContext
+	@Lazy val VitruvDomainRepository propagationDomains = new VitruvDomainRepositoryImpl(
+		changePropagationSpecifications.flatMap [List.of(sourceDomain, targetDomain)].toSet
+	)
 
 	override execute() throws Throwable {
 		val testView = setupTestView()
@@ -82,7 +86,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
 			testStep.executeIn(testView)
 			referenceSteps.values.forEach[executeIn(referenceView)]
-			verifyTestDomainResults()
+			verifyTestViewResults()
 		} catch (Throwable t) {
 			extensionContext.executionException = Optional.of(t)
 			throw t
@@ -96,14 +100,14 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		TuidManager.instance.reinitialize()
 		val changePropagationSpecifications = this.changePropagationSpecifications
 		val userInteraction = new TestUserInteraction
-		var userInteractor = UserInteractionFactory.instance.createUserInteractor(new TestUserInteraction.ResultProvider(userInteraction))
-		val vsum = new VirtualModelImpl(vsumDirectory.toFile(), userInteractor, new VirtualModelConfiguration => [
-			changePropagationSpecifications.flatMap[List.of(sourceDomain, targetDomain)].toSet //
-			.forEach[domain|addMetamodel(domain)]
-			changePropagationSpecifications.forEach[spec|addChangePropagationSpecification(spec)]
-		])
+		val vsum = new VirtualModelBuilder()
+			.withStorageFolder(vsumDirectory)
+			.withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(userInteraction))
+			.withDomainRepository(propagationDomains)
+			.withChangePropagationSpecifications(changePropagationSpecifications)
+			.build()
 		new DirectoryTestView(
-			new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum),
+			new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum, propagationDomains),
 			viewDirectory
 		)
 	}
@@ -127,33 +131,26 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 				}
 			}
 
-			verifyTestDomainResults()
+			verifyTestViewResults()
 		} catch (AssertionError failure) {
-			throw abortedException(
-				'This run was aborted because its dependency steps produces an inconsistent result:',
-				failure
+			throw abortedException( 
+				'This run was aborted because its dependency steps produces an inconsistent result:', failure 
 			)
 		} catch (Throwable failure) {
-			throw abortedException(
-				'''This run was aborted because executing its dependency steps failed:''',
-				failure
-			)
+			throw abortedException('This run was aborted because executing its dependency steps failed:', failure)
 		}
 	}
 
 	def private static abortedException(String reason, Throwable cause) {
-		new TestAbortedException(
-			'''«System.lineSeparator»«reason»«System.lineSeparator»«cause.message»''',
-			cause
-		)
+		new TestAbortedException('''«reason»«System.lineSeparator»«cause.message»''', cause)
 	}
 
-	def private void verifyTestDomainResults() {
+	def private void verifyTestViewResults() {
 		// use new views to reload the actual resources from disk
-		verifyTestDomainResults(setupReadOnlyTestView(), setupReferenceView())
+		verifyTestViewResults(setupReadOnlyTestView(), setupReferenceView())
 	}
 
-	def private void verifyTestDomainResults(
+	def private void verifyTestViewResults(
 		@CloseResource DirectoryTestView testView,
 		@CloseResource DirectoryTestView referenceView
 	) throws Throwable {
@@ -230,7 +227,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	}
 
 	def private newBasicView(Path viewDirectory) {
-		new DirectoryTestView(new BasicTestView(viewDirectory, uriMode), viewDirectory)
+		new DirectoryTestView(new BasicTestView(viewDirectory, uriMode, propagationDomains), viewDirectory)
 	}
 
 	@FinalFieldsConstructor
@@ -258,16 +255,16 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
 		override matchesSafely(DirectoryTestView testView) {
 			testFiles = testView.directory.dataFiles [ file |
-				referenceDomains.exists[file.belongsTo(it)]
+				referenceDomains.exists [file.belongsTo(it)]
 			].toSet
 			return testFiles == referenceFiles
 		}
 
 		override describeMismatchSafely(DirectoryTestView testView, Description mismatchDescription) {
-			val missingResources = (new LinkedHashSet(referenceFiles) => [removeAll(testFiles)]) //
-			.map[referenceView.resourceAt(it)].toSet
-			val unexpectedResources = (new LinkedHashSet(testFiles) => [removeAll(referenceFiles)]) //
-			.map[testView.resourceAt(it)].toSet
+			val missingResources = (new LinkedHashSet(referenceFiles) => [removeAll(testFiles)])
+				.map[referenceView.resourceAt(it)].toSet
+			val unexpectedResources = (new LinkedHashSet(testFiles) => [removeAll(referenceFiles)])
+				.map[testView.resourceAt(it)].toSet
 			if (!missingResources.isEmpty) {
 				mismatchDescription.appendText("the following resources are missing in the test view: ").
 					appendModelValueSet(missingResources, MULTI_LINE, idProvider)
