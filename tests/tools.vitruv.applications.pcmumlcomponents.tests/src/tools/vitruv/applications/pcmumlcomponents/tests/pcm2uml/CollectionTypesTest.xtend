@@ -135,6 +135,7 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 		val collectionType = createCollectionType(nestedType.entityName.collectionTypeName, nestedType)
 
 		val innerDeclaration = createDataTypeWithInnerDeclaration(collectionType)
+		userInteraction.acknowledgeNotification[message.contains("Nested collection types are not transformed to UML")]
 		propagate
 
 		val umlAttribute = innerDeclaration.correspondingElements.head as org.eclipse.uml2.uml.Property
