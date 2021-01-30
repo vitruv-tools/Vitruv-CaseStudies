@@ -42,11 +42,14 @@ class UmlConstructionSimulationTest extends UmlToJavaTransformationTest {
 	}
 
 	def private void testUmlModel(String modelPath) {
+		for (i : 1..2) {
+			userInteraction.acknowledgeNotification [message.contains("Only predefined uml::PrimitiveTypes will be mapped")]
+		}
+		
 		val originalResource = new ResourceSetImpl().getResource(URI.createFileURI(modelPath), true)
 		resourceAt(Path.of("model/model.uml")).startRecordingChanges => [
 			contents += EObject.from(originalResource)
 		]
 		propagate
 	}
-
 }
