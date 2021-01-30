@@ -319,8 +319,9 @@ routine addOperationParameter(uml::Operation umlOperation, uml::Parameter umlPar
 	action {
 		call {
 			if (umlParameter.direction == ParameterDirectionKind.RETURN_LITERAL) {
-				val returnParameters = umlOperation.ownedParameters.filter[p | p.direction == ParameterDirectionKind.RETURN_LITERAL]
-				if (returnParameters.length > 0) {
+				if (umlOperation.ownedParameters.exists [ 
+					direction == ParameterDirectionKind.RETURN_LITERAL && it != umlParameter
+				]) {
 				    userInteractor.notificationDialogBuilder
 				        .message("A second return type cannot be applied in the PCM model.")
 				        .windowModality(WindowModality.MODAL).startInteraction()
