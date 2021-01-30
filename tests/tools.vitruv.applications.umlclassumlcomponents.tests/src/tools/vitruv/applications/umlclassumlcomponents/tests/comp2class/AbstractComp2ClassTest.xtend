@@ -11,7 +11,6 @@ import tools.vitruv.applications.umlclassumlcomponents.comp2class.UmlComp2UmlCla
 
 import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.util.SharedUtil.*
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.UserInteractionTestUtil.*
 import org.junit.jupiter.api.BeforeEach
 import tools.vitruv.testutils.LegacyVitruvApplicationTest
 import java.nio.file.Path
@@ -32,8 +31,8 @@ abstract class AbstractComp2ClassTest extends LegacyVitruvApplicationTest {
 
 	// SaveAndSynchronize & commit all pending userInteractions
 	protected def saveAndSynchronizeWithInteractions(EObject object) {
-		sendCollectedUserInteractionSelections(this.userInteraction)
 		propagate
+		userInteraction.assertAllInteractionsOccurred()
 	}
 
 	@BeforeEach
