@@ -14,6 +14,8 @@ import static org.eclipse.emf.common.util.URI.createFileURI
 /**
  * Test class for the reconstruction of existing java models
  */
+// FIXME implement loading objects correctly
+@Disabled("disfunctional because loading is not implemented correctly")
 class JavaConstructionSimulationTest extends JavaToUmlTransformationTest {
 
 	/**
