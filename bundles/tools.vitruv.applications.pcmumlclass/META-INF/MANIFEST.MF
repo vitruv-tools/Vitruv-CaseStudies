@@ -69,8 +69,8 @@ Export-Package: mir.reactions.combinedPcmToUmlClassReactions;x-internal:=true,
  mir.routines.umlReturnAndRegularParameterTypeReactions;x-internal:=true,
  mir.routines.umlSignatureOperationReactions;x-internal:=true,
  tools.vitruv.applications.pcmumlclass,
- tools.vitruv.applications.pcmumlclass.pcm;x-internal:=true,
- tools.vitruv.applications.pcmumlclass.uml;x-internal:=true
+ tools.vitruv.applications.pcmumlclass.pcm2uml;x-internal:=true,
+ tools.vitruv.applications.pcmumlclass.uml2pcm;x-internal:=true
 Require-Bundle: tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.framework.applications,
