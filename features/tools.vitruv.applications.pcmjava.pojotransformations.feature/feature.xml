@@ -51,18 +51,4 @@
          version="0.0.0"
          unpack="false"/>
 
-   <plugin
-         id="tools.vitruv.applications.pcmjava.pojotransformations.java2pcm"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="tools.vitruv.applications.pcmjava.pojotransformations.pcm2java"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
 </feature>
