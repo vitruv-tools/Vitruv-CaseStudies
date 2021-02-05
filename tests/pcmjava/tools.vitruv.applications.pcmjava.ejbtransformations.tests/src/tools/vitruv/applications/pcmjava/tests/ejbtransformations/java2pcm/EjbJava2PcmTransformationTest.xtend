@@ -3,9 +3,9 @@ package tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.OperationInterface
-import tools.vitruv.applications.pcmjava.tests.util.Java2PcmTransformationTest
+import tools.vitruv.applications.pcmjava.tests.util.java2pcm.Java2PcmTransformationTest
 import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmChangePropagationSpecification
-import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils
+import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils
 import org.palladiosimulator.pcm.repository.Repository
 import java.io.IOException
 import org.eclipse.core.runtime.CoreException

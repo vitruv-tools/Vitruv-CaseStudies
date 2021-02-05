@@ -11,8 +11,7 @@ Require-Bundle: org.junit.jupiter.api,
  tools.vitruv.applications.umljava.tests,
  tools.vitruv.applications.pcmumlclass,
  tools.vitruv.applications.pcmumlclass.tests,
- tools.vitruv.applications.pcmjava.pojotransformations.pcm2java,
- tools.vitruv.applications.pcmjava.pojotransformations.java2pcm,
+ tools.vitruv.applications.pcmjava.pojotransformations,
  tools.vitruv.extensions.dslsruntime.reactions
 Export-Package: tools.vitruv.applications.pcmumlclassjava,
  tools.vitruv.applications.pcmumlclassjava.tests

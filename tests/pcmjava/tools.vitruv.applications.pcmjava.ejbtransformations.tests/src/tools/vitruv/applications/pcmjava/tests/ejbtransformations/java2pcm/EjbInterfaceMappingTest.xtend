@@ -1,12 +1,12 @@
 package tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm
 
-import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils
+import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.Parameter
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
-import tools.vitruv.applications.pcmjava.tests.util.CompilationUnitManipulatorHelper
+import tools.vitruv.applications.pcmjava.tests.util.java2pcm.CompilationUnitManipulatorHelper
 import org.eclipse.jdt.core.IMethod
 import org.junit.jupiter.api.Test
 
