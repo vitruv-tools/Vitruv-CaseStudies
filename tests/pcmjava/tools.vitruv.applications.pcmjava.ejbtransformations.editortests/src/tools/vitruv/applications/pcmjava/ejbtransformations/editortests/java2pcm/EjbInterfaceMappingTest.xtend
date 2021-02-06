@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm
+package tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm
 
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils
 import org.palladiosimulator.pcm.repository.CollectionDataType
