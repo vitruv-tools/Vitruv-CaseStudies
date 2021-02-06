@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.editortests.pojotransformations.java2pcm;
+package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
 
 import org.eclipse.emf.ecore.EObject;
 import org.junit.jupiter.api.Test;

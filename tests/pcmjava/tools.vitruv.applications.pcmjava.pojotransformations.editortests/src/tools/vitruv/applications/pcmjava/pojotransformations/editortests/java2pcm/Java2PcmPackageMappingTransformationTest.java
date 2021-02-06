@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.editortests.pojotransformations.java2pcm;
+package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
 
 import java.util.Collections;
 import java.util.List;
