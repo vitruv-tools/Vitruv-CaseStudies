@@ -13,8 +13,7 @@ Require-Bundle: org.eclipse.xtend.lib,
  tools.vitruv.domains.java,
  tools.vitruv.domains.java.echange,
  tools.vitruv.applications.util.temporary;visibility:=reexport,
- edu.kit.ipd.sdq.activextendannotations,
- tools.vitruv.testutils
+ edu.kit.ipd.sdq.activextendannotations
 Export-Package: tools.vitruv.applications.pcmjava.util.java2pcm,
  tools.vitruv.applications.pcmjava.util.pcm2java
 Bundle-Vendor: vitruv.tools
