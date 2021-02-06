@@ -12,11 +12,11 @@ import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pc
 import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.MethodMappingTransformationTest;
 import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.PackageMappingTransformationTest;
 import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.TypeReferenceMappingTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbClassMappingTest;
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbFieldMappingTest;
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbImplementsMappingTest;
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbInterfaceMappingTest;
-import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbPackageMappingTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbClassMappingTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbFieldMappingTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbImplementsMappingTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbInterfaceMappingTest;
+import tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm.EjbPackageMappingTest;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.DataTypeCorrespondenceHelperTest;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository.BasicComponentMappingTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository.CollectionDataTypeMappingTransformationTest;
