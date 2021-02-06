@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm
+package tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm
 
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.palladiosimulator.pcm.repository.BasicComponent

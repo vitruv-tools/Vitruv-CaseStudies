@@ -16,7 +16,7 @@ Require-Bundle: org.junit.jupiter.api,
  tools.vitruv.applications.pcmjava.tests.util,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.editortests,
  tools.vitruv.applications.pcmjava.pojotransformations.tests,
- tools.vitruv.applications.pcmjava.ejbtransformations.tests
+ tools.vitruv.applications.pcmjava.ejbtransformations.editortests
 Export-Package: tools.vitruv.applications.pcmjava.tests,
  tools.vitruv.applications.pcmjava.tests.transformations
 Bundle-Vendor: vitruv.tools
