@@ -591,6 +591,7 @@ reaction UmlPackageRenamed {
 routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
     match {
         val jPackage = retrieve java::Package corresponding to uPackage
+        check uPackage.name != jPackage.name
     }
     action {
         update jPackage {
