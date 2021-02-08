@@ -103,6 +103,7 @@ routine createOrFindUmlClass(java::Class jClass, java::CompilationUnit jCompUnit
 	match {
 		val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
 		require absence of uml::Class corresponding to jClass
+		require absence of uml::DataType corresponding to jClass
 	}
     action {
 		call {
