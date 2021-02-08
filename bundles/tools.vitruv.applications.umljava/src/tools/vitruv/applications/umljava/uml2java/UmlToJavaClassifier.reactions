@@ -146,6 +146,7 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
         val jPackage = retrieve optional java::Package corresponding to umlClassifier.eContainer
         val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
         val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier
+        check umlClassifier.name != javaClassifier.name
     }
     action {
         update javaClassifier {
