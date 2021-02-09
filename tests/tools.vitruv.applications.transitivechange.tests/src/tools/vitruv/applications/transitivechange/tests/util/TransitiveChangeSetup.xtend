@@ -17,27 +17,15 @@ import tools.vitruv.domains.java.JavaDomainProvider
 class TransitiveChangeSetup {
 	static def getChangePropagationSpecifications(boolean linearNetwork) {
 		val specifications = new ArrayList<ChangePropagationSpecification>()
-		specifications.addAll(
-			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
-			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
-			new UmlToJavaChangePropagationSpecification,
-			new JavaToUmlChangePropagationSpecification
-		)
+		specifications += new CombinedPcmToUmlClassReactionsChangePropagationSpecification
+		specifications += new CombinedUmlClassToPcmReactionsChangePropagationSpecification
+		specifications += new UmlToJavaChangePropagationSpecification
+		specifications += new JavaToUmlChangePropagationSpecification
 		if (!linearNetwork) {
-			specifications.addAll(new Pcm2JavaChangePropagationSpecification,
-				new Java2PcmChangePropagationSpecification)
+			specifications += new Pcm2JavaChangePropagationSpecification
+			specifications += new Java2PcmChangePropagationSpecification
 		}
 		return specifications
-//		val specifications = new ArrayList<ChangePropagationSpecification>()
-//		specifications += new CombinedPcmToUmlClassReactionsChangePropagationSpecification
-//		specifications += new CombinedUmlClassToPcmReactionsChangePropagationSpecification
-//		specifications += new UmlToJavaChangePropagationSpecification
-//		specifications += new JavaToUmlChangePropagationSpecification
-//		if (!linearNetwork) {
-//			specifications += new Pcm2JavaChangePropagationSpecification
-//			specifications += new Java2PcmChangePropagationSpecification
-//		}
-//		return specifications
 	}
 	
 	static def patchDomains() {
