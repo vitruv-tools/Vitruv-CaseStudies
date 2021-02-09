@@ -15,7 +15,7 @@ import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformationTest {
 
 	@Test
-	public void testAddOperationRequiredRole() throws Throwable, Throwable {
+	public void testAddOperationRequiredRole() throws Throwable {
 		final OperationRequiredRole operationRequiredRole = this
 				.createAndSyncRepoBasicCompInterfaceAndOperationReqiredRole();
 
@@ -52,7 +52,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
 	}
 
 	@Test
-	public void testChangeOperationRequiredRole() throws Throwable, Throwable {
+	public void testChangeOperationRequiredRole() throws Throwable {
 		final OperationRequiredRole opr = this.createAndSyncRepoBasicCompInterfaceAndOperationReqiredRole();
 		final Repository repo = opr.getRequiredInterface__OperationRequiredRole().getRepository__Interface();
 
