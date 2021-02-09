@@ -7,7 +7,6 @@ import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Disabled
 
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertNotNull
@@ -62,7 +61,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 
 	}
 
-	@Test @Disabled
+	@Test
 	def testDeletePackage() { // Delete or Refactoring java packages seems to lead to problems
 		var jPackage = getCorrespondingPackage(uPackageLevel1)
 		assertNotNull(jPackage)
@@ -74,7 +73,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 		assertNull(jPackage)
 	}
 
-	@Test @Disabled
+	@Test
 	def testRenamePackage() { // Delete or Refactoring java packages seems to lead to problems
 		uPackageLevel1.name = PACKAGE_RENAMED
 		propagate
