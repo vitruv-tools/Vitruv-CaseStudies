@@ -12,7 +12,11 @@ Require-Bundle: org.junit.jupiter.api,
  tools.vitruv.applications.pcmumlclass,
  tools.vitruv.applications.pcmumlclass.tests,
  tools.vitruv.applications.pcmjava.pojotransformations,
- tools.vitruv.extensions.dslsruntime.reactions
+ tools.vitruv.extensions.dslsruntime.reactions,
+ org.hamcrest.core,
+ edu.kit.ipd.sdq.activextendannotations
 Export-Package: tools.vitruv.applications.transitivechange.tests.circular.pcmumlclassjava,
- tools.vitruv.applications.transitivechange.tests.linear.pcmumlclassjava
+ tools.vitruv.applications.transitivechange.tests.linear.pcmumlclassjava,
+ tools.vitruv.applications.transitivechange.tests.linear.java2uml,
+ tools.vitruv.applications.transitivechange.tests.linear.uml2java
 Bundle-Vendor: vitruv-tools
