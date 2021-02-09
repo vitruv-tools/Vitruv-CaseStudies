@@ -209,7 +209,6 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	@Disabled
 	def void classMethodWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithStringReturnCreation.createAndSynchronize()
