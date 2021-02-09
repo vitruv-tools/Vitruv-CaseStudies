@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclassjava.tests
+package tools.vitruv.applications.transitivechange.tests.linear.pcmumlclassjava
 
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Operation
@@ -10,7 +10,6 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
@@ -25,7 +24,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmRequiredRole.reactions, UmlRequiredRoleParameter.reactions, UmlRequiredRoleProperty.reactions
  */
-class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
+class RequiredRoleConceptTest extends PcmUmlJavaLinearTransitiveChangeTest {
 
 	val REQUIRED_ROLE_NAME = "testRequiredRole"
 

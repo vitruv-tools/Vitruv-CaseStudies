@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclassjava.tests
+package tools.vitruv.applications.transitivechange.tests.linear.pcmumlclassjava
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
@@ -13,7 +13,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
@@ -26,7 +25,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: pcmParameter.reactions, UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
  */
-class ParameterConceptTest extends LinearTransitiveChangeTest {
+class ParameterConceptTest extends PcmUmlJavaLinearTransitiveChangeTest {
 
 	static val TEST_PARAMETER_NAME = "testParameter"
 

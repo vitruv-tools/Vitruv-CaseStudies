@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclassjava.tests
+package tools.vitruv.applications.transitivechange.tests.circular.pcmumlclassjava
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
@@ -9,7 +9,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
@@ -26,7 +25,7 @@ import java.nio.file.Path
  * 		UmlCompositeDataTypeClass.reactions, 
  * 		UmlCompositeDataTypeGeneralization.reactions
  */
-class CompositeDataTypeConceptTest extends TransitiveChangeTest {
+class CompositeDataTypeConceptTest extends PcmUmlJavaTransitiveChangeTest {
 
 	static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
 	static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
