@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclassjava.tests
+package tools.vitruv.applications.transitivechange.tests.circular.pcmumlclassjava
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Interface
@@ -8,7 +8,6 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
@@ -22,7 +21,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmInterface.reactions, UmlInterface.reactions, UmlInterfaceGeneralization.reactions
  */
-class InterfaceConceptTest extends TransitiveChangeTest {
+class InterfaceConceptTest extends PcmUmlJavaTransitiveChangeTest {
 
 	static val TEST_INTERFACE_NAME = "TestInterface"
 

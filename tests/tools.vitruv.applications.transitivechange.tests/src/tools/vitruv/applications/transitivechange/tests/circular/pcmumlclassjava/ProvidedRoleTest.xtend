@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclassjava.tests
+package tools.vitruv.applications.transitivechange.tests.circular.pcmumlclassjava
 
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.junit.jupiter.api.Test
@@ -7,7 +7,6 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
@@ -20,7 +19,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmProvidedRole.reactions, UmlProvidedRoleGeneralization.reactions
  */
-class ProvidedRoleTest extends TransitiveChangeTest {
+class ProvidedRoleTest extends PcmUmlJavaTransitiveChangeTest {
 
 	static val PROVIDED_ROLE_NAME = "testProvidedRole"
 

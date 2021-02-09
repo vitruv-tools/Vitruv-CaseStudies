@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclassjava.tests
+package tools.vitruv.applications.transitivechange.tests.linear.pcmumlclassjava
 
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.URI
@@ -17,6 +17,13 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import java.nio.file.Path
+import tools.vitruv.domains.java.util.JavaPersistenceHelper
+import org.emftext.language.java.containers.CompilationUnit
+import java.util.List
+import org.emftext.language.java.containers.ContainersFactory
+import org.emftext.language.java.containers.Package import org.emftext.language.java.classifiers.Interface
+import tools.vitruv.framework.userinteraction.UserInteractionFactory
+import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 
 /**
  * Model creation tests, to test the set of transformations as a whole. 
@@ -29,7 +36,7 @@ import java.nio.file.Path
  * This might make it necessary to provide the VM that runs the tests with additional heap space.
  * For the same reason, the uml-insertion test only uses a reduced repository model.
  */
-class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
+class MediaStoreRepositoryCreationTest extends PcmUmlJavaLinearTransitiveChangeTest {
 
     protected static val Logger logger = Logger.getLogger(typeof(MediaStoreRepositoryCreationTest).simpleName)
 
@@ -238,8 +245,8 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		propagate
 		var jClass_MediaAccessImpl = getJavaClassFromCompilationUnit(COMPONENT_IMPL_NAME, REPOSITORY_PKG_NAME, COMPONENT_PKG_NAME) // TODO here it fails
 		assertNotNull(jClass_MediaAccessImpl)
-		var jIRef_IFileStorage = createNamespaceReferenceFromClassifier(jI_IFileStorage)// required
-		var jIRef_IMediaAccess = createNamespaceReferenceFromClassifier(jI_IFileStorage)// provided
+		var jIRef_IFileStorage = createNamespaceReferenceFromClassifier(jI_IFileStorage) // required
+		var jIRef_IMediaAccess = createNamespaceReferenceFromClassifier(jI_IFileStorage) // provided
 		jClass_MediaAccessImpl.implements += jIRef_IMediaAccess
 		var jAtt_requiredIFileStorage = createJavaAttribute(ATTRIBUTE_NAME, jIRef_IFileStorage, JavaVisibility.PRIVATE, false, false)
 		jClass_MediaAccessImpl.members += jAtt_requiredIFileStorage
@@ -279,5 +286,124 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		assertModelExists(pcmPath)
 		assertModelExists(umlPath)
 	}
+	
+	protected def setInteractiveUserInteractor(){
+		val userInteractor = UserInteractionFactory.instance.createDialogUserInteractor()
+		virtualModel.userInteractor = userInteractor
+	}
+	
+	def protected getJavaPackage(String qualifiedPackageName){
+		val namespaces = qualifiedPackageName.split(".")
+		return getJavaPackage(namespaces)
+	}
+	
+	def protected getJavaPackage(String ... namespaces){
+		val packageFileName = JavaPersistenceHelper.buildJavaFilePath(JavaPersistenceHelper.packageInfoClassName + ".java", namespaces)
+		val resource = resourceAt(Path.of(packageFileName))
+		if (
+			resource !== null 
+			&& resource.contents.head !== null 
+			&& resource.contents.head instanceof Package
+		){
+			val package = resource.contents.head as Package
+			return package
+		}
+		return null
+	}
+	
+	/**
+	 * Roundabout way to retrieve the jClass via uml correspondences because it fails when loading the CU directly.
+	 */
+	def protected getJavaClassFromCompilationUnit(String name, String ... namespaces){
+		// This roundabout way works to retrieve the read-only instance of the VSUM but still fails when trying to load the CU from the URI.
+//		val javaPkg = getJavaPackageElement(namespaces)
+//		val umlPkg = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, javaPkg, org.eclipse.uml2.uml.Package).head
+//		val umlCompImpl = umlPkg.packagedElements.filterNull.filter(org.eclipse.uml2.uml.Class)
+//			.findFirst[it.name.toLowerCase.contains(javaPkg.name.toLowerCase)]
+//		val javaCompImpl = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, umlCompImpl, org.emftext.language.java.classifiers.Class).head
+//		// here it fails, because the CU cannot be loaded into the view-ResourceSet
+//		// because the UUID resolver fails on trying to register the 'Object extends Object'-ClassifierReference 
+//		val modifiableJavaCompImpl = getModelElement(EcoreUtil.getURI(javaCompImpl)) as org.emftext.language.java.classifiers.Class
+//		return modifiableJavaCompImpl
+		
+		// fails because the compilationUnits reference is always empty on load
+//		val package = getJavaPackageElement(namespaces)
+//		val cu = package.compilationUnits.findFirst[it.name.contains(name)] // "endsWith" because the name might by qualified
+//		return cu.containedClass
+
+		// fails because the CU needs to load java.lang.Object 
+		// and UUID resolver fails on trying to register the 'Object extends Object'-ClassifierReference 
+		val cuFileName = JavaPersistenceHelper.buildJavaFilePath(name + ".java", namespaces)
+		val resource = resourceAt(Path.of(cuFileName))
+		if (
+			resource !== null 
+			&& resource.contents.head !== null 
+			&& resource.contents.head instanceof Package
+		){
+			val cu = resource.contents.head as CompilationUnit
+			return cu.containedClass
+		}
+		return null
+	}
+	
+	def protected createCompilationUnitInPackage(Package containingPackage, String cuName){
+		val List<String> namespace = if(containingPackage === null) #[] else (containingPackage.namespaces + #[containingPackage.name]).toList
+		val compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit => [
+			name = '''«name».java'''
+			namespaces += namespace
+		]
+//        cu.name = (namespace + #[cuName]).join(".")  + ".java"
+        containingPackage.compilationUnits += compilationUnit
+        resourceAt(Path.of(JavaPersistenceHelper.buildJavaFilePath(compilationUnit))).startRecordingChanges => [
+			contents += compilationUnit
+		]
+		propagate
+        return compilationUnit
+	}
+	
+	/**
+	 * Implicitly creates the necessary CompilationUnit and propagates the changes. 
+	 */
+	def protected createJavaClassInPackage(
+		Package containingPackage,
+		String cName, JavaVisibility visibility, boolean abstr, boolean fin
+	){
+		val cu = createCompilationUnitInPackage(containingPackage, cName)
+		val class = createJavaClass(cName, visibility, abstr, fin)
+		cu.classifiers += class
+		propagate
+		return class
+	}
+	
+	/**
+	 * Implicitly creates the necessary CompilationUnit and propagates the changes. 
+	 */
+	def protected createJavaInterfaceInPackage(
+		Package containingPackage,
+		String cName, List<Interface> superInterfaces
+	){
+		val cu = createCompilationUnitInPackage(containingPackage, cName)
+		val interface = createJavaInterface(cName, superInterfaces)
+		cu.classifiers += interface
+		propagate
+		return interface
+	}
+	
+//	############# copied from tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
+    
+    /**
+     * Creates a new java package and synchronizes it as root model.
+     * 
+     * @param name the name of the package
+     * @param superPackage the package that contains the new package. Can be null if it is the default package.
+     */
+    def protected createJavaPackageAsModel(String name, Package superPackage) {
+        val jPackage = createJavaPackage(name, superPackage)
+        resourceAt(Path.of(JavaPersistenceHelper.buildJavaFilePath(jPackage))).startRecordingChanges => [
+			contents += jPackage
+		]
+		propagate
+        return jPackage
+    }
 	
 }

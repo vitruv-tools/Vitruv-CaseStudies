@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclassjava.tests
+package tools.vitruv.applications.transitivechange.tests.circular.pcmumlclassjava
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Package
@@ -10,7 +10,6 @@ import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUs
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
@@ -23,7 +22,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmRepository.reactions, UmlRepositoryAndSystemPackage.reactions
  */
-class RepositoryConceptTest extends TransitiveChangeTest {
+class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 
 	def protected static checkRepositoryConcept(
 		CorrespondenceModel cm,

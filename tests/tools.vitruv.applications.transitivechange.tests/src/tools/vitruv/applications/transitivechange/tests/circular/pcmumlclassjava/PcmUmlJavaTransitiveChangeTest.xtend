@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclassjava
+package tools.vitruv.applications.transitivechange.tests.circular.pcmumlclassjava
 
 import java.util.ArrayList
 import java.util.Collection
@@ -29,55 +29,33 @@ import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
 import org.junit.jupiter.api.BeforeEach
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification
-import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification
-import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
-import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
-import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
-import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
-import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
-import tools.vitruv.domains.pcm.PcmDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 
 import static org.junit.jupiter.api.Assertions.*
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static extension tools.vitruv.applications.transitivechange.tests.util.TransitiveChangeSetup.*
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
  * Provides additional checks for comparing the Java model to the correlating UML model.
  */
-abstract class TransitiveChangeTest extends PcmUmlClassApplicationTest {
+abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	protected static final int ARRAY_LIST_SELECTION = 0
 	protected static boolean linearNetwork // set true (before class) to avoid the transformation between PCM and Java
-	static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
+	static val logger = Logger.getLogger(typeof(PcmUmlJavaTransitiveChangeTest).simpleName)
 
 	override protected getChangePropagationSpecifications() {
-		val specifications = new ArrayList<ChangePropagationSpecification>()
-		specifications.addAll(
-			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
-			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
-			new UmlToJavaChangePropagationSpecification,
-			new JavaToUmlChangePropagationSpecification
-		)
-		if (!linearNetwork) {
-			specifications.addAll(new Pcm2JavaChangePropagationSpecification,
-				new Java2PcmChangePropagationSpecification)
-		}
-		return specifications
+		linearNetwork.changePropagationSpecifications
 	}
 
 	@BeforeEach
-	def void patchDomains() { // ensures all domains execute transitively
-		new PcmDomainProvider().domain.enableTransitiveChangePropagation
-		new UmlDomainProvider().domain.enableTransitiveChangePropagation
-		new JavaDomainProvider().domain.enableTransitiveChangePropagation
+	def void before() {
+		patchDomains() // ensures all domains execute transitively
 	}
 
 	def protected checkJavaType(Classifier umlClassifier) {
