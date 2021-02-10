@@ -1,6 +1,5 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest
 
-import edu.kit.ipd.sdq.activextendannotations.CloseResource
 import java.nio.file.Path
 import java.util.List
 import java.util.Optional
@@ -43,7 +42,6 @@ import tools.vitruv.testutils.printing.HamcrestDescriptionPrintTarget
 import org.opentest4j.TestAbortedException
 import tools.vitruv.testutils.printing.ModelPrinting
 import org.eclipse.emf.common.util.URI
-import tools.vitruv.testutils.printing.CombinedModelPrinter
 import tools.vitruv.testutils.printing.UriReplacingPrinter
 import tools.vitruv.testutils.printing.DefaultPrintIdProvider
 import java.util.Collection
@@ -68,20 +66,11 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	)
 
 	override execute() throws Throwable {
-		val testView = setupTestView()
-		val referenceView = setupReferenceView()
-		val printerChange = installViewDirectoryUriReplacement(testView, referenceView)
-		
-		execute(this, printerChange, setupTestView(), setupReferenceView())
-	}
-
-	def private void execute(
-		@CloseResource AutoCloseable toClose1,
-		@CloseResource AutoCloseable toClose2,
-		@CloseResource DirectoryTestView testView,
-		@CloseResource DirectoryTestView referenceView
-	) throws Throwable {
-		try {
+		try (
+			val testView = setupTestView();
+			val referenceView = setupReferenceView();
+			val printerChange = installViewDirectoryUriReplacement(testView, referenceView)
+		) {
 			executeDependencies(testView, referenceView)
 
 			testStep.executeIn(testView)
@@ -90,6 +79,8 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		} catch (Throwable t) {
 			extensionContext.executionException = Optional.of(t)
 			throw t
+		} finally {
+			close()
 		}
 	}
 
@@ -145,41 +136,37 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		new TestAbortedException('''«reason»«System.lineSeparator»«cause.message»''', cause)
 	}
 
-	def private void verifyTestViewResults() {
+	def private void verifyTestViewResults() throws Throwable {
 		// use new views to reload the actual resources from disk
-		verifyTestViewResults(setupReadOnlyTestView(), setupReferenceView())
-	}
-
-	def private void verifyTestViewResults(
-		@CloseResource DirectoryTestView testView,
-		@CloseResource DirectoryTestView referenceView
-	) throws Throwable {
-		val referenceFiles = referenceView.directory.dataFiles [ file |
-			referenceDomains.exists[file.belongsTo(it)]
-		]
-
-		assertThat(testView, containsExactlyResources(referenceView, referenceFiles))
-
-		referenceFiles.forEach [ model |
-			val referenceResource = referenceView.resourceAt(model)
-			val referenceDomain = checkNotNull(
-				referenceDomains.findFirst[referenceResource.belongsTo(it)],
-				'''Cannot find domain of «referenceResource»!'''
-			)
-			val filters = comparisonSettings.getEqualityOptionsForDomain(referenceDomain)
-
-			assertThat(testView.resourceAt(model), containsModelOf(referenceResource, filters))
-		]
+		try(
+			val testView = setupReadOnlyTestView();
+			val referenceView = setupReferenceView()
+		) {
+			val referenceFiles = referenceView.directory.dataFiles [ file |
+				referenceDomains.exists[file.belongsTo(it)]
+			]
+	
+			assertThat(testView, containsExactlyResources(referenceView, referenceFiles))
+	
+			referenceFiles.forEach [ model |
+				val referenceResource = referenceView.resourceAt(model)
+				val referenceDomain = checkNotNull(
+					referenceDomains.findFirst[referenceResource.belongsTo(it)],
+					'''Cannot find domain of «referenceResource»!'''
+				)
+				val filters = comparisonSettings.getEqualityOptionsForDomain(referenceDomain)
+	
+				assertThat(testView.resourceAt(model), containsModelOf(referenceResource, filters))
+			]
+		}
 	}
 
 	def private AutoCloseable installViewDirectoryUriReplacement(TestView testView, TestView referenceView) {
-		ModelPrinting.use [ currentPrinter |
-			new CombinedModelPrinter(new UriReplacingPrinter(List.of(
-				// mind the order, the test view is a prefix of the reference view!
-				referenceView.getUri(Path.of('.')).appendSegment('') -> URI.createFileURI("[reference view]/"),
-				testView.getUri(Path.of('.')).appendSegment('') -> URI.createFileURI("[test view]/")
-			)), currentPrinter)
-		]
+		ModelPrinting.prepend(new UriReplacingPrinter(List.of(
+			// mind the order, the test view is a prefix of the reference view!
+			referenceView.getUri(Path.of('.')).appendSegment('') -> URI.createFileURI("[reference view]/"),
+			testView.getUri(Path.of('.')).appendSegment('') -> URI.createFileURI("[test view]/")
+		)))
 	}
 
 	override close() {
@@ -210,7 +197,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	}
 
 	def static private belongsTo(Path path, VitruvDomain domain) {
-		domain.fileExtensions.exists[path.toString.endsWith('''.«it»''')]
+		domain.fileExtensions.exists [path.toString.endsWith('''.«it»''')]
 	}
 
 	def static private belongsTo(Resource resource, VitruvDomain domain) {

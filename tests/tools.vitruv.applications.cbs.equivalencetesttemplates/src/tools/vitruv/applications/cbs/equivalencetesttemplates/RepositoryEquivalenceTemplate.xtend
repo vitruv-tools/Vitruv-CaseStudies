@@ -159,13 +159,13 @@ abstract class RepositoryEquivalenceTemplate {
 		
 		stepFor(uml.domain) [ extension view |
 			Model.from('model/umlrootmodel'.uml).propagate [
-				packagedElements.get(0).name = "renamed"
+				packagedElements.get(0).name = 'renamed'
 			]
 		]
 		
 		inputVariantFor(uml.domain, 'uppercase name') [ extension view |
 			Model.from('model/umlrootmodel'.uml).propagate [
-				packagedElements.get(0).name = "Renamed"
+				packagedElements.get(0).name = 'Renamed'
 			]
 		].alsoCompareToMainStepOfSameDomain()
 

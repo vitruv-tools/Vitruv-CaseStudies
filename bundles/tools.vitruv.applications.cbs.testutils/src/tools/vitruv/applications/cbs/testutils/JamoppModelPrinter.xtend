@@ -68,6 +68,7 @@ class JamoppModelPrinter implements ModelPrinter {
 	override PrintResult printFeatureValue(
 		PrintTarget target,
 		PrintIdProvider idProvider,
+		EObject object,
 		EStructuralFeature feature,
 		Object value
 	) {
@@ -84,6 +85,7 @@ class JamoppModelPrinter implements ModelPrinter {
 	override printFeatureValueList(
 		PrintTarget target,
 		PrintIdProvider idProvider,
+		EObject object,
 		EStructuralFeature feature,
 		Collection<?> valueList
 	) {
@@ -94,7 +96,7 @@ class JamoppModelPrinter implements ModelPrinter {
 				]
 			case NAMESPACE_AWARE_ELEMENT__NAMESPACES:
 				target.printList(valueList, SINGLE_LINE) [ subTarget, element |
-					subPrinter.printFeatureValue(subTarget, idProvider, feature, element)
+					subPrinter.printFeatureValue(subTarget, idProvider, object, feature, element)
 				]
 			default:
 				NOT_RESPONSIBLE
