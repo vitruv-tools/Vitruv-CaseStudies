@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv UML Class-UML Components Tests
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.tests
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents.tests
-Bundle-Version: 0.2.0
+Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Fragment-Host: tools.vitruv.applications.umlclassumlcomponents
 Require-Bundle: org.junit.jupiter.api,
