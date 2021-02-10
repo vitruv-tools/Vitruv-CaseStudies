@@ -22,7 +22,6 @@ import org.emftext.language.java.containers.CompilationUnit
 import java.util.List
 import org.emftext.language.java.containers.ContainersFactory
 import org.emftext.language.java.containers.Package import org.emftext.language.java.classifiers.Interface
-import tools.vitruv.framework.userinteraction.UserInteractionFactory
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 
 /**
@@ -182,9 +181,8 @@ class MediaStoreRepositoryCreationTest extends PcmUmlJavaLinearTransitiveChangeT
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)	
 	}
 	
-	// REMARK: Currently failing due to incomplete Java UUIDs
 	@Test
-	@Disabled
+	@Disabled("Currently failing due to incomplete Java UUIDs")
 	def void testMediaStoreCreation_JavaInserted_reducedAndManuallyReplicated() {		
 		val REPOSITORY_PKG_NAME = "defaultRepository"
 		val CONTRACTS_PKG_NAME = "contracts"
@@ -253,12 +251,9 @@ class MediaStoreRepositoryCreationTest extends PcmUmlJavaLinearTransitiveChangeT
 		propagate
 	}
 	
-	// REMARK: Only for manual test execution
 	@Test
-	@Disabled
+	@Disabled("Requires the predefinition of necessary user interactions")
 	def void testMediaStoreCreation_PcmInserted() {
-		setInteractiveUserInteractor
-		
 		val pcmRepo_forward = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH).testResource.contents.head as Repository
 		
 		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION // the default output if no input is given to the UserInteractor
@@ -270,12 +265,9 @@ class MediaStoreRepositoryCreationTest extends PcmUmlJavaLinearTransitiveChangeT
 		assertModelExists(umlPath)	
 	}
 	
-	// REMARK: Only for manual test execution
 	@Test
-	@Disabled
+	@Disabled("Requires the predefinition of necessary user interactions")
 	def void testMinimalRepository_PcmUmlJava() {
-		setInteractiveUserInteractor
-		
 		val pcmRepo_forward = createRepository
 		val pcmPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME + DefaultLiterals.PCM_REPOSITORY_EXTENSION
 		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
@@ -285,11 +277,6 @@ class MediaStoreRepositoryCreationTest extends PcmUmlJavaLinearTransitiveChangeT
 		propagate
 		assertModelExists(pcmPath)
 		assertModelExists(umlPath)
-	}
-	
-	protected def setInteractiveUserInteractor(){
-		val userInteractor = UserInteractionFactory.instance.createDialogUserInteractor()
-		virtualModel.userInteractor = userInteractor
 	}
 	
 	def protected getJavaPackage(String qualifiedPackageName){
