@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv PCM-Java POJO Application
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.pojotransformations;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.2.0
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.pcmjava.pojotransformations,

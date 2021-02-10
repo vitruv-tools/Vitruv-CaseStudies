@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv PCM-UML Class Mappings Application Sources
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.mapping.sources
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.2.0
 Require-Bundle: tools.vitruv.extensions.dslsruntime.mappings,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.domains.uml;visibility:=reexport,

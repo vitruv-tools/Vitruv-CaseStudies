@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv PCM-UML Components Application
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmumlcomponents
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.2.0
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.domains.pcm;visibility:=reexport,
