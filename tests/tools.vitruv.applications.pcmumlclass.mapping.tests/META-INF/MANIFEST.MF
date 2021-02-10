@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv PCM-UML Class Mappings Application Tests
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.mapping.tests
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.3.0.qualifier
 Fragment-Host: tools.vitruv.applications.pcmumlclass.mapping
 Require-Bundle: tools.vitruv.applications.util.temporary,
  org.eclipse.emf.compare,

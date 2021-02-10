@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv UML-Java Application
 Bundle-SymbolicName: tools.vitruv.applications.umljava;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.umljava
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: edu.kit.ipd.sdq.activextendannotations,
  tools.vitruv.domains.uml;visibility:=reexport,

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: tools.vitruv.applications.cbs.frameworkwrapper
 Bundle-SymbolicName: tools.vitruv.applications.cbs.frameworkwrapper
 Automatic-Module-Name: tools.vitruv.applications.cbs.frameworkwrapper
-Bundle-Version: 0.2.0.qualifier
+Bundle-Version: 0.3.0.qualifier
 Require-Bundle: tools.vitruv.dsls.reactions,
  tools.vitruv.dsls.mappings,
  tools.vitruv.dsls.mirbase,
