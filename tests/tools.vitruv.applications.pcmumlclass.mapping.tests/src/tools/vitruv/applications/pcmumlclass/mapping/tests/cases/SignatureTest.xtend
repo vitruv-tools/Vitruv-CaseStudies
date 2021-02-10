@@ -58,13 +58,13 @@ class SignatureTest extends PcmUmlClassTest {
 	}
 
 	def protected checkSignatureConcept(OperationSignature pcmSignature) {
-		val umlOperation = helper.getModifiableCorr(pcmSignature, Operation, TagLiterals.SIGNATURE__OPERATION)
+		val umlOperation = helper.getCorr(pcmSignature, Operation, TagLiterals.SIGNATURE__OPERATION)
 		assertNotNull(umlOperation)
 		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
 	}
 
 	def protected checkSignatureConcept(Operation umlOperation) {
-		val pcmSignature = helper.getModifiableCorr(umlOperation, OperationSignature, TagLiterals.SIGNATURE__OPERATION)
+		val pcmSignature = helper.getCorr(umlOperation, OperationSignature, TagLiterals.SIGNATURE__OPERATION)
 		assertNotNull(pcmSignature)
 		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
 	}
