@@ -38,13 +38,13 @@ class ProvidedRoleTest extends PcmUmlClassTest {
 	}
 
 	def protected checkProvidedRoleConcept(OperationProvidedRole pcmProvided) {
-		val umlRealization = helper.getModifiableCorr(pcmProvided, InterfaceRealization,
+		val umlRealization = helper.getCorr(pcmProvided, InterfaceRealization,
 			TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
 		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
 	}
 
 	def protected checkProvidedRoleConcept(InterfaceRealization umlRealization) {
-		val pcmProvided = helper.getModifiableCorr(umlRealization, OperationProvidedRole,
+		val pcmProvided = helper.getCorr(umlRealization, OperationProvidedRole,
 			TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
 		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
 	}
