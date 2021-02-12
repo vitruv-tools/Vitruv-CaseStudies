@@ -987,7 +987,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final Classifier classifier = this.createClassifierFromName(annotationName);
 		newAnnotation.setAnnotation(classifier);
 		annotableAndModifiable.getAnnotationsAndModifiers().add(newAnnotation);
-		createChange.setAffectedEObject(EcoreUtil.copy(annotableAndModifiable));
+		createChange.setAffectedEObject(annotableAndModifiable);
 		final EReference containingReference = (EReference) newAnnotation.eContainingFeature();
 		@SuppressWarnings("unchecked")
 		final int index = ((EList<EObject>) createChange.getAffectedEObject().eGet(containingReference))
@@ -995,9 +995,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		createChange.setAffectedFeature(containingReference);
 		createChange.setIndex(index);
 		createChange.setNewValue(newAnnotation);
-		final VURI vuri = VURI.getInstance(annotableAndModifiable.eResource());
-		final ConcreteChange change = VitruviusChangeFactory.getInstance().createConcreteChangeWithVuri(createChange,
-				vuri);
+		final ConcreteChange change = VitruviusChangeFactory.getInstance().createConcreteApplicableChange(createChange);
 		getVirtualModel().propagateChange(change);
 	}
 
