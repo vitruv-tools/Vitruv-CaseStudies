@@ -8,11 +8,12 @@ import org.junit.jupiter.api.^extension.ExtendWith
 import java.lang.annotation.Inherited
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.framework.applications.VitruvApplication
+import tools.vitruv.testutils.TestLogging
 
 @Retention(RUNTIME)
 @Target(TYPE, METHOD)
 @Inherited
-@ExtendWith(EquivalenceTestExtension)
+@ExtendWith(TestLogging, EquivalenceTestExtension)
 annotation EquivalenceTest {
 	val Class<? extends VitruvApplication>[] applications
 	val Class<? extends ModelComparisonSettings>[] comparisonSettings = #[]

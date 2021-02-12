@@ -96,7 +96,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 			.withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(userInteraction))
 			.withDomainRepository(propagationDomains)
 			.withChangePropagationSpecifications(changePropagationSpecifications)
-			.build()
+			.buildAndInitialize()
 		new DirectoryTestView(
 			new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum, propagationDomains),
 			viewDirectory

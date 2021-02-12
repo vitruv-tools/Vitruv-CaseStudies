@@ -1,24 +1,26 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest
 
-import static org.junit.jupiter.api.DynamicTest.dynamicTest
-import tools.vitruv.framework.domains.VitruvDomain
+import java.util.Collection
 import java.util.LinkedList
 import java.util.List
+import java.util.Map
+import java.util.Set
+import java.util.TreeMap
 import java.util.function.Consumer
-import static com.google.common.base.Preconditions.checkState
-import org.junit.jupiter.api.^extension.ExtensionContext
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.junit.jupiter.api.^extension.ExtensionContext
+import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
+import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder.VariantOptions
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification
-import static com.google.common.base.Preconditions.checkArgument
+import tools.vitruv.framework.domains.VitruvDomain
+import tools.vitruv.testutils.TestUserInteraction
 import tools.vitruv.testutils.TestView
 import tools.vitruv.testutils.UriMode
-import java.util.Map
-import java.util.HashMap
-import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
-import java.util.Set
-import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder.VariantOptions
-import java.util.Collection
-import tools.vitruv.testutils.TestUserInteraction
+
+import static com.google.common.base.Preconditions.checkArgument
+import static com.google.common.base.Preconditions.checkState
+import static java.util.Comparator.comparing
+import static org.junit.jupiter.api.DynamicTest.dynamicTest
 
 abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
 	/* both maps always contain lists for all domains */
@@ -33,7 +35,7 @@ abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
 	}
 	
 	def private static mapForDomains(Set<VitruvDomain> domains) {
-		val result = new HashMap<VitruvDomain, List<DomainStep>>(domains.size)
+		val result = new TreeMap<VitruvDomain, List<DomainStep>>(comparing [name])
 		for (domain : domains) {
 			result.put(domain, new LinkedList)
 		}
