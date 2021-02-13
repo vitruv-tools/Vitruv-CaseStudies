@@ -12,6 +12,7 @@ import tools.vitruv.testutils.printing.UseModelPrinter
 import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.applications.cbs.commonalities.CbsCommonalitiesApplication
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
+import tools.vitruv.testutils.printing.UnsetFeaturesHidingModelPrinter
 
 @Target(TYPE)
 @Retention(RUNTIME)
@@ -23,6 +24,6 @@ import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 	]
 )
 @ExtendWith(ModelPrinterChange, RegisterMetamodelsInStandalone)
-@UseModelPrinter(JamoppModelPrinter, PcmModelPrinter)
+@UseModelPrinter(UnsetFeaturesHidingModelPrinter, JamoppModelPrinter, PcmModelPrinter)
 annotation CommonalitiesEquivalenceTest {
 }

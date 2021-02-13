@@ -68,9 +68,9 @@ abstract class RepositoryEquivalenceTemplate {
 		].alsoCompareToMainStepOfSameDomain()
 		
 		stepFor(uml.domain) [ extension view |
-			resourceAt('model/umlrootmodel'.uml).propagate [
+			resourceAt('model/model'.uml).propagate [
 				contents += uml.Model => [
-					name = 'umlrootmodel'
+					name = 'model'
 					packagedElements += uml.Package => [
 						name = 'test'
 						packagedElements += uml.Package => [
@@ -85,9 +85,9 @@ abstract class RepositoryEquivalenceTemplate {
 		]
 		
 		inputVariantFor(uml.domain, 'creating only the root package') [ extension view |
-			resourceAt('model/umlrootmodel'.uml).propagate [
+			resourceAt('model/model'.uml).propagate [
 				contents += uml.Model => [
-					name = 'umlrootmodel'
+					name = 'model'
 					packagedElements += uml.Package => [
 						name = 'test'
 					]
@@ -96,9 +96,9 @@ abstract class RepositoryEquivalenceTemplate {
 		].alsoCompareToMainStepOfSameDomain()
 		
 		inputVariantFor(uml.domain, 'creating only the root package — uppercase name') [ extension view |
-			resourceAt('model/umlrootmodel'.uml).propagate [
+			resourceAt('model/model'.uml).propagate [
 				contents += uml.Model => [
-					name = 'umlrootmodel'
+					name = 'model'
 					packagedElements += uml.Package => [
 						name = 'Test'
 					]
@@ -158,13 +158,13 @@ abstract class RepositoryEquivalenceTemplate {
 		]
 		
 		stepFor(uml.domain) [ extension view |
-			Model.from('model/umlrootmodel'.uml).propagate [
+			Model.from('model/model'.uml).propagate [
 				packagedElements.get(0).name = 'renamed'
 			]
 		]
 		
 		inputVariantFor(uml.domain, 'uppercase name') [ extension view |
-			Model.from('model/umlrootmodel'.uml).propagate [
+			Model.from('model/model'.uml).propagate [
 				packagedElements.get(0).name = 'Renamed'
 			]
 		].alsoCompareToMainStepOfSameDomain()
@@ -191,11 +191,11 @@ abstract class RepositoryEquivalenceTemplate {
 		].alsoCompareToMainStepOfSameDomain()
 		
 		stepFor(uml.domain) [ extension view |
-			resourceAt('model/umlrootmodel'.uml).propagate [delete(emptyMap)]
+			resourceAt('model/model'.uml).propagate [delete(emptyMap)]
 		]
 		
 		inputVariantFor(uml.domain, 'deleting only the root package') [ extension view |
-			Model.from('model/umlrootmodel'.uml).propagate [
+			Model.from('model/model'.uml).propagate [
 				packagedElements.remove(0)
 			]
 		].alsoCompareToMainStepOfSameDomain()

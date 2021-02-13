@@ -15,7 +15,7 @@ public final class DefaultLiterals {
 	public static final String UML_MODEL_FILE_NAME = PCM_REPOSITORY_FILE_NAME;
 	public static final String UML_EXTENSION = ".uml";
 
-	public static final String ROOT_MODEL_NAME = "umlrootmodel";
+	public static final String ROOT_MODEL_NAME = "model";
 	public static final String CONTRACTS_PACKAGE_NAME = "contracts";
 	public static final String DATATYPES_PACKAGE_NAME = "datatypes";
 	public static final String IMPLEMENTATION_SUFFIX = "Impl";

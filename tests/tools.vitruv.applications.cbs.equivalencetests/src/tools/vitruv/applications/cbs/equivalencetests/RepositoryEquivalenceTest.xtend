@@ -16,9 +16,9 @@ class RepositoryEquivalenceTest extends RepositoryEquivalenceTemplate {
 			onTextInput [message.contains("path for the UML root model")]
 				.respondWith("model/")
 			onTextInput [message.contains("name for the UML root model")]
-				.respondWith("umlrootmodel")
+				.respondWith("model")
 			onTextInput [message.contains("where to save the corresponding Uml-Model")]
-				.respondWith("model/umlrootmodel")
+				.respondWith("model/model")
 			onTextInput [message.contains("where to save the corresponding PCM model")]
 				.respondWith("model/Test")
 			onMultipleChoiceSingleSelection [message.contains("a PCM::Repository or a PCM::System")]
