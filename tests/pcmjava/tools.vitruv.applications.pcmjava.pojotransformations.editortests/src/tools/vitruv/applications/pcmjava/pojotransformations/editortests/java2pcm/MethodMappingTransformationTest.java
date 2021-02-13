@@ -75,13 +75,8 @@ public class MethodMappingTransformationTest extends Java2PcmPackageMappingTrans
 				"OperationSignature " + opSig + " is not in OperationInterface " + opInterface);
 		this.assertPCMNamedElement(opSig, expectedName);
 
-		Method jaMoPPMethod;
-		try {
-			jaMoPPMethod = claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
+		Method jaMoPPMethod = claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
 					MethodMappingTransformationTest.this.getCorrespondenceModel(), opSig, Method.class));
-		} catch (final Throwable e) {
-			throw new RuntimeException(e);
-		}
 		MethodMappingTransformationTest.this.assertDataTypeName(jaMoPPMethod.getTypeReference(),
 				opSig.getReturnType__OperationSignature());
 	}
