@@ -135,27 +135,19 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 	}
 
 	private void assertOperationRequiredRole(final OperationRequiredRole operationRequiredRole) throws Throwable {
-		Set<EObject> correspondingEObjects;
-		try {
-			correspondingEObjects = CorrespondenceModelUtil.getCorrespondingEObjects(
-					FieldMappingTransformationTest.this.getCorrespondenceModel(), operationRequiredRole);
+		Set<EObject> correspondingEObjects = CorrespondenceModelUtil.getCorrespondingEObjects(
+				FieldMappingTransformationTest.this.getCorrespondenceModel(), operationRequiredRole);
 
-			boolean fieldFound = false;
-			for (final EObject correspondingEObject : correspondingEObjects) {
-				if (correspondingEObject instanceof Field) {
-					fieldFound = true;
-				} else {
-					fail("OperationRequiredRole should correspond to field only, but corresonds also to: "
-							+ correspondingEObject);
-				}
+		boolean fieldFound = false;
+		for (final EObject correspondingEObject : correspondingEObjects) {
+			if (correspondingEObject instanceof Field) {
+				fieldFound = true;
+			} else {
+				fail("OperationRequiredRole should correspond to field only, but corresonds also to: "
+						+ correspondingEObject);
 			}
-			assertTrue(fieldFound, "OperationRequiredRole does not correspond to a field");
-		} catch (final Throwable e) {
-			if (e instanceof Exception) {
-				throw (Exception) e;
-			}
-			throw new RuntimeException(e);
 		}
+		assertTrue(fieldFound, "OperationRequiredRole does not correspond to a field");
 	}
 
 	private InnerDeclaration renameFieldInClass(final String className, final String fieldName,

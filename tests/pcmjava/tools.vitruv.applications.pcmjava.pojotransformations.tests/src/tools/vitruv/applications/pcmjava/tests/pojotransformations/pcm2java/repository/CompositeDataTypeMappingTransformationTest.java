@@ -40,12 +40,8 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
 		final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
 		propagate();
 
-		try {
-			CompositeDataTypeMappingTransformationTest.this.assertDataTypeCorrespondence(cdt);
-			CompositeDataTypeMappingTransformationTest.this.assertInnerDeclaration(innerDec);
-		} catch (final Throwable e) {
-			throw new RuntimeException(e);
-		}
+		CompositeDataTypeMappingTransformationTest.this.assertDataTypeCorrespondence(cdt);
+		CompositeDataTypeMappingTransformationTest.this.assertInnerDeclaration(innerDec);
 	}
 
 	@Test
