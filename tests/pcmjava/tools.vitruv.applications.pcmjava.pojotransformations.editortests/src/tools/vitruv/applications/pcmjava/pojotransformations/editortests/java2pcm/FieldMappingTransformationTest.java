@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
@@ -136,35 +135,19 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 	}
 
 	private void assertOperationRequiredRole(final OperationRequiredRole operationRequiredRole) throws Throwable {
-		this.getVirtualModel().executeCommand(new Callable<Void>() {
+		Set<EObject> correspondingEObjects = CorrespondenceModelUtil.getCorrespondingEObjects(
+				FieldMappingTransformationTest.this.getCorrespondenceModel(), operationRequiredRole);
 
-			@Override
-			public Void call() throws Exception {
-				Set<EObject> correspondingEObjects;
-				try {
-					correspondingEObjects = CorrespondenceModelUtil.getCorrespondingEObjects(
-							FieldMappingTransformationTest.this.getCorrespondenceModel(), operationRequiredRole);
-
-					boolean fieldFound = false;
-					for (final EObject correspondingEObject : correspondingEObjects) {
-						if (correspondingEObject instanceof Field) {
-							fieldFound = true;
-						} else {
-							fail("OperationRequiredRole should correspond to field only, but corresonds also to: "
-									+ correspondingEObject);
-						}
-					}
-					assertTrue(fieldFound, "OperationRequiredRole does not correspond to a field");
-				} catch (final Throwable e) {
-					if (e instanceof Exception) {
-						throw (Exception) e;
-					}
-					throw new RuntimeException(e);
-				}
-				return null;
+		boolean fieldFound = false;
+		for (final EObject correspondingEObject : correspondingEObjects) {
+			if (correspondingEObject instanceof Field) {
+				fieldFound = true;
+			} else {
+				fail("OperationRequiredRole should correspond to field only, but corresonds also to: "
+						+ correspondingEObject);
 			}
-		});
-
+		}
+		assertTrue(fieldFound, "OperationRequiredRole does not correspond to a field");
 	}
 
 	private InnerDeclaration renameFieldInClass(final String className, final String fieldName,

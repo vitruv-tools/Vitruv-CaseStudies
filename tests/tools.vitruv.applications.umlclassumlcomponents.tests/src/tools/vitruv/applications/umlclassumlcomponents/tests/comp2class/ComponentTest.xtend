@@ -68,10 +68,7 @@ class ComponentTest extends AbstractComp2ClassTest {
 		val umlClass2 = UMLFactory.eINSTANCE.createClass()
 		umlClass2.name = CLASS_NAME2
 		// Add new Class to Package in transaction:
-		virtualModel.executeCommand([
-			classPackage.packagedElements += umlClass2
-			return null
-		])
+		classPackage.packagedElements += umlClass2
 
 		// Remove Component		
 		assertTrue(rootElement.packagedElements.contains(umlComp))
@@ -102,10 +99,7 @@ class ComponentTest extends AbstractComp2ClassTest {
 		val umlClass2 = UMLFactory.eINSTANCE.createClass()
 		umlClass2.name = CLASS_NAME2
 		// Add new Class to Package in transaction:
-		virtualModel.executeCommand([
-			classPackage.packagedElements += umlClass2
-			return null
-		])
+		classPackage.packagedElements += umlClass2
 
 		// Remove Component		
 		assertTrue(rootElement.packagedElements.contains(umlComp))
