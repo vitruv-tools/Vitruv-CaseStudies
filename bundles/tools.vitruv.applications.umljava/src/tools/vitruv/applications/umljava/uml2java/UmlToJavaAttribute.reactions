@@ -1,11 +1,12 @@
 import org.eclipse.uml2.uml.Property
 import org.emftext.language.java.members.Field
+import tools.vitruv.applications.umljava.uml2java.UmlToJavaTag
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 
-import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimNotMany
+import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -44,8 +45,8 @@ routine createOrFindJavaAttribute(uml::Classifier uClassifier, uml::Property uml
                 createJavaAttribute(uClassifier, umlAttribute) 
             } else {
                 addAttributeCorrespondence(umlAttribute, foundField)
-                createJavaGetter(foundField)
-                createJavaSetter(foundField)
+                createOrFindJavaGetter(umlAttribute, foundField)
+                createOrFindJavaSetter(umlAttribute, foundField)
             }
         }
     }
@@ -61,6 +62,8 @@ routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttrib
     match {
         val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
         require absence of java::Field corresponding to umlAttribute
+        require absence of java::Method corresponding to umlAttribute tagged with UmlToJavaTag.GETTER
+        require absence of java::Method corresponding to umlAttribute tagged with UmlToJavaTag.SETTER
     }
     action {
         val javaAttribute = create java::Field and initialize {
@@ -72,8 +75,8 @@ routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttrib
         }
         add correspondence between umlAttribute and javaAttribute
         call {
-            createJavaGetter(javaAttribute)
-            createJavaSetter(javaAttribute)
+			createOrFindJavaGetter(umlAttribute, javaAttribute)
+        	createOrFindJavaSetter(umlAttribute, javaAttribute)
 			changeJavaAttributeType(umlAttribute)
         }
     }
@@ -92,16 +95,14 @@ reaction UmlAttributeDeletedFromDataType {
 routine deleteJavaAttribute(uml::Property umlAttr, uml::Classifier umlClassifier) {
     match {
         val jAttr = retrieve java::Field corresponding to umlAttr
-        val jClass = retrieve optional java::Class corresponding to umlClassifier
+        val jGetter = retrieve optional java::ClassMethod corresponding to umlAttr tagged with UmlToJavaTag.GETTER
+        val jSetter = retrieve optional java::ClassMethod corresponding to umlAttr tagged with UmlToJavaTag.SETTER
+
     }
     action {
-        call {
-        	jClass.ifPresent [
-        		removeJavaGettersOfAttribute(jAttr)
-	            removeJavaSettersOfAttribute(jAttr)
-        	]
-        }
         delete jAttr
+        delete jGetter?.get
+        delete jSetter?.get
     }
 }
 
@@ -142,36 +143,47 @@ routine changeJavaAttributeType(uml::Property uAttribute) {
     match {
         val jAttribute = retrieve java::Field corresponding to uAttribute
         val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uAttribute.type
+        val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlToJavaTag.GETTER
+        val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlToJavaTag.SETTER
     }
     action {
         call {
         	umlToJavaTypePropagation.propagatePropertyTypeChanged(uAttribute, jAttribute, jCustomType.orElse(null))
-
-		    updateAttributeTypeInSetters(jAttribute)
-		    updateAttributeTypeInGetters(jAttribute)
+		    jGetter.ifPresent [ updateAttributeTypeInGetter(it, jAttribute) ]
+		    jSetter.ifPresent [ updateAttributeTypeInSetter(it, jAttribute) ]
         }
     }
 }
 
 
-routine createJavaGetter(java::Field jAttribute) {
+routine createOrFindJavaGetter(uml::Property uAttribute, java::Field jAttribute) {
     action {
         call {
-            if (!javaGetterForAttributeExists(jAttribute)) {
-                createGetterForAttribute(jAttribute)
+            var javaGetter = getJavaGettersOfAttribute(jAttribute).head
+            if (javaGetter === null) {
+            	javaGetter = createGetterForAttribute(jAttribute)
             }
+            createAccessorCorrespondence(uAttribute, javaGetter, UmlToJavaTag.GETTER)
         }
     }
 }
 
-routine createJavaSetter(java::Field jAttribute) {
+routine createOrFindJavaSetter(uml::Property uAttribute, java::Field jAttribute) {
     action {
         call {
-            if (!javaSetterForAttributeExists(jAttribute)) {
-                createSetterForAttribute(jAttribute)
+            var javaSetter = getJavaSettersOfAttribute(jAttribute).head
+            if (javaSetter === null) {
+            	javaSetter = createSetterForAttribute(jAttribute)
             }
+            createAccessorCorrespondence(uAttribute, javaSetter, UmlToJavaTag.SETTER)
         }
     }
+}
+
+routine createAccessorCorrespondence(uml::Property uAttribute, java::ClassMethod jMethod, String tag) {
+	action {
+		add correspondence between uAttribute and jMethod tagged with tag
+	}
 }
 
 reaction UmlAttributeRenamed {
@@ -182,12 +194,14 @@ reaction UmlAttributeRenamed {
 routine renameJavaAttribute(String newName, String oldName, uml::Property uAttribute) {
     match {
         val jAttribute = retrieve java::Field corresponding to uAttribute
+        val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlToJavaTag.GETTER
+        val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlToJavaTag.SETTER
     }
     action {
         call {
             jAttribute.name = uAttribute.name
-            renameGettersOfAttribute(jAttribute, oldName)
-            renameSettersOfAttribute(jAttribute, oldName)
+            jGetter.ifPresent [ renameGetterOfAttribute(it, jAttribute) ]
+            jSetter.ifPresent [ renameSetter(it, jAttribute, oldName) ]
         }
     }
 }

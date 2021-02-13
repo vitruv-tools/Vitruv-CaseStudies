@@ -187,6 +187,7 @@ reaction UmlFeatureMadeStatic {
 routine setStatic(uml::Feature uFeat) {
     match {
         val jMod = retrieve java::AnnotableAndModifiable corresponding to uFeat
+			with !(uFeat instanceof org.eclipse.uml2.uml.Property && jMod instanceof ClassMethod)
     }
     action {
         val staticMod = create java::Static
@@ -281,6 +282,7 @@ reaction UmlElementVisibilityChanged {
 routine changeJavaElementVisibility(uml::NamedElement uElem) {
     match {
         val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem
+        	with !(uElem instanceof org.eclipse.uml2.uml.Property && jElem instanceof ClassMethod)
     }
     action {
         update jElem {
