@@ -54,15 +54,15 @@ class RepositoryComponentTest extends PcmUmlClassTest {
 	}
 
 	def protected checkRepositoryComponentConcept(RepositoryComponent pcmComponent) {
-		val umlComponentPkg = helper.getModifiableCorr(pcmComponent, Package, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
-		val umlComponentImpl = helper.getModifiableCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
-		val umlComponentConstructor = helper.getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
+		val umlComponentPkg = helper.getCorr(pcmComponent, Package, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
+		val umlComponentImpl = helper.getCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
+		val umlComponentConstructor = helper.getCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
 		checkRepositoryComponentConcept(correspondenceModel, pcmComponent, umlComponentPkg, umlComponentImpl,
 			umlComponentConstructor)
 	}
 
 	def protected checkRepositoryComponentConcept(Package umlComponentPkg) {
-		val pcmComponent = helper.getModifiableCorr(umlComponentPkg, RepositoryComponent,
+		val pcmComponent = helper.getCorr(umlComponentPkg, RepositoryComponent,
 			TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 		assertNotNull(pcmComponent)
 		checkRepositoryComponentConcept(pcmComponent)

@@ -54,16 +54,15 @@ class RequiredRoleTest extends PcmUmlClassTest {
 
 	def protected checkRequiredRoleConcept(OperationRequiredRole pcmRequired) {
 		assertNotNull(pcmRequired)
-		val umlRequiredInstance = helper.getModifiableCorr(pcmRequired, Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
-		val umlRequiredParameter = helper.getModifiableCorr(pcmRequired, Parameter,
-			TagLiterals.REQUIRED_ROLE__PARAMETER)
+		val umlRequiredInstance = helper.getCorr(pcmRequired, Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
+		val umlRequiredParameter = helper.getCorr(pcmRequired, Parameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
 		checkRequiredRoleConcept(correspondenceModel, pcmRequired, umlRequiredInstance, umlRequiredParameter)
 	}
 
 	def protected checkRequiredRoleConcept(Property umlRequiredInstance, Parameter umlRequiredParameter) {
 		assertNotNull(umlRequiredInstance)
 		assertNotNull(umlRequiredParameter)
-		val pcmRequired = helper.getModifiableCorr(umlRequiredParameter, OperationRequiredRole,
+		val pcmRequired = helper.getCorr(umlRequiredParameter, OperationRequiredRole,
 			TagLiterals.REQUIRED_ROLE__PARAMETER)
 		assertNotNull(pcmRequired)
 		checkRequiredRoleConcept(pcmRequired)

@@ -46,12 +46,12 @@ class InterfaceTest extends PcmUmlClassTest {
 	}
 
 	def protected checkInterfaceConcept(OperationInterface pcmInterface) {
-		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
+		val umlInterface = helper.getCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
 	}
 
 	def protected checkInterfaceConcept(Interface umlInterface) {
-		val pcmInterface = helper.getModifiableCorr(umlInterface, OperationInterface,
+		val pcmInterface = helper.getCorr(umlInterface, OperationInterface,
 			TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
 	}
