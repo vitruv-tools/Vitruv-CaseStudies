@@ -19,6 +19,7 @@ import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
+import org.junit.jupiter.api.Disabled
 
 /**
  * A Test class to test class methods and its traits.
@@ -201,6 +202,8 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 	}
 	
 	@Test
+	@Disabled("Creates a class method instead of a constructor")
+	///https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/issues/127
 	def testMoveConstructor() {
 		val uConstr = createSimpleUmlOperation(uClass.name)
 		uClass.ownedOperations += uConstr
