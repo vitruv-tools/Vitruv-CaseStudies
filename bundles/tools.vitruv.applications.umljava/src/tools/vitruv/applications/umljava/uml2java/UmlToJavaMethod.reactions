@@ -348,7 +348,7 @@ routine createMissingJavaParameter(uml::Parameter uParameter) {
 }
 
 reaction UmlParameterCreated {
-    after element uml::Parameter created and inserted in uml::Operation[ownedParameter]
+    after element uml::Parameter inserted in uml::Operation[ownedParameter]
     with newValue.direction == ParameterDirectionKind.IN_LITERAL && newValue.name !== null
     call createJavaParameter(affectedEObject, newValue)
 
@@ -376,13 +376,13 @@ routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
 }
 
 reaction UmlReturnParameterDeleted {
-    after element uml::Parameter deleted and removed from uml::Operation[ownedParameter]
+    after element uml::Parameter removed from uml::Operation[ownedParameter]
     with oldValue.direction == ParameterDirectionKind.RETURN_LITERAL
     call setJavaMethodReturnType(affectedEObject, affectedEObject.getReturnResult)
 }
 
 reaction UmlParameterDeleted {
-    after element uml::Parameter deleted and removed from uml::Operation[ownedParameter]
+    after element uml::Parameter removed from uml::Operation[ownedParameter]
     with oldValue.direction == ParameterDirectionKind.IN_LITERAL
     call deleteJavaParameter(oldValue)
 }

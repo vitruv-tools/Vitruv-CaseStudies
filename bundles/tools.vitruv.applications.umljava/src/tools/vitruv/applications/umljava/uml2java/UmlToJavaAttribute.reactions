@@ -240,7 +240,7 @@ routine renameJavaAttribute(String newName, String oldName, uml::Property uAttri
 }
 
 reaction UmlAttributeCreatedInInterface {
-    after element uml::Property created and inserted in uml::Interface[ownedAttribute]
+    after element uml::Property inserted in uml::Interface[ownedAttribute]
     call showMessage(userInteractor, "We do not support adding attributes to interfaces. Please delete " + newValue + " from " + affectedEObject)
 }
 
