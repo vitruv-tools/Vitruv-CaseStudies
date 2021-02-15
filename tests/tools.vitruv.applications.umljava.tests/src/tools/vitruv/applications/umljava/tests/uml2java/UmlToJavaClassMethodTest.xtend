@@ -6,19 +6,19 @@ import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertNotNull
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * A Test class to test class methods and its traits.
@@ -115,6 +115,18 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 		val jClass = getCorrespondingClass(uClass)
 		assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
 	}
+	
+	@Test
+	def testMoveMethod() {
+		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
+		uClass2.ownedOperations += uOperation
+		propagate
+		
+		val jClass = getCorrespondingClass(uClass)
+		val jClass2 = getCorrespondingClass(uClass2)
+		assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
+		assertFalse(jClass2.getMembersByName(OPERATION_NAME).nullOrEmpty)
+	}
 
 	/**
 	 * Tests if setting a method static correctly reflected on the java side.
@@ -210,7 +222,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 	 * propagated to the java model.
 	 */
 	@Test
-	def void testDeleteMethodInDataType() {
+	def testDeleteMethodInDataType() {
 		val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
 		val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null)
 		propagate
@@ -223,5 +235,21 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 
 		val jClass = getCorrespondingClass(dataType)
 		assertJavaMemberContainerDontHaveMember(jClass, STANDARD_OPERATION_NAME)
+	}
+	
+	@Test
+	def testMoveMethodInDataType() {
+		val uDataType = createUmlDataType(rootElement, DATATYPE_NAME)
+		val uOperation = uDataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null)
+		propagate
+		
+		val uDataType2 = createUmlDataType(rootElement, "DataTypeName2")
+		uDataType2.ownedOperations += uOperation
+		propagate
+		
+		val jDataType = getCorrespondingClass(uDataType)
+		val jDataType2 = getCorrespondingClass(uDataType2)
+		assertJavaMemberContainerDontHaveMember(jDataType, uOperation.name)
+		assertFalse(jDataType2.getMembersByName(uOperation.name).nullOrEmpty)
 	}
 }
