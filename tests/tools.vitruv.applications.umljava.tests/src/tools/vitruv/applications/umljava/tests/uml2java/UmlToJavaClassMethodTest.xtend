@@ -19,6 +19,7 @@ import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
+import org.junit.jupiter.api.Disabled
 
 /**
  * A Test class to test class methods and its traits.
@@ -197,6 +198,52 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 		uClass.ownedOperations += uConstr
 		propagate
 		val jConstr = getCorrespondingConstructor(uConstr)
+		assertNotNull(jConstr)
+	}
+	
+	@Test
+	@Disabled("Creates a class method instead of a constructor")
+	def testMoveConstructor() {
+		val uConstr = createSimpleUmlOperation(uClass.name)
+		uClass.ownedOperations += uConstr
+		propagate
+		
+		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
+		uClass2.ownedOperations += uConstr
+		uConstr.name = uClass2.name
+		propagate
+		
+		val jClass = getCorrespondingClass(uClass)
+		val jClass2 = getCorrespondingClass(uClass2)
+		val jConstr = getCorrespondingConstructor(uConstr)
+		assertJavaMemberContainerDontHaveMember(jClass, uClass.name)
+		assertJavaMemberContainerDontHaveMember(jClass, uClass2.name)
+		assertJavaMemberContainerDontHaveMember(jClass2, uClass.name)
+		assertFalse(jClass2.getMembersByName(uConstr.name).nullOrEmpty)
+		assertNotNull(jConstr)
+	}
+	
+	/**
+	 * Same as testMoveConstructor but the order of move and rename is switched
+	 */
+	@Test
+	def testMoveConstructor2() {
+		val uConstr = createSimpleUmlOperation(uClass.name)
+		uClass.ownedOperations += uConstr
+		propagate
+		
+		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
+		uConstr.name = uClass2.name
+		uClass2.ownedOperations += uConstr
+		propagate
+		
+		val jClass = getCorrespondingClass(uClass)
+		val jClass2 = getCorrespondingClass(uClass2)
+		val jConstr = getCorrespondingConstructor(uConstr)
+		assertJavaMemberContainerDontHaveMember(jClass, uClass.name)
+		assertJavaMemberContainerDontHaveMember(jClass, uClass2.name)
+		assertJavaMemberContainerDontHaveMember(jClass2, uClass.name)
+		assertFalse(jClass2.getMembersByName(uConstr.name).nullOrEmpty)
 		assertNotNull(jConstr)
 	}
 

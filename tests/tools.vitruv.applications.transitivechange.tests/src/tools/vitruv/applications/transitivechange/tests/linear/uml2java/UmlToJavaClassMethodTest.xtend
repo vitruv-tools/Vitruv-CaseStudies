@@ -199,6 +199,57 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 		val jConstr = getCorrespondingConstructor(uConstr)
 		assertNotNull(jConstr)
 	}
+	
+	@Test
+	def testMoveConstructor() {
+		val uConstr = createSimpleUmlOperation(uClass.name)
+		uClass.ownedOperations += uConstr
+		propagate
+		
+		var jConstr = getCorrespondingConstructor(uConstr)
+		assertNotNull(jConstr)
+		
+		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
+		uClass2.ownedOperations += uConstr
+		uConstr.name = uClass2.name
+		propagate
+		
+		val jClass = getCorrespondingClass(uClass)
+		val jClass2 = getCorrespondingClass(uClass2)
+		jConstr = getCorrespondingConstructor(uConstr)
+		assertJavaMemberContainerDontHaveMember(jClass, uClass.name)
+		assertJavaMemberContainerDontHaveMember(jClass, uClass2.name)
+		assertJavaMemberContainerDontHaveMember(jClass2, uClass.name)
+		assertFalse(jClass2.getMembersByName(uConstr.name).nullOrEmpty)
+		assertNotNull(jConstr)
+	}
+	
+	/**
+	 * Same as testMoveConstructor but the order of move and rename is switched
+	 */
+	@Test
+	def testMoveConstructor2() {
+		val uConstr = createSimpleUmlOperation(uClass.name)
+		uClass.ownedOperations += uConstr
+		propagate
+		
+		var jConstr = getCorrespondingConstructor(uConstr)
+		assertNotNull(jConstr)
+		
+		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
+		uConstr.name = uClass2.name
+		uClass2.ownedOperations += uConstr
+		propagate
+		
+		val jClass = getCorrespondingClass(uClass)
+		val jClass2 = getCorrespondingClass(uClass2)
+		jConstr = getCorrespondingConstructor(uConstr)
+		assertJavaMemberContainerDontHaveMember(jClass, uClass.name)
+		assertJavaMemberContainerDontHaveMember(jClass, uClass2.name)
+		assertJavaMemberContainerDontHaveMember(jClass2, uClass.name)
+		assertFalse(jClass2.getMembersByName(uConstr.name).nullOrEmpty)
+		assertNotNull(jConstr)
+	}
 
 	/**
 	 * Checks if method creating in datatypes is reflected in the corresponding java class.

@@ -62,6 +62,7 @@ routine createOrFindJavaConstructor(uml::Operation umlOperation, uml::Classifier
 		check umlOperation.name.toFirstUpper == umlClassifier.name.toFirstUpper
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
         require absence of java::Constructor corresponding to umlOperation
+        require absence of java::Method corresponding to umlOperation
 	}
 	action {
 		call {
@@ -90,6 +91,7 @@ routine createOrFindJavaClassMethod(uml::Operation umlOperation, uml::Classifier
 		check umlOperation.name.toFirstUpper != umlClassifier.name.toFirstUpper // -> constructor
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
         require absence of java::ClassMethod corresponding to umlOperation
+        require absence of java::Constructor corresponding to umlOperation
 	}
 	action {
 		call {
