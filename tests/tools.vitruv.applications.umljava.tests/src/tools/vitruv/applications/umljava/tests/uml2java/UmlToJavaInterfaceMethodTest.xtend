@@ -1,8 +1,5 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.Interface
-import org.eclipse.uml2.uml.Operation
 import org.emftext.language.java.types.TypesFactory
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -100,5 +97,4 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
 		assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
 		assertInterfaceMethodEquals(uOperation, jMethod)
 	}
-
 }
