@@ -203,6 +203,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 	
 	@Test
 	@Disabled("Creates a class method instead of a constructor")
+	///https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/issues/127
 	def testMoveConstructor() {
 		val uConstr = createSimpleUmlOperation(uClass.name)
 		uClass.ownedOperations += uConstr
