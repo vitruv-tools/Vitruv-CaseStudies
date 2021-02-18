@@ -108,7 +108,7 @@ class JavaInterfaceMethodTestModels extends JavaTestModelsBase implements Interf
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaInterface => [
 				members += newJavaInterfaceMethod => [
-					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+					typeReference = referenceJamoppType(String)
 				]
 			])
 			return #[
@@ -205,7 +205,7 @@ class JavaInterfaceMethodTestModels extends JavaTestModelsBase implements Interf
 				members += newJavaInterfaceMethod => [
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 				]
 			])
@@ -269,7 +269,7 @@ class JavaInterfaceMethodTestModels extends JavaTestModelsBase implements Interf
 					]
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 					parameters += newJavaOrdinaryParameter => [
 						name = CLASS_PARAMETER_NAME
@@ -301,7 +301,7 @@ class JavaInterfaceMethodTestModels extends JavaTestModelsBase implements Interf
 					]
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 					parameters += newJavaOrdinaryParameter => [
 						name = CLASS_PARAMETER_NAME
@@ -335,7 +335,7 @@ class JavaInterfaceMethodTestModels extends JavaTestModelsBase implements Interf
 					typeReference = TypesFactory.eINSTANCE.createInt
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 				]
 			])
