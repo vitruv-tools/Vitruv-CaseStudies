@@ -348,7 +348,7 @@ routine createComponentImplementation(pcm::RepositoryComponent component) {
 	}
 	action {
 		call {
-			createJavaPackage(component, repositoryPackage, component.entityName, null);
+			createOrFindJavaPackage(component, repositoryPackage, component.entityName, null);
 			createImplementationForComponent(component);
 		}
 	}
@@ -698,8 +698,9 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 	action {
 		val javaPackage = create java::Package and initialize {
 			if (parentPackage !== null) {
-				javaPackage.namespaces += parentPackage.namespaces;
-				javaPackage.namespaces += parentPackage.name;
+				val newNamespaces = new ArrayList(parentPackage.namespaces)
+				newNamespaces += parentPackage.name
+				javaPackage.namespaces += newNamespaces;
 			}
 			javaPackage.name = packageName.toFirstLower;
 			persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage));
@@ -717,13 +718,30 @@ routine renameJavaPackage(pcm::NamedElement sourceElementMappedToPackage, java::
 	}
 	action {
 		update javaPackage {
-			javaPackage.namespaces.clear();
-			if (parentPackage !== null) {
-				javaPackage.namespaces += parentPackage.namespaces;
-				javaPackage.namespaces += parentPackage.name;
+			var modified = false
+			if (parentPackage === null) {
+				if (!javaPackage.namespaces.empty) {
+					modified = true
+				}
+				javaPackage.namespaces.clear()
 			}
-			javaPackage.name = packageName;
-			persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage));
+			
+			if (parentPackage !== null) {
+				val newNamespaces = new ArrayList(parentPackage.namespaces)
+				newNamespaces += parentPackage.name
+				if (javaPackage.namespaces != newNamespaces) {
+					javaPackage.namespaces.clear()
+					javaPackage.namespaces += newNamespaces;
+					modified = true
+				}
+			}
+			if (javaPackage.name != packageName) {
+				javaPackage.name = packageName
+				modified = true	
+			}
+			if (modified) {
+				persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage))
+			}
 		}
 	}
 }
@@ -807,9 +825,10 @@ routine addMissingClassifierCorrespondence(pcm::NamedElement pcmElement, java::C
 routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java::ConcreteClassifier classifier, java::Package containingPackage) {
 	action {
 		val compilationUnit = create java::CompilationUnit and initialize {
-			compilationUnit.namespaces += containingPackage.namespaces;
-			compilationUnit.namespaces += containingPackage.name;
-			compilationUnit.name = classifier.name + ".java";
+			val newNamespaces = new ArrayList(containingPackage.namespaces)
+			newNamespaces += containingPackage.name
+			compilationUnit.namespaces += newNamespaces
+			compilationUnit.name = containingPackage.namespacesAsString + containingPackage.name + "." + classifier.name.toFirstUpper + ".java"
 			compilationUnit.classifiers += classifier;
 			persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
 		}
@@ -826,14 +845,27 @@ routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package
 	}
 	action {
 		update javaClassifier {
-			javaClassifier.name = className.toFirstUpper;
+			if (javaClassifier.name != className.toFirstUpper) {
+				javaClassifier.name = className.toFirstUpper
+			}
 		}
 		update compilationUnit {
-			compilationUnit.name = className.toFirstUpper + ".java";
-			compilationUnit.namespaces.clear;
-			compilationUnit.namespaces += containingPackage.namespaces;
-			compilationUnit.namespaces += containingPackage.name;
-			persistProjectRelative(classSourceElement, compilationUnit, buildJavaFilePath(compilationUnit));
+			var modified = false
+			val newName = containingPackage.namespacesAsString + containingPackage.name + "." + className.toFirstUpper + ".java"
+			if (compilationUnit.name != newName) {
+				compilationUnit.name = newName
+				modified = true
+			}
+			val newNamespaces = new ArrayList(containingPackage.namespaces)
+			newNamespaces += containingPackage.name
+			if (compilationUnit.namespaces != newNamespaces) {
+				compilationUnit.namespaces.clear
+				compilationUnit.namespaces += newNamespaces
+				modified = true
+			}
+			if (modified) {
+				persistProjectRelative(classSourceElement, compilationUnit, buildJavaFilePath(compilationUnit))
+			}
 		}
 	}
 }
