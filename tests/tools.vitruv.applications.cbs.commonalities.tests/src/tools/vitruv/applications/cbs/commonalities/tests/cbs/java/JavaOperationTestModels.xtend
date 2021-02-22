@@ -8,7 +8,6 @@ import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.OperationTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsBase
-import tools.vitruv.domains.java.util.JavaModificationUtil
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.*
 
@@ -81,7 +80,7 @@ class JavaOperationTestModels extends JavaTestModelsBase implements OperationTes
 
 			val compilationUnit = contractsPackage.newCompilationUnit(newJavaInterface => [
 				members += newJavaInterfaceMethod => [
-					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+					typeReference = referenceJamoppType(String)
 				]
 			])
 
@@ -150,7 +149,7 @@ class JavaOperationTestModels extends JavaTestModelsBase implements OperationTes
 				members += newJavaInterfaceMethod => [
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 				]
 			])
@@ -177,7 +176,7 @@ class JavaOperationTestModels extends JavaTestModelsBase implements OperationTes
 					]
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 				]
 			])
@@ -208,7 +207,7 @@ class JavaOperationTestModels extends JavaTestModelsBase implements OperationTes
 					typeReference = TypesFactory.eINSTANCE.createInt
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 				]
 			])

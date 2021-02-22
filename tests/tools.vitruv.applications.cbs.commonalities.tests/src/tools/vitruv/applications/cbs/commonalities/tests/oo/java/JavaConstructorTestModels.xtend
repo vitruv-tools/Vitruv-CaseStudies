@@ -184,7 +184,7 @@ class JavaConstructorTestModels extends JavaTestModelsBase implements Constructo
 				members += newJavaConstructor => [
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 				]
 			])
@@ -248,7 +248,7 @@ class JavaConstructorTestModels extends JavaTestModelsBase implements Constructo
 					]
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 					parameters += newJavaOrdinaryParameter => [
 						name = CLASS_PARAMETER_NAME
@@ -279,7 +279,7 @@ class JavaConstructorTestModels extends JavaTestModelsBase implements Constructo
 				members += newJavaConstructor => [
 					parameters += newJavaOrdinaryParameter => [
 						name = STRING_PARAMETER_NAME
-						typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
+						typeReference = referenceJamoppType(String)
 					]
 				]
 			])
