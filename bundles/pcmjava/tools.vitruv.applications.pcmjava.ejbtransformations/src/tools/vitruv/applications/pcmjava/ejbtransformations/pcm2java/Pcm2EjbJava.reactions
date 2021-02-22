@@ -2,7 +2,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.modifiers.ModifiersFactory
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.OperationInterface
-import org.palladiosimulator.pcm.repository.RepositoryComponent
 
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 
@@ -152,19 +151,20 @@ reaction pcm2javaCommon::DeletedRequiredRole {
 	// ejb: slightly different trigger
 	after element pcm::OperationRequiredRole deleted and removed from pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
 	call {
-		removeRequiredRole(oldValue, affectedEObject as RepositoryComponent);
+		removeRequiredRole(oldValue);
 	}
 }
 
-routine pcm2javaCommon::removeRequiredRole(pcm::RequiredRole requiredRole, pcm::InterfaceRequiringEntity requiringEntity) {
+routine pcm2javaCommon::removeRequiredRole(pcm::RequiredRole requiredRole) {
 	match {
 		val requiredInterfaceImport = retrieve java::ClassifierImport corresponding to requiredRole
 		val requiredInterfaceField = retrieve java::Field corresponding to requiredRole
-		val javaClass = retrieve java::Class corresponding to requiringEntity
+		val javaClass = retrieve java::Class corresponding to requiredRole
 	}
 	action {
 		delete requiredInterfaceImport
 		delete requiredInterfaceField
+		remove correspondence between javaClass and requiredRole
 		// ejb: removed 'remove-parameter' code
 	}
 }
@@ -174,7 +174,7 @@ reaction ChangeOperationRequiredRoleEntity {
 	after element replaced at pcm::OperationRequiredRole[requiringEntity_RequiredRole]
 	call {
 		val requiredRole = affectedEObject;
-		removeRequiredRole(requiredRole, oldValue);
+		removeRequiredRole(requiredRole);
 		addRequiredRole(requiredRole);
 	}
 }
