@@ -17,6 +17,7 @@ import static extension tools.vitruv.applications.util.temporary.uml.UmlClassifi
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static extension tools.vitruv.framework.util.bridges.JavaHelper.claimOneOrNone
+import static java.util.List.copyOf
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -602,11 +603,11 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
             modified = jPackage.updateName(uPackage.name) || modified 
             if (modified) {
                 persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
-                for (compUnit : jPackage.compilationUnits) {
+                for (compUnit : copyOf(jPackage.compilationUnits)) {
                     changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
                 }
                 // TODO TS This should be dealt with by the java domain, as this regards model specific persistence issues:
-                for (nestedPackage : uPackage.nestedPackages) {
+                for (nestedPackage : copyOf(uPackage.nestedPackages)) {
                     renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages
                 }
             }
