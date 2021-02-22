@@ -26,16 +26,15 @@ import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationSignature
-import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.system.SystemPackage
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
-import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static extension tools.vitruv.framework.util.bridges.JavaHelper.claimOneOrNone
 
@@ -718,27 +717,13 @@ routine renameJavaPackage(pcm::NamedElement sourceElementMappedToPackage, java::
 	}
 	action {
 		update javaPackage {
-			var modified = false
-			if (parentPackage === null) {
-				if (!javaPackage.namespaces.empty) {
-					modified = true
-				}
-				javaPackage.namespaces.clear()
-			}
-			
+			val newNamespaces = newArrayList 
 			if (parentPackage !== null) {
-				val newNamespaces = new ArrayList(parentPackage.namespaces)
+				newNamespaces += parentPackage.namespaces
 				newNamespaces += parentPackage.name
-				if (javaPackage.namespaces != newNamespaces) {
-					javaPackage.namespaces.clear()
-					javaPackage.namespaces += newNamespaces;
-					modified = true
-				}
 			}
-			if (javaPackage.name != packageName) {
-				javaPackage.name = packageName
-				modified = true	
-			}
+			var modified = javaPackage.updateNamespaces(newNamespaces)
+			modified = javaPackage.updateName(packageName) || modified
 			if (modified) {
 				persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage))
 			}
@@ -845,24 +830,14 @@ routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package
 	}
 	action {
 		update javaClassifier {
-			if (javaClassifier.name != className.toFirstUpper) {
-				javaClassifier.name = className.toFirstUpper
-			}
+			javaClassifier.updateName(className.toFirstUpper)
 		}
 		update compilationUnit {
-			var modified = false
-			val newName = containingPackage.namespacesAsString + containingPackage.name + "." + className.toFirstUpper + ".java"
-			if (compilationUnit.name != newName) {
-				compilationUnit.name = newName
-				modified = true
-			}
 			val newNamespaces = new ArrayList(containingPackage.namespaces)
 			newNamespaces += containingPackage.name
-			if (compilationUnit.namespaces != newNamespaces) {
-				compilationUnit.namespaces.clear
-				compilationUnit.namespaces += newNamespaces
-				modified = true
-			}
+			var modified = compilationUnit.updateNamespaces(newNamespaces)
+			val newName = getCompilationUnitName(containingPackage, className.toFirstUpper)
+			modified = compilationUnit.updateName(newName) || modified
 			if (modified) {
 				persistProjectRelative(classSourceElement, compilationUnit, buildJavaFilePath(compilationUnit))
 			}
