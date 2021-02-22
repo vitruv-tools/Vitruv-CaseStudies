@@ -15,6 +15,7 @@ import static com.google.common.base.Preconditions.*
 import static tools.vitruv.framework.util.XtendAssertHelper.*
 
 import static extension tools.vitruv.extensions.dslruntime.commonalities.helper.IntermediateModelHelper.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 
 // TODO Some duplication with JavaSubPackagesOperator
 @ReferenceMappingOperator(
@@ -88,11 +89,8 @@ class JavaPackageCompilationUnitsOperator extends AbstractReferenceMappingOperat
 		validateObject(object)
 		val Package package = (container as Package)
 		val CompilationUnit compilationUnit = (object as CompilationUnit)
-		// TODO Only update namespaces if not already matching?
 		logger.trace('''Inserting Java CompilationUnit «compilationUnit» into package '«package.packageString»'.''')
-		compilationUnit.namespaces.clear
-		compilationUnit.namespaces += package.namespaces
-		compilationUnit.namespaces += package.name
+		compilationUnit.updateNamespaces(package)
 
 		val resourceBridge = correspondenceModel.getCorrespondingResourceBridge(compilationUnit)
 		assertTrue(resourceBridge !== null)

@@ -38,8 +38,10 @@ class JavaVisibilityConditionOperator extends AbstractSingleArgumentConditionOpe
 	override enforce() {
 		val modifiers = leftAnnotableAndModifiable.annotationsAndModifiers
 		val newModifiers = modifiers.setVisibility(rightVisibility)
-		modifiers.clear
-		modifiers += newModifiers
+		if (modifiers != newModifiers) {
+			modifiers.clear
+			modifiers += newModifiers
+		}
 	}
 
 	override check() {
