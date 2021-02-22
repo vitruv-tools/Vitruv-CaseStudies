@@ -7,13 +7,14 @@ import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.InterfaceMethod
+import org.emftext.language.java.types.TypesFactory
+
+import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
-import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -178,21 +179,18 @@ routine setJavaMethodReturnType(uml::Operation uOperation, uml::Parameter uParam
     }
 }
 
-//uml::Feature defines static
-reaction UmlFeatureMadeStatic {
-    after attribute replaced at uml::Feature[isStatic]
+reaction UmlOperationMadeStatic {
+    after attribute replaced at uml::Operation[isStatic]
     call setStatic(affectedEObject)
 }
 
-routine setStatic(uml::Feature uFeat) {
+routine setStatic(uml::Operation uFeat) {
     match {
-        val jMod = retrieve java::AnnotableAndModifiable corresponding to uFeat
-			with !(uFeat instanceof org.eclipse.uml2.uml.Property && jMod instanceof ClassMethod)
+        val jMethod = retrieve java::Method corresponding to uFeat tagged with ""
     }
     action {
-        val staticMod = create java::Static
-        update jMod {
-            jMod.static = uFeat.isStatic
+        update jMethod {
+            jMethod.static = uFeat.isStatic
         }
     }
 }
@@ -281,8 +279,7 @@ reaction UmlElementVisibilityChanged {
 
 routine changeJavaElementVisibility(uml::NamedElement uElem) {
     match {
-        val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem
-        	with !(uElem instanceof org.eclipse.uml2.uml.Property && jElem instanceof ClassMethod)
+        val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem tagged with ""
     }
     action {
         update jElem {

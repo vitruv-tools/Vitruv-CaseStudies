@@ -310,10 +310,7 @@ reaction JavaElementMadePackagePrivate {
 
 routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem, java::Modifier mod) {
     match {
-        val uElem = retrieve uml::NamedElement corresponding to jElem
-			with !(jElem instanceof org.emftext.language.java.members.ClassMethod 
-				&& uElem instanceof org.eclipse.uml2.uml.Property)
-        
+        val uElem = retrieve uml::NamedElement corresponding to jElem tagged with ""
     }
     action {
         update uElem {
@@ -335,9 +332,7 @@ reaction JavaCompilationUnitRenamed {
 
 routine renameUmlNamedElement(java::NamedElement jElement) {
     match {
-        val uElement = retrieve uml::NamedElement corresponding to jElement
-			with !(jElement instanceof org.emftext.language.java.members.ClassMethod 
-        		&& uElement instanceof org.eclipse.uml2.uml.Property)
+        val uElement = retrieve uml::NamedElement corresponding to jElement tagged with ""
         
     }
     action {
