@@ -29,6 +29,9 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import java.util.Optional
+import org.emftext.language.java.commons.NamespaceAwareElement
+import static java.util.Collections.emptyList
 
 /**
  * Class for java classifier, package and compilation unit util functions
@@ -277,4 +280,42 @@ class JavaContainerAndClassifierUtil {
     def static String getLastPackageName(String packageName) { // TODO TS technically not depending on Java domain
         return packageName?.substring(packageName.indexOf('.') + 1)
     }
+    
+    def static String getCompilationUnitName(Package containingPackage, String className) {
+    	'''«IF containingPackage !== null»«containingPackage.namespacesAsString»«containingPackage.name».«ENDIF»«className».java'''
+    }
+    
+    def static String getCompilationUnitName(Optional<Package> containingPackage, String className) {
+    	getCompilationUnitName(if (containingPackage.present) containingPackage.get else null, className)
+    }
+    
+    def static boolean updateNamespaces(NamespaceAwareElement elementToChange, List<String> newNamespaces) {
+		if (newNamespaces != elementToChange.namespaces) {
+			elementToChange.namespaces.clear
+			elementToChange.namespaces += newNamespaces
+			return true
+		}
+		return false
+    }
+    
+    def static boolean updateNamespaces(NamespaceAwareElement elementToChange, Optional<Package> containingPackage) {
+    	if (containingPackage.present) {
+    		elementToChange.updateNamespaces(containingPackage.get)
+    	} else {
+    		elementToChange.updateNamespaces(emptyList)
+    	}
+    }
+    
+    def static boolean updateNamespaces(NamespaceAwareElement elementToChange, Package containingPackage) {
+   		return elementToChange.updateNamespaces(containingPackage.javaPackageAsStringList)
+    }
+    
+    def static boolean updateName(NamedElement elementToChange, String newName) {
+    	if (newName != elementToChange.name) {
+    		elementToChange.name = newName
+    		return true
+    	}
+    	return false
+    }
+    
 }
