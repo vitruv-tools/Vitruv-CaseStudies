@@ -970,6 +970,7 @@ routine addRequiredRole(pcm::OperationRequiredRole requiredRole) {
 		val javaClass = retrieve java::Class corresponding to requiredRole.requiringEntity_RequiredRole
 	}
 	action {
+		add correspondence between javaClass and requiredRole
 		// TODO HK this should be partly in the context of the compilation unit
 		val requiredInterfaceImport = create java::ClassifierImport and initialize {
 			addImportToCompilationUnitOfClassifier(requiredInterfaceImport, javaClass, requiredInterface);
@@ -1016,19 +1017,20 @@ routine addParameterAndAssignmentToConstructor(pcm::NamedElement parameterCorres
 reaction DeletedRequiredRole {
 	after element pcm::OperationRequiredRole removed from pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
 	call {
-		removeRequiredRole(oldValue, affectedEObject as RepositoryComponent);
+		removeRequiredRole(oldValue);
 	}
 }
 
-routine removeRequiredRole(pcm::RequiredRole requiredRole, pcm::InterfaceRequiringEntity requiringEntity) {
+routine removeRequiredRole(pcm::RequiredRole requiredRole) {
 	match {
 		val requiredInterfaceImport = retrieve java::ClassifierImport corresponding to requiredRole
 		val requiredInterfaceField = retrieve java::Field corresponding to requiredRole
-		val javaClass = retrieve java::Class corresponding to requiringEntity
+		val javaClass = retrieve java::Class corresponding to requiredRole
 	}
 	action {
 		delete requiredInterfaceImport
 		delete requiredInterfaceField
+		remove correspondence between javaClass and requiredRole
 		call {
 			for (ctor : javaClass.members.filter(typeof(Constructor))) {
 				removeParameterToFieldAssignmentFromConstructor(ctor, requiredRole.entityName);
@@ -1078,7 +1080,7 @@ routine removeCorrespondingParameterFromConstructor(java::Constructor ctor, pcm:
 routine reinitializeOperationRequiredRole(pcm::OperationRequiredRole requiredRole) {
 	action {
 		call {
-			removeRequiredRole(requiredRole, requiredRole.requiringEntity_RequiredRole);
+			removeRequiredRole(requiredRole);
 			addRequiredRole(requiredRole);
 		}
 	}
