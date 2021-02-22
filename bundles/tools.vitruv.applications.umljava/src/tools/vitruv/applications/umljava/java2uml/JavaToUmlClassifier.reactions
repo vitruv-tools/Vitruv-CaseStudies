@@ -527,15 +527,15 @@ routine addUmlElementToModelOrPackage(java::CompilationUnit jCompUnit, uml::Clas
 	}
     action {
        call {
-      		val uPackage = if (jCompUnit.namespaces.nullOrEmpty) {
+            val uPackage = if (jCompUnit.namespaces.nullOrEmpty) {
                 uModel
             } else {
                 findUmlPackage(uModel, jCompUnit.namespaces.last)
             }
             
             if (uPackage !== uClassifier.package) {
-            	addUmlElementToPackage(uClassifier, uPackage)
-           	}
+                addUmlElementToPackage(uClassifier, uPackage)
+            }
         }
     }
 }
