@@ -34,7 +34,7 @@ reaction UmlClassCreated {
     after element uml::Class created and inserted in uml::Package[packagedElement]
     call createOrFindJavaClass(newValue)
 }
-
+	
 routine createOrFindJavaClass(uml::Classifier umlClassifier) {
     match{
         require absence of java::Class corresponding to umlClassifier
@@ -98,7 +98,7 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
         }
         update jPackage {
             jPackage.ifPresent [
-				compilationUnits += javaCompilationUnit
+                compilationUnits += javaCompilationUnit
             ]
         }
         add correspondence between umlClassifier and javaCompilationUnit
@@ -152,18 +152,17 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
             javaClassifier.name = umlClassifier.name
         }
         update javaCompilationUnit {
-        	var modified = false
-			modified = javaCompilationUnit.updateNamespaces(jPackage)
-			val newName = getCompilationUnitName(jPackage, javaClassifier.name)
+            var modified = javaCompilationUnit.updateNamespaces(jPackage)
+            val newName = getCompilationUnitName(jPackage, javaClassifier.name)
             modified = javaCompilationUnit.updateName(newName) || modified
             if (modified) {
-            	persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+                persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
             }
         }
         call jPackage.ifPresent[
-        	if (!compilationUnits.contains(javaCompilationUnit)) {
-				compilationUnits += javaCompilationUnit
-			}
+            if (!compilationUnits.contains(javaCompilationUnit)) {
+                compilationUnits += javaCompilationUnit
+            }
         ]
     }
 }
@@ -599,28 +598,28 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
     }
     action {
         call {
-        	var modified = jPackage.updateNamespaces(uPackage.umlParentNamespaceAsStringList)
-        	modified = jPackage.updateName(uPackage.name) || modified 
+            var modified = jPackage.updateNamespaces(uPackage.umlParentNamespaceAsStringList)
+            modified = jPackage.updateName(uPackage.name) || modified 
             if (modified) {
-            	persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
+                persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
                 for (compUnit : jPackage.compilationUnits) {
                     changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
                 }
-	            // TODO TS This should be dealt with by the java domain, as this regards model specific persistence issues:
-            	for (nestedPackage : uPackage.nestedPackages) {
-	                renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages
-            	}
+                // TODO TS This should be dealt with by the java domain, as this regards model specific persistence issues:
+                for (nestedPackage : uPackage.nestedPackages) {
+                    renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages
+                }
             }
-		}
+        }
     }
 }
 
 routine changePackageOfJavaCompilationUnit(java::Package jPackage, java::CompilationUnit jCompUnit, uml::Namespace uNamespace) {
     action {
         update jCompUnit {
-        	if (jCompUnit.updateNamespaces(jPackage)) {
-        		persistProjectRelative(uNamespace, jCompUnit, buildJavaFilePath(jCompUnit))	
-        	}
+            if (jCompUnit.updateNamespaces(jPackage)) {
+                persistProjectRelative(uNamespace, jCompUnit, buildJavaFilePath(jCompUnit))	
+            }
         }
     }
 }
