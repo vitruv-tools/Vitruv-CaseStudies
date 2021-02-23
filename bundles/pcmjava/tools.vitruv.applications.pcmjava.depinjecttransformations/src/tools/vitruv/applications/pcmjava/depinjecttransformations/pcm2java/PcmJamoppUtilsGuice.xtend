@@ -42,7 +42,6 @@ import org.palladiosimulator.pcm.system.System
 import tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
-import tools.vitruv.framework.tuid.TuidManager
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
@@ -394,8 +393,6 @@ class PcmJamoppUtilsGuice {
 		}
 		if (saveClassResource) {
 			saveResourceForClass(affectedClass)
-			TuidManager.instance.updateTuid(oldMethod, newMethod)
-		// ci.update(oldMethod, newMethod)
 		}
 
 	}
