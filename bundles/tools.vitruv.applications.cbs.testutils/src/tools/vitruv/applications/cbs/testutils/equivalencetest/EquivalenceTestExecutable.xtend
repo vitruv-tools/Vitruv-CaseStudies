@@ -1,55 +1,54 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest
 
+import edu.kit.ipd.sdq.activextendannotations.Lazy
+import java.io.IOException
 import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
+import java.util.Collection
+import java.util.LinkedHashSet
 import java.util.List
+import java.util.Map
 import java.util.Optional
+import java.util.Set
+import java.util.function.Predicate
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.Delegate
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.hamcrest.Description
+import org.hamcrest.Matcher
+import org.hamcrest.TypeSafeMatcher
 import org.junit.jupiter.api.function.Executable
+import org.opentest4j.TestAbortedException
+import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification
+import tools.vitruv.framework.domains.VitruvDomain
+import tools.vitruv.framework.domains.repository.VitruvDomainRepository
+import tools.vitruv.framework.domains.repository.VitruvDomainRepositoryImpl
 import tools.vitruv.framework.tuid.TuidManager
+import tools.vitruv.framework.vsum.VirtualModelBuilder
+import tools.vitruv.testutils.BasicTestView
 import tools.vitruv.testutils.ChangePublishingTestView
 import tools.vitruv.testutils.TestProjectManager
+import tools.vitruv.testutils.TestUserInteraction
 import tools.vitruv.testutils.TestView
 import tools.vitruv.testutils.UriMode
+import tools.vitruv.testutils.printing.DefaultPrintIdProvider
+import tools.vitruv.testutils.printing.ModelPrinting
+import tools.vitruv.testutils.printing.PrintIdProvider
+import tools.vitruv.testutils.printing.UriReplacingPrinter
 
+import static com.google.common.base.Preconditions.checkNotNull
+import static java.nio.file.FileVisitResult.*
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.containsModelOf
+import static tools.vitruv.testutils.printing.PrintMode.MULTI_LINE
 
 import static extension java.nio.file.Files.walkFileTree
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
-import static java.nio.file.FileVisitResult.*
-import java.io.IOException
-import java.util.LinkedHashSet
-import java.util.function.Predicate
-import tools.vitruv.framework.domains.VitruvDomain
-import org.hamcrest.TypeSafeMatcher
-import java.util.Set
-import org.hamcrest.Description
-
 import static extension tools.vitruv.testutils.printing.ModelPrinting.*
-import org.eclipse.emf.ecore.resource.Resource
-import org.hamcrest.Matcher
-import static tools.vitruv.testutils.printing.PrintMode.MULTI_LINE
-import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
-import static com.google.common.base.Preconditions.checkNotNull
-import tools.vitruv.testutils.BasicTestView
-import java.util.Map
-import tools.vitruv.testutils.printing.PrintIdProvider
-import tools.vitruv.testutils.printing.HamcrestDescriptionPrintTarget
-import org.opentest4j.TestAbortedException
-import tools.vitruv.testutils.printing.ModelPrinting
-import org.eclipse.emf.common.util.URI
-import tools.vitruv.testutils.printing.UriReplacingPrinter
-import tools.vitruv.testutils.printing.DefaultPrintIdProvider
-import java.util.Collection
-import tools.vitruv.testutils.TestUserInteraction
-import tools.vitruv.framework.domains.repository.VitruvDomainRepositoryImpl
-import tools.vitruv.framework.vsum.VirtualModelBuilder
-import tools.vitruv.framework.domains.repository.VitruvDomainRepository
-import edu.kit.ipd.sdq.activextendannotations.Lazy
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
 @FinalFieldsConstructor
 package class EquivalenceTestExecutable implements Executable, AutoCloseable {
@@ -235,23 +234,26 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
 		override describeTo(Description description) {
 			description.appendText("exactly these resource paths to exist in the test view: ")
-			new HamcrestDescriptionPrintTarget(description).printSet(referenceFiles, MULTI_LINE) [ subTarget, path |
-				subTarget.print(path.toString)
-			]
+				.appendPrintResult [
+					printSet(referenceFiles, MULTI_LINE) [ subTarget, path |
+						subTarget.print(path.toString)
+					]
+				]
 		}
 
 		override matchesSafely(DirectoryTestView testView) {
 			testFiles = testView.directory.dataFiles [ file |
 				referenceDomains.exists [file.belongsTo(it)]
-			].toSet
+			]
 			return testFiles == referenceFiles
 		}
 
 		override describeMismatchSafely(DirectoryTestView testView, Description mismatchDescription) {
 			val missingResources = (new LinkedHashSet(referenceFiles) => [removeAll(testFiles)])
-				.map[referenceView.resourceAt(it)].toSet
+				.mapFixedTo(new LinkedHashSet) [referenceView.resourceAt(it)]
 			val unexpectedResources = (new LinkedHashSet(testFiles) => [removeAll(referenceFiles)])
-				.map[testView.resourceAt(it)].toSet
+				.mapFixedTo(new LinkedHashSet) [referenceView.resourceAt(it)]
+			
 			if (!missingResources.isEmpty) {
 				mismatchDescription.appendText("the following resources are missing in the test view: ").
 					appendModelValueSet(missingResources, MULTI_LINE, idProvider)
