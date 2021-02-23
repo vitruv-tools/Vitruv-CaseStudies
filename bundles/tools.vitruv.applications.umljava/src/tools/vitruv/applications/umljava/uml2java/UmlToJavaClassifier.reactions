@@ -17,6 +17,7 @@ import static extension tools.vitruv.applications.util.temporary.uml.UmlClassifi
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static extension tools.vitruv.framework.util.bridges.JavaHelper.claimOneOrNone
+import static java.util.List.copyOf
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -34,7 +35,7 @@ reaction UmlClassCreated {
     after element uml::Class created and inserted in uml::Package[packagedElement]
     call createOrFindJavaClass(newValue)
 }
-
+	
 routine createOrFindJavaClass(uml::Classifier umlClassifier) {
     match{
         require absence of java::Class corresponding to umlClassifier
@@ -90,17 +91,16 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
     }
     action {
         val javaCompilationUnit = create java::CompilationUnit and initialize {
-            if (jPackage.present) {
-                javaCompilationUnit.namespaces += jPackage.get.javaPackageAsStringList
-            }
-            javaCompilationUnit.name = jClassifier.name + ".java";
-            javaCompilationUnit.classifiers += jClassifier;
-            persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+            javaCompilationUnit.updateNamespaces(jPackage)
+            val name = getCompilationUnitName(jPackage, jClassifier.name)
+            javaCompilationUnit.updateName(name)
+            javaCompilationUnit.classifiers += jClassifier
+            persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit))
         }
-        call {
-            if (jPackage.present) {
-                jPackage.get.compilationUnits += javaCompilationUnit
-            }
+        update jPackage {
+            jPackage.ifPresent [
+                compilationUnits += javaCompilationUnit
+            ]
         }
         add correspondence between umlClassifier and javaCompilationUnit
     }
@@ -120,18 +120,18 @@ routine moveJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackag
 	}
 	action {
 		update javaCompilationUnit {
-			javaCompilationUnit.namespaces.clear
-			javaPackage.ifPresent [
-				javaCompilationUnit.namespaces += javaPackageAsStringList
-			]
-			//TODO: updating the compilation unit's name should not be needed 
-			//it is currently necessary as the name is incorrectly resolved to <oldPackageName>.<correctName> after the classifier got removed from its old package
-			javaCompilationUnit.name = javaClassifier.name + ".java"
-			persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+			var modified = javaCompilationUnit.updateNamespaces(javaPackage)
+			val newName = getCompilationUnitName(javaPackage, javaClassifier.name)
+			modified = javaCompilationUnit.updateName(newName) || modified
+			if (modified) {
+				persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+			}
 			
 		}
 		call javaPackage.ifPresent [
-			compilationUnits += javaCompilationUnit
+			if (!compilationUnits.contains(javaCompilationUnit)) {
+				compilationUnits += javaCompilationUnit
+			}
 		]
     }
 }
@@ -150,17 +150,21 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
     }
     action {
         update javaClassifier {
-            javaClassifier.name = umlClassifier.name;
+            javaClassifier.name = umlClassifier.name
         }
         update javaCompilationUnit {
-            if (jPackage.present) {
-                javaCompilationUnit.namespaces.clear();
-                javaCompilationUnit.namespaces += jPackage.get.javaPackageAsStringList
+            var modified = javaCompilationUnit.updateNamespaces(jPackage)
+            val newName = getCompilationUnitName(jPackage, javaClassifier.name)
+            modified = javaCompilationUnit.updateName(newName) || modified
+            if (modified) {
+                persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
             }
-            javaCompilationUnit.name = umlClassifier.name + ".java";
-            persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
         }
-        call jPackage.ifPresent[compilationUnits += javaCompilationUnit]
+        call jPackage.ifPresent[
+            if (!compilationUnits.contains(javaCompilationUnit)) {
+                compilationUnits += javaCompilationUnit
+            }
+        ]
     }
 }
 
@@ -594,21 +598,18 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
         check uPackage.name != jPackage.name || uPackage.umlParentNamespaceAsStringList != jPackage.namespaces
     }
     action {
-        update jPackage {
-            jPackage.namespaces.clear
-            jPackage.namespaces += uPackage.umlParentNamespaceAsStringList
-            jPackage.name = uPackage.name
-            persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
-        }
         call {
-            if (uPackage.name != jPackage.name) {
-                for (compUnit : jPackage.compilationUnits) {
+            var modified = jPackage.updateNamespaces(uPackage.umlParentNamespaceAsStringList)
+            modified = jPackage.updateName(uPackage.name) || modified 
+            if (modified) {
+                persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
+                for (compUnit : copyOf(jPackage.compilationUnits)) {
                     changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
                 }
-            }
-            // TODO TS This should be dealt with by the java domain, as this regards model specific persistence issues:
-            for (nestedPackage : uPackage.nestedPackages) {
-                renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages
+                // TODO TS This should be dealt with by the java domain, as this regards model specific persistence issues:
+                for (nestedPackage : copyOf(uPackage.nestedPackages)) {
+                    renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages
+                }
             }
         }
     }
@@ -617,9 +618,9 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
 routine changePackageOfJavaCompilationUnit(java::Package jPackage, java::CompilationUnit jCompUnit, uml::Namespace uNamespace) {
     action {
         update jCompUnit {
-            jCompUnit.namespaces.clear
-            jCompUnit.namespaces += jPackage.javaPackageAsStringList
-            persistProjectRelative(uNamespace, jCompUnit, buildJavaFilePath(jCompUnit))
+            if (jCompUnit.updateNamespaces(jPackage)) {
+                persistProjectRelative(uNamespace, jCompUnit, buildJavaFilePath(jCompUnit))	
+            }
         }
     }
 }

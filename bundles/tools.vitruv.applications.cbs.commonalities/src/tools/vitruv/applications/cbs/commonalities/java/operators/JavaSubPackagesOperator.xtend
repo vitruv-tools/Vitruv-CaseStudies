@@ -20,6 +20,8 @@ import static tools.vitruv.framework.util.XtendAssertHelper.*
 import static extension java.nio.file.Files.*
 import static extension tools.vitruv.extensions.dslruntime.commonalities.helper.IntermediateModelHelper.*
 
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+
 @ReferenceMappingOperator(
 	name = 'javaSubPackages',
 	isMultiValued = true,
@@ -92,9 +94,7 @@ class JavaSubPackagesOperator extends AbstractReferenceMappingOperator {
 		val Package subPackage = (object as Package)
 		// TODO Only update namespaces if not already matching?
 		logger.trace('''Inserting Java package '«subPackage.packageString»' into package '«package.packageString»'.''')
-		subPackage.namespaces.clear
-		subPackage.namespaces += package.namespaces
-		subPackage.namespaces += package.name
+		subPackage.updateNamespaces(package)
 
 		val resourceBridge = correspondenceModel.getCorrespondingResourceBridge(subPackage)
 		assertTrue(resourceBridge !== null)

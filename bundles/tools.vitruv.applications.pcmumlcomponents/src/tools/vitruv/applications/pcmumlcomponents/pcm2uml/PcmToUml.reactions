@@ -558,8 +558,10 @@ routine addOperationProvidedRoleInterface(pcm::OperationProvidedRole pcmRole, pc
 	}
 	action {
 		update interfaceRealization {
-			interfaceRealization.suppliers.clear()
-			interfaceRealization.suppliers += umlInterface
+			if (interfaceRealization.suppliers != #[umlInterface]) {
+				interfaceRealization.suppliers.clear()
+				interfaceRealization.suppliers += umlInterface	
+			}
 		}
 	}
 }
@@ -606,8 +608,10 @@ routine addOperationRequiredRoleInterface(pcm::OperationRequiredRole pcmRole, pc
 	}
 	action {
 		update umlUsage {
-			umlUsage.suppliers.clear()
-			umlUsage.suppliers += umlInterface
+			if (umlUsage.suppliers != #[umlInterface]) {
+				umlUsage.suppliers.clear()
+				umlUsage.suppliers += umlInterface	
+			}
 		}
 	}
 }

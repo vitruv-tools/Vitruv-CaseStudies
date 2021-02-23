@@ -5,7 +5,6 @@ import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.modifiers.ModifiersFactory
 import org.palladiosimulator.pcm.core.composition.AssemblyContext
 import org.palladiosimulator.pcm.repository.BasicComponent
-import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.system.System
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
@@ -169,6 +168,7 @@ routine pcm2javaCommon::addRequiredRole(pcm::OperationRequiredRole requiredRole)
 		val javaClass = retrieve java::Class corresponding to requiredRole.requiringEntity_RequiredRole
 	}
 	action {
+		add correspondence between javaClass and requiredRole
 		// depInject: start
 		val requiredInterfaceImport = create java::ClassifierImport
 		val requiredInterfaceField = create java::Field
@@ -193,7 +193,7 @@ reaction pcm2javaCommon::DeletedRequiredRole {
 	// depInject: slightly different trigger
 	after element pcm::OperationRequiredRole deleted and removed from pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
 	call {
-		removeRequiredRole(oldValue, affectedEObject as RepositoryComponent);
+		removeRequiredRole(oldValue);
 	}
 }
 
@@ -202,7 +202,7 @@ reaction ChangeOperationRequiredRoleEntity {
 	after element replaced at pcm::OperationRequiredRole[requiringEntity_RequiredRole]
 	call {
 		val requiredRole = affectedEObject;
-		removeRequiredRole(requiredRole, oldValue);
+		removeRequiredRole(requiredRole);
 		addRequiredRole(requiredRole);
 	}
 }

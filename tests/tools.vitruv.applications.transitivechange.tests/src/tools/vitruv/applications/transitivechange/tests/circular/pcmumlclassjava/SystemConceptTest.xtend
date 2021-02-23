@@ -111,7 +111,7 @@ class SystemConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		]
 		propagate
 
-		var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME)
+		var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME.toFirstLower)
 
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
 		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
