@@ -155,6 +155,23 @@ routine setJavaAttributeFinal(uml::Property umlAttr) {
     }
 }
 
+reaction UmlAttributeMadeStatic {
+    after attribute replaced at uml::Property[isStatic]
+    call setStatic(affectedEObject)
+}
+
+routine setStatic(uml::Property umlAttr) {
+    match {
+        val jAttr = retrieve java::Field corresponding to umlAttr tagged with ""
+    }
+    action {
+        update jAttr {
+            jAttr.static = umlAttr.isStatic
+        }
+        //TODO: updating the static property of a java field requires an update of its corresponding accessors
+    }
+}
+
 reaction UmlAttributeTypeChanged {
     after element uml::Type replaced at uml::Property[type]
     call changeJavaAttributeType(affectedEObject)

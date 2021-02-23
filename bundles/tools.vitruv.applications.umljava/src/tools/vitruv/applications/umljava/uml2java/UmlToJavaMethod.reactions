@@ -230,21 +230,18 @@ routine setJavaMethodReturnType(uml::Operation uOperation, uml::Parameter uParam
     }
 }
 
-//uml::Feature defines static
-reaction UmlFeatureMadeStatic {
-    after attribute replaced at uml::Feature[isStatic]
+reaction UmlOperationMadeStatic {
+    after attribute replaced at uml::Operation[isStatic]
     call setStatic(affectedEObject)
 }
 
-routine setStatic(uml::Feature uFeat) {
+routine setStatic(uml::Operation uFeat) {
     match {
-        val jMod = retrieve java::AnnotableAndModifiable corresponding to uFeat
-			with !(uFeat instanceof Property && jMod instanceof ClassMethod)
+        val jMethod = retrieve java::Method corresponding to uFeat tagged with ""
     }
     action {
-        val staticMod = create java::Static
-        update jMod {
-            jMod.static = uFeat.isStatic
+        update jMethod {
+            jMethod.static = uFeat.isStatic
         }
     }
 }
@@ -297,8 +294,7 @@ reaction UmlElementVisibilityChanged {
 
 routine changeJavaElementVisibility(uml::NamedElement uElem) {
     match {
-        val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem
-        	with !(uElem instanceof Property && jElem instanceof ClassMethod)
+        val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem tagged with ""
     }
     action {
         update jElem {
