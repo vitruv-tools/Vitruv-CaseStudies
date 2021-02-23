@@ -269,7 +269,7 @@ class JavaTypeUtil {
 
     def static ClassifierImport addJavaImport(CompilationUnit compUnit, ConcreteClassifier jType) {
         if (compUnit === null) {
-            throw new IllegalStateException("Tried to add a java import without passing a CompilationUnit.")
+        	return null
         }
         if (jType === null || jType instanceof PrimitiveType) {
             return null // nothing to do
