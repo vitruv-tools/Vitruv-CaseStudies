@@ -505,7 +505,7 @@ routine deleteJavaEnumConstant(uml::EnumerationLiteral uLiteral) {
 //===========================================
 
 reaction UmlModelCreated {
-	after element uml::Model created and inserted as root
+	after element uml::Model inserted as root
 	call checkIfUmlModelCorrespondenceExists(newValue)
 }
 routine checkIfUmlModelCorrespondenceExists(uml::Model newModel) {
@@ -519,11 +519,11 @@ routine checkIfUmlModelCorrespondenceExists(uml::Model newModel) {
 }
 
 reaction UmlPackageCreated {
-    after element uml::Package created and inserted in uml::Package[packagedElement]
-    call createOrFindJavaPackage(newValue, affectedEObject)
+    after element uml::Package inserted in uml::Package[packagedElement]
+    call createOrFindJavaPackage(newValue)
 }
 
-routine createOrFindJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
+routine createOrFindJavaPackage(uml::Package uPackage) {
 	match {
 		require absence of java::Package corresponding to uPackage
 		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
@@ -532,7 +532,7 @@ routine createOrFindJavaPackage(uml::Package uPackage, uml::Package uSuperPackag
 	action {
 		call {
 			if(matchingPackages.empty) {
-				createJavaPackage(uPackage, uSuperPackage)
+				createJavaPackage(uPackage)
 			} else {
 				addPackageCorrespondence(uPackage, matchingPackages.head)
 			}
@@ -546,9 +546,8 @@ routine addPackageCorrespondence(uml::Package uPackage, java::Package jPackage) 
 	}
 }
 
-routine createJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
+routine createJavaPackage(uml::Package uPackage) {
     match {
-        val jSuperPackage = retrieve optional java::Package corresponding to uSuperPackage
         require absence of java::Package corresponding to uPackage
     }
     action {
@@ -609,8 +608,8 @@ routine changePackageOfJavaCompilationUnit(java::Package jPackage, java::Compila
 }
 
 reaction UmlPackageDeleted {
-    after element uml::Package deleted and removed from uml::Package[packagedElement]
-    call deleteJavaPackage(oldValue)
+    after element uml::Package deleted
+    call deleteJavaPackage(affectedEObject)
 }
 
 routine deleteJavaPackage(uml::Package uPackage) {
