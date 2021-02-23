@@ -315,7 +315,7 @@ reaction UmlInterfaceRealizationReplaced {
 
 
 
-reaction UmlDataTypeCreated {
+reaction UmlDataTypeInserted {
     after element uml::DataType inserted in uml::Package[packagedElement]
     with !(newValue instanceof PrimitiveType)
         && !(newValue instanceof Enumeration)
@@ -330,7 +330,7 @@ reaction UmlDataTypeCreated {
 //===========================================
 
 
-reaction UmlInterfaceCreated {
+reaction UmlInterfaceInserted {
     after element uml::Interface inserted in uml::Package[packagedElement]
     call {
     	createOrFindJavaInterface(newValue)
@@ -441,7 +441,7 @@ reaction UmlSuperInterfaceReplaced {
 //===========================================
 
 
-reaction UmlEnumCreated {
+reaction UmlEnumInserted {
 	after element uml::Enumeration inserted in uml::Package[packagedElement]
 	call {
 		createJavaEnum(newValue)
@@ -622,7 +622,7 @@ routine deleteJavaPackage(uml::Package uPackage) {
     }
 }
 
-reaction UmlPrimitiveTypeCreated {
+reaction UmlPrimitiveTypeInserted {
     after element uml::PrimitiveType inserted in uml::Model[packagedElement]
     call warnUserToUsePredefinedPrimitiveTypes()
 }
