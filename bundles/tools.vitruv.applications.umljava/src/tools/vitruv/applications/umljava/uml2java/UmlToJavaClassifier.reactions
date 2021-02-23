@@ -31,9 +31,12 @@ execute actions in Java
 //===========================================
 
 
-reaction UmlClassCreated {
-    after element uml::Class created and inserted in uml::Package[packagedElement]
-    call createOrFindJavaClass(newValue)
+reaction UmlClassInserted {
+    after element uml::Class inserted in uml::Package[packagedElement]
+    call {
+    	createOrFindJavaClass(newValue)
+    	insertJavaClassifier(newValue, affectedEObject)
+    }
 }
 	
 routine createOrFindJavaClass(uml::Classifier umlClassifier) {
@@ -47,7 +50,7 @@ routine createOrFindJavaClass(uml::Classifier umlClassifier) {
            if (javaPackage.isPresent) {
                createOrFindJavaClassInPackage(umlClassifier, javaPackage.get)
            } else {
-                createJavaClass(umlClassifier) // root class, direct container is the model
+                createJavaClass(umlClassifier)
            }
         }
     }
@@ -69,10 +72,10 @@ routine createOrFindJavaClassInPackage(uml::Classifier umlClassifier, java::Pack
 routine createJavaClass(uml::Classifier umlClassifier) {
     action {
         val javaClassifier = create java::Class and initialize {
-            javaClassifier.name = umlClassifier.name;
+            javaClassifier.name = umlClassifier.name
             javaClassifier.makePublic
         }
-        call createJavaCompilationUnit (umlClassifier, javaClassifier, umlClassifier.namespace)
+        call createJavaCompilationUnit (umlClassifier, javaClassifier)
         add correspondence between umlClassifier and javaClassifier
     }
 }
@@ -84,39 +87,23 @@ routine addMissingClassifierCorrespondence(uml::Classifier umlClassifier, java::
     }
 }
 
-routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteClassifier jClassifier, uml::Namespace uNamespace) {
+routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteClassifier jClassifier) {
     match {
-        val jPackage = retrieve optional java::Package corresponding to uNamespace
         require absence of java::CompilationUnit corresponding to umlClassifier
     }
     action {
         val javaCompilationUnit = create java::CompilationUnit and initialize {
-            javaCompilationUnit.updateNamespaces(jPackage)
-            val name = getCompilationUnitName(jPackage, jClassifier.name)
-            javaCompilationUnit.updateName(name)
             javaCompilationUnit.classifiers += jClassifier
-            persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit))
-        }
-        update jPackage {
-            jPackage.ifPresent [
-                compilationUnits += javaCompilationUnit
-            ]
         }
         add correspondence between umlClassifier and javaCompilationUnit
     }
 }
 
-reaction UmlClassifierInserted {
-    after element uml::Classifier inserted in uml::Package[packagedElement]
-    call moveJavaClassifier(newValue, affectedEObject)
-}
-
-routine moveJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackage) {
+routine insertJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackage) {
 	match {
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+		val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier
 		val javaPackage = retrieve optional java::Package corresponding to umlPackage
-		val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier 
-			with !javaPackage.isPresent || !javaPackage.get.compilationUnits.contains(javaCompilationUnit)
 	}
 	action {
 		update javaCompilationUnit {
@@ -124,16 +111,15 @@ routine moveJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackag
 			val newName = getCompilationUnitName(javaPackage, javaClassifier.name)
 			modified = javaCompilationUnit.updateName(newName) || modified
 			if (modified) {
-				persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+				persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit))
 			}
-			
 		}
 		call javaPackage.ifPresent [
 			if (!compilationUnits.contains(javaCompilationUnit)) {
 				compilationUnits += javaCompilationUnit
 			}
 		]
-    }
+	}
 }
 
 reaction UmlClassifierRenamed {
@@ -152,25 +138,13 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
         update javaClassifier {
             javaClassifier.name = umlClassifier.name
         }
-        update javaCompilationUnit {
-            var modified = javaCompilationUnit.updateNamespaces(jPackage)
-            val newName = getCompilationUnitName(jPackage, javaClassifier.name)
-            modified = javaCompilationUnit.updateName(newName) || modified
-            if (modified) {
-                persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
-            }
-        }
-        call jPackage.ifPresent[
-            if (!compilationUnits.contains(javaCompilationUnit)) {
-                compilationUnits += javaCompilationUnit
-            }
-        ]
+        call insertJavaClassifier(umlClassifier, umlClassifier.eContainer as org.eclipse.uml2.uml.Package)
     }
 }
 
 reaction UmlClassifierDeleted {
-    after element uml::Classifier deleted and removed from uml::Package[packagedElement]
-    call deleteJavaClass(oldValue)
+	after element uml::Classifier deleted
+	call deleteJavaClass(affectedEObject)
 }
 
 routine deleteJavaClass(uml::Classifier umlClassifer) {
@@ -342,10 +316,13 @@ reaction UmlInterfaceRealizationReplaced {
 
 
 reaction UmlDataTypeCreated {
-    after element uml::DataType created and inserted in uml::Package[packagedElement]
+    after element uml::DataType inserted in uml::Package[packagedElement]
     with !(newValue instanceof PrimitiveType)
         && !(newValue instanceof Enumeration)
-    call createOrFindJavaClass(newValue)
+    call {
+    	createOrFindJavaClass(newValue)
+    	insertJavaClassifier(newValue, affectedEObject)
+    }
 }
 
 //===========================================
@@ -354,8 +331,11 @@ reaction UmlDataTypeCreated {
 
 
 reaction UmlInterfaceCreated {
-    after element uml::Interface created and inserted in uml::Package[packagedElement]
-    call createOrFindJavaInterface(newValue)
+    after element uml::Interface inserted in uml::Package[packagedElement]
+    call {
+    	createOrFindJavaInterface(newValue)
+    	insertJavaClassifier(newValue, affectedEObject)
+    }
 }
 
 routine createOrFindJavaInterface(uml::Interface umlInterface) {
@@ -368,7 +348,7 @@ routine createOrFindJavaInterface(uml::Interface umlInterface) {
             if (javaPackage.isPresent) {
                 createOrFindJavaInterfaceInPackage(umlInterface, javaPackage.get)
             } else {
-                createJavaInterface(umlInterface) // root interface, the direct container is the model
+                createJavaInterface(umlInterface)
             }
         }
     }
@@ -393,10 +373,10 @@ routine createJavaInterface(uml::Interface umlInterface) {
     }
     action {
         val javaInterface = create java::Interface and initialize {
-            javaInterface.name = umlInterface.name;
+            javaInterface.name = umlInterface.name
             javaInterface.makePublic
         }
-        call createJavaCompilationUnit(umlInterface, javaInterface, umlInterface.namespace)
+        call createJavaCompilationUnit(umlInterface, javaInterface)
         add correspondence between umlInterface and javaInterface
     }
 }
@@ -462,8 +442,11 @@ reaction UmlSuperInterfaceReplaced {
 
 
 reaction UmlEnumCreated {
-	after element uml::Enumeration created and inserted in uml::Package[packagedElement]
-	call createJavaEnum(newValue)
+	after element uml::Enumeration inserted in uml::Package[packagedElement]
+	call {
+		createJavaEnum(newValue)
+		insertJavaClassifier(newValue, affectedEObject)
+	}
 }
 
 routine createJavaEnum(uml::Enumeration uEnum) {
@@ -476,14 +459,14 @@ routine createJavaEnum(uml::Enumeration uEnum) {
 			jEnum.makePublic
 		}
 		call {
-			createJavaCompilationUnit(uEnum, jEnum, uEnum.namespace)
+			createJavaCompilationUnit(uEnum, jEnum)
 		}
 		add correspondence between uEnum and jEnum
 	}
 }
 
-reaction UmlEnumLiteralCreated {
-	after element uml::EnumerationLiteral created and inserted in uml::Enumeration[ownedLiteral]
+reaction UmlEnumLiteralInserted {
+	after element uml::EnumerationLiteral inserted in uml::Enumeration[ownedLiteral]
 	call createJavaEnumConstant(newValue, affectedEObject)
 }
 
@@ -503,8 +486,8 @@ routine createJavaEnumConstant(uml::EnumerationLiteral uLiteral, uml::Enumeratio
 	}
 }
 
-reaction UmlEnumLiteralDeleted {
-	after element uml::EnumerationLiteral deleted and removed from uml::Enumeration[ownedLiteral]
+reaction UmlEnumLiteralRemoved {
+	after element uml::EnumerationLiteral removed from uml::Enumeration[ownedLiteral]
 	call deleteJavaEnumConstant(oldValue)
 }
 
@@ -640,7 +623,7 @@ routine deleteJavaPackage(uml::Package uPackage) {
 }
 
 reaction UmlPrimitiveTypeCreated {
-    after element uml::PrimitiveType created and inserted in uml::Model[packagedElement]
+    after element uml::PrimitiveType inserted in uml::Model[packagedElement]
     call warnUserToUsePredefinedPrimitiveTypes()
 }
 
