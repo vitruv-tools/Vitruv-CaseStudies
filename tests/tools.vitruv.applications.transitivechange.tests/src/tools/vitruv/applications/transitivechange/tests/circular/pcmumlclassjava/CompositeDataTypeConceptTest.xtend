@@ -54,12 +54,12 @@ class CompositeDataTypeConceptTest extends PcmUmlJavaTransitiveChangeTest {
 	}
 
 	def protected checkCompositeDataTypeConcept(CompositeDataType pcmCompositeType) {
-		val umlClass = helper.getModifiableCorr(pcmCompositeType, Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
+		val umlClass = helper.getCorr(pcmCompositeType, Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
 
 	def protected checkCompositeDataTypeConcept(Class umlClass) {
-		val pcmCompositeType = helper.getModifiableCorr(umlClass, CompositeDataType,
+		val pcmCompositeType = helper.getCorr(umlClass, CompositeDataType,
 			TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
