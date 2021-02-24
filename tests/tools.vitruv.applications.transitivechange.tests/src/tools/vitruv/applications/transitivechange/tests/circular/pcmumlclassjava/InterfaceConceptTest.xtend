@@ -13,6 +13,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
+import org.eclipse.uml2.uml.VisibilityKind
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -53,13 +54,13 @@ class InterfaceConceptTest extends PcmUmlJavaTransitiveChangeTest {
 	}
 
 	def protected checkInterfaceConcept(OperationInterface pcmInterface) {
-		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
+		val umlInterface = helper.getCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
 		checkJavaInterfaceConcept(umlInterface, pcmInterface)
 	}
 
 	def protected checkInterfaceConcept(Interface umlInterface) {
-		val pcmInterface = helper.getModifiableCorr(umlInterface, OperationInterface,
+		val pcmInterface = helper.getCorr(umlInterface, OperationInterface,
 			TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
 		checkJavaInterfaceConcept(umlInterface, pcmInterface)
@@ -95,6 +96,7 @@ class InterfaceConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		startRecordingChanges(umlContractsPkg)
 
 		var mUmlInterface = umlContractsPkg.createOwnedInterface(TEST_INTERFACE_NAME)
+		mUmlInterface.visibility = VisibilityKind.PUBLIC_LITERAL
 		propagate
 
 		umlContractsPkg.clearResourcesAndReloadRoot
