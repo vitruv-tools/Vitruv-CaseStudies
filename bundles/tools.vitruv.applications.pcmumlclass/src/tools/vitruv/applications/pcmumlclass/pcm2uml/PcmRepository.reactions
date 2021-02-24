@@ -157,8 +157,8 @@ routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo) {
 					.message(DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL).startInteraction
 
 			if (deleteCorrespondingUmlRepository) {// DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES
-				umlContractsPkg.ifPresent[destroy]
-				umlDatatypesPkg.ifPresent[destroy]
+				umlContractsPkg.ifPresent[umlRepositoryPkg.packagedElements -= it]
+				umlDatatypesPkg.ifPresent[umlRepositoryPkg.packagedElements -= it]
 				umlRepositoryPkg.destroy // delete parent package last to allow the recorder to notice the child package deletion
 			}
 		}
