@@ -518,9 +518,12 @@ routine checkIfUmlModelCorrespondenceExists(uml::Model newModel) {
 	}
 }
 
-reaction UmlPackageCreated {
+reaction UmlPackageInserted {
     after element uml::Package inserted in uml::Package[packagedElement]
-    call createOrFindJavaPackage(newValue)
+    call {
+    	createOrFindJavaPackage(newValue)
+    	renameJavaPackage(newValue, newValue.namespace)
+    }
 }
 
 routine createOrFindJavaPackage(uml::Package uPackage) {
@@ -551,17 +554,7 @@ routine createJavaPackage(uml::Package uPackage) {
         require absence of java::Package corresponding to uPackage
     }
     action {
-        val jPackage = create java::Package and initialize {
-            if (uPackage instanceof Model) {
-                jPackage.name = ""
-            } else {
-                if (uPackage.namespace !== null) {
-                    jPackage.namespaces += getUmlParentNamespaceAsStringList(uPackage)
-                }
-                jPackage.name = uPackage.name
-            }
-            persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
-        }
+        val jPackage = create java::Package
         add correspondence between jPackage and uPackage
         // Required to enable locating existing packages with missing correspondences when keeping more than two models consistent:
         add correspondence between jPackage and ContainersPackage.Literals.PACKAGE
