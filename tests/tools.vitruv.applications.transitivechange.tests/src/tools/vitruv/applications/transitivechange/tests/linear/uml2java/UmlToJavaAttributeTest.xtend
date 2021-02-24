@@ -160,6 +160,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		assertTrue(jClass.methods.filter [name == buildGetterName(ATTRIBUTE_NAME)].nullOrEmpty)
 		assertTrue(jClass.methods.filter [name == buildSetterName(ATTRIBUTE_NAME)].nullOrEmpty)
 		assertFalse(jClass2.getMembersByName(ATTRIBUTE_NAME).nullOrEmpty)
+		assertAttributeEquals(uAttr, jAttr)
 		assertTrue(javaGetterForAttributeExists(jAttr))
 		assertTrue(javaSetterForAttributeExists(jAttr))
 	}
