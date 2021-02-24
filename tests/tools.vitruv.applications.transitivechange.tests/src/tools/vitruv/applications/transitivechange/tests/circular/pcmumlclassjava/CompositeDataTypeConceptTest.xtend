@@ -14,6 +14,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
+import org.eclipse.uml2.uml.VisibilityKind
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -54,12 +55,12 @@ class CompositeDataTypeConceptTest extends PcmUmlJavaTransitiveChangeTest {
 	}
 
 	def protected checkCompositeDataTypeConcept(CompositeDataType pcmCompositeType) {
-		val umlClass = helper.getModifiableCorr(pcmCompositeType, Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
+		val umlClass = helper.getCorr(pcmCompositeType, Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
 
 	def protected checkCompositeDataTypeConcept(Class umlClass) {
-		val pcmCompositeType = helper.getModifiableCorr(umlClass, CompositeDataType,
+		val pcmCompositeType = helper.getCorr(umlClass, CompositeDataType,
 			TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
@@ -100,6 +101,7 @@ class CompositeDataTypeConceptTest extends PcmUmlJavaTransitiveChangeTest {
 
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(
 			CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
+		umlCompositeTypeClass.visibility = VisibilityKind.PUBLIC_LITERAL
 		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
 		propagate
 
@@ -141,7 +143,9 @@ class CompositeDataTypeConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		startRecordingChanges(umlDatatypesPkg)
 
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE, false)
+		umlCompositeTypeClass.visibility = VisibilityKind.PUBLIC_LITERAL
 		var umlCompositeTypeParentClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE_PARENT, false)
+		umlCompositeTypeParentClass.visibility = VisibilityKind.PUBLIC_LITERAL
 		umlCompositeTypeClass.createGeneralization(umlCompositeTypeParentClass)
 		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
 		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)

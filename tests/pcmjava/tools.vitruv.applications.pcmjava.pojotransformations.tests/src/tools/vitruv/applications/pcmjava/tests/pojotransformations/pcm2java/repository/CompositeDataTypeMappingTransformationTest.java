@@ -1,7 +1,5 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
-import java.util.concurrent.Callable;
-
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
@@ -42,19 +40,8 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
 		final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
 		propagate();
 
-		this.getVirtualModel().executeCommand(new Callable<Void>() {
-
-			@Override
-			public Void call() throws Exception {
-				try {
-					CompositeDataTypeMappingTransformationTest.this.assertDataTypeCorrespondence(cdt);
-					CompositeDataTypeMappingTransformationTest.this.assertInnerDeclaration(innerDec);
-				} catch (final Throwable e) {
-					throw new RuntimeException(e);
-				}
-				return null;
-			}
-		});
+		CompositeDataTypeMappingTransformationTest.this.assertDataTypeCorrespondence(cdt);
+		CompositeDataTypeMappingTransformationTest.this.assertInnerDeclaration(innerDec);
 	}
 
 	@Test

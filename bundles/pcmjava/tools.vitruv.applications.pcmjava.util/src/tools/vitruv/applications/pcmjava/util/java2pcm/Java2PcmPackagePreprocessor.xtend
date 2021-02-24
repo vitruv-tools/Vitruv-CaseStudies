@@ -22,8 +22,8 @@ class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification
 	}
 
 	override doesHandleChange(TransactionalChange change, CorrespondenceModel correspondenceModel) {
-		if (change instanceof ConcreteChange && change.getEChanges.size == 1) {
-			val eChange = change.getEChanges.get(0)
+		if (change instanceof ConcreteChange) {
+			val eChange = change.getEChange
 			return eChange instanceof InsertRootEObject<?> ||
 				eChange instanceof JavaReplaceSingleValuedEAttribute<?, ?>
 		}
@@ -66,13 +66,13 @@ class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification
 	 */
 	override propagateChange(TransactionalChange change, CorrespondenceModel correspondenceModel,
 		ResourceAccess resourceAccess) {
-		if (doesHandleChange(change, correspondenceModel)) {
-			val eChange = change.getEChanges.get(0)
-			if (eChange instanceof InsertRootEObject<?>) {
-				attachPackageToResource(eChange.newValue, change.getURI())
-			} else if (eChange instanceof JavaReplaceSingleValuedEAttribute<?, ?>) {
-				prepareRenamePackageInfos(eChange, change.getURI())
-			} // TODO: package deletion
+		if (change instanceof ConcreteChange) {
+			val eChange = change.EChange
+			switch(eChange) {
+				InsertRootEObject<?>: attachPackageToResource(eChange.newValue, change.changedVURI)
+				JavaReplaceSingleValuedEAttribute<?, ?>: prepareRenamePackageInfos(eChange, change.changedVURI)
+				// TODO: package deletion
+			}
 		}
 	}
 
