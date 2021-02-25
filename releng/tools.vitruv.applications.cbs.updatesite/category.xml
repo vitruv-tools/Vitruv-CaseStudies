@@ -33,6 +33,12 @@
    <feature id="tools.vitruv.applications.pcmumlcomponents.feature.source" version="0.3.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
+   <feature url="features/tools.vitruv.applications.pcmumlclass.feature_0.3.0.qualifier.jar" id="tools.vitruv.applications.pcmumlclass.feature" version="0.3.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
+   <feature id="tools.vitruv.applications.pcmumlclass.feature.source" version="0.3.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
    <category-def name="Vitruv Applications for Component-based Systems" label="Vitruv Applications for Component-based Systems">
       <description>
          Applications for Vitruv and Component-based Systems
