@@ -133,7 +133,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 			if (correspondingEObject instanceof NamedElement) {
 				final NamedElement jaMoPPElement = (NamedElement) correspondingEObject;
 				assertTrue(jaMoPPElement.getName().contains(expectedName),
-						"The name of the jamopp element does not contain the expected name");
+						"The name of the jamopp element '" + jaMoPPElement.getName() + "' does not contain the expected name '" +  expectedName + "'");
 				jaMoPPElements.add(jaMoPPElement);
 			} else {
 				// expected name should be null

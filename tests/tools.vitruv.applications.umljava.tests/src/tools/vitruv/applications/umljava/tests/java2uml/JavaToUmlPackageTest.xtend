@@ -75,6 +75,8 @@ class JavaToUmlPackageTest extends JavaToUmlTransformationTest {
 
 		val uPackage = getCorrespondingPackage(jPackageLevel1)
 		val uClass = getCorrespondingClass(javaClass)
+		assertNotNull(uClass, "UML class")
+		assertNotNull(uPackage, "UML package")
 		assertUmlPackageableElementIsInPackage(uClass, uPackage)
 	}
 
