@@ -124,8 +124,10 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 		
 		val jClass = getCorrespondingClass(uClass)
 		val jClass2 = getCorrespondingClass(uClass2)
+		val jMethod = getCorrespondingClassMethod(uOperation)
 		assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
 		assertFalse(jClass2.getMembersByName(OPERATION_NAME).nullOrEmpty)
+		assertClassMethodEquals(uOperation, jMethod)
 	}
 
 	/**
@@ -294,7 +296,9 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 		
 		val jDataType = getCorrespondingClass(uDataType)
 		val jDataType2 = getCorrespondingClass(uDataType2)
+		val jMethod = getCorrespondingClassMethod(uOperation)
 		assertJavaMemberContainerDontHaveMember(jDataType, uOperation.name)
 		assertFalse(jDataType2.getMembersByName(uOperation.name).nullOrEmpty)
+		assertClassMethodEquals(uOperation, jMethod)
 	}
 }
