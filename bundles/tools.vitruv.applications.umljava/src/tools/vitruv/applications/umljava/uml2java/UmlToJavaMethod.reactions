@@ -163,34 +163,6 @@ routine insertJavaMethod(uml::Operation umlOperation, uml::Classifier umlClassif
 	}
 }
 
-reaction UmlMethodRemovedFromClass {
-    after element uml::Operation removed from uml::Class[ownedOperation]
-    call removeJavaMethodFromParent(oldValue, affectedEObject)
-}
-
-reaction UmlMethodRemovedFromDataType {
-    after element uml::Operation removed from uml::DataType[ownedOperation]
-    call removeJavaMethodFromParent(oldValue, affectedEObject)
-}
-
-reaction UmlMethodRemovedFromInterface {
-    after element uml::Operation removed from uml::Interface[ownedOperation]
-    call removeJavaMethodFromParent(oldValue, affectedEObject)
-}
-
-routine removeJavaMethodFromParent(uml::Operation umlOperation, uml::Classifier umlClassifier) {
-    match {
-        val javaMethod = retrieve java::Member corresponding to umlOperation 
-			with javaMethod instanceof Constructor || javaMethod instanceof Method
-        val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
-    }
-    action {
-        update javaClassifier {
-        	javaClassifier.members -= javaMethod
-        }
-    }
-}
-
 reaction UmlMethodDeleted {
 	after element uml::Operation deleted
 	call deleteJavaMethod(affectedEObject)

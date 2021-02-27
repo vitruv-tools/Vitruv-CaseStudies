@@ -94,32 +94,6 @@ routine insertJavaField(uml::Property umlProperty, uml::Classifier umlClassifier
 	}
 }
 
-reaction UmlPropertyRemovedFromClass {
-	after element uml::Property removed from uml::Class[ownedAttribute]
-	call removeJavaFieldFromParent(oldValue, affectedEObject)
-}
-
-reaction UmlPropertyRemovedFromDataType {
-	after element uml::Property removed from uml::DataType[ownedAttribute]
-	call removeJavaFieldFromParent(oldValue, affectedEObject)
-}
-
-routine removeJavaFieldFromParent(uml::Property umlProperty, uml::Classifier umlClassifier) {
-	match {
-		val javaField = retrieve java::Field corresponding to umlProperty
-		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
-		val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.GETTER
-		val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.SETTER
-	}
-	action {
-		update javaClassifier {
-			javaClassifier.members -= javaField
-			javaGetter.ifPresent [ javaClassifier.members -= it ]
-			javaSetter.ifPresent [ javaClassifier.members -= it ]
-		}
-	}
-}
-
 reaction UmlAttributeDeleted {
     after element uml::Property deleted
     call deleteJavaField(affectedEObject)
