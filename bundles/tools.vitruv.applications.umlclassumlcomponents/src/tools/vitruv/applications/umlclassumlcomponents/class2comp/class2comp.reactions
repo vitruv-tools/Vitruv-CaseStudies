@@ -140,11 +140,7 @@ routine createUmlComponentForClass(umlclass::Class umlClass) {
 			compModel.packagedElements += umlComp
 		
 		add correspondence between umlClass and umlComp
-		
-		call {
-			val classPackage = umlClass.package
-			correspondenceModel.createAndAddCorrespondence(#[umlComp], #[classPackage])
-		}
+		add correspondence between umlComp and umlClass.package
 	}
 }
 
