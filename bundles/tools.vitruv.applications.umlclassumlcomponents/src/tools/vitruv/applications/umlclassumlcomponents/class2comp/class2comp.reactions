@@ -485,26 +485,33 @@ reaction PackageRenamed {
 
 routine routinePackageRenamed(umlclass::Package classPackage, String newName, String oldName) {
 	action {
-		call {
-			//Check if Package rename is illegal
-			//This is the case if it's the DataType package or gets its name, or if it has a corresponding Component
-			//Renaming the Component is not possible as renaming the Class would be required too
-			val comps = correspondenceModel.getCorrespondingEObjects(#[classPackage]).flatten.filter(Component)
-			var Component comp = if(!comps.isEmpty) comps.get(0) else null		
-			if ((oldName == CLASS_DATATYPES_PACKAGE_NAME) || (comp !== null) || (newName == CLASS_DATATYPES_PACKAGE_NAME)) {
-				//Revert rename currently not possible
-				//TODO: Add a rollback once Vitruvius can handle it
-			}
-			//Therefore use temporary hack:
-			if (oldName == CLASS_DATATYPES_PACKAGE_NAME)
+		// Revert illegal package name change
+		update classPackage {
+			if (oldName == CLASS_DATATYPES_PACKAGE_NAME) {
 				classPackage.name = CLASS_DATATYPES_PACKAGE_NAME
-			else if ((newName == CLASS_DATATYPES_PACKAGE_NAME) && (oldName !== null)) {
-				//Check for pre-exisitnce of the DataTypePackage:
-				val dataTypePackageExistence = classPackage.model.packagedElements.filter(Package).filter[name==CLASS_DATATYPES_PACKAGE_NAME]
-				if (!dataTypePackageExistence.isEmpty) 
-					classPackage.name = "DefaultPackageName"
+			} else if (newName == CLASS_DATATYPES_PACKAGE_NAME && oldName !== null) {
+				// Check for pre-existence of the DataTypePackage
+				val dataTypePackageExistence = classPackage.model.packagedElements.filter(Package).filter[name == CLASS_DATATYPES_PACKAGE_NAME]
+				if (!dataTypePackageExistence.isEmpty) {
+					classPackage.name = oldName
+				}
 			}
-				
+		}
+		call updateCorrespondingComponent(classPackage, oldName)
+	}
+}
+
+routine updateCorrespondingComponent(umlclass::Package classPackage, String oldName) {
+	match {
+		val component = retrieve umlcomp::Component corresponding to classPackage
+	}
+	action {
+		update component {
+			// Packages for components have to end with the package suffix
+			if (!classPackage.name.endsWith(PACKAGE_SUFFIX)) {
+				classPackage.name = oldName
+			}
+			component.name = classPackage.name.substring(0, classPackage.name.length - PACKAGE_SUFFIX.length)
 		}
 	}
 }
