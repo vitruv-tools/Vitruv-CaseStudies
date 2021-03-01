@@ -325,38 +325,13 @@ reaction JavaNamedElementRenamed {
     call renameUmlNamedElement(affectedEObject)
 }
 
-reaction JavaCompilationUnitRenamed {
-    after attribute replaced at java::CompilationUnit[name]
-    call renameUmlNamedElementCorrespondingToCompilationUnit(affectedEObject)
-}
-
 routine renameUmlNamedElement(java::NamedElement jElement) {
     match {
         val uElement = retrieve uml::NamedElement corresponding to jElement tagged with ""
-        
     }
     action {
         update uElement {
             uElement.name = jElement.name;
-        }
-    }
-}
-
-routine renameUmlNamedElementCorrespondingToCompilationUnit(java::CompilationUnit jElement) {
-    match {
-        val uElement = retrieve uml::NamedElement corresponding to jElement
-    }
-    action {
-        update uElement {
-            var propagatedName = jElement.name
-            if(!jElement.namespaces.empty) { // trim off the namespace in case the name is loaded fully classified
-                var namespacePrefix = jElement.namespaces.join("\\.") + "\\." // escaping avoids eating any char with "." regex
-                propagatedName = propagatedName.replaceFirst(namespacePrefix, "")
-            }
-            if(propagatedName.endsWith(".java")) { // trim off file extension if it exists 
-                propagatedName = propagatedName.replaceFirst("\\.java", "") // escaping avoids eating any char with "." regex
-            }
-            uElement.name = propagatedName;
         }
     }
 }

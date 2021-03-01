@@ -1,16 +1,17 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import org.emftext.language.java.types.TypesFactory
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
 
 /**
  * This class provides basic tests for creating, deleting and changing traits of interface methods.
@@ -73,6 +74,18 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
 		val jInterface = getCorrespondingInterface(uInterface)
 		assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
 	}
+	
+	@Test
+	def testMoveInterfaceMethod() {
+		val uInterface2 = createSimpleUmlInterface(rootElement, "InterfaceName2")
+		uInterface2.ownedOperations += uOperation
+		propagate
+		
+		val jInterface = getCorrespondingInterface(uInterface)
+		val jInterface2 = getCorrespondingInterface(uInterface2)
+		assertJavaMemberContainerDontHaveMember(jInterface, uOperation.name)
+		assertFalse(jInterface2.getMembersByName(uOperation.name).nullOrEmpty)
+	}
 
 	@Test
 	def testChangeInterfaceMethodReturnType() {
@@ -84,5 +97,4 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
 		assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
 		assertInterfaceMethodEquals(uOperation, jMethod)
 	}
-
 }

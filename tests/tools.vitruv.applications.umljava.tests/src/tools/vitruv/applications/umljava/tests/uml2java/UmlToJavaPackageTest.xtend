@@ -52,8 +52,25 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 		val uPackageLevel2 = createUmlPackageAndAddToSuperPackage(PACKAGE_LEVEL_2, uPackageLevel1)
 		propagate
 
+		val jPackageLevel1 = getCorrespondingPackage(uPackageLevel1)
 		val jPackageLevel2 = getCorrespondingPackage(uPackageLevel2)
 		assertEquals(PACKAGE_LEVEL_2, jPackageLevel2.name)
+		assertEquals(#[jPackageLevel1.name], jPackageLevel2.namespaces)
+		assertPackageEquals(uPackageLevel2, jPackageLevel2)
+	}
+	
+	@Test
+	def testMovePackage() {
+		val uPackageLevel2 = createUmlPackageAndAddToSuperPackage(PACKAGE_LEVEL_2, rootElement)
+		propagate
+		
+		uPackageLevel1.packagedElements += uPackageLevel2
+		propagate
+		
+		val jPackageLevel1 = getCorrespondingPackage(uPackageLevel1)
+		val jPackageLevel2 = getCorrespondingPackage(uPackageLevel2)
+		assertEquals(PACKAGE_LEVEL_2, jPackageLevel2.name)
+		assertEquals(#[jPackageLevel1.name], jPackageLevel2.namespaces)
 		assertPackageEquals(uPackageLevel2, jPackageLevel2)
 	}
 

@@ -1,6 +1,4 @@
-import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Classifier
-import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Parameter
@@ -10,6 +8,7 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.InterfaceMethod
+import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypesFactory
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
@@ -30,128 +29,152 @@ import routines umlToJavaTypePropagation using qualified names
 //===========================================
 
 
-reaction UmlMethodCreated {
-    after element uml::Operation created and inserted in uml::Class[ownedOperation]
+//We can not define one single reaction for attribute creation in enums and classes because
+//they don't share a common superclass for "having ownedOperations"
+reaction UmlOperationInsertedInClass {
+    after element uml::Operation inserted in uml::Class[ownedOperation]
     call {
-        createJavaMethod(affectedEObject, newValue)       
+        createOrFindJavaConstructor(newValue, affectedEObject)
+        createOrFindJavaClassMethod(newValue, affectedEObject)
+        insertJavaMethod(newValue, affectedEObject)       
     }
 }
 
-//We need separate Reactions for Class and Enums, because they don't have a common
-//superClass for "having ownedOperation"
-reaction UmlMethodCreatedInDataType {
-    after element uml::Operation created and inserted in uml::DataType[ownedOperation]
+reaction UmlOperationInsertedInDataType {
+    after element uml::Operation inserted in uml::DataType[ownedOperation]
     call {
-        createJavaMethod(affectedEObject, newValue)       
+        createOrFindJavaConstructor(newValue, affectedEObject)
+        createOrFindJavaClassMethod(newValue, affectedEObject)
+        insertJavaMethod(newValue, affectedEObject)       
     }
 }
-routine createJavaMethod(uml::Classifier uClassifier, uml::Operation uOperation) {
+
+reaction UmlMethodInsertedInInterface {
+    after element uml::Operation inserted in uml::Interface[ownedOperation]
+    call {
+        createOrFindJavaInterfaceMethod(newValue, affectedEObject)
+        insertJavaMethod(newValue, affectedEObject)
+    }
+}
+
+routine createOrFindJavaConstructor(uml::Operation umlOperation, uml::Classifier umlClassifier) {
+    match {
+        check umlOperation.name.toFirstUpper == umlClassifier.name.toFirstUpper
+        val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+        require absence of java::Constructor corresponding to umlOperation
+        require absence of java::Method corresponding to umlOperation
+    }
     action {
         call {
-            if (uClassifier.name.toFirstUpper == uOperation.name.toFirstUpper) {
-                createOrFindJavaConstructor(uClassifier, uOperation)
-            } else if (uClassifier instanceof Class
-                || uClassifier instanceof DataType) {
-                createOrFindJavaClassMethod(uClassifier, uOperation)
-            } else if (uClassifier instanceof Interface) {
-                createOrFindJavaInterfaceMethod(uClassifier, uOperation)
+            val foundConstructor = javaClassifier.members.filter(Constructor).findFirst[name == umlOperation.name]
+            if (foundConstructor === null) {
+                createJavaConstructor(umlOperation)
             } else {
-                logger.warn("Invalid creation of " + uOperation + ", containing UML-Classifier is neither a Class, nor an Interface nor a DataType")
+                addMethodCorrespondence(foundConstructor, umlOperation)
             }
         }
     }
 }
 
-// Shared between interface methods, class methods and constructors:
-routine addMethodCorrespondence(java::Member javaMethodOrConstructor, uml::Operation uOperation) {
+routine createJavaConstructor(uml::Operation umlOperation) {
+    action {
+        val javaConstructor = create java::Constructor and initialize {
+            javaConstructor.name = umlOperation.name
+            setJavaVisibility(javaConstructor, umlOperation.visibility)
+        }
+        add correspondence between umlOperation and javaConstructor
+    }
+}
+
+routine createOrFindJavaClassMethod(uml::Operation umlOperation, uml::Classifier umlClassifier) {
+    match {
+        check umlOperation.name.toFirstUpper != umlClassifier.name.toFirstUpper // -> constructor
+        val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+        require absence of java::ClassMethod corresponding to umlOperation
+        require absence of java::Constructor corresponding to umlOperation
+    }
+    action {
+        call {
+            val foundMethod = javaClassifier.members.filter(ClassMethod).findFirst[name == umlOperation.name]
+            if (foundMethod === null) {
+                createJavaClassMethod(umlOperation)
+            } else {
+                addMethodCorrespondence(foundMethod, umlOperation)
+            }
+        }
+    }
+}
+
+routine createJavaClassMethod(uml::Operation umlOperation) {
+    action {
+        val javaMethod = create java::ClassMethod and initialize {
+            javaMethod.name = umlOperation.name
+            setJavaVisibility(javaMethod, umlOperation.visibility)
+        }
+        add correspondence between umlOperation and javaMethod
+        call setJavaMethodReturnType(umlOperation, umlOperation.getReturnResult)
+    }
+}
+
+routine createOrFindJavaInterfaceMethod(uml::Operation umlOperation, uml::Classifier umlClassifier) {
+    match {
+        val javaClassifier = retrieve java::Interface corresponding to umlClassifier
+        require absence of java::InterfaceMethod corresponding to umlOperation
+    }
+    action {
+        call {
+            val foundMethod = javaClassifier.members.filter(InterfaceMethod).findFirst[name == umlOperation.name]
+            if (foundMethod === null) {
+                createJavaInterfaceMethod(umlOperation)
+            } else {
+                addMethodCorrespondence(foundMethod, umlOperation)
+            }
+        }
+    }
+}
+
+routine createJavaInterfaceMethod(uml::Operation umlOperation) {
+    action {
+        val javaMethod = create java::InterfaceMethod and initialize {
+            javaMethod.name = umlOperation.name
+            javaMethod.makePublic
+        }
+        add correspondence between umlOperation and javaMethod
+        call setJavaMethodReturnType(umlOperation, umlOperation.getReturnResult)
+    }
+}
+
+routine addMethodCorrespondence(java::Member javaMethodOrConstructor, uml::Operation umlOperation) {
      action {
-         add correspondence between uOperation and javaMethodOrConstructor
+         add correspondence between umlOperation and javaMethodOrConstructor
      }
 }
 
-routine createOrFindJavaClassMethod(uml::Classifier uClassifier, uml::Operation uOperation) {
+routine insertJavaMethod(uml::Operation umlOperation, uml::Classifier umlClassifier) {
     match {
-        val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
-        require absence of java::ClassMethod corresponding to uOperation
+        val javaMethod = retrieve java::Member corresponding to umlOperation 
+            with javaMethod instanceof Constructor || javaMethod instanceof Method
+        val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
     }
     action {
-        call {
-            val foundMethod = jClassifier.members.filter(ClassMethod).findFirst[name == uOperation.name]
-            if (foundMethod === null) {
-                createJavaClassMethod(jClassifier, uOperation)
-            } else {
-                addMethodCorrespondence(foundMethod, uOperation)
-            }
+        update javaClassifier {
+            javaClassifier.members += javaMethod
         }
     }
 }
 
-routine createJavaClassMethod(java::ConcreteClassifier jClassifier, uml::Operation uOperation) {
-    action {
-        val javaMethod = create java::ClassMethod and initialize {
-            javaMethod.name = uOperation.name;
-            setJavaVisibility(javaMethod, uOperation.visibility)
-        }
-        update jClassifier {
-            jClassifier.members += javaMethod;
-        }
-        add correspondence between uOperation and javaMethod
-        call setJavaMethodReturnType(uOperation, uOperation.getReturnResult) // if uOperation.getReturnResult is null, setReturnType should set void
-    }
+reaction UmlMethodDeleted {
+    after element uml::Operation deleted
+    call deleteJavaMethod(affectedEObject)
 }
 
-routine createOrFindJavaConstructor(uml::Classifier uClassifier, uml::Operation uOperation) {
+routine deleteJavaMethod(uml::Operation umlOperation) {
     match {
-        val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
-        require absence of java::Constructor corresponding to uOperation
+        val javaMethod = retrieve java::Member corresponding to umlOperation 
+            with javaMethod instanceof Constructor || javaMethod instanceof Method
     }
     action {
-        call {
-            val foundConstructor = jClassifier.members.filter(Constructor).findFirst[name == uOperation.name]
-            if (foundConstructor === null) {
-                createJavaConstructor(jClassifier, uOperation)
-            } else {
-                addMethodCorrespondence(foundConstructor, uOperation)
-            }
-        }
-    }
-}
-
-routine createJavaConstructor(java::ConcreteClassifier jClassifier, uml::Operation uOperation) {
-    action {
-        val jConstructor = create java::Constructor and initialize {
-            jConstructor.name = uOperation.name;
-            setJavaVisibility(jConstructor, uOperation.visibility)
-        }
-        update jClassifier {
-            jClassifier.members += jConstructor;
-        }
-        add correspondence between uOperation and jConstructor
-    }
-}
-
-reaction UmlClassMethodDeleted {
-    after element uml::Operation deleted and removed from uml::Class[ownedOperation]
-    call deleteJavaMethod(oldValue)
-}
-//uml::Interface and uml::Class and uml::DataType don't have a common superClass for "having ownedOperation",
-//so we need separate reactions
-reaction UmlInterfaceMethodDeleted {
-    after element uml::Operation deleted and removed from uml::Interface[ownedOperation]
-    call deleteJavaMethod(oldValue)
-}
-//uml::Enumeration is a uml::DataType
-reaction UmlDataTypeMethodDeleted {
-    after element uml::Operation deleted and removed from uml::DataType[ownedOperation]
-    call deleteJavaMethod(oldValue)
-}
-
-routine deleteJavaMethod(uml::Operation uOperation) {
-    match {
-        val jMeth = retrieve java::Method corresponding to uOperation
-    }
-    action {
-        delete jMeth
+        delete javaMethod
     }
 }
 
@@ -207,45 +230,9 @@ routine setJavaMethodAbstract(uml::Operation uOperation) {
     }
     action {
         update javaMethod {
-            javaMethod.abstract =  uOperation.abstract
+            javaMethod.abstract = uOperation.abstract
         }
     }    
-}
-
-reaction UmlInterfaceMethodCreated {
-    after element uml::Operation created and inserted in uml::Interface[ownedOperation]
-    call createJavaMethod(affectedEObject, newValue)
-}
-
-routine createOrFindJavaInterfaceMethod(uml::Interface uInterface, uml::Operation uOperation) {
-    match {
-        val jInterface = retrieve java::Interface corresponding to uInterface
-        require absence of java::InterfaceMethod corresponding to uOperation
-    }
-    action {
-        call {
-            val foundMethod = uInterface.members.filter(InterfaceMethod).findFirst[name == uOperation.name]
-            if (foundMethod === null) {
-                createJavaInterfaceMethod(jInterface, uOperation)
-            } else {
-                addMethodCorrespondence(foundMethod, uOperation)
-            }
-        }
-    }
-}
-
-routine createJavaInterfaceMethod(java::Interface jInterface, uml::Operation uOperation) {
-    action {
-        val javaMethod = create java::InterfaceMethod and initialize {
-            javaMethod.name = uOperation.name;
-            javaMethod.makePublic
-        }
-        update jInterface {
-            jInterface.members += javaMethod;
-        }
-        add correspondence between uOperation and javaMethod
-        call setJavaMethodReturnType(uOperation, uOperation.getReturnResult) // returnResult may be null
-    }
 }
 
 reaction UmlMethodMadeFinal {
@@ -329,7 +316,7 @@ routine createMissingJavaParameter(uml::Parameter uParameter) {
 }
 
 reaction UmlParameterCreated {
-    after element uml::Parameter created and inserted in uml::Operation[ownedParameter]
+    after element uml::Parameter inserted in uml::Operation[ownedParameter]
     with newValue.direction == ParameterDirectionKind.IN_LITERAL && newValue.name !== null
     call createJavaParameter(affectedEObject, newValue)
 
@@ -357,13 +344,13 @@ routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
 }
 
 reaction UmlReturnParameterDeleted {
-    after element uml::Parameter deleted and removed from uml::Operation[ownedParameter]
+    after element uml::Parameter removed from uml::Operation[ownedParameter]
     with oldValue.direction == ParameterDirectionKind.RETURN_LITERAL
     call setJavaMethodReturnType(affectedEObject, affectedEObject.getReturnResult)
 }
 
 reaction UmlParameterDeleted {
-    after element uml::Parameter deleted and removed from uml::Operation[ownedParameter]
+    after element uml::Parameter removed from uml::Operation[ownedParameter]
     with oldValue.direction == ParameterDirectionKind.IN_LITERAL
     call deleteJavaParameter(oldValue)
 }

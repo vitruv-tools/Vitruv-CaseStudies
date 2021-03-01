@@ -5,20 +5,20 @@ import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertTrue
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This Test class checks the creating, deleting and modifying of attributes in den uml to java
@@ -145,5 +145,23 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		assertJavaAttributeTraits(jAttr, ATTRIBUTE_NAME, JavaVisibility.PUBLIC, TypesFactory.eINSTANCE.createInt, false,
 			false, jClass)
 		assertAttributeEquals(uAttr, jAttr)
+	}
+	
+	@Test
+	def testMoveAttribute() {
+		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
+		uClass2.ownedAttributes += uAttr
+		propagate
+		
+		val jClass = getCorrespondingClass(uClass)
+		val jClass2 = getCorrespondingClass(uClass2)
+		val jAttr = getCorrespondingAttribute(uAttr)
+		assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
+		assertTrue(jClass.methods.filter [name == buildGetterName(ATTRIBUTE_NAME)].nullOrEmpty)
+		assertTrue(jClass.methods.filter [name == buildSetterName(ATTRIBUTE_NAME)].nullOrEmpty)
+		assertFalse(jClass2.getMembersByName(ATTRIBUTE_NAME).nullOrEmpty)
+		assertAttributeEquals(uAttr, jAttr)
+		assertTrue(javaGetterForAttributeExists(jAttr))
+		assertTrue(javaSetterForAttributeExists(jAttr))
 	}
 }
