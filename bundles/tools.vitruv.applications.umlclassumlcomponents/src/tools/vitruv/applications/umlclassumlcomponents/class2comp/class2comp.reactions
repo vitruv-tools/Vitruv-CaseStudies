@@ -166,7 +166,10 @@ routine createDataTypeForClass(umlclass::Class umlClass) {
 
 reaction RenameClass {
 	after attribute replaced at umlclass::Class[name]
-	call renameComponent(affectedEObject)
+	call {
+		renameComponent(affectedEObject)
+		renameDataType(affectedEObject)
+	}
 }
 
 routine renameComponent(umlclass::Class umlClass) { 
@@ -180,6 +183,16 @@ routine renameComponent(umlclass::Class umlClass) {
 	}
 }
 
+routine renameDataType(umlclass::Class umlClass) { 
+	match {
+		val umlDataType = retrieve umlcomp::DataType corresponding to umlClass
+	}
+	action { 
+		update umlDataType {
+			umlDataType.name = umlClass.name
+		}
+	}
+}
 
 reaction DeletedClass{
 	after element umlclass::Class deleted and removed from umlclass::Package[packagedElement]
