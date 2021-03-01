@@ -1,37 +1,41 @@
 package tools.vitruv.applications.umlclassumlcomponents.tests.comp2class
 
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.VisibilityKind
 
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
+import static extension tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
+import static tools.vitruv.applications.umlclassumlcomponents.util.SharedUtil.*
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
+import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Component
 
 class VisibilityTest extends AbstractComp2ClassTest {
 
-	/*******
-	 * Tests:*
-	 ********/
-	private def void assertVisibility(NamedElement element) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[element]).flatten
-		for (EObject corrElement : correspondingElements) {
-			assertTrue((corrElement as NamedElement).visibility == element.visibility)
-		}
-
-	}
-
 	@Test
 	def void testVisibilityChange() {
-		val umlComp = createComponent(COMP_NAME)
-		umlComp.visibility = VisibilityKind.PRIVATE_LITERAL
-		propagate
-		assertVisibility(umlComp)
-
-		umlComp.visibility = VisibilityKind.PUBLIC_LITERAL
-		propagate
-		assertVisibility(umlComp)
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+				visibility = VisibilityKind.PRIVATE_LITERAL
+			]
+		]
+		
+		var componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
+		assertEquals(VisibilityKind.PRIVATE_LITERAL, componentPackage.visibility)
+		assertEquals(VisibilityKind.PRIVATE_LITERAL, componentPackage.claimPackagedElementWithName(Class, COMP_NAME).visibility)
+		
+		rootElement.claimPackagedElementWithName(Component, COMP_NAME).propagate [
+			visibility = VisibilityKind.PUBLIC_LITERAL
+		]
+		
+		componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
+		assertEquals(VisibilityKind.PUBLIC_LITERAL, componentPackage.visibility)
+		assertEquals(VisibilityKind.PUBLIC_LITERAL, componentPackage.claimPackagedElementWithName(Class, COMP_NAME).visibility)
+		
 	}
 
 }
+

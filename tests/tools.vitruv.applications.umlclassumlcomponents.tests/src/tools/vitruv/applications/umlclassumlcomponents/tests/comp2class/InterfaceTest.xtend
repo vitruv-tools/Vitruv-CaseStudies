@@ -5,276 +5,209 @@ import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.Usage
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Package
 
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
+import static extension tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.util.SharedUtil.*
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertFalse
-import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.hamcrest.CoreMatchers.hasItem
+import static org.hamcrest.CoreMatchers.is
+import static org.hamcrest.MatcherAssert.assertThat
 
 class InterfaceTest extends AbstractComp2ClassTest {
 
-	/*******
-	 * Tests:*
-	 ********/
 	@Test
 	def void testInterfaceRealized() {
-		// Create Class in Package for a Component
-		val umlComp = createComponent(COMP_NAME)
-		// Create Interface and Realization
-		val compInterface = createInterface(INTERFACE_NAME)
-		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
-		compIFRealization.suppliers += compInterface
-		propagate
-
-		// Assert Class
-		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
-		// Assert Class Interface:
-		val classInterface = assertInterface(compInterface)
-
-		// Assert Class InterfaceRealization:
-		val classIFRealization = assertInterfaceRealization(compIFRealization)
-		// Check for correct realization setup:
-		assertTrue(classIFRealization.clients.contains(umlClass))
-		assertTrue(classIFRealization.contract == classInterface)
-		assertTrue(classIFRealization.suppliers.contains(classInterface))
-		assertTrue(umlClass.interfaceRealizations.contains(classIFRealization))
+		rootElement.propagate [
+			val interface = UMLFactory.eINSTANCE.createInterface() => [
+				name = INTERFACE_NAME
+			]
+			packagedElements += interface 
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
+					name = INTERFACE_REALIZATION_NAME
+					suppliers += interface
+				]
+			]
+		]
+		
+		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)		
+		val componentClass = componentPackage.claimPackagedElementWithName(Class, COMP_NAME)
+		// TODO I think it's not reasonable to place the class interface in the package of the component realization class that uses the interface first.
+		// Probably, there should not even be two interfaces, one for the component and one for the class
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		val classInterfaceRealization = componentClass.claimInterfaceRealization(INTERFACE_REALIZATION_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		componentClass.checkInterfaceRealization(classInterfaceRealization, classInterface)
 	}
 
 	@Test
 	def void testDeleteInterfaceRealization() {
-		// Create Class in Package for a Component
-		val umlComp = createComponent(COMP_NAME)
-		// Create Interface and Realization
-		val compInterface = createInterface(INTERFACE_NAME)
-		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
-		compIFRealization.suppliers += compInterface
-		propagate
-
-		// Get Class and Class InterfaceRealization:
-		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
-		val classIFRealization = assertInterfaceRealization(compIFRealization)
-
-		// Remove Component interfaceRealization and check if the corresponding one is removed, too
-		compIFRealization.destroy
-		propagate
-		assertFalse(umlClass.interfaceRealizations.contains(classIFRealization))
+		rootElement.propagate [
+			val interface = UMLFactory.eINSTANCE.createInterface() => [
+				name = INTERFACE_NAME
+			]
+			packagedElements += interface 
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
+					name = INTERFACE_REALIZATION_NAME
+					suppliers += interface
+				]
+			]
+		]
+		 		
+		rootElement.claimPackagedElementWithName(Component, COMP_NAME).propagate [
+			val componentInterface = rootElement.claimPackagedElementWithName(Interface, INTERFACE_NAME)
+			claimInterfaceRealization(INTERFACE_REALIZATION_NAME, componentInterface) => [
+				destroy()
+			]	
+		]
+		
+		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
+		val componentClass = componentPackage.claimPackagedElementWithName(Class, COMP_NAME)
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		componentClass.claimNoInterfaceRealization(INTERFACE_REALIZATION_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		assertThat(componentClass.interfaceRealizations.size, is(0))	
 	}
 
 	@Test
 	def void testInterfaceUsed() {
-		// ***First add InterfaceRealization***
-		// Create Class in Package for a Component
-		val umlComp = createComponent(COMP_NAME)
-		// Create Interface and Realization
-		val compInterface = createInterface(INTERFACE_NAME)
-		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
-		compIFRealization.suppliers += compInterface
-		propagate
-
-		// Assert Class
-		val umlClass1 = assertClassAndPackage(umlComp, COMP_NAME)
-		// Assert Class Interface:
-		val classInterface = assertInterface(compInterface)
-
-		// Assert Class InterfaceRealization:
-		val classIFRealization1 = assertInterfaceRealization(compIFRealization)
-		// Check for correct realization setup:
-		assertTrue(classIFRealization1.clients.contains(umlClass1))
-		assertTrue(classIFRealization1.contract == classInterface)
-		assertTrue(classIFRealization1.suppliers.contains(classInterface))
-		assertTrue(umlClass1.interfaceRealizations.contains(classIFRealization1))
-
-		// ***Now add uses Relationship***
-		// Create second Class in Package for a Component
-		val umlComp2 = createComponent(COMP_NAME2)
-		// Create Usage for Component Interface
-		val compUsage = createUsage(USAGE_NAME, umlComp2)
-		compUsage.suppliers += compInterface
-
-		propagate
-
-		// Assert Class
-		val umlClass2 = assertClassAndPackage(umlComp2, COMP_NAME2)
-
-		// Assert Class InterfaceRealization:
-		val classIFRealization2 = assertUsage(compUsage)
-		// Assert correct Package:
-		assertTrue(classInterface.package == umlClass1.package)
-
-		// Check for correct realization setup:
-		assertTrue(classIFRealization2.clients.contains(umlClass2))
-		assertFalse(classIFRealization2.clients.contains(umlClass1))
-		assertTrue(classIFRealization2.contract == classInterface)
-		assertTrue(classIFRealization2.suppliers.contains(classInterface))
-		assertTrue(umlClass2.interfaceRealizations.contains(classIFRealization2))
-		assertFalse(umlClass2.interfaceRealizations.contains(classIFRealization1))
+		rootElement.propagate [
+			val interface = UMLFactory.eINSTANCE.createInterface() => [
+				name = INTERFACE_NAME
+			]
+			packagedElements += interface 
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
+					name = INTERFACE_REALIZATION_NAME
+					suppliers += interface
+				]
+			]
+		]
+		
+		rootElement.propagate [
+			val interface = model.claimPackagedElementWithName(Interface, INTERFACE_NAME)
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME2
+				val component = it
+				packagedElements += UMLFactory.eINSTANCE.createUsage() => [
+					name = USAGE_NAME
+					clients += component 
+					suppliers += interface
+				]
+			]
+		]
+		
+		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		val component2Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX)		
+		val component2Class = component2Package.claimPackagedElementWithName(Class, COMP_NAME2)
+		val class2InterfaceRealization = component2Class.claimInterfaceRealization(USAGE_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		component2Class.checkInterfaceRealization(class2InterfaceRealization, classInterface)
 	}
 
 	@Test
 	def void testDeleteUsage() {
-		// ***First add InterfaceRealization***
-		// Create Class in Package for a Component
-		val umlComp = createComponent(COMP_NAME)
-		// Create Interface and Realization
-		val compInterface = createInterface(INTERFACE_NAME)
-		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
-		compIFRealization.suppliers += compInterface
-		propagate
-
-		// ***Now add uses Relationship***
-		// Create second Class in Package for a Component
-		val umlComp2 = createComponent(COMP_NAME2)
-		// Create Usage for Component Interface
-		val compUsage = createUsage(USAGE_NAME, umlComp2)
-		compUsage.suppliers += compInterface
-
-		propagate
-
-		// ***Now delete the Usage***
-		// Get second Class and InterfaceReazation
-		val umlClass2 = assertClassAndPackage(umlComp2, COMP_NAME2)
-		val classIFRealization2 = assertUsage(compUsage)
-
-		// Remove Usage and check if the corresponding InterfaceRealization is removed, too
-		compUsage.destroy
-		propagate
-		assertFalse(umlClass2.interfaceRealizations.contains(classIFRealization2))
+		rootElement.propagate [
+			val interface = UMLFactory.eINSTANCE.createInterface() => [
+				name = INTERFACE_NAME
+			]
+			packagedElements += interface 
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
+					name = INTERFACE_REALIZATION_NAME
+					suppliers += interface
+				]
+			]
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME2
+				val component = it
+				packagedElements += UMLFactory.eINSTANCE.createUsage() => [
+					name = USAGE_NAME
+					clients += component 
+					suppliers += interface
+				]
+			]
+		]
+		
+		rootElement.claimPackagedElementWithName(Component, COMP_NAME2).propagate [
+			claimPackagedElementWithName(Usage, USAGE_NAME) => [
+				destroy()
+			]
+		]
+		
+		// Assert that everything still exists except for the interface realization
+		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		val component2Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX)		
+		val component2Class = component2Package.claimPackagedElementWithName(Class, COMP_NAME2)
+		component2Class.claimNoInterfaceRealization(USAGE_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		assertThat(component2Class.interfaceRealizations.size, is(0))
 	}
 
 	@Test
 	def void testInterfaceUsedTwice() {
-		// ***First add InterfaceRealization***
-		// Create Class in Package for a Component
-		val umlComp = createComponent(COMP_NAME)
-		// Create Interface and Realization
-		val compInterface = createInterface(INTERFACE_NAME)
-		val compIFRealization = createInterfaceRealization(INTERFACE_REALIZATION_NAME, umlComp)
-		compIFRealization.suppliers += compInterface
-		propagate
+		rootElement.propagate [
+			val interface = UMLFactory.eINSTANCE.createInterface() => [
+				name = INTERFACE_NAME
+			]
+			packagedElements += interface 
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
+					name = INTERFACE_REALIZATION_NAME
+					suppliers += interface
+				]
+			]
+		]
+		
+		rootElement.propagate [
+			val interface = claimPackagedElementWithName(Interface, INTERFACE_NAME)
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME2
+				val component = it
+				packagedElements += UMLFactory.eINSTANCE.createUsage() => [
+					name = USAGE_NAME
+					clients += component 
+					suppliers += interface
+				]
+			]
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME3
+				val component = it
+				packagedElements += UMLFactory.eINSTANCE.createUsage() => [
+					name = USAGE_NAME2
+					clients += component 
+					suppliers += interface
+				]
+			]
+		]
 
-		// Assert Class
-		val umlClass1 = assertClassAndPackage(umlComp, COMP_NAME)
-		// Assert Class Interface:
-		val classInterface = assertInterface(compInterface)
-
-		// Assert Class InterfaceRealization:
-		val classIFRealization1 = assertInterfaceRealization(compIFRealization)
-		// Check for correct realization setup:
-		assertTrue(classIFRealization1.clients.contains(umlClass1))
-		assertTrue(classIFRealization1.contract == classInterface)
-		assertTrue(classIFRealization1.suppliers.contains(classInterface))
-		assertTrue(umlClass1.interfaceRealizations.contains(classIFRealization1))
-
-		// ***Now add uses Relationships***
-		// Create a second Class in Package for a Component
-		val umlComp2 = createComponent(COMP_NAME2)
-		// Create Usage for Component Interface
-		val compUsage = createUsage(USAGE_NAME, umlComp2)
-		compUsage.suppliers += compInterface
-
-		// Create a third Class in Package for a Component
-		val umlComp3 = createComponent(COMP_NAME3)
-		// Create Usage for Component Interface
-		val compUsage2 = createUsage(USAGE_NAME2, umlComp3)
-		compUsage2.suppliers += compInterface
-
-		propagate
-
-		// Assert Classes
-		val umlClass2 = assertClassAndPackage(umlComp2, COMP_NAME2)
-		val umlClass3 = assertClassAndPackage(umlComp3, COMP_NAME3)
-
-		// Assert Class Usages:
-		val classIFRealization2 = assertUsage(compUsage)
-		val classIFRealization3 = assertUsage(compUsage2, USAGE_NAME2)
-		// Assert correct Package:
-		assertTrue(classInterface.package == umlClass1.package)
-
-		// Check for correct usage setup:
-		// Usage 1
-		assertTrue(classIFRealization2.clients.contains(umlClass2))
-		assertFalse(classIFRealization2.clients.contains(umlClass1))
-		assertTrue(classIFRealization2.contract == classInterface)
-		assertTrue(classIFRealization2.suppliers.contains(classInterface))
-		assertTrue(umlClass2.interfaceRealizations.contains(classIFRealization2))
-		assertFalse(umlClass2.interfaceRealizations.contains(classIFRealization1))
-		// Usage 2
-		assertTrue(classIFRealization3.clients.contains(umlClass3))
-		assertFalse(classIFRealization3.clients.contains(umlClass1))
-		assertTrue(classIFRealization3.contract == classInterface)
-		assertTrue(classIFRealization3.suppliers.contains(classInterface))
-		assertTrue(umlClass3.interfaceRealizations.contains(classIFRealization3))
-		assertFalse(umlClass3.interfaceRealizations.contains(classIFRealization1))
+		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		val component2Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX)		
+		val component2Class = component2Package.claimPackagedElementWithName(Class, COMP_NAME2)
+		val class2InterfaceRealization = component2Class.claimInterfaceRealization(USAGE_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		component2Class.checkInterfaceRealization(class2InterfaceRealization, classInterface)
+		val component3Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME3 + PACKAGE_SUFFIX)		
+		val component3Class = component3Package.claimPackagedElementWithName(Class, COMP_NAME3)
+		val class3InterfaceRealization = component3Class.claimInterfaceRealization(USAGE_NAME2 + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		component3Class.checkInterfaceRealization(class3InterfaceRealization, classInterface)
+	}
+	
+	def static checkInterfaceRealization(Class realizingClass, InterfaceRealization interfaceRealization, Interface expectedInterface) {
+		assertThat(interfaceRealization.clients.size, is(1))
+		assertThat(interfaceRealization.clients, hasItem(realizingClass))
+		assertThat(interfaceRealization.suppliers.size, is(1))
+		assertThat(interfaceRealization.suppliers, hasItem(expectedInterface))
+		assertThat(interfaceRealization.contract, is(expectedInterface))
+		assertThat(realizingClass.interfaceRealizations.size, is(1))
+		assertThat(realizingClass.interfaceRealizations, hasItem(interfaceRealization))
 	}
 
-	/***************
-	 * Assert Helper:*
-	 ****************/
-	private def Interface assertInterface(Interface compInterface) {
-		assertInterface(compInterface, INTERFACE_NAME)
-	}
-
-	private def Interface assertInterface(Interface compInterface, String name) {
-		var correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compInterface]).flatten.filter(
-			Interface)
-		assertEquals(1, correspondingElements.size)
-		val classInterface = correspondingElements.get(0)
-		assertTypeAndName(classInterface, Interface, name + CLASS_INTERFACE_SUFFIX)
-		return classInterface
-	}
-
-	private def InterfaceRealization assertInterfaceRealization(InterfaceRealization compIFRealization) {
-		return assertInterfaceRealization(compIFRealization, INTERFACE_REALIZATION_NAME)
-	}
-
-	private def InterfaceRealization assertInterfaceRealization(InterfaceRealization compIFRealization, String name) {
-		var correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compIFRealization]).flatten.filter(
-			InterfaceRealization)
-		assertEquals(1, correspondingElements.size)
-		val classIFRealization = correspondingElements.get(0)
-		assertTypeAndName(classIFRealization, InterfaceRealization, name + CLASS_IFR_AND_USAGE_SUFFIX)
-		return classIFRealization
-	}
-
-	private def InterfaceRealization assertUsage(Usage compUsage) {
-		assertUsage(compUsage, USAGE_NAME)
-	}
-
-	private def InterfaceRealization assertUsage(Usage compUsage, String name) {
-		var correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compUsage]).flatten.filter(
-			InterfaceRealization)
-		assertEquals(1, correspondingElements.size)
-		val classIFRealization = correspondingElements.get(0)
-		assertTypeAndName(classIFRealization, InterfaceRealization, name + CLASS_IFR_AND_USAGE_SUFFIX)
-		return classIFRealization
-	}
-
-	/*****************
-	 * Creation Helper:*
-	 ******************/
-	private def Interface createInterface(String name) {
-		val classInterface = UMLFactory.eINSTANCE.createInterface()
-		classInterface.name = name
-		rootElement.packagedElements += classInterface
-		return classInterface
-	}
-
-	private def InterfaceRealization createInterfaceRealization(String name, Component umlComp) {
-		val compInterfaceRealization = UMLFactory.eINSTANCE.createInterfaceRealization()
-		compInterfaceRealization.name = name
-		compInterfaceRealization.clients += umlComp
-		umlComp.interfaceRealizations += compInterfaceRealization
-		return compInterfaceRealization
-	}
-
-	private def Usage createUsage(String name, Component umlComp) {
-		val compUsage = UMLFactory.eINSTANCE.createUsage()
-		compUsage.name = name
-		compUsage.clients += umlComp
-		umlComp.packagedElements += compUsage
-		return compUsage
-	}
 }

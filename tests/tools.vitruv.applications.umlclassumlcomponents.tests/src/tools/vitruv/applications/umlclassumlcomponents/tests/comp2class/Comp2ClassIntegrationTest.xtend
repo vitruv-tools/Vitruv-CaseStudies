@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umlclassumlcomponents.tests.comp2class
 
-import java.util.Collections
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
@@ -18,29 +17,21 @@ import org.junit.jupiter.api.Disabled
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import java.nio.file.Path
-import org.eclipse.emf.ecore.EObject
 
 class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
-	override protected setup() {
-		// Don't initialize a model here, as we are loading and creating one
+	override protected isInitializeTestModel() {
+		return false
 	}
 
 	def Model integrationTest(String fileName) {
-		resourceAt(Path.of(OUTPUT_NAME)).startRecordingChanges => [
-			contents += EObject.from(fileName.testModelResource)
+		resourceAt(Path.of(OUTPUT_NAME)).propagate [
+			contents += Model.from(fileName.testModelResource)
 		]
-		propagate
 
-		val umlModel = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model).get(0)
-		umlModel.eResource.save(Collections.EMPTY_MAP)
-
-		return umlModel
+		return Model.from(Path.of(OUTPUT_NAME))
 	}
 
-	/*******
-	 * Tests:*
-	 ********/
 	@Test
 	def void integrationTestWith2Components() {
 		val umlModel = integrationTest("TestModel2Components.uml")
@@ -56,11 +47,9 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
 	@Test
 	def void integrationTestWithComponentAnd2DataTypes() {
-		userInteraction
-			// Decide to create a Class for the first DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// Decide to create a Class for the second DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
+		userInteraction// Decide to create a Class for the first DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No")// Decide to create a Class for the second DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		val umlModel = integrationTest("TestModelWith2DataTypesAndComponent.uml")
 
@@ -75,11 +64,9 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
 	@Test
 	def void integrationTestWithComponentAndDataTypeWithoutClassRepresentation() {
-		userInteraction
-			// Decide to create no corresponding Class for the first DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
-			// Decide to create a Class for the second DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
+		userInteraction// Decide to create no corresponding Class for the first DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("Yes")// Decide to create a Class for the second DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		val umlModel = integrationTest("TestModelWith2DataTypesAndComponent.uml")
 
@@ -94,9 +81,8 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
 	@Test
 	def void integrationTestWithDataTypeWithPropertyAndOperation() {
-		userInteraction
-			// Decide to create a Class for the DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
+		userInteraction// Decide to create a Class for the DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		val umlModel = integrationTest("TestModelDataTypeWithPropertyAndOperation.uml")
 
@@ -176,11 +162,9 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	@Disabled
 	@Test
 	def void integrationTestAllCombined() {
-		userInteraction
-			// Decide to create a Class for the first DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// Decide to create no corresponding Class for the second DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
+		userInteraction// Decide to create a Class for the first DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No")// Decide to create no corresponding Class for the second DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("Yes")
 
 		val umlModel = integrationTest("TestModelAllCombined.uml")
 
@@ -193,7 +177,6 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		assertCountOfTypeInPackage(modelElements, 2, Class, 1) // Class Package 2 should have 1 Class
 		assertCountOfTypeInPackage(modelElements, 1, Interface, 1) // Class Package 1 should have 1 Interface
 		assertCountOfTypeInPackage(modelElements, 2, Interface, 0) // Class Package 2 should have no Interfaces
-
 		// Check Class 1 for InterfaceRealization and inspect if it's setup correctly:
 		val umlClass = modelElements.filter(Package).get(1).packagedElements.filter(Class).get(0)
 		val iFRealizations = umlClass.interfaceRealizations.map[e|e as NamedElement]
@@ -226,13 +209,10 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	@Test
 	def void integrationTestMatthiasSmallExampleComponentResult() {
 		// This model was retrieved out of the BA PCM->Comp as the result of an integration
-		userInteraction
-			// Decide to create a Class for the first DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// Decide to create a Class for the second DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// Decide to create a Class for the third DataType:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
+		userInteraction// Decide to create a Class for the first DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No")// Decide to create a Class for the second DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No")// Decide to create a Class for the third DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		integrationTest("Matthias_small_example_Component_Result.uml")
 
