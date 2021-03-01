@@ -24,7 +24,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 			val interface = UMLFactory.eINSTANCE.createInterface() => [
 				name = INTERFACE_NAME
 			]
-			packagedElements += interface 
+			packagedElements += interface
 			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
 				name = COMP_NAME
 				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
@@ -33,13 +33,13 @@ class InterfaceTest extends AbstractComp2ClassTest {
 				]
 			]
 		]
-		
-		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)		
+
+		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
 		val componentClass = componentPackage.claimPackagedElementWithName(Class, COMP_NAME)
-		// TODO I think it's not reasonable to place the class interface in the package of the component realization class that uses the interface first.
-		// Probably, there should not even be two interfaces, one for the component and one for the class
-		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
-		val classInterfaceRealization = componentClass.claimInterfaceRealization(INTERFACE_REALIZATION_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface,
+			INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		val classInterfaceRealization = componentClass.claimInterfaceRealization(INTERFACE_REALIZATION_NAME +
+			CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
 		componentClass.checkInterfaceRealization(classInterfaceRealization, classInterface)
 	}
 
@@ -49,7 +49,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 			val interface = UMLFactory.eINSTANCE.createInterface() => [
 				name = INTERFACE_NAME
 			]
-			packagedElements += interface 
+			packagedElements += interface
 			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
 				name = COMP_NAME
 				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
@@ -58,19 +58,21 @@ class InterfaceTest extends AbstractComp2ClassTest {
 				]
 			]
 		]
-		 		
+
 		rootElement.claimPackagedElementWithName(Component, COMP_NAME).propagate [
 			val componentInterface = rootElement.claimPackagedElementWithName(Interface, INTERFACE_NAME)
 			claimInterfaceRealization(INTERFACE_REALIZATION_NAME, componentInterface) => [
 				destroy()
-			]	
+			]
 		]
-		
+
 		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
 		val componentClass = componentPackage.claimPackagedElementWithName(Class, COMP_NAME)
-		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
-		componentClass.claimNoInterfaceRealization(INTERFACE_REALIZATION_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
-		assertThat(componentClass.interfaceRealizations.size, is(0))	
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface,
+			INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		componentClass.claimNoInterfaceRealization(INTERFACE_REALIZATION_NAME + CLASS_IFR_AND_USAGE_SUFFIX,
+			classInterface)
+		assertThat(componentClass.interfaceRealizations.size, is(0))
 	}
 
 	@Test
@@ -79,7 +81,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 			val interface = UMLFactory.eINSTANCE.createInterface() => [
 				name = INTERFACE_NAME
 			]
-			packagedElements += interface 
+			packagedElements += interface
 			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
 				name = COMP_NAME
 				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
@@ -88,7 +90,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 				]
 			]
 		]
-		
+
 		rootElement.propagate [
 			val interface = model.claimPackagedElementWithName(Interface, INTERFACE_NAME)
 			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
@@ -96,17 +98,19 @@ class InterfaceTest extends AbstractComp2ClassTest {
 				val component = it
 				packagedElements += UMLFactory.eINSTANCE.createUsage() => [
 					name = USAGE_NAME
-					clients += component 
+					clients += component
 					suppliers += interface
 				]
 			]
 		]
-		
+
 		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
-		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
-		val component2Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX)		
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface,
+			INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		val component2Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX)
 		val component2Class = component2Package.claimPackagedElementWithName(Class, COMP_NAME2)
-		val class2InterfaceRealization = component2Class.claimInterfaceRealization(USAGE_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		val class2InterfaceRealization = component2Class.claimInterfaceRealization(USAGE_NAME +
+			CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
 		component2Class.checkInterfaceRealization(class2InterfaceRealization, classInterface)
 	}
 
@@ -116,7 +120,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 			val interface = UMLFactory.eINSTANCE.createInterface() => [
 				name = INTERFACE_NAME
 			]
-			packagedElements += interface 
+			packagedElements += interface
 			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
 				name = COMP_NAME
 				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
@@ -129,22 +133,23 @@ class InterfaceTest extends AbstractComp2ClassTest {
 				val component = it
 				packagedElements += UMLFactory.eINSTANCE.createUsage() => [
 					name = USAGE_NAME
-					clients += component 
+					clients += component
 					suppliers += interface
 				]
 			]
 		]
-		
+
 		rootElement.claimPackagedElementWithName(Component, COMP_NAME2).propagate [
 			claimPackagedElementWithName(Usage, USAGE_NAME) => [
 				destroy()
 			]
 		]
-		
+
 		// Assert that everything still exists except for the interface realization
 		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
-		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
-		val component2Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX)		
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface,
+			INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		val component2Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX)
 		val component2Class = component2Package.claimPackagedElementWithName(Class, COMP_NAME2)
 		component2Class.claimNoInterfaceRealization(USAGE_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
 		assertThat(component2Class.interfaceRealizations.size, is(0))
@@ -156,7 +161,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 			val interface = UMLFactory.eINSTANCE.createInterface() => [
 				name = INTERFACE_NAME
 			]
-			packagedElements += interface 
+			packagedElements += interface
 			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
 				name = COMP_NAME
 				interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization() => [
@@ -165,7 +170,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 				]
 			]
 		]
-		
+
 		rootElement.propagate [
 			val interface = claimPackagedElementWithName(Interface, INTERFACE_NAME)
 			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
@@ -173,7 +178,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 				val component = it
 				packagedElements += UMLFactory.eINSTANCE.createUsage() => [
 					name = USAGE_NAME
-					clients += component 
+					clients += component
 					suppliers += interface
 				]
 			]
@@ -182,25 +187,29 @@ class InterfaceTest extends AbstractComp2ClassTest {
 				val component = it
 				packagedElements += UMLFactory.eINSTANCE.createUsage() => [
 					name = USAGE_NAME2
-					clients += component 
+					clients += component
 					suppliers += interface
 				]
 			]
 		]
 
 		val componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
-		val classInterface = componentPackage.claimPackagedElementWithName(Interface, INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
-		val component2Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX)		
+		val classInterface = componentPackage.claimPackagedElementWithName(Interface,
+			INTERFACE_NAME + CLASS_INTERFACE_SUFFIX)
+		val component2Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX)
 		val component2Class = component2Package.claimPackagedElementWithName(Class, COMP_NAME2)
-		val class2InterfaceRealization = component2Class.claimInterfaceRealization(USAGE_NAME + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		val class2InterfaceRealization = component2Class.claimInterfaceRealization(USAGE_NAME +
+			CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
 		component2Class.checkInterfaceRealization(class2InterfaceRealization, classInterface)
-		val component3Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME3 + PACKAGE_SUFFIX)		
+		val component3Package = rootElement.claimPackagedElementWithName(Package, COMP_NAME3 + PACKAGE_SUFFIX)
 		val component3Class = component3Package.claimPackagedElementWithName(Class, COMP_NAME3)
-		val class3InterfaceRealization = component3Class.claimInterfaceRealization(USAGE_NAME2 + CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
+		val class3InterfaceRealization = component3Class.claimInterfaceRealization(USAGE_NAME2 +
+			CLASS_IFR_AND_USAGE_SUFFIX, classInterface)
 		component3Class.checkInterfaceRealization(class3InterfaceRealization, classInterface)
 	}
-	
-	def static checkInterfaceRealization(Class realizingClass, InterfaceRealization interfaceRealization, Interface expectedInterface) {
+
+	def static checkInterfaceRealization(Class realizingClass, InterfaceRealization interfaceRealization,
+		Interface expectedInterface) {
 		assertThat(interfaceRealization.clients.size, is(1))
 		assertThat(interfaceRealization.clients, hasItem(realizingClass))
 		assertThat(interfaceRealization.suppliers.size, is(1))

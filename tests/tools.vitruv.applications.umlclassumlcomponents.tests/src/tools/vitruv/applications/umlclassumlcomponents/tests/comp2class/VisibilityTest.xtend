@@ -22,20 +22,20 @@ class VisibilityTest extends AbstractComp2ClassTest {
 				visibility = VisibilityKind.PRIVATE_LITERAL
 			]
 		]
-		
+
 		var componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
 		assertEquals(VisibilityKind.PRIVATE_LITERAL, componentPackage.visibility)
-		assertEquals(VisibilityKind.PRIVATE_LITERAL, componentPackage.claimPackagedElementWithName(Class, COMP_NAME).visibility)
-		
+		assertEquals(VisibilityKind.PRIVATE_LITERAL,
+			componentPackage.claimPackagedElementWithName(Class, COMP_NAME).visibility)
+
 		rootElement.claimPackagedElementWithName(Component, COMP_NAME).propagate [
 			visibility = VisibilityKind.PUBLIC_LITERAL
 		]
-		
+
 		componentPackage = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
 		assertEquals(VisibilityKind.PUBLIC_LITERAL, componentPackage.visibility)
-		assertEquals(VisibilityKind.PUBLIC_LITERAL, componentPackage.claimPackagedElementWithName(Class, COMP_NAME).visibility)
-		
+		assertEquals(VisibilityKind.PUBLIC_LITERAL,
+			componentPackage.claimPackagedElementWithName(Class, COMP_NAME).visibility)
 	}
 
 }
-
