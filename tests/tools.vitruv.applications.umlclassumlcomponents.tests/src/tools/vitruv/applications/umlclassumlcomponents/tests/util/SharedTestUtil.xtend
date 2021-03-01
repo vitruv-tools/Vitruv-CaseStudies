@@ -3,8 +3,7 @@ package tools.vitruv.applications.umlclassumlcomponents.tests.util
 import org.eclipse.emf.ecore.EObject
 
 import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.PackageableElement
@@ -39,80 +38,72 @@ class SharedTestUtil {
 	public static val PROPERTY_NAME = "TestProperty"
 	public static val OPERATION_NAME = "TestOperation"
 
-	def static void claimNoPackagedElementWithName(Package in, Class<? extends PackageableElement> containedElementType,
-		String containedElementName) {
-		val foundElement = in.getPackagedElementWithName(containedElementType, containedElementName)
-		assertNull(foundElement,
-			containedElementType.name + " with name '" + containedElementName + "' found in package " + in)
-	}
-
 	def static <T extends PackageableElement> T claimPackagedElementWithName(Package in, Class<T> containedElementType,
 		String containedElementName) {
-		val foundElement = in.getPackagedElementWithName(containedElementType, containedElementName)
-		assertNotNull(foundElement,
-			"No " + containedElementType.name + " with name '" + containedElementName + "' found in package " + in)
-		return foundElement
+		return in.claimPackagedElementWithName(in.packagedElements, containedElementType, containedElementName)
 	}
 
-	def static <T extends PackageableElement> T getPackagedElementWithName(Package in, Class<T> containedElementType,
+	def static void claimNoPackagedElementWithName(Package in, Class<? extends PackageableElement> containedElementType,
 		String containedElementName) {
-		val foundElements = in.packagedElements.filter(containedElementType).filter[name == containedElementName]
-		assertTrue(foundElements.size <= 1,
-			"There were " + foundElements.size + " " + containedElementType.name + "s with name '" +
-				containedElementName + "' in package " + in)
-		return foundElements.findFirst[true]
-	}
-
-	def static void claimNoPackagedElementWithName(Component in,
-		Class<? extends PackageableElement> containedElementType, String containedElementName) {
-		val foundElement = in.getPackagedElementWithName(containedElementType, containedElementName)
-		assertNull(foundElement,
-			containedElementType.name + " with name '" + containedElementName + "' found in component " + in)
+		in.claimNoPackagedElementWithName(in.packagedElements, containedElementType, containedElementName)
 	}
 
 	def static <T extends PackageableElement> T claimPackagedElementWithName(Component in,
 		Class<T> containedElementType, String containedElementName) {
-		val foundElement = in.getPackagedElementWithName(containedElementType, containedElementName)
-		assertNotNull(foundElement,
-			"No " + containedElementType.name + " with name '" + containedElementName + "' found in component " + in)
-		return foundElement
+		return in.claimPackagedElementWithName(in.packagedElements, containedElementType, containedElementName)
 	}
 
-	def static <T extends PackageableElement> T getPackagedElementWithName(Component in, Class<T> containedElementType,
-		String containedElementName) {
-		val foundElements = in.packagedElements.filter(containedElementType).filter[name == containedElementName]
-		assertTrue(foundElements.size <= 1,
+	def static void claimNoPackagedElementWithName(Component in,
+		Class<? extends PackageableElement> containedElementType, String containedElementName) {
+		in.claimNoPackagedElementWithName(in.packagedElements, containedElementType, containedElementName)
+	}
+
+	private def static <T extends PackageableElement> T claimPackagedElementWithName(EObject container,
+		Iterable<PackageableElement> packagedElements, Class<T> containedElementType, String containedElementName) {
+		val foundElements = packagedElements.filterCandidates(containedElementType, containedElementName)
+		assertEquals(1, foundElements.size,
 			"There were " + foundElements.size + " " + containedElementType.name + "s with name '" +
-				containedElementName + "' in component " + in)
-		return foundElements.findFirst[true]
+				containedElementName + "' in " + container)
+		return foundElements.get(0)
 	}
 
-	def static void claimNoInterfaceRealization(BehavioredClassifier in, String interfaceRelalizationName,
-		Interface realizedInterface) {
-		val foundElement = in.getInterfaceRealization(interfaceRelalizationName, realizedInterface)
-		assertNull(foundElement,
-			"Interface realization with name '" + interfaceRelalizationName + "' for interface " + realizedInterface +
-				" found in classifier " + in)
+	private def static void claimNoPackagedElementWithName(EObject container,
+		Iterable<PackageableElement> packagedElements, Class<? extends PackageableElement> containedElementType,
+		String containedElementName) {
+		val foundElements = packagedElements.filterCandidates(containedElementType, containedElementName)
+		assertTrue(foundElements.empty,
+			"There were " + foundElements.size + " " + containedElementType.name + "s with name '" +
+				containedElementName + "' in " + container)
+	}
+
+	private def static <T extends PackageableElement> Iterable<T> filterCandidates(
+		Iterable<PackageableElement> packagedElements, Class<T> containedElementType, String containedElementName) {
+		return packagedElements.filter(containedElementType).filter[name == containedElementName]
 	}
 
 	def static InterfaceRealization claimInterfaceRealization(BehavioredClassifier in, String interfaceRelalizationName,
 		Interface realizedInterface) {
-		val foundElement = getInterfaceRealization(in, interfaceRelalizationName, realizedInterface)
-		assertNotNull(foundElement,
-			"No interface realization with name '" + interfaceRelalizationName + "' for interface " +
-				realizedInterface + " found in classifier " + in)
-		return foundElement
-	}
-
-	def static InterfaceRealization getInterfaceRealization(BehavioredClassifier in, String interfaceRelalizationName,
-		Interface realizedInterface) {
-		val foundElements = in.interfaceRealizations.filter[name == interfaceRelalizationName].filter [
-			suppliers.size == 1 && suppliers.contains(realizedInterface)
-		]
-		assertTrue(foundElements.size <= 1,
+		val foundElements = in.interfaceRealizations.filterCandidates(interfaceRelalizationName, realizedInterface)
+		assertEquals(1, foundElements.size,
 			"There were " + foundElements.size + " interface realizations with name '" + interfaceRelalizationName +
 				"' for interface " + realizedInterface + " in classifier " + in)
-		return foundElements.findFirst[true]
+		return foundElements.get(0)
+	}
+
+	def static void claimNoInterfaceRealization(BehavioredClassifier in, String interfaceRelalizationName,
+		Interface realizedInterface) {
+		val foundElements = in.interfaceRealizations.filterCandidates(interfaceRelalizationName, realizedInterface)
+		assertTrue(foundElements.empty,
+			"Interface realization with name '" + interfaceRelalizationName + "' for interface " + realizedInterface +
+				" found in classifier " + in)
+	}
+
+	private def static Iterable<InterfaceRealization> filterCandidates(
+		Iterable<InterfaceRealization> interfaceRealizations, String interfaceRelalizationName,
+		Interface realizedInterface) {
+		return interfaceRealizations.filter[name == interfaceRelalizationName].filter [
+			suppliers.size == 1 && suppliers.contains(realizedInterface)
+		]
 	}
 
 	def static Property claimOwnedAttributeWithName(StructuredClassifier in, String containedAttributeName) {
@@ -126,8 +117,7 @@ class SharedTestUtil {
 	private def static claimSingleProperty(EObject container, Iterable<Property> properties, String expectedName) {
 		val foundElements = properties.filter[name == expectedName]
 		assertTrue(foundElements.size <= 1,
-			"There were " + foundElements.size + " properties with name '" + expectedName + "' in classifier " +
-				container)
+			"There were " + foundElements.size + " properties with name '" + expectedName + "' in " + container)
 		assertTrue(foundElements.size > 0, "No property with name '" + expectedName + "' found in " + container)
 		return foundElements.get(0)
 	}
@@ -143,8 +133,7 @@ class SharedTestUtil {
 	private def static claimSingleOperation(EObject container, Iterable<Operation> properties, String expectedName) {
 		val foundElements = properties.filter[name == expectedName]
 		assertTrue(foundElements.size <= 1,
-			"There were " + foundElements.size + " operations with name '" + expectedName + "' in classifier " +
-				container)
+			"There were " + foundElements.size + " operations with name '" + expectedName + "' in " + container)
 		assertTrue(foundElements.size > 0, "No operation with name '" + expectedName + "' found in " + container)
 		return foundElements.get(0)
 	}

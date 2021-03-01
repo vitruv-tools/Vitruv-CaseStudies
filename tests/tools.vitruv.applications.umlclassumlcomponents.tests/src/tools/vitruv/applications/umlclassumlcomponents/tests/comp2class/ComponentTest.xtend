@@ -78,7 +78,7 @@ class ComponentTest extends AbstractComp2ClassTest {
 		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
 			claimPackagedElementWithName(Class, COMP_NAME)
 
-		rootElement.getPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).propagate [
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).propagate [
 			// Package gets more members:
 			val umlClass2 = UMLFactory.eINSTANCE.createClass()
 			umlClass2.name = CLASS_NAME2
@@ -115,7 +115,7 @@ class ComponentTest extends AbstractComp2ClassTest {
 		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
 			claimPackagedElementWithName(Class, COMP_NAME)
 
-		rootElement.getPackagedElementWithName(Package, COMP_NAME + " Package").propagate [
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME + " Package").propagate [
 			// Package gets more members:
 			val umlClass2 = UMLFactory.eINSTANCE.createClass()
 			umlClass2.name = CLASS_NAME2
