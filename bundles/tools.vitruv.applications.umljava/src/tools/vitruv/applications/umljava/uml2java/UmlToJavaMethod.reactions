@@ -34,8 +34,8 @@ import routines umlToJavaTypePropagation using qualified names
 reaction UmlOperationInsertedInClass {
     after element uml::Operation inserted in uml::Class[ownedOperation]
     call {
-    	createOrFindJavaConstructor(newValue, affectedEObject)
-    	createOrFindJavaClassMethod(newValue, affectedEObject)
+        createOrFindJavaConstructor(newValue, affectedEObject)
+        createOrFindJavaClassMethod(newValue, affectedEObject)
         insertJavaMethod(newValue, affectedEObject)       
     }
 }
@@ -43,8 +43,8 @@ reaction UmlOperationInsertedInClass {
 reaction UmlOperationInsertedInDataType {
     after element uml::Operation inserted in uml::DataType[ownedOperation]
     call {
-    	createOrFindJavaConstructor(newValue, affectedEObject)
-    	createOrFindJavaClassMethod(newValue, affectedEObject)
+        createOrFindJavaConstructor(newValue, affectedEObject)
+        createOrFindJavaClassMethod(newValue, affectedEObject)
         insertJavaMethod(newValue, affectedEObject)       
     }
 }
@@ -52,28 +52,28 @@ reaction UmlOperationInsertedInDataType {
 reaction UmlMethodInsertedInInterface {
     after element uml::Operation inserted in uml::Interface[ownedOperation]
     call {
-    	createOrFindJavaInterfaceMethod(newValue, affectedEObject)
-    	insertJavaMethod(newValue, affectedEObject)
+        createOrFindJavaInterfaceMethod(newValue, affectedEObject)
+        insertJavaMethod(newValue, affectedEObject)
     }
 }
 
 routine createOrFindJavaConstructor(uml::Operation umlOperation, uml::Classifier umlClassifier) {
-	match {
-		check umlOperation.name.toFirstUpper == umlClassifier.name.toFirstUpper
-		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+    match {
+        check umlOperation.name.toFirstUpper == umlClassifier.name.toFirstUpper
+        val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
         require absence of java::Constructor corresponding to umlOperation
         require absence of java::Method corresponding to umlOperation
-	}
-	action {
-		call {
-			val foundConstructor = javaClassifier.members.filter(Constructor).findFirst[name == umlOperation.name]
+    }
+    action {
+        call {
+            val foundConstructor = javaClassifier.members.filter(Constructor).findFirst[name == umlOperation.name]
             if (foundConstructor === null) {
                 createJavaConstructor(umlOperation)
             } else {
                 addMethodCorrespondence(foundConstructor, umlOperation)
             }
-		}
-	}
+        }
+    }
 }
 
 routine createJavaConstructor(uml::Operation umlOperation) {
@@ -87,22 +87,22 @@ routine createJavaConstructor(uml::Operation umlOperation) {
 }
 
 routine createOrFindJavaClassMethod(uml::Operation umlOperation, uml::Classifier umlClassifier) {
-	match {
-		check umlOperation.name.toFirstUpper != umlClassifier.name.toFirstUpper // -> constructor
-		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+    match {
+        check umlOperation.name.toFirstUpper != umlClassifier.name.toFirstUpper // -> constructor
+        val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
         require absence of java::ClassMethod corresponding to umlOperation
         require absence of java::Constructor corresponding to umlOperation
-	}
-	action {
-		call {
-			val foundMethod = javaClassifier.members.filter(ClassMethod).findFirst[name == umlOperation.name]
+    }
+    action {
+        call {
+            val foundMethod = javaClassifier.members.filter(ClassMethod).findFirst[name == umlOperation.name]
             if (foundMethod === null) {
                 createJavaClassMethod(umlOperation)
             } else {
                 addMethodCorrespondence(foundMethod, umlOperation)
             }
-		}
-	}
+        }
+    }
 }
 
 routine createJavaClassMethod(uml::Operation umlOperation) {
@@ -117,20 +117,20 @@ routine createJavaClassMethod(uml::Operation umlOperation) {
 }
 
 routine createOrFindJavaInterfaceMethod(uml::Operation umlOperation, uml::Classifier umlClassifier) {
-	match {
-		val javaClassifier = retrieve java::Interface corresponding to umlClassifier
+    match {
+        val javaClassifier = retrieve java::Interface corresponding to umlClassifier
         require absence of java::InterfaceMethod corresponding to umlOperation
-	}
-	action {
-		call {
-			val foundMethod = javaClassifier.members.filter(InterfaceMethod).findFirst[name == umlOperation.name]
+    }
+    action {
+        call {
+            val foundMethod = javaClassifier.members.filter(InterfaceMethod).findFirst[name == umlOperation.name]
             if (foundMethod === null) {
                 createJavaInterfaceMethod(umlOperation)
             } else {
                 addMethodCorrespondence(foundMethod, umlOperation)
             }
-		}
-	}
+        }
+    }
 }
 
 routine createJavaInterfaceMethod(uml::Operation umlOperation) {
@@ -151,31 +151,31 @@ routine addMethodCorrespondence(java::Member javaMethodOrConstructor, uml::Opera
 }
 
 routine insertJavaMethod(uml::Operation umlOperation, uml::Classifier umlClassifier) {
-	match {
-		val javaMethod = retrieve java::Member corresponding to umlOperation 
-			with javaMethod instanceof Constructor || javaMethod instanceof Method
-		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
-	}
-	action {
-		update javaClassifier {
-			javaClassifier.members += javaMethod
-		}
-	}
+    match {
+        val javaMethod = retrieve java::Member corresponding to umlOperation 
+            with javaMethod instanceof Constructor || javaMethod instanceof Method
+        val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+    }
+    action {
+        update javaClassifier {
+            javaClassifier.members += javaMethod
+        }
+    }
 }
 
 reaction UmlMethodDeleted {
-	after element uml::Operation deleted
-	call deleteJavaMethod(affectedEObject)
+    after element uml::Operation deleted
+    call deleteJavaMethod(affectedEObject)
 }
 
 routine deleteJavaMethod(uml::Operation umlOperation) {
-	match {
-		val javaMethod = retrieve java::Member corresponding to umlOperation 
-			with javaMethod instanceof Constructor || javaMethod instanceof Method
-	}
-	action {
-		delete javaMethod
-	}
+    match {
+        val javaMethod = retrieve java::Member corresponding to umlOperation 
+            with javaMethod instanceof Constructor || javaMethod instanceof Method
+    }
+    action {
+        delete javaMethod
+    }
 }
 
 reaction UmlMethodReturnTypeChanged {

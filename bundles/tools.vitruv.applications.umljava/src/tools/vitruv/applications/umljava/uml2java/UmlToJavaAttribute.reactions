@@ -20,19 +20,19 @@ import routines umlToJavaTypePropagation using qualified names
 //We can not define one single reaction for attribute creation in enums and classes because
 //they don't share a common superclass for "having ownedAttributes"
 reaction UmlPropertyInsertedInClass {
-	after element uml::Property inserted in uml::Class[ownedAttribute]
-	call {
-		createOrFindJavaField(newValue, affectedEObject)
-		insertJavaField(newValue, affectedEObject)
-	}
+    after element uml::Property inserted in uml::Class[ownedAttribute]
+    call {
+        createOrFindJavaField(newValue, affectedEObject)
+        insertJavaField(newValue, affectedEObject)
+    }
 }
 
 reaction UmlPropertyInsertedInDataType {
-	after element uml::Property inserted in uml::DataType[ownedAttribute]
-	call {
-		createOrFindJavaField(newValue, affectedEObject)
-		insertJavaField(newValue, affectedEObject)
-	}
+    after element uml::Property inserted in uml::DataType[ownedAttribute]
+    call {
+        createOrFindJavaField(newValue, affectedEObject)
+        insertJavaField(newValue, affectedEObject)
+    }
 }
 
 routine createOrFindJavaField(uml::Property umlProperty, uml::Classifier umlClassifier) {
@@ -48,28 +48,28 @@ routine createOrFindJavaField(uml::Property umlProperty, uml::Classifier umlClas
             } else {
                 addAttributeCorrespondence(umlProperty, foundField)
                 createOrFindJavaGetter(umlProperty, foundField)
-            	createOrFindJavaSetter(umlProperty, foundField)
+                createOrFindJavaSetter(umlProperty, foundField)
             }
         }
     }    
 }
 
 routine createJavaField(uml::Property umlProperty) {
-	match {
-		require absence of java::Field corresponding to umlProperty
-	}
-	action {
-		val javaField = create java::Field and initialize {
+    match {
+        require absence of java::Field corresponding to umlProperty
+    }
+    action {
+        val javaField = create java::Field and initialize {
             javaField.name = umlProperty.name
             javaField.makePublic
         }
         add correspondence between umlProperty and javaField
         call {
-			createOrFindJavaGetter(umlProperty, javaField)
-        	createOrFindJavaSetter(umlProperty, javaField)
-			changeJavaAttributeType(umlProperty)
+            createOrFindJavaGetter(umlProperty, javaField)
+            createOrFindJavaSetter(umlProperty, javaField)
+            changeJavaAttributeType(umlProperty)
         }
-	}
+    }
 }
 
 routine addAttributeCorrespondence(uml::Property umlAttribute, java::Field javaField) {
@@ -79,19 +79,19 @@ routine addAttributeCorrespondence(uml::Property umlAttribute, java::Field javaF
 }
 
 routine insertJavaField(uml::Property umlProperty, uml::Classifier umlClassifier) {
-	match {
-		val javaField = retrieve java::Field corresponding to umlProperty
-		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
-		val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.GETTER
-		val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.SETTER
-	}
-	action {
-		update javaClassifier {
-			javaClassifier.members += javaField
-			javaGetter.ifPresent [ javaClassifier.members += it ]
-			javaSetter.ifPresent [ javaClassifier.members += it ]
-		}
-	}
+    match {
+        val javaField = retrieve java::Field corresponding to umlProperty
+        val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+        val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.GETTER
+        val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.SETTER
+    }
+    action {
+        update javaClassifier {
+            javaClassifier.members += javaField
+            javaGetter.ifPresent [ javaClassifier.members += it ]
+            javaSetter.ifPresent [ javaClassifier.members += it ]
+        }
+    }
 }
 
 reaction UmlAttributeDeleted {
@@ -172,9 +172,9 @@ routine changeJavaAttributeType(uml::Property uAttribute) {
     }
     action {
         call {
-        	umlToJavaTypePropagation.propagatePropertyTypeChanged(uAttribute, jAttribute, jCustomType.orElse(null))
-		    jGetter.ifPresent [ updateAttributeTypeInGetter(it, jAttribute) ]
-		    jSetter.ifPresent [ updateAttributeTypeInSetter(it, jAttribute) ]
+            umlToJavaTypePropagation.propagatePropertyTypeChanged(uAttribute, jAttribute, jCustomType.orElse(null))
+            jGetter.ifPresent [ updateAttributeTypeInGetter(it, jAttribute) ]
+            jSetter.ifPresent [ updateAttributeTypeInSetter(it, jAttribute) ]
         }
     }
 }
@@ -185,7 +185,7 @@ routine createOrFindJavaGetter(uml::Property uAttribute, java::Field jAttribute)
         call {
             var javaGetter = getJavaGettersOfAttribute(jAttribute).head
             if (javaGetter === null) {
-            	javaGetter = createGetterForAttribute(jAttribute)
+                javaGetter = createGetterForAttribute(jAttribute)
             }
             createAccessorCorrespondence(uAttribute, javaGetter, UmlToJavaTag.GETTER)
         }
@@ -197,7 +197,7 @@ routine createOrFindJavaSetter(uml::Property uAttribute, java::Field jAttribute)
         call {
             var javaSetter = getJavaSettersOfAttribute(jAttribute).head
             if (javaSetter === null) {
-            	javaSetter = createSetterForAttribute(jAttribute)
+                javaSetter = createSetterForAttribute(jAttribute)
             }
             createAccessorCorrespondence(uAttribute, javaSetter, UmlToJavaTag.SETTER)
         }
@@ -205,9 +205,9 @@ routine createOrFindJavaSetter(uml::Property uAttribute, java::Field jAttribute)
 }
 
 routine createAccessorCorrespondence(uml::Property uAttribute, java::ClassMethod jMethod, String tag) {
-	action {
-		add correspondence between uAttribute and jMethod tagged with tag
-	}
+    action {
+        add correspondence between uAttribute and jMethod tagged with tag
+    }
 }
 
 reaction UmlAttributeRenamed {

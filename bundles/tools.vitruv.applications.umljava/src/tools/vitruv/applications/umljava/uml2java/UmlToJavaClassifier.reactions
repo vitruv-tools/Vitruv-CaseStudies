@@ -34,11 +34,11 @@ execute actions in Java
 reaction UmlClassInserted {
     after element uml::Class inserted in uml::Package[packagedElement]
     call {
-    	createOrFindJavaClass(newValue)
-    	insertJavaClassifier(newValue, affectedEObject)
+        createOrFindJavaClass(newValue)
+        insertJavaClassifier(newValue, affectedEObject)
     }
 }
-	
+    
 routine createOrFindJavaClass(uml::Classifier umlClassifier) {
     match{
         require absence of java::Class corresponding to umlClassifier
@@ -100,26 +100,26 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
 }
 
 routine insertJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackage) {
-	match {
-		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
-		val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier
-		val javaPackage = retrieve optional java::Package corresponding to umlPackage
-	}
-	action {
-		update javaCompilationUnit {
-			var modified = javaCompilationUnit.updateNamespaces(javaPackage)
-			val newName = getCompilationUnitName(javaPackage, javaClassifier.name)
-			modified = javaCompilationUnit.updateName(newName) || modified
-			if (modified) {
-				persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit))
-			}
-		}
-		call javaPackage.ifPresent [
-			if (!compilationUnits.contains(javaCompilationUnit)) {
-				compilationUnits += javaCompilationUnit
-			}
-		]
-	}
+    match {
+        val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
+        val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier
+        val javaPackage = retrieve optional java::Package corresponding to umlPackage
+    }
+    action {
+        update javaCompilationUnit {
+            var modified = javaCompilationUnit.updateNamespaces(javaPackage)
+            val newName = getCompilationUnitName(javaPackage, javaClassifier.name)
+            modified = javaCompilationUnit.updateName(newName) || modified
+            if (modified) {
+                persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit))
+            }
+        }
+        call javaPackage.ifPresent [
+            if (!compilationUnits.contains(javaCompilationUnit)) {
+                compilationUnits += javaCompilationUnit
+            }
+        ]
+    }
 }
 
 reaction UmlClassifierRenamed {
@@ -143,8 +143,8 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
 }
 
 reaction UmlClassifierDeleted {
-	after element uml::Classifier deleted
-	call deleteJavaClass(affectedEObject)
+    after element uml::Classifier deleted
+    call deleteJavaClass(affectedEObject)
 }
 
 routine deleteJavaClass(uml::Classifier umlClassifer) {
@@ -233,84 +233,84 @@ routine deleteJavaSuperClass(uml::Generalization uGeneralization) {
 }
 
 reaction UmlSuperClassReplaced{
-	after element uml::Class replaced at uml::Generalization[general]
-	with {affectedEObject.specific !== null && affectedEObject.specific instanceof Class}
-	call {
-		val uGeneralization = affectedEObject
-		val uClass = affectedEObject.specific as Class
-		if (oldValue !== null)
-			deleteJavaSuperClass(uGeneralization)
-		if (newValue !== null)
-			addJavaSuperClass(uClass, uGeneralization)
-	}
+    after element uml::Class replaced at uml::Generalization[general]
+    with {affectedEObject.specific !== null && affectedEObject.specific instanceof Class}
+    call {
+        val uGeneralization = affectedEObject
+        val uClass = affectedEObject.specific as Class
+        if (oldValue !== null)
+            deleteJavaSuperClass(uGeneralization)
+        if (newValue !== null)
+            addJavaSuperClass(uClass, uGeneralization)
+    }
 }
 
 reaction UmlInterfaceRealizationCreated {
-	after element uml::InterfaceRealization inserted in uml::Class[interfaceRealization]
-	call createJavaClassImplementsReference(newValue, affectedEObject)
+    after element uml::InterfaceRealization inserted in uml::Class[interfaceRealization]
+    call createJavaClassImplementsReference(newValue, affectedEObject)
 }
 
 routine createJavaClassImplementsReference(uml::InterfaceRealization uRealization, uml::Class uClass){
-	match {
-		val jClass = retrieve java::Class corresponding to uClass
-		val jInterface = retrieve java::Interface corresponding to uRealization.contract
-		require absence of java::TypeReference corresponding to uRealization
-	}
-	action {
-		execute {
-			val matchingReference = jClass.implements.filter[target == jInterface].claimOneOrNone
-			if (matchingReference.isPresent) {
-				addImplementsCorrespondence(uRealization, matchingReference.get)
-			} else {
-				var typeReference = createTypeReference(uRealization.contract, Optional.^of(jInterface), null, userInteractor)
-				addJavaImport(jClass.containingCompilationUnit, typeReference)
-				jClass.implements += typeReference
-				addImplementsCorrespondence(uRealization, typeReference)
-			}
-			
-		}
-	}
+    match {
+        val jClass = retrieve java::Class corresponding to uClass
+        val jInterface = retrieve java::Interface corresponding to uRealization.contract
+        require absence of java::TypeReference corresponding to uRealization
+    }
+    action {
+        execute {
+            val matchingReference = jClass.implements.filter[target == jInterface].claimOneOrNone
+            if (matchingReference.isPresent) {
+                addImplementsCorrespondence(uRealization, matchingReference.get)
+            } else {
+                var typeReference = createTypeReference(uRealization.contract, Optional.^of(jInterface), null, userInteractor)
+                addJavaImport(jClass.containingCompilationUnit, typeReference)
+                jClass.implements += typeReference
+                addImplementsCorrespondence(uRealization, typeReference)
+            }
+            
+        }
+    }
 }
 
 routine addImplementsCorrespondence(uml::InterfaceRealization uRealization, java::TypeReference jReference) {
-	match {
-		require absence of java::TypeReference corresponding to uRealization
-	}
-	action {
-		add correspondence between uRealization and jReference
-	}
+    match {
+        require absence of java::TypeReference corresponding to uRealization
+    }
+    action {
+        add correspondence between uRealization and jReference
+    }
 }
 
 reaction UmlInterfaceRealizationRemoved {
-	after element uml::InterfaceRealization removed from uml::Class[interfaceRealization]
-	call deleteJavaClassImplementsReference(oldValue, affectedEObject)
+    after element uml::InterfaceRealization removed from uml::Class[interfaceRealization]
+    call deleteJavaClassImplementsReference(oldValue, affectedEObject)
 }
 
 routine deleteJavaClassImplementsReference(uml::InterfaceRealization uRealization, uml::Class uClass) {
-	match {
-		val jClass = retrieve java::Class corresponding to uClass
-		val jReference = retrieve java::TypeReference corresponding to uRealization
-	}
-	action {
-		update uRealization {
-			uRealization.clients -= uClass
-		}
-		delete jReference
-	}
+    match {
+        val jClass = retrieve java::Class corresponding to uClass
+        val jReference = retrieve java::TypeReference corresponding to uRealization
+    }
+    action {
+        update uRealization {
+            uRealization.clients -= uClass
+        }
+        delete jReference
+    }
 }
 
 reaction UmlInterfaceRealizationReplaced {
-	after element replaced at uml::InterfaceRealization[contract]
-	with affectedEObject.implementingClassifier !== null
-		&& affectedEObject.implementingClassifier instanceof Class
-	call {
-		val uRealization = affectedEObject
-		val uClass = affectedEObject.implementingClassifier as Class
-		if (oldValue !== null)
-			deleteJavaClassImplementsReference(uRealization, uClass)
-		if (newValue !== null)
-			createJavaClassImplementsReference(uRealization, uClass)
-	}
+    after element replaced at uml::InterfaceRealization[contract]
+    with affectedEObject.implementingClassifier !== null
+        && affectedEObject.implementingClassifier instanceof Class
+    call {
+        val uRealization = affectedEObject
+        val uClass = affectedEObject.implementingClassifier as Class
+        if (oldValue !== null)
+            deleteJavaClassImplementsReference(uRealization, uClass)
+        if (newValue !== null)
+            createJavaClassImplementsReference(uRealization, uClass)
+    }
 }
 
 
@@ -320,8 +320,8 @@ reaction UmlDataTypeInserted {
     with !(newValue instanceof PrimitiveType)
         && !(newValue instanceof Enumeration)
     call {
-    	createOrFindJavaClass(newValue)
-    	insertJavaClassifier(newValue, affectedEObject)
+        createOrFindJavaClass(newValue)
+        insertJavaClassifier(newValue, affectedEObject)
     }
 }
 
@@ -333,8 +333,8 @@ reaction UmlDataTypeInserted {
 reaction UmlInterfaceInserted {
     after element uml::Interface inserted in uml::Package[packagedElement]
     call {
-    	createOrFindJavaInterface(newValue)
-    	insertJavaClassifier(newValue, affectedEObject)
+        createOrFindJavaInterface(newValue)
+        insertJavaClassifier(newValue, affectedEObject)
     }
 }
 
@@ -403,13 +403,13 @@ routine addJavaSuperInterface(uml::Interface uInterface, uml::Generalization uGe
 }
 
 routine addGeneralizationCorrespondence(uml::Generalization uGeneralization, java::TypeReference jReference) {
-	match {
-		require absence of uml::Generalization corresponding to jReference
-		require absence of java::TypeReference corresponding to uGeneralization
-	}
-	action {
-		add correspondence between uGeneralization and jReference
-	}
+    match {
+        require absence of uml::Generalization corresponding to jReference
+        require absence of java::TypeReference corresponding to uGeneralization
+    }
+    action {
+        add correspondence between uGeneralization and jReference
+    }
 }
 
 reaction UmlSuperInterfaceDeleted {
@@ -427,13 +427,13 @@ routine deleteJavaSuperInterface(uml::Generalization uGeneralization) {
 }
 
 reaction UmlSuperInterfaceReplaced {
-	after element uml::Interface replaced at uml::Generalization[general]
-	call {
-		if(oldValue !== null)
-			deleteJavaSuperInterface(affectedEObject)
-		if(affectedEObject.specific !== null && affectedEObject.specific instanceof Interface)
-			addJavaSuperInterface(affectedEObject.specific as Interface, affectedEObject)
-	}
+    after element uml::Interface replaced at uml::Generalization[general]
+    call {
+        if(oldValue !== null)
+            deleteJavaSuperInterface(affectedEObject)
+        if(affectedEObject.specific !== null && affectedEObject.specific instanceof Interface)
+            addJavaSuperInterface(affectedEObject.specific as Interface, affectedEObject)
+    }
 }
 
 //===========================================
@@ -442,62 +442,62 @@ reaction UmlSuperInterfaceReplaced {
 
 
 reaction UmlEnumInserted {
-	after element uml::Enumeration inserted in uml::Package[packagedElement]
-	call {
-		createJavaEnum(newValue)
-		insertJavaClassifier(newValue, affectedEObject)
-	}
+    after element uml::Enumeration inserted in uml::Package[packagedElement]
+    call {
+        createJavaEnum(newValue)
+        insertJavaClassifier(newValue, affectedEObject)
+    }
 }
 
 routine createJavaEnum(uml::Enumeration uEnum) {
-	match {
+    match {
         require absence of java::Enumeration corresponding to uEnum
-	}
-	action {
-		val jEnum = create java::Enumeration and initialize {
-			jEnum.name = uEnum.name
-			jEnum.makePublic
-		}
-		call {
-			createJavaCompilationUnit(uEnum, jEnum)
-		}
-		add correspondence between uEnum and jEnum
-	}
+    }
+    action {
+        val jEnum = create java::Enumeration and initialize {
+            jEnum.name = uEnum.name
+            jEnum.makePublic
+        }
+        call {
+            createJavaCompilationUnit(uEnum, jEnum)
+        }
+        add correspondence between uEnum and jEnum
+    }
 }
 
 reaction UmlEnumLiteralInserted {
-	after element uml::EnumerationLiteral inserted in uml::Enumeration[ownedLiteral]
-	call createJavaEnumConstant(newValue, affectedEObject)
+    after element uml::EnumerationLiteral inserted in uml::Enumeration[ownedLiteral]
+    call createJavaEnumConstant(newValue, affectedEObject)
 }
 
 routine createJavaEnumConstant(uml::EnumerationLiteral uLiteral, uml::Enumeration uEnum) {
-	match {
-		val jEnum = retrieve java::Enumeration corresponding to uEnum
+    match {
+        val jEnum = retrieve java::Enumeration corresponding to uEnum
         require absence of java::EnumConstant corresponding to uLiteral
-	}
-	action {
-		val jConstant = create java::EnumConstant and initialize {
-			jConstant.name = uLiteral.name
-		}
-		update jEnum {
-			jEnum.constants += jConstant
-		}
-		add correspondence between jConstant and uLiteral
-	}
+    }
+    action {
+        val jConstant = create java::EnumConstant and initialize {
+            jConstant.name = uLiteral.name
+        }
+        update jEnum {
+            jEnum.constants += jConstant
+        }
+        add correspondence between jConstant and uLiteral
+    }
 }
 
 reaction UmlEnumLiteralRemoved {
-	after element uml::EnumerationLiteral removed from uml::Enumeration[ownedLiteral]
-	call deleteJavaEnumConstant(oldValue)
+    after element uml::EnumerationLiteral removed from uml::Enumeration[ownedLiteral]
+    call deleteJavaEnumConstant(oldValue)
 }
 
 routine deleteJavaEnumConstant(uml::EnumerationLiteral uLiteral) {
-	match {
-		val jConst = retrieve java::EnumConstant corresponding to uLiteral
-	}
-	action {
-		delete jConst
-	}
+    match {
+        val jConst = retrieve java::EnumConstant corresponding to uLiteral
+    }
+    action {
+        delete jConst
+    }
 }
 
 //===========================================
@@ -505,48 +505,48 @@ routine deleteJavaEnumConstant(uml::EnumerationLiteral uLiteral) {
 //===========================================
 
 reaction UmlModelCreated {
-	after element uml::Model inserted as root
-	call checkIfUmlModelCorrespondenceExists(newValue)
+    after element uml::Model inserted as root
+    call checkIfUmlModelCorrespondenceExists(newValue)
 }
 routine checkIfUmlModelCorrespondenceExists(uml::Model newModel) {
-	match {
-		val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
-		check !alreadyCorrespondingModels.contains(newModel)
-	}
-	action {
-		add correspondence between UMLPackage.Literals.MODEL and newModel
-	}
+    match {
+        val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
+        check !alreadyCorrespondingModels.contains(newModel)
+    }
+    action {
+        add correspondence between UMLPackage.Literals.MODEL and newModel
+    }
 }
 
 reaction UmlPackageInserted {
     after element uml::Package inserted in uml::Package[packagedElement]
     call {
-    	createOrFindJavaPackage(newValue)
-    	renameJavaPackage(newValue, newValue.namespace)
+        createOrFindJavaPackage(newValue)
+        renameJavaPackage(newValue, newValue.namespace)
     }
 }
 
 routine createOrFindJavaPackage(uml::Package uPackage) {
-	match {
-		require absence of java::Package corresponding to uPackage
-		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
-		with matchingPackages.namespacesAsString + matchingPackages.name == getUmlNamespaceAsString(uPackage)
-	}
-	action {
-		call {
-			if(matchingPackages.empty) {
-				createJavaPackage(uPackage)
-			} else {
-				addPackageCorrespondence(uPackage, matchingPackages.head)
-			}
-		}
-	}
+    match {
+        require absence of java::Package corresponding to uPackage
+        val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
+        with matchingPackages.namespacesAsString + matchingPackages.name == getUmlNamespaceAsString(uPackage)
+    }
+    action {
+        call {
+            if(matchingPackages.empty) {
+                createJavaPackage(uPackage)
+            } else {
+                addPackageCorrespondence(uPackage, matchingPackages.head)
+            }
+        }
+    }
 }
 
 routine addPackageCorrespondence(uml::Package uPackage, java::Package jPackage) {
-	action {
-		add correspondence between jPackage and uPackage
-	}
+    action {
+        add correspondence between jPackage and uPackage
+    }
 }
 
 routine createJavaPackage(uml::Package uPackage) {
@@ -594,7 +594,7 @@ routine changePackageOfJavaCompilationUnit(java::Package jPackage, java::Compila
     action {
         update jCompUnit {
             if (jCompUnit.updateNamespaces(jPackage)) {
-                persistProjectRelative(uNamespace, jCompUnit, buildJavaFilePath(jCompUnit))	
+                persistProjectRelative(uNamespace, jCompUnit, buildJavaFilePath(jCompUnit))    
             }
         }
     }
