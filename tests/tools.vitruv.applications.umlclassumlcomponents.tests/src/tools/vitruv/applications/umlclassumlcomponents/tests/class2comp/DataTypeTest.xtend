@@ -2,115 +2,184 @@ package tools.vitruv.applications.umlclassumlcomponents.tests.class2comp
 
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.DataType
-import org.eclipse.uml2.uml.Operation
-import org.eclipse.uml2.uml.Property
+import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
 
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
+import static extension tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.util.SharedUtil.*
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertNull
-import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.CoreMatchers.is
 
 class DataTypeTest extends AbstractClass2CompTest {
 
-	/***********
-	 * DataTypes:*
-	 ************/
 	@Test
 	def void testCreateDataTypeForClass() {
-		val classDataType = createDataTypeClass(CLASS_NAME)
-		saveAndSynchronizeWithInteractions(classDataType)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_DATATYPES_PACKAGE_NAME»' to an existing Component''')
+		].respondWith("No")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_DATATYPES_PACKAGE_NAME
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+				]
+			]
+		]
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[classDataType]).flatten
-		assertEquals(1, correspondingElements.size)
-		val compDataType = correspondingElements.get(0)
-		assertTypeAndName(compDataType, DataType, CLASS_NAME)
+		rootElement.claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME)
+		rootElement.claimPackagedElementWithName(DataType, CLASS_NAME)
+		assertThat(rootElement.packagedElements.size, is(2))
+	}
+
+	@Test
+	def void testRenameDataType() {
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_DATATYPES_PACKAGE_NAME»' to an existing Component''')
+		].respondWith("No")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_DATATYPES_PACKAGE_NAME
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+				]
+			]
+		]
+
+		rootElement.claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME)
+		rootElement.claimPackagedElementWithName(DataType, CLASS_NAME)
+		assertThat(rootElement.packagedElements.size, is(2))
+
+		rootElement.propagate [
+			claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME) => [
+				claimPackagedElementWithName(Class, CLASS_NAME) => [
+					name = CLASS_NAME2
+				]
+			]
+		]
+
+		rootElement.claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME)
+		rootElement.claimPackagedElementWithName(DataType, CLASS_NAME2)
+		assertThat(rootElement.packagedElements.size, is(2))
 	}
 
 	@Test
 	def void testAddPropertyToDataType() {
-		val classDataType = createDataTypeClass(CLASS_NAME)
-		saveAndSynchronizeWithInteractions(classDataType)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_DATATYPES_PACKAGE_NAME»' to an existing Component''')
+		].respondWith("No")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_DATATYPES_PACKAGE_NAME
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+					ownedAttributes += UMLFactory.eINSTANCE.createProperty() => [
+						name = PROPERTY_NAME
+					]
+				]
+			]
+		]
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[classDataType]).flatten
-		val compDataType = (correspondingElements.get(0) as DataType)
-		val classProperty = UMLFactory.eINSTANCE.createProperty()
-		classProperty.name = PROPERTY_NAME
-		classDataType.ownedAttributes += classProperty
-		propagate
-
-		assertEquals(1, compDataType.ownedAttributes.size)
-		val compProperty = compDataType.ownedAttributes.get(0)
-		assertTypeAndName(compProperty, Property, PROPERTY_NAME)
+		rootElement.claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME)
+		val dataType = rootElement.claimPackagedElementWithName(DataType, CLASS_NAME)
+		dataType.claimOwnedAttributeWithName(PROPERTY_NAME)
+		assertThat(dataType.ownedAttributes.size, is(1))
+		assertThat(rootElement.packagedElements.size, is(2))
 	}
 
 	@Test
 	def void testRenameDataTypeProperty() {
-		val classDataType = createDataTypeClass(CLASS_NAME)
-		saveAndSynchronizeWithInteractions(classDataType)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_DATATYPES_PACKAGE_NAME»' to an existing Component''')
+		].respondWith("No")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_DATATYPES_PACKAGE_NAME
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+					ownedAttributes += UMLFactory.eINSTANCE.createProperty() => [
+						name = PROPERTY_NAME
+					]
+				]
+			]
+		]
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[classDataType]).flatten
-		val compDataType = (correspondingElements.get(0) as DataType)
-		val classProperty = UMLFactory.eINSTANCE.createProperty()
-		classProperty.name = "Old"
-		classDataType.ownedAttributes += classProperty
-		propagate
+		val newPropertyName = PROPERTY_NAME + "New"
+		rootElement.propagate [
+			claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME) => [
+				claimPackagedElementWithName(Class, CLASS_NAME) => [
+					claimOwnedAttributeWithName(PROPERTY_NAME) => [
+						name = newPropertyName
+					]
+				]
+			]
+		]
 
-		// Change name:
-		classProperty.name = "New"
-		propagate
-
-		// Check if rename happened in Component Property:
-		val compProperty = compDataType.ownedAttributes.get(0)
-		assertEquals("New", compProperty.name)
+		rootElement.claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME)
+		val dataType = rootElement.claimPackagedElementWithName(DataType, CLASS_NAME)
+		dataType.claimOwnedAttributeWithName(newPropertyName)
+		assertThat(dataType.ownedAttributes.size, is(1))
+		assertThat(rootElement.packagedElements.size, is(2))
 	}
 
 	@Test
 	def void testAddOperationToDataType() {
-		val classDataType = createDataTypeClass(CLASS_NAME)
-		saveAndSynchronizeWithInteractions(classDataType)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_DATATYPES_PACKAGE_NAME»' to an existing Component''')
+		].respondWith("No")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_DATATYPES_PACKAGE_NAME
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+					ownedOperations += UMLFactory.eINSTANCE.createOperation() => [
+						name = OPERATION_NAME
+					]
+				]
+			]
+		]
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[classDataType]).flatten
-		val compDataType = (correspondingElements.get(0) as DataType)
-		val classOperation = UMLFactory.eINSTANCE.createOperation()
-		classOperation.name = OPERATION_NAME
-		classDataType.ownedOperations += classOperation
-		propagate
-
-		assertEquals(1, compDataType.ownedOperations.size)
-		val compOperation = compDataType.ownedOperations.get(0)
-		assertTypeAndName(compOperation, Operation, OPERATION_NAME)
+		rootElement.claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME)
+		val dataType = rootElement.claimPackagedElementWithName(DataType, CLASS_NAME)
+		dataType.claimOwnedOperationWithName(OPERATION_NAME)
+		assertThat(dataType.ownedOperations.size, is(1))
+		assertThat(rootElement.packagedElements.size, is(2))
 	}
 
 	@Test
 	def void testRenameDataTypeOperation() {
-		val classDataType = createDataTypeClass(CLASS_NAME)
-		saveAndSynchronizeWithInteractions(classDataType)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_DATATYPES_PACKAGE_NAME»' to an existing Component''')
+		].respondWith("No")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_DATATYPES_PACKAGE_NAME
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+					ownedOperations += UMLFactory.eINSTANCE.createOperation() => [
+						name = OPERATION_NAME
+					]
+				]
+			]
+		]
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[classDataType]).flatten
-		val compDataType = (correspondingElements.get(0) as DataType)
-		val classOperation = UMLFactory.eINSTANCE.createOperation()
-		classOperation.name = "Old"
-		classDataType.ownedOperations += classOperation
-		propagate
+		val newOperationName = OPERATION_NAME + "New"
+		rootElement.propagate [
+			claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME) => [
+				claimPackagedElementWithName(Class, CLASS_NAME) => [
+					claimOwnedOperationWithName(OPERATION_NAME) => [
+						name = newOperationName
+					]
+				]
+			]
+		]
 
-		// Change name:
-		classOperation.name = "New"
-		propagate
-
-		// Check if rename happened in Component Operation:
-		val compOperation = compDataType.ownedOperations.get(0)
-		assertEquals("New", compOperation.name)
+		rootElement.claimPackagedElementWithName(Package, CLASS_DATATYPES_PACKAGE_NAME)
+		val dataType = rootElement.claimPackagedElementWithName(DataType, CLASS_NAME)
+		dataType.claimOwnedOperationWithName(newOperationName)
+		assertThat(dataType.ownedOperations.size, is(1))
+		assertThat(rootElement.packagedElements.size, is(2))
 	}
 
-	/*****************
-	 * Creation Helper:*
-	 ******************/
-	private def Class createDataTypeClass(String name) {
-		val dataTypePackage = createPackage(CLASS_DATATYPES_PACKAGE)
-		val classDataType = createClassWithoutInteraction(name, dataTypePackage)
-		return classDataType
-	}
 }

@@ -1,10 +1,8 @@
 package tools.vitruv.applications.umlclassumlcomponents.tests.util
 
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.uml2.uml.NamedElement
 
 import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertNull
 import edu.kit.ipd.sdq.activextendannotations.Utility
@@ -21,9 +19,6 @@ import org.eclipse.uml2.uml.Operation
 
 @Utility
 class SharedTestUtil {
-	/***************
-	 * Constants:*
-	 ****************/
 	// Class
 	public static val CLASS_NAME = "TestUmlClass"
 	public static val CLASS_NAME2 = "TestUmlClass2"
@@ -43,15 +38,6 @@ class SharedTestUtil {
 	public static val DATATYPE_NAME = "TestDataType"
 	public static val PROPERTY_NAME = "TestProperty"
 	public static val OPERATION_NAME = "TestOperation"
-
-	/***************
-	 * Assert Helper:*
-	 ****************/
-	static def void assertTypeAndName(EObject umlObject, Class<? extends NamedElement> umlType, String name) {
-		assertTrue(umlObject.class.isInstance(umlType) || umlObject.class.genericInterfaces.contains(umlType))
-		// Second condition encloses 'impl'-Classes		
-		assertEquals(name, (umlObject as NamedElement).name)
-	}
 
 	def static void claimNoPackagedElementWithName(Package in, Class<? extends PackageableElement> containedElementType,
 		String containedElementName) {
@@ -75,6 +61,13 @@ class SharedTestUtil {
 			"There were " + foundElements.size + " " + containedElementType.name + "s with name '" +
 				containedElementName + "' in package " + in)
 		return foundElements.findFirst[true]
+	}
+
+	def static void claimNoPackagedElementWithName(Component in,
+		Class<? extends PackageableElement> containedElementType, String containedElementName) {
+		val foundElement = in.getPackagedElementWithName(containedElementType, containedElementName)
+		assertNull(foundElement,
+			containedElementType.name + " with name '" + containedElementName + "' found in component " + in)
 	}
 
 	def static <T extends PackageableElement> T claimPackagedElementWithName(Component in,
@@ -133,12 +126,12 @@ class SharedTestUtil {
 	private def static claimSingleProperty(EObject container, Iterable<Property> properties, String expectedName) {
 		val foundElements = properties.filter[name == expectedName]
 		assertTrue(foundElements.size <= 1,
-			"There were " + foundElements.size + " properties with name '" + expectedName +
-				"' in classifier " + container)
+			"There were " + foundElements.size + " properties with name '" + expectedName + "' in classifier " +
+				container)
 		assertTrue(foundElements.size > 0, "No property with name '" + expectedName + "' found in " + container)
 		return foundElements.get(0)
 	}
-	
+
 	def static Operation claimOwnedOperationWithName(org.eclipse.uml2.uml.Class in, String containedOperationName) {
 		return in.claimSingleOperation(in.ownedOperations, containedOperationName)
 	}
@@ -150,8 +143,8 @@ class SharedTestUtil {
 	private def static claimSingleOperation(EObject container, Iterable<Operation> properties, String expectedName) {
 		val foundElements = properties.filter[name == expectedName]
 		assertTrue(foundElements.size <= 1,
-			"There were " + foundElements.size + " operations with name '" + expectedName +
-				"' in classifier " + container)
+			"There were " + foundElements.size + " operations with name '" + expectedName + "' in classifier " +
+				container)
 		assertTrue(foundElements.size > 0, "No operation with name '" + expectedName + "' found in " + container)
 		return foundElements.get(0)
 	}

@@ -1,105 +1,211 @@
 package tools.vitruv.applications.umlclassumlcomponents.tests.class2comp
 
 import org.eclipse.uml2.uml.Component
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.Class
 
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
+import static extension tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
+import static tools.vitruv.applications.umlclassumlcomponents.util.SharedUtil.*
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertFalse
-import static org.junit.jupiter.api.Assertions.assertEquals
+import org.eclipse.uml2.uml.UMLFactory
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.CoreMatchers.is
 
 class ClassTest extends AbstractClass2CompTest {
 
-	/*******
-	 * Class:*
-	 ********/
 	@Test
 	def void testCreateComponentForClass() {
-		val umlClass = createClass(CLASS_NAME, 0)
-		saveAndSynchronizeWithInteractions(umlClass)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_NAME + PACKAGE_SUFFIX»' to an existing Component''')
+		].respondWith("No")
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''Should '«CLASS_NAME»' be represented by a Component?''')
+		].respondWith("Yes")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_NAME + PACKAGE_SUFFIX
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+				]
+			]
+		]
 
-		assertComponentForClass(umlClass, CLASS_NAME)
+		userInteraction.assertAllInteractionsOccurred()
+		rootElement.claimPackagedElementWithName(Component, CLASS_NAME)
+		rootElement.claimPackagedElementWithName(Package, CLASS_NAME + PACKAGE_SUFFIX)
+		assertThat(rootElement.packagedElements.size, is(2))
+	}
+
+	@Test
+	def void testCreateComponentForClassInPackageWithNonMatchingName() {
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_NAME»' to an existing Component''')
+		].respondWith("No")
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''Should '«CLASS_NAME»' be represented by a Component?''')
+		].respondWith("Yes")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_NAME
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+				]
+			]
+		]
+
+		userInteraction.assertAllInteractionsOccurred()
+		rootElement.claimPackagedElementWithName(Component, CLASS_NAME)
+		rootElement.claimPackagedElementWithName(Package, CLASS_NAME)
+		assertThat(rootElement.packagedElements.size, is(2))
 	}
 
 	@Test
 	def void testCreate2ComponentsFor2ClassesInSamePackage() {
-		val classPackage = createPackage(CLASS_NAME)
-		val umlClass1 = createClass(CLASS_NAME, classPackage, 0)
-		val umlClass2 = createClassWithoutInteraction(CLASS_NAME2, classPackage)
-		saveAndSynchronizeWithInteractions(rootElement)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_NAME + PACKAGE_SUFFIX»' to an existing Component''')
+		].respondWith("No")
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''Should '«CLASS_NAME»' be represented by a Component?''')
+		].respondWith("Yes")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_NAME + PACKAGE_SUFFIX
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+				]
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME2
+				]
+			]
+		]
 
-		// First Class should have Component
-		assertComponentForClass(umlClass1, CLASS_NAME)
-
-		// Second Class should receive no Component
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass2]).flatten
-		assertEquals(0, correspondingElements.size)
+		userInteraction.assertAllInteractionsOccurred()
+		rootElement.claimPackagedElementWithName(Package, CLASS_NAME + PACKAGE_SUFFIX)
+		rootElement.claimPackagedElementWithName(Component, CLASS_NAME)
+		rootElement.claimNoPackagedElementWithName(Component, CLASS_NAME2)
+		assertThat(rootElement.packagedElements.size, is(2))
 	}
 
 	@Test
 	def void testCreate2ComponentsFor2ClassesInDifferentPackages() {
-		val classPackage1 = createPackage(CLASS_NAME)
-		val umlClass1 = createClass(CLASS_NAME, classPackage1, 0)
-		val classPackage2 = createPackage(CLASS_NAME2)
-		val umlClass2 = createClass(CLASS_NAME2, classPackage2, 0)
-		saveAndSynchronizeWithInteractions(rootElement)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_NAME + PACKAGE_SUFFIX»' to an existing Component''')
+		].respondWith("No")
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''Should '«CLASS_NAME»' be represented by a Component?''')
+		].respondWith("Yes")
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_NAME2 + PACKAGE_SUFFIX»' to an existing Component''')
+		].respondWith("No")
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''Should '«CLASS_NAME2»' be represented by a Component?''')
+		].respondWith("Yes")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_NAME + PACKAGE_SUFFIX
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+				]
+			]
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_NAME2 + PACKAGE_SUFFIX
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME2
+				]
+			]
+		]
 
-		// Both Classes should have corresponding Components
-		assertComponentForClass(umlClass1, CLASS_NAME)
-		assertPackageLinkedToComponent(classPackage1, CLASS_NAME)
-		assertComponentForClass(umlClass2, CLASS_NAME2)
-		assertPackageLinkedToComponent(classPackage2, CLASS_NAME2)
+		userInteraction.assertAllInteractionsOccurred()
+		rootElement.claimPackagedElementWithName(Package, CLASS_NAME + PACKAGE_SUFFIX)
+		rootElement.claimPackagedElementWithName(Package, CLASS_NAME2 + PACKAGE_SUFFIX)
+		rootElement.claimPackagedElementWithName(Component, CLASS_NAME)
+		rootElement.claimPackagedElementWithName(Component, CLASS_NAME2)
+		assertThat(rootElement.packagedElements.size, is(4))
 	}
 
 	@Test
 	def void testCreateNoComponentForClass() {
-		val umlClass = createClass(CLASS_NAME, 1)
-		saveAndSynchronizeWithInteractions(umlClass)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_NAME + PACKAGE_SUFFIX»' to an existing Component''')
+		].respondWith("No")
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''Should '«CLASS_NAME»' be represented by a Component?''')
+		].respondWith("No")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_NAME + PACKAGE_SUFFIX
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+				]
+			]
+		]
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
-		assertEquals(0, correspondingElements.size)
-		assertFalse(rootElement.packagedElements.contains(Component))
+		userInteraction.assertAllInteractionsOccurred()
+		rootElement.claimNoPackagedElementWithName(Component, CLASS_NAME)
+		assertThat(rootElement.packagedElements.size, is(1))
 	}
 
 	@Test
 	def void testRenameClass() {
-		val umlClass = createClass("Old", 0)
-		saveAndSynchronizeWithInteractions(umlClass)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_NAME + PACKAGE_SUFFIX»' to an existing Component''')
+		].respondWith("No")
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''Should '«CLASS_NAME»' be represented by a Component?''')
+		].respondWith("Yes")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_NAME + PACKAGE_SUFFIX
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+				]
+			]
+		]
 
-		// Change name:
-		umlClass.name = "New"
-		saveAndSynchronizeWithInteractions(umlClass)
+		rootElement.propagate [
+			claimPackagedElementWithName(Package, CLASS_NAME + PACKAGE_SUFFIX) => [
+				claimPackagedElementWithName(Class, CLASS_NAME) => [
+					name = CLASS_NAME2
+				]
+			]
+		]
 
-		// Check if rename happened in Component:
-		assertComponentForClass(umlClass, "New")
+		rootElement.claimNoPackagedElementWithName(Component, CLASS_NAME)
+		rootElement.claimPackagedElementWithName(Component, CLASS_NAME2)
+		rootElement.claimPackagedElementWithName(Package, CLASS_NAME + PACKAGE_SUFFIX)
+		assertThat(rootElement.packagedElements.size, is(2))
 	}
 
 	@Test
 	def void testDeleteClass() {
-		val classPackage = createPackage(CLASS_NAME)
-		val umlClass = createClass(CLASS_NAME, classPackage, 0)
-		saveAndSynchronizeWithInteractions(umlClass)
-		val umlComponent = assertComponentForClass(umlClass, CLASS_NAME)
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''link this Package '«CLASS_NAME + PACKAGE_SUFFIX»' to an existing Component''')
+		].respondWith("No")
+		userInteraction.onMultipleChoiceSingleSelection [
+			message.contains('''Should '«CLASS_NAME»' be represented by a Component?''')
+		].respondWith("Yes")
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createPackage() => [
+				name = CLASS_NAME + PACKAGE_SUFFIX
+				packagedElements += UMLFactory.eINSTANCE.createClass() => [
+					name = CLASS_NAME
+				]
+			]
+		]
+		assertThat(rootElement.packagedElements.size, is(2))
+		rootElement.claimPackagedElementWithName(Component, CLASS_NAME)
 
-		// Remove Class		
-		assertTrue(classPackage.packagedElements.contains(umlClass))
-		umlClass.destroy()
-		assertFalse(classPackage.packagedElements.contains(umlClass))
-		saveAndSynchronizeWithInteractions(rootElement)
+		rootElement.propagate [
+			claimPackagedElementWithName(Package, CLASS_NAME + PACKAGE_SUFFIX) => [
+				claimPackagedElementWithName(Class, CLASS_NAME) => [
+					destroy()
+				]
+			]
+		]
 
-		// Check if Component still exists:		
-		assertFalse(classPackage.packagedElements.contains(umlComponent))
-	}
-
-	@Test
-	def void testCreateComponentForClassInPackage() {
-		val classPackage = createPackage(CLASS_NAME)
-		val umlClass = createClass(CLASS_NAME, classPackage, 0)
-		saveAndSynchronizeWithInteractions(umlClass)
-
-		assertComponentForClass(umlClass, CLASS_NAME)
-		assertPackageLinkedToComponent(classPackage, CLASS_NAME)
+		rootElement.claimNoPackagedElementWithName(Component, CLASS_NAME)
+		assertThat(rootElement.packagedElements.size, is(1))
 	}
 
 }

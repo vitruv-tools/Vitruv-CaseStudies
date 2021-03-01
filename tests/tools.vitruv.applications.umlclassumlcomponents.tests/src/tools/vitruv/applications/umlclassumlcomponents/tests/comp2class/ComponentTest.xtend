@@ -19,7 +19,7 @@ class ComponentTest extends AbstractComp2ClassTest {
 				name = COMP_NAME
 			]
 		]
-		
+
 		rootElement.claimPackagedElementWithName(Component, COMP_NAME)
 		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
 			claimPackagedElementWithName(Class, COMP_NAME)
@@ -32,7 +32,7 @@ class ComponentTest extends AbstractComp2ClassTest {
 				name = COMP_NAME
 			]
 		]
-		
+
 		val changedCompName = COMP_NAME + "New"
 		rootElement.claimPackagedElementWithName(Component, COMP_NAME).propagate [
 			name = changedCompName
@@ -52,11 +52,11 @@ class ComponentTest extends AbstractComp2ClassTest {
 				name = COMP_NAME
 			]
 		]
-		
+
 		rootElement.claimPackagedElementWithName(Component, COMP_NAME)
 		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
 			claimPackagedElementWithName(Class, COMP_NAME)
-		
+
 		// Remove Component		
 		rootElement.propagate [
 			claimPackagedElementWithName(Component, COMP_NAME).destroy()
@@ -110,7 +110,7 @@ class ComponentTest extends AbstractComp2ClassTest {
 				name = COMP_NAME
 			]
 		]
-		
+
 		rootElement.claimPackagedElementWithName(Component, COMP_NAME)
 		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
 			claimPackagedElementWithName(Class, COMP_NAME)

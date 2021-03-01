@@ -47,8 +47,8 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
 	@Test
 	def void integrationTestWithComponentAnd2DataTypes() {
-		userInteraction// Decide to create a Class for the first DataType:
-		.onNextMultipleChoiceSingleSelection.respondWith("No")// Decide to create a Class for the second DataType:
+		userInteraction // Decide to create a Class for the first DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No") // Decide to create a Class for the second DataType:
 		.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		val umlModel = integrationTest("TestModelWith2DataTypesAndComponent.uml")
@@ -64,8 +64,8 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
 	@Test
 	def void integrationTestWithComponentAndDataTypeWithoutClassRepresentation() {
-		userInteraction// Decide to create no corresponding Class for the first DataType:
-		.onNextMultipleChoiceSingleSelection.respondWith("Yes")// Decide to create a Class for the second DataType:
+		userInteraction // Decide to create no corresponding Class for the first DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("Yes") // Decide to create a Class for the second DataType:
 		.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		val umlModel = integrationTest("TestModelWith2DataTypesAndComponent.uml")
@@ -81,7 +81,7 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 
 	@Test
 	def void integrationTestWithDataTypeWithPropertyAndOperation() {
-		userInteraction// Decide to create a Class for the DataType:
+		userInteraction // Decide to create a Class for the DataType:
 		.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		val umlModel = integrationTest("TestModelDataTypeWithPropertyAndOperation.uml")
@@ -162,8 +162,8 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	@Disabled
 	@Test
 	def void integrationTestAllCombined() {
-		userInteraction// Decide to create a Class for the first DataType:
-		.onNextMultipleChoiceSingleSelection.respondWith("No")// Decide to create no corresponding Class for the second DataType:
+		userInteraction // Decide to create a Class for the first DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No") // Decide to create no corresponding Class for the second DataType:
 		.onNextMultipleChoiceSingleSelection.respondWith("Yes")
 
 		val umlModel = integrationTest("TestModelAllCombined.uml")
@@ -209,9 +209,9 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	@Test
 	def void integrationTestMatthiasSmallExampleComponentResult() {
 		// This model was retrieved out of the BA PCM->Comp as the result of an integration
-		userInteraction// Decide to create a Class for the first DataType:
-		.onNextMultipleChoiceSingleSelection.respondWith("No")// Decide to create a Class for the second DataType:
-		.onNextMultipleChoiceSingleSelection.respondWith("No")// Decide to create a Class for the third DataType:
+		userInteraction // Decide to create a Class for the first DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No") // Decide to create a Class for the second DataType:
+		.onNextMultipleChoiceSingleSelection.respondWith("No") // Decide to create a Class for the third DataType:
 		.onNextMultipleChoiceSingleSelection.respondWith("No")
 
 		integrationTest("Matthias_small_example_Component_Result.uml")
