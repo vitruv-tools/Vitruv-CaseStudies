@@ -2,6 +2,7 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -46,17 +47,21 @@ routine propagateTypeChangeToTypedMultiplicityElement(
 	}
 	action {
 		execute {
+			val existingUmlType = uTyped.type
 			val jType = jElement.typeReference
 			val isCollectionReference = isCollectionTypeReference(jType)
-	    	if (isCollectionReference){
+	    	val newType = if (isCollectionReference){
 	    		uMultiplicity.lower = 0
 	    		uMultiplicity.upper = LiteralUnlimitedNatural.UNLIMITED
 	    		val innerTypeRef = getInnerTypeRefOfCollectionReference(jType)
 	    		val innerType = if(innerTypeRef !== null) getUmlTypeFromReference(innerTypeRef, correspondenceModel) else null
-	    		uTyped.type = innerType
+	    		innerType
 	    	}
 	    	else {
-	    		uTyped.type = getUmlTypeFromReference(jType, correspondenceModel)
+	    		getUmlTypeFromReference(jType, correspondenceModel)
+	    	}
+	    	if (!EcoreUtil.equals(existingUmlType, newType)) {
+	    		uTyped.type = newType
 	    	}
 		}
 	}

@@ -6,6 +6,7 @@ import org.eclipse.uml2.uml.ParameterDirectionKind
 
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -79,9 +80,9 @@ routine propagateTypedMultiplicityElementTypeChanged(
 	}
 	action {
 		execute {
+			val existingJavaTypeReference = jElement.typeReference
 	    	var typeReference = createTypeReference(uElement.type, jType, defaultReference, userInteractor)
-	    	
-			if(uMultiplicity.lower == 0 && uMultiplicity.upper == LiteralUnlimitedNatural.UNLIMITED) {
+	    	if(uMultiplicity.lower == 0 && uMultiplicity.upper == LiteralUnlimitedNatural.UNLIMITED) {
 				if (typeReference === defaultReference){
 					// could not create a specific typeReference for the uElement.type
 					// default to java.lang.Object as an inner type
@@ -99,8 +100,10 @@ routine propagateTypedMultiplicityElementTypeChanged(
 	    		}
 			}
 			
-			jElement.typeReference = typeReference
-			addJavaImport(jElement.containingCompilationUnit, typeReference)
+			if (!EcoreUtil.equals(existingJavaTypeReference, typeReference)) {
+				jElement.typeReference = typeReference
+				addJavaImport(jElement.containingCompilationUnit, typeReference)				
+			}
 		}
 	}
 }
