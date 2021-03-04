@@ -36,6 +36,8 @@ routine createOrFindUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClas
         val uClassifier = retrieve uml::Classifier corresponding to jClassifier
             with uClassifier instanceof OperationOwner
         require absence of uml::Operation corresponding to jMethod
+        require absence of uml::Property corresponding to jMethod tagged with UmlJavaCorrespondenceTag.GETTER
+        require absence of uml::Property corresponding to jMethod tagged with UmlJavaCorrespondenceTag.SETTER
     }
     action {
         call {
