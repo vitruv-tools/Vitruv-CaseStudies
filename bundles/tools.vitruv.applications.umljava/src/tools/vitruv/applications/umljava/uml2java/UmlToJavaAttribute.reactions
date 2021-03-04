@@ -1,6 +1,6 @@
 import org.eclipse.uml2.uml.Property
 import org.emftext.language.java.members.Field
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaTag
+import tools.vitruv.applications.umljava.util.UmlJavaCorrespondenceTag
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
@@ -82,8 +82,8 @@ routine insertJavaField(uml::Property umlProperty, uml::Classifier umlClassifier
     match {
         val javaField = retrieve java::Field corresponding to umlProperty
         val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
-        val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.GETTER
-        val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.SETTER
+        val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlJavaCorrespondenceTag.GETTER
+        val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlJavaCorrespondenceTag.SETTER
     }
     action {
         update javaClassifier {
@@ -102,8 +102,8 @@ reaction UmlAttributeDeleted {
 routine deleteJavaField(uml::Property umlProperty) {
     match {
         val javaField = retrieve java::Field corresponding to umlProperty
-        val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.GETTER
-        val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlToJavaTag.SETTER
+        val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlJavaCorrespondenceTag.GETTER
+        val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlJavaCorrespondenceTag.SETTER
 
     }
     action {
@@ -167,8 +167,8 @@ routine changeJavaAttributeType(uml::Property uAttribute) {
     match {
         val jAttribute = retrieve java::Field corresponding to uAttribute
         val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uAttribute.type
-        val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlToJavaTag.GETTER
-        val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlToJavaTag.SETTER
+        val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlJavaCorrespondenceTag.GETTER
+        val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlJavaCorrespondenceTag.SETTER
     }
     action {
         call {
@@ -187,7 +187,7 @@ routine createOrFindJavaGetter(uml::Property uAttribute, java::Field jAttribute)
             if (javaGetter === null) {
                 javaGetter = createGetterForAttribute(jAttribute)
             }
-            createAccessorCorrespondence(uAttribute, javaGetter, UmlToJavaTag.GETTER)
+            createAccessorCorrespondence(uAttribute, javaGetter, UmlJavaCorrespondenceTag.GETTER)
         }
     }
 }
@@ -199,7 +199,7 @@ routine createOrFindJavaSetter(uml::Property uAttribute, java::Field jAttribute)
             if (javaSetter === null) {
                 javaSetter = createSetterForAttribute(jAttribute)
             }
-            createAccessorCorrespondence(uAttribute, javaSetter, UmlToJavaTag.SETTER)
+            createAccessorCorrespondence(uAttribute, javaSetter, UmlJavaCorrespondenceTag.SETTER)
         }
     }
 }
@@ -218,8 +218,8 @@ reaction UmlAttributeRenamed {
 routine renameJavaAttribute(String newName, String oldName, uml::Property uAttribute) {
     match {
         val jAttribute = retrieve java::Field corresponding to uAttribute
-        val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlToJavaTag.GETTER
-        val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlToJavaTag.SETTER
+        val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlJavaCorrespondenceTag.GETTER
+        val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlJavaCorrespondenceTag.SETTER
     }
     action {
         call {
