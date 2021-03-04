@@ -6,7 +6,6 @@ Automatic-Module-Name: tools.vitruv.applications.cbs.frameworkwrapper
 Bundle-Version: 0.3.0.qualifier
 Require-Bundle: tools.vitruv.dsls.reactions,
  tools.vitruv.dsls.mappings,
- tools.vitruv.dsls.mirbase,
  tools.vitruv.dsls.common,
  tools.vitruv.dsls.commonalities,
  tools.vitruv.extensions.dslsruntime.reactions,
