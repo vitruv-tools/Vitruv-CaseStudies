@@ -7,6 +7,9 @@ import static tools.vitruv.extensions.dslsruntime.mappings.updates.MappingRoutin
 
 import static extension tools.vitruv.applications.pcmumlclass.mapping.MappingUpdateUtils.*
 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
 //will be ignored anyway because we only import the routines
 reactions: umlXpcmRoutines 
 in reaction to changes in UML
@@ -52,7 +55,7 @@ routine updateRepoName(uml::Package repositoryPkg, uml::Package contractsPkg , u
 	}
 }
 
-routine updateRepoPackageName(repository::Repository repository) {
+routine updateRepoPackageName(pcm::Repository repository) {
 	match{
 		val repositoryPkg = retrieve asserted uml::Package corresponding to repository tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 	}	
@@ -84,7 +87,7 @@ routine updateComponentName(uml::Package componentPackage, uml::Package reposito
 	}
 }
    	 
-routine updateComponentCorrespondingUmlNames(repository::RepositoryComponent component, repository::Repository repository) {
+routine updateComponentCorrespondingUmlNames(pcm::RepositoryComponent component, pcm::Repository repository) {
 	match{
 		val umlComponentImplementation = retrieve uml::Class corresponding to component tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val umlComponentPackage = retrieve uml::Package corresponding to component tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
@@ -196,7 +199,7 @@ routine changeTypeOfCorrespondingRequiredRole(uml::Property umlProperty, uml::Pa
 	}
 }
 
-routine updateRequiredRoleCorrespondingUmlNames(repository::OperationRequiredRole role, repository::OperationInterface operationInterface , entity::InterfaceProvidingRequiringEntity requiringEntity) {
+routine updateRequiredRoleCorrespondingUmlNames(pcm::OperationRequiredRole role, pcm::OperationInterface operationInterface, pcm::InterfaceProvidingRequiringEntity requiringEntity) {
 	match{
 		val property = retrieve uml::Property corresponding to role tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
 		val parameter = retrieve uml::Parameter corresponding to role tagged with TagLiterals.REQUIRED_ROLE__PARAMETER		
@@ -246,11 +249,13 @@ routine updateInterfaceRealizationName(pcm::OperationProvidedRole role, pcm::Ope
 
 routine updateSignaturePcmReturnType(uml::Operation operation, uml::Parameter returnParameter , uml::Interface interface_) {
 	action{
-		call umlReturnAndRegularParameterTypeReactions.propagateTypeChange(returnParameter)
+		call {
+			umlReturnAndRegularParameterTypeReactions.propagateTypeChange(returnParameter)
+		}
 	}
 }
 
-routine updateSignatureUmlName(repository::OperationSignature operationSignature, repository::DataType returnType , repository::OperationInterface operationInterface) {
+routine updateSignatureUmlName(pcm::OperationSignature operationSignature, pcm::DataType returnType , pcm::OperationInterface operationInterface) {
 	match{
 		val operation = retrieve uml::Operation corresponding to operationSignature tagged with TagLiterals.SIGNATURE__OPERATION
 	} 	
@@ -261,7 +266,7 @@ routine updateSignatureUmlName(repository::OperationSignature operationSignature
 	}
 }
 
-routine updateSignatureUmlReturnType(repository::OperationSignature operationSignature, repository::DataType returnType , repository::OperationInterface operationInterface) {
+routine updateSignatureUmlReturnType(pcm::OperationSignature operationSignature, pcm::DataType returnType , pcm::OperationInterface operationInterface) {
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to operationSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
 	}
@@ -271,12 +276,14 @@ routine updateSignatureUmlReturnType(repository::OperationSignature operationSig
 			//fix for setting return literal
 			umlParam.direction = ParameterDirectionKind.RETURN_LITERAL
 		}
-		call pcmDataTypePropagationReactions.setUmlParameterType(returnType, umlParam)
+		call {
+			pcmDataTypePropagationReactions.setUmlParameterType(returnType, umlParam)
+		}
 	}
 }
 	
 
-//routine changeTypeOfCorrespondingRegularParameter(repository::OperationSignature operationSignature, repository::Parameter parameter , repository::DataType returnType , repository::OperationInterface operationInterface) {
+//routine changeTypeOfCorrespondingRegularParameter(pcm::OperationSignature operationSignature, pcm::Parameter parameter , pcm::DataType returnType , pcm::OperationInterface operationInterface) {
 //	match {
 //		val umlParam = retrieve uml::Parameter corresponding to parameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 //	}
@@ -291,7 +298,7 @@ routine updateSignatureUmlReturnType(repository::OperationSignature operationSig
 //	}
 //}
 
-//routine renameCorrespondingRegularParameter(repository::OperationSignature operationSignature, repository::Parameter parameter , repository::DataType returnType , repository::OperationInterface operationInterface) {
+//routine renameCorrespondingRegularParameter(pcm::OperationSignature operationSignature, pcm::Parameter parameter , pcm::DataType returnType , pcm::OperationInterface operationInterface) {
 //	match {
 //		val umlParam = retrieve uml::Parameter corresponding to parameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 //	}
@@ -302,7 +309,7 @@ routine updateSignatureUmlReturnType(repository::OperationSignature operationSig
 //	}
 //}
 
-//routine changeDirectionOfCorrespondingRegularParameter(repository::OperationSignature operationSignature, repository::Parameter parameter , repository::DataType returnType , repository::OperationInterface operationInterface) {
+//routine changeDirectionOfCorrespondingRegularParameter(pcm::OperationSignature operationSignature, pcm::Parameter parameter , pcm::DataType returnType , pcm::OperationInterface operationInterface) {
 //	match {
 //		val umlParam = retrieve uml::Parameter corresponding to parameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 //	}
