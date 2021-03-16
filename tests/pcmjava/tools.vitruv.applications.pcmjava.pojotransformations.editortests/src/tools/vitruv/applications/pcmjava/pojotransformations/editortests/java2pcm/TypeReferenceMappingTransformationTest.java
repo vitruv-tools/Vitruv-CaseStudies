@@ -26,7 +26,7 @@ public class TypeReferenceMappingTransformationTest extends Java2PcmPackageMappi
 
 		// add the implement relation
 		final OperationProvidedRole opr = super.addImplementsCorrespondingToOperationProvidedRoleToClass(
-				basicComponent.getEntityName(), opInterface.getEntityName());
+				basicComponent.getEntityName() + "Impl", opInterface.getEntityName());
 
 		assertEquals(opr.getProvidedInterface__OperationProvidedRole().getId(), opInterface.getId(),
 				"The interface proivieded by the provided role is not the expected interface");
