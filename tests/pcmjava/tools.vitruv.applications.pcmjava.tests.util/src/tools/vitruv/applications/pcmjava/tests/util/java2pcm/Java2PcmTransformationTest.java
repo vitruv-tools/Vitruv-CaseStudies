@@ -326,14 +326,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		this.secondPackage = this.createPackageWithPackageInfo(namespace);
 	}
 
-	protected void createPackage(final String[] namespace) throws Throwable {
-		final IPackageFragmentRoot packageRoot = this.getIJavaProject();
-		final String namespaceDotted = StringUtils.join(namespace, ".");
-		final boolean force = true;
-		packageRoot.createPackageFragment(namespaceDotted, force, new NullProgressMonitor());
-		waitForSynchronization(1);
-	}
-
 	protected Package createPackageWithPackageInfo(final String... namespace) throws IOException {
 		String packageFile = StringUtils.join(namespace, "/");
 		packageFile = packageFile + "/package-info.java";

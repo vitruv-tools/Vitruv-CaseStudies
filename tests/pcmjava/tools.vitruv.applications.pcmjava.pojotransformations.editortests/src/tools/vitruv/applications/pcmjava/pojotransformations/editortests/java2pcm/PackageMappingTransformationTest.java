@@ -36,18 +36,6 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
 		this.assertFilesOnlyForEObjects(repo);
 	}
 
-	@Test
-	public void testAddFirstPackageWithoutFile() throws Throwable {
-		super.createPackage(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
-		// Consistency preservation creates the contracts and datatypes packages, which
-		// also trigger consistency preservation and notify the test
-		waitForSynchronization(2);
-		final CorrespondenceModel ci = this.getCorrespondenceModel();
-		assertTrue(null != ci, "CorrespondenceModel == null");
-		assertTrue(0 < ci.getAllEObjectsOfTypeInCorrespondences(Repository.class).size(),
-				"No repository found in correspondence instance.");
-	}
-
 	/**
 	 * second packages is added --> should be mapped to a basic component
 	 *
