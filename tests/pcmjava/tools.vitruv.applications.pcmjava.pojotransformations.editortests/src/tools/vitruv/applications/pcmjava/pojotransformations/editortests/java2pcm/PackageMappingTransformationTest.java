@@ -11,7 +11,6 @@ import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 import static java.util.stream.Collectors.toSet;

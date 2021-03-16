@@ -129,7 +129,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 		// create interface
 		super.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts",
 				Pcm2JavaTestUtils.INTERFACE_NAME);
-		// create provided role from providing compontent to interface
+		// create provided role from providing component to interface
 		super.addImplementsCorrespondingToOperationProvidedRoleToClass(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME);
 	}
