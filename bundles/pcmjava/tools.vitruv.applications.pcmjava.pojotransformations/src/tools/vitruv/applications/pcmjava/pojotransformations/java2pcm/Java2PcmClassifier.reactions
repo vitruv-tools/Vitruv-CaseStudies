@@ -297,7 +297,7 @@ reaction InterfaceCreated {
 routine createOrFindPCMInterface(java::Interface javaInterface, java::CompilationUnit compilationUnit) {
 	match {
 		val containingPackage = retrieve java::Package corresponding to ContainersPackage.Literals.PACKAGE
-			with containingPackage.compilationUnits.map[namespacesAsString + '.' + name].contains(compilationUnit.namespacesAsString + '.' + compilationUnit.name)
+			with containingPackage.namespacesAsString + containingPackage.name + "." == compilationUnit.namespacesAsString
 		val pcmRepository = retrieve optional pcm::Repository corresponding to containingPackage tagged with "contracts"
 		require absence of pcm::OperationInterface corresponding to javaInterface
 	}
