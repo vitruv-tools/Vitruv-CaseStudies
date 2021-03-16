@@ -101,20 +101,15 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
 
 		final Package renamedPackage = super.renamePackage(this.secondPackage, packageName);
 
-		// EcoreResourceBridge.saveEObjectAsOnlyContent(secondPackage, );
-		// waitForSynchronization();
-
 		final Set<EObject> correspondingEObjects = CorrespondenceModelUtil
 				.getCorrespondingEObjects(this.getCorrespondenceModel(), renamedPackage).stream()
-				.filter(it -> it != null).collect(toSet()); // filter out null from non-EObject correspondence
+				.filter(it -> it != null && it instanceof BasicComponent).collect(toSet()); // filter out null from non-EObject correspondence
 		final EObject correspondingEObject = claimOne(correspondingEObjects);
-		assertTrue(correspondingEObject instanceof BasicComponent,
-				"The corresponding EObject for the package has to be a BasicComponent");
 		final BasicComponent bc = (BasicComponent) correspondingEObject;
 		// repository of basic component has to be the repository
 		assertEquals(repo.getId(), bc.getRepository__RepositoryComponent().getId(),
 				"Repository of basic compoennt is not the repository: " + repo);
-		// name should be changed since there is no implementing class (yet) fot the
+		// name should be changed since there is no implementing class (yet) for the
 		// component
 		assertTrue(packageName.toLowerCase().contains(bc.getEntityName().toLowerCase()),
 				"The name of the basic component, which is '" + bc.getEntityName()
