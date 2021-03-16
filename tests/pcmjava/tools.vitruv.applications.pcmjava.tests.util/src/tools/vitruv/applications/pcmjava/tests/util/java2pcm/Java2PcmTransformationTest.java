@@ -352,10 +352,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final IFile iFile = URIUtil.getIFileForEMFUri(resource.getURI());
 		IPath iPath = iFile.getProjectRelativePath();
 		iPath = iPath.removeLastSegments(1);
-		final String oldPackageName = packageToRename.getName();
-		if (oldPackageName.contains(".")) {
-			newName = oldPackageName.substring(0, oldPackageName.lastIndexOf(".") + 1) + newName;
-		}
+		newName = packageToRename.getNamespacesAsString() + newName;
 		final IFolder iFolder = iFile.getProject().getFolder(iPath);
 		final IJavaElement javaPackage = JavaCore.create(iFolder);
 		this.refactorRenameJavaElement(newName, javaPackage, IJavaRefactorings.RENAME_PACKAGE);
