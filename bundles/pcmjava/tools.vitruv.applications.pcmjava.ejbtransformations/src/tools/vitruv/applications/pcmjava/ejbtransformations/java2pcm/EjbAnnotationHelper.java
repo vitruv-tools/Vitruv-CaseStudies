@@ -8,22 +8,26 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.annotations.AnnotationInstance;
+import org.emftext.language.java.annotations.SingleAnnotationParameter;
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
+import org.emftext.language.java.references.StringReference;
 
 public final class EjbAnnotationHelper {
 
 	private static final Logger logger = Logger.getLogger(EjbAnnotationHelper.class.getSimpleName());
-
-	private static final String STATELESS_ANNOTATION_NAME = "Stateless";
-	private static final String STATEFUL_ANNOTATION_NAME = "Stateful";
-	private static final String MESSAGE_DRIVEN_ANNOTATION_NAME = "MessageDriven";
-	private static final String LOCAL_ANNOTATION_NAME = "Local";
-	private static final String REMOTE_ANNOTATION_NAME = "Remote";
-	private static final String EJB_ANNOTATION_NAME = "EJB";
+	
+	public static final String BEAN_ANNOTATION_NAME = "SuppressWarnings";
+	
+	public static final String STATELESS_ANNOTATION_NAME = "Stateless";
+	public static final String STATEFUL_ANNOTATION_NAME = "Stateful";
+	public static final String MESSAGE_DRIVEN_ANNOTATION_NAME = "MessageDriven";
+	public static final String LOCAL_ANNOTATION_NAME = "Local";
+	public static final String REMOTE_ANNOTATION_NAME = "Remote";
+	public static final String EJB_ANNOTATION_NAME = "EJB";
 
 	static final Set<String> EJB_COMPONENT_ANNOTATION_NAMES = new HashSet<String>(
 			Arrays.asList(EjbAnnotationHelper.STATELESS_ANNOTATION_NAME, EjbAnnotationHelper.STATEFUL_ANNOTATION_NAME,
@@ -47,6 +51,18 @@ public final class EjbAnnotationHelper {
 		return found;
 	}
 
+	public static boolean filterAnnotationParameterName(final AnnotationInstance annotation,
+			final Set<String> annotationParamertersToCheck) {
+		if (annotation.getParameter() instanceof SingleAnnotationParameter) {
+			SingleAnnotationParameter parameter = (SingleAnnotationParameter)annotation.getParameter();
+			if (parameter.getValue() instanceof StringReference) {
+				StringReference value = (StringReference)parameter.getValue();
+				return annotationParamertersToCheck.contains(value.getValue());
+			}
+		}
+		return false;
+	}
+	
 	public static boolean filterAnnotationName(final AnnotationInstance annotation,
 			final Set<String> annotationClassifiersToCheck) {
 		final Classifier annotationClassifier = annotation.getAnnotation();
@@ -55,13 +71,20 @@ public final class EjbAnnotationHelper {
 		}
 		return false;
 	}
-
+	
+	/*
+	 * We do currently not use the Java EE annotations like @Stateful, because they require the
+	 * Java EE library to be present in the project. Until we have adapted the tests to provide
+	 * that library, we use the simple @JavaBean annotation with a parameter describing the
+	 * bean role.
+	 */
 	public static boolean hasAnnoations(final AnnotableAndModifiable annotableAndModifiable,
-			final Set<String> annotationClassifiersToCheck) {
+			final Set<String> annotationParametersToCheck) {
 		return annotableAndModifiable.getAnnotationsAndModifiers().stream()
 				.filter(annotationOrModifier -> annotationOrModifier instanceof AnnotationInstance)
-				.map(annotation -> (AnnotationInstance) annotation).filter(annotation -> EjbAnnotationHelper
-						.filterAnnotationName(annotation, annotationClassifiersToCheck))
+				.map(annotation -> (AnnotationInstance) annotation)
+				.filter(annotation -> filterAnnotationName(annotation, Set.of(BEAN_ANNOTATION_NAME)))
+				.filter(annotation -> filterAnnotationParameterName(annotation, annotationParametersToCheck))
 				.collect(Collectors.toList()).size() > 0;
 	}
 

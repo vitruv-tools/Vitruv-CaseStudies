@@ -955,12 +955,13 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	// add Annotation via the framework
 	protected <T> T addAnnotationToClassifier(final AnnotableAndModifiable annotable, final String annotationName,
-			final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
+			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
 		final IType type = cu.getType(className);
 		final int offset = CompilationUnitManipulatorHelper.getOffsetForAddingAnntationToClass(type);
-		final InsertEdit insertEdit = new InsertEdit(offset, "@" + annotationName);
+		final String composedName = "@" + annotationName + (annotationParameter != null ? "(\"" + annotationParameter + "\")" : "") + java.lang.System.lineSeparator();
+		final InsertEdit insertEdit = new InsertEdit(offset, composedName);
 		editCompilationUnit(cu, insertEdit);
 		final Set<T> eObjectsByType = CorrespondenceModelUtil
 				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), annotable, classOfCorrespondingObject);
@@ -969,12 +970,13 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	// add Annotation via the framework
 	protected <T> T addAnnotationToField(final String fieldName, final String annotationName,
-			final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
+			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
 		final IType type = cu.getType(className);
 		final int offset = CompilationUnitManipulatorHelper.getOffsetForAddingAnntationToField(type, fieldName);
-		final InsertEdit insertEdit = new InsertEdit(offset, "@" + annotationName + " ");
+		final String composedName = "@" + annotationName + (annotationParameter != null ? "(\"" + annotationParameter + "\")" : "") + java.lang.System.lineSeparator();
+		final InsertEdit insertEdit = new InsertEdit(offset, composedName);
 		editCompilationUnit(cu, insertEdit);
 		final Field jaMoPPField = this.getJaMoPPFieldFromClass(cu, fieldName);
 		final Set<T> eObjectsByType = CorrespondenceModelUtil
