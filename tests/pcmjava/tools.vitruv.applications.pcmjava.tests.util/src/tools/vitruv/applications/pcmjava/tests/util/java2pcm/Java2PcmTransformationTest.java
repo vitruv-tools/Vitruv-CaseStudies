@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jdt.core.IBuffer;
@@ -47,10 +46,7 @@ import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.JavaClasspath;
-import org.emftext.language.java.annotations.AnnotationInstance;
-import org.emftext.language.java.annotations.AnnotationsFactory;
 import org.emftext.language.java.classifiers.Classifier;
-import org.emftext.language.java.classifiers.ClassifiersFactory;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
@@ -87,13 +83,10 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.domains.java.JamoppLibraryHelper;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
-import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
-import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
-import tools.vitruv.framework.change.description.ConcreteChange;
-import tools.vitruv.framework.change.description.VitruviusChangeFactory;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
@@ -960,34 +953,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return field;
 	}
 
-	/**
-	 * Create change for annotation manually and notify change synchronizer
-	 *
-	 * @param annotableAndModifiable
-	 * @throws Throwable
-	 */
-	protected void addAnnotationToMember(final AnnotableAndModifiable annotableAndModifiable,
-			final String annotationName) throws Throwable {
-		final JavaInsertEReference<EObject, EObject> createChange = ReferenceFactory.eINSTANCE
-				.createJavaInsertEReference();
-		// createChange.setIsCreate(true);
-		createChange.setOldAffectedEObject(annotableAndModifiable);
-		final AnnotationInstance newAnnotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance();
-		final Classifier classifier = this.createClassifierFromName(annotationName);
-		newAnnotation.setAnnotation(classifier);
-		annotableAndModifiable.getAnnotationsAndModifiers().add(newAnnotation);
-		createChange.setAffectedEObject(annotableAndModifiable);
-		final EReference containingReference = (EReference) newAnnotation.eContainingFeature();
-		@SuppressWarnings("unchecked")
-		final int index = ((EList<EObject>) createChange.getAffectedEObject().eGet(containingReference))
-				.indexOf(newAnnotation);
-		createChange.setAffectedFeature(containingReference);
-		createChange.setIndex(index);
-		createChange.setNewValue(newAnnotation);
-		final ConcreteChange change = VitruviusChangeFactory.getInstance().createConcreteApplicableChange(createChange);
-		getVirtualModel().propagateChange(change);
-	}
-
 	// add Annotation via the framework
 	protected <T> T addAnnotationToClassifier(final AnnotableAndModifiable annotable, final String annotationName,
 			final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
@@ -1015,12 +980,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final Set<T> eObjectsByType = CorrespondenceModelUtil
 				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPField, classOfCorrespondingObject);
 		return claimOne(eObjectsByType);
-	}
-
-	private Classifier createClassifierFromName(final String annotationName) {
-		final org.emftext.language.java.classifiers.Class jaMoPPClass = ClassifiersFactory.eINSTANCE.createClass();
-		jaMoPPClass.setName(annotationName);
-		return jaMoPPClass;
 	}
 
 	protected void assertCorrespondingSEFF(final ResourceDemandingSEFF correspondingSeff, String methodName)
