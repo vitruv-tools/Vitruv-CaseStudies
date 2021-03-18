@@ -11,15 +11,12 @@ import java.io.IOException
 import org.eclipse.core.runtime.CoreException
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
+import static tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper.*
 
 /**
  * class that contains special methods for EJB testing
  */
 abstract class EjbJava2PcmTransformationTest extends Java2PcmTransformationTest {
-
-	public static val String STATELESS_ANNOTATION_NAME = "Stateless"
-	public static val String REMOTE_ANNOTATION_NAME = "Remote"
-	public static val String EJB_FIELD_ANNOTATION_NAME = "EJB"
 
 	protected static val String TEST_CLASS_NAME = "TestEJBClass"
 	protected static val String TEST_INTERFACE_NAME = "TestEJBInterface"
@@ -28,19 +25,19 @@ abstract class EjbJava2PcmTransformationTest extends Java2PcmTransformationTest 
 	override protected getChangePropagationSpecifications() {
 		return #[new EjbJava2PcmChangePropagationSpecification()]
 	}
-
+	
 	def protected createEjbClass(String className) {
 		val ConcreteClassifier classifier = super.createClassInPackage(this.mainPackage,
 			className) as ConcreteClassifier
-		val BasicComponent correspondingBasicComponent = this.addAnnotationToClassifier(classifier,
-			STATELESS_ANNOTATION_NAME, BasicComponent, className)
+		val BasicComponent correspondingBasicComponent = addAnnotationToClassifier(classifier, 
+			BEAN_ANNOTATION_NAME, STATELESS_ANNOTATION_NAME, BasicComponent, className)
 		correspondingBasicComponent
 	}
 
 	def protected createEjbInterface(String interfaceName) {
 		val ConcreteClassifier classifier = super.createJaMoPPInterfaceInPackage(mainPackage.name, interfaceName)
 		val OperationInterface correspondingOpInterface = this.addAnnotationToClassifier(classifier,
-			REMOTE_ANNOTATION_NAME, OperationInterface, interfaceName)
+			BEAN_ANNOTATION_NAME, REMOTE_ANNOTATION_NAME, OperationInterface, interfaceName)
 		correspondingOpInterface
 	}
 
