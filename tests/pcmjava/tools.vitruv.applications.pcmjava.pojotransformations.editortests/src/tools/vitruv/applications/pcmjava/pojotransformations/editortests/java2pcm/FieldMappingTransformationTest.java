@@ -72,32 +72,26 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 		this.assertInnerDeclaration(newInnerDeclaration, newFieldTypeName, fieldName);
 	}
 
-	@Disabled
+	@Disabled("Not yet implemented")
 	@Test
 	public void testRemoveFieldInClassThatCorrespondsToBasicComponent() {
-		fail("Not yet implemented");
 	}
 
-	@Disabled
+	@Disabled("Not yet implemented")
 	@Test
 	public void testAddFieldToClassThatCorrespondsToBasicComponent() {
-		fail("Not yet implemented");
 	}
 
-	@Disabled
+	@Disabled("Not yet implemented")
 	@Test
 	public void testAddFieldInClassWithoutCorrespondence() {
-		fail("Not yet implemented");
 	}
 
-	@Disabled
 	@Test
 	public void testAddFieldWithTypeOfInterface() throws Throwable {
 		this.createRepoBasicComponentAndInterface();
 
-		// create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME +
-		// "Requiring" to
-		// Interface
+		// create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" to Interface
 		final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME,
 				"i" + Pcm2JavaTestUtils.INTERFACE_NAME, OperationRequiredRole.class);
@@ -109,8 +103,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 	public void testAddFieldWithTypeOfBasicComponentToClass() throws Throwable {
 		this.createRepoBasicComponentAndInterface();
 
-		// create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME +
-		// "Requiring" to
+		// create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" to
 		// Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing"
 		final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl",
