@@ -7,7 +7,6 @@ Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.framework.applications,
  tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.domains.java.echange,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.common,
  tools.vitruv.domains.pcm,
