@@ -1,4 +1,3 @@
-import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
 import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
@@ -10,6 +9,7 @@ import tools.vitruv.framework.^correspondence.CorrespondenceModelUtil
 
 import static tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper.*
 import static extension tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper.*
+import static extension tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getNormalizedClassifierFromTypeReference
 import static tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil.setParameterName
 import static tools.vitruv.applications.util.temporary.pcm.PcmRepositoryUtil.getFirstRepository
@@ -240,8 +240,12 @@ routine createPCMParameter(java::Parameter jaMoPPParam, pcm::OperationSignature 
 	action {
 		val pcmParameter = create pcm::Parameter and initialize {
 			setParameterName(pcmParameter, jaMoPPParam.name)
-			pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.typeReference, 
-				correspondenceModel, userInteractor, opSignature.interface__OperationSignature.repository__Interface, jaMoPPParam.arrayDimension)
+			pcmParameter.dataType__Parameter = if (jaMoPPParam.typeReference !== null) {
+					jaMoPPParam.typeReference.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel, userInteractor, 
+						opSignature.interface__OperationSignature.repository__Interface, jaMoPPParam.arrayDimension)
+				} else {
+					null
+				}
 		}
 		update opSignature {
 			opSignature.parameters__OperationSignature += pcmParameter
@@ -269,9 +273,12 @@ routine createdReturnType(java::InterfaceMethod method, java::TypeReference type
 routine createPCMReturnType(java::TypeReference returnType, pcm::OperationSignature opSignature, java::Method javaMethod) {
 	action {
 		update opSignature {
-			val pcmDataType = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(returnType, correspondenceModel, userInteractor, 
-					opSignature.interface__OperationSignature.repository__Interface, javaMethod.arrayDimension
-			)
+			val pcmDataType = if (returnType !== null) {
+					returnType.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel, userInteractor, 
+						opSignature.interface__OperationSignature.repository__Interface, javaMethod.arrayDimension)
+				} else {
+					null
+				}
 			opSignature.returnType__OperationSignature = pcmDataType
 		}
 	}
@@ -291,9 +298,12 @@ routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
 	}
 	action {
 		val innerDec = create pcm::InnerDeclaration and initialize {
-			innerDec.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
-					getCorrespondingPCMDataTypeForTypeReference(field.typeReference, correspondenceModel,
+			innerDec.datatype_InnerDeclaration = if (field.typeReference !== null) {
+					field.typeReference.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel,
 						userInteractor, compositeDataType.repository__DataType, field.arrayDimension)
+				} else {
+					null
+				}
 			innerDec.entityName = field.name
 		}
 		add correspondence between innerDec and field
