@@ -30,6 +30,7 @@ import tools.vitruv.framework.userinteraction.UserInteractor
 import tools.vitruv.domains.pcm.util.PrimitiveTypesRepositoryLoader
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import static com.google.common.base.Preconditions.checkState
 
 /**
  * Helper to map type References to PCM data types
@@ -79,23 +80,25 @@ class TypeReferenceCorrespondenceHelper {
 			}
 			pcmDataType = collectionDataType
 		}
-		if (null === pcmDataType) {
-			logger.error("Could not find a PCM data type for type reference " + typeReference)
-		}
 		return pcmDataType
 	}
 
+	/**
+	 * Returns a valid PCM type for the given type reference. Throws an exception if none was found
+	 */
 	def static DataType getDataTypeFromTypeReference(TypeReference typeReference,
 		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
 		if (typeReference instanceof PrimitiveType) {
 			return claimPCMDataTypeForJaMoPPPrimitiveType(typeReference)
-		} else if (typeReference instanceof ClassifierReference) {
-			return getPCMDataTypeForClassifierReference(typeReference, correspondenceModel, userInteractor, repo)
+		}
+		val type = if (typeReference instanceof ClassifierReference) {
+			getPCMDataTypeForClassifierReference(typeReference, correspondenceModel, userInteractor, repo)
 		} else if (typeReference instanceof NamespaceClassifierReference) {
-			return getPCMDataTypeForNamespaceClassifierReference(typeReference, correspondenceModel, userInteractor,
+			getPCMDataTypeForNamespaceClassifierReference(typeReference, correspondenceModel, userInteractor,
 				repo)
 		}
-		return null
+		checkState(type !== null, "Could not find a PCM data type for type reference %s", typeReference)
+		return type
 	}
 
 	def private static DataType getPCMDataTypeForNamespaceClassifierReference(NamespaceClassifierReference reference,
