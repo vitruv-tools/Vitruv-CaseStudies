@@ -55,7 +55,7 @@ reaction CreatedClass {
 
 reaction CreateClassAnnotation {
 	after element inserted in java::Class[annotationsAndModifiers]
-		with affectedEObject.isEjbClass 
+		with affectedEObject.isEjbClass
 	call {
 		val Repository repo = getFirstRepository(correspondenceModel) 
 		createBasicComponent(repo, affectedEObject as NamedElement)
@@ -63,6 +63,9 @@ reaction CreateClassAnnotation {
 }
 
 routine createBasicComponent(pcm::Repository repo, java::NamedElement namedElement) {
+	match {
+		require absence of pcm::BasicComponent corresponding to namedElement
+	}
 	action {
 		val basicComponent = create pcm::BasicComponent and initialize {
 			basicComponent.entityName = namedElement.name;
@@ -96,6 +99,9 @@ reaction CreateInterfaceAnnotation {
 }
 
 routine createOperationInterface(pcm::Repository repo, java::NamedElement namedElement) {
+	match {
+		require absence of pcm::OperationInterface corresponding to namedElement
+	}
 	action { 
 		val operationInterface = create pcm::OperationInterface and initialize {
 			operationInterface.entityName = namedElement.name;
@@ -136,7 +142,7 @@ reaction CreateField {
 }
 
 routine createdField(java::Field field) {
-	match {
+	match {  
 		val basicComponent = retrieve pcm::BasicComponent corresponding to field
 		//retrieve: pcm::OperationInterface as opInterface corresponding to newValue
 	}
@@ -151,6 +157,9 @@ routine createdField(java::Field field) {
 
 
 routine createOperationRequiredRole(pcm::BasicComponent basicComponent, pcm::OperationInterface opInterface, java::Field field) {
+	match {
+		require absence of pcm::OperationRequiredRole corresponding to field
+	}
 	action { 
 		val orr = create pcm::OperationRequiredRole and initialize {
 			orr.requiringEntity_RequiredRole = basicComponent
