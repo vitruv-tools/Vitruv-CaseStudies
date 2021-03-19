@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.util.java2pcm;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -195,11 +194,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		// accidentally resolved
 		JavaClasspath.reset();
 		JamoppLibraryHelper.registerStdLib();
-		// Pipe JaMoPP error output to empty stream
-		java.lang.System.setErr(new PrintStream(new java.io.OutputStream() {
-			public void write(int b) {
-			}
-		}));
 	}
 
 	@BeforeEach
