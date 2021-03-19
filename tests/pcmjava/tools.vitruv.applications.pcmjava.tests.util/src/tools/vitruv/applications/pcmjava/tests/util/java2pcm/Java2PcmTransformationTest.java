@@ -148,7 +148,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			fail("Failure during project reload and build");
 		}
 	}
-	
+
 	private void refreshProject() {
 		try {
 			testEclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
@@ -233,9 +233,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		logger.debug("Starting to wait for finished synchronization in test " + testEclipseProject.getName()
 				+ ". Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: "
 				+ expectedNumberOfSyncs);
-		// Trigger the build to start change propagation
-		refreshAndBuildProject();
 		try {
+			// There are still some processes running for which we have to wait to ensure
+			// that we can load the resources during change propagation.
+			// Probably the Eclipse save job has not finished before we start the change
+			// propagation process. Until we have found out how to fix that, we need to wait
+			// a high enough amount of time to ensure that no failures occur.
+			Thread.sleep(400);
+			// Trigger the build to start change propagation
+			refreshAndBuildProject();
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
 				synchronized (this) {
@@ -949,12 +955,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	// add Annotation via the framework
 	protected <T> T addAnnotationToClassifier(final AnnotableAndModifiable annotable, final String annotationName,
-			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
+			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className)
+			throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
 		final IType type = cu.getType(className);
 		final int offset = CompilationUnitManipulatorHelper.getOffsetForAddingAnntationToClass(type);
-		final String composedName = "@" + annotationName + (annotationParameter != null ? "(\"" + annotationParameter + "\")" : "") + java.lang.System.lineSeparator();
+		final String composedName = "@" + annotationName
+				+ (annotationParameter != null ? "(\"" + annotationParameter + "\")" : "")
+				+ java.lang.System.lineSeparator();
 		final InsertEdit insertEdit = new InsertEdit(offset, composedName);
 		editCompilationUnit(cu, insertEdit);
 		final Set<T> eObjectsByType = CorrespondenceModelUtil
@@ -964,12 +973,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	// add Annotation via the framework
 	protected <T> T addAnnotationToField(final String fieldName, final String annotationName,
-			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
+			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className)
+			throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
 		final IType type = cu.getType(className);
 		final int offset = CompilationUnitManipulatorHelper.getOffsetForAddingAnntationToField(type, fieldName);
-		final String composedName = "@" + annotationName + (annotationParameter != null ? "(\"" + annotationParameter + "\")" : "") + java.lang.System.lineSeparator();
+		final String composedName = "@" + annotationName
+				+ (annotationParameter != null ? "(\"" + annotationParameter + "\")" : "")
+				+ java.lang.System.lineSeparator();
 		final InsertEdit insertEdit = new InsertEdit(offset, composedName);
 		editCompilationUnit(cu, insertEdit);
 		final Field jaMoPPField = this.getJaMoPPFieldFromClass(cu, fieldName);
