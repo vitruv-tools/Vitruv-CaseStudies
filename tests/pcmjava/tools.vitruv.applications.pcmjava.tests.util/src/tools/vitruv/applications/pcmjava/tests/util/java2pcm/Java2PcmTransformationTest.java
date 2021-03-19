@@ -290,13 +290,9 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
 		this.mainPackage = this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
-		// Contracts and datatypes packages are created by change propagation, so wait
-		// for them to be synchronized instead of creating them
+		// Contracts and datatypes packages are created by change propagation and recorded by the Java monitor,
+		// so trigger their processing by the monitor
 		waitForSynchronization(2);
-		// this.createPackageWithPackageInfo(new String[] {
-		// Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts" });
-		// this.createPackageWithPackageInfo(new String[] {
-		// Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes" });
 		final CorrespondenceModel ci = this.getCorrespondenceModel();
 		if (null == ci) {
 			throw new RuntimeException("Could not get correspondence instance.");
@@ -400,24 +396,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 						final Package jaMoPPPackage = this.getJaMoPPRootForVURI(vuri);
 						return jaMoPPPackage;
 					}
-					// final IJavaElement[] javaElements =
-					// fragment.getChildren();
-					// for (int k = 0; k < javaElements.length; k++) {
-					// final IJavaElement javaElement = javaElements[k];
-					// if (javaElement.getElementType() ==
-					// IJavaElement.PACKAGE_FRAGMENT) {
-					// final IPackageFragment packageFragment =
-					// (IPackageFragment) javaElement;
-					// if (packageFragment.getElementName().equals(newName)) {
-					// final VURI vuri =
-					// this.getVURIForElementInPackage(packageFragment,
-					// "package-info.java");
-					// final Package jaMoPPPackage =
-					// this.getJaMoPPRootForVURI(vuri);
-					// return jaMoPPPackage;
-					// }
-					// }
-					// }
 				}
 			}
 		}
