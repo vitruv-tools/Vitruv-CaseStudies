@@ -235,11 +235,12 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				+ expectedNumberOfSyncs);
 		try {
 			// There are still some processes running for which we have to wait to ensure
-			// that we can load the resources during change propagation.
+			// that we can load the resources during change propagation and check them afterwards.
 			// Probably the Eclipse save job has not finished before we start the change
-			// propagation process. Until we have found out how to fix that, we need to wait
-			// a high enough amount of time to ensure that no failures occur.
-			Thread.sleep(400);
+			// propagation process and before we check the models afterwards. Until we have found 
+			// out how to fix that, we need to wait a high enough amount of time to ensure that 
+			// no failures occur.
+			Thread.sleep(100);
 			// Trigger the build to start change propagation
 			refreshAndBuildProject();
 			int wakeups = 0;
@@ -255,6 +256,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 					fail("Waiting for synchronization timed out");
 				}
 			}
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			fail("An interrupt occurred unexpectedly");
 		}
