@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -78,6 +79,7 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.system.System;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
+import static edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IResourceUtil.getEMFPlatformURI;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
@@ -91,7 +93,6 @@ import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
-import tools.vitruv.framework.util.datatypes.VURI;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationAbortCause;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationListener;
 import tools.vitruv.testutils.DisableAutoBuild;
@@ -373,8 +374,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			}
 			final ReplaceEdit edit = new ReplaceEdit(offset, entityName.length(), newName);
 			editCompilationUnit(cu, edit);
-			final VURI vuri = VURI.getInstance(cu.getResource());
-			final Classifier jaMoPPClass = this.getJaMoPPClassifierForVURI(vuri);
+			final URI uri = getEMFPlatformURI(cu.getResource());
+			final Classifier jaMoPPClass = this.getJaMoPPClassifierForURI(uri);
 			return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
 					jaMoPPClass, type));
 		} catch (final Throwable e) {
@@ -392,8 +393,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				if (iJavaElement instanceof IPackageFragment) {
 					final IPackageFragment fragment = (IPackageFragment) iJavaElement;
 					if (fragment.getElementName().equals(newName)) {
-						final VURI vuri = this.getVURIForElementInPackage(fragment, "package-info");
-						final Package jaMoPPPackage = this.getJaMoPPRootForVURI(vuri);
+						final URI uri = this.getURIForElementInPackage(fragment, "package-info");
+						final Package jaMoPPPackage = this.getJaMoPPRootForURI(uri);
 						return jaMoPPPackage;
 					}
 				}
@@ -449,19 +450,18 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			throws CoreException {
 		final IPackageFragment packageFragment = this.getPackageFragment(packageNamespace);
 		createEmptyClass(packageFragment, implementingClassName);
-		final VURI vuri = this.getVURIForElementInPackage(packageFragment, implementingClassName);
-		final Classifier jaMoPPClass = this.getJaMoPPClassifierForVURI(vuri);
+		final URI uri = this.getURIForElementInPackage(packageFragment, implementingClassName);
+		final Classifier jaMoPPClass = this.getJaMoPPClassifierForURI(uri);
 		return jaMoPPClass;
 	}
 
-	private VURI getVURIForElementInPackage(final IPackageFragment packageFragment, final String elementName) {
-		String vuriKey = packageFragment.getResource().getFullPath().toString() + "/" + elementName + "."
+	private URI getURIForElementInPackage(final IPackageFragment packageFragment, final String elementName) {
+		String uriString = packageFragment.getResource().getFullPath().toString() + "/" + elementName + "."
 				+ JavaNamespace.FILE_EXTENSION;
-		if (vuriKey.startsWith("/")) {
-			vuriKey = vuriKey.substring(1, vuriKey.length());
+		if (uriString.startsWith("/")) {
+			uriString = uriString.substring(1, uriString.length());
 		}
-		final VURI vuri = VURI.getInstance(vuriKey);
-		return vuri;
+		return URI.createPlatformResourceURI(uriString, true);
 	}
 
 	private IPackageFragment getPackageFragment(String packageNamespace) throws CoreException {
@@ -474,14 +474,14 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		throw new RuntimeException("No packageFragment found for JaMoPP package " + packageNamespace);
 	}
 
-	protected ConcreteClassifier getJaMoPPClassifierForVURI(final VURI vuri) {
-		final CompilationUnit cu = this.getJaMoPPRootForVURI(vuri);
+	protected ConcreteClassifier getJaMoPPClassifierForURI(final URI uri) {
+		final CompilationUnit cu = this.getJaMoPPRootForURI(uri);
 		final Classifier jaMoPPClassifier = cu.getClassifiers().get(0);
 		return (ConcreteClassifier) jaMoPPClassifier;
 	}
 
-	private <T extends JavaRoot> T getJaMoPPRootForVURI(final VURI vuri) {
-		final Resource resource = URIUtil.loadResourceAtURI(vuri.getEMFUri(), new ResourceSetImpl());
+	private <T extends JavaRoot> T getJaMoPPRootForURI(final URI uri) {
+		final Resource resource = URIUtil.loadResourceAtURI(uri, new ResourceSetImpl());
 		// unchecked is OK for the test.
 		@SuppressWarnings("unchecked")
 		final T javaRoot = (T) resource.getContents().get(0);
@@ -616,8 +616,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			throws CoreException {
 		final IPackageFragment packageFragment = this.getPackageFragment(packageNamespace);
 		createEmptyInterface(packageFragment, interfaceName);
-		final VURI vuri = this.getVURIForElementInPackage(packageFragment, interfaceName);
-		final ConcreteClassifier jaMoPPIf = this.getJaMoPPClassifierForVURI(vuri);
+		final URI uri = this.getURIForElementInPackage(packageFragment, interfaceName);
+		final ConcreteClassifier jaMoPPIf = this.getJaMoPPClassifierForURI(uri);
 
 		return jaMoPPIf;
 	}
@@ -693,8 +693,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	protected OperationSignature findOperationSignatureForJaMoPPMethodInCompilationUnit(final String methodName,
 			final String interfaceName, final ICompilationUnit cu) throws Throwable {
-		final VURI vuri = VURI.getInstance(cu.getResource());
-		final Classifier classifier = this.getJaMoPPClassifierForVURI(vuri);
+		final URI uri = getEMFPlatformURI(cu.getResource());
+		final Classifier classifier = this.getJaMoPPClassifierForURI(uri);
 		final Interface jaMoPPInterface = (Interface) classifier;
 		for (final Method jaMoPPMethod : jaMoPPInterface.getMethods()) {
 			if (jaMoPPMethod.getName().equals(methodName)) {
@@ -775,7 +775,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final InsertEdit insertEdit = new InsertEdit(offset, parameterStr);
 		editCompilationUnit(icu, insertEdit);
 		final ConcreteClassifier concreateClassifier = this
-				.getJaMoPPClassifierForVURI(VURI.getInstance(icu.getResource()));
+				.getJaMoPPClassifierForURI(getEMFPlatformURI(icu.getResource()));
 		final Method jaMoPPMethod = (Method) concreateClassifier.getMembersByName(methodName).get(0);
 		final org.emftext.language.java.parameters.Parameter jaMoPPParam = this
 				.getJaMoPPParameterFromJaMoPPMethod(jaMoPPMethod, parameterName);
@@ -797,7 +797,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final ReplaceEdit replaceEdit = new ReplaceEdit(offset + 1, oldTypeName.length() + 1, retTypeStr);
 		editCompilationUnit(icu, replaceEdit);
 		final ConcreteClassifier concreateClassifier = this
-				.getJaMoPPClassifierForVURI(VURI.getInstance(icu.getResource()));
+				.getJaMoPPClassifierForURI(getEMFPlatformURI(icu.getResource()));
 		final Method jaMoPPMethod = (Method) concreateClassifier.getMembersByName(methodName).get(0);
 		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
 				jaMoPPMethod, OperationSignature.class));
@@ -821,7 +821,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	protected Method findJaMoPPMethodInICU(final ICompilationUnit icu, final String methodName) {
-		final ConcreteClassifier cc = this.getJaMoPPClassifierForVURI(VURI.getInstance(icu.getResource()));
+		final ConcreteClassifier cc = this.getJaMoPPClassifierForURI(getEMFPlatformURI(icu.getResource()));
 		final List<Member> jaMoPPMethods = cc.getMembersByName(methodName);
 		for (final Member member : jaMoPPMethods) {
 			if (member instanceof Method && member.getName().equals(methodName)) {
@@ -883,7 +883,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final InsertEdit insertEdit = new InsertEdit(offset, newSource);
 		editCompilationUnit(classCompilationUnit, insertEdit);
 		final org.emftext.language.java.classifiers.Class jaMoPPClass = (org.emftext.language.java.classifiers.Class) this
-				.getJaMoPPClassifierForVURI(VURI.getInstance(classCompilationUnit.getResource()));
+				.getJaMoPPClassifierForURI(getEMFPlatformURI(classCompilationUnit.getResource()));
 		final EList<TypeReference> classImplements = jaMoPPClass.getImplements();
 		logger.debug("Found implements: " + classImplements);
 		for (final TypeReference implementsReference : classImplements) {
@@ -928,7 +928,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	protected Field getJaMoPPFieldFromClass(final ICompilationUnit icu, final String fieldName) {
-		final ConcreteClassifier cc = this.getJaMoPPClassifierForVURI(VURI.getInstance(icu.getResource()));
+		final ConcreteClassifier cc = this.getJaMoPPClassifierForURI(getEMFPlatformURI(icu.getResource()));
 		final Field field = (Field) cc.getMembersByName(fieldName).get(0);
 		return field;
 	}
