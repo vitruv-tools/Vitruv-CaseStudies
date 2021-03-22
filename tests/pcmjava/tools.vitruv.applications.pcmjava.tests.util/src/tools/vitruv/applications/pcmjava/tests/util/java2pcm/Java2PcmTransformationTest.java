@@ -327,7 +327,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		jaMoPPPackage.setName(namespaceList.get(namespaceList.size() - 1));
 		jaMoPPPackage.getNamespaces().addAll(namespaceList.subList(0, namespaceList.size() - 1));
 		final Resource resource = resourceAt(Path.of(getPathInProjectForSrcFile(packageFile)));
-		EcoreResourceBridge.saveEObjectAsOnlyContent(jaMoPPPackage, resource);
+		resource.getContents().add(jaMoPPPackage);
+		resource.save(null);
 		waitForSynchronization(1);
 		return jaMoPPPackage;
 	}
@@ -458,9 +459,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	private URI getURIForElementInPackage(final IPackageFragment packageFragment, final String elementName) {
 		String uriString = packageFragment.getResource().getFullPath().toString() + "/" + elementName + "."
 				+ JavaNamespace.FILE_EXTENSION;
-		if (uriString.startsWith("/")) {
-			uriString = uriString.substring(1, uriString.length());
-		}
 		return URI.createPlatformResourceURI(uriString, true);
 	}
 

@@ -44,7 +44,6 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
@@ -713,7 +712,7 @@ class PcmJamoppUtilsGuice {
 	}
 
 	def static saveResourceForSystem(ComposedStructure system) {
-		EcoreResourceBridge.saveResource(system.eResource)
+		system.eResource.save(null)
 	}
 
 	def static EObject[] createBindCallForConnector(AssemblyContext assemblyContext,

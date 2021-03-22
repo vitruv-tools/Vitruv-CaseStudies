@@ -60,7 +60,6 @@ import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 
@@ -321,7 +320,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		// innerDec.setCompositeDataType_InnerDeclaration(cdt);
 		innerDec.setEntityName(Pcm2JavaTestUtils.INNER_DEC_NAME);
 		cdt.getInnerDeclaration_CompositeDataType().add(innerDec);
-		EcoreResourceBridge.saveResource(cdt.eResource());
+		cdt.eResource().save(null);
 		return innerDec;
 	}
 
