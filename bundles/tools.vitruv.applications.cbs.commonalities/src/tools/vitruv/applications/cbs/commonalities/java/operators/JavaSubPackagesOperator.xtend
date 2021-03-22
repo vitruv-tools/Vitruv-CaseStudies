@@ -11,7 +11,7 @@ import tools.vitruv.domains.java.util.JavaPersistenceHelper
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.AbstractReferenceMappingOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.ReferenceMappingOperator
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
-import tools.vitruv.framework.util.bridges.EMFBridge
+import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createFileURI
 
 import static com.google.common.base.Preconditions.*
 import static java.util.stream.Collectors.*
@@ -133,7 +133,7 @@ class JavaSubPackagesOperator extends AbstractReferenceMappingOperator {
 		if (!packageFile.isRegularFile) {
 			return null
 		}
-		val packageURI = EMFBridge.getEmfFileUriForFile(packageFile.toFile)
+		val packageURI = packageFile.toFile.createFileURI()
 		val packageResource = resourceSet.getResource(packageURI, true)
 		if (packageResource === null) return null
 		val headContent = packageResource.contents.head
