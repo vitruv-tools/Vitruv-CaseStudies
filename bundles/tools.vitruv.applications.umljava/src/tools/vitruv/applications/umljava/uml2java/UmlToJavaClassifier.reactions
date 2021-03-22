@@ -219,7 +219,7 @@ routine addJavaSuperClass(uml::Class uClass, uml::Generalization uGeneralization
 }
 
 reaction UmlSuperClassDeleted {
-    after element uml::Generalization removed from uml::Interface[generalization]
+    after element uml::Generalization removed from uml::Class[generalization]
     call deleteJavaSuperClass(oldValue)
 }
 

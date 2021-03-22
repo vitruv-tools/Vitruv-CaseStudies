@@ -139,9 +139,16 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		val superClass = createSimpleUmlClass(rootElement, SUPER_CLASS_NAME)
 		uClass.generals += superClass
 		propagate
-		val jClass = getCorrespondingClass(uClass)
-		val jSuperClass = getCorrespondingClass(superClass)
+		var jClass = getCorrespondingClass(uClass)
+		var jSuperClass = getCorrespondingClass(superClass)
 		assertHasSuperClass(jClass, jSuperClass)
+		assertClassEquals(uClass, jClass)
+		
+		uClass.generals -= superClass
+		propagate
+		jClass = getCorrespondingClass(uClass)
+		jSuperClass = getCorrespondingClass(superClass)
+		assertTrue(jClass.extends === null)
 		assertClassEquals(uClass, jClass)
 	}
 
