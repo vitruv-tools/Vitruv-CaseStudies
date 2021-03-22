@@ -14,7 +14,6 @@ import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,7 +33,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
 
 		// Test
 		repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
-		EcoreResourceBridge.saveResource(repo.eResource());
+		repo.eResource().save(null);
 		propagate();
 
 		// check
@@ -49,7 +48,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
 
 		// Test
 		repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
-		EcoreResourceBridge.saveResource(repo.eResource());
+		repo.eResource().save(null);
 		propagate();
 
 		// check
