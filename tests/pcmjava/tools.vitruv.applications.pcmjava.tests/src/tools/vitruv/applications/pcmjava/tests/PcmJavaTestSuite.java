@@ -34,13 +34,11 @@ import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.syst
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system.RequiredDelegationConnectorMappingTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system.SystemMappingTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.transformations.JaMoPPTest;
-import tools.vitruv.applications.pcmjava.tests.transformations.JavaUtilsTest;
 
 @RunWith(JUnitPlatform.class)
 
 @SelectClasses({
 	JaMoPPTest.class,
-	JavaUtilsTest.class,
 	// PCM2Java-POJO Tests
 	DataTypeCorrespondenceHelperTest.class,
 	BasicComponentMappingTransformationTest.class,
