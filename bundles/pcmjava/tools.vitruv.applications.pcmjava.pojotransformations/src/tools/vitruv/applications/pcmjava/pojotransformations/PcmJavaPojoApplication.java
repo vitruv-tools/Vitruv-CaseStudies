@@ -6,7 +6,7 @@ import java.util.Set;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.framework.applications.AbstractVitruvApplication;
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
+import tools.vitruv.framework.propagation.ChangePropagationSpecification;
 
 public class PcmJavaPojoApplication extends AbstractVitruvApplication {
 
