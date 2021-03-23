@@ -12,8 +12,8 @@ import tools.vitruv.commonalities.objectorienteddesign.ObjectOrientedDesignDomai
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
-import tools.vitruv.framework.change.processing.impl.CompositeDecomposingChangePropagationSpecification;
+import tools.vitruv.framework.propagation.ChangePropagationSpecification;
+import tools.vitruv.framework.propagation.impl.CompositeDecomposingChangePropagationSpecification;
 import tools.vitruv.framework.domains.VitruvDomain;
 
 //TODO The Commonalities language should // generate a combined

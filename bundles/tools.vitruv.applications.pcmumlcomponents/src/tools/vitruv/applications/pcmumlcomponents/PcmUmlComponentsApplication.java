@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import tools.vitruv.framework.applications.AbstractVitruvApplication;
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
+import tools.vitruv.framework.propagation.ChangePropagationSpecification;
 
 public class PcmUmlComponentsApplication extends AbstractVitruvApplication {
 
