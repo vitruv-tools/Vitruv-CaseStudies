@@ -6,8 +6,6 @@ import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
@@ -25,22 +23,21 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 
 	static val TEST_INTERFACE_NAME = "TestInterface"
 
-	def static checkInterfaceConcept(
-		CorrespondenceModel cm,
+	def checkInterfaceConcept(
 		OperationInterface pcmInterface,
 		Interface umlInterface
 	) {
 		assertNotNull(pcmInterface)
 		assertNotNull(umlInterface)
-		assertTrue(corresponds(cm, pcmInterface, umlInterface, TagLiterals.INTERFACE_TO_INTERFACE))
+		assertTrue(corresponds(pcmInterface, umlInterface, TagLiterals.INTERFACE_TO_INTERFACE))
 		assertTrue(pcmInterface.entityName == umlInterface.name)
 		// should be contained in corresponding repository and contracts package respectively
 		assertTrue(
-			corresponds(cm, pcmInterface.repository__Interface, umlInterface.package,
+			corresponds(pcmInterface.repository__Interface, umlInterface.package,
 				TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE))
 		// parent interfaces should correspond
 		val umlParentCorrespondences = pcmInterface.parentInterfaces__Interface.map [ pcmParent |
-			CorrespondenceModelUtil.getCorrespondingEObjectsByType(cm, pcmParent, Interface).head
+			getCorrespondingEObjects(pcmParent, Interface).head
 		].toList
 		assertFalse(umlParentCorrespondences.contains(null))
 		assertFalse(
@@ -52,13 +49,13 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 
 	def protected checkInterfaceConcept(OperationInterface pcmInterface) {
 		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
-		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
+		checkInterfaceConcept(pcmInterface, umlInterface)
 	}
 
 	def protected checkInterfaceConcept(Interface umlInterface) {
 		val pcmInterface = helper.getModifiableCorr(umlInterface, OperationInterface,
 			TagLiterals.INTERFACE_TO_INTERFACE)
-		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
+		checkInterfaceConcept(pcmInterface, umlInterface)
 	}
 
 	def private Repository createRepositoryConcept() {

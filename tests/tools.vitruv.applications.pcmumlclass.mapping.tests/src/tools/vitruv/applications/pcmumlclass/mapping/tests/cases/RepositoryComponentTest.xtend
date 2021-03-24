@@ -12,7 +12,6 @@ import tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
 import static tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals.*
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -24,8 +23,7 @@ class RepositoryComponentTest extends PcmUmlClassTest {
 
 	val COMPONENT_NAME = "TestComponent"
 
-	def static void checkRepositoryComponentConcept(
-		CorrespondenceModel cm,
+	def void checkRepositoryComponentConcept(
 		RepositoryComponent pcmComponent,
 		Package umlComponentPkg,
 		Class umlComponentImpl,
@@ -35,9 +33,9 @@ class RepositoryComponentTest extends PcmUmlClassTest {
 		assertNotNull(umlComponentPkg)
 		assertNotNull(umlComponentImpl)
 		assertNotNull(umlComponentConstructor)
-		assertTrue(corresponds(cm, pcmComponent, umlComponentPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE))
-		assertTrue(corresponds(cm, pcmComponent, umlComponentImpl, TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(corresponds(cm, pcmComponent, umlComponentConstructor, TagLiterals.IPRE__CONSTRUCTOR))
+		assertTrue(corresponds(pcmComponent, umlComponentPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE))
+		assertTrue(corresponds(pcmComponent, umlComponentImpl, TagLiterals.IPRE__IMPLEMENTATION))
+		assertTrue(corresponds(pcmComponent, umlComponentConstructor, TagLiterals.IPRE__CONSTRUCTOR))
 		assertEquals(umlComponentPkg.name, pcmComponent.entityName.toFirstLower)
 		assertEquals(umlComponentPkg.name.toFirstUpper, pcmComponent.entityName)
 		assertEquals(pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX, umlComponentImpl.name)
@@ -49,7 +47,7 @@ class RepositoryComponentTest extends PcmUmlClassTest {
 		assertEquals(umlComponentPkg, umlComponentImpl.package)
 		// component repository should correspond to the parent package of the component package
 		assertTrue(
-			corresponds(cm, pcmComponent.repository__RepositoryComponent, umlComponentPkg.nestingPackage,
+			corresponds(pcmComponent.repository__RepositoryComponent, umlComponentPkg.nestingPackage,
 				TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE))
 	}
 
@@ -57,7 +55,7 @@ class RepositoryComponentTest extends PcmUmlClassTest {
 		val umlComponentPkg = helper.getCorr(pcmComponent, Package, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 		val umlComponentImpl = helper.getCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
 		val umlComponentConstructor = helper.getCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
-		checkRepositoryComponentConcept(correspondenceModel, pcmComponent, umlComponentPkg, umlComponentImpl,
+		checkRepositoryComponentConcept(pcmComponent, umlComponentPkg, umlComponentImpl,
 			umlComponentConstructor)
 	}
 

@@ -23,10 +23,10 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
-import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
+import tools.vitruv.testutils.LegacyCorrespondenceRetriever
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 class PcmUmlClassTestHelper {
 	public static val REPOSITORY_NAME = "TestRepository"
@@ -52,11 +52,11 @@ class PcmUmlClassTestHelper {
 	public val PrimitiveType UML_STRING
 	public val PrimitiveType UML_UNLIMITED_NATURAL
 
-	val CorrespondenceModel correspondenceModel
+	val LegacyCorrespondenceRetriever correspondenceRetriever
 	val Function<URI, Resource> resourceRetriever
 
-	new(CorrespondenceModel testCorrespondenceModel, Function<URI, Resource> resourceRetriever) {
-		this.correspondenceModel = testCorrespondenceModel
+	new(LegacyCorrespondenceRetriever correspondenceRetriever, Function<URI, Resource> resourceRetriever) {
+		this.correspondenceRetriever = correspondenceRetriever
 		this.resourceRetriever = resourceRetriever
 
 		val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(resourceRetriever)
@@ -91,17 +91,10 @@ class PcmUmlClassTestHelper {
 		return resourceRetriever.apply(originalURI.trimFragment).getEObject(originalURI.fragment) as T
 	}
 
-//	def public <T extends EObject> Set<T> getCorrSet(EObject source, Class<T> typeFilter) {
-//		return correspondenceModel.getCorrespondingEObjectsByType(source, typeFilter) as Set<T>
-//	}
 	def <T extends EObject> T getCorr(EObject source, java.lang.Class<T> typeFilter, String tag) {
-		return ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(correspondenceModel, source, tag,
-			typeFilter).head
+		return correspondenceRetriever.getCorrespondingEObjects(source, typeFilter, tag).claimOne()
 	}
-
-//	def public <T extends EObject> Set<T> getModifiableCorrSet(EObject source, Class<T> typeFilter) {
-//		return getCorrSet(source, typeFilter).map[getModifiableInstance(it)].filter[it !== null].toSet
-//	}
+	
 	def <T extends EObject> T getModifiableCorr(EObject source, java.lang.Class<T> typeFilter, String tag) {
 		val correspondence = getCorr(source, typeFilter, tag)
 		if(correspondence === null) return null

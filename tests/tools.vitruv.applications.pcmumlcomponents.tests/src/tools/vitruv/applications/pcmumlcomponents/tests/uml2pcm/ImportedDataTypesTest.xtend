@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmumlcomponents.tests.uml2pcm
 
 import org.eclipse.emf.common.util.BasicEList
-import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLFactory
@@ -11,32 +10,14 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
-import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 class ImportedDataTypesTest extends AbstractUmlPcmTest {
 
 	protected val UMLTYPE_BOOL = "Boolean"
-
-	/**
-	 * Cannot modify resource set without a write transaction
-	 */
-	// @Test
-	def void importedTypesExistTest() {
-		val umlTypes = importPrimitiveTypes()
-		assertNotNull(umlTypes.getOwnedMember(UMLTYPE_BOOL))
-		val umlType = umlTypes.getOwnedMember(UMLTYPE_BOOL) as DataType
-		val pcmRepository = rootElement.claimCorrespondingRepository
-		propagate
-		val pcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, null,
-			correspondenceModel)
-		assertNotNull(pcmType)
-		assertTrue(pcmType instanceof PrimitiveDataType)
-		assertEquals(PrimitiveTypeEnum.BOOL, (pcmType as PrimitiveDataType).type)
-	}
 
 	@Test
 	def void unmappedPrimitiveTypeTest() {
@@ -47,9 +28,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		userInteraction.addNextSingleSelection(PrimitiveTypeEnum.BYTE_VALUE)
 		rootElement.packagedElements += umlType
 		propagate
-		val pcmRepository = rootElement.claimCorrespondingRepository
-		val pcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, null,
-			correspondenceModel) as PrimitiveDataType
+		val pcmType = getCorrespondingEObjects(umlType, PrimitiveDataType).claimOne
 		assertEquals(PrimitiveTypeEnum.BYTE, pcmType.type)
 	}
 
@@ -75,8 +54,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		umlInterface.createOwnedOperation(OPERATION_NAME, new BasicEList<String>(), new BasicEList<Type>(), umlType)
 		rootElement.packagedElements += umlInterface
 		propagate
-		val pcmInterface = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten.
-			head as OperationInterface
+		val pcmInterface = getCorrespondingEObjects(umlInterface, OperationInterface).claimOne
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(UMLTYPE_BOOL),
 			(pcmInterface.signatures__OperationInterface.head.returnType__OperationSignature as PrimitiveDataType).type)
 	}

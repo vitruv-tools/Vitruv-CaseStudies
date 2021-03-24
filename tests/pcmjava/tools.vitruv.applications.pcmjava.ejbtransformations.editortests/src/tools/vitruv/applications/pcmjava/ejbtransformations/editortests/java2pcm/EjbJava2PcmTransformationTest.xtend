@@ -9,7 +9,6 @@ import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils
 import org.palladiosimulator.pcm.repository.Repository
 import java.io.IOException
 import org.eclipse.core.runtime.CoreException
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import static tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper.*
 
@@ -55,8 +54,7 @@ abstract class EjbJava2PcmTransformationTest extends Java2PcmTransformationTest 
 		this.mainPackage = this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME])
 		this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts"])
 		this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes"])
-		val Repository repo = claimOne(
-			CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, this.mainPackage, Repository))
+		val Repository repo = claimOne(getCorrespondingEObjects(this.mainPackage, Repository))
 		return repo
 	}
 }

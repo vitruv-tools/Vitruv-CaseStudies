@@ -3,7 +3,6 @@ package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2p
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
-import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
@@ -21,7 +20,6 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 
 import tools.vitruv.applications.pcmjava.tests.util.java2pcm.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -128,8 +126,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 	}
 
 	private void assertOperationRequiredRole(final OperationRequiredRole operationRequiredRole) throws Throwable {
-		Set<EObject> correspondingEObjects = CorrespondenceModelUtil.getCorrespondingEObjects(
-				FieldMappingTransformationTest.this.getCorrespondenceModel(), operationRequiredRole);
+		Iterable<EObject> correspondingEObjects = getCorrespondingEObjects(operationRequiredRole, EObject.class);
 
 		boolean fieldFound = false;
 		for (final EObject correspondingEObject : correspondingEObjects) {
@@ -159,8 +156,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 		final InsertEdit insertEdit = new InsertEdit(offset, newFieldName + ";");
 		editCompilationUnit(icu, deleteEdit, insertEdit);
 		final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, newFieldName);
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				newJaMoPPField, InnerDeclaration.class));
+		return claimOne(getCorrespondingEObjects(newJaMoPPField, InnerDeclaration.class));
 	}
 
 	private InnerDeclaration changeFieldTypeInClass(final String className, final String fieldName,
@@ -177,8 +173,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 		final InsertEdit insertEdit = new InsertEdit(offset, newFieldTypeName);
 		editCompilationUnit(icu, deleteEdit, insertEdit);
 		final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, fieldName);
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				newJaMoPPField, InnerDeclaration.class));
+		return claimOne(getCorrespondingEObjects(newJaMoPPField, InnerDeclaration.class));
 	}
 
 	private void assertInnerDeclaration(final InnerDeclaration innerDeclaration, final String fieldType,

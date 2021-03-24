@@ -34,7 +34,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	@Test
 	def void testPrimitiveDataTypeCreate() {
 		val pcmDataType = createPrimitiveDataType()
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
+		val correspondingElements = pcmDataType.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		val umlModel = getUmlModel()
 		val umlType = umlModel.getOwnedType(PcmToUmlUtil.getUmlPrimitiveTypeName(pcmDataType.type))
@@ -71,7 +71,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	@Test
 	def void testCompositeDataTypeCreate() {
 		val pcmDataType = createCompositeDataType(DATATYPE_NAME)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
+		val correspondingElements = pcmDataType.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		val umlModel = getUmlModel()
 		val umlType = umlModel.getOwnedType(pcmDataType.entityName)
@@ -82,7 +82,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	def void testCompositeDataTypeDeclarationAdd() {
 		val attributeName = ATTRIBUTE_NAME
 		val pcmDataType = initCompositeDataTypeDeclaration(DATATYPE_NAME, attributeName)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
+		val correspondingElements = pcmDataType.correspondingElements
 		val umlType = (correspondingElements.get(0) as DataType)
 		assertEquals(1, umlType.ownedAttributes.length)
 		assertEquals(attributeName, umlType.ownedAttributes.get(0).name)
@@ -94,7 +94,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	def void testCompositeDataTypeDeclarationEdit() {
 		val attributeName = ATTRIBUTE_NAME
 		val pcmDataType = initCompositeDataTypeDeclaration(DATATYPE_NAME, ATTRIBUTE_NAME + "2")
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
+		val correspondingElements = pcmDataType.correspondingElements
 		val declaration = pcmDataType.innerDeclaration_CompositeDataType.get(0)
 		declaration.entityName = attributeName
 		pcmDataType.innerDeclaration_CompositeDataType.set(0, declaration)
@@ -116,7 +116,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		declaration.datatype_InnerDeclaration = innerType
 		pcmDataType.innerDeclaration_CompositeDataType += declaration
 		propagate
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
+		val correspondingElements = pcmDataType.correspondingElements
 		val umlType = (correspondingElements.get(0) as DataType)
 		assertEquals(2, umlType.ownedAttributes.length, "Type should be initialized with two properties")
 		val removedDeclaration = pcmDataType.innerDeclaration_CompositeDataType.remove(0)

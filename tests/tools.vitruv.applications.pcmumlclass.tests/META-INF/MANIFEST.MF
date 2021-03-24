@@ -10,7 +10,7 @@ Require-Bundle: tools.vitruv.testutils,
  org.eclipse.emf.compare,
  org.hamcrest.core,
  tools.vitruv.applications.pcmumlclass,
- tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.applications.util.temporary
+ tools.vitruv.applications.util.temporary,
+ org.eclipse.xtend.lib
 Export-Package: tools.vitruv.applications.pcmumlclass.tests
 Bundle-Vendor: vitruv.tools

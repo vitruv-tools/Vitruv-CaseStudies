@@ -12,7 +12,6 @@ import org.eclipse.uml2.uml.Property
 import java.util.List
 import org.emftext.language.java.members.EnumConstant
 import org.emftext.language.java.members.Member
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import org.eclipse.uml2.uml.UMLPackage
 import java.util.ArrayList
 import org.junit.jupiter.api.BeforeEach
@@ -213,8 +212,7 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	}
 
 	def protected getRegisteredUmlModel() {
-		val model = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel,
-			UMLPackage.Literals.MODEL, Model).head
+		val model = getCorrespondingEObjects(UMLPackage.Literals.MODEL, Model).head
 		return model
 	}
 

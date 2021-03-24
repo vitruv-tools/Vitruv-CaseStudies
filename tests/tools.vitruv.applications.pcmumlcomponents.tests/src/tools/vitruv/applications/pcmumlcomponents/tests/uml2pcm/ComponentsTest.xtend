@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 class ComponentsTest extends AbstractUmlPcmTest {
 
@@ -42,24 +43,21 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	}
 
 	protected def CompositeComponent getCorrespondingCompositeComponent(Component umlComponent) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
-		return (correspondingElements.get(0) as CompositeComponent)
+		getCorrespondingEObjects(umlComponent, CompositeComponent).claimOne
 	}
 
 	protected def BasicComponent getCorrespondingBasicComponent(Component umlComponent) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
-		return (correspondingElements.get(0) as BasicComponent)
+		getCorrespondingEObjects(umlComponent, BasicComponent).claimOne
 	}
 
 	protected def OperationInterface getCorrespondingInterface(Interface umlInterface) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten
-		return (correspondingElements.get(0) as OperationInterface)
+		getCorrespondingEObjects(umlInterface, OperationInterface).claimOne
 	}
 
 	@Test
 	def void testCreateBasicComponent() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
+		val correspondingElements = umlComponent.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof BasicComponent)
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
@@ -186,7 +184,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	@Test
 	def void testCreateCompositeComponent() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME, true)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
+		val correspondingElements = umlComponent.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof CompositeComponent)
 		val pcmComponent = getCorrespondingCompositeComponent(umlComponent)

@@ -11,7 +11,6 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNull
@@ -34,31 +33,30 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		return umlDirection == PcmUmlClassHelper.getMatchingParameterDirection(pcmModifier)
 	}
 
-	def static checkParameterConcept(
-		CorrespondenceModel cm,
+	def checkParameterConcept(
 		Parameter pcmParam,
 		org.eclipse.uml2.uml.Parameter umlParam
 	) {
 		assertNotNull(pcmParam)
 		assertNotNull(umlParam)
-		assertTrue(corresponds(cm, pcmParam, umlParam, TagLiterals.PARAMETER__REGULAR_PARAMETER))
+		assertTrue(corresponds(pcmParam, umlParam, TagLiterals.PARAMETER__REGULAR_PARAMETER))
 		assertTrue(pcmParam.parameterName == umlParam.name)
 		assertTrue(checkParameterModifiers(pcmParam.modifier__Parameter, umlParam.direction))
-		assertTrue(isCorrect_DataType_Parameter_Correspondence(cm, pcmParam.dataType__Parameter, umlParam))
+		assertTrue(isCorrect_DataType_Parameter_Correspondence(pcmParam.dataType__Parameter, umlParam))
 		assertTrue(
-			corresponds(cm, pcmParam.operationSignature__Parameter, umlParam.operation,
+			corresponds(pcmParam.operationSignature__Parameter, umlParam.operation,
 				TagLiterals.SIGNATURE__OPERATION))
 	}
 
 	def protected checkParameterConcept(Parameter pcmParam) {
 		val mUmlParam = helper.getModifiableCorr(pcmParam, org.eclipse.uml2.uml.Parameter,
 			TagLiterals.PARAMETER__REGULAR_PARAMETER)
-		checkParameterConcept(correspondenceModel, pcmParam, mUmlParam)
+		checkParameterConcept(pcmParam, mUmlParam)
 	}
 
 	def protected checkParameterConcept(org.eclipse.uml2.uml.Parameter umlParam) {
 		val mPcmParam = helper.getModifiableCorr(umlParam, Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
-		checkParameterConcept(correspondenceModel, mPcmParam, umlParam)
+		checkParameterConcept(mPcmParam, umlParam)
 	}
 
 	def private Repository createRepositoryWithSignature() {

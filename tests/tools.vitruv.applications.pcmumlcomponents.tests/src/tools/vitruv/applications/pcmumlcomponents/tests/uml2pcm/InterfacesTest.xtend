@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 class InterfacesTest extends AbstractUmlPcmTest {
 
@@ -33,7 +34,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	def void createInterfaceTest() {
 		val interfaceName = INTERFACE_NAME
 		val umlInterface = createUmlInterface(interfaceName)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten
+		val correspondingElements = umlInterface.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof OperationInterface)
 		val pcmInterface = (correspondingElements.get(0) as OperationInterface)
@@ -60,7 +61,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, parameterNames, parameterTypes, returnType)
 		propagate
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
+		val correspondingElements = umlOperation.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof OperationSignature)
 		val pcmOperation = (correspondingElements.get(0) as OperationSignature)
@@ -90,8 +91,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	def void changeInterfaceOperationTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
-		var correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
-		var pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
+		var pcmSignature = getCorrespondingEObjects(umlOperation, OperationSignature).claimOne
 		umlOperation.name = OPERATION_NAME + "2"
 		propagate
 		assertEquals(umlOperation.name, pcmSignature.entityName)
@@ -101,15 +101,13 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		umlOperation.type = newType
 		propagate
 
-		correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
-		pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
+		pcmSignature = getCorrespondingEObjects(umlOperation, OperationSignature).claimOne
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(newType.name),
 			(pcmSignature.returnType__OperationSignature as PrimitiveDataType).type)
 
 		umlOperation.type = null
 		propagate
-		correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
-		pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
+		pcmSignature = getCorrespondingEObjects(umlOperation, OperationSignature).claimOne
 		assertNull(pcmSignature.returnType__OperationSignature)
 	}
 
@@ -134,7 +132,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val pcmSignature = getCorrespondingSignature(umlOperation)
 		assertEquals(1, pcmSignature.parameters__OperationSignature.length)
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlParameter]).flatten
+		val correspondingElements = umlParameter.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof org.palladiosimulator.pcm.repository.Parameter)
 		val pcmParameter = (correspondingElements.get(0) as org.palladiosimulator.pcm.repository.Parameter)
@@ -146,13 +144,11 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 
 	protected def OperationSignature getCorrespondingSignature(Operation operation) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[operation]).flatten
-		return (correspondingElements.get(0) as OperationSignature)
+		return getCorrespondingEObjects(operation, OperationSignature).claimOne
 	}
 
 	protected def org.palladiosimulator.pcm.repository.Parameter getCorrespondingParameter(Parameter umlParameter) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlParameter]).flatten
-		return (correspondingElements.get(0) as org.palladiosimulator.pcm.repository.Parameter)
+		return getCorrespondingEObjects(umlParameter, org.palladiosimulator.pcm.repository.Parameter).claimOne
 	}
 
 	@Test
@@ -161,7 +157,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
 		val umlParameter = createParameter(umlOperation, PARAMETER_NAME, UML_TYPE_INT)
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlParameter]).flatten
+		val correspondingElements = umlParameter.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof org.palladiosimulator.pcm.repository.Parameter)
 		var pcmParameter = (correspondingElements.get(0) as org.palladiosimulator.pcm.repository.Parameter)

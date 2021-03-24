@@ -28,8 +28,6 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
-import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import tools.vitruv.testutils.LegacyVitruvApplicationTest
 import org.junit.jupiter.api.AfterEach
@@ -68,7 +66,7 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 	@BeforeEach
 	def protected void setup() {
 		testResourceSet = new ResourceSetImpl()
-		helper = new PcmUmlClassTestHelper(correspondenceModel, [uri|uri.resourceAt])
+		helper = new PcmUmlClassTestHelper(this, [uri|uri.resourceAt])
 	}
 
 	def protected void assertModelExists(String modelPathWithinProject) {
@@ -93,53 +91,49 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		return rootElement
 	}
 
-	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b) {
-		return cm.getCorrespondingEObjects(#[a]).exists(corrSet|EcoreUtil.equals(corrSet.head, b))
+	def protected corresponds(EObject a, EObject b) {
+		return getCorrespondingEObjects(a, EObject).exists[EcoreUtil.equals(it, b)]
 	}
 
-	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b, String tag) {
-		return EcoreUtil.equals(b,
-			ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, a, tag, b.class).head)
+	def protected corresponds(EObject a, EObject b, String tag) {
+		return EcoreUtil.equals(b, getCorrespondingEObjects(a, b.class, tag).head)
 	}
 
-	private static def boolean isCorrectSimpleTypeCorrespondence(
-		CorrespondenceModel correspondenceModel,
+	private def boolean isCorrectSimpleTypeCorrespondence(
 		DataType pcmDatatype,
 		Type umlType,
 		int lower,
 		int upper
 	) {
-		val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlType,
+		val correspondingPrimitiveType = corresponds(pcmDatatype, umlType,
 			TagLiterals.DATATYPE__TYPE)
-		val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlType,
+		val correspondingCompositeType = corresponds(pcmDatatype, umlType,
 			TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		return (correspondingPrimitiveType || correspondingCompositeType) // inner collection types are not supported
 		&& upper == 1 // && lower == 1 // lower could also be 0
 	}
 
-	private static def boolean isCorrectCollectionTypeCorrespondence(
-		CorrespondenceModel correspondenceModel,
+	private def boolean isCorrectCollectionTypeCorrespondence(
 		CollectionDataType pcmCollection,
 		Type umlType,
 		int lower,
 		int upper
 	) {
 		return lower == 0 && upper == LiteralUnlimitedNatural.UNLIMITED &&
-			isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmCollection.innerType_CollectionDataType, umlType,
+			isCorrectSimpleTypeCorrespondence(pcmCollection.innerType_CollectionDataType, umlType,
 				1, 1)
 	}
 
-	def protected static isCorrect_DataType_Parameter_Correspondence(CorrespondenceModel correspondenceModel,
-		DataType pcmDatatype, Parameter umlParam) {
+	def protected isCorrect_DataType_Parameter_Correspondence(DataType pcmDatatype, Parameter umlParam) {
 		if (pcmDatatype === null || umlParam.type === null) {
 			return pcmDatatype === null && umlParam.type === null
 		}
-		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype,
+		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(pcmDatatype,
 			umlParam.type, umlParam.lower, umlParam.upper)
-		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlParam,
+		val collectionTypeCorrespondenceExists = corresponds(pcmDatatype, umlParam,
 			TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 		val collectionTypeCorrespondenceIsCorrect = if (pcmDatatype instanceof CollectionDataType)
-				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower,
+				isCorrectCollectionTypeCorrespondence(pcmDatatype, umlParam.type, umlParam.lower,
 					umlParam.upper)
 			else
 				null

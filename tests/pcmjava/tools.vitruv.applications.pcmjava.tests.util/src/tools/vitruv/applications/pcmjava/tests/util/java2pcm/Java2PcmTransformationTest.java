@@ -51,6 +51,7 @@ import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.ContainersFactory;
+import org.emftext.language.java.containers.ContainersPackage;
 import org.emftext.language.java.containers.JavaRoot;
 import org.emftext.language.java.containers.Package;
 import org.emftext.language.java.members.ClassMethod;
@@ -88,10 +89,8 @@ import tools.vitruv.domains.java.JamoppLibraryHelper;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
-import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationAbortCause;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationListener;
 import tools.vitruv.testutils.DisableAutoBuild;
@@ -293,12 +292,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		// Contracts and datatypes packages are created by change propagation and recorded by the Java monitor,
 		// so trigger their processing by the monitor
 		waitForSynchronization(2);
-		final CorrespondenceModel ci = this.getCorrespondenceModel();
-		if (null == ci) {
-			throw new RuntimeException("Could not get correspondence instance.");
-		}
-		final Repository repo = claimOne(
-				CorrespondenceModelUtil.getCorrespondingEObjectsByType(ci, this.mainPackage, Repository.class));
+		final Repository repo = claimOne(getCorrespondingEObjects(this.mainPackage, Repository.class));
 		return repo;
 	}
 
@@ -308,10 +302,9 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
 
-	protected <T> T createSecondPackage(final Class<T> correspondingType, final String... namespace) throws Throwable {
+	protected <T extends EObject> T createSecondPackage(final Class<T> correspondingType, final String... namespace) throws Throwable {
 		this.secondPackage = this.createPackageWithPackageInfo(namespace);
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				this.secondPackage, correspondingType));
+		return claimOne(getCorrespondingEObjects(this.secondPackage, correspondingType));
 	}
 
 	private void createSecondPackageWithoutCorrespondence(final String... namespace) throws Throwable {
@@ -363,7 +356,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		waitForSynchronization(1);
 	}
 
-	protected <T> T renameClassifierWithName(final String entityName, final String newName, final Class<T> type)
+	protected <T extends EObject> T renameClassifierWithName(final String entityName, final String newName, final Class<T> type)
 			throws Throwable {
 		try {
 			final ICompilationUnit cu = CompilationUnitManipulatorHelper
@@ -376,8 +369,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			editCompilationUnit(cu, edit);
 			final URI uri = createPlatformResourceURI(cu.getResource());
 			final Classifier jaMoPPClass = this.getJaMoPPClassifierForURI(uri);
-			return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-					jaMoPPClass, type));
+			return claimOne(getCorrespondingEObjects(jaMoPPClass, type));
 		} catch (final Throwable e) {
 			logger.warn(e.getMessage());
 		}
@@ -420,22 +412,21 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return "src/" + srcFilePath;
 	}
 
-	protected <T> T addClassInSecondPackage(final Class<T> classOfCorrespondingObject) throws Throwable {
+	protected <T extends EObject> T addClassInSecondPackage(final Class<T> classOfCorrespondingObject) throws Throwable {
 		final T createdEObject = this.addClassInPackage(this.secondPackage, classOfCorrespondingObject);
 		return createdEObject;
 	}
 
-	protected <T> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject)
+	protected <T extends EObject> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject)
 			throws Throwable {
 		final String implementingClassName = Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME;
 		return this.addClassInPackage(packageForClass, classOfCorrespondingObject, implementingClassName);
 	}
 
-	protected <T> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject,
+	protected <T extends EObject> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject,
 			final String implementingClassName) throws CoreException, InterruptedException {
 		final Classifier jaMoPPClass = this.createClassInPackage(packageForClass, implementingClassName);
-		final Set<T> eObjectsByType = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPClass, classOfCorrespondingObject);
+		final Iterable<T> eObjectsByType = getCorrespondingEObjects(jaMoPPClass, classOfCorrespondingObject);
 		return claimOne(eObjectsByType);
 	}
 
@@ -597,12 +588,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	protected OperationInterface createInterfaceInPackage(String packageNamespace, final String interfaceName,
 			boolean claimOne) throws CoreException {
 		final Classifier jaMoPPIf = createJaMoPPInterfaceInPackage(packageNamespace, interfaceName);
-		Set<OperationInterface> correspondingOpInterfaces = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPIf, OperationInterface.class);
+		Iterable<OperationInterface> correspondingOpInterfaces = getCorrespondingEObjects(jaMoPPIf, OperationInterface.class);
 		if (claimOne) {
 			return claimOne(correspondingOpInterfaces);
 		}
-		if (null == correspondingOpInterfaces || 0 == correspondingOpInterfaces.size()) {
+		if (null == correspondingOpInterfaces || !correspondingOpInterfaces.iterator().hasNext()) {
 			return null;
 		}
 		logger.warn("More than one corresponding interfaces found for interface " + jaMoPPIf + ". Returning the first");
@@ -654,8 +644,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	protected Package getPackageWithNameFromCorrespondenceModel(final String name) throws CoreException {
-		final Set<Package> packages = this.getCorrespondenceModel()
-				.getAllEObjectsOfTypeInCorrespondences(Package.class);
+		final Iterable<Package> packages = getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE, Package.class);
 		for (final Package currentPackage : packages) {
 			if (currentPackage.getName().equals(name)) {
 				return currentPackage;
@@ -684,8 +673,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				methodString, this.getCurrentTestProject(), this);
 		final Method jaMoPPMethod = this.findJaMoPPMethodInICU(icu, methodName);
 		final ClassMethod classMethod = (ClassMethod) jaMoPPMethod;
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				classMethod, ResourceDemandingSEFF.class));
+		return claimOne(getCorrespondingEObjects(classMethod, ResourceDemandingSEFF.class));
 	}
 
 	protected OperationSignature findOperationSignatureForJaMoPPMethodInCompilationUnit(final String methodName,
@@ -695,8 +683,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final Interface jaMoPPInterface = (Interface) classifier;
 		for (final Method jaMoPPMethod : jaMoPPInterface.getMethods()) {
 			if (jaMoPPMethod.getName().equals(methodName)) {
-				return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-						jaMoPPMethod, OperationSignature.class));
+				return claimOne(getCorrespondingEObjects(jaMoPPMethod, OperationSignature.class));
 			}
 		}
 		logger.warn("No JaMoPP method with name " + methodName + " found in " + interfaceName);
@@ -776,8 +763,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final Method jaMoPPMethod = (Method) concreateClassifier.getMembersByName(methodName).get(0);
 		final org.emftext.language.java.parameters.Parameter jaMoPPParam = this
 				.getJaMoPPParameterFromJaMoPPMethod(jaMoPPMethod, parameterName);
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				jaMoPPParam, Parameter.class));
+		return claimOne(getCorrespondingEObjects(jaMoPPParam, Parameter.class));
 	}
 
 	protected OperationSignature addReturnTypeToSignature(final String interfaceName, final String methodName,
@@ -796,8 +782,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final ConcreteClassifier concreateClassifier = this
 				.getJaMoPPClassifierForURI(createPlatformResourceURI(icu.getResource()));
 		final Method jaMoPPMethod = (Method) concreateClassifier.getMembersByName(methodName).get(0);
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				jaMoPPMethod, OperationSignature.class));
+		return claimOne(getCorrespondingEObjects(jaMoPPMethod, OperationSignature.class));
 	}
 
 	protected org.emftext.language.java.parameters.Parameter getJaMoPPParameterFromJaMoPPMethod(
@@ -885,11 +870,10 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		logger.debug("Found implements: " + classImplements);
 		for (final TypeReference implementsReference : classImplements) {
 			logger.debug("Implements data: " + implementsReference.getTarget());
-			final Set<OperationProvidedRole> correspondingEObjects = CorrespondenceModelUtil
-					.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), implementsReference,
+			final Iterable<OperationProvidedRole> correspondingEObjects = getCorrespondingEObjects(implementsReference,
 							OperationProvidedRole.class);
 			logger.debug("Corresponding provided roles: " + correspondingEObjects);
-			if (null != correspondingEObjects && 0 < correspondingEObjects.size()) {
+			if (null != correspondingEObjects && correspondingEObjects.iterator().hasNext()) {
 				return correspondingEObjects.iterator().next();
 			}
 		}
@@ -904,7 +888,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		classCompilationUnit.createImport(namespace, null, null);
 	}
 
-	protected <T> T addFieldToClassWithName(final String className, final String fieldType, final String fieldName,
+	protected <T extends EObject> T addFieldToClassWithName(final String className, final String fieldType, final String fieldName,
 			final Class<T> correspondingType) throws Throwable {
 		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
@@ -920,8 +904,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		if (correspondingType == null) {
 			return null;
 		}
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				jaMoPPField, correspondingType));
+		return claimOne(getCorrespondingEObjects(jaMoPPField, correspondingType));
 	}
 
 	protected Field getJaMoPPFieldFromClass(final ICompilationUnit icu, final String fieldName) {
@@ -931,7 +914,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	// add Annotation via the framework
-	protected <T> T addAnnotationToClassifier(final AnnotableAndModifiable annotable, final String annotationName,
+	protected <T extends EObject> T addAnnotationToClassifier(final AnnotableAndModifiable annotable, final String annotationName,
 			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className)
 			throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
@@ -943,13 +926,12 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				+ java.lang.System.lineSeparator();
 		final InsertEdit insertEdit = new InsertEdit(offset, composedName);
 		editCompilationUnit(cu, insertEdit);
-		final Set<T> eObjectsByType = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), annotable, classOfCorrespondingObject);
+		final Iterable<T> eObjectsByType = getCorrespondingEObjects(annotable, classOfCorrespondingObject);
 		return claimOne(eObjectsByType);
 	}
 
 	// add Annotation via the framework
-	protected <T> T addAnnotationToField(final String fieldName, final String annotationName,
+	protected <T extends EObject> T addAnnotationToField(final String fieldName, final String annotationName,
 			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className)
 			throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
@@ -962,15 +944,13 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final InsertEdit insertEdit = new InsertEdit(offset, composedName);
 		editCompilationUnit(cu, insertEdit);
 		final Field jaMoPPField = this.getJaMoPPFieldFromClass(cu, fieldName);
-		final Set<T> eObjectsByType = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPField, classOfCorrespondingObject);
+		final Iterable<T> eObjectsByType = getCorrespondingEObjects(jaMoPPField, classOfCorrespondingObject);
 		return claimOne(eObjectsByType);
 	}
 
 	protected void assertCorrespondingSEFF(final ResourceDemandingSEFF correspondingSeff, String methodName)
 			throws Throwable {
-		final ClassMethod jaMoPPMethod = claimOne(CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), correspondingSeff, ClassMethod.class));
+		final ClassMethod jaMoPPMethod = claimOne(getCorrespondingEObjects(correspondingSeff, ClassMethod.class));
 		assertEquals(jaMoPPMethod.getName(), methodName);
 	}
 
