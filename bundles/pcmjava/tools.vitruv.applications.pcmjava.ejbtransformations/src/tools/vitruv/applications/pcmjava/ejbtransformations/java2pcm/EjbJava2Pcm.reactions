@@ -1,8 +1,8 @@
 import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
-import org.palladiosimulator.pcm.repository.Repository
 import java.util.Collections
+import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationSignature
 import tools.vitruv.framework.^correspondence.CorrespondenceModelUtil
@@ -30,13 +30,14 @@ reaction CreatedFirstPackage {
 
 routine createRepositoryForFirstPackage(java::Package javaPackage) {
 	match {
-		check getFirstRepository(correspondenceModel) === null
+		require absence of pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
 	}
 	action {
 		val repository = create pcm::Repository and initialize {
 			repository.setEntityName(javaPackage.name)
 			persistProjectRelative(javaPackage, repository, "model/" + repository.entityName + ".repository")
 		}
+		add correspondence between repository and RepositoryPackage.Literals.REPOSITORY
 		add correspondence between repository and javaPackage
 	}
 }
@@ -48,8 +49,7 @@ reaction CreatedClass {
 	after element inserted in java::CompilationUnit[classifiers]
 		with newValue.isEjbClass 	
 	call {
-		val Repository repo = getFirstRepository(correspondenceModel)
-		createBasicComponent(repo, newValue);
+		createBasicComponent(newValue);
 	} 
 }
 
@@ -57,13 +57,13 @@ reaction CreateClassAnnotation {
 	after element inserted in java::Class[annotationsAndModifiers]
 		with affectedEObject.isEjbClass
 	call {
-		val Repository repo = getFirstRepository(correspondenceModel) 
-		createBasicComponent(repo, affectedEObject as NamedElement)
+		createBasicComponent(affectedEObject as NamedElement)
 	} 
 }
 
-routine createBasicComponent(pcm::Repository repo, java::NamedElement namedElement) {
+routine createBasicComponent(java::NamedElement namedElement) {
 	match {
+		val repo = retrieve asserted pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
 		require absence of pcm::BasicComponent corresponding to namedElement
 	}
 	action {
@@ -84,8 +84,7 @@ reaction CreatedInterface {
 	after element inserted in java::CompilationUnit[classifiers]
 		with newValue.isEjbBuisnessInterface 
 	call {
-		val Repository repo = getFirstRepository(correspondenceModel)
-		createOperationInterface(repo, newValue)
+		createOperationInterface(newValue)
 	}
 }
 
@@ -93,13 +92,13 @@ reaction CreateInterfaceAnnotation {
 	after element inserted in java::Interface[annotationsAndModifiers]
 		with affectedEObject.isEjbBuisnessInterface
 	call {
-		val Repository repo = getFirstRepository(correspondenceModel)
-		createOperationInterface(repo, affectedEObject as NamedElement)
+		createOperationInterface(affectedEObject as NamedElement)
 	}
 }
 
-routine createOperationInterface(pcm::Repository repo, java::NamedElement namedElement) {
+routine createOperationInterface(java::NamedElement namedElement) {
 	match {
+		val repo = retrieve asserted pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
 		require absence of pcm::OperationInterface corresponding to namedElement
 	}
 	action { 
