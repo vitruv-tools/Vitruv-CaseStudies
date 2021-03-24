@@ -13,7 +13,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
@@ -34,31 +33,30 @@ class ParameterConceptTest extends PcmUmlJavaLinearTransitiveChangeTest {
 		return umlDirection == PcmUmlClassHelper.getMatchingParameterDirection(pcmModifier)
 	}
 
-	def static checkParameterConcept(
-		CorrespondenceModel cm,
+	def checkParameterConcept(
 		Parameter pcmParameter,
 		org.eclipse.uml2.uml.Parameter umlParameter
 	) {
 		assertNotNull(pcmParameter)
 		assertNotNull(umlParameter)
-		assertTrue(corresponds(cm, pcmParameter, umlParameter, TagLiterals.PARAMETER__REGULAR_PARAMETER))
+		assertTrue(corresponds(pcmParameter, umlParameter, TagLiterals.PARAMETER__REGULAR_PARAMETER))
 		assertTrue(pcmParameter.parameterName == umlParameter.name)
 		assertTrue(checkParameterModifiers(pcmParameter.modifier__Parameter, umlParameter.direction))
-		assertTrue(isCorrect_DataType_Parameter_Correspondence(cm, pcmParameter.dataType__Parameter, umlParameter))
+		assertTrue(isCorrect_DataType_Parameter_Correspondence(pcmParameter.dataType__Parameter, umlParameter))
 		assertTrue(
-			corresponds(cm, pcmParameter.operationSignature__Parameter, umlParameter.operation,
+			corresponds(pcmParameter.operationSignature__Parameter, umlParameter.operation,
 				TagLiterals.SIGNATURE__OPERATION))
 	}
 
 	def protected checkParameterConcept(Parameter pcmParameter) {
 		val mumlParameter = helper.getModifiableCorr(pcmParameter, org.eclipse.uml2.uml.Parameter,
 			TagLiterals.PARAMETER__REGULAR_PARAMETER)
-		checkParameterConcept(correspondenceModel, pcmParameter, mumlParameter)
+		checkParameterConcept(pcmParameter, mumlParameter)
 	}
 
 	def protected checkParameterConcept(org.eclipse.uml2.uml.Parameter umlParameter) {
 		val pcmParameter = helper.getModifiableCorr(umlParameter, Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
-		checkParameterConcept(correspondenceModel, pcmParameter, umlParameter)
+		checkParameterConcept(pcmParameter, umlParameter)
 		checkJavaParameterConcept(umlParameter, pcmParameter)
 	}
 

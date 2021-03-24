@@ -7,7 +7,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
 import static tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals.*
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -18,35 +17,34 @@ class ProvidedRoleTest extends PcmUmlClassTest {
 
 	static val PROVIDED_ROLE_NAME = "testProvidedRole"
 
-	def static void checkProvidedRoleConcept(
-		CorrespondenceModel cm,
+	def void checkProvidedRoleConcept(
 		OperationProvidedRole pcmProvided,
 		InterfaceRealization umlRealization
 	) {
 		assertNotNull(pcmProvided)
 		assertNotNull(umlRealization)
-		assertTrue(corresponds(cm, pcmProvided, umlRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION))
+		assertTrue(corresponds(pcmProvided, umlRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION))
 		assertTrue(pcmProvided.entityName == umlRealization.name)
 		// the respective type references have to correspond
 		assertTrue(
-			corresponds(cm, pcmProvided.providedInterface__OperationProvidedRole, umlRealization.contract,
+			corresponds(pcmProvided.providedInterface__OperationProvidedRole, umlRealization.contract,
 				TagLiterals.INTERFACE_TO_INTERFACE))
 		// the owning component and component implementation have to correspond
 		assertTrue(
-			corresponds(cm, pcmProvided.providingEntity_ProvidedRole, umlRealization.implementingClassifier,
+			corresponds(pcmProvided.providingEntity_ProvidedRole, umlRealization.implementingClassifier,
 				TagLiterals.IPRE__IMPLEMENTATION))
 	}
 
 	def protected checkProvidedRoleConcept(OperationProvidedRole pcmProvided) {
 		val umlRealization = helper.getCorr(pcmProvided, InterfaceRealization,
 			TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
-		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
+		checkProvidedRoleConcept(pcmProvided, umlRealization)
 	}
 
 	def protected checkProvidedRoleConcept(InterfaceRealization umlRealization) {
 		val pcmProvided = helper.getCorr(umlRealization, OperationProvidedRole,
 			TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
-		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
+		checkProvidedRoleConcept(pcmProvided, umlRealization)
 	}
 
 	def private Repository createRepository_Component_Interface() {

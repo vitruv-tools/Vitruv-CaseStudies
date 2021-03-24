@@ -3,7 +3,6 @@ package tools.vitruv.applications.transitivechange.tests.circular.pcmumlclassjav
 import java.util.ArrayList
 import java.util.Collection
 import java.util.List
-import java.util.Set
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Classifier
@@ -38,6 +37,7 @@ import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.transitivechange.tests.util.TransitiveChangeSetup.*
+import org.emftext.language.java.containers.ContainersPackage
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
@@ -83,7 +83,7 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 	}
 
 	def protected checkNumberOfJavaPackages(Package umlRootPackage) {
-		val allJavaPackages = typeof(org.emftext.language.java.containers.Package).getCorrespondingObjectsOfClass
+		val allJavaPackages = getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE, org.emftext.language.java.containers.Package)
 		var umlPackagesCount = umlRootPackage.countPackages
 		if(umlRootPackage instanceof Model) umlPackagesCount -= 1 // do not count the model
 		assertEquals(allJavaPackages.size, umlPackagesCount)
@@ -166,7 +166,7 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 		if (obj === null) {
 			throw new IllegalArgumentException("Cannot retrieve correspondence for null")
 		}
-		val correspondingObjectList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten.filter(c)
+		val correspondingObjectList = getCorrespondingEObjects(obj, c)
 		if (correspondingObjectList.nullOrEmpty) {
 			logger.warn("There are no corresponding objects for " + obj + " of the type " + c.class +
 				". Returning null.")
@@ -176,17 +176,6 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 				". Returning the first.")
 		}
 		return correspondingObjectList.head
-	}
-
-	/** Retrieves all corresponding objects of the type defined by class c
-	 * 
-	 * {@link tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest#getCorrespondenceModel}
-	 * @param obj the object for which the corresponding objects should be retrieved
-	 * @return the corresponding objects of obj filtered by c or null if none could be found
-	 * @throws IllegalArgumentException if obj is null
-	 */
-	def protected <E> Set<E> getCorrespondingObjectsOfClass(java.lang.Class<E> clazz) {
-		return getCorrespondenceModel.getAllEObjectsOfTypeInCorrespondences(clazz)
 	}
 
 	/**

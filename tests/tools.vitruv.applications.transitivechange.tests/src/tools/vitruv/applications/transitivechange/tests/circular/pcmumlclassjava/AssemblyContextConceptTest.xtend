@@ -7,7 +7,6 @@ import org.palladiosimulator.pcm.core.composition.CompositionFactory
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
@@ -23,20 +22,19 @@ class AssemblyContextConceptTest extends PcmUmlJavaTransitiveChangeTest {
 
 	static val PROPERTY_NAME = "testAssemblyContextField"
 
-	def static void checkAssemblyContextConcept(
-		CorrespondenceModel cm,
+	def void checkAssemblyContextConcept(
 		AssemblyContext pcmAssemblyContext,
 		Property umlAssemblyContextProperty
 	) {
 		assertNotNull(pcmAssemblyContext)
 		assertNotNull(umlAssemblyContextProperty)
 		assertTrue(
-			corresponds(cm, pcmAssemblyContext, umlAssemblyContextProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY))
+			corresponds(pcmAssemblyContext, umlAssemblyContextProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY))
 		assertTrue(
-			corresponds(cm, pcmAssemblyContext.parentStructure__AssemblyContext, umlAssemblyContextProperty.owner,
+			corresponds(pcmAssemblyContext.parentStructure__AssemblyContext, umlAssemblyContextProperty.owner,
 				TagLiterals.IPRE__IMPLEMENTATION))
 		assertTrue(
-			corresponds(cm, pcmAssemblyContext.encapsulatedComponent__AssemblyContext, umlAssemblyContextProperty.type,
+			corresponds(pcmAssemblyContext.encapsulatedComponent__AssemblyContext, umlAssemblyContextProperty.type,
 				TagLiterals.IPRE__IMPLEMENTATION))
 		assertTrue(pcmAssemblyContext.entityName == umlAssemblyContextProperty.name)
 	}
@@ -44,14 +42,14 @@ class AssemblyContextConceptTest extends PcmUmlJavaTransitiveChangeTest {
 	def protected checkAssemblyContextConcept(AssemblyContext pcmAssemblyContext) {
 		val umlAssemblyContextProperty = helper.getModifiableCorr(pcmAssemblyContext, Property,
 			TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
-		checkAssemblyContextConcept(correspondenceModel, pcmAssemblyContext, umlAssemblyContextProperty)
+		checkAssemblyContextConcept(pcmAssemblyContext, umlAssemblyContextProperty)
 		checkJavaAssemblyContextConcept(umlAssemblyContextProperty, pcmAssemblyContext)
 	}
 
 	def protected checkAssemblyContextConcept(Property umlAssemblyContextProperty) {
 		val pcmAssemblyContext = helper.getModifiableCorr(umlAssemblyContextProperty, AssemblyContext,
 			TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
-		checkAssemblyContextConcept(correspondenceModel, pcmAssemblyContext, umlAssemblyContextProperty)
+		checkAssemblyContextConcept(pcmAssemblyContext, umlAssemblyContextProperty)
 		checkJavaAssemblyContextConcept(umlAssemblyContextProperty, pcmAssemblyContext)
 	}
 

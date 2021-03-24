@@ -1,8 +1,5 @@
 package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
 
-import java.util.Set;
-
-import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -11,9 +8,7 @@ import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
-import static java.util.stream.Collectors.toSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -88,11 +83,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
 
 		final Package renamedPackage = super.renamePackage(this.secondPackage, packageName);
 
-		final Set<EObject> correspondingEObjects = CorrespondenceModelUtil
-				.getCorrespondingEObjects(this.getCorrespondenceModel(), renamedPackage).stream()
-				.filter(it -> it != null && it instanceof BasicComponent).collect(toSet()); // filter out null from non-EObject correspondence
-		final EObject correspondingEObject = claimOne(correspondingEObjects);
-		final BasicComponent bc = (BasicComponent) correspondingEObject;
+		final BasicComponent bc = claimOne(getCorrespondingEObjects(renamedPackage, BasicComponent.class));
 		// repository of basic component has to be the repository
 		assertEquals(repo.getId(), bc.getRepository__RepositoryComponent().getId(),
 				"Repository of basic compoennt is not the repository: " + repo);

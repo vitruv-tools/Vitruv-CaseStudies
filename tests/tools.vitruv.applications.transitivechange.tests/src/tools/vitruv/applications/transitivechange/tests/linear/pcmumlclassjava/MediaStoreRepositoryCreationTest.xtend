@@ -304,10 +304,10 @@ class MediaStoreRepositoryCreationTest extends PcmUmlJavaLinearTransitiveChangeT
 	def protected getJavaClassFromCompilationUnit(String name, String ... namespaces){
 		// This roundabout way works to retrieve the read-only instance of the VSUM but still fails when trying to load the CU from the URI.
 //		val javaPkg = getJavaPackageElement(namespaces)
-//		val umlPkg = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, javaPkg, org.eclipse.uml2.uml.Package).head
+//		val umlPkg = getCorrespondingEObjects(javaPkg, org.eclipse.uml2.uml.Package).head
 //		val umlCompImpl = umlPkg.packagedElements.filterNull.filter(org.eclipse.uml2.uml.Class)
 //			.findFirst[it.name.toLowerCase.contains(javaPkg.name.toLowerCase)]
-//		val javaCompImpl = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, umlCompImpl, org.emftext.language.java.classifiers.Class).head
+//		val javaCompImpl = getCorrespondingEObjects(umlCompImpl, org.emftext.language.java.classifiers.Class).head
 //		// here it fails, because the CU cannot be loaded into the view-ResourceSet
 //		// because the UUID resolver fails on trying to register the 'Object extends Object'-ClassifierReference 
 //		val modifiableJavaCompImpl = getModelElement(EcoreUtil.getURI(javaCompImpl)) as org.emftext.language.java.classifiers.Class

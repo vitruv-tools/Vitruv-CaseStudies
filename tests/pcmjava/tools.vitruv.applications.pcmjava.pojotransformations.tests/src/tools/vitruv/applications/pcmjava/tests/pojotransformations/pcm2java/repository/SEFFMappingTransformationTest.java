@@ -1,7 +1,5 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
-import java.util.Set;
-
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.ClassMethod;
 import org.junit.jupiter.api.Test;
@@ -11,9 +9,10 @@ import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 
+import com.google.common.collect.Iterables;
+
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,9 +51,8 @@ public class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 
 	private void assertSEFFCorrespondenceToMethod(final ResourceDemandingSEFF rdSEFF, final String expectedName)
 			throws Throwable {
-		final Set<EObject> correspondingEObjects = CorrespondenceModelUtil
-				.getCorrespondingEObjects(this.getCorrespondenceModel(), rdSEFF);
-		assertEquals(1, correspondingEObjects.size(),
+		final Iterable<EObject> correspondingEObjects = getCorrespondingEObjects(rdSEFF, EObject.class);
+		assertEquals(1, Iterables.size(correspondingEObjects),
 				"Expected exactly one corresponding EObject for rdSEFF " + rdSEFF);
 		final EObject correspondingEObject = correspondingEObjects.iterator().next();
 		assertTrue(correspondingEObject instanceof ClassMethod,

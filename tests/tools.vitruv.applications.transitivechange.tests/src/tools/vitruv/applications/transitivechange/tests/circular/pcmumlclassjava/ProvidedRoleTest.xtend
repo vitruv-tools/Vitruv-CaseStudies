@@ -7,7 +7,6 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
@@ -23,36 +22,35 @@ class ProvidedRoleTest extends PcmUmlJavaTransitiveChangeTest {
 
 	static val PROVIDED_ROLE_NAME = "testProvidedRole"
 
-	def static void checkProvidedRoleConcept(
-		CorrespondenceModel cm,
+	def void checkProvidedRoleConcept(
 		OperationProvidedRole pcmProvided,
 		InterfaceRealization umlRealization
 	) {
 		assertNotNull(pcmProvided)
 		assertNotNull(umlRealization)
-		assertTrue(corresponds(cm, pcmProvided, umlRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION))
+		assertTrue(corresponds(pcmProvided, umlRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION))
 		assertTrue(pcmProvided.entityName == umlRealization.name)
 		// the respective type references have to correspond
 		assertTrue(
-			corresponds(cm, pcmProvided.providedInterface__OperationProvidedRole, umlRealization.contract,
+			corresponds(pcmProvided.providedInterface__OperationProvidedRole, umlRealization.contract,
 				TagLiterals.INTERFACE_TO_INTERFACE))
 		// the owning component and component implementation have to correspond
 		assertTrue(
-			corresponds(cm, pcmProvided.providingEntity_ProvidedRole, umlRealization.implementingClassifier,
+			corresponds(pcmProvided.providingEntity_ProvidedRole, umlRealization.implementingClassifier,
 				TagLiterals.IPRE__IMPLEMENTATION))
 	}
 
 	def protected checkProvidedRoleConcept(OperationProvidedRole pcmProvided) {
 		val umlRealization = helper.getModifiableCorr(pcmProvided, InterfaceRealization,
 			TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
-		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
+		checkProvidedRoleConcept(pcmProvided, umlRealization)
 		checkJavaProvidedRoleConcept(umlRealization, pcmProvided)
 	}
 
 	def protected checkProvidedRoleConcept(InterfaceRealization umlRealization) {
 		val pcmProvided = helper.getModifiableCorr(umlRealization, OperationProvidedRole,
 			TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
-		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
+		checkProvidedRoleConcept(pcmProvided, umlRealization)
 		checkJavaProvidedRoleConcept(umlRealization, pcmProvided)
 	}
 

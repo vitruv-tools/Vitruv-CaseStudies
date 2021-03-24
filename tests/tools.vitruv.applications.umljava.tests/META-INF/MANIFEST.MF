@@ -9,9 +9,10 @@ Require-Bundle: org.junit.jupiter.api,
  tools.vitruv.applications.umljava,
  tools.vitruv.framework.applications,
  tools.vitruv.testutils,
- tools.vitruv.extensions.dslsruntime.reactions,
  org.hamcrest.core,
  org.apache.commons.io,
- edu.kit.ipd.sdq.activextendannotations
+ edu.kit.ipd.sdq.activextendannotations,
+ org.eclipse.xtend.lib,
+ org.apache.log4j
 Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.umljava.tests.util

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Path
 import tools.vitruv.testutils.LegacyVitruvApplicationTest
 import tools.vitruv.applications.pcmumlcomponents.PcmToUmlComponentsChangePropagationSpecification
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository"
@@ -52,8 +53,7 @@ abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
 	}
 
 	protected def Model getUmlModel() {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
-		return (correspondingElements.get(0) as Model)
+		return getCorrespondingEObjects(rootElement, Model).claimOne()
 	}
 
 	@BeforeEach
@@ -87,7 +87,7 @@ abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
 	}
 
 	protected def Iterable<EObject> correspondingElements(EObject element) {
-		return correspondenceModel.getCorrespondingEObjects(#[element]).flatten
+		return getCorrespondingEObjects(element, EObject)
 	}
 
 }

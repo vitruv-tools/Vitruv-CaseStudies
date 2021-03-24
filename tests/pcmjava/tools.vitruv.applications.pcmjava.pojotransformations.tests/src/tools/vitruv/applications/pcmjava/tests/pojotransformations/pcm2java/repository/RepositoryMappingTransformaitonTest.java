@@ -1,9 +1,5 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.Set;
-
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
@@ -13,7 +9,6 @@ import org.palladiosimulator.pcm.repository.Repository;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -69,12 +64,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
 	}
 
 	private void assertRepositoryCorrespondences(final Repository repo) throws Throwable {
-		if (null == this.getCorrespondenceModel()) {
-			fail("correspondence instance is still null - no transformation was executed.");
-			return;
-		}
-		final Set<Package> jaMoPPPackages = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), repo, Package.class);
+		final Iterable<Package> jaMoPPPackages = getCorrespondingEObjects(repo, Package.class);
 		boolean foundRepositoryPackage = false;
 		boolean foundDatatypesPackage = false;
 		boolean foundContractsPackage = false;

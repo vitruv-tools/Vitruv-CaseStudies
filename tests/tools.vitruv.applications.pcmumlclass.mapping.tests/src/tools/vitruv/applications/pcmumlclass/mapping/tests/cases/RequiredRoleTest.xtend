@@ -10,7 +10,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
 import static tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals.*
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import org.eclipse.uml2.uml.Operation
 import org.apache.log4j.Logger
@@ -28,25 +27,24 @@ class RequiredRoleTest extends PcmUmlClassTest {
 
 	val REQUIRED_ROLE_NAME = "testRequiredRole"
 
-	def static void checkRequiredRoleConcept(
-		CorrespondenceModel cm,
+	def void checkRequiredRoleConcept(
 		OperationRequiredRole pcmRequired,
 		Property umlRequiredInstance,
 		Parameter umlRequiredParameter
 	) {
 		assertNotNull(umlRequiredInstance)
 		assertNotNull(umlRequiredParameter)
-		assertTrue(corresponds(cm, pcmRequired, umlRequiredInstance, TagLiterals.REQUIRED_ROLE__PROPERTY))
-		assertTrue(corresponds(cm, pcmRequired, umlRequiredParameter, TagLiterals.REQUIRED_ROLE__PARAMETER))
+		assertTrue(corresponds(pcmRequired, umlRequiredInstance, TagLiterals.REQUIRED_ROLE__PROPERTY))
+		assertTrue(corresponds(pcmRequired, umlRequiredParameter, TagLiterals.REQUIRED_ROLE__PARAMETER))
 		// the respective type references have to correspond
-		assertTrue(corresponds(cm, pcmRequired.requiredInterface__OperationRequiredRole, umlRequiredInstance.type))
-		assertTrue(corresponds(cm, pcmRequired.requiredInterface__OperationRequiredRole, umlRequiredParameter.type))
+		assertTrue(corresponds(pcmRequired.requiredInterface__OperationRequiredRole, umlRequiredInstance.type))
+		assertTrue(corresponds(pcmRequired.requiredInterface__OperationRequiredRole, umlRequiredParameter.type))
 		// the owning component and component implementation have to correspond
 		assertTrue(
-			corresponds(cm, pcmRequired.requiringEntity_RequiredRole, umlRequiredInstance.class_,
+			corresponds(pcmRequired.requiringEntity_RequiredRole, umlRequiredInstance.class_,
 				TagLiterals.IPRE__IMPLEMENTATION))
 		assertTrue(
-			corresponds(cm, pcmRequired.requiringEntity_RequiredRole, umlRequiredParameter.operation?.class_,
+			corresponds(pcmRequired.requiringEntity_RequiredRole, umlRequiredParameter.operation?.class_,
 				TagLiterals.IPRE__IMPLEMENTATION))
 		assertEquals(pcmRequired.entityName, umlRequiredInstance.name)
 		assertEquals(pcmRequired.entityName, umlRequiredParameter.name)
@@ -56,7 +54,7 @@ class RequiredRoleTest extends PcmUmlClassTest {
 		assertNotNull(pcmRequired)
 		val umlRequiredInstance = helper.getCorr(pcmRequired, Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
 		val umlRequiredParameter = helper.getCorr(pcmRequired, Parameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
-		checkRequiredRoleConcept(correspondenceModel, pcmRequired, umlRequiredInstance, umlRequiredParameter)
+		checkRequiredRoleConcept(pcmRequired, umlRequiredInstance, umlRequiredParameter)
 	}
 
 	def protected checkRequiredRoleConcept(Property umlRequiredInstance, Parameter umlRequiredParameter) {

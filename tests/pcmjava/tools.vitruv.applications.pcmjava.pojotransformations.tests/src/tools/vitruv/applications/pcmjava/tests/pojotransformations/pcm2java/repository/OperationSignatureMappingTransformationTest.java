@@ -1,7 +1,9 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
+import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.members.InterfaceMethod;
-import org.emftext.language.java.types.TypeReference;
+import org.emftext.language.java.types.Type;
+import org.emftext.language.java.types.Void;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
@@ -13,6 +15,13 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
+
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
+
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformationTest {
 
@@ -68,10 +77,17 @@ public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransfo
 	private InterfaceMethod assertOperationSignatureCorrespondence(final OperationSignature opSig) throws Throwable {
 		final InterfaceMethod intMethod = (InterfaceMethod) this.assertSingleCorrespondence(opSig,
 				InterfaceMethod.class, opSig.getEntityName());
-		final TypeReference tr = DataTypeCorrespondenceHelper.claimUniqueCorrespondingJaMoPPDataTypeReference(
-				opSig.getReturnType__OperationSignature(), this.getCorrespondenceModel());
-		this.assertEqualsTypeReference(intMethod.getTypeReference(), tr);
-
+		if (opSig.getReturnType__OperationSignature() == null) {
+			assertThat(intMethod.getTypeReference(), instanceOf(Void.class));
+		} else {
+			Type type;
+			if (opSig.getReturnType__OperationSignature() instanceof PrimitiveDataType) {
+				type = DataTypeCorrespondenceHelper.claimJaMoPPTypeForPrimitiveDataType((PrimitiveDataType)opSig.getReturnType__OperationSignature());
+			} else {
+				type = claimOne(getCorrespondingEObjects(opSig.getReturnType__OperationSignature(), Classifier.class));
+			}
+			EcoreUtil.equals(intMethod.getTypeReference().getTarget(), type);
+		}
 		return intMethod;
 	}
 
