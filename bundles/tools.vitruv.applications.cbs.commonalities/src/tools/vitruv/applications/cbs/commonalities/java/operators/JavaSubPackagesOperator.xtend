@@ -21,6 +21,8 @@ import static extension java.nio.file.Files.*
 import static extension tools.vitruv.extensions.dslruntime.commonalities.helper.IntermediateModelHelper.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import org.emftext.language.java.containers.ContainersPackage
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 
 @ReferenceMappingOperator(
 	name = 'javaSubPackages',
@@ -59,7 +61,7 @@ class JavaSubPackagesOperator extends AbstractReferenceMappingOperator {
 		logger.trace('''Searching container for Java package: «subPackage»''')
 		// TODO avoid brute force search
 		// TODO only finds packages with an correspondence
-		val knownPackages = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Package)
+		val knownPackages = correspondenceModel.getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE, Package)
 		return knownPackages.findFirst [
 			logger.trace('''  Found candidate package: «it»''')
 			it.packageString == subPackageNamespacesString

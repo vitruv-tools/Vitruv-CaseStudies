@@ -7,7 +7,6 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.Iterator
 import java.util.List
-import java.util.Set
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ClassifiersFactory
@@ -32,6 +31,8 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import java.util.Optional
 import org.emftext.language.java.commons.NamespaceAwareElement
 import static java.util.Collections.emptyList
+import org.emftext.language.java.containers.ContainersPackage
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 
 /**
  * Class for java classifier, package and compilation unit util functions
@@ -214,8 +215,8 @@ class JavaContainerAndClassifierUtil {
 		val matchingClassifiers = javaPackage.compilationUnits.map[it.classifiers].flatten.filter(classifierType).filter [
 			it.name.toFirstUpper == name.toFirstUpper
 		]
-		if(matchingClassifiers.size > 1) throw new IllegalStateException("Multiple matching classifers were found: " +
-			matchingClassifiers)
+		if (matchingClassifiers.size > 1)
+			throw new IllegalStateException("Multiple matching classifers were found: " + matchingClassifiers)
 		return matchingClassifiers.head
 	}
 
@@ -226,8 +227,8 @@ class JavaContainerAndClassifierUtil {
 			namespace = namespace.substring(0, namespace.length - 1)
 		}
 		val finalNamespace = namespace
-		var Set<Package> packagesWithCorrespondences = correspondenceModel.
-			getAllEObjectsOfTypeInCorrespondences(Package)
+		var Iterable<Package> packagesWithCorrespondences = correspondenceModel.getCorrespondingEObjects(
+			ContainersPackage.Literals.PACKAGE, Package)
 		val packagesWithNamespace = packagesWithCorrespondences.filter [ pack |
 			finalNamespace.equals(pack.namespacesAsString + pack.name)
 		]
