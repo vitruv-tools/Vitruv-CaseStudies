@@ -68,7 +68,7 @@ class PcmJamoppUtilsGuice {
 		CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
 		var Class jaMoPPCompositeClass = null
 		try {
-			jaMoPPCompositeClass = correspondenceModel.getCorrespondingEObjectsByType(
+			jaMoPPCompositeClass = correspondenceModel.getCorrespondingEObjects(
 				assemblyContext.parentStructure__AssemblyContext, Class).claimOne
 
 		} catch (RuntimeException e) {
@@ -92,7 +92,7 @@ class PcmJamoppUtilsGuice {
 		}
 
 		val system = assemblyContext.parentStructure__AssemblyContext
-		val implClass = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, component, Class).
+		val implClass = CorrespondenceModelUtil.getCorrespondingEObjects(correspondenceModel, component, Class).
 			claimOne
 
 		var AssemblyConnector acToRemove = null
@@ -102,7 +102,7 @@ class PcmJamoppUtilsGuice {
 			OperationProvidedRole)) {
 
 			val opInterface = providedRole.providedInterface__OperationProvidedRole
-			val interfaceClass = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel,
+			val interfaceClass = CorrespondenceModelUtil.getCorrespondingEObjects(correspondenceModel,
 				opInterface, Interface).claimOne
 			var keepOldBinding = false
 
@@ -249,7 +249,7 @@ class PcmJamoppUtilsGuice {
 		var saveClassResource = false
 
 		// Save all mappings between assembly connectors and bindings, so we can easily add/remove a connector if needed
-		val system = ci.getCorrespondingEObjectsByType(affectedClass, System).claimOne
+		val system = ci.getCorrespondingEObjects(affectedClass, System).claimOne
 		val interfaceToConnectorMappings = returnMappingsBetweenConnectorsAndInterfaceBindings(system, ci)
 
 		val oldStatements = oldMethod.statements
@@ -423,7 +423,7 @@ class PcmJamoppUtilsGuice {
 			if (providedRole !== null) {
 				val opInterface = providedRole.providedInterface__OperationProvidedRole
 				if (opInterface !== null) {
-					val interfaceClass = ci.getCorrespondingEObjectsByType(opInterface, Interface).claimOne
+					val interfaceClass = ci.getCorrespondingEObjects(opInterface, Interface).claimOne
 					interfaceToConnectorMappings.put(interfaceClass.name, ac)
 				}
 			}
@@ -532,10 +532,10 @@ class PcmJamoppUtilsGuice {
 	def static removeStatementForAssemblyConnector(ClassMethod configureMethod, AssemblyConnector assemblyConnector,
 		CorrespondenceModel ci) {
 		val opInterface = assemblyConnector.providedRole_AssemblyConnector.providedInterface__OperationProvidedRole
-		val implClass = ci.getCorrespondingEObjectsByType(
+		val implClass = ci.getCorrespondingEObjects(
 			assemblyConnector.providingAssemblyContext_AssemblyConnector.encapsulatedComponent__AssemblyContext, Class).
 			claimOne
-		val interfaceClass = ci.getCorrespondingEObjectsByType(opInterface, Interface).claimOne
+		val interfaceClass = ci.getCorrespondingEObjects(opInterface, Interface).claimOne
 		for (ExpressionStatement expr : configureMethod.statements.filter(ExpressionStatement)) {
 			if (interfaceAndClassNameEqualBindExpressionArguments(expr, interfaceClass.name, implClass.name)) {
 				configureMethod.statements.remove(expr)
@@ -682,7 +682,7 @@ class PcmJamoppUtilsGuice {
 	private def static findBasicComponentByName(Repository repository, String entityName, CorrespondenceModel ci) {
 		for (BasicComponent comp : repository.components__Repository.filter(BasicComponent)) {
 			try {
-				val implClass = ci.getCorrespondingEObjectsByType(comp, Class).claimOne
+				val implClass = ci.getCorrespondingEObjects(comp, Class).claimOne
 				if (implClass.name == entityName) {
 					return comp
 				}
@@ -715,7 +715,7 @@ class PcmJamoppUtilsGuice {
 
 	def static EObject[] createBindCallForConnector(AssemblyContext assemblyContext,
 		AssemblyConnector assemblyConnector, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
-		val configureMethod = correspondenceModel.getCorrespondingEObjectsByType(assemblyContext, ClassMethod).claimOne
+		val configureMethod = correspondenceModel.getCorrespondingEObjects(assemblyContext, ClassMethod).claimOne
 		configureMethod.statements.removeAll(configureMethod.statements)
 
 		val system = assemblyContext.parentStructure__AssemblyContext
@@ -728,12 +728,12 @@ class PcmJamoppUtilsGuice {
 
 		for (AssemblyConnector ac : assemblyConnectors) {
 			if (!configureMethod.parameters.nullOrEmpty) {
-				val implClass = correspondenceModel.getCorrespondingEObjectsByType(
+				val implClass = correspondenceModel.getCorrespondingEObjects(
 					ac.providingAssemblyContext_AssemblyConnector.encapsulatedComponent__AssemblyContext, Class).
 					claimOne
 
 				val opInterface = ac.providedRole_AssemblyConnector.providedInterface__OperationProvidedRole
-				val interfaceClass = correspondenceModel.getCorrespondingEObjectsByType(opInterface, Interface).claimOne
+				val interfaceClass = correspondenceModel.getCorrespondingEObjects(opInterface, Interface).claimOne
 
 				var removeOldBinding = false
 				// A binding for opInterface already exists -> check if the new binding binds it to a different implementation

@@ -113,7 +113,7 @@ routine addedProvidedDelegationConnector(pcm::ProvidedDelegationConnector provid
 		call {
 			val opInterface = providedDelegationConnector.innerProvidedRole_ProvidedDelegationConnector.providedInterface__OperationProvidedRole;
 			val systemClass = configureMethod.containingConcreteClassifier as Class;
-			val jaMoPPInterface = correspondenceModel.getCorrespondingEObjectsByType(opInterface, Interface).claimOne;
+			val jaMoPPInterface = correspondenceModel.getCorrespondingEObjects(opInterface, Interface).claimOne;
 			val namespaceClassifierRef = createNamespaceClassifierReference(jaMoPPInterface);
 			for (impl : systemClass.implements) {
 				if (hasSameTargetReference(namespaceClassifierRef, impl)) {
