@@ -49,8 +49,8 @@ import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import static tools.vitruv.applications.util.temporary.pcm.PcmRepositoryUtil.*
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import org.palladiosimulator.pcm.repository.Repository
 
 /**
  * 
@@ -242,7 +242,7 @@ class PcmJamoppUtilsGuice {
 		].nullOrEmpty)
 	}
 
-	def static updateConfigure(ConcreteClassifier affectedClass, ClassMethod oldMethod, ClassMethod newMethod,
+	def static updateConfigure(Repository repository, ConcreteClassifier affectedClass, ClassMethod oldMethod, ClassMethod newMethod,
 		CorrespondenceModel ci, UserInteractor userInteractor) {
 		// logger.info("Update statements in configure method")
 		var saveSystemResource = false
@@ -341,8 +341,8 @@ class PcmJamoppUtilsGuice {
 								if (acToUpdate !== null) {
 									// change providing assembly context of connector
 									updateProvidedRoleOfAssemblyConnector(acToUpdate,
-										findOperationInterfaceByName(interfaceName, ci),
-										findBasicComponentByName(className, ci), system, userInteractor)
+										findOperationInterfaceByName(repository, interfaceName),
+										findBasicComponentByName(repository, className, ci), system, userInteractor)
 								}
 							} else {
 								// Another statement mapping the same interface exists and a new one has been added
@@ -356,8 +356,8 @@ class PcmJamoppUtilsGuice {
 									val acToUpdate = interfaceToConnectorMappings.get(interfaceName)
 									// change providing assembly context of connector
 									updateProvidedRoleOfAssemblyConnector(acToUpdate,
-										findOperationInterfaceByName(interfaceName, ci),
-										findBasicComponentByName(className, ci), system, userInteractor)
+										findOperationInterfaceByName(repository, interfaceName),
+										findBasicComponentByName(repository, className, ci), system, userInteractor)
 								} else {
 									// Remove newly added binding and keep old one
 									// logger.info("remove newly added binding and keep old one")
@@ -372,8 +372,8 @@ class PcmJamoppUtilsGuice {
 							// This is the first mapping for the interface -> create new assembly connector
 							// logger.info("first mapping for interface -> create new assembly connector")
 							createAssemblyConnector(
-								findOperationInterfaceByName(interfaceName, ci),
-								findBasicComponentByName(className, ci),
+								findOperationInterfaceByName(repository, interfaceName),
+								findBasicComponentByName(repository, className, ci),
 								null,
 								null,
 								system,
@@ -679,9 +679,8 @@ class PcmJamoppUtilsGuice {
 	}
 
 	// TODO: check if a similar method exists in POJO utils
-	private def static findBasicComponentByName(String entityName, CorrespondenceModel ci) {
-		val repo = getFirstRepository(ci)
-		for (BasicComponent comp : repo.components__Repository.filter(BasicComponent)) {
+	private def static findBasicComponentByName(Repository repository, String entityName, CorrespondenceModel ci) {
+		for (BasicComponent comp : repository.components__Repository.filter(BasicComponent)) {
 			try {
 				val implClass = ci.getCorrespondingEObjectsByType(comp, Class).claimOne
 				if (implClass.name == entityName) {
@@ -697,9 +696,8 @@ class PcmJamoppUtilsGuice {
 	}
 
 	// TODO: check if a similar method exists in POJO utils
-	private def static findOperationInterfaceByName(String entityName, CorrespondenceModel ci) {
-		val repo = getFirstRepository(ci)
-		for (OperationInterface opInterface : repo.interfaces__Repository.filter(OperationInterface)) {
+	private def static findOperationInterfaceByName(Repository repository, String entityName) {
+		for (OperationInterface opInterface : repository.interfaces__Repository.filter(OperationInterface)) {
 			if (opInterface.entityName == entityName) {
 				return opInterface
 			}
