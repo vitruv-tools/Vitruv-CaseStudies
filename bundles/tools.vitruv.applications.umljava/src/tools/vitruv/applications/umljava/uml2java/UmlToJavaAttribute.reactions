@@ -1,4 +1,5 @@
 import org.eclipse.uml2.uml.Property
+import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Field
 import tools.vitruv.applications.umljava.util.UmlJavaCorrespondenceTag
 
@@ -47,9 +48,16 @@ routine createOrFindJavaField(uml::Property umlProperty, uml::Classifier umlClas
                 createJavaField(umlProperty) 
             } else {
                 addAttributeCorrespondence(umlProperty, foundField)
-                createOrFindJavaGetter(umlProperty, foundField)
-                createOrFindJavaSetter(umlProperty, foundField)
+                val getter = jClassifier.methods.filter(ClassMethod).filter [ name == buildGetterName(umlProperty.name) ].head
+                val setter = jClassifier.methods.filter(ClassMethod).filter [ name == buildSetterName(umlProperty.name) ].head
+                if (getter !== null) {
+                	createAccessorCorrespondence(umlProperty, getter, UmlJavaCorrespondenceTag.GETTER)
+                }
+                if (setter !== null) {
+                	createAccessorCorrespondence(umlProperty, setter, UmlJavaCorrespondenceTag.SETTER)
+                }
             }
+            changeJavaAttributeType(umlProperty)
         }
     }    
 }
@@ -67,7 +75,6 @@ routine createJavaField(uml::Property umlProperty) {
         call {
             createOrFindJavaGetter(umlProperty, javaField)
             createOrFindJavaSetter(umlProperty, javaField)
-            changeJavaAttributeType(umlProperty)
         }
     }
 }
