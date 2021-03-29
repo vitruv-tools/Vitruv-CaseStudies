@@ -108,9 +108,20 @@ routine deleteJavaField(uml::Property umlProperty) {
     }
     action {
         delete javaField
-        delete javaGetter?.get
-        delete javaSetter?.get
+        call {
+        	deleteJavaAccessor(umlProperty, UmlJavaCorrespondenceTag.GETTER)
+        	deleteJavaAccessor(umlProperty, UmlJavaCorrespondenceTag.SETTER)
+        }
     }
+}
+
+routine deleteJavaAccessor(uml::Property umlProperty, String tag) {
+	match {
+		val javaAccessor = retrieve java::ClassMethod corresponding to umlProperty tagged with tag
+	}
+	action {
+		delete javaAccessor
+	}
 }
 
 reaction UmlAttributeMadeFinal {
