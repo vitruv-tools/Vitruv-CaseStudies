@@ -38,6 +38,7 @@ public final class CompilationUnitManipulatorHelper {
 		cu.reconcile(ICompilationUnit.NO_AST, false, null, null);
 		cu.commitWorkingCopy(false, new NullProgressMonitor());
 		cu.discardWorkingCopy();
+		cu.save(null, true);
 		synchronizationCallback.waitForSynchronization(1);
 	}
 

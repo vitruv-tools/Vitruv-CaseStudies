@@ -9,7 +9,6 @@ import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 import static org.junit.jupiter.api.Assertions.assertNotNull
@@ -26,32 +25,31 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 
 	static val TEST_ATTRIBUTE = "testAttribute"
 
-	def static void checkAttributeConcept(
-		CorrespondenceModel cm,
+	def void checkAttributeConcept(
 		InnerDeclaration pcmAttribute,
 		Property umlAttribute
 	) {
 		assertNotNull(pcmAttribute)
 		assertNotNull(umlAttribute)
-		assertTrue(corresponds(cm, pcmAttribute, umlAttribute, TagLiterals.INNER_DECLARATION__PROPERTY))
+		assertTrue(corresponds(pcmAttribute, umlAttribute, TagLiterals.INNER_DECLARATION__PROPERTY))
 		assertTrue(pcmAttribute.entityName == umlAttribute.name)
 		// parent CompositeType should correspond to parent uml::Class
 		assertTrue(
-			corresponds(cm, pcmAttribute.compositeDataType_InnerDeclaration, umlAttribute.class_,
+			corresponds(pcmAttribute.compositeDataType_InnerDeclaration, umlAttribute.class_,
 				TagLiterals.COMPOSITE_DATATYPE__CLASS))
 		// types should correspond
-		assertTrue(isCorrect_DataType_Property_Correspondence(cm, pcmAttribute.datatype_InnerDeclaration, umlAttribute))
+		assertTrue(isCorrect_DataType_Property_Correspondence(pcmAttribute.datatype_InnerDeclaration, umlAttribute))
 	}
 
 	def protected checkAttributeConcept(InnerDeclaration pcmAttribute) {
 		val umlAttribute = helper.getModifiableCorr(pcmAttribute, Property, TagLiterals.INNER_DECLARATION__PROPERTY)
-		checkAttributeConcept(correspondenceModel, pcmAttribute, umlAttribute)
+		checkAttributeConcept(pcmAttribute, umlAttribute)
 	}
 
 	def protected checkAttributeConcept(Property umlAttribute) {
 		val pcmAttribute = helper.getModifiableCorr(umlAttribute, InnerDeclaration,
 			TagLiterals.INNER_DECLARATION__PROPERTY)
-		checkAttributeConcept(correspondenceModel, pcmAttribute, umlAttribute)
+		checkAttributeConcept(pcmAttribute, umlAttribute)
 	}
 
 	def private Repository createRepository() {

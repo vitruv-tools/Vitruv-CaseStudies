@@ -1,7 +1,5 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
-import java.util.Set;
-
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.parameters.OrdinaryParameter;
@@ -14,10 +12,11 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.Repository;
 
+import com.google.common.collect.Iterables;
+
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -125,15 +124,13 @@ public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformatio
 
 	private void assertCorrectSignatureMappingWithParameters(final OperationSignature signature,
 			int expectedParameterCount) throws Throwable {
-		Set<InterfaceMethod> ims = CorrespondenceModelUtil.getCorrespondingEObjectsByType(getCorrespondenceModel(),
-				signature, InterfaceMethod.class);
-		assertEquals(1, ims.size());
+		Iterable<InterfaceMethod> ims = getCorrespondingEObjects(signature, InterfaceMethod.class);
+		assertEquals(1, Iterables.size(ims));
 		InterfaceMethod im = ims.iterator().next();
 		assertEquals(expectedParameterCount, im.getParameters().size());
 		for (Parameter curParam : signature.getParameters__OperationSignature()) {
-			Set<OrdinaryParameter> javaParams = CorrespondenceModelUtil
-					.getCorrespondingEObjectsByType(getCorrespondenceModel(), curParam, OrdinaryParameter.class);
-			assertEquals(1, javaParams.size());
+			Iterable<OrdinaryParameter> javaParams = getCorrespondingEObjects(curParam, OrdinaryParameter.class);
+			assertEquals(1, Iterables.size(javaParams));
 			OrdinaryParameter javaParam = javaParams.iterator().next();
 			assertEquals(im.getParameters().get(signature.getParameters__OperationSignature().indexOf(curParam)),
 					javaParam);

@@ -11,7 +11,6 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNull
@@ -31,8 +30,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 
 	static val TEST_SIGNATURE_NAME = "testSignature"
 
-	def static void checkSignatureConcept(
-		CorrespondenceModel cm,
+	def void checkSignatureConcept(
 		OperationSignature pcmSignature,
 		Operation umlOperation
 	) {
@@ -42,28 +40,28 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(pcmSignature)
 		assertNotNull(umlOperation)
 		assertNotNull(returnParam)
-		assertTrue(corresponds(cm, pcmSignature, umlOperation, TagLiterals.SIGNATURE__OPERATION))
-		assertTrue(corresponds(cm, pcmSignature, returnParam, TagLiterals.SIGNATURE__RETURN_PARAMETER))
+		assertTrue(corresponds(pcmSignature, umlOperation, TagLiterals.SIGNATURE__OPERATION))
+		assertTrue(corresponds(pcmSignature, returnParam, TagLiterals.SIGNATURE__RETURN_PARAMETER))
 		assertTrue(pcmSignature.entityName == umlOperation.name)
 		// the name needs to be set, so that its TUID is distinct and the object is not confused with new instances
 		assertTrue(returnParam.name == DefaultLiterals.RETURN_PARAM_NAME)
 		// return types of both model elements should correspond to each other if they are set
 		assertTrue(
-			isCorrect_DataType_Parameter_Correspondence(cm, pcmSignature.returnType__OperationSignature, returnParam))
+			isCorrect_DataType_Parameter_Correspondence(pcmSignature.returnType__OperationSignature, returnParam))
 		// should both be contained in corresponding interfaces
 		assertTrue(
-			corresponds(cm, pcmSignature.interface__OperationSignature, umlOperation.interface,
+			corresponds(pcmSignature.interface__OperationSignature, umlOperation.interface,
 				TagLiterals.INTERFACE_TO_INTERFACE))
 	}
 
 	def protected checkSignatureConcept(OperationSignature pcmSignature) {
 		val umlOperation = helper.getModifiableCorr(pcmSignature, Operation, TagLiterals.SIGNATURE__OPERATION)
-		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
+		checkSignatureConcept(pcmSignature, umlOperation)
 	}
 
 	def protected checkSignatureConcept(Operation umlOperation) {
 		val pcmSignature = helper.getModifiableCorr(umlOperation, OperationSignature, TagLiterals.SIGNATURE__OPERATION)
-		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
+		checkSignatureConcept(pcmSignature, umlOperation)
 	}
 
 	def private Repository createRepositoryWithInterface() {

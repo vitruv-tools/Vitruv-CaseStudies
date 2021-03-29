@@ -6,7 +6,7 @@ import java.util.Set;
 import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java.Pcm2EjbJavaChangePropagationSpecification;
 import tools.vitruv.framework.applications.AbstractVitruvApplication;
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
+import tools.vitruv.framework.propagation.ChangePropagationSpecification;
 
 public class PcmJavaEjbApplication extends AbstractVitruvApplication {
 

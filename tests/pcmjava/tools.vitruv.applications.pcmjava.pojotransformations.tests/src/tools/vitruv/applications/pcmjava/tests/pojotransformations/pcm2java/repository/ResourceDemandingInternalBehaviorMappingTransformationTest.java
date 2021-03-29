@@ -12,7 +12,6 @@ import org.palladiosimulator.pcm.seff.SeffFactory;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,8 +38,7 @@ public class ResourceDemandingInternalBehaviorMappingTransformationTest extends 
 	private void assertResourceDemandingInternalBehaviourCorrespondenceToMethod(
 			final ResourceDemandingInternalBehaviour resourceDemandingInternalBehaviour,
 			final String expectedMethodName) throws Throwable {
-		final ClassMethod classMethod = claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
-				this.getCorrespondenceModel(), resourceDemandingInternalBehaviour, ClassMethod.class));
+		final ClassMethod classMethod = claimOne(getCorrespondingEObjects(resourceDemandingInternalBehaviour, ClassMethod.class));
 		assertEquals(classMethod.getName(), expectedMethodName,
 				"The class method should have the same name as the user selected");
 	}

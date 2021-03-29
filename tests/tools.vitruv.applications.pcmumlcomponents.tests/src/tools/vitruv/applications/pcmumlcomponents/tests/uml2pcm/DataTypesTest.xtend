@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 class DataTypesTest extends AbstractUmlPcmTest {
 
@@ -23,7 +24,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		primitiveType.name = UML_TYPE_BOOL
 		rootElement.packagedElements += primitiveType
 		propagate
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[primitiveType]).flatten
+		val correspondingElements = primitiveType.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		val pcmType = correspondingElements.get(0)
 		assertTrue(pcmType instanceof PrimitiveDataType)
@@ -40,7 +41,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		userInteraction.addNextSingleSelection(1)
 		propagate
 		assertEquals(nrOwnedTypesBefore + 1, rootElement.ownedTypes.length)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[dataType]).flatten
+		val correspondingElements = dataType.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		val pcmType = correspondingElements.get(0)
 		assertTrue(pcmType instanceof CompositeDataType)
@@ -61,8 +62,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		property.type = propertyType
 		dataType.ownedAttributes += property
 		propagate
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[dataType]).flatten
-		val pcmType = (correspondingElements.get(0) as CompositeDataType)
+		val pcmType = getCorrespondingEObjects(dataType, CompositeDataType).claimOne
 		assertEquals(1, pcmType.innerDeclaration_CompositeDataType.length)
 		assertEquals(propertyName, pcmType.innerDeclaration_CompositeDataType.get(0).entityName)
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(propertyType.name),
@@ -91,8 +91,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	}
 
 	protected def org.palladiosimulator.pcm.repository.DataType getCorrespondingDataType(DataType umlType) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlType]).flatten
-		return correspondingElements.get(0) as org.palladiosimulator.pcm.repository.DataType
+		return getCorrespondingEObjects(umlType, org.palladiosimulator.pcm.repository.DataType).claimOne
 	}
 
 	@Test

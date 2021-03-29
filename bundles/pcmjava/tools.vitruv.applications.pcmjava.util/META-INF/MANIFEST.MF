@@ -8,10 +8,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.xtend.lib,
  org.apache.log4j,
  tools.vitruv.framework.change,
- tools.vitruv.framework.change.processing,
+ tools.vitruv.framework.propagation,
  tools.vitruv.domains.pcm,
  tools.vitruv.domains.java,
- tools.vitruv.domains.java.echange,
  tools.vitruv.applications.util.temporary;visibility:=reexport,
  edu.kit.ipd.sdq.activextendannotations
 Export-Package: tools.vitruv.applications.pcmjava.util.java2pcm,

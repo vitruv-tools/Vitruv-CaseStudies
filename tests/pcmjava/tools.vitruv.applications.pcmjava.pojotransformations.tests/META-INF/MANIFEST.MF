@@ -7,12 +7,12 @@ Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.emf.transaction,
  tools.vitruv.testutils,
- tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.domains.java.echange,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.tests.util,
  tools.vitruv.applications.pcmjava.pojotransformations,
- org.junit.jupiter.api
+ org.junit.jupiter.api,
+ org.hamcrest.core,
+ com.google.guava
 Export-Package: tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java,
  tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository,
  tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system

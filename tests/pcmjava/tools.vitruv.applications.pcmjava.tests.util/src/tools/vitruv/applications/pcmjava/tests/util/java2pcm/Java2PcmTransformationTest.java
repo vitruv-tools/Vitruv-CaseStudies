@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.util.java2pcm;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +19,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jdt.core.IBuffer;
@@ -47,14 +46,12 @@ import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.JavaClasspath;
-import org.emftext.language.java.annotations.AnnotationInstance;
-import org.emftext.language.java.annotations.AnnotationsFactory;
 import org.emftext.language.java.classifiers.Classifier;
-import org.emftext.language.java.classifiers.ClassifiersFactory;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.ContainersFactory;
+import org.emftext.language.java.containers.ContainersPackage;
 import org.emftext.language.java.containers.JavaRoot;
 import org.emftext.language.java.containers.Package;
 import org.emftext.language.java.members.ClassMethod;
@@ -83,23 +80,17 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.system.System;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
+import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createPlatformResourceURI;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.domains.java.JamoppLibraryHelper;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
-import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
-import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
-import tools.vitruv.framework.change.description.ConcreteChange;
-import tools.vitruv.framework.change.description.VitruviusChangeFactory;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
-import tools.vitruv.framework.correspondence.CorrespondenceModel;
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
-import tools.vitruv.framework.util.datatypes.VURI;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationAbortCause;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationListener;
 import tools.vitruv.testutils.DisableAutoBuild;
@@ -114,7 +105,7 @@ import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static tools.vitruv.framework.util.ProjectBuildUtils.refreshAndBuildIncrementally;
+import static edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil.refreshAndBuildIncrementally;
 
 /**
  * Test class that contains utility methods that can be used by JaMoPP2PCM
@@ -156,7 +147,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			fail("Failure during project reload and build");
 		}
 	}
-	
+
 	private void refreshProject() {
 		try {
 			testEclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
@@ -201,11 +192,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		// resources from previous tests are still in the classpath and
 		// accidentally resolved
 		JavaClasspath.reset();
-		// Pipe JaMoPP error output to empty stream
-		java.lang.System.setErr(new PrintStream(new java.io.OutputStream() {
-			public void write(int b) {
-			}
-		}));
+		JamoppLibraryHelper.registerStdLib();
 	}
 
 	@BeforeEach
@@ -245,9 +232,16 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		logger.debug("Starting to wait for finished synchronization in test " + testEclipseProject.getName()
 				+ ". Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: "
 				+ expectedNumberOfSyncs);
-		// Trigger the build to start change propagation
-		refreshAndBuildProject();
 		try {
+			// There are still some processes running for which we have to wait to ensure
+			// that we can load the resources during change propagation and check them afterwards.
+			// Probably the Eclipse save job has not finished before we start the change
+			// propagation process and before we check the models afterwards. Until we have found 
+			// out how to fix that, we need to wait a high enough amount of time to ensure that 
+			// no failures occur.
+			Thread.sleep(100);
+			// Trigger the build to start change propagation
+			refreshAndBuildProject();
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
 				synchronized (this) {
@@ -261,6 +255,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 					fail("Waiting for synchronization timed out");
 				}
 			}
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			fail("An interrupt occurred unexpectedly");
 		}
@@ -294,19 +289,10 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
 		this.mainPackage = this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
-		// Contracts and datatypes packages are created by change propagation, so wait
-		// for them to be synchronized instead of creating them
+		// Contracts and datatypes packages are created by change propagation and recorded by the Java monitor,
+		// so trigger their processing by the monitor
 		waitForSynchronization(2);
-		// this.createPackageWithPackageInfo(new String[] {
-		// Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts" });
-		// this.createPackageWithPackageInfo(new String[] {
-		// Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes" });
-		final CorrespondenceModel ci = this.getCorrespondenceModel();
-		if (null == ci) {
-			throw new RuntimeException("Could not get correspondence instance.");
-		}
-		final Repository repo = claimOne(
-				CorrespondenceModelUtil.getCorrespondingEObjectsByType(ci, this.mainPackage, Repository.class));
+		final Repository repo = claimOne(getCorrespondingEObjects(this.mainPackage, Repository.class));
 		return repo;
 	}
 
@@ -316,22 +302,13 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
 
-	protected <T> T createSecondPackage(final Class<T> correspondingType, final String... namespace) throws Throwable {
+	protected <T extends EObject> T createSecondPackage(final Class<T> correspondingType, final String... namespace) throws Throwable {
 		this.secondPackage = this.createPackageWithPackageInfo(namespace);
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				this.secondPackage, correspondingType));
+		return claimOne(getCorrespondingEObjects(this.secondPackage, correspondingType));
 	}
 
 	private void createSecondPackageWithoutCorrespondence(final String... namespace) throws Throwable {
 		this.secondPackage = this.createPackageWithPackageInfo(namespace);
-	}
-
-	protected void createPackage(final String[] namespace) throws Throwable {
-		final IPackageFragmentRoot packageRoot = this.getIJavaProject();
-		final String namespaceDotted = StringUtils.join(namespace, ".");
-		final boolean force = true;
-		packageRoot.createPackageFragment(namespaceDotted, force, new NullProgressMonitor());
-		waitForSynchronization(1);
 	}
 
 	protected Package createPackageWithPackageInfo(final String... namespace) throws IOException {
@@ -342,7 +319,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		jaMoPPPackage.setName(namespaceList.get(namespaceList.size() - 1));
 		jaMoPPPackage.getNamespaces().addAll(namespaceList.subList(0, namespaceList.size() - 1));
 		final Resource resource = resourceAt(Path.of(getPathInProjectForSrcFile(packageFile)));
-		EcoreResourceBridge.saveEObjectAsOnlyContent(jaMoPPPackage, resource);
+		resource.getContents().add(jaMoPPPackage);
+		resource.save(null);
 		waitForSynchronization(1);
 		return jaMoPPPackage;
 	}
@@ -352,10 +330,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final IFile iFile = URIUtil.getIFileForEMFUri(resource.getURI());
 		IPath iPath = iFile.getProjectRelativePath();
 		iPath = iPath.removeLastSegments(1);
-		final String oldPackageName = packageToRename.getName();
-		if (oldPackageName.contains(".")) {
-			newName = oldPackageName.substring(0, oldPackageName.lastIndexOf(".") + 1) + newName;
-		}
+		newName = packageToRename.getNamespacesAsString() + newName;
 		final IFolder iFolder = iFile.getProject().getFolder(iPath);
 		final IJavaElement javaPackage = JavaCore.create(iFolder);
 		this.refactorRenameJavaElement(newName, javaPackage, IJavaRefactorings.RENAME_PACKAGE);
@@ -381,7 +356,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		waitForSynchronization(1);
 	}
 
-	protected <T> T renameClassifierWithName(final String entityName, final String newName, final Class<T> type)
+	protected <T extends EObject> T renameClassifierWithName(final String entityName, final String newName, final Class<T> type)
 			throws Throwable {
 		try {
 			final ICompilationUnit cu = CompilationUnitManipulatorHelper
@@ -392,10 +367,9 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			}
 			final ReplaceEdit edit = new ReplaceEdit(offset, entityName.length(), newName);
 			editCompilationUnit(cu, edit);
-			final VURI vuri = VURI.getInstance(cu.getResource());
-			final Classifier jaMoPPClass = this.getJaMoPPClassifierForVURI(vuri);
-			return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-					jaMoPPClass, type));
+			final URI uri = createPlatformResourceURI(cu.getResource());
+			final Classifier jaMoPPClass = this.getJaMoPPClassifierForURI(uri);
+			return claimOne(getCorrespondingEObjects(jaMoPPClass, type));
 		} catch (final Throwable e) {
 			logger.warn(e.getMessage());
 		}
@@ -411,28 +385,10 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				if (iJavaElement instanceof IPackageFragment) {
 					final IPackageFragment fragment = (IPackageFragment) iJavaElement;
 					if (fragment.getElementName().equals(newName)) {
-						final VURI vuri = this.getVURIForElementInPackage(fragment, "package-info");
-						final Package jaMoPPPackage = this.getJaMoPPRootForVURI(vuri);
+						final URI uri = this.getURIForElementInPackage(fragment, "package-info");
+						final Package jaMoPPPackage = this.getJaMoPPRootForURI(uri);
 						return jaMoPPPackage;
 					}
-					// final IJavaElement[] javaElements =
-					// fragment.getChildren();
-					// for (int k = 0; k < javaElements.length; k++) {
-					// final IJavaElement javaElement = javaElements[k];
-					// if (javaElement.getElementType() ==
-					// IJavaElement.PACKAGE_FRAGMENT) {
-					// final IPackageFragment packageFragment =
-					// (IPackageFragment) javaElement;
-					// if (packageFragment.getElementName().equals(newName)) {
-					// final VURI vuri =
-					// this.getVURIForElementInPackage(packageFragment,
-					// "package-info.java");
-					// final Package jaMoPPPackage =
-					// this.getJaMoPPRootForVURI(vuri);
-					// return jaMoPPPackage;
-					// }
-					// }
-					// }
 				}
 			}
 		}
@@ -456,22 +412,21 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return "src/" + srcFilePath;
 	}
 
-	protected <T> T addClassInSecondPackage(final Class<T> classOfCorrespondingObject) throws Throwable {
+	protected <T extends EObject> T addClassInSecondPackage(final Class<T> classOfCorrespondingObject) throws Throwable {
 		final T createdEObject = this.addClassInPackage(this.secondPackage, classOfCorrespondingObject);
 		return createdEObject;
 	}
 
-	protected <T> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject)
+	protected <T extends EObject> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject)
 			throws Throwable {
 		final String implementingClassName = Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME;
 		return this.addClassInPackage(packageForClass, classOfCorrespondingObject, implementingClassName);
 	}
 
-	protected <T> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject,
+	protected <T extends EObject> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject,
 			final String implementingClassName) throws CoreException, InterruptedException {
 		final Classifier jaMoPPClass = this.createClassInPackage(packageForClass, implementingClassName);
-		final Set<T> eObjectsByType = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPClass, classOfCorrespondingObject);
+		final Iterable<T> eObjectsByType = getCorrespondingEObjects(jaMoPPClass, classOfCorrespondingObject);
 		return claimOne(eObjectsByType);
 	}
 
@@ -486,19 +441,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			throws CoreException {
 		final IPackageFragment packageFragment = this.getPackageFragment(packageNamespace);
 		createEmptyClass(packageFragment, implementingClassName);
-		final VURI vuri = this.getVURIForElementInPackage(packageFragment, implementingClassName);
-		final Classifier jaMoPPClass = this.getJaMoPPClassifierForVURI(vuri);
+		final URI uri = this.getURIForElementInPackage(packageFragment, implementingClassName);
+		final Classifier jaMoPPClass = this.getJaMoPPClassifierForURI(uri);
 		return jaMoPPClass;
 	}
 
-	private VURI getVURIForElementInPackage(final IPackageFragment packageFragment, final String elementName) {
-		String vuriKey = packageFragment.getResource().getFullPath().toString() + "/" + elementName + "."
+	private URI getURIForElementInPackage(final IPackageFragment packageFragment, final String elementName) {
+		String uriString = packageFragment.getResource().getFullPath().toString() + "/" + elementName + "."
 				+ JavaNamespace.FILE_EXTENSION;
-		if (vuriKey.startsWith("/")) {
-			vuriKey = vuriKey.substring(1, vuriKey.length());
-		}
-		final VURI vuri = VURI.getInstance(vuriKey);
-		return vuri;
+		return URI.createPlatformResourceURI(uriString, true);
 	}
 
 	private IPackageFragment getPackageFragment(String packageNamespace) throws CoreException {
@@ -511,14 +462,14 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		throw new RuntimeException("No packageFragment found for JaMoPP package " + packageNamespace);
 	}
 
-	protected ConcreteClassifier getJaMoPPClassifierForVURI(final VURI vuri) {
-		final CompilationUnit cu = this.getJaMoPPRootForVURI(vuri);
+	protected ConcreteClassifier getJaMoPPClassifierForURI(final URI uri) {
+		final CompilationUnit cu = this.getJaMoPPRootForURI(uri);
 		final Classifier jaMoPPClassifier = cu.getClassifiers().get(0);
 		return (ConcreteClassifier) jaMoPPClassifier;
 	}
 
-	private <T extends JavaRoot> T getJaMoPPRootForVURI(final VURI vuri) {
-		final Resource resource = URIUtil.loadResourceAtURI(vuri.getEMFUri(), new ResourceSetImpl());
+	private <T extends JavaRoot> T getJaMoPPRootForURI(final URI uri) {
+		final Resource resource = new ResourceSetImpl().getResource(uri, true);
 		// unchecked is OK for the test.
 		@SuppressWarnings("unchecked")
 		final T javaRoot = (T) resource.getContents().get(0);
@@ -637,12 +588,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	protected OperationInterface createInterfaceInPackage(String packageNamespace, final String interfaceName,
 			boolean claimOne) throws CoreException {
 		final Classifier jaMoPPIf = createJaMoPPInterfaceInPackage(packageNamespace, interfaceName);
-		Set<OperationInterface> correspondingOpInterfaces = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPIf, OperationInterface.class);
+		Iterable<OperationInterface> correspondingOpInterfaces = getCorrespondingEObjects(jaMoPPIf, OperationInterface.class);
 		if (claimOne) {
 			return claimOne(correspondingOpInterfaces);
 		}
-		if (null == correspondingOpInterfaces || 0 == correspondingOpInterfaces.size()) {
+		if (null == correspondingOpInterfaces || !correspondingOpInterfaces.iterator().hasNext()) {
 			return null;
 		}
 		logger.warn("More than one corresponding interfaces found for interface " + jaMoPPIf + ". Returning the first");
@@ -653,8 +603,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			throws CoreException {
 		final IPackageFragment packageFragment = this.getPackageFragment(packageNamespace);
 		createEmptyInterface(packageFragment, interfaceName);
-		final VURI vuri = this.getVURIForElementInPackage(packageFragment, interfaceName);
-		final ConcreteClassifier jaMoPPIf = this.getJaMoPPClassifierForVURI(vuri);
+		final URI uri = this.getURIForElementInPackage(packageFragment, interfaceName);
+		final ConcreteClassifier jaMoPPIf = this.getJaMoPPClassifierForURI(uri);
 
 		return jaMoPPIf;
 	}
@@ -694,8 +644,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	protected Package getPackageWithNameFromCorrespondenceModel(final String name) throws CoreException {
-		final Set<Package> packages = this.getCorrespondenceModel()
-				.getAllEObjectsOfTypeInCorrespondences(Package.class);
+		final Iterable<Package> packages = getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE, Package.class);
 		for (final Package currentPackage : packages) {
 			if (currentPackage.getName().equals(name)) {
 				return currentPackage;
@@ -724,19 +673,17 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				methodString, this.getCurrentTestProject(), this);
 		final Method jaMoPPMethod = this.findJaMoPPMethodInICU(icu, methodName);
 		final ClassMethod classMethod = (ClassMethod) jaMoPPMethod;
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				classMethod, ResourceDemandingSEFF.class));
+		return claimOne(getCorrespondingEObjects(classMethod, ResourceDemandingSEFF.class));
 	}
 
 	protected OperationSignature findOperationSignatureForJaMoPPMethodInCompilationUnit(final String methodName,
 			final String interfaceName, final ICompilationUnit cu) throws Throwable {
-		final VURI vuri = VURI.getInstance(cu.getResource());
-		final Classifier classifier = this.getJaMoPPClassifierForVURI(vuri);
+		final URI uri = createPlatformResourceURI(cu.getResource());
+		final Classifier classifier = this.getJaMoPPClassifierForURI(uri);
 		final Interface jaMoPPInterface = (Interface) classifier;
 		for (final Method jaMoPPMethod : jaMoPPInterface.getMethods()) {
 			if (jaMoPPMethod.getName().equals(methodName)) {
-				return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-						jaMoPPMethod, OperationSignature.class));
+				return claimOne(getCorrespondingEObjects(jaMoPPMethod, OperationSignature.class));
 			}
 		}
 		logger.warn("No JaMoPP method with name " + methodName + " found in " + interfaceName);
@@ -812,12 +759,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final InsertEdit insertEdit = new InsertEdit(offset, parameterStr);
 		editCompilationUnit(icu, insertEdit);
 		final ConcreteClassifier concreateClassifier = this
-				.getJaMoPPClassifierForVURI(VURI.getInstance(icu.getResource()));
+				.getJaMoPPClassifierForURI(createPlatformResourceURI(icu.getResource()));
 		final Method jaMoPPMethod = (Method) concreateClassifier.getMembersByName(methodName).get(0);
 		final org.emftext.language.java.parameters.Parameter jaMoPPParam = this
 				.getJaMoPPParameterFromJaMoPPMethod(jaMoPPMethod, parameterName);
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				jaMoPPParam, Parameter.class));
+		return claimOne(getCorrespondingEObjects(jaMoPPParam, Parameter.class));
 	}
 
 	protected OperationSignature addReturnTypeToSignature(final String interfaceName, final String methodName,
@@ -834,10 +780,9 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final ReplaceEdit replaceEdit = new ReplaceEdit(offset + 1, oldTypeName.length() + 1, retTypeStr);
 		editCompilationUnit(icu, replaceEdit);
 		final ConcreteClassifier concreateClassifier = this
-				.getJaMoPPClassifierForVURI(VURI.getInstance(icu.getResource()));
+				.getJaMoPPClassifierForURI(createPlatformResourceURI(icu.getResource()));
 		final Method jaMoPPMethod = (Method) concreateClassifier.getMembersByName(methodName).get(0);
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				jaMoPPMethod, OperationSignature.class));
+		return claimOne(getCorrespondingEObjects(jaMoPPMethod, OperationSignature.class));
 	}
 
 	protected org.emftext.language.java.parameters.Parameter getJaMoPPParameterFromJaMoPPMethod(
@@ -858,7 +803,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	protected Method findJaMoPPMethodInICU(final ICompilationUnit icu, final String methodName) {
-		final ConcreteClassifier cc = this.getJaMoPPClassifierForVURI(VURI.getInstance(icu.getResource()));
+		final ConcreteClassifier cc = this.getJaMoPPClassifierForURI(createPlatformResourceURI(icu.getResource()));
 		final List<Member> jaMoPPMethods = cc.getMembersByName(methodName);
 		for (final Member member : jaMoPPMethods) {
 			if (member instanceof Method && member.getName().equals(methodName)) {
@@ -920,16 +865,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final InsertEdit insertEdit = new InsertEdit(offset, newSource);
 		editCompilationUnit(classCompilationUnit, insertEdit);
 		final org.emftext.language.java.classifiers.Class jaMoPPClass = (org.emftext.language.java.classifiers.Class) this
-				.getJaMoPPClassifierForVURI(VURI.getInstance(classCompilationUnit.getResource()));
+				.getJaMoPPClassifierForURI(createPlatformResourceURI(classCompilationUnit.getResource()));
 		final EList<TypeReference> classImplements = jaMoPPClass.getImplements();
 		logger.debug("Found implements: " + classImplements);
 		for (final TypeReference implementsReference : classImplements) {
 			logger.debug("Implements data: " + implementsReference.getTarget());
-			final Set<OperationProvidedRole> correspondingEObjects = CorrespondenceModelUtil
-					.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), implementsReference,
+			final Iterable<OperationProvidedRole> correspondingEObjects = getCorrespondingEObjects(implementsReference,
 							OperationProvidedRole.class);
 			logger.debug("Corresponding provided roles: " + correspondingEObjects);
-			if (null != correspondingEObjects && 0 < correspondingEObjects.size()) {
+			if (null != correspondingEObjects && correspondingEObjects.iterator().hasNext()) {
 				return correspondingEObjects.iterator().next();
 			}
 		}
@@ -944,7 +888,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		classCompilationUnit.createImport(namespace, null, null);
 	}
 
-	protected <T> T addFieldToClassWithName(final String className, final String fieldType, final String fieldName,
+	protected <T extends EObject> T addFieldToClassWithName(final String className, final String fieldType, final String fieldName,
 			final Class<T> correspondingType) throws Throwable {
 		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
@@ -960,83 +904,53 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		if (correspondingType == null) {
 			return null;
 		}
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				jaMoPPField, correspondingType));
+		return claimOne(getCorrespondingEObjects(jaMoPPField, correspondingType));
 	}
 
 	protected Field getJaMoPPFieldFromClass(final ICompilationUnit icu, final String fieldName) {
-		final ConcreteClassifier cc = this.getJaMoPPClassifierForVURI(VURI.getInstance(icu.getResource()));
+		final ConcreteClassifier cc = this.getJaMoPPClassifierForURI(createPlatformResourceURI(icu.getResource()));
 		final Field field = (Field) cc.getMembersByName(fieldName).get(0);
 		return field;
 	}
 
-	/**
-	 * Create change for annotation manually and notify change synchronizer
-	 *
-	 * @param annotableAndModifiable
-	 * @throws Throwable
-	 */
-	protected void addAnnotationToMember(final AnnotableAndModifiable annotableAndModifiable,
-			final String annotationName) throws Throwable {
-		final JavaInsertEReference<EObject, EObject> createChange = ReferenceFactory.eINSTANCE
-				.createJavaInsertEReference();
-		// createChange.setIsCreate(true);
-		createChange.setOldAffectedEObject(annotableAndModifiable);
-		final AnnotationInstance newAnnotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance();
-		final Classifier classifier = this.createClassifierFromName(annotationName);
-		newAnnotation.setAnnotation(classifier);
-		annotableAndModifiable.getAnnotationsAndModifiers().add(newAnnotation);
-		createChange.setAffectedEObject(annotableAndModifiable);
-		final EReference containingReference = (EReference) newAnnotation.eContainingFeature();
-		@SuppressWarnings("unchecked")
-		final int index = ((EList<EObject>) createChange.getAffectedEObject().eGet(containingReference))
-				.indexOf(newAnnotation);
-		createChange.setAffectedFeature(containingReference);
-		createChange.setIndex(index);
-		createChange.setNewValue(newAnnotation);
-		final ConcreteChange change = VitruviusChangeFactory.getInstance().createConcreteApplicableChange(createChange);
-		getVirtualModel().propagateChange(change);
-	}
-
 	// add Annotation via the framework
-	protected <T> T addAnnotationToClassifier(final AnnotableAndModifiable annotable, final String annotationName,
-			final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
+	protected <T extends EObject> T addAnnotationToClassifier(final AnnotableAndModifiable annotable, final String annotationName,
+			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className)
+			throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
 		final IType type = cu.getType(className);
 		final int offset = CompilationUnitManipulatorHelper.getOffsetForAddingAnntationToClass(type);
-		final InsertEdit insertEdit = new InsertEdit(offset, "@" + annotationName);
+		final String composedName = "@" + annotationName
+				+ (annotationParameter != null ? "(\"" + annotationParameter + "\")" : "")
+				+ java.lang.System.lineSeparator();
+		final InsertEdit insertEdit = new InsertEdit(offset, composedName);
 		editCompilationUnit(cu, insertEdit);
-		final Set<T> eObjectsByType = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), annotable, classOfCorrespondingObject);
+		final Iterable<T> eObjectsByType = getCorrespondingEObjects(annotable, classOfCorrespondingObject);
 		return claimOne(eObjectsByType);
 	}
 
 	// add Annotation via the framework
-	protected <T> T addAnnotationToField(final String fieldName, final String annotationName,
-			final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
+	protected <T extends EObject> T addAnnotationToField(final String fieldName, final String annotationName,
+			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className)
+			throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
 		final IType type = cu.getType(className);
 		final int offset = CompilationUnitManipulatorHelper.getOffsetForAddingAnntationToField(type, fieldName);
-		final InsertEdit insertEdit = new InsertEdit(offset, "@" + annotationName + " ");
+		final String composedName = "@" + annotationName
+				+ (annotationParameter != null ? "(\"" + annotationParameter + "\")" : "")
+				+ java.lang.System.lineSeparator();
+		final InsertEdit insertEdit = new InsertEdit(offset, composedName);
 		editCompilationUnit(cu, insertEdit);
 		final Field jaMoPPField = this.getJaMoPPFieldFromClass(cu, fieldName);
-		final Set<T> eObjectsByType = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPField, classOfCorrespondingObject);
+		final Iterable<T> eObjectsByType = getCorrespondingEObjects(jaMoPPField, classOfCorrespondingObject);
 		return claimOne(eObjectsByType);
-	}
-
-	private Classifier createClassifierFromName(final String annotationName) {
-		final org.emftext.language.java.classifiers.Class jaMoPPClass = ClassifiersFactory.eINSTANCE.createClass();
-		jaMoPPClass.setName(annotationName);
-		return jaMoPPClass;
 	}
 
 	protected void assertCorrespondingSEFF(final ResourceDemandingSEFF correspondingSeff, String methodName)
 			throws Throwable {
-		final ClassMethod jaMoPPMethod = claimOne(CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), correspondingSeff, ClassMethod.class));
+		final ClassMethod jaMoPPMethod = claimOne(getCorrespondingEObjects(correspondingSeff, ClassMethod.class));
 		assertEquals(jaMoPPMethod.getName(), methodName);
 	}
 

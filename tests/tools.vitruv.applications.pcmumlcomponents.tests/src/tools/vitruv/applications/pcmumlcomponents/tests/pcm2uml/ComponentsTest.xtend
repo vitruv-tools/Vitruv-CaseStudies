@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 class ComponentsTest extends AbstractPcmUmlTest {
 	static val COMPONENT_NAME = "TestComponent"
@@ -38,13 +39,11 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 
 	protected def Interface getCorrespondingUmlInterface(OperationInterface pcmInterface) {
-		val correspondingInterfaceElements = correspondenceModel.getCorrespondingEObjects(#[pcmInterface]).flatten
-		correspondingInterfaceElements.get(0) as Interface
+		return getCorrespondingEObjects(pcmInterface, Interface).claimOne
 	}
 
 	protected def Component getCorrespondingUmlComponent(RepositoryComponent pcmComponent) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent]).flatten
-		correspondingElements.get(0) as Component
+		return getCorrespondingEObjects(pcmComponent, Component).claimOne
 	}
 
 	@Test
@@ -53,7 +52,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		pcmComponent.entityName = COMPONENT_NAME
 		rootElement.components__Repository += pcmComponent
 		propagate
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent]).flatten
+		val correspondingElements = pcmComponent.correspondingElements
 		assertEquals(1, correspondingElements.size)
 		val umlComponent = correspondingElements.get(0)
 		assertTrue(umlComponent instanceof Component)
@@ -71,7 +70,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += requiredRole
 		propagate
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[requiredRole]).flatten
+		val correspondingElements = requiredRole.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof Usage)
 		val umlUsage = (correspondingElements.get(0) as Usage)
@@ -101,7 +100,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface2
 		propagate
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[requiredRole]).flatten
+		val correspondingElements = requiredRole.correspondingElements
 		val umlUsage = (correspondingElements.get(0) as Usage)
 		val umlInterface = getCorrespondingUmlInterface(pcmInterface2)
 		assertEquals(umlInterface, umlUsage.suppliers.get(0))
@@ -135,7 +134,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		pcmComponent.providedRoles_InterfaceProvidingEntity += providedRole
 		propagate
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[providedRole]).flatten
+		val correspondingElements = providedRole.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof InterfaceRealization)
 		val umlInterfaceRealization = (correspondingElements.get(0) as InterfaceRealization)

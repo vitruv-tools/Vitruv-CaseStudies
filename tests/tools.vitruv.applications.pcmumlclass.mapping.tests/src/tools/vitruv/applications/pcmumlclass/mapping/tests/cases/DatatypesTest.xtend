@@ -8,8 +8,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
 import static tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals.*
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
-import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -23,20 +21,19 @@ class DatatypesTest extends PcmUmlClassTest {
 	static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
 	static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
 
-	def static checkCompositeDataTypeConcept(
-		CorrespondenceModel cm,
+	def checkCompositeDataTypeConcept(
 		CompositeDataType pcmCompositeType,
 		Class umlClass
 	) {
-		assertTrue(corresponds(cm, pcmCompositeType, umlClass))
+		assertTrue(corresponds(pcmCompositeType, umlClass))
 		assertTrue(pcmCompositeType.entityName == umlClass.name)
 		// Repository should correspond to the datatypes package
 		assertTrue(
-			corresponds(cm, pcmCompositeType.repository__DataType, umlClass.package,
+			corresponds(pcmCompositeType.repository__DataType, umlClass.package,
 				TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE))
 		// check that parent compositedatatypes and parent classes correspond
 		val umlParentCorrespondences = pcmCompositeType.parentType_CompositeDataType.map [ pcmParent |
-			CorrespondenceModelUtil.getCorrespondingEObjectsByType(cm, pcmParent, Class).head
+			getCorrespondingEObjects(pcmParent, Class).head
 		].toList
 		assertFalse(umlParentCorrespondences.contains(null))
 		assertFalse(
@@ -49,14 +46,14 @@ class DatatypesTest extends PcmUmlClassTest {
 	def protected checkCompositeDataTypeConcept(CompositeDataType pcmCompositeType) {
 		val umlClass = helper.getCorr(pcmCompositeType, Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		assertNotNull(umlClass)
-		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
+		checkCompositeDataTypeConcept(pcmCompositeType, umlClass)
 	}
 
 	def protected checkCompositeDataTypeConcept(Class umlClass) {
 		val pcmCompositeType = helper.getCorr(umlClass, CompositeDataType,
 			TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		assertNotNull(pcmCompositeType)
-		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
+		checkCompositeDataTypeConcept(pcmCompositeType, umlClass)
 	}
 
 	/**

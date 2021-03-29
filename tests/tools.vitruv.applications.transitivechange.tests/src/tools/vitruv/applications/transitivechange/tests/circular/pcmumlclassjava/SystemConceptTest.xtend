@@ -11,7 +11,6 @@ import org.palladiosimulator.pcm.system.SystemFactory
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
@@ -36,8 +35,7 @@ class SystemConceptTest extends PcmUmlJavaTransitiveChangeTest {
 	val MODEL_NAME = "testRootModel"
 	val SYSTEM_NAME = "TestSystem"
 
-	def protected static checkSystemConcept(
-		CorrespondenceModel cm,
+	def protected checkSystemConcept(
 		System pcmSystem,
 		Package umlSystemPkg,
 		Class umlSystemImpl,
@@ -47,8 +45,8 @@ class SystemConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		assertNotNull(umlSystemPkg)
 		assertNotNull(umlSystemImpl)
 		assertNotNull(umlSystemConstructor)
-		assertTrue(corresponds(cm, pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE))
-		assertTrue(corresponds(cm, pcmSystem, umlSystemImpl, TagLiterals.IPRE__IMPLEMENTATION))
+		assertTrue(corresponds(pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE))
+		assertTrue(corresponds(pcmSystem, umlSystemImpl, TagLiterals.IPRE__IMPLEMENTATION))
 		assertTrue(pcmSystem.entityName.toFirstLower == umlSystemPkg.name)
 		assertTrue(pcmSystem.entityName == umlSystemPkg.name.toFirstUpper)
 		assertTrue(pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlSystemImpl.name)
@@ -69,7 +67,7 @@ class SystemConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		val umlSystemPkg = helper.getModifiableCorr(pcmSystem, Package, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
 		val umlSystemImpl = helper.getModifiableCorr(pcmSystem, Class, TagLiterals.IPRE__IMPLEMENTATION)
 		val umlSystemConstructor = helper.getModifiableCorr(pcmSystem, Operation, TagLiterals.IPRE__CONSTRUCTOR)
-		checkSystemConcept(correspondenceModel, pcmSystem, umlSystemPkg, umlSystemImpl, umlSystemConstructor)
+		checkSystemConcept(pcmSystem, umlSystemPkg, umlSystemImpl, umlSystemConstructor)
 		checkJavaPackage(umlSystemPkg)
 		checkJavaType(umlSystemImpl)
 		checkJavaConstructor(umlSystemConstructor)

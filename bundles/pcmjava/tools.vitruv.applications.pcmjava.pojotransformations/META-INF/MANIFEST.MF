@@ -15,6 +15,5 @@ Require-Bundle: tools.vitruv.framework.applications,
  tools.vitruv.domains.pcm,
  tools.vitruv.applications.util.temporary,
  tools.vitruv.applications.pcmjava.util,
- tools.vitruv.domains.java.echange,
  edu.kit.ipd.sdq.commons.util.pcm,
  tools.vitruv.applications.pcmjava.common

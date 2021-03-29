@@ -11,7 +11,7 @@ import tools.vitruv.domains.java.util.JavaPersistenceHelper
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.AbstractReferenceMappingOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.ReferenceMappingOperator
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
-import tools.vitruv.framework.util.bridges.EMFBridge
+import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createFileURI
 
 import static com.google.common.base.Preconditions.*
 import static java.util.stream.Collectors.*
@@ -21,6 +21,8 @@ import static extension java.nio.file.Files.*
 import static extension tools.vitruv.extensions.dslruntime.commonalities.helper.IntermediateModelHelper.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import org.emftext.language.java.containers.ContainersPackage
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 
 @ReferenceMappingOperator(
 	name = 'javaSubPackages',
@@ -59,7 +61,7 @@ class JavaSubPackagesOperator extends AbstractReferenceMappingOperator {
 		logger.trace('''Searching container for Java package: «subPackage»''')
 		// TODO avoid brute force search
 		// TODO only finds packages with an correspondence
-		val knownPackages = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Package)
+		val knownPackages = correspondenceModel.getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE, Package)
 		return knownPackages.findFirst [
 			logger.trace('''  Found candidate package: «it»''')
 			it.packageString == subPackageNamespacesString
@@ -133,7 +135,7 @@ class JavaSubPackagesOperator extends AbstractReferenceMappingOperator {
 		if (!packageFile.isRegularFile) {
 			return null
 		}
-		val packageURI = EMFBridge.getEmfFileUriForFile(packageFile.toFile)
+		val packageURI = packageFile.toFile.createFileURI()
 		val packageResource = resourceSet.getResource(packageURI, true)
 		if (packageResource === null) return null
 		val headContent = packageResource.contents.head

@@ -11,9 +11,9 @@ import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import edu.kit.ipd.sdq.activextendannotations.Utility
 
@@ -65,7 +65,7 @@ class DataTypeCorrespondenceHelper {
 	}
 
 	private static def dispatch Type claimUniqueCorrespondingType(CollectionDataType cdt, CorrespondenceModel ci) {
-		return ci.getCorrespondingEObjectsByType(cdt, ConcreteClassifier).claimOne
+		return ci.getCorrespondingEObjects(cdt, ConcreteClassifier).claimOne
 	}
 
 	private static def dispatch Type claimUniqueCorrespondingType(PrimitiveDataType pdt, CorrespondenceModel ci) {
@@ -73,6 +73,6 @@ class DataTypeCorrespondenceHelper {
 	}
 
 	private static def dispatch Type claimUniqueCorrespondingType(CompositeDataType cdt, CorrespondenceModel ci) {
-		return ci.getCorrespondingEObjectsByType(cdt, ConcreteClassifier).claimOne
+		return ci.getCorrespondingEObjects(cdt, ConcreteClassifier).claimOne
 	}
 }

@@ -30,6 +30,8 @@ import tools.vitruv.framework.userinteraction.UserInteractor
 import tools.vitruv.domains.pcm.util.PrimitiveTypesRepositoryLoader
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import static com.google.common.base.Preconditions.checkState
+import java.util.List
 
 /**
  * Helper to map type References to PCM data types
@@ -74,28 +76,30 @@ class TypeReferenceCorrespondenceHelper {
 				if (!(pcmDataType instanceof PrimitiveDataType)) {
 					// create a correspondence from the collection to the non collection DataType.
 					// reason: as long as the inner type exists the collection resectievly an array can be used easily
-					correspondenceModel.createAndAddCorrespondence(collectionDataType, pcmDataType)
+					correspondenceModel.createAndAddCorrespondence(List.of(collectionDataType), List.of(pcmDataType))
 				}
 			}
 			pcmDataType = collectionDataType
 		}
-		if (null === pcmDataType) {
-			logger.error("Could not find a PCM data type for type reference " + typeReference)
-		}
 		return pcmDataType
 	}
 
+	/**
+	 * Returns a valid PCM type for the given type reference. Throws an exception if none was found
+	 */
 	def static DataType getDataTypeFromTypeReference(TypeReference typeReference,
 		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
 		if (typeReference instanceof PrimitiveType) {
 			return claimPCMDataTypeForJaMoPPPrimitiveType(typeReference)
-		} else if (typeReference instanceof ClassifierReference) {
-			return getPCMDataTypeForClassifierReference(typeReference, correspondenceModel, userInteractor, repo)
+		}
+		val type = if (typeReference instanceof ClassifierReference) {
+			getPCMDataTypeForClassifierReference(typeReference, correspondenceModel, userInteractor, repo)
 		} else if (typeReference instanceof NamespaceClassifierReference) {
-			return getPCMDataTypeForNamespaceClassifierReference(typeReference, correspondenceModel, userInteractor,
+			getPCMDataTypeForNamespaceClassifierReference(typeReference, correspondenceModel, userInteractor,
 				repo)
 		}
-		return null
+		checkState(type !== null, "Could not find a PCM data type for type reference %s", typeReference)
+		return type
 	}
 
 	def private static DataType getPCMDataTypeForNamespaceClassifierReference(NamespaceClassifierReference reference,
@@ -126,7 +130,7 @@ class TypeReferenceCorrespondenceHelper {
 			}
 			var Set<DataType> dataTypes = null
 			try {
-				dataTypes = correspondenceModel.getCorrespondingEObjectsByType(classifier, DataType)
+				dataTypes = correspondenceModel.getCorrespondingEObjects(classifier, DataType)
 			} catch (Throwable t) {
 				logger.info("No correspondence found for classifier")
 				return null
@@ -156,7 +160,7 @@ class TypeReferenceCorrespondenceHelper {
 			logger.warn("Classifier is null! Can not create a data type for the classifier")
 			return null
 		}
-		val correspondingPCMEObjects = correspondenceModel.getCorrespondingEObjectsByType(classifier, NamedElement)
+		val correspondingPCMEObjects = correspondenceModel.getCorrespondingEObjects(classifier, NamedElement)
 		var String correspondingWarning = ""
 		if (!correspondingPCMEObjects.nullOrEmpty) {
 			correspondingWarning = System.getProperty("line.seperator") + "Warning: the classifier " + classifier.name +
@@ -171,7 +175,7 @@ class TypeReferenceCorrespondenceHelper {
 		val CompositeDataType cdt = RepositoryFactory.eINSTANCE.createCompositeDataType
 		cdt.entityName = classifier.name
 		cdt.repository__DataType = repo
-		correspondenceModel.createAndAddCorrespondence(cdt, classifier)
+		correspondenceModel.createAndAddCorrespondence(List.of(cdt), List.of(classifier))
 
 		/*val String message = "Automatically created the corresponding composite data type " + cdt.entityName +
 		 * 	" for classifier " + classifier.name + correspondingWarning

@@ -12,11 +12,11 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModal
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static com.google.common.base.Preconditions.checkState
 
 import static extension tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
-import static extension tools.vitruv.framework.util.bridges.JavaHelper.claimOneOrNone
 import static java.util.List.copyOf
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
@@ -219,7 +219,7 @@ routine addJavaSuperClass(uml::Class uClass, uml::Generalization uGeneralization
 }
 
 reaction UmlSuperClassDeleted {
-    after element uml::Generalization removed from uml::Interface[generalization]
+    after element uml::Generalization removed from uml::Class[generalization]
     call deleteJavaSuperClass(oldValue)
 }
 
@@ -258,9 +258,10 @@ routine createJavaClassImplementsReference(uml::InterfaceRealization uRealizatio
     }
     action {
         execute {
-            val matchingReference = jClass.implements.filter[target == jInterface].claimOneOrNone
-            if (matchingReference.isPresent) {
-                addImplementsCorrespondence(uRealization, matchingReference.get)
+            val matchingReference = jClass.implements.filter[target == jInterface]
+            checkState(matchingReference.size <= 1, "There is more than one implementation of Java interface %s in class %s", jInterface, jClass)
+            if (matchingReference.size == 1) {
+                addImplementsCorrespondence(uRealization, matchingReference.get(0))
             } else {
                 var typeReference = createTypeReference(uRealization.contract, Optional.^of(jInterface), null, userInteractor)
                 addJavaImport(jClass.containingCompilationUnit, typeReference)
