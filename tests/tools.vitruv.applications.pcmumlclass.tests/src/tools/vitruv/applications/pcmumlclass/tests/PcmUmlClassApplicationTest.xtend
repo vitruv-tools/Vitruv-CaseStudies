@@ -247,6 +247,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			for (originalParameter : originalOperationParameterMapping.getOrDefault(generatedOperation.name,
 				new ArrayList<Parameter>)) {
 				val generatedParameter = generatedOperation.ownedParameters.findFirst[it.name == originalParameter.name]
+				resolveElements(originalParameter, generatedModel.eResource, "name")
 				if (generatedParameter !== null) {
 					mergeElements(originalParameter, generatedParameter, "name")
 				} else {
@@ -288,8 +289,10 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		assertNotNull(generatedComponentImpl)
 
 		// merge everything except operations which are separately handled, because some of the constructor parameters will be generated.
+		resolveElements(originalComponentImpl, generatedModel.eResource, "ownedOperation", "interfaceRealization")
 		mergeElements(originalComponentImpl, generatedComponentImpl, "ownedOperation", "interfaceRealization")
 		for (originalRealization : originalComponentImpl.interfaceRealizations.clone) {
+			resolveElements(originalRealization, generatedModel.eResource)
 			originalComponentImpl.interfaceRealizations -= originalRealization
 			originalRealization.clients -= originalComponentImpl // needs to be manually cleared, or else originalComponentImpl is still set as a client and causes UUID error
 			generatedComponentImpl.interfaceRealizations += originalRealization
@@ -315,9 +318,11 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		]
 		assertNotNull(originalConstructor)
 		assertNotNull(generatedConstructor)
+		resolveElements(originalConstructor, generatedModel.eResource, "ownedParameter")
 		mergeElements(originalConstructor, generatedConstructor, "ownedParameter")
 		for (originalParameter : originalConstructor.ownedParameters.clone) {
 			val generatedParameter = generatedConstructor.ownedParameters.findFirst[it.name == originalParameter.name]
+			resolveElements(originalParameter, generatedModel.eResource, "name")
 			if (generatedParameter !== null) {
 				mergeElements(originalParameter, generatedParameter, "name")
 			} else {
@@ -440,6 +445,23 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 				generated.eSet(feature, original.eGet(feature))
 			}
 		}
+	}
+
+	private def resolveElements(EObject original, Resource generatedResource, String ... skipFeatures) {
+		for (feature : original.eClass.EAllReferences) {
+			if (!feature.derived && feature.changeable && original.eIsSet(feature) &&
+				!feature.isContainer && !skipFeatures.contains(feature.name)) {
+				if (original.eGet(feature) instanceof EObject) {
+					original.eSet(feature, (original.eGet(feature) as EObject).resolve(generatedResource))
+				} else if (original.eGet(feature) instanceof List) {
+					original.eSet(feature, (original.eGet(feature) as List<?>).map[(it as EObject).resolve(generatedResource)])
+				}
+			}
+		}
+	}
+
+	private def resolve(EObject original, Resource in) {
+		in.resourceSet.getEObject(in.URI.appendFragment(EcoreUtil.getRelativeURIFragmentPath(null, original)), true)
 	}
 
 }
