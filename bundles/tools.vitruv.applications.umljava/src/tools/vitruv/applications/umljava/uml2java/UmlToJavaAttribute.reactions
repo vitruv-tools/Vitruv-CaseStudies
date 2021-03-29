@@ -48,8 +48,8 @@ routine createOrFindJavaField(uml::Property umlProperty, uml::Classifier umlClas
                 createJavaField(umlProperty) 
             } else {
                 addAttributeCorrespondence(umlProperty, foundField)
-                val getter = jClassifier.methods.filter(ClassMethod).filter [ name == buildGetterName(umlProperty.name) ].head
-                val setter = jClassifier.methods.filter(ClassMethod).filter [ name == buildSetterName(umlProperty.name) ].head
+                val getter = jClassifier.methods.filter(ClassMethod).filter [ name == buildGetterName(umlProperty.name) ].claimNotMany
+                val setter = jClassifier.methods.filter(ClassMethod).filter [ name == buildSetterName(umlProperty.name) ].claimNotMany
                 if (getter !== null) {
                 	createAccessorCorrespondence(umlProperty, getter, UmlJavaCorrespondenceTag.GETTER)
                 }
