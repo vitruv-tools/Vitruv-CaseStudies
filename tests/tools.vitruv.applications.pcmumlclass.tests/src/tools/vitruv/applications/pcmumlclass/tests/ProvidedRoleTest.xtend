@@ -87,7 +87,7 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testProvidedRoleConcept_UML() {
 		var pcmRepository = createRepository_Component_Interface
-		startRecordingChanges(helper.getUmlComponentImpl(pcmRepository))
+		helper.getUmlComponentImpl(pcmRepository)
 
 		var umlRealization = helper.getUmlComponentImpl(pcmRepository).createInterfaceRealization(PROVIDED_ROLE_NAME,
 			helper.getUmlInterface(pcmRepository))
