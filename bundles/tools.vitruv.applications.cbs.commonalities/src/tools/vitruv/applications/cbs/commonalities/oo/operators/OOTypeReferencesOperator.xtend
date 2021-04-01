@@ -38,7 +38,7 @@ class OOTypeReferencesOperator extends AbstractAttributeMappingOperator<List<Str
 	override applyTowardsCommonality(List<String> ooTypeReferences) {
 		val intermediateTypeReferences = ooTypeReferences.map [
 			ooTypeReferenceOperator.applyTowardsCommonality(it)
-		]
+		].filterNull.toList
 		logger.debug('''Mapping OO type references «ooTypeReferences» to intermediate type references «
 			intermediateTypeReferences».''')
 		return intermediateTypeReferences
@@ -48,7 +48,7 @@ class OOTypeReferencesOperator extends AbstractAttributeMappingOperator<List<Str
 	override applyTowardsParticipation(List<String> intermediateTypeReferences) {
 		val ooTypeReferences = intermediateTypeReferences.map [
 			ooTypeReferenceOperator.applyTowardsParticipation(it)
-		]
+		].filterNull.toList
 		logger.debug('''Mapping intermediate type references «intermediateTypeReferences» to OO type references «
 			ooTypeReferences».''')
 		return ooTypeReferences
