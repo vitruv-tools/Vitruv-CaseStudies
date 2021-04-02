@@ -5,7 +5,6 @@ import org.emftext.language.java.members.ClassMethod
 import org.junit.jupiter.api.Test
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * A test class to test the class method reactions.
@@ -52,7 +52,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 		typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_NAME)
 		typeClass2 = createSimpleJavaClassWithCompilationUnit(TYPE_NAME2)
 		jMeth = createSimpleJavaOperation(OPERATION_NAME)
-		jParam = createJavaParameter(PARAMETER_NAME, createNamespaceReferenceFromClassifier(typeClass2))
+		jParam = createJavaParameter(PARAMETER_NAME, createNamespaceClassifierReference(typeClass2))
 		jParamMeth = createJavaClassMethod(OPERATION_NAME2, TypesFactory.eINSTANCE.createBoolean, JavaVisibility.PUBLIC,
 			false, false, #[jParam])
 		jClass.members += jMeth
@@ -80,7 +80,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def void testChangeReturnType() {
-		jMeth.typeReference = createNamespaceReferenceFromClassifier(typeClass)
+		jMeth.typeReference = createNamespaceClassifierReference(typeClass)
 		propagate
 
 		val uOperation = getCorrespondingMethod(jMeth)
@@ -208,7 +208,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def testCreateParameter() {
-		val param = createJavaParameter(PARAMETER_NAME2, createNamespaceReferenceFromClassifier(typeClass))
+		val param = createJavaParameter(PARAMETER_NAME2, createNamespaceClassifierReference(typeClass))
 		jMeth.parameters += param
 		propagate
 
@@ -250,7 +250,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def testChangeParameterType() {
-		jParam.typeReference = createNamespaceReferenceFromClassifier(typeClass)
+		jParam.typeReference = createNamespaceClassifierReference(typeClass)
 		propagate
 
 		val uParam = getCorrespondingParameter(jParam)

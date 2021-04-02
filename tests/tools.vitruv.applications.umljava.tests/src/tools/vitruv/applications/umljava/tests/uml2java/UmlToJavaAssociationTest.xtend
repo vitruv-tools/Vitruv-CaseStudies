@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * This test class contains basic test for associations.
@@ -44,7 +45,7 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 		val jClass1 = getCorrespondingClass(uClass1)
 		val jAttribute = getCorrespondingAttribute(uAttribute)
 		val jClass2 = getCorrespondingClass(uClass2)
-		assertJavaElementHasTypeRef(jAttribute, createNamespaceReferenceFromClassifier(jClass2))
+		assertJavaElementHasTypeRef(jAttribute, createNamespaceClassifierReference(jClass2))
 		assertClassEquals(uClass1, jClass1)
 		assertAttributeEquals(uAttribute, jAttribute)
 	}
@@ -59,7 +60,7 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 		val jClass1 = getCorrespondingClass(uClass1)
 		val jAttribute = getCorrespondingAttribute(uAttribute)
 		val jClass2 = getCorrespondingClass(uClass2)
-		assertJavaElementHasTypeRef(jAttribute, createNamespaceReferenceFromClassifier(jClass2))
+		assertJavaElementHasTypeRef(jAttribute, createNamespaceClassifierReference(jClass2))
 		assertClassEquals(uClass1, jClass1)
 		assertTrue(javaGetterForAttributeExists(jAttribute))
 		assertTrue(javaSetterForAttributeExists(jAttribute))
@@ -78,7 +79,7 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 		val arrayListReference = getClassifierFromTypeReference(jAttribute.typeReference)
 		assertEquals("ArrayList", arrayListReference.name)
 		val innerTypeRef = getInnerTypeReferenceOfCollectionTypeReference(jAttribute.typeReference)
-		assertTypeEquals(createNamespaceReferenceFromClassifier(jClass2), innerTypeRef)
+		assertTypeEquals(createNamespaceClassifierReference(jClass2), innerTypeRef)
 	}
 
 }

@@ -8,13 +8,13 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * A Test class for creating, renaming and deleting enums.
@@ -118,7 +118,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 		val jTypeClass = getCorrespondingClass(typeClass)
 		val jAttr = getCorrespondingAttribute(attr)
 		assertJavaAttributeTraits(jAttr, ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
-			createNamespaceReferenceFromClassifier(jTypeClass), false, false, jEnum)
+			createNamespaceClassifierReference(jTypeClass), false, false, jEnum)
 		assertAttributeEquals(attr, jAttr)
 
 	}

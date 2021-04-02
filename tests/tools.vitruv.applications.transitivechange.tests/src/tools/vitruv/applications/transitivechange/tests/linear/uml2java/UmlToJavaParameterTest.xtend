@@ -11,9 +11,9 @@ import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -60,7 +60,7 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
 
 		val jParam = getCorrespondingParameter(uParam)
 		val jTypeClass = getCorrespondingClass(typeClass)
-		assertJavaParameterTraits(jParam, STANDARD_PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
+		assertJavaParameterTraits(jParam, STANDARD_PARAMETER_NAME, createNamespaceClassifierReference(jTypeClass))
 		assertParameterEquals(uParam, jParam)
 	}
 
@@ -92,7 +92,7 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
 
 		val jParam = getCorrespondingParameter(uParam)
 		val jTypeClass = getCorrespondingClass(typeClass)
-		assertJavaParameterTraits(jParam, PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
+		assertJavaParameterTraits(jParam, PARAMETER_NAME, createNamespaceClassifierReference(jTypeClass))
 		assertParameterEquals(uParam, jParam)
 	}
 

@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test
 
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import org.junit.jupiter.api.BeforeEach
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * A Test class for interface tests. Checks their creation, renaming, deleting and the 
@@ -63,7 +63,7 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
 	@Test
 	def testAddSuperInterface() {
 		val superInterface = createSimpleJavaInterfaceWithCompilationUnit(SUPERINTERFACENAME_1)
-		jInterface.extends += createNamespaceReferenceFromClassifier(superInterface)
+		jInterface.extends += createNamespaceClassifierReference(superInterface)
 		propagate
 
 		val uInterface = getCorrespondingInterface(jInterface)
@@ -76,8 +76,8 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
 	def testRemoveSuperInterface() {
 		val superInterface = createSimpleJavaInterfaceWithCompilationUnit(SUPERINTERFACENAME_1)
 		val superInterface2 = createSimpleJavaInterfaceWithCompilationUnit(SUPERINTERFACENAME_2)
-		jInterface.extends += createNamespaceReferenceFromClassifier(superInterface)
-		jInterface.extends += createNamespaceReferenceFromClassifier(superInterface2)
+		jInterface.extends += createNamespaceClassifierReference(superInterface)
+		jInterface.extends += createNamespaceClassifierReference(superInterface2)
 		propagate
 
 		jInterface.extends.remove(0)

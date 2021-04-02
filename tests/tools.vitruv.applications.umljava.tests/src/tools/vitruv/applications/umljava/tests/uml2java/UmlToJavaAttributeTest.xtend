@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * This Test class checks the creating, deleting and modifying of attributes in den uml to java
@@ -70,7 +70,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		val jtypeClass = getCorrespondingClass(typeClass)
 		val jAttr = getCorrespondingAttribute(attr)
 		assertJavaAttributeTraits(jAttr, STANDARD_ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
-			createNamespaceReferenceFromClassifier(jtypeClass), false, false, jClass)
+			createNamespaceClassifierReference(jtypeClass), false, false, jClass)
 		assertAttributeEquals(attr, jAttr)
 
 	}

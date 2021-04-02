@@ -1,7 +1,6 @@
 package tools.vitruv.applications.transitivechange.tests.linear.java2uml
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import org.junit.jupiter.api.Test
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * This class contains test cases for the creation, renaming and deleting of interface methods.
@@ -77,7 +77,7 @@ class JavaToUmlInterfaceMethodTest extends JavaToUmlTransformationTest {
 
 	@Test
 	def testChangeInterfaceMethodReturnType() {
-		jMeth.typeReference = createNamespaceReferenceFromClassifier(typeClass)
+		jMeth.typeReference = createNamespaceClassifierReference(typeClass)
 		propagate
 
 		val uOperation = getCorrespondingMethod(jMeth)
@@ -88,7 +88,7 @@ class JavaToUmlInterfaceMethodTest extends JavaToUmlTransformationTest {
 
 	@Test
 	def testCreateInterfaceParameter() {
-		val jParam = createJavaParameter(PARAMETER_NAME, createNamespaceReferenceFromClassifier(typeClass))
+		val jParam = createJavaParameter(PARAMETER_NAME, createNamespaceClassifierReference(typeClass))
 		jMeth.parameters += jParam
 		propagate
 
