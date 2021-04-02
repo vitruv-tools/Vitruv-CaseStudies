@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * This class provides basic tests for creating, deleting and changing traits of interface methods.
@@ -94,7 +94,7 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
 
 		val jMethod = getCorrespondingInterfaceMethod(uOperation)
 		val jTypeClass = getCorrespondingClass(typeClass)
-		assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
+		assertJavaElementHasTypeRef(jMethod, createNamespaceClassifierReference(jTypeClass))
 		assertInterfaceMethodEquals(uOperation, jMethod)
 	}
 }

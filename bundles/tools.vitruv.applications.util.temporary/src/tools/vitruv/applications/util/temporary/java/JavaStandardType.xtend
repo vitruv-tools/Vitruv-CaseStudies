@@ -14,7 +14,7 @@ import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.types.Void
 
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * Util class with for Java-PrimitiveTypes and Java-String.
@@ -89,7 +89,7 @@ class JavaStandardType {
             case LONG: return TypesFactory.eINSTANCE.createLong
             case SHORT: return TypesFactory.eINSTANCE.createShort
             case VOID: return TypesFactory.eINSTANCE.createVoid
-            case STRING: return createNamespaceReferenceFromClassifier(createJavaClass(STRING, JavaVisibility.PUBLIC, false, false))
+            case STRING: return createNamespaceClassifierReference(createJavaClass(STRING, JavaVisibility.PUBLIC, false, false))
             default: throw new IllegalArgumentException("Unknown standard primitive type name: " + standardTypeName)
         }
     }

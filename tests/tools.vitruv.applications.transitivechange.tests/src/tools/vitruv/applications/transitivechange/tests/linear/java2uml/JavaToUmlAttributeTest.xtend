@@ -12,8 +12,8 @@ import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import org.junit.jupiter.api.BeforeEach
@@ -78,7 +78,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def testCreateAttribute() {
-		val attr = createJavaAttribute(STANDARD_ATTRIBUTE_NAME, createNamespaceReferenceFromClassifier(typeClass),
+		val attr = createJavaAttribute(STANDARD_ATTRIBUTE_NAME, createNamespaceClassifierReference(typeClass),
 			JavaVisibility.PRIVATE, false, false)
 		jClass.members += attr
 		propagate
@@ -125,7 +125,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def testChangeAttributeType() {
-		jAttr.typeReference = createNamespaceReferenceFromClassifier(typeClass)
+		jAttr.typeReference = createNamespaceClassifierReference(typeClass)
 		propagate
 
 		val uAttr = getCorrespondingAttribute(jAttr)
