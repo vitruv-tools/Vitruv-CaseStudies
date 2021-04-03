@@ -6,7 +6,7 @@ import java.util.Set;
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.framework.applications.AbstractVitruvApplication;
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
+import tools.vitruv.framework.propagation.ChangePropagationSpecification;
 
 public class PcmUmlClassApplication extends AbstractVitruvApplication {
 

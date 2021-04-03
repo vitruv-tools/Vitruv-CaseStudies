@@ -83,7 +83,7 @@ abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
 	}
 
 	protected def Iterable<EObject> correspondingElements(EObject element) {
-		return correspondenceModel.getCorrespondingEObjects(#[element]).flatten
+		return getCorrespondingEObjects(element, EObject)
 	}
 
 	protected def <T> EList<T> toEList(List<T> elements) {

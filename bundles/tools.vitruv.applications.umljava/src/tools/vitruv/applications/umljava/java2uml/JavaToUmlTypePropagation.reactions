@@ -1,7 +1,7 @@
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -29,11 +29,9 @@ routine propagateParameterTypeChange(java::OrdinaryParameter jParam, uml::Parame
 }
 
 // ******** general variants to reduce code duplication. If possible please use the facade routines above
-
-routine propagateTypeChangeToTypedMultiplicityElement(
-		uml::TypedElement uTyped, uml::MultiplicityElement uMultiplicity, // same element -- uml::Property or uml::Parameter
+routine propagateTypeChangeToTypedMultiplicityElement(uml::TypedElement uTyped, uml::MultiplicityElement uMultiplicity, // same element -- uml::Property or uml::Parameter
 		java::TypedElement jElement // java::Field, java::Parameter, or java::Method
-	) {
+) {
 	match {
 		check {
 			if(uTyped !== uMultiplicity) {
@@ -46,18 +44,20 @@ routine propagateTypeChangeToTypedMultiplicityElement(
 	}
 	action {
 		execute {
+			val existingUmlType = uTyped.type
 			val jType = jElement.typeReference
 			val isCollectionReference = isCollectionTypeReference(jType)
-	    	if (isCollectionReference){
-	    		uMultiplicity.lower = 0
-	    		uMultiplicity.upper = LiteralUnlimitedNatural.UNLIMITED
-	    		val innerTypeRef = getInnerTypeRefOfCollectionReference(jType)
-	    		val innerType = if(innerTypeRef !== null) getUmlTypeFromReference(innerTypeRef, correspondenceModel) else null
-	    		uTyped.type = innerType
-	    	}
-	    	else {
-	    		uTyped.type = getUmlTypeFromReference(jType, correspondenceModel)
-	    	}
+			val newType = if (isCollectionReference) {
+				uMultiplicity.lower = 0
+				uMultiplicity.upper = LiteralUnlimitedNatural.UNLIMITED
+				val innerTypeRef = getInnerTypeRefOfCollectionReference(jType)
+				if(innerTypeRef !== null) getUmlTypeFromReference(innerTypeRef, correspondenceModel) else null
+			} else {
+				getUmlTypeFromReference(jType, correspondenceModel)
+			}
+			if (!EcoreUtil.equals(existingUmlType, newType)) {
+				uTyped.type = newType
+			}
 		}
 	}
 }

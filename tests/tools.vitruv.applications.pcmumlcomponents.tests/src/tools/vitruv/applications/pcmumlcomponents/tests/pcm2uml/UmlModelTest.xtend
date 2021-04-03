@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import java.nio.file.Path
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 class UmlModelTest extends AbstractPcmUmlTest {
 
@@ -16,7 +17,7 @@ class UmlModelTest extends AbstractPcmUmlTest {
 	def void testModelCreation() {
 		val modelUri = getUri(Path.of("model").resolve(MODEL_NAME + ".uml"))
 		assertThat(modelUri, isResource)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
+		val correspondingElements = rootElement.correspondingElements
 		assertEquals(1, correspondingElements.size)
 		val umlModel = correspondingElements.get(0)
 		assertTrue(umlModel instanceof Model)
@@ -28,7 +29,7 @@ class UmlModelTest extends AbstractPcmUmlTest {
 		val newName = 'foo'
 		rootElement.entityName = newName
 		propagate
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
-		assertEquals(newName, (correspondingElements.get(0) as Model).name)
+		val model = getCorrespondingEObjects(rootElement, Model).claimOne
+		assertEquals(newName, model.name)
 	}
 }

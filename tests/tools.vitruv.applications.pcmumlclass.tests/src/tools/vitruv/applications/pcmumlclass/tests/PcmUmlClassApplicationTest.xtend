@@ -14,8 +14,6 @@ import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChang
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.common.util.URI
@@ -43,6 +41,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
+import static com.google.common.base.Preconditions.checkNotNull
+import static extension tools.vitruv.framework.util.ObjectResolutionUtil.getHierarchicUriFragment
+import org.eclipse.emf.ecore.EStructuralFeature
 
 abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
@@ -67,7 +68,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	@BeforeEach
 	def protected void setup() {
 		patchDomains
-		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, [uri|uri.resourceAt])
+		helper = new PcmUmlClassApplicationTestHelper(this, [uri|uri.resourceAt])
 		testResourceSet = new ResourceSetImpl()
 	}
 
@@ -115,73 +116,64 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		return rootElement
 	}
 
-	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b) {
-		return cm.getCorrespondingEObjects(#[a]).exists(corrSet|EcoreUtil.equals(corrSet.head, b))
+	def protected corresponds(EObject a, EObject b) {
+		return getCorrespondingEObjects(a, EObject).exists[EcoreUtil.equals(it, b)]
 	}
 
-	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b, String tag) {
-		return EcoreUtil.equals(b,
-			ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, a, tag, b.class).head)
+	def protected corresponds(EObject a, EObject b, String tag) {
+		return EcoreUtil.equals(b, getCorrespondingEObjects(a, b.class, tag).head)
 	}
 
 	// DataType consistency constraints defined here because it is used in multiple tests
-	private static def boolean isCorrectSimpleTypeCorrespondence(
-		CorrespondenceModel correspondenceModel,
+	private def boolean isCorrectSimpleTypeCorrespondence(
 		DataType pcmDatatype,
 		Type umlType,
 		int lower,
 		int upper
 	) {
-		val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlType,
-			TagLiterals.DATATYPE__TYPE)
-		val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlType,
-			TagLiterals.COMPOSITE_DATATYPE__CLASS)
+		val correspondingPrimitiveType = corresponds(pcmDatatype, umlType, TagLiterals.DATATYPE__TYPE)
+		val correspondingCompositeType = corresponds(pcmDatatype, umlType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		return (correspondingPrimitiveType || correspondingCompositeType) // inner collection types are not supported
 		&& upper == 1 // && lower == 1 // lower could also be 0
 	}
 
-	private static def boolean isCorrectCollectionTypeCorrespondence(
-		CorrespondenceModel correspondenceModel,
+	private def boolean isCorrectCollectionTypeCorrespondence(
 		CollectionDataType pcmCollection,
 		Type umlType,
 		int lower,
 		int upper
 	) {
 		return lower == 0 && upper == LiteralUnlimitedNatural.UNLIMITED &&
-			isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmCollection.innerType_CollectionDataType, umlType,
-				1, 1)
+			isCorrectSimpleTypeCorrespondence(pcmCollection.innerType_CollectionDataType, umlType, 1, 1)
 	}
 
-	def protected static isCorrect_DataType_Property_Correspondence(CorrespondenceModel correspondenceModel,
-		DataType pcmDatatype, Property umlProperty) {
+	def protected isCorrect_DataType_Property_Correspondence(DataType pcmDatatype, Property umlProperty) {
 		if (pcmDatatype === null || umlProperty.type === null) {
 			return pcmDatatype === null && umlProperty.type === null
 		}
 
-		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype,
-			umlProperty.type, umlProperty.lower, umlProperty.upper)
-		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlProperty,
+		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(pcmDatatype, umlProperty.type,
+			umlProperty.lower, umlProperty.upper)
+		val collectionTypeCorrespondenceExists = corresponds(pcmDatatype, umlProperty,
 			TagLiterals.COLLECTION_DATATYPE__PROPERTY)
 		val collectionTypeCorrespondenceIsCorrect = if (pcmDatatype instanceof CollectionDataType)
-				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype, umlProperty.type,
-					umlProperty.lower, umlProperty.upper)
+				isCorrectCollectionTypeCorrespondence(pcmDatatype, umlProperty.type, umlProperty.lower,
+					umlProperty.upper)
 			else
 				null
 		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}
 
-	def protected static isCorrect_DataType_Parameter_Correspondence(CorrespondenceModel correspondenceModel,
-		DataType pcmDatatype, Parameter umlParam) {
+	def protected isCorrect_DataType_Parameter_Correspondence(DataType pcmDatatype, Parameter umlParam) {
 		if (pcmDatatype === null || umlParam.type === null) {
 			return pcmDatatype === null && umlParam.type === null
 		}
-		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype,
-			umlParam.type, umlParam.lower, umlParam.upper)
-		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlParam,
+		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(pcmDatatype, umlParam.type, umlParam.lower,
+			umlParam.upper)
+		val collectionTypeCorrespondenceExists = corresponds(pcmDatatype, umlParam,
 			TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 		val collectionTypeCorrespondenceIsCorrect = if (pcmDatatype instanceof CollectionDataType)
-				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower,
-					umlParam.upper)
+				isCorrectCollectionTypeCorrespondence(pcmDatatype, umlParam.type, umlParam.lower, umlParam.upper)
 			else
 				null
 		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
@@ -231,6 +223,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			return umlRepositoryModel
 		}
 		val originalInterface = originalContractsPackageElement as Interface
+		resolveElements(originalInterface, umlRepositoryModel.eResource, emptyList)
 
 		// add each operation without its parameters because at least the returnParameters will be already generated
 		val originalOperationParameterMapping = new HashMap<String, List<Parameter>>()
@@ -258,6 +251,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			for (originalParameter : originalOperationParameterMapping.getOrDefault(generatedOperation.name,
 				new ArrayList<Parameter>)) {
 				val generatedParameter = generatedOperation.ownedParameters.findFirst[it.name == originalParameter.name]
+				resolveElements(originalParameter, generatedModel.eResource, "name")
 				if (generatedParameter !== null) {
 					mergeElements(originalParameter, generatedParameter, "name")
 				} else {
@@ -299,8 +293,10 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		assertNotNull(generatedComponentImpl)
 
 		// merge everything except operations which are separately handled, because some of the constructor parameters will be generated.
+		resolveElements(originalComponentImpl, generatedModel.eResource, "ownedOperation", "interfaceRealization")
 		mergeElements(originalComponentImpl, generatedComponentImpl, "ownedOperation", "interfaceRealization")
 		for (originalRealization : originalComponentImpl.interfaceRealizations.clone) {
+			resolveElements(originalRealization, generatedModel.eResource)
 			originalComponentImpl.interfaceRealizations -= originalRealization
 			originalRealization.clients -= originalComponentImpl // needs to be manually cleared, or else originalComponentImpl is still set as a client and causes UUID error
 			generatedComponentImpl.interfaceRealizations += originalRealization
@@ -326,9 +322,11 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		]
 		assertNotNull(originalConstructor)
 		assertNotNull(generatedConstructor)
+		resolveElements(originalConstructor, generatedModel.eResource, "ownedParameter")
 		mergeElements(originalConstructor, generatedConstructor, "ownedParameter")
 		for (originalParameter : originalConstructor.ownedParameters.clone) {
 			val generatedParameter = generatedConstructor.ownedParameters.findFirst[it.name == originalParameter.name]
+			resolveElements(originalParameter, generatedModel.eResource, "name")
 			if (generatedParameter !== null) {
 				mergeElements(originalParameter, generatedParameter, "name")
 			} else {
@@ -415,7 +413,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * @return
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
-	def Comparison compare(URI originalUri, URI generatedUri) {
+	def static Comparison compare(URI originalUri, URI generatedUri) {
 		val resourceSet = new ResourceSetImpl()
 		val original = resourceSet.getResource(originalUri, true).contents.head
 		val generated = resourceSet.getResource(generatedUri, true).contents.head
@@ -426,7 +424,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * This directly applies the default EMFCompare comparator to the passed elements. 
 	 * It does not ensure that the compared elements are in sync with the disk state.  
 	 */
-	def Comparison compare(Notifier original, Notifier generated) {
+	def static Comparison compare(Notifier original, Notifier generated) {
 		val comparator = EMFCompare.builder().build()
 		val scope = new DefaultComparisonScope(original, generated, original)
 		return comparator.compare(scope)
@@ -443,14 +441,38 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * @param skipFeatures
 	 * 		the names of the features that should be ignored
 	 */
-	def mergeElements(EObject original, EObject generated, String ... skipFeatures) {
-		for (feature : original.eClass.EAllStructuralFeatures) {
-			if (!feature.derived && feature.changeable && original.eIsSet(feature) &&
-				!(feature instanceof EReference && (feature as EReference).isContainer) &&
-				!skipFeatures.contains(feature.name)) {
-				generated.eSet(feature, original.eGet(feature))
+	def static mergeElements(EObject original, EObject generated, String ... skipFeatures) {
+		val relevantFeatures = original.eClass.EAllStructuralFeatures.filter [
+			isResolveAndMergeRelevantFeature(original, skipFeatures)
+		]
+		for (feature : relevantFeatures) {
+			generated.eSet(feature, original.eGet(feature))
+		}
+	}
+
+	private def resolveElements(EObject original, Resource generatedResource, String ... skipFeatures) {
+		val relevantReferences = original.eClass.EAllReferences.filter [
+			isResolveAndMergeRelevantFeature(original, skipFeatures)
+		]
+		for (reference : relevantReferences) {
+			val originalValue = original.eGet(reference)
+			if (!reference.many) {
+				original.eSet(reference, (originalValue as EObject).resolve(generatedResource))
+			} else {
+				original.eSet(reference, (originalValue as List<EObject>).map[resolve(generatedResource)])
 			}
 		}
+	}
+
+	private def static boolean isResolveAndMergeRelevantFeature(EStructuralFeature feature, EObject object,
+		String ... skipFeatures) {
+		return !feature.derived && feature.changeable && object.eIsSet(feature) &&
+			!skipFeatures.contains(feature.name) && if(feature instanceof EReference) !feature.isContainer else true
+	}
+
+	private def static resolve(EObject original, Resource in) {
+		checkNotNull(in.resourceSet.getEObject(in.URI.appendFragment(original.hierarchicUriFragment), true),
+			"resolved object for %s", original)
 	}
 
 }

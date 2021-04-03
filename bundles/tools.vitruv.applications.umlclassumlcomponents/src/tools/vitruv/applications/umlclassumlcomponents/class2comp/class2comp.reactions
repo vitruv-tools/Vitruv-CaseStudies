@@ -140,11 +140,7 @@ routine createUmlComponentForClass(umlclass::Class umlClass) {
 			compModel.packagedElements += umlComp
 		
 		add correspondence between umlClass and umlComp
-		
-		call {
-			val classPackage = umlClass.package
-			correspondenceModel.createAndAddCorrespondence(#[umlComp], #[classPackage])
-		}
+		add correspondence between umlComp and umlClass.package
 	}
 }
 
@@ -166,7 +162,10 @@ routine createDataTypeForClass(umlclass::Class umlClass) {
 
 reaction RenameClass {
 	after attribute replaced at umlclass::Class[name]
-	call renameComponent(affectedEObject)
+	call {
+		renameComponent(affectedEObject)
+		renameDataType(affectedEObject)
+	}
 }
 
 routine renameComponent(umlclass::Class umlClass) { 
@@ -180,6 +179,16 @@ routine renameComponent(umlclass::Class umlClass) {
 	}
 }
 
+routine renameDataType(umlclass::Class umlClass) { 
+	match {
+		val umlDataType = retrieve umlcomp::DataType corresponding to umlClass
+	}
+	action { 
+		update umlDataType {
+			umlDataType.name = umlClass.name
+		}
+	}
+}
 
 reaction DeletedClass{
 	after element umlclass::Class deleted and removed from umlclass::Package[packagedElement]
@@ -408,10 +417,14 @@ routine createdPackage(umlclass::Package classPackage) {
 			//Get list of existing components as options for dialog
 			val componentsList = compModel.packagedElements.filter(Component).toList
 			if (!componentsList.isEmpty) { 
-				val options = componentsList.map[e | e.name] 			
-				val selection = userInteractor.modalTextUserinteracting(question, options)		
-				//Use selection to assign new package
-				val umlComp = componentsList.get(selection)
+				val options = componentsList.map[e | e.name]
+				val umlComp = if (options.size > 1) { 			
+					val selection = userInteractor.modalTextUserinteracting(question, options)
+					componentsList.get(selection)
+				} else {
+					componentsList.get(0)
+				}
+				warnIfPackageLinkedToComponent(umlComp)
 				assignNewPackage(classPackage, umlComp)
 			} else {
 				userInteractor.notificationDialogBuilder.message("No available Component found")
@@ -422,20 +435,25 @@ routine createdPackage(umlclass::Package classPackage) {
 	}
 }
 
-routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlComponent) { //TODO rewrite this to fit new package linking
+routine warnIfPackageLinkedToComponent(umlclass::Component umlComponent) {
+	match {
+		val correspondingPackage = retrieve umlclass::Package corresponding to umlComponent 
+	}
 	action {
 		call {
-			val packages = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten.filter(Package)
-			var Package oldPackage = if(!packages.isEmpty) packages.get(0) else null			
-			
-			if (oldPackage === null) {
-				correspondenceModel.createAndAddCorrespondence(#[umlComponent], #[newPackage])
-			} else {
-				val String errorMsg = "Chosen Component is already linked to existing Package '" + oldPackage.name + "'."
-				userInteractor.notificationDialogBuilder.message(errorMsg).windowModality(WindowModality.MODELESS)
-				    .startInteraction()
-			}
+			val String errorMsg = "Chosen Component is already linked to existing Package '" + correspondingPackage.name + "'."
+			userInteractor.notificationDialogBuilder.message(errorMsg).windowModality(WindowModality.MODELESS)
+			    .startInteraction()
 		}
+	} 
+}
+
+routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlComponent) {
+	match {
+		require absence of umlclass::Package corresponding to umlComponent 
+	}
+	action {
+		add correspondence between umlComponent and newPackage
 	} 
 }
 
@@ -476,26 +494,33 @@ reaction PackageRenamed {
 
 routine routinePackageRenamed(umlclass::Package classPackage, String newName, String oldName) {
 	action {
-		call {
-			//Check if Package rename is illegal
-			//This is the case if it's the DataType package or gets its name, or if it has a corresponding Component
-			//Renaming the Component is not possible as renaming the Class would be required too
-			val comps = correspondenceModel.getCorrespondingEObjects(#[classPackage]).flatten.filter(Component)
-			var Component comp = if(!comps.isEmpty) comps.get(0) else null		
-			if ((oldName == CLASS_DATATYPES_PACKAGE_NAME) || (comp !== null) || (newName == CLASS_DATATYPES_PACKAGE_NAME)) {
-				//Revert rename currently not possible
-				//TODO: Add a rollback once Vitruvius can handle it
-			}
-			//Therefore use temporary hack:
-			if (oldName == CLASS_DATATYPES_PACKAGE_NAME)
+		// Revert illegal package name change
+		update classPackage {
+			if (oldName == CLASS_DATATYPES_PACKAGE_NAME) {
 				classPackage.name = CLASS_DATATYPES_PACKAGE_NAME
-			else if ((newName == CLASS_DATATYPES_PACKAGE_NAME) && (oldName !== null)) {
-				//Check for pre-exisitnce of the DataTypePackage:
-				val dataTypePackageExistence = classPackage.model.packagedElements.filter(Package).filter[name==CLASS_DATATYPES_PACKAGE_NAME]
-				if (!dataTypePackageExistence.isEmpty) 
-					classPackage.name = "DefaultPackageName"
+			} else if (newName == CLASS_DATATYPES_PACKAGE_NAME && oldName !== null) {
+				// Check for pre-existence of the DataTypePackage
+				val dataTypePackageExistence = classPackage.model.packagedElements.filter(Package).filter[name == CLASS_DATATYPES_PACKAGE_NAME]
+				if (!dataTypePackageExistence.isEmpty) {
+					classPackage.name = oldName
+				}
 			}
-				
+		}
+		call updateCorrespondingComponent(classPackage, oldName)
+	}
+}
+
+routine updateCorrespondingComponent(umlclass::Package classPackage, String oldName) {
+	match {
+		val component = retrieve umlcomp::Component corresponding to classPackage
+	}
+	action {
+		update component {
+			// Packages for components have to end with the package suffix
+			if (!classPackage.name.endsWith(PACKAGE_SUFFIX)) {
+				classPackage.name = oldName
+			}
+			component.name = classPackage.name.substring(0, classPackage.name.length - PACKAGE_SUFFIX.length)
 		}
 	}
 }

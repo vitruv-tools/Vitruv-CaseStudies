@@ -10,13 +10,13 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import org.junit.jupiter.api.BeforeEach
 
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * This class contains Tests for creating, deleting and renaming enums.
@@ -111,7 +111,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
 	@Test
 	def void testAddEnumAttribute() {
 		val typeClass = createJavaClassWithCompilationUnit(TYPECLASS, JavaVisibility.PUBLIC, false, false)
-		val jAttr = createJavaAttribute(ATTRIBUTE_NAME, createNamespaceReferenceFromClassifier(typeClass),
+		val jAttr = createJavaAttribute(ATTRIBUTE_NAME, createNamespaceClassifierReference(typeClass),
 			JavaVisibility.PRIVATE, false, false)
 		jEnum.members += jAttr
 		propagate

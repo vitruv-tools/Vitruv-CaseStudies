@@ -1,7 +1,5 @@
 package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
 
-import java.util.concurrent.Callable;
-
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.text.edits.DeleteEdit;
@@ -13,7 +11,6 @@ import org.palladiosimulator.pcm.repository.OperationSignature;
 
 import tools.vitruv.applications.pcmjava.tests.util.java2pcm.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,8 +74,7 @@ public class MethodMappingTransformationTest extends Java2PcmPackageMappingTrans
 				"OperationSignature " + opSig + " is not in OperationInterface " + opInterface);
 		this.assertPCMNamedElement(opSig, expectedName);
 
-		Method jaMoPPMethod = claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
-					MethodMappingTransformationTest.this.getCorrespondenceModel(), opSig, Method.class));
+		Method jaMoPPMethod = claimOne(getCorrespondingEObjects(opSig, Method.class));
 		MethodMappingTransformationTest.this.assertDataTypeName(jaMoPPMethod.getTypeReference(),
 				opSig.getReturnType__OperationSignature());
 	}

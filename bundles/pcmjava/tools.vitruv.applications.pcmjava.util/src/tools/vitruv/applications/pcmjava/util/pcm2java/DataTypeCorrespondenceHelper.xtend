@@ -4,9 +4,6 @@ import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
-import tools.vitruv.framework.util.datatypes.ClaimableHashMap
-import tools.vitruv.framework.util.datatypes.ClaimableMap
 import org.apache.log4j.Logger
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
@@ -14,11 +11,10 @@ import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
-import org.eclipse.emf.ecore.util.EcoreUtil
 import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
@@ -34,29 +30,22 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
  */
 @Utility
 class DataTypeCorrespondenceHelper {
-
 	static final Logger logger = Logger.getLogger(DataTypeCorrespondenceHelper.simpleName)
 
-	static val ClaimableMap<PrimitiveTypeEnum, Type> primitveTypeMappingMap = new ClaimableHashMap<PrimitiveTypeEnum, Type>()
-
-	private def static initPrimitiveTypeMap() {
-		if (!primitveTypeMappingMap.empty) {
-			return
+	static def Type claimJaMoPPTypeForPrimitiveDataType(PrimitiveDataType primitivePcmType) {
+		switch primitivePcmType.type {
+			case BOOL: TypesFactory.eINSTANCE.createBoolean
+			case BYTE: TypesFactory.eINSTANCE.createByte
+			case CHAR: TypesFactory.eINSTANCE.createChar
+			case DOUBLE: TypesFactory.eINSTANCE.createDouble
+			case INT: TypesFactory.eINSTANCE.createInt
+			case LONG: TypesFactory.eINSTANCE.createLong
+			case STRING: { 
+				val stringClassifier = ClassifiersFactory.eINSTANCE.createClass
+				stringClassifier.setName("String")
+				return stringClassifier
+			}
 		}
-		val stringClassifier = ClassifiersFactory.eINSTANCE.createClass
-		stringClassifier.setName("String")
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.BOOL, TypesFactory.eINSTANCE.createBoolean)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.BYTE, TypesFactory.eINSTANCE.createByte)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.CHAR, TypesFactory.eINSTANCE.createChar)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.DOUBLE, TypesFactory.eINSTANCE.createDouble)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.INT, TypesFactory.eINSTANCE.createInt)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.LONG, TypesFactory.eINSTANCE.createLong)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.STRING, stringClassifier)
-	}
-
-	synchronized def static Type claimJaMoPPTypeForPrimitiveDataType(PrimitiveDataType pdt) {
-		initPrimitiveTypeMap()
-		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
 	}
 
 	static def TypeReference claimUniqueCorrespondingJaMoPPDataTypeReference(DataType dataType,
@@ -76,7 +65,7 @@ class DataTypeCorrespondenceHelper {
 	}
 
 	private static def dispatch Type claimUniqueCorrespondingType(CollectionDataType cdt, CorrespondenceModel ci) {
-		return ci.getCorrespondingEObjectsByType(cdt, ConcreteClassifier).claimOne
+		return ci.getCorrespondingEObjects(cdt, ConcreteClassifier).claimOne
 	}
 
 	private static def dispatch Type claimUniqueCorrespondingType(PrimitiveDataType pdt, CorrespondenceModel ci) {
@@ -84,6 +73,6 @@ class DataTypeCorrespondenceHelper {
 	}
 
 	private static def dispatch Type claimUniqueCorrespondingType(CompositeDataType cdt, CorrespondenceModel ci) {
-		return ci.getCorrespondingEObjectsByType(cdt, ConcreteClassifier).claimOne
+		return ci.getCorrespondingEObjects(cdt, ConcreteClassifier).claimOne
 	}
 }

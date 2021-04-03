@@ -1,5 +1,6 @@
 package tools.vitruv.applications.transitivechange.tests.linear.java2uml
 
+import java.nio.file.Path
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
@@ -7,8 +8,8 @@ import org.junit.jupiter.api.Test
 
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import org.junit.jupiter.api.BeforeEach
@@ -18,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertEquals
-import java.nio.file.Path
 
 /**
  * A Test class to test classes and their traits.
@@ -164,7 +164,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	@Test
 	def testSuperClassChanged() {
 		val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME)
-		jClass.extends = createNamespaceReferenceFromClassifier(superClass)
+		jClass.extends = createNamespaceClassifierReference(superClass)
 		propagate
 
 		val uClass = getCorrespondingClass(jClass)
@@ -180,7 +180,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	@Test
 	def testRemoveSuperClass() {
 		val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME)
-		jClass.extends = createNamespaceReferenceFromClassifier(superClass)
+		jClass.extends = createNamespaceClassifierReference(superClass)
 		propagate
 
 		var uClass = getCorrespondingClass(jClass)
@@ -208,7 +208,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	@Test
 	def testAddClassImplement() {
 		val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
-		jClass.implements += createNamespaceReferenceFromClassifier(implInterface)
+		jClass.implements += createNamespaceClassifierReference(implInterface)
 		propagate
 
 		val uClass = getCorrespondingClass(jClass)
@@ -233,8 +233,8 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	def testRemoveClassImplement() {
 		val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
 		val implInterface2 = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME2)
-		jClass.implements += createNamespaceReferenceFromClassifier(implInterface)
-		jClass.implements += createNamespaceReferenceFromClassifier(implInterface2)
+		jClass.implements += createNamespaceClassifierReference(implInterface)
+		jClass.implements += createNamespaceClassifierReference(implInterface2)
 		propagate
 
 		var uClass = getCorrespondingClass(jClass)

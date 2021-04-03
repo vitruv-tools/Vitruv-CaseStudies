@@ -40,7 +40,7 @@ class UmlPropertyAndAssociationUtil {
     }
 
     /**
-     * Creates a new dircted association from the 'fromClass' to the 'toClass'.
+     * Creates a new directed association from the 'fromClass' to the 'toClass'.
      * LowerLimit and UpperLimit are the multiplicities of the association end that is attached to the toClass
      *
      */

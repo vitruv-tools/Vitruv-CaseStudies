@@ -8,8 +8,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.jdt.core,
  org.eclipse.text,
  tools.vitruv.testutils,
- tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.domains.java.echange,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.tests.util,
  tools.vitruv.applications.pcmjava.pojotransformations,

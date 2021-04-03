@@ -44,6 +44,6 @@ public final class DefaultLiterals {
 	public static final int USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING = 2;
 
 	public static final String WARNING_MULTIPLE_COMPOSITE_DATA_TYPE_CANDIDATES = "Found multiple possible CompositeDatatype correspondence candidates in the datatypes package for uml::Class =  ";
-	public static final String WARNING_IPRE_IMPLEMENTATION_REMOVED = "An IPRE implementation class (Component or System) has been removed from its corresct package. This is against the convention. uml::Class = ";
+	public static final String WARNING_IPRE_IMPLEMENTATION_REMOVED = "An IPRE implementation class (Component or System) has been removed from its correct package. This is against the convention. uml::Class = ";
 	public static final String WARNING_NESTED_COLLECTION_DATA_TYPE = "The innerType of a pcm::CollectionDataType has been set to another CollectionDataType. This can not be propagated to UML. pcm::CollectionDataType[innerType_CollectionDataType] = ";
 }

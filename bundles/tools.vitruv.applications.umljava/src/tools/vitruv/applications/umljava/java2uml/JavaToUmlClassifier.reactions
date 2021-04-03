@@ -12,7 +12,7 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-import static extension tools.vitruv.framework.util.bridges.JavaHelper.claimOneOrNone
+import static com.google.common.base.Preconditions.checkState
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -149,9 +149,6 @@ routine potentiallyMoveClass(java::CompilationUnit compUnit) {
 	}
 	action {
 		call {
-			if (umlClass.package !== null) {
-				umlClass.package.packagedElements -= umlClass
-			}
 			addUmlElementToModelOrPackage(compUnit, umlClass)
 		}
 	}
@@ -274,9 +271,10 @@ routine addUmlClassImplement(java::Class jClass, java::TypeReference jReference,
     }
     action {
         execute {
-            val matchingInterfaceRealization = uClass.interfaceRealizations.filter[contract == uInterface].claimOneOrNone
-            if(matchingInterfaceRealization.isPresent) {
-                 addImplementsCorrespondence(jReference, matchingInterfaceRealization.get)
+            val matchingInterfaceRealization = uClass.interfaceRealizations.filter[contract == uInterface]
+            checkState(matchingInterfaceRealization.size <= 1, "There was more than one realization of interface %s in class %s", uInterface, uClass)	
+            if (matchingInterfaceRealization.size == 1) {
+                 addImplementsCorrespondence(jReference, matchingInterfaceRealization.get(0))
             } else if (uInterface !== null) {
                 val uRealization = uClass.createInterfaceRealization(uInterface.name, uInterface)
                 addImplementsCorrespondence(jReference, uRealization)
@@ -530,10 +528,14 @@ routine addUmlElementToModelOrPackage(java::CompilationUnit jCompUnit, uml::Clas
 	}
     action {
        call {
-            if (jCompUnit.namespaces.nullOrEmpty) {
-                addUmlElementToPackage(uClassifier, uModel)
+            val uPackage = if (jCompUnit.namespaces.nullOrEmpty) {
+                uModel
             } else {
-                addUmlElementToPackage(uClassifier, findUmlPackage(uModel, jCompUnit.namespaces.last))
+                findUmlPackage(uModel, jCompUnit.namespaces.last)
+            }
+            
+            if (uPackage !== uClassifier.package) {
+                addUmlElementToPackage(uClassifier, uPackage)
             }
         }
     }

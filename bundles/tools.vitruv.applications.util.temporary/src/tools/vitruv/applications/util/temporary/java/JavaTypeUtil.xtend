@@ -24,7 +24,6 @@ import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypedElement
 import org.emftext.language.java.types.TypesFactory
-import tools.vitruv.domains.java.util.JavaModificationUtil
 
 import static tools.vitruv.applications.util.temporary.other.UriUtil.normalizeURI
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
@@ -119,33 +118,18 @@ class JavaTypeUtil {
     def static EList<NamespaceClassifierReference> createNamespaceReferenceFromList(List<? extends ConcreteClassifier> list) {
         val typeReferences = new BasicEList<NamespaceClassifierReference>
         for (ConcreteClassifier i : list) {
-            typeReferences += createNamespaceReferenceFromClassifier(i)
+            typeReferences += createNamespaceClassifierReference(i)
         }
         return typeReferences
     }
 
     def static TypeReference createCollectiontypeReference(String collectionQualifiedName, ConcreteClassifier innerTypeClass) {
-        val innerTypeReference = createNamespaceReferenceFromClassifier(innerTypeClass)
+        val innerTypeReference = createNamespaceClassifierReference(innerTypeClass)
         val qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument()
         qualifiedTypeArgument.typeReference = innerTypeReference
-        val collectionClassNamespaceReference = createNamespaceReferenceFromClassifier(createJavaClassImport(collectionQualifiedName).classifier)
+        val collectionClassNamespaceReference = createNamespaceClassifierReferenceForName(collectionQualifiedName)
         collectionClassNamespaceReference.classifierReferences.get(0).typeArguments += qualifiedTypeArgument
         return collectionClassNamespaceReference
-    }
-
-    /**
-     * Wraps a copy of the given concreteClassifier into a ClassfierReference which is then wrapped into a namespaceClassifierReference
-     * @throws IllegalArgumentException if concreteCLassifier is null
-     */
-    def static NamespaceClassifierReference createNamespaceReferenceFromClassifier(ConcreteClassifier concreteClassifier) {
-        if (concreteClassifier === null) {
-            throw new IllegalArgumentException("Cannot create a NamespaceClassifierReference for null")
-        }
-        val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
-        var classifierRef = TypesFactory.eINSTANCE.createClassifierReference
-        classifierRef.target = concreteClassifier
-        namespaceClassifierReference.classifierReferences.add(classifierRef)
-        return namespaceClassifierReference
     }
 
     def static setTypeReference(TypedElement typedElement, TypeReference typeRef) {
@@ -269,7 +253,7 @@ class JavaTypeUtil {
 
     def static ClassifierImport addJavaImport(CompilationUnit compUnit, ConcreteClassifier jType) {
         if (compUnit === null) {
-            throw new IllegalStateException("Tried to add a java import without passing a CompilationUnit.")
+        	return null
         }
         if (jType === null || jType instanceof PrimitiveType) {
             return null // nothing to do
@@ -318,7 +302,7 @@ class JavaTypeUtil {
         // wrap typeReference if necessary
         var wrappedInnerReference = innerTypeReference
         if (wrappedInnerReference instanceof PrimitiveType) {
-            wrappedInnerReference = JavaModificationUtil.getWrapperTypeReferenceForPrimitiveType(wrappedInnerReference)
+            wrappedInnerReference = getWrapperTypeReferenceForPrimitiveType(wrappedInnerReference)
         }
 
         // set the inner type reference on the NamespaceClassifierReference of the Collection type
@@ -333,7 +317,7 @@ class JavaTypeUtil {
         ConcreteClassifier collectionTypeClassifier,
         TypeReference innerTypeReference
     ) {
-        val collectionTypeReference = JavaModificationUtil.createNamespaceClassifierReference(collectionTypeClassifier)
+        val collectionTypeReference = createNamespaceClassifierReference(collectionTypeClassifier)
         return createCollectionTypeReference(collectionTypeReference, innerTypeReference)
     }
 
@@ -343,7 +327,7 @@ class JavaTypeUtil {
     ) {
         val collectionNamespace = collectionType.name.replace("." + collectionType.simpleName, "")
         val collectionSimpleName = collectionType.simpleName
-        val collectionTypeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(collectionNamespace, collectionSimpleName)
+        val collectionTypeReference = createNamespaceClassifierReferenceForName(collectionNamespace, collectionSimpleName)
 
         return createCollectionTypeReference(collectionTypeReference, innerTypeReference)
     }

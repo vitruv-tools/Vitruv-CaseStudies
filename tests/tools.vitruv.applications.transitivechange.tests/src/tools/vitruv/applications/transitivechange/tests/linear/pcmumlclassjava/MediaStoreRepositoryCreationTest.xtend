@@ -12,7 +12,6 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 import static org.junit.jupiter.api.Assertions.assertNotNull
@@ -22,6 +21,7 @@ import org.emftext.language.java.containers.CompilationUnit
 import java.util.List
 import org.emftext.language.java.containers.ContainersFactory
 import org.emftext.language.java.containers.Package import org.emftext.language.java.classifiers.Interface
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 
 /**
@@ -221,14 +221,14 @@ class MediaStoreRepositoryCreationTest extends PcmUmlJavaLinearTransitiveChangeT
 		
 		var jPkg_contracts = getJavaPackage(REPOSITORY_PKG_NAME, CONTRACTS_PKG_NAME)
 		var jI_IFileStorage = createJavaInterfaceInPackage(jPkg_contracts, INTERFACE_NAME_IFileStorage, #[])
-		var jDtRef_AudioCollectionRequest = createNamespaceReferenceFromClassifier(jDt_AudioCollectionRequest)
+		var jDtRef_AudioCollectionRequest = createNamespaceClassifierReference(jDt_AudioCollectionRequest)
 		var jParam_audioRequest = createJavaParameter(PARAMETER_NAME_audioRequest, jDtRef_AudioCollectionRequest)
-		var jDtRef_FileContent = createNamespaceReferenceFromClassifier(jDt_FileContent)
+		var jDtRef_FileContent = createNamespaceClassifierReference(jDt_FileContent)
 		var jMeth_getFile = createJavaInterfaceMethod(METHOD_NAME_getFile, jDtRef_FileContent, #[jParam_audioRequest])
 		jI_IFileStorage.members += jMeth_getFile
 		propagate
 		var jI_IMediaAccess = createJavaInterfaceInPackage(jPkg_contracts, INTERFACE_NAME_IMediaAccess, #[])
-		jDtRef_FileContent = createNamespaceReferenceFromClassifier(jDt_FileContent)
+		jDtRef_FileContent = createNamespaceClassifierReference(jDt_FileContent)
 		var jParam_file = createJavaParameter(PARAMETER_NAME_file, jDtRef_FileContent)
 		var jMeth_upload = createJavaInterfaceMethod(METHOD_NAME_upload, null, #[jParam_file])
 		jI_IMediaAccess.members += jMeth_upload
@@ -243,8 +243,8 @@ class MediaStoreRepositoryCreationTest extends PcmUmlJavaLinearTransitiveChangeT
 		propagate
 		var jClass_MediaAccessImpl = getJavaClassFromCompilationUnit(COMPONENT_IMPL_NAME, REPOSITORY_PKG_NAME, COMPONENT_PKG_NAME) // TODO here it fails
 		assertNotNull(jClass_MediaAccessImpl)
-		var jIRef_IFileStorage = createNamespaceReferenceFromClassifier(jI_IFileStorage) // required
-		var jIRef_IMediaAccess = createNamespaceReferenceFromClassifier(jI_IFileStorage) // provided
+		var jIRef_IFileStorage = createNamespaceClassifierReference(jI_IFileStorage) // required
+		var jIRef_IMediaAccess = createNamespaceClassifierReference(jI_IFileStorage) // provided
 		jClass_MediaAccessImpl.implements += jIRef_IMediaAccess
 		var jAtt_requiredIFileStorage = createJavaAttribute(ATTRIBUTE_NAME, jIRef_IFileStorage, JavaVisibility.PRIVATE, false, false)
 		jClass_MediaAccessImpl.members += jAtt_requiredIFileStorage
@@ -304,10 +304,10 @@ class MediaStoreRepositoryCreationTest extends PcmUmlJavaLinearTransitiveChangeT
 	def protected getJavaClassFromCompilationUnit(String name, String ... namespaces){
 		// This roundabout way works to retrieve the read-only instance of the VSUM but still fails when trying to load the CU from the URI.
 //		val javaPkg = getJavaPackageElement(namespaces)
-//		val umlPkg = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, javaPkg, org.eclipse.uml2.uml.Package).head
+//		val umlPkg = getCorrespondingEObjects(javaPkg, org.eclipse.uml2.uml.Package).head
 //		val umlCompImpl = umlPkg.packagedElements.filterNull.filter(org.eclipse.uml2.uml.Class)
 //			.findFirst[it.name.toLowerCase.contains(javaPkg.name.toLowerCase)]
-//		val javaCompImpl = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, umlCompImpl, org.emftext.language.java.classifiers.Class).head
+//		val javaCompImpl = getCorrespondingEObjects(umlCompImpl, org.emftext.language.java.classifiers.Class).head
 //		// here it fails, because the CU cannot be loaded into the view-ResourceSet
 //		// because the UUID resolver fails on trying to register the 'Object extends Object'-ClassifierReference 
 //		val modifiableJavaCompImpl = getModelElement(EcoreUtil.getURI(javaCompImpl)) as org.emftext.language.java.classifiers.Class

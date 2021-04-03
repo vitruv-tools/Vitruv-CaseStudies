@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umlclassumlcomponents.tests.class2comp
 
-import java.util.Collections
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
@@ -18,25 +17,19 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import java.nio.file.Path
-import org.eclipse.emf.ecore.EObject
 
 class Class2CompIntegrationTest extends AbstractClass2CompTest {
 
-	override protected setup() {
-		// Don't initialize a model here, as we are loading and creating one
+	override protected isInitializeTestModel() {
+		return false
 	}
 
 	def Model integrationTest(String fileName) {
-		resourceAt(Path.of(OUTPUT_NAME)).startRecordingChanges => [
-			contents += EObject.from(fileName.testModelResource)
+		resourceAt(Path.of(OUTPUT_NAME)).propagate [
+			contents += Model.from(fileName.testModelResource)
 		]
-		propagate()
-		userInteraction.assertAllInteractionsOccurred()
 
-		val umlModel = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model).get(0)
-		umlModel.eResource.save(Collections.EMPTY_MAP)
-
-		return umlModel
+		return Model.from(Path.of(OUTPUT_NAME))
 	}
 
 	/*******
@@ -44,13 +37,9 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 	 ********/
 	@Test
 	def void integrationTestWith2Classses() {
-		userInteraction
-			// 2x Decide to create an empty Package:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// 2x Decide to create a Component for the Class:
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
+		userInteraction // 2x Decide to create an empty Package:
+		.onNextMultipleChoiceSingleSelection.respondWith("No").onNextMultipleChoiceSingleSelection.respondWith("No") // 2x Decide to create a Component for the Class:
+		.onNextMultipleChoiceSingleSelection.respondWith("Yes").onNextMultipleChoiceSingleSelection.respondWith("Yes")
 
 		val umlModel = integrationTest("TestModel2Classes.uml")
 
@@ -76,13 +65,10 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 
 	@Test
 	def void integrationTestWithClassAndDataType() {
-		userInteraction
-			// 2x Decide to create an empty Package:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// Decide to create a Class as a DataType (no Interactions)
-			// Decide to create a Component for the Class:
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")	
+		userInteraction // 2x Decide to create an empty Package:
+		.onNextMultipleChoiceSingleSelection.respondWith("No").onNextMultipleChoiceSingleSelection.respondWith("No") // Decide to create a Class as a DataType (no Interactions)
+		// Decide to create a Component for the Class:
+		.onNextMultipleChoiceSingleSelection.respondWith("Yes")
 
 		val umlModel = integrationTest("TestModel1Class1Datatype.uml")
 
@@ -97,10 +83,9 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 
 	@Test
 	def void integrationTestWithClassAndDataTypeWithPropertyAndOperation() {
-		userInteraction
-			// Decide to create an empty Package:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// Decide to create a Class as a DataType (no Interactions)
+		userInteraction // Decide to create an empty Package:
+		.onNextMultipleChoiceSingleSelection.respondWith("No")
+		// Decide to create a Class as a DataType (no Interactions)
 		val umlModel = integrationTest("TestModel1DatatypeWithPropertyAndOperation.uml")
 
 		// Validate expected contents:
@@ -119,13 +104,9 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 
 	@Test
 	def void integrationTestWithTestModel2ClassesAndRequiredAndProvidedInterface() {
-		userInteraction
-			// 2x Decide to create an empty Package:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// 2x Decide to create a Component for the Class:
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")	
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")		
+		userInteraction // 2x Decide to create an empty Package:
+		.onNextMultipleChoiceSingleSelection.respondWith("No").onNextMultipleChoiceSingleSelection.respondWith("No") // 2x Decide to create a Component for the Class:
+		.onNextMultipleChoiceSingleSelection.respondWith("Yes").onNextMultipleChoiceSingleSelection.respondWith("Yes")
 
 		val umlModel = integrationTest("TestModel2ClassesWithInterfaceRequiredAndProvided.uml")
 
@@ -160,15 +141,12 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 
 	@Test
 	def void integrationTestAllCombined() {
-		userInteraction
-			// 3x Decide to create an empty Package:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// Decide to create a Class as a DataType (no Interactions)
+		userInteraction // 3x Decide to create an empty Package:
+		.onNextMultipleChoiceSingleSelection.respondWith("No").onNextMultipleChoiceSingleSelection.respondWith("No").
+			onNextMultipleChoiceSingleSelection.respondWith("No") // Decide to create a Class as a DataType (no Interactions)
 			// 2x Decide to create a Component for the Class:
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
+			.onNextMultipleChoiceSingleSelection.respondWith("Yes").onNextMultipleChoiceSingleSelection.
+			respondWith("Yes")
 
 		val umlModel = integrationTest("TestModelAllCombined.uml")
 
@@ -211,15 +189,11 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 
 	@Test
 	def void integrationTestMatthiasSmallExampleClassResult() {
-		userInteraction
-			// 3x Decide to create an empty Package:
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			.onNextMultipleChoiceSingleSelection.respondWith("No")
-			// Decide to create a Class as a DataType (no Interactions)
+		userInteraction // 3x Decide to create an empty Package:
+		.onNextMultipleChoiceSingleSelection.respondWith("No").onNextMultipleChoiceSingleSelection.respondWith("No").
+			onNextMultipleChoiceSingleSelection.respondWith("No") // Decide to create a Class as a DataType (no Interactions)
 			// Decide to create a Component for the Class:
-			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
-			// Decide to create a Component for the Class:
+			.onNextMultipleChoiceSingleSelection.respondWith("Yes") // Decide to create a Component for the Class:
 			.onNextMultipleChoiceSingleSelection.respondWith("Yes")
 
 		integrationTest("Matthias_small_example_Class_Result.uml")

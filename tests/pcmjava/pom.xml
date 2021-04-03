@@ -17,7 +17,7 @@
 		<module>tools.vitruv.applications.pcmjava.pojotransformations.tests</module>
 		<module>tools.vitruv.applications.pcmjava.pojotransformations.editortests</module>
 		<module>tools.vitruv.applications.pcmjava.ejbtransformations.editortests</module>
-		<module>tools.vitruv.applications.pcmjava.tests</module>
+		<!--<module>tools.vitruv.applications.pcmjava.tests</module>-->
 		<module>tools.vitruv.applications.pcmjava.tests.util</module>
 	</modules>
 	

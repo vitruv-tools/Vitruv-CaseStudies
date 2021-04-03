@@ -16,14 +16,6 @@ import org.emftext.language.java.types.PrimitiveType
 import org.emftext.language.java.types.Short
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.Void
-import org.emftext.language.java.types.impl.BooleanImpl
-import org.emftext.language.java.types.impl.ByteImpl
-import org.emftext.language.java.types.impl.CharImpl
-import org.emftext.language.java.types.impl.DoubleImpl
-import org.emftext.language.java.types.impl.FloatImpl
-import org.emftext.language.java.types.impl.IntImpl
-import org.emftext.language.java.types.impl.LongImpl
-import org.emftext.language.java.types.impl.ShortImpl
 import org.palladiosimulator.pcm.core.entity.NamedElement
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
@@ -32,14 +24,14 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.util.datatypes.ClaimableHashMap
-import tools.vitruv.framework.util.datatypes.ClaimableMap
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractor
 import tools.vitruv.domains.pcm.util.PrimitiveTypesRepositoryLoader
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import static com.google.common.base.Preconditions.checkState
+import java.util.List
 
 /**
  * Helper to map type References to PCM data types
@@ -50,38 +42,21 @@ class TypeReferenceCorrespondenceHelper {
 
 	static final Logger logger = Logger.getLogger(TypeReferenceCorrespondenceHelper.simpleName)
 
-	static val ClaimableMap<Class<? extends PrimitiveType>, DataType> primitveTypeMappingMap = new ClaimableHashMap
-
-	private def static initPrimitiveTypeMap() {
-		if (!primitveTypeMappingMap.empty) {
-			return
+	private def static DataType claimPCMDataTypeForJaMoPPPrimitiveType(PrimitiveType primitiveJavaType) {
+		switch primitiveJavaType {
+			Void: null
+			Boolean: PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BOOL")
+			Byte: PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BYTE")
+			Char: PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("CHAR")
+			Double: PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE")
+			Int: PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT")
+			Long: PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT")
+			Float: PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE")
+			Short: PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT")
+			default: throw new IllegalStateException("No PCM type for Java type '" + primitiveJavaType.eClass.name + "' defined")
 		}
-		primitveTypeMappingMap.put(Boolean, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BOOL"))
-		primitveTypeMappingMap.put(BooleanImpl, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BOOL"))
-		primitveTypeMappingMap.put(Byte, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BYTE"))
-		primitveTypeMappingMap.put(ByteImpl, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BYTE"))
-		primitveTypeMappingMap.put(Char, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("CHAR"))
-		primitveTypeMappingMap.put(CharImpl, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("CHAR"))
-		primitveTypeMappingMap.put(Double, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE"))
-		primitveTypeMappingMap.put(DoubleImpl, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE"))
-		primitveTypeMappingMap.put(Int, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
-		primitveTypeMappingMap.put(IntImpl, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
-		primitveTypeMappingMap.put(Long, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
-		primitveTypeMappingMap.put(LongImpl, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
-		primitveTypeMappingMap.put(Float, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE"))
-		primitveTypeMappingMap.put(FloatImpl, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE"))
-		primitveTypeMappingMap.put(Short, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
-		primitveTypeMappingMap.put(ShortImpl, PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
 	}
-
-	private synchronized def static DataType claimPCMDataTypeForJaMoPPPrimitiveType(PrimitiveType primitiveType) {
-		if (primitiveType instanceof Void) {
-			return null
-		}
-		initPrimitiveTypeMap()
-		return primitveTypeMappingMap.claimValueForKey(primitiveType.class)
-	}
-
+	
 	def static DataType getCorrespondingPCMDataTypeForTypeReference(TypeReference typeReference,
 		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo, long arrayDimension) {
 		var DataType pcmDataType = getDataTypeFromTypeReference(typeReference, correspondenceModel, userInteractor,
@@ -101,28 +76,30 @@ class TypeReferenceCorrespondenceHelper {
 				if (!(pcmDataType instanceof PrimitiveDataType)) {
 					// create a correspondence from the collection to the non collection DataType.
 					// reason: as long as the inner type exists the collection resectievly an array can be used easily
-					correspondenceModel.createAndAddCorrespondence(collectionDataType, pcmDataType)
+					correspondenceModel.createAndAddCorrespondence(List.of(collectionDataType), List.of(pcmDataType))
 				}
 			}
 			pcmDataType = collectionDataType
 		}
-		if (null === pcmDataType) {
-			logger.error("Could not find a PCM data type for type reference " + typeReference)
-		}
 		return pcmDataType
 	}
 
+	/**
+	 * Returns a valid PCM type for the given type reference. Throws an exception if none was found
+	 */
 	def static DataType getDataTypeFromTypeReference(TypeReference typeReference,
 		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
 		if (typeReference instanceof PrimitiveType) {
 			return claimPCMDataTypeForJaMoPPPrimitiveType(typeReference)
-		} else if (typeReference instanceof ClassifierReference) {
-			return getPCMDataTypeForClassifierReference(typeReference, correspondenceModel, userInteractor, repo)
+		}
+		val type = if (typeReference instanceof ClassifierReference) {
+			getPCMDataTypeForClassifierReference(typeReference, correspondenceModel, userInteractor, repo)
 		} else if (typeReference instanceof NamespaceClassifierReference) {
-			return getPCMDataTypeForNamespaceClassifierReference(typeReference, correspondenceModel, userInteractor,
+			getPCMDataTypeForNamespaceClassifierReference(typeReference, correspondenceModel, userInteractor,
 				repo)
 		}
-		return null
+		checkState(type !== null, "Could not find a PCM data type for type reference %s", typeReference)
+		return type
 	}
 
 	def private static DataType getPCMDataTypeForNamespaceClassifierReference(NamespaceClassifierReference reference,
@@ -153,7 +130,7 @@ class TypeReferenceCorrespondenceHelper {
 			}
 			var Set<DataType> dataTypes = null
 			try {
-				dataTypes = correspondenceModel.getCorrespondingEObjectsByType(classifier, DataType)
+				dataTypes = correspondenceModel.getCorrespondingEObjects(classifier, DataType)
 			} catch (Throwable t) {
 				logger.info("No correspondence found for classifier")
 				return null
@@ -183,7 +160,7 @@ class TypeReferenceCorrespondenceHelper {
 			logger.warn("Classifier is null! Can not create a data type for the classifier")
 			return null
 		}
-		val correspondingPCMEObjects = correspondenceModel.getCorrespondingEObjectsByType(classifier, NamedElement)
+		val correspondingPCMEObjects = correspondenceModel.getCorrespondingEObjects(classifier, NamedElement)
 		var String correspondingWarning = ""
 		if (!correspondingPCMEObjects.nullOrEmpty) {
 			correspondingWarning = System.getProperty("line.seperator") + "Warning: the classifier " + classifier.name +
@@ -198,7 +175,7 @@ class TypeReferenceCorrespondenceHelper {
 		val CompositeDataType cdt = RepositoryFactory.eINSTANCE.createCompositeDataType
 		cdt.entityName = classifier.name
 		cdt.repository__DataType = repo
-		correspondenceModel.createAndAddCorrespondence(cdt, classifier)
+		correspondenceModel.createAndAddCorrespondence(List.of(cdt), List.of(classifier))
 
 		/*val String message = "Automatically created the corresponding composite data type " + cdt.entityName +
 		 * 	" for classifier " + classifier.name + correspondingWarning

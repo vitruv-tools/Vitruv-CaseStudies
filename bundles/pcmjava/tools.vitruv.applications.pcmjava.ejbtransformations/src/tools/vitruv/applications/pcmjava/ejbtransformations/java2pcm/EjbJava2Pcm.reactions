@@ -1,18 +1,17 @@
-import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
 import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
-import org.palladiosimulator.pcm.repository.Repository
 import java.util.Collections
+import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationSignature
-import tools.vitruv.framework.^correspondence.CorrespondenceModelUtil
 
 import static tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper.*
 import static extension tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper.*
+import static extension tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getNormalizedClassifierFromTypeReference
 import static tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil.setParameterName
-import static tools.vitruv.applications.util.temporary.pcm.PcmRepositoryUtil.getFirstRepository
+import static extension tools.vitruv.framework.^correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -30,13 +29,14 @@ reaction CreatedFirstPackage {
 
 routine createRepositoryForFirstPackage(java::Package javaPackage) {
 	match {
-		check getFirstRepository(correspondenceModel) === null
+		require absence of pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
 	}
 	action {
 		val repository = create pcm::Repository and initialize {
 			repository.setEntityName(javaPackage.name)
 			persistProjectRelative(javaPackage, repository, "model/" + repository.entityName + ".repository")
 		}
+		add correspondence between repository and RepositoryPackage.Literals.REPOSITORY
 		add correspondence between repository and javaPackage
 	}
 }
@@ -48,21 +48,23 @@ reaction CreatedClass {
 	after element inserted in java::CompilationUnit[classifiers]
 		with newValue.isEjbClass 	
 	call {
-		val Repository repo = getFirstRepository(correspondenceModel)
-		createBasicComponent(repo, newValue);
+		createBasicComponent(newValue);
 	} 
 }
 
 reaction CreateClassAnnotation {
 	after element inserted in java::Class[annotationsAndModifiers]
-		with affectedEObject.isEjbClass 
+		with affectedEObject.isEjbClass
 	call {
-		val Repository repo = getFirstRepository(correspondenceModel) 
-		createBasicComponent(repo, affectedEObject as NamedElement)
+		createBasicComponent(affectedEObject as NamedElement)
 	} 
 }
 
-routine createBasicComponent(pcm::Repository repo, java::NamedElement namedElement) {
+routine createBasicComponent(java::NamedElement namedElement) {
+	match {
+		val repo = retrieve asserted pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
+		require absence of pcm::BasicComponent corresponding to namedElement
+	}
 	action {
 		val basicComponent = create pcm::BasicComponent and initialize {
 			basicComponent.entityName = namedElement.name;
@@ -81,8 +83,7 @@ reaction CreatedInterface {
 	after element inserted in java::CompilationUnit[classifiers]
 		with newValue.isEjbBuisnessInterface 
 	call {
-		val Repository repo = getFirstRepository(correspondenceModel)
-		createOperationInterface(repo, newValue)
+		createOperationInterface(newValue)
 	}
 }
 
@@ -90,12 +91,15 @@ reaction CreateInterfaceAnnotation {
 	after element inserted in java::Interface[annotationsAndModifiers]
 		with affectedEObject.isEjbBuisnessInterface
 	call {
-		val Repository repo = getFirstRepository(correspondenceModel)
-		createOperationInterface(repo, affectedEObject as NamedElement)
+		createOperationInterface(affectedEObject as NamedElement)
 	}
 }
 
-routine createOperationInterface(pcm::Repository repo, java::NamedElement namedElement) {
+routine createOperationInterface(java::NamedElement namedElement) {
+	match {
+		val repo = retrieve asserted pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
+		require absence of pcm::OperationInterface corresponding to namedElement
+	}
 	action { 
 		val operationInterface = create pcm::OperationInterface and initialize {
 			operationInterface.entityName = namedElement.name;
@@ -136,7 +140,7 @@ reaction CreateField {
 }
 
 routine createdField(java::Field field) {
-	match {
+	match {  
 		val basicComponent = retrieve pcm::BasicComponent corresponding to field
 		//retrieve: pcm::OperationInterface as opInterface corresponding to newValue
 	}
@@ -151,6 +155,9 @@ routine createdField(java::Field field) {
 
 
 routine createOperationRequiredRole(pcm::BasicComponent basicComponent, pcm::OperationInterface opInterface, java::Field field) {
+	match {
+		require absence of pcm::OperationRequiredRole corresponding to field
+	}
 	action { 
 		val orr = create pcm::OperationRequiredRole and initialize {
 			orr.requiringEntity_RequiredRole = basicComponent
@@ -240,8 +247,12 @@ routine createPCMParameter(java::Parameter jaMoPPParam, pcm::OperationSignature 
 	action {
 		val pcmParameter = create pcm::Parameter and initialize {
 			setParameterName(pcmParameter, jaMoPPParam.name)
-			pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.typeReference, 
-				correspondenceModel, userInteractor, opSignature.interface__OperationSignature.repository__Interface, jaMoPPParam.arrayDimension)
+			pcmParameter.dataType__Parameter = if (jaMoPPParam.typeReference !== null) {
+					jaMoPPParam.typeReference.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel, userInteractor, 
+						opSignature.interface__OperationSignature.repository__Interface, jaMoPPParam.arrayDimension)
+				} else {
+					null
+				}
 		}
 		update opSignature {
 			opSignature.parameters__OperationSignature += pcmParameter
@@ -269,9 +280,12 @@ routine createdReturnType(java::InterfaceMethod method, java::TypeReference type
 routine createPCMReturnType(java::TypeReference returnType, pcm::OperationSignature opSignature, java::Method javaMethod) {
 	action {
 		update opSignature {
-			val pcmDataType = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(returnType, correspondenceModel, userInteractor, 
-					opSignature.interface__OperationSignature.repository__Interface, javaMethod.arrayDimension
-			)
+			val pcmDataType = if (returnType !== null) {
+					returnType.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel, userInteractor, 
+						opSignature.interface__OperationSignature.repository__Interface, javaMethod.arrayDimension)
+				} else {
+					null
+				}
 			opSignature.returnType__OperationSignature = pcmDataType
 		}
 	}
@@ -291,9 +305,12 @@ routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
 	}
 	action {
 		val innerDec = create pcm::InnerDeclaration and initialize {
-			innerDec.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
-					getCorrespondingPCMDataTypeForTypeReference(field.typeReference, correspondenceModel,
+			innerDec.datatype_InnerDeclaration = if (field.typeReference !== null) {
+					field.typeReference.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel,
 						userInteractor, compositeDataType.repository__DataType, field.arrayDimension)
+				} else {
+					null
+				}
 			innerDec.entityName = field.name
 		}
 		add correspondence between innerDec and field
@@ -320,7 +337,7 @@ routine createdClassMethodInEjbClass(java::Class clazz, java::ClassMethod classM
 	action {  
 		call {
 			val method = getOverridenInterfaceMethod(classMethod, clazz)
-			val correspondingEObjects = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, method, OperationSignature)
+			val correspondingEObjects = correspondenceModel.getCorrespondingEObjects(method, OperationSignature)
 			var OperationSignature opSignature = null
 			if(!correspondingEObjects.nullOrEmpty){
 				opSignature = correspondingEObjects.get(0)			

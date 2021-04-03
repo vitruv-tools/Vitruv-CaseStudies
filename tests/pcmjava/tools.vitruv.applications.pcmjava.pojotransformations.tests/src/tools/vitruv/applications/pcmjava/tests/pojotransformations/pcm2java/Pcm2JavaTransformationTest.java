@@ -52,15 +52,15 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.seff.SeffFactory;
 import org.palladiosimulator.pcm.system.System;
 
+import com.google.common.collect.Iterables;
+
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil;
 import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
+import tools.vitruv.framework.propagation.ChangePropagationSpecification;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 
@@ -118,14 +118,12 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	protected <T> Set<NamedElement> assertCorrespondnecesAndCompareNames(final EObject pcmNamedElement,
 			final int expectedSize, final java.lang.Class<? extends EObject>[] expectedClasses,
 			final String[] expectedNames) throws Throwable {
-		final Set<EObject> correspondences = (Set<EObject>) claimNotEmpty(
-				CorrespondenceModelUtil.getCorrespondingEObjects(this.getCorrespondenceModel(), pcmNamedElement));
-		assertEquals(expectedSize, correspondences.size(), "correspondences.size should be " + expectedSize);
+		final Iterable<EObject> correspondences = claimNotEmpty(getCorrespondingEObjects(pcmNamedElement, EObject.class));
+		assertEquals(expectedSize, Iterables.size(correspondences), "correspondences.size should be " + expectedSize);
 		final Set<NamedElement> jaMoPPElements = new HashSet<NamedElement>();
 		for (int i = 0; i < expectedClasses.length; i++) {
 			final java.lang.Class<? extends EObject> expectedClass = expectedClasses[i];
-			final EObject correspondingEObject = claimOne(CorrespondenceModelUtil
-					.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), pcmNamedElement, expectedClass));
+			final EObject correspondingEObject = claimOne(getCorrespondingEObjects(pcmNamedElement, expectedClass));
 			if (!expectedClass.isInstance(correspondingEObject)) {
 				fail("Corresponding EObject " + correspondingEObject + " is not an instance of " + expectedClass);
 			}
@@ -133,7 +131,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 			if (correspondingEObject instanceof NamedElement) {
 				final NamedElement jaMoPPElement = (NamedElement) correspondingEObject;
 				assertTrue(jaMoPPElement.getName().contains(expectedName),
-						"The name of the jamopp element does not contain the expected name");
+						"The name of the jamopp element '" + jaMoPPElement.getName() + "' does not contain the expected name '" +  expectedName + "'");
 				jaMoPPElements.add(jaMoPPElement);
 			} else {
 				// expected name should be null
@@ -144,22 +142,14 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		return jaMoPPElements;
 	}
 
-	protected void assertEmptyCorrespondence(final EObject eObject) throws Throwable {
-		try {
-			final Set<EObject> correspondences = (Set<EObject>) claimNotEmpty(
-					CorrespondenceModelUtil.getCorrespondingEObjects(this.getCorrespondenceModel(), eObject));
-			fail("correspondences.size should be " + 0 + " but is " + correspondences.size());
-		} catch (final RuntimeException re) {
-			// expected Runtime expception:
-		}
-
+	protected void assertEmptyCorrespondence(final EObject eObject) {
+		assertEquals(0, Iterables.size(getCorrespondingEObjects(eObject, EObject.class)));
 	}
 
 	protected void assertEqualsTypeReference(final TypeReference expected, final TypeReference actual) {
 		assertTrue(expected.getClass().equals(actual.getClass()), "type reference are not from the same type");
 		// Note: not necessary to check Primitive type: if the classes are from
-		// the same type (e.g.
-		// Int) the TypeReferences are equal
+		// the same type (e.g. Int) the TypeReferences are equal
 		if (expected instanceof ClassifierReference) {
 			final ClassifierReference expectedClassifierRef = (ClassifierReference) expected;
 			final ClassifierReference actualClassifierRef = (ClassifierReference) actual;
@@ -321,7 +311,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 		// innerDec.setCompositeDataType_InnerDeclaration(cdt);
 		innerDec.setEntityName(Pcm2JavaTestUtils.INNER_DEC_NAME);
 		cdt.getInnerDeclaration_CompositeDataType().add(innerDec);
-		EcoreResourceBridge.saveResource(cdt.eResource());
+		cdt.eResource().save(null);
 		return innerDec;
 	}
 
@@ -406,8 +396,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	 * @throws Throwable
 	 */
 	protected void assertOperationProvidedRole(final OperationProvidedRole operationProvidedRole) throws Throwable {
-		final Set<EObject> correspondingEObjects = CorrespondenceModelUtil
-				.getCorrespondingEObjects(this.getCorrespondenceModel(), operationProvidedRole);
+		final Iterable<EObject> correspondingEObjects = getCorrespondingEObjects(operationProvidedRole, EObject.class);
 		int namespaceClassifierReferenceFound = 0;
 		int importFound = 0;
 		for (final EObject eObject : correspondingEObjects) {
@@ -434,8 +423,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	 * @throws Throwable
 	 */
 	protected void assertOperationRequiredRole(final OperationRequiredRole operationRequiredRole) throws Throwable {
-		final Set<EObject> correspondingEObjects = CorrespondenceModelUtil
-				.getCorrespondingEObjects(this.getCorrespondenceModel(), operationRequiredRole);
+		final Iterable<EObject> correspondingEObjects = getCorrespondingEObjects(operationRequiredRole, EObject.class);
 		int importFounds = 0;
 		int constructorParameterFound = 0;
 		int fieldsFound = 0;
@@ -486,8 +474,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	 * @throws Throwable
 	 */
 	protected void assertAssemblyContext(final AssemblyContext assemblyContext) throws Throwable {
-		final Set<EObject> correspondingEObjects = CorrespondenceModelUtil
-				.getCorrespondingEObjects(this.getCorrespondenceModel(), assemblyContext);
+		final Iterable<EObject> correspondingEObjects = getCorrespondingEObjects(assemblyContext, EObject.class);
 		boolean fieldFound = false;
 		boolean importFound = false;
 		boolean newConstructorCallFound = false;
@@ -580,8 +567,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	 * @throws Throwable
 	 */
 	protected void assertInnerDeclaration(final InnerDeclaration innerDec) throws Throwable {
-		final Set<EObject> correspondingObjects = CorrespondenceModelUtil
-				.getCorrespondingEObjects(this.getCorrespondenceModel(), innerDec);
+		final Iterable<EObject> correspondingObjects = getCorrespondingEObjects(innerDec, EObject.class);
 		int fieldsFound = 0;
 		int methodsFound = 0;
 		String fieldName = null;

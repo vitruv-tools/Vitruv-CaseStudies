@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import java.nio.file.Path
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+import org.junit.jupiter.api.Disabled
 
 /**
  * This class contains basis tests for java packages.
@@ -73,6 +74,8 @@ class JavaToUmlPackageTest extends JavaToUmlTransformationTest {
 	}
 
 	@Test
+	@Disabled("Java in-memory model is not correctly updated")
+	//https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/issues/130
 	def void testAddClassToPackage() {
 		val javaClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME2)
 		jPackageLevel1.compilationUnits += getContainingCompilationUnit(javaClass)
@@ -80,6 +83,8 @@ class JavaToUmlPackageTest extends JavaToUmlTransformationTest {
 
 		val uPackage = getCorrespondingPackage(jPackageLevel1)
 		val uClass = getCorrespondingClass(javaClass)
+		assertNotNull(uClass, "UML class")
+		assertNotNull(uPackage, "UML package")
 		assertUmlPackageableElementIsInPackage(uClass, uPackage)
 	}
 

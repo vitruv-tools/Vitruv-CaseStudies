@@ -2,127 +2,155 @@ package tools.vitruv.applications.umlclassumlcomponents.tests.comp2class
 
 import org.eclipse.uml2.uml.UMLFactory
 
-import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
+import static extension tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
+import static tools.vitruv.applications.umlclassumlcomponents.util.SharedUtil.*
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertFalse
+import org.eclipse.uml2.uml.Component
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Package
 
 class ComponentTest extends AbstractComp2ClassTest {
 
-	/*******
-	 * Tests:*
-	 ********/
 	@Test
 	def void testCreateClassForComponent() {
-		val umlComp = createComponent(COMP_NAME)
-		propagate
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+			]
+		]
 
-		assertClassAndPackage(umlComp, COMP_NAME)
+		rootElement.claimPackagedElementWithName(Component, COMP_NAME)
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
+			claimPackagedElementWithName(Class, COMP_NAME)
 	}
 
 	@Test
 	def void testRenameComponent() {
-		val umlComp = createComponent("Old")
-		propagate
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+			]
+		]
 
-		// Change name:
-		umlComp.name = "New"
-		propagate
+		val changedCompName = COMP_NAME + "New"
+		rootElement.claimPackagedElementWithName(Component, COMP_NAME).propagate [
+			name = changedCompName
+		]
 
-		// Check if rename happened in Class & Package:
-		assertClassAndPackage(umlComp, "New")
+		rootElement.claimNoPackagedElementWithName(Component, COMP_NAME)
+		rootElement.claimNoPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
+		rootElement.claimPackagedElementWithName(Component, changedCompName)
+		rootElement.claimPackagedElementWithName(Package, changedCompName + PACKAGE_SUFFIX).
+			claimPackagedElementWithName(Class, changedCompName)
 	}
 
 	@Test
 	def void testDeleteComponentWithPackage() {
-		val umlComp = createComponent(COMP_NAME)
-		propagate
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+			]
+		]
 
-		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
-		val classPackage = umlClass.package
-		val classModel = umlClass.model
+		rootElement.claimPackagedElementWithName(Component, COMP_NAME)
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
+			claimPackagedElementWithName(Class, COMP_NAME)
 
 		// Remove Component		
-		assertTrue(rootElement.packagedElements.contains(umlComp))
-		umlComp.destroy()
-		assertFalse(rootElement.packagedElements.contains(umlComp))
-		propagate
+		rootElement.propagate [
+			claimPackagedElementWithName(Component, COMP_NAME).destroy()
+		]
 
-		// Check if Class or Package exists:		
-		assertFalse(classPackage.packagedElements.contains(umlClass))
-		assertFalse(classModel.packagedElements.contains(umlClass))
-		assertFalse(classModel.packagedElements.contains(classPackage))
+		rootElement.claimNoPackagedElementWithName(Component, COMP_NAME)
+		rootElement.claimNoPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
 	}
 
 	@Test
 	def void testDeleteComponentWithoutPackage() {
-		val umlComp = createComponent(COMP_NAME)
-		propagate
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+			]
+		]
 
-		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
-		val classPackage = umlClass.package
-		val classModel = umlClass.model
+		rootElement.claimPackagedElementWithName(Component, COMP_NAME)
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
+			claimPackagedElementWithName(Class, COMP_NAME)
 
-		// Package gets more members:
-		val umlClass2 = UMLFactory.eINSTANCE.createClass()
-		umlClass2.name = CLASS_NAME2
-		// Add new Class to Package in transaction:
-		classPackage.packagedElements += umlClass2
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).propagate [
+			// Package gets more members:
+			val umlClass2 = UMLFactory.eINSTANCE.createClass()
+			umlClass2.name = CLASS_NAME2
+			// Add new Class to Package in transaction:
+			packagedElements += umlClass2
+		]
 
 		// Remove Component		
-		assertTrue(rootElement.packagedElements.contains(umlComp))
-		userInteraction.onMultipleChoiceSingleSelection [
-			message.contains("Delete the corresponding Package") && message.contains("and all its contained elements")
-		].respondWith("No")
-		umlComp.destroy()
-		assertFalse(rootElement.packagedElements.contains(umlComp))
-		saveAndSynchronizeWithInteractions(rootElement)
+		rootElement.propagate [
+			userInteraction.onMultipleChoiceSingleSelection [
+				message.contains("Delete the corresponding Package") &&
+					message.contains("and all its contained elements")
+			].respondWith("No")
+			claimPackagedElementWithName(Component, COMP_NAME).destroy()
+		]
 
-		// Check if Class or Package exists:		
-		assertFalse(classPackage.packagedElements.contains(umlClass))
-		assertFalse(classModel.packagedElements.contains(umlClass))
-		assertTrue(classModel.packagedElements.contains(classPackage))
-		assertTrue(classPackage.packagedElements.contains(umlClass2))
+		userInteraction.assertAllInteractionsOccurred()
+
+		rootElement.claimNoPackagedElementWithName(Component, COMP_NAME)
+		val package = rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
+		package.claimNoPackagedElementWithName(Class, COMP_NAME)
+		package.claimPackagedElementWithName(Class, CLASS_NAME2)
 	}
 
 	@Test
 	def void testDeleteComponentWithPackageAndContents() {
-		val umlComp = createComponent(COMP_NAME)
-		propagate
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+			]
+		]
 
-		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
-		val classPackage = umlClass.package
-		val classModel = umlClass.model
+		rootElement.claimPackagedElementWithName(Component, COMP_NAME)
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
+			claimPackagedElementWithName(Class, COMP_NAME)
 
-		// Package gets more members:
-		val umlClass2 = UMLFactory.eINSTANCE.createClass()
-		umlClass2.name = CLASS_NAME2
-		// Add new Class to Package in transaction:
-		classPackage.packagedElements += umlClass2
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME + " Package").propagate [
+			// Package gets more members:
+			val umlClass2 = UMLFactory.eINSTANCE.createClass()
+			umlClass2.name = CLASS_NAME2
+			// Add new Class to Package in transaction:
+			packagedElements += umlClass2
+		]
 
 		// Remove Component		
-		assertTrue(rootElement.packagedElements.contains(umlComp))
-		userInteraction.onMultipleChoiceSingleSelection [
-			message.contains("Delete the corresponding Package") && message.contains("and all its contained elements")
-		].respondWith("Yes")
-		umlComp.destroy()
-		assertFalse(rootElement.packagedElements.contains(umlComp))
-		saveAndSynchronizeWithInteractions(rootElement)
+		rootElement.propagate [
+			userInteraction.onMultipleChoiceSingleSelection [
+				message.contains("Delete the corresponding Package") &&
+					message.contains("and all its contained elements")
+			].respondWith("Yes")
+			claimPackagedElementWithName(Component, COMP_NAME).destroy()
+		]
+		userInteraction.assertAllInteractionsOccurred()
 
-		// Check if Class or Package exists:		
-		assertFalse(classPackage.packagedElements.contains(umlClass))
-		assertFalse(classModel.packagedElements.contains(umlClass))
-		assertFalse(classModel.packagedElements.contains(classPackage))
-		assertFalse(classModel.packagedElements.contains(umlClass2))
+		rootElement.claimNoPackagedElementWithName(Component, COMP_NAME)
+		rootElement.claimNoPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX)
 	}
 
 	@Test
 	def void testCreate2ClassFor2Component() {
-		val umlComp1 = createComponent(COMP_NAME)
-		val umlComp2 = createComponent(COMP_NAME2)
-		propagate
-		assertClassAndPackage(umlComp1, COMP_NAME)
-		assertClassAndPackage(umlComp2, COMP_NAME2)
+		rootElement.propagate [
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME
+			]
+			packagedElements += UMLFactory.eINSTANCE.createComponent() => [
+				name = COMP_NAME2
+			]
+		]
+		rootElement.claimPackagedElementWithName(Component, COMP_NAME)
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME + PACKAGE_SUFFIX).
+			claimPackagedElementWithName(Class, COMP_NAME)
+		rootElement.claimPackagedElementWithName(Package, COMP_NAME2 + PACKAGE_SUFFIX).
+			claimPackagedElementWithName(Class, COMP_NAME2)
 	}
 }

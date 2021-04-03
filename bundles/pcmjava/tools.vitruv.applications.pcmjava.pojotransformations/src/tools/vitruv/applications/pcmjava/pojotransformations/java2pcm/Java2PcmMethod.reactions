@@ -1,12 +1,12 @@
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.emftext.language.java.classifiers.ConcreteClassifier
-import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
 
-import static tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.hasSameSignature
+import static extension tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference
+import static extension tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference
 
 import "http://www.emftext.org/java" as java 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -46,16 +46,10 @@ routine createParameter(java::OrdinaryParameter javaParameter, java::Parametriza
 		val operationSignature = retrieve pcm::OperationSignature corresponding to javaMethod
 	}
 	action {
-		val pcmParameter = create pcm::Parameter and initialize {
-			pcmParameter.operationSignature__Parameter = operationSignature
-			pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.
-				getDataTypeFromTypeReference(javaParameter.typeReference, correspondenceModel,
-				userInteractor, null)
-			pcmParameter.dataType__Parameter.repository__DataType = operationSignature.interface__OperationSignature.repository__Interface
-			pcmParameter.name = javaParameter.name
-		}
+		val pcmParameter = create pcm::Parameter
+		call changeParameterName(javaParameter.name, javaParameter)
+		call changeParameterType(javaParameter.typeReference, javaParameter)
 		add correspondence between javaParameter and pcmParameter
-			
 		update operationSignature {
 			operationSignature.parameters__OperationSignature += pcmParameter
 		}
@@ -100,6 +94,26 @@ routine changeParameterName(String newName, java::Parameter javaParameter) {
 	}
 }
 
+reaction ParameterTypeChanged {
+	after element replaced at java::Parameter[typeReference]
+	call changeParameterType(newValue, affectedEObject)
+}
+
+routine changeParameterType(java::TypeReference newType, java::Parameter javaParameter) {
+	match {
+		val pcmParameter = retrieve pcm::Parameter corresponding to javaParameter
+	}
+	action {
+		update pcmParameter {
+			pcmParameter.dataType__Parameter = if (javaParameter.typeReference !== null) {
+					javaParameter.typeReference.getDataTypeFromTypeReference(correspondenceModel, userInteractor, null)
+				} else {
+					null
+				}
+		}
+	}
+}
+
 // Field:
 /**
  * Check if Field has correspondence to CompositeDataType, ComposedProvidingRequiringEntity, 
@@ -123,9 +137,11 @@ routine createInnerDeclaration(java::ConcreteClassifier classifier, java::Field 
 	action {
 		val innerDeclaration = create pcm::InnerDeclaration and initialize {
 			innerDeclaration.entityName = javaField.name
-			innerDeclaration.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
-				getDataTypeFromTypeReference(javaField.typeReference, correspondenceModel,
-					userInteractor, null)
+			innerDeclaration.datatype_InnerDeclaration = if (javaField.typeReference !== null) {
+					javaField.typeReference.getDataTypeFromTypeReference(correspondenceModel, userInteractor, null)
+				} else {
+					null
+				}
 			innerDeclaration.compositeDataType_InnerDeclaration = compositeDataType
 		}
 		add correspondence between innerDeclaration and javaField
@@ -220,8 +236,11 @@ routine changeInnerDeclarationType(java::TypeReference typeReference, java::Fiel
 	}
 	action {
 		update innerDeclaration {
-			innerDeclaration.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
-				getDataTypeFromTypeReference(typeReference, correspondenceModel, userInteractor, null)
+			innerDeclaration.datatype_InnerDeclaration = if (typeReference !== null) {
+					typeReference.getDataTypeFromTypeReference(correspondenceModel, userInteractor, null)
+				} else {
+					null
+				}
 		}
 	}
 }
@@ -311,7 +330,11 @@ routine changeReturnType(java::Method javaMethod, java::TypeReference typeRefere
 	 action {
 		 update operationSignature {
 			val repository = operationSignature.interface__OperationSignature.repository__Interface
-			operationSignature.returnType__OperationSignature = getCorrespondingPCMDataTypeForTypeReference(typeReference, correspondenceModel, userInteractor, repository, javaMethod.arrayDimension)
+			operationSignature.returnType__OperationSignature = if (typeReference !== null) {
+					typeReference.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel, userInteractor, repository, javaMethod.arrayDimension)
+				} else {
+					null
+				}
 		 }
 	 }
 }

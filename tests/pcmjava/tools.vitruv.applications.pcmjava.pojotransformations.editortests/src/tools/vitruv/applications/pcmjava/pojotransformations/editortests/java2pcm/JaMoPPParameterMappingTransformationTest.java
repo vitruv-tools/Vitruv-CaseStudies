@@ -1,13 +1,10 @@
 package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
 
-import java.util.Set;
-
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.text.edits.ReplaceEdit;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
@@ -19,7 +16,6 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 
 import tools.vitruv.applications.pcmjava.tests.util.java2pcm.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,11 +34,6 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
 		this.assertParameter(opSig, parameter, "String", Pcm2JavaTestUtils.PARAMETER_NAME);
 	}
 
-	/**
-	 *
-	 * @throws Throwable
-	 */
-	@Disabled
 	@Test
 	public void testRenameParameter() throws Throwable {
 		super.addRepoContractsAndDatatypesPackage();
@@ -59,7 +50,6 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
 				Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
 	}
 
-	@Disabled
 	@Test
 	public void testChangeParameterType() throws Throwable {
 		super.addRepoContractsAndDatatypesPackage();
@@ -89,8 +79,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
 		editCompilationUnit(icu, replaceEdit);
 		final org.emftext.language.java.parameters.Parameter newJaMoPPParameter = super.findJaMoPPParameterInICU(icu,
 				interfaceName, methodName, newParameterName);
-		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
-				newJaMoPPParameter, Parameter.class));
+		return claimOne(getCorrespondingEObjects(newJaMoPPParameter, Parameter.class));
 	}
 
 	private Parameter changeParameterType(final String interfaceName, final String methodName, final String paramName,
@@ -105,8 +94,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
 		editCompilationUnit(icu, replaceEdit);
 		final org.emftext.language.java.parameters.Parameter newJaMoPPParameter = super.findJaMoPPParameterInICU(icu,
 				interfaceName, methodName, paramName);
-		Set<Parameter> correspondingEObjectsByType = CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), newJaMoPPParameter, Parameter.class);
+		Iterable<Parameter> correspondingEObjectsByType = getCorrespondingEObjects(newJaMoPPParameter, Parameter.class);
 		return claimOne(correspondingEObjectsByType);
 	}
 

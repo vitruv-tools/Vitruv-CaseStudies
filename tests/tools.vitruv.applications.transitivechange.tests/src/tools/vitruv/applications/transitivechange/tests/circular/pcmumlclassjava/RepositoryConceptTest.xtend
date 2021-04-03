@@ -10,10 +10,10 @@ import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUs
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
+import org.emftext.language.java.containers.ContainersPackage
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -24,17 +24,16 @@ import java.nio.file.Path
  */
 class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 
-	def protected static checkRepositoryConcept(
-		CorrespondenceModel cm,
+	def protected checkRepositoryConcept(
 		Repository pcmRepo,
 		Package umlRepositoryPkg,
 		Package umlContractsPkg,
 		Package umlDatatypesPkg
 	) {
 		// correspondence constraints
-		assertTrue(corresponds(cm, pcmRepo, umlRepositoryPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE))
-		assertTrue(corresponds(cm, pcmRepo, umlContractsPkg, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE))
-		assertTrue(corresponds(cm, pcmRepo, umlDatatypesPkg, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE))
+		assertTrue(corresponds(pcmRepo, umlRepositoryPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE))
+		assertTrue(corresponds(pcmRepo, umlContractsPkg, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE))
+		assertTrue(corresponds(pcmRepo, umlDatatypesPkg, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE))
 		// containment constraints
 		assertTrue(EcoreUtil.equals(umlContractsPkg.nestingPackage, umlRepositoryPkg))
 		assertTrue(EcoreUtil.equals(umlDatatypesPkg.nestingPackage, umlRepositoryPkg))
@@ -65,7 +64,7 @@ class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		assertTrue(umlRepositoryPkg !== null)
 		assertTrue(umlContractsPkg !== null)
 		assertTrue(umlDatatypesPkg !== null)
-		checkRepositoryConcept(correspondenceModel, pcmRepository, umlRepositoryPkg, umlContractsPkg, umlDatatypesPkg)
+		checkRepositoryConcept(pcmRepository, umlRepositoryPkg, umlContractsPkg, umlDatatypesPkg)
 		checkJavaRepositoryPackage(umlRepositoryPkg)
 	}
 
@@ -188,7 +187,7 @@ class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		assertTrue(umlModel?.packagedElements.empty)
 
 		// There should be no Java packages:
-		val allJavaPackages = typeof(org.emftext.language.java.containers.Package).getCorrespondingObjectsOfClass
+		val allJavaPackages = getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE, org.emftext.language.java.containers.Package)
 		assertEquals(umlModel?.packagedElements.size, allJavaPackages.size,
 			"Too many Java packages: " + allJavaPackages)
 	}

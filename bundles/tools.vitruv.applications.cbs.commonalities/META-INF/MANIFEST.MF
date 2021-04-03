@@ -15,6 +15,7 @@ Require-Bundle: tools.vitruv.framework.applications,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.domains.java;visibility:=reexport,
- edu.kit.ipd.sdq.activextendannotations
+ edu.kit.ipd.sdq.activextendannotations,
+ tools.vitruv.applications.util.temporary
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities

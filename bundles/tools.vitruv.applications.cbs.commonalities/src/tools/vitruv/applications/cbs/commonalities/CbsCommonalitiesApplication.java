@@ -3,7 +3,7 @@ package tools.vitruv.applications.cbs.commonalities;
 import java.util.Set;
 
 import tools.vitruv.framework.applications.AbstractVitruvApplication;
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
+import tools.vitruv.framework.propagation.ChangePropagationSpecification;
 
 public class CbsCommonalitiesApplication extends AbstractVitruvApplication {
 	@Override

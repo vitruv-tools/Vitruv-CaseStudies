@@ -1,7 +1,5 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
-import java.util.concurrent.Callable;
-
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;

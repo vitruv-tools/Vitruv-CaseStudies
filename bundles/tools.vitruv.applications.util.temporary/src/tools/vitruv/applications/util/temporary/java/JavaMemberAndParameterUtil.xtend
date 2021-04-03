@@ -144,8 +144,7 @@ class JavaMemberAndParameterUtil {
      * @param jAttribute the attribute for which a getter should be created
      */
     def static createGetterForAttribute(Field jAttribute) {
-        val jGetter = createJavaGetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
-        jAttribute.containingConcreteClassifier.members += jGetter
+        createJavaGetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
     }
 
     /**
@@ -153,8 +152,7 @@ class JavaMemberAndParameterUtil {
      * @param jAttribute the attribute for which a getter should be created
      */
     def static createSetterForAttribute(Field jAttribute) {
-        val jSetter = createJavaSetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
-        jAttribute.containingConcreteClassifier.members += jSetter
+        createJavaSetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
     }
 
     /**
@@ -332,39 +330,6 @@ class JavaMemberAndParameterUtil {
         return getJavaClassMethodsWithName(jClass, buildGetterName(jAttributeName))
     }
 
-    def static removeJavaGettersOfAttribute(Field jAttribute) {
-        val getters = getJavaGettersOfAttribute(jAttribute)
-        if (!getters.nullOrEmpty) {
-            for (getter : getters) {
-                EcoreUtil.remove(getter)
-            }
-        }
-    }
-
-    def static removeJavaSettersOfAttribute(Field jAttribute) {
-        val setters = getJavaSettersOfAttribute(jAttribute)
-        if (!setters.nullOrEmpty) {
-            for (setter : setters) {
-                EcoreUtil.remove(setter)
-            }
-        }
-    }
-
-    /**
-     * Checks the containing class of the given attribute for existing setters with the old attribute name.
-     * Renames the setters to the new attribute name.
-     * 
-     * @param jAttributeWithNewName the Attribute with the new name
-     * @param the name of jAttribute before it was renamed
-     */
-    def static renameSettersOfAttribute(Field jAttributeWithNewName, String oldName) {
-        val setters = getJavaSettersOfAttribute(jAttributeWithNewName.containingConcreteClassifier, oldName)
-        for (setter : setters) {
-            renameSetter(setter, jAttributeWithNewName, oldName)
-        }
-
-    }
-
     /**
      * Renames the given setter so that it matches the name of the given attribute
      * @param oldName the name of jAttribute before it was renamed
@@ -375,14 +340,6 @@ class JavaMemberAndParameterUtil {
         for (expStatement : setter.statements.filter(ExpressionStatement)) {
             val selfReference = getAttributeSelfReferenceInExpressionStatement(expStatement, oldName)
             selfReference?.setTarget(jAttribute)
-        }
-
-    }
-
-    def static updateAttributeTypeInSetters(Field jAttribute) {
-        val setters = getJavaSettersOfAttribute(jAttribute)
-        for (setter : setters) {
-            updateAttributeTypeInSetter(setter, jAttribute)
         }
     }
 
@@ -402,18 +359,6 @@ class JavaMemberAndParameterUtil {
     }
 
     /**
-     * Renames all getters of the attribute that are contained in class of the attribute
-     * 
-     * @param jAttribute the attribute with the new name
-     */
-    def static renameGettersOfAttribute(Field jAttribute, String oldName) {
-        val getters = getJavaGettersOfAttribute(jAttribute.containingConcreteClassifier, oldName)
-        for (getter : getters) {
-            renameGetterOfAttribute(getter, jAttribute)
-        }
-    }
-
-    /**
      * Renames the given getter so that it matches the name of the given attribute
      * Assumption: standard getter that only returns the attribute
      */
@@ -422,17 +367,6 @@ class JavaMemberAndParameterUtil {
         val returnStatement = getter.statements.filter(Return).head
         if (returnStatement !== null) {
             returnStatement.returnValue = createSelfReferenceToAttribute(jAttribute)
-        }
-    }
-
-    /**
-     * Searches all getters of the given attribute in the same containing class
-     * and matches the return type of the getters to the type of the attribute.
-     * 
-     */
-    def static updateAttributeTypeInGetters(Field jAttribute) {
-        for (getter : getJavaGettersOfAttribute(jAttribute)) {
-            updateAttributeTypeInGetter(getter, jAttribute)
         }
     }
 

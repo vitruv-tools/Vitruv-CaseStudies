@@ -139,6 +139,7 @@ reaction RepositoryDeleted {
 
 routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo) {
 	match {
+		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
 		val umlRepositoryPkg = retrieve uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		val umlContractsPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
 		val umlDatatypesPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
@@ -157,9 +158,9 @@ routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo) {
 					.message(DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL).startInteraction
 
 			if (deleteCorrespondingUmlRepository) {// DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES
-				umlContractsPkg.ifPresent[destroy]
-				umlDatatypesPkg.ifPresent[destroy]
-				umlRepositoryPkg.destroy // delete parent package last to allow the recorder to notice the child package deletion
+				umlContractsPkg.ifPresent[umlRepositoryPkg.packagedElements -= it]
+				umlDatatypesPkg.ifPresent[umlRepositoryPkg.packagedElements -= it]
+				umlModel.packagedElements -= umlRepositoryPkg // remove parent package last to allow the recorder to notice the child package deletion
 			}
 		}
 	}

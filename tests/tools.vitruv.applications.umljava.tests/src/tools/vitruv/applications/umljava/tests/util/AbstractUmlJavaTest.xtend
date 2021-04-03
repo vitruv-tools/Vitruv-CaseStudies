@@ -21,7 +21,6 @@ abstract class AbstractUmlJavaTest extends LegacyVitruvApplicationTest {
 	/**
 	 * Retrieves all corresponding objects of obj.
 	 * 
-	 * {@link tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest#getCorrespondenceModel}
 	 * @param obj the object for which the corresponding objects should be retrieved
 	 * @return the corresponding objects of obj or null if none could be found
 	 * @throws IllegalArgumentException if obj is null
@@ -30,7 +29,7 @@ abstract class AbstractUmlJavaTest extends LegacyVitruvApplicationTest {
 		if (obj === null) {
 			throw new IllegalArgumentException("Cannot retrieve correspondence for null")
 		}
-		val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten
+		val corrList = getCorrespondingEObjects(obj, EObject)
 		if (corrList.nullOrEmpty) {
 			logger.warn("No Correspondences found for " + obj)
 			return null

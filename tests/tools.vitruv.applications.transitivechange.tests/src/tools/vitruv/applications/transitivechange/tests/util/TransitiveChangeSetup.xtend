@@ -8,7 +8,7 @@ import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
 import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification
+import tools.vitruv.framework.propagation.ChangePropagationSpecification
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.domains.java.JavaDomainProvider

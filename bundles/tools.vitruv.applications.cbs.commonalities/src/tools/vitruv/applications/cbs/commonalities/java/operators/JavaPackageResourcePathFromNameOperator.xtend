@@ -10,6 +10,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
 import static com.google.common.base.Preconditions.*
 
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
+import org.emftext.language.java.containers.ContainersPackage
+import java.util.List
 
 @AttributeMappingOperator(
 	name='javaPackageResourcePathFromName',
@@ -55,9 +58,16 @@ class JavaPackageResourcePathFromNameOperator extends AbstractAttributeMappingOp
 			return resourcePath + PATH_SEPARATOR
 		}
 	}
+	
+	private def registerUniqueJavaPackageCorrespondence() {
+		if (!correspondenceModel.getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE).contains(javaPackage)) {
+			correspondenceModel.createAndAddCorrespondence(List.of(javaPackage), List.of(ContainersPackage.Literals.PACKAGE))
+		}
+	}
 
 	// package name -> resource path
 	override applyTowardsParticipation(String packageName) {
+		registerUniqueJavaPackageCorrespondence()
 		val namespaces = javaPackage.namespaces
 		val resourcePath = buildJavaPackagePath(sourcePath, namespaces, packageName)
 		logger.debug('''Mapping package name '«packageName»', namespaces «namespaces» and source path '«sourcePath
