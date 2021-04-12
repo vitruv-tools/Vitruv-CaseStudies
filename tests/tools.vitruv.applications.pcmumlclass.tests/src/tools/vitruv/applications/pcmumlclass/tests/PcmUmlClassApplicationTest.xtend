@@ -41,6 +41,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
+import static com.google.common.base.Preconditions.checkNotNull
+import static extension tools.vitruv.framework.util.ObjectResolutionUtil.getHierarchicUriFragment
+import org.eclipse.emf.ecore.EStructuralFeature
 
 abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
@@ -220,6 +223,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			return umlRepositoryModel
 		}
 		val originalInterface = originalContractsPackageElement as Interface
+		resolveElements(originalInterface, umlRepositoryModel.eResource, emptyList)
 
 		// add each operation without its parameters because at least the returnParameters will be already generated
 		val originalOperationParameterMapping = new HashMap<String, List<Parameter>>()
@@ -409,7 +413,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * @return
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
-	def Comparison compare(URI originalUri, URI generatedUri) {
+	def static Comparison compare(URI originalUri, URI generatedUri) {
 		val resourceSet = new ResourceSetImpl()
 		val original = resourceSet.getResource(originalUri, true).contents.head
 		val generated = resourceSet.getResource(generatedUri, true).contents.head
@@ -420,7 +424,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * This directly applies the default EMFCompare comparator to the passed elements. 
 	 * It does not ensure that the compared elements are in sync with the disk state.  
 	 */
-	def Comparison compare(Notifier original, Notifier generated) {
+	def static Comparison compare(Notifier original, Notifier generated) {
 		val comparator = EMFCompare.builder().build()
 		val scope = new DefaultComparisonScope(original, generated, original)
 		return comparator.compare(scope)
@@ -437,31 +441,38 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * @param skipFeatures
 	 * 		the names of the features that should be ignored
 	 */
-	def mergeElements(EObject original, EObject generated, String ... skipFeatures) {
-		for (feature : original.eClass.EAllStructuralFeatures) {
-			if (!feature.derived && feature.changeable && original.eIsSet(feature) &&
-				!(feature instanceof EReference && (feature as EReference).isContainer) &&
-				!skipFeatures.contains(feature.name)) {
-				generated.eSet(feature, original.eGet(feature))
-			}
+	def static mergeElements(EObject original, EObject generated, String ... skipFeatures) {
+		val relevantFeatures = original.eClass.EAllStructuralFeatures.filter [
+			isResolveAndMergeRelevantFeature(original, skipFeatures)
+		]
+		for (feature : relevantFeatures) {
+			generated.eSet(feature, original.eGet(feature))
 		}
 	}
 
 	private def resolveElements(EObject original, Resource generatedResource, String ... skipFeatures) {
-		for (feature : original.eClass.EAllReferences) {
-			if (!feature.derived && feature.changeable && original.eIsSet(feature) &&
-				!feature.isContainer && !skipFeatures.contains(feature.name)) {
-				if (original.eGet(feature) instanceof EObject) {
-					original.eSet(feature, (original.eGet(feature) as EObject).resolve(generatedResource))
-				} else if (original.eGet(feature) instanceof List) {
-					original.eSet(feature, (original.eGet(feature) as List<?>).map[(it as EObject).resolve(generatedResource)])
-				}
+		val relevantReferences = original.eClass.EAllReferences.filter [
+			isResolveAndMergeRelevantFeature(original, skipFeatures)
+		]
+		for (reference : relevantReferences) {
+			val originalValue = original.eGet(reference)
+			if (!reference.many) {
+				original.eSet(reference, (originalValue as EObject).resolve(generatedResource))
+			} else {
+				original.eSet(reference, (originalValue as List<EObject>).map[resolve(generatedResource)])
 			}
 		}
 	}
 
-	private def resolve(EObject original, Resource in) {
-		in.resourceSet.getEObject(in.URI.appendFragment(EcoreUtil.getRelativeURIFragmentPath(null, original)), true)
+	private def static boolean isResolveAndMergeRelevantFeature(EStructuralFeature feature, EObject object,
+		String ... skipFeatures) {
+		return !feature.derived && feature.changeable && object.eIsSet(feature) &&
+			!skipFeatures.contains(feature.name) && if(feature instanceof EReference) !feature.isContainer else true
+	}
+
+	private def static resolve(EObject original, Resource in) {
+		checkNotNull(in.resourceSet.getEObject(in.URI.appendFragment(original.hierarchicUriFragment), true),
+			"resolved object for %s", original)
 	}
 
 }
