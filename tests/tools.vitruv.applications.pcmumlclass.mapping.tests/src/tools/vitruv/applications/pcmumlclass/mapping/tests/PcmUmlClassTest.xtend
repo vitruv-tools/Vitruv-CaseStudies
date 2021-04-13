@@ -66,7 +66,7 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 	@BeforeEach
 	def protected void setup() {
 		testResourceSet = new ResourceSetImpl()
-		helper = new PcmUmlClassTestHelper(this, [uri|uri.resourceAt])
+		helper = new PcmUmlClassTestHelper(this, [uri|startRecordingChanges(uri.resourceAt)])
 	}
 
 	def protected void assertModelExists(String modelPathWithinProject) {
