@@ -13,7 +13,7 @@ import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.framework.propagation.ChangePropagationSpecification;
-import tools.vitruv.framework.propagation.impl.CompositeDecomposingChangePropagationSpecification;
+import tools.vitruv.framework.propagation.impl.CompositeChangePropagationSpecification;
 import tools.vitruv.framework.domains.VitruvDomain;
 
 //TODO The Commonalities language should // generate a combined
@@ -92,7 +92,7 @@ public class CbsCommonalitiesChangePropagationSpecifications {
             .collect(groupingBy(spec -> new Pair<>(spec.getSourceDomain(), spec.getTargetDomain())));
 
     private static abstract class CbsCommonalitiesChangePropagationSpecification
-    extends CompositeDecomposingChangePropagationSpecification {
+    extends CompositeChangePropagationSpecification {
         public CbsCommonalitiesChangePropagationSpecification(VitruvDomain sourceDomain, VitruvDomain targetDomain) {
             super(sourceDomain, targetDomain);
             for (var spec : allChangePropagationSpecifications.get(new Pair<>(sourceDomain, targetDomain))) {
