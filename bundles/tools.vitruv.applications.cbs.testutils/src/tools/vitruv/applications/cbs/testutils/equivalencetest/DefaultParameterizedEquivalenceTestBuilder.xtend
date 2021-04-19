@@ -4,7 +4,6 @@ import java.util.List
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.jupiter.api.^extension.ExtensionContext
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 import tools.vitruv.testutils.UriMode
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.applications.cbs.testutils.equivalencetest.ParameterizedEquivalenceTestBuilder.NamedParameter
@@ -14,6 +13,7 @@ import tools.vitruv.applications.cbs.testutils.equivalencetest.ParameterizedEqui
 import org.eclipse.xtend.lib.annotations.Delegate
 import org.junit.jupiter.api.DynamicNode
 import java.util.Collection
+import tools.vitruv.framework.propagation.ChangePropagationSpecification
 
 @FinalFieldsConstructor
 package class DefaultParameterizedEquivalenceTestBuilder implements ParameterizedEquivalenceTestBuilder {

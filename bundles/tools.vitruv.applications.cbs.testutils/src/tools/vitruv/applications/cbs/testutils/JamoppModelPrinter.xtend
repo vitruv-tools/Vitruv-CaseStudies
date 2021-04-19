@@ -91,11 +91,11 @@ class JamoppModelPrinter implements ModelPrinter {
 	) {
 		switch (feature) {
 			case ANNOTABLE_AND_MODIFIABLE__ANNOTATIONS_AND_MODIFIERS:
-				target.printList(valueList, SINGLE_LINE) [ subTarget, element |
+				target.printList(valueList, SINGLE_LINE_LIST) [ subTarget, element |
 					subTarget.printShortenedJava(idProvider, element)
 				]
 			case NAMESPACE_AWARE_ELEMENT__NAMESPACES:
-				target.printList(valueList, SINGLE_LINE) [ subTarget, element |
+				target.printList(valueList, SINGLE_LINE_LIST) [ subTarget, element |
 					subPrinter.printFeatureValue(subTarget, idProvider, object, feature, element)
 				]
 			default:
@@ -140,7 +140,7 @@ class JamoppModelPrinter implements ModelPrinter {
 				PRINTED_NO_OUTPUT
 			}
 		} + //
-		target.printIterableElements(typeReferences, SINGLE_LINE) [ subTarget, ref |
+		target.printIterableElements(typeReferences, SINGLE_LINE_LIST) [ subTarget, ref |
 			printObjectShortened(subTarget, idProvider, ref)
 		] + //
 		print((0 ..< arrayDimension).join('')['[]'])
@@ -153,7 +153,7 @@ class JamoppModelPrinter implements ModelPrinter {
 	) {
 		target.print(reference.target.bestName) + //
 		if (!reference.typeArguments.isEmpty) {
-			target.printIterable('<', '>', reference.typeArguments, SINGLE_LINE) [ subTarget, argument |
+			target.printIterable('<', '>', reference.typeArguments, SINGLE_LINE_LIST) [ subTarget, argument |
 				subPrinter.printObjectShortened(subTarget, idProvider, argument)
 			]
 		} else
@@ -195,7 +195,7 @@ class JamoppModelPrinter implements ModelPrinter {
 		val importedNames = (
 			theImport.importedClassifiers.map[qualifiedName] + theImport.importedMembers.map[name]
 		).toList
-		val printMode = if (importedNames.size > 1) MULTI_LINE else SINGLE_LINE
+		val printMode = if (importedNames.size > 1) MULTI_LINE_LIST else SINGLE_LINE_LIST
 		target.printList(importedNames.toList, printMode)[extension subTarget, name|print(name)]
 	}
 

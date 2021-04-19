@@ -23,11 +23,9 @@ import org.hamcrest.TypeSafeMatcher
 import org.junit.jupiter.api.function.Executable
 import org.opentest4j.TestAbortedException
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 import tools.vitruv.framework.domains.VitruvDomain
 import tools.vitruv.framework.domains.repository.VitruvDomainRepository
 import tools.vitruv.framework.domains.repository.VitruvDomainRepositoryImpl
-import tools.vitruv.framework.tuid.TuidManager
 import tools.vitruv.framework.vsum.VirtualModelBuilder
 import tools.vitruv.testutils.BasicTestView
 import tools.vitruv.testutils.ChangePublishingTestView
@@ -44,11 +42,12 @@ import static com.google.common.base.Preconditions.checkNotNull
 import static java.nio.file.FileVisitResult.*
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.containsModelOf
-import static tools.vitruv.testutils.printing.PrintMode.MULTI_LINE
+import static tools.vitruv.testutils.printing.PrintMode.*
 
 import static extension java.nio.file.Files.walkFileTree
 import static extension tools.vitruv.testutils.printing.ModelPrinting.*
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import tools.vitruv.framework.propagation.ChangePropagationSpecification
 
 @FinalFieldsConstructor
 package class EquivalenceTestExecutable implements Executable, AutoCloseable {
@@ -87,7 +86,6 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		val viewDirectory = testProjectManager.getProject("", extensionContext)
 		val vsumDirectory = testProjectManager.getProject("vsum", extensionContext)
 
-		TuidManager.instance.reinitialize()
 		val changePropagationSpecifications = this.changePropagationSpecifications
 		val userInteraction = new TestUserInteraction
 		val vsum = new VirtualModelBuilder()
@@ -235,7 +233,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		override describeTo(Description description) {
 			description.appendText("exactly these resource paths to exist in the test view: ")
 				.appendPrintResult [
-					printSet(referenceFiles, MULTI_LINE) [ subTarget, path |
+					printSet(referenceFiles, MULTI_LINE_LIST) [ subTarget, path |
 						subTarget.print(path.toString)
 					]
 				]
@@ -256,14 +254,14 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 			
 			if (!missingResources.isEmpty) {
 				mismatchDescription.appendText("the following resources are missing in the test view: ").
-					appendModelValueSet(missingResources, MULTI_LINE, idProvider)
+					appendModelValueSet(missingResources, MULTI_LINE_LIST, idProvider)
 			}
 			if (!unexpectedResources.isEmpty) {
 				if (!missingResources.isEmpty) {
 					mismatchDescription.appendText(System.lineSeparator).appendText('    and ')
 				}
 				mismatchDescription.appendText("the test view contains the following unexpected resources: ").
-					appendModelValueSet(unexpectedResources, MULTI_LINE, idProvider)
+					appendModelValueSet(unexpectedResources, MULTI_LINE_LIST, idProvider)
 			}
 		}
 	}

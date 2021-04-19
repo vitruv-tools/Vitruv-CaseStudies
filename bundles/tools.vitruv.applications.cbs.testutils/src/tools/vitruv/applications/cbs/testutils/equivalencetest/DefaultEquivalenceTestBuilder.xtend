@@ -11,7 +11,6 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.junit.jupiter.api.^extension.ExtensionContext
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder.VariantOptions
-import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 import tools.vitruv.framework.domains.VitruvDomain
 import tools.vitruv.testutils.TestUserInteraction
 import tools.vitruv.testutils.TestView
@@ -21,6 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument
 import static com.google.common.base.Preconditions.checkState
 import static java.util.Comparator.comparing
 import static org.junit.jupiter.api.DynamicTest.dynamicTest
+import tools.vitruv.framework.propagation.ChangePropagationSpecification
 
 abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
 	/* both maps always contain lists for all domains */
