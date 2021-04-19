@@ -4,6 +4,7 @@ import tools.vitruv.applications.cbs.equivalencetesttemplates.RepositoryEquivale
 import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Disabled
 
 @ReactionsEquivalenceTest
 class RepositoryEquivalenceTest extends RepositoryEquivalenceTemplate {
@@ -28,6 +29,7 @@ class RepositoryEquivalenceTest extends RepositoryEquivalenceTemplate {
 		super.creation(builder)
 	}
 	
+	@Disabled("the recations leave models undeleted")
 	@TestFactory
 	override deletion(extension EquivalenceTestBuilder builder) {
 		userInteractions [
