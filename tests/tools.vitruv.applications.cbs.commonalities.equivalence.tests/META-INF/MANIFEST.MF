@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Component-Based Applications Commonalities Equivalence Tests
-Bundle-SymbolicName: tools.vitruv.applications.cbs.commonalities.equivalencetests
+Bundle-SymbolicName: tools.vitruv.applications.cbs.commonalities.equivalence.tests
 Bundle-Version: 0.2.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities.equivalencetests
 Bundle-RequiredExecutionEnvironment: JavaSE-11
