@@ -85,8 +85,8 @@ class TestUtil {
 	 */
 	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage,
 		org.emftext.language.java.containers.Package jPackage) {
-		assertEquals(uPackage.name, jPackage.name)
-		assertEquals(getUmlParentNamespaceAsStringList(uPackage), jPackage.namespaces)
+		assertEquals(uPackage.name.toFirstLower, jPackage.name)
+		assertEquals(getUmlParentNamespaceAsStringList(uPackage).map[toFirstLower], jPackage.namespaces)
 	}
 
 	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage,

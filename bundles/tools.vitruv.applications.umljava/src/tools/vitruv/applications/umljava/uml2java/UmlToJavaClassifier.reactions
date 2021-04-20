@@ -575,8 +575,8 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
     }
     action {
         call {
-            var modified = jPackage.updateNamespaces(uPackage.umlParentNamespaceAsStringList)
-            modified = jPackage.updateName(uPackage.name) || modified 
+            var modified = jPackage.updateNamespaces(uPackage.umlParentNamespaceAsStringList.map[toFirstLower])
+            modified = jPackage.updateName(uPackage.name.toFirstLower) || modified
             if (modified) {
                 persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
                 for (compUnit : copyOf(jPackage.compilationUnits)) {
