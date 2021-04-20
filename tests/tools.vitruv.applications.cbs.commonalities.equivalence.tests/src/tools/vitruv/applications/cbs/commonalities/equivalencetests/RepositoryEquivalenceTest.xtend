@@ -1,7 +1,0 @@
-package tools.vitruv.applications.cbs.commonalities.equivalencetests
-
-import tools.vitruv.applications.cbs.equivalencetesttemplates.RepositoryEquivalenceTemplate
-
-@CommonalitiesEquivalenceTest
-class RepositoryEquivalenceTest extends RepositoryEquivalenceTemplate {
-}
