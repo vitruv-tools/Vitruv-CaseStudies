@@ -69,6 +69,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 			val referenceView = setupReferenceView();
 			val printerChange = installViewDirectoryUriReplacement(testView, referenceView)
 		) {
+			checkNotNull(printerChange) // Suppress warning for variable not being used
 			executeDependencies(testView, referenceView)
 
 			testStep.executeIn(testView)
