@@ -68,7 +68,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	@BeforeEach
 	def protected void setup() {
 		patchDomains
-		helper = new PcmUmlClassApplicationTestHelper(this, [uri|uri.resourceAt])
+		helper = new PcmUmlClassApplicationTestHelper(this, [uri|startRecordingChanges(uri.resourceAt)])
 		testResourceSet = new ResourceSetImpl()
 	}
 
