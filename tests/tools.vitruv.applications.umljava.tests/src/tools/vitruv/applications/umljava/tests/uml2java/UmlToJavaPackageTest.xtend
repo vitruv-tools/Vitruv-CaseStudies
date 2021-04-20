@@ -46,7 +46,32 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 		assertEquals(PACKAGE_NAME, jPackage.name)
 		assertPackageEquals(uPackage, jPackage)
 	}
+	
+	@Test
+	def testCreateUppercasePackage() {
+		val uPackage = createUmlPackageAndAddToSuperPackage(PACKAGE_NAME.toFirstUpper, rootElement)
+		propagate
 
+		val jPackage = getCorrespondingPackage(uPackage)
+		assertEquals(PACKAGE_NAME, jPackage.name)
+		assertPackageEquals(uPackage, jPackage)
+	}
+
+	@Test
+	def testCreateNestedUppercasePackage() {
+		uPackageLevel1.name = uPackageLevel1.name.toFirstUpper
+		propagate
+		
+		val uPackageLevel2 = createUmlPackageAndAddToSuperPackage(PACKAGE_LEVEL_2.toFirstUpper, uPackageLevel1)
+		propagate
+
+		val jPackageLevel1 = getCorrespondingPackage(uPackageLevel1)
+		val jPackageLevel2 = getCorrespondingPackage(uPackageLevel2)
+		assertEquals(PACKAGE_LEVEL_2, jPackageLevel2.name)
+		assertEquals(#[jPackageLevel1.name], jPackageLevel2.namespaces)
+		assertPackageEquals(uPackageLevel2, jPackageLevel2)
+	}
+	
 	@Test
 	def testCreateNestedPackage() {
 		val uPackageLevel2 = createUmlPackageAndAddToSuperPackage(PACKAGE_LEVEL_2, uPackageLevel1)
