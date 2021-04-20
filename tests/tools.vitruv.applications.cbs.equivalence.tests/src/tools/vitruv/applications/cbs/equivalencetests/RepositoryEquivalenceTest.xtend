@@ -29,7 +29,7 @@ class RepositoryEquivalenceTest extends RepositoryEquivalenceTemplate {
 		super.creation(builder)
 	}
 	
-	@Disabled("the recations leave models undeleted")
+	@Disabled("the reactions leave models undeleted")
 	@TestFactory
 	override deletion(extension EquivalenceTestBuilder builder) {
 		userInteractions [
