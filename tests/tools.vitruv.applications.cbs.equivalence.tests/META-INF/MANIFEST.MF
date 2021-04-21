@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Component-Based Applications Equivalence Tests
+Bundle-SymbolicName: tools.vitruv.applications.cbs.equivalence.tests
+Bundle-Version: 0.2.0.qualifier
+Automatic-Module-Name: tools.vitruv.applications.cbs.equivalencetests
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Vendor: vitruv.tools
+Require-Bundle: com.google.guava,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib.macro,
+ org.junit.jupiter.api,
+ tools.vitruv.applications.cbs.equivalencetesttemplates,
+ tools.vitruv.applications.pcmjava.pojotransformations,
+ tools.vitruv.applications.pcmumlclass,
+ tools.vitruv.applications.umljava
+Export-Package: tools.vitruv.applications.cbs.equivalencetests

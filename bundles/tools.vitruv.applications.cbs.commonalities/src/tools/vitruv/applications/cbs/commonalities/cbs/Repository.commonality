@@ -1,3 +1,5 @@
+import tools.vitruv.applications.cbs.commonalities.domaincommon.operators._
+
 concept ComponentBasedSystems
 
 commonality Repository {
@@ -9,9 +11,9 @@ commonality Repository {
 	}
 
 	with ObjectOrientedDesign:(
-		(Package as RepositoryPackage),
-		(Package as ContractsPackage),
-		(Package as DatatypesPackage)
+		Package as RepositoryPackage,
+		Package as ContractsPackage,
+		Package as DatatypesPackage
 	)
 	whereat {
 		ContractsPackage in RepositoryPackage,
@@ -25,7 +27,7 @@ commonality Repository {
 		= PCM:Repository.entityName
 		-> PCM:Resource.name
 
-		= ObjectOrientedDesign:RepositoryPackage.name
+		= firstUpper(ObjectOrientedDesign:RepositoryPackage.name)
 	}
 
 	has components referencing ComponentBasedSystems:Component {

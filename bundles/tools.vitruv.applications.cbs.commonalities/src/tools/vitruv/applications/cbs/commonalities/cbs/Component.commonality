@@ -12,8 +12,8 @@ referenced commonality Component {
 
 	// Contained by ObjectOrientedDesign:RepositoryPackage.subPackages
 	with ObjectOrientedDesign:(
-		(Package as ComponentPackage),
-		(Class as ComponentClass)
+		Package as ComponentPackage,
+		Class as ComponentClass
 	)
 	whereat {
 		ComponentClass in ComponentPackage.classes,

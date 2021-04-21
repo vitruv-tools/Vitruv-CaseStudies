@@ -6,7 +6,6 @@ import tools.vitruv.applications.cbs.commonalities.tests.TestConstants.UML
 
 @Utility
 class UmlTestModelHelper {
-
 	static def newUmlModel() {
 		return UMLFactory.eINSTANCE.createModel => [
 			name = UML.MODEL_NAME
