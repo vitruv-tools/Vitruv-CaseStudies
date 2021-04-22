@@ -119,7 +119,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
 
-	private static int MAXIMUM_SYNC_WAITING_TIME = 15000;
+	private static int MAXIMUM_SYNC_WAITING_TIME = 25000;
 
 	protected Package mainPackage;
 	protected Package secondPackage;
@@ -239,7 +239,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			// propagation process and before we check the models afterwards. Until we have found 
 			// out how to fix that, we need to wait a high enough amount of time to ensure that 
 			// no failures occur.
-			Thread.sleep(100);
+			Thread.sleep(150);
 			// Trigger the build to start change propagation
 			refreshAndBuildProject();
 			int wakeups = 0;
@@ -255,7 +255,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 					fail("Waiting for synchronization timed out");
 				}
 			}
-			Thread.sleep(100);
+			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			fail("An interrupt occurred unexpectedly");
 		}
