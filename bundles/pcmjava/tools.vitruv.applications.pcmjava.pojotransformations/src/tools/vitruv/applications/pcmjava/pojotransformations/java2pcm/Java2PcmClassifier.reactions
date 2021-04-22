@@ -257,6 +257,42 @@ reaction JavaPackageRenamed {
 	}
 }
 
+reaction JavaPackageRemoved {
+	after element java::Package deleted
+	call {
+		removeRepository(affectedEObject)
+		removeSystem(affectedEObject)
+		removeComponent(affectedEObject)
+	}
+}
+
+routine removeRepository(java::Package javaPackage) {
+	match {
+		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage tagged with "package_root"
+	}
+	action {
+		delete pcmRepository
+	}
+}
+
+routine removeSystem(java::Package javaPackage) {
+	match {
+		val pcmSystem = retrieve pcm::System corresponding to javaPackage tagged with "root_system"
+	}
+	action {
+		delete pcmSystem
+	}
+}
+
+routine removeComponent(java::Package javaPackage) {
+	match {
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to javaPackage
+	}
+	action {
+		delete pcmComponent
+	}
+}
+
 routine renameRepository(java::Package javaPackage) {
 	match {
 		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage tagged with "package_root"
