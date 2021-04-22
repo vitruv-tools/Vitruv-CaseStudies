@@ -608,10 +608,14 @@ reaction UmlPackageDeleted {
 
 routine deleteJavaPackage(uml::Package uPackage) {
     match {
-        val jPackage = retrieve java::Package corresponding to uPackage
+        val jPackage = retrieve optional java::Package corresponding to uPackage
     }
     action {
-        delete jPackage
+    	call {
+    		uPackage.packagedElements.filter(org.eclipse.uml2.uml.Package).forEach[deleteJavaPackage()]
+    		uPackage.packagedElements.filter(org.eclipse.uml2.uml.Class).forEach[deleteJavaClass()]
+    	} 
+        delete jPackage.orElse(null)
     }
 }
 
