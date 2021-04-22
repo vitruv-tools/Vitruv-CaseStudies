@@ -15,7 +15,6 @@ import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.commons.NamedElement;
 import org.emftext.language.java.containers.CompilationUnit;
-import org.emftext.language.java.imports.ClassifierImport;
 import org.emftext.language.java.imports.Import;
 import org.emftext.language.java.instantiations.NewConstructorCall;
 import org.emftext.language.java.members.Constructor;
@@ -398,17 +397,13 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	protected void assertOperationProvidedRole(final OperationProvidedRole operationProvidedRole) throws Throwable {
 		final Iterable<EObject> correspondingEObjects = getCorrespondingEObjects(operationProvidedRole, EObject.class);
 		int namespaceClassifierReferenceFound = 0;
-		int importFound = 0;
 		for (final EObject eObject : correspondingEObjects) {
 			if (eObject instanceof NamespaceClassifierReference) {
 				namespaceClassifierReferenceFound++;
-			} else if (eObject instanceof ClassifierImport) {
-				importFound++;
 			} else {
 				fail("operation provided role corresponds to unexpected object: " + eObject);
 			}
 		}
-		assertEquals(1, importFound, "unexpected size of corresponding imports");
 		assertEquals(1, namespaceClassifierReferenceFound,
 				"unexpected size of corresponding namespace classifier references");
 	}

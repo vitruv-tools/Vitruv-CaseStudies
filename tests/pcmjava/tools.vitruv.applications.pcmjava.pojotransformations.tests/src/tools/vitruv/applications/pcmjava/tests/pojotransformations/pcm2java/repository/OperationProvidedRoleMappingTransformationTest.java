@@ -98,7 +98,6 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
 
 		this.assertOperationProvidedRole(operationProvidedRole);
 		final CompilationUnit jaMoPPCu = claimOne(getCorrespondingEObjects(basicComponent, CompilationUnit.class));
-		assertEquals(1, jaMoPPCu.getImports().size(), "Unexpected size of imports");
 		final Class jaMoPPClass = (Class) jaMoPPCu.getClassifiers().get(0);
 		assertEquals(1, jaMoPPClass.getImplements().size(), "Unexpected size of implemented interfaces");
 	}

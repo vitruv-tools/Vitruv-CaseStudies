@@ -938,11 +938,9 @@ reaction DeletedProvidedRoleFromComponent {
 
 routine removeProvidedRole(pcm::ProvidedRole providedRole) {
 	match {
-		val requiredInterfaceImport = retrieve java::ClassifierImport corresponding to providedRole
 		val typeReference = retrieve java::TypeReference corresponding to providedRole
 	}
 	action {
-		delete requiredInterfaceImport
 		delete typeReference.getPureClassifierReference // seems to be necessary to properly delete reference if it is a NamespaceClassifierReference
 		delete typeReference
 	}
