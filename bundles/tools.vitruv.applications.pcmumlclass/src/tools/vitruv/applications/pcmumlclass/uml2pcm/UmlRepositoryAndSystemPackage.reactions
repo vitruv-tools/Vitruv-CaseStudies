@@ -60,7 +60,8 @@ routine insertCorrespondingRepositoryOrSystem(uml::Package umlPackage, uml::Pack
 				//no move-operation necessary since both repository and system are root elements
 			} else {
 				// nested component repositories and component based systems are not allowed
-				deleteCorrespondingRepositoryOrSystem(umlPackage)
+				deleteCorrespondingRepository(umlPackage)
+				deleteCorrespondingSystem(umlPackage)
 			}
 		}
 	}
@@ -212,20 +213,9 @@ routine createCorrespondingSystem(uml::Package umlPkg, uml::Package umlParentPkg
 
 reaction RepositoryOrSystemPackageDeleted {
 	after element uml::Package deleted
-	call deleteCorrespondingRepositoryOrSystem(affectedEObject)
-}
-
-
-routine deleteCorrespondingRepositoryOrSystem(uml::Package umlPackage) {
-	match {
-		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPackage tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		val pcmSystem = retrieve optional pcm::System corresponding to umlPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
-	}
-	action {
-		call {
-			pcmRepository.ifPresent[deleteCorrespondingRepository(umlPackage)]
-			pcmSystem.ifPresent[deleteCorrespondingSystem(umlPackage)]
-		}
+	call {
+		deleteCorrespondingRepository(affectedEObject)
+		deleteCorrespondingSystem(affectedEObject)
 	}
 }
 
