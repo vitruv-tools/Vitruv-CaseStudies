@@ -898,11 +898,6 @@ routine addProvidedRole(pcm::OperationProvidedRole providedRole) {
 		val javaClass = retrieve java::Class corresponding to providedRole.providingEntity_ProvidedRole
 	}
 	action { 
-		// TODO HK This should be partly in the context of the compilation unit
-		val interfaceImport = create java::ClassifierImport and initialize {
-			addImportToCompilationUnitOfClassifier(interfaceImport, javaClass, operationProvidingInterface)
-		}
-		add correspondence between interfaceImport and providedRole
 		val namespaceClassifierReference = create java::NamespaceClassifierReference and initialize {
 			createNamespaceClassifierReference(namespaceClassifierReference, operationProvidingInterface)
 		}
