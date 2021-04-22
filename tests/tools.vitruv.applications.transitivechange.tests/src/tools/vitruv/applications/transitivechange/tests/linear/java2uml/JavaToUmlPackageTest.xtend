@@ -70,7 +70,6 @@ class JavaToUmlPackageTest extends JavaToUmlTransformationTest {
 			delete(null)
 		]
 		assertTrue(getUmlPackagedElementsbyName(Package, PACKAGE_LEVEL_1).nullOrEmpty)
-
 	}
 
 	@Test
