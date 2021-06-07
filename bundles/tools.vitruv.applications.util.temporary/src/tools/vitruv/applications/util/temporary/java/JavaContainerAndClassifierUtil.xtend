@@ -33,6 +33,8 @@ import org.emftext.language.java.commons.NamespaceAwareElement
 import static java.util.Collections.emptyList
 import org.emftext.language.java.containers.ContainersPackage
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
+import org.emftext.language.java.JavaClasspath
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 /**
  * Class for java classifier, package and compilation unit util functions
@@ -184,12 +186,6 @@ class JavaContainerAndClassifierUtil {
 	}
 
 	def static removeJavaClassifierFromPackage(Package jPackage, ConcreteClassifier jClassifier) {
-		val iter = jPackage.compilationUnits.iterator
-		while (iter.hasNext) {
-			if (iter.next.name.equals(jClassifier.name)) {
-				iter.remove
-			}
-		}
 	}
 
 	def static File createPackageInfo(String directory, String packageName) {
@@ -212,7 +208,12 @@ class JavaContainerAndClassifierUtil {
 	 */
 	static def <T extends ConcreteClassifier> T findClassifier(String name, Package javaPackage,
 		java.lang.Class<T> classifierType) {
-		val matchingClassifiers = javaPackage.compilationUnits.map[it.classifiers].flatten.filter(classifierType).filter [
+		val possibleClassifiers = JavaClasspath.get.getConcreteClassifiers(javaPackage.namespacesAsString)
+		val matchingClassifiers = possibleClassifiers.map[
+			EcoreUtil.resolve(it, javaPackage) as ConcreteClassifier
+		].filter[it !== null].filter[classifierType.isInstance(it)].map[
+			it as T
+		].filter[
 			it.name.toFirstUpper == name.toFirstUpper
 		]
 		if (matchingClassifiers.size > 1)
