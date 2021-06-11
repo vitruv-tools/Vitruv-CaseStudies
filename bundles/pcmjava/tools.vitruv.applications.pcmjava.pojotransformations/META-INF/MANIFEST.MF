@@ -6,7 +6,15 @@ Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations
 Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools
-Export-Package: tools.vitruv.applications.pcmjava.pojotransformations,
+Export-Package: mir.reactions.java2Pcm,
+ mir.reactions.java2PcmClassifier,
+ mir.reactions.java2PcmMethod,
+ mir.reactions.pcm2java,
+ mir.routines.java2Pcm,
+ mir.routines.java2PcmClassifier,
+ mir.routines.java2PcmMethod,
+ mir.routines.pcm2java,
+ tools.vitruv.applications.pcmjava.pojotransformations,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java
 Require-Bundle: tools.vitruv.framework.applications,

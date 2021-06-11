@@ -817,7 +817,6 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 			compilationUnit.classifiers += classifier;
 			persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
 		}
-		call containingPackage.compilationUnits += compilationUnit
 		add correspondence between compilationUnit and sourceElementMappedToClass
 	}
 }
