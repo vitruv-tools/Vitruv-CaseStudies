@@ -87,6 +87,9 @@ class JavaTypeUtil {
      */
     def static Classifier getNormalizedClassifierFromTypeReference(TypeReference typeRef) {
         var type = getTypeFromReference(typeRef)
+        if (type instanceof PrimitiveType) {
+        	type = type.wrapPrimitiveType
+        }
         if (type instanceof Classifier) {
             if (type.eIsProxy) { // resolve proxy
                 val resourceSet = type.eResource?.resourceSet // resource can be null, but EcoreUtil.resolve() can handle null as resource set
