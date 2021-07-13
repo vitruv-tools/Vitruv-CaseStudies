@@ -26,7 +26,7 @@
 		<repository>
 			<id>Palladiosimulator</id>
 			<layout>p2</layout>
-			<url>https://updatesite.palladio-simulator.com/palladio-core-pcm/releases/4.3.0/</url>
+			<url>https://updatesite.palladio-simulator.com/palladio-core-pcm/releases/5.0.0/</url>
 		</repository>
 	</repositories>
 
