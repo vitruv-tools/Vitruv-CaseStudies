@@ -20,19 +20,13 @@
    </license>
 
    <requires>
-      <import plugin="com.google.guava"/>
-      <import plugin="org.eclipse.xtext.xbase.lib"/>
-      <import plugin="org.eclipse.xtend.lib"/>
-      <import plugin="org.eclipse.xtend.lib.macro"/>
-      <import plugin="org.apache.log4j"/>
-      <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.uml2.uml"/>
-      <import feature="tools.vitruv.framework.feature" version="1.0.0"/>
-      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="1.0.0"/>
-      <import feature="tools.vitruv.domains.pcm.feature" version="1.0.0"/>
-      <import feature="tools.vitruv.domains.uml.feature" version="1.0.0"/>
       <import feature="tools.vitruv.applications.util.temporary.feature"/>
+      <import plugin="tools.vitruv.domains.uml"/>
+      <import plugin="tools.vitruv.domains.pcm"/>
+      <import plugin="tools.vitruv.framework.applications"/>
+      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
+      <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.pcm"/>
    </requires>
 
    <plugin
