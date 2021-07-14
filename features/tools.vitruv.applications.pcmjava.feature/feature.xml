@@ -22,10 +22,6 @@
    <requires>
       <import plugin="org.eclipse.xtend.lib"/>
       <import plugin="org.apache.log4j"/>
-      <import feature="tools.vitruv.framework.feature" version="1.0.0"/>
-      <import feature="tools.vitruv.domains.java.feature" version="1.0.0"/>
-      <import feature="tools.vitruv.domains.pcm.feature" version="1.0.0"/>
-      <import feature="tools.vitruv.applications.util.temporary.feature"/>
       <import plugin="tools.vitruv.framework.change"/>
       <import plugin="tools.vitruv.framework.propagation"/>
       <import plugin="tools.vitruv.domains.pcm"/>
@@ -33,6 +29,7 @@
       <import plugin="tools.vitruv.applications.util.temporary"/>
       <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
       <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
+      <import feature="tools.vitruv.applications.util.temporary.feature"/>
    </requires>
 
    <plugin

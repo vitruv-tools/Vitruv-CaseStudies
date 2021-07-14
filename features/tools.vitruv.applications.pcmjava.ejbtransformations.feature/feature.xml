@@ -24,22 +24,13 @@
          version="0.3.0.qualifier"/>
 
    <requires>
-      <import plugin="org.apache.log4j"/>
-      <import plugin="com.google.guava"/>
-      <import plugin="org.eclipse.xtend.lib"/>
-      <import plugin="org.eclipse.xtend.lib.macro"/>
-      <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.emftext.language.java"/>
-      <import plugin="org.eclipse.emf.ecore.xmi" version="2.9.1" match="greaterOrEqual"/>
-      <import plugin="org.emftext.language.java.resource"/>
-      <import plugin="org.emftext.language.java.resource.java"/>
-      <import plugin="org.emftext.commons.antlr3_4_0" version="3.4.0" match="greaterOrEqual"/>
-      <import plugin="org.emftext.language.java.resource.bcel"/>
-      <import feature="tools.vitruv.framework.feature"/>
-      <import feature="tools.vitruv.extensions.dslsruntime.feature"/>
-      <import feature="tools.vitruv.domains.java.feature"/>
-      <import feature="tools.vitruv.domains.pcm.feature"/>
+      <import plugin="tools.vitruv.framework.applications"/>
+      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
+      <import plugin="tools.vitruv.applications.pcmjava.util"/>
+      <import plugin="tools.vitruv.applications.pcmjava.common"/>
+      <import plugin="tools.vitruv.domains.pcm"/>
+      <import plugin="tools.vitruv.domains.java"/>
+      <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
    </requires>
 
    <plugin
