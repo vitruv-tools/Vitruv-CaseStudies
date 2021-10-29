@@ -7,6 +7,7 @@ import org.emftext.language.java.classifiers.Interface
 import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.createOrFindUmlPackage
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlClass
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlInterface
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
@@ -107,7 +108,7 @@ routine createOrFindUmlClass(java::Class jClass, java::CompilationUnit jCompUnit
 	}
     action {
 		call {
-			val uClass = findUmlClass(uModel, jClass.name, jCompUnit.namespaces.last)
+			val uClass = findUmlClass(uModel, jClass.name, jCompUnit.namespaces)
 			if(uClass === null) {
 				createUmlClass(jClass, jCompUnit)
 			} else {
@@ -333,7 +334,7 @@ routine createOrFindUmlInterface(java::Interface jInterface, java::CompilationUn
 	}
 	action {
 		call {
-			val uInterface = findUmlInterface(uModel, jInterface.name, jCompUnit.namespaces.last)
+			val uInterface = findUmlInterface(uModel, jInterface.name, jCompUnit.namespaces)
 			if(uInterface === null) {
 				createUmlInterface(jInterface, jCompUnit)
 			} else {
@@ -441,7 +442,7 @@ routine createOrFindUmlPackage(java::Package jPackage) {
 	}
 	action {
 		call {
-			val uPackage = findUmlPackage(uModel, jPackage.name)
+			val uPackage = findUmlPackage(uModel, jPackage.namespaces, jPackage.name)
 			if(uPackage === null) {
 				createUmlPackage(jPackage, uModel)
 			} else {
@@ -468,7 +469,7 @@ routine createUmlPackage(java::Package jPackage, uml::Model uModel) {
 		        addUmlElementToPackage(uPackage, uModel)
 		    } else {
 		    	// find package by name is necessary, since jPackage does not explicitly model parent-child package relations
-		        addUmlElementToPackage(uPackage, findUmlPackage(uModel, jPackage.namespaces.last))
+		        addUmlElementToPackage(uPackage, findUmlPackage(uModel, jPackage.namespaces))
 		    }
 		}
 	}
@@ -531,7 +532,7 @@ routine addUmlElementToModelOrPackage(java::CompilationUnit jCompUnit, uml::Clas
             val uPackage = if (jCompUnit.namespaces.nullOrEmpty) {
                 uModel
             } else {
-                findUmlPackage(uModel, jCompUnit.namespaces.last)
+                createOrFindUmlPackage(uModel, jCompUnit.namespaces)
             }
             
             if (uPackage !== uClassifier.package) {

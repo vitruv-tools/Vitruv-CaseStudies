@@ -5,6 +5,7 @@ import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
+import org.emftext.language.java.types.Void
 import org.eclipse.uml2.uml.OperationOwner
 import tools.vitruv.applications.umljava.util.UmlJavaCorrespondenceTag
 
@@ -296,12 +297,14 @@ routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
     action {
         execute {
             var uParam = uOperation.getReturnResult
-            if (uParam === null){
-                // create a new return parameter
-                uParam = uOperation.createOwnedParameter("returnParameter", null)
-                uParam.direction = ParameterDirectionKind.RETURN_LITERAL
+            if (jMeth.typeReference !== null && !(jMeth.typeReference instanceof Void)) {
+	            if (uParam === null){
+	                // create a new return parameter
+	                uParam = uOperation.createOwnedParameter("", null)
+	                uParam.direction = ParameterDirectionKind.RETURN_LITERAL
+	            }
+	            javaToUmlTypePropagation.propagateMethodReturnTypeChange(jMeth, uParam)
             }
-            javaToUmlTypePropagation.propagateMethodReturnTypeChange(jMeth, uParam)
         }
     }
 }

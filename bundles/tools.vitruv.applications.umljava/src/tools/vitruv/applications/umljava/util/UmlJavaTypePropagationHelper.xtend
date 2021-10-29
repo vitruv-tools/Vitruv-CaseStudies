@@ -1,11 +1,13 @@
 package tools.vitruv.applications.umljava.util
 
+import edu.kit.ipd.sdq.activextendannotations.Utility
 import java.util.ArrayList
 import java.util.HashSet
 import java.util.LinkedList
 import java.util.List
 import java.util.Optional
 import org.apache.log4j.Logger
+import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLPackage
@@ -17,6 +19,7 @@ import org.emftext.language.java.types.Int
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
+import tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil
 import tools.vitruv.domains.java.util.JavaModificationUtil
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
@@ -25,7 +28,6 @@ import tools.vitruv.framework.userinteraction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
  * Helper class for the Uml <-> Java - reactions. Contains functions for handling java::TypeReferences
@@ -41,6 +43,7 @@ class UmlJavaTypePropagationHelper {
 	public static val UML_PRIMITIVE_REAL_TAG = "Real"
 	public static val UML_PRIMITIVE_INTEGER_TAG = "Integer"
 	public static val UML_PRIMITIVE_STRING_TAG = "String"
+	public static val UML_PRIMITIVE_OBJECT_TAG = "Object"
 
 	static val List<Class<?>> supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
 
@@ -78,8 +81,32 @@ class UmlJavaTypePropagationHelper {
 		}
 
 		val classifier = getNormalizedClassifierFromTypeReference(jRef)
-		if (classifier !== null)
-			return ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, classifier, null, Type).head
+		if (classifier !== null) {
+			val type = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, classifier, null, Type).head
+			//if (!getQualifiedName(classifier).startsWith("java.")) {
+			if (type !== null) {
+				return type;
+			} else {
+				// create dummy type
+				// TODO
+				val uModel = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.MODEL, null, Model).head
+				val uPackage = UmlClassifierAndPackageUtil.createOrFindUmlPackage(uModel, classifier.containingPackageName)
+				if (classifier instanceof org.emftext.language.java.classifiers.Class) {
+					val uClass = UmlClassifierAndPackageUtil.findUmlClass(uModel, classifier.name, classifier.containingPackageName)
+					if (uClass !== null)
+						return uClass
+					else
+						return UmlClassifierAndPackageUtil.createSimpleUmlClass(uPackage, classifier.name)
+				}
+				else if (classifier instanceof org.emftext.language.java.classifiers.Interface) {
+					val uInterface = UmlClassifierAndPackageUtil.findUmlInterface(uModel, classifier.name, classifier.containingPackageName)
+					if (uInterface !== null)
+						return uInterface
+					else
+						return UmlClassifierAndPackageUtil.createSimpleUmlInterface(uPackage, classifier.name)
+				}
+			}
+		}
 		else {
 			return null
 		}
@@ -140,7 +167,13 @@ class UmlJavaTypePropagationHelper {
 				val umlString = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm,
 					UMLPackage.Literals.PRIMITIVE_TYPE, UML_PRIMITIVE_STRING_TAG, PrimitiveType).head
 				return umlString
-			} else {
+			}
+//			else if (getQualifiedName(classifier) == "java.lang.Object") {
+//				val umlString = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm,
+//					UMLPackage.Literals.PRIMITIVE_TYPE, UML_PRIMITIVE_OBJECT_TAG, PrimitiveType).head
+//				return umlString
+//			}
+			 else {
 				return null
 			}
 		}
