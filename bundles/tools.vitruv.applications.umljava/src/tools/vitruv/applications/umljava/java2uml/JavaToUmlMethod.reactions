@@ -42,7 +42,9 @@ routine createOrFindUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClas
     }
     action {
         call {
-            val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst[name == jMethod.name]
+            //val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst[name == jMethod.name && parameters.map[typeReference.pureClassifierReference.target.name] == jMethod.parameters.map[typeReference.pureClassifierReference.target.name]]
+            //val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst[name == jMethod.name]
+            val foundMethod = null
             if (foundMethod === null) {
                 createUmlClassMethod(jMethod, uClassifier)
             } else {
@@ -76,7 +78,8 @@ routine createOrFindUmlInterfaceMethod(java::InterfaceMethod jMethod, java::Inte
     }
     action {
         call {
-            val foundMethod = uInterface.ownedOperations.findFirst[name == jMethod.name]
+            //val foundMethod = uInterface.ownedOperations.findFirst[name == jMethod.name]
+            val foundMethod = null
             if (foundMethod === null) {
                 createUmlInterfaceMethod(jMethod, uInterface)
             } else {
@@ -118,7 +121,8 @@ routine createOrFindUmlConstructor(java::Constructor jConstructor, java::Concret
     }
     action {
         call {
-            val foundConstructor = uClassifier.ownedOperations.findFirst[name == jConstructor.name]
+            //val foundConstructor = uClassifier.ownedOperations.findFirst[name == jConstructor.name]
+            val foundConstructor = null
             if (foundConstructor === null) {
                 createUmlConstructor(jConstructor, uClassifier)
             } else {
