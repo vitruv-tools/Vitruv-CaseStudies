@@ -5,6 +5,7 @@ on:
     branches: [master]
   create:
     tags:
+  workflow_dispatch:
   pull_request:
   schedule:
     - cron: '30 4 * * *' # run nightly at 4:30 am
