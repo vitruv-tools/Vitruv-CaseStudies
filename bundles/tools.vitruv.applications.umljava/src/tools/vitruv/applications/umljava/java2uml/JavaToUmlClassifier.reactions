@@ -224,6 +224,7 @@ reaction JavaSuperClassChanged {
     		deleteUmlSuperClassGeneralization(oldValue)
     	if (newValue !== null && getNormalizedClassifierFromTypeReference(newValue) instanceof Class){
     		val jSuperClass = getNormalizedClassifierFromTypeReference(newValue) as Class
+    		createOrFindUmlClass(jSuperClass, jSuperClass.containingCompilationUnit)
     		addUmlSuperClassGeneralization(affectedEObject, newValue, jSuperClass)
     	}
     }
@@ -260,6 +261,7 @@ reaction JavaClassImplementAdded {
     after element java::TypeReference created and inserted in java::Class[implements]
     call{
         val jInterface = getNormalizedClassifierFromTypeReference(newValue) as Interface
+        createOrFindUmlInterface(jInterface, jInterface.containingCompilationUnit)
         addUmlClassImplement(affectedEObject, newValue, jInterface)
     }
 }
@@ -360,6 +362,7 @@ reaction JavaSuperInterfaceAdded {
     after element java::TypeReference inserted in java::Interface[^extends]
     call {
     	val jSuperInterface = getNormalizedClassifierFromTypeReference(newValue) as Interface
+    	createOrFindUmlInterface(jSuperInterface, jSuperInterface.containingCompilationUnit)
     	addUmlSuperinterfaces(affectedEObject, newValue, jSuperInterface)
     }
 }
