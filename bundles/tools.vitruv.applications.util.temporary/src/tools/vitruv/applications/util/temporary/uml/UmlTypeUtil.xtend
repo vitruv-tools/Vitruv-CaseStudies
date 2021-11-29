@@ -46,15 +46,6 @@ class UmlTypeUtil { // TODO TS merge with UmlClassifierAndPackagableUtil?
             if (alreadyRegistered === null)
                 ReactionsCorrespondenceHelper.addCorrespondence(cm, UMLPackage.Literals.PRIMITIVE_TYPE, primitive, primitive.name)
         }
-//        // register a type for Object (similar as for String)
-//        {
-//	        var List<PrimitiveType> ecorePrimitiveTypes = #[]
-//	        val uri = URI.createURI("pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml")
-//	        val resource = rs.getResource(uri, true)
-//	        ecorePrimitiveTypes = resource.allContents.filter(PrimitiveType).toList
-//	        val objectType = ecorePrimitiveTypes.filter(p | p.name.equals("EJavaObject")).head
-//	        ReactionsCorrespondenceHelper.addCorrespondence(cm, UMLPackage.Literals.PRIMITIVE_TYPE, objectType, "Object")
-//        }
     }
 
     def static getUmlPrimitiveTypes(EObject alreadyPersistedObject) {

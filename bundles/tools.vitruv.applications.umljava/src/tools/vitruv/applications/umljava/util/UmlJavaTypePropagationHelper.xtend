@@ -43,7 +43,6 @@ class UmlJavaTypePropagationHelper {
 	public static val UML_PRIMITIVE_REAL_TAG = "Real"
 	public static val UML_PRIMITIVE_INTEGER_TAG = "Integer"
 	public static val UML_PRIMITIVE_STRING_TAG = "String"
-	public static val UML_PRIMITIVE_OBJECT_TAG = "Object"
 
 	static val List<Class<?>> supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
 
@@ -83,12 +82,10 @@ class UmlJavaTypePropagationHelper {
 		val classifier = getNormalizedClassifierFromTypeReference(jRef)
 		if (classifier !== null) {
 			val type = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, classifier, null, Type).head
-			//if (!getQualifiedName(classifier).startsWith("java.")) {
 			if (type !== null) {
 				return type;
 			} else {
 				// create dummy type
-				// TODO
 				val uModel = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.MODEL, null, Model).head
 				val uPackage = UmlClassifierAndPackageUtil.createOrFindUmlPackage(uModel, classifier.containingPackageName)
 				if (classifier instanceof org.emftext.language.java.classifiers.Class) {
@@ -97,8 +94,7 @@ class UmlJavaTypePropagationHelper {
 						return uClass
 					else
 						return UmlClassifierAndPackageUtil.createSimpleUmlClass(uPackage, classifier.name)
-				}
-				else if (classifier instanceof org.emftext.language.java.classifiers.Interface) {
+				} else if (classifier instanceof org.emftext.language.java.classifiers.Interface) {
 					val uInterface = UmlClassifierAndPackageUtil.findUmlInterface(uModel, classifier.name, classifier.containingPackageName)
 					if (uInterface !== null)
 						return uInterface
@@ -167,13 +163,7 @@ class UmlJavaTypePropagationHelper {
 				val umlString = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm,
 					UMLPackage.Literals.PRIMITIVE_TYPE, UML_PRIMITIVE_STRING_TAG, PrimitiveType).head
 				return umlString
-			}
-//			else if (getQualifiedName(classifier) == "java.lang.Object") {
-//				val umlString = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm,
-//					UMLPackage.Literals.PRIMITIVE_TYPE, UML_PRIMITIVE_OBJECT_TAG, PrimitiveType).head
-//				return umlString
-//			}
-			 else {
+			} else {
 				return null
 			}
 		}

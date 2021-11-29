@@ -29,10 +29,10 @@ reaction JavaClassMethodCreated {
     after element java::ClassMethod created and inserted in java::ConcreteClassifier[members]
     with (affectedEObject instanceof Class)
         || (affectedEObject instanceof Enumeration)
-    call createOrFindUmlClassMethod(newValue, affectedEObject)
+    call createUmlClassMethod(newValue, affectedEObject)
 }
 
-routine createOrFindUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClassifier jClassifier) {
+routine createUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClassifier jClassifier) {
      match {
         val uClassifier = retrieve uml::Classifier corresponding to jClassifier
             with uClassifier instanceof OperationOwner
@@ -40,21 +40,6 @@ routine createOrFindUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClas
         require absence of uml::Property corresponding to jMethod tagged with UmlJavaCorrespondenceTag.GETTER
         require absence of uml::Property corresponding to jMethod tagged with UmlJavaCorrespondenceTag.SETTER
     }
-    action {
-        call {
-            //val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst[name == jMethod.name && parameters.map[typeReference.pureClassifierReference.target.name] == jMethod.parameters.map[typeReference.pureClassifierReference.target.name]]
-            //val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst[name == jMethod.name]
-            val foundMethod = null
-            if (foundMethod === null) {
-                createUmlClassMethod(jMethod, uClassifier)
-            } else {
-                addUmlMethodCorrespondence(foundMethod, jMethod)
-            }
-        }
-    }
-}
-
-routine createUmlClassMethod(java::ClassMethod jMethod, uml::Classifier uClassifier) {
     action {
         val uOperation = create uml::Operation and initialize {
             uOperation.name = jMethod.name;
@@ -68,34 +53,20 @@ routine createUmlClassMethod(java::ClassMethod jMethod, uml::Classifier uClassif
 
 reaction JavaInterfaceMethodCreated {
     after element java::InterfaceMethod created and inserted in java::Interface[members]
-    call createOrFindUmlInterfaceMethod(newValue, affectedEObject)
+    call createUmlInterfaceMethod(newValue, affectedEObject)
 }
 
-routine createOrFindUmlInterfaceMethod(java::InterfaceMethod jMethod, java::Interface jInterface) {
+routine createUmlInterfaceMethod(java::InterfaceMethod jMethod, java::Interface jInterface) {
      match {
         val uInterface = retrieve uml::Interface corresponding to jInterface
         require absence of uml::Operation corresponding to jMethod
     }
     action {
-        call {
-            //val foundMethod = uInterface.ownedOperations.findFirst[name == jMethod.name]
-            val foundMethod = null
-            if (foundMethod === null) {
-                createUmlInterfaceMethod(jMethod, uInterface)
-            } else {
-                addUmlMethodCorrespondence(foundMethod, jMethod)
-            }
-        }
-    }
-}
-
-routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, uml::Interface uInterface) {
-    action {
         val uOperation = create uml::Operation and initialize {
-            uOperation.name = jMeth.name;
+            uOperation.name = jMethod.name;
             uOperation.isAbstract = true;
         }
-        add correspondence between uOperation and jMeth
+        add correspondence between uOperation and jMethod
         update uInterface {
             uInterface.ownedOperations += uOperation;
         }
@@ -111,28 +82,14 @@ routine addUmlMethodCorrespondence(uml::Operation uOperation, java::Member jMeth
 
 reaction JavaConstructorCreated {
     after element java::Constructor created and inserted in java::ConcreteClassifier[members]
-    call createOrFindUmlConstructor(newValue, affectedEObject)
+    call createUmlConstructor(newValue, affectedEObject)
 }
 
-routine createOrFindUmlConstructor(java::Constructor jConstructor, java::ConcreteClassifier jClassifier) {
+routine createUmlConstructor(java::Constructor jConstructor, java::ConcreteClassifier jClassifier) {
      match {
         val uClassifier = retrieve uml::Class corresponding to jClassifier
         require absence of uml::Operation corresponding to jConstructor
     }
-    action {
-        call {
-            //val foundConstructor = uClassifier.ownedOperations.findFirst[name == jConstructor.name]
-            val foundConstructor = null
-            if (foundConstructor === null) {
-                createUmlConstructor(jConstructor, uClassifier)
-            } else {
-                addUmlMethodCorrespondence(foundConstructor, jConstructor)
-            }
-        }
-    }
-}
-
-routine createUmlConstructor(java::Constructor jConstructor, uml::Class uClassifier) {
     action {
         val uConstructor = create uml::Operation and initialize {
             uConstructor.name = jConstructor.name

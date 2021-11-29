@@ -42,37 +42,18 @@ class UmlClassifierAndPackageUtil {
      * @param packageName the package name for which a fitting UML package should be retrieved
      * @return the UML package or null if none could be found
      */
-    def static Package findUmlPackage(Model umlModel, String packageName) { // NOTE: this is not used anymore
-        val Set<Package> allPackages = umlModel.eAllContents.filter(Package).toSet
-        val packages = allPackages.filter[name == packageName]
-        if (packages.nullOrEmpty) {
-            logger.warn("The UML-Package with the name " + packageName + " does not exist in the correspondence model")
-            return null
-        }
-        if (packages.size > 1) {
-            throw new IllegalStateException("There is more than one package with name " + packageName + " in the UML model.")
-        }
-        return packages.head
-    }
-    
     def static Package findUmlPackage(Model umlModel, EList<String> packageNames) {
     	val qualifiedPackageName = umlModel.name + (!packageNames.empty ? "::" : "") + packageNames.stream().collect(Collectors.joining("::"))
-        val Set<Package> allPackages = umlModel.eAllContents.filter(Package).toSet
-        val packages = allPackages.filter[qualifiedName == qualifiedPackageName]
-        if (packages.nullOrEmpty) {
-            logger.warn("The UML-Package with the name " + qualifiedPackageName + " does not exist in the correspondence model")
-            return null
-        }
-        if (packages.size > 1) {
-            throw new IllegalStateException("There is more than one package with name " + qualifiedPackageName + " in the UML model.")
-        }
-        return packages.head
+        return findUmlPackage(umlModel, qualifiedPackageName)
     }
 
     def static Package findUmlPackage(Model umlModel, EList<String> packageNames, String packageName) {
-    	val qualifiedTempPackageName = umlModel.name + (!packageNames.empty ? "::" : "") + packageNames.stream().collect(Collectors.joining("::"))
-    	val qualifiedPackageName = qualifiedTempPackageName + (!packageName.empty ? "::" : "") + packageName
-        val Set<Package> allPackages = umlModel.eAllContents.filter(Package).toSet
+    	val qualifiedPackageName = umlModel.name + (!packageNames.empty ? "::" : "") + packageNames.stream().collect(Collectors.joining("::")) + (!packageName.empty ? "::" : "") + packageName
+		return findUmlPackage(umlModel, qualifiedPackageName)
+    }
+    
+    def private static Package findUmlPackage(Model umlModel, String qualifiedPackageName) {
+    	val Set<Package> allPackages = umlModel.eAllContents.filter(Package).toSet
         val packages = allPackages.filter[qualifiedName == qualifiedPackageName]
         if (packages.nullOrEmpty) {
             logger.warn("The UML-Package with the name " + qualifiedPackageName + " does not exist in the correspondence model")
@@ -83,7 +64,6 @@ class UmlClassifierAndPackageUtil {
         }
         return packages.head
     }
-
 
     def static Package createOrFindUmlPackage(Model umlModel, List<String> packageNames) {
     	val qualifiedPackageName = umlModel.name + (!packageNames.empty ? "::" : "") + packageNames.stream().collect(Collectors.joining("::"))
@@ -92,7 +72,6 @@ class UmlClassifierAndPackageUtil {
         if (packages.nullOrEmpty) {
         	val uPackage = UMLFactory.eINSTANCE.createPackage
 	        uPackage.name = packageNames.last
-	        
 	        val parentPackage = 
 		        if (packageNames.size > 1)
 		        	createOrFindUmlPackage(umlModel, packageNames.take(packageNames.size - 1).toList)
@@ -106,7 +85,6 @@ class UmlClassifierAndPackageUtil {
         }
         return packages.head
     }
-
 
     /**
      * Searches and retrieves the UML interface located in a specific package of a UML model that has an equal name as the given package name (ignoring the capitalization of the first letter).
