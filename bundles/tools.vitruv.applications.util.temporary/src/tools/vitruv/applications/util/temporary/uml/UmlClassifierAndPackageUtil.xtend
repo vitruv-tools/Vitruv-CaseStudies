@@ -42,17 +42,22 @@ class UmlClassifierAndPackageUtil {
      * @param packageName the package name for which a fitting UML package should be retrieved
      * @return the UML package or null if none could be found
      */
+    def static Package findUmlPackage(Model umlModel, String packageName) {
+    	val qualifiedPackageName = umlModel.name + (!packageName.empty ? "::" : "") + packageName
+        return findUmlPackageByQualifiedName(umlModel, qualifiedPackageName)
+    }
+
     def static Package findUmlPackage(Model umlModel, EList<String> packageNames) {
     	val qualifiedPackageName = umlModel.name + (!packageNames.empty ? "::" : "") + packageNames.stream().collect(Collectors.joining("::"))
-        return findUmlPackage(umlModel, qualifiedPackageName)
+        return findUmlPackageByQualifiedName(umlModel, qualifiedPackageName)
     }
 
     def static Package findUmlPackage(Model umlModel, EList<String> packageNames, String packageName) {
     	val qualifiedPackageName = umlModel.name + (!packageNames.empty ? "::" : "") + packageNames.stream().collect(Collectors.joining("::")) + (!packageName.empty ? "::" : "") + packageName
-		return findUmlPackage(umlModel, qualifiedPackageName)
+		return findUmlPackageByQualifiedName(umlModel, qualifiedPackageName)
     }
-    
-    def private static Package findUmlPackage(Model umlModel, String qualifiedPackageName) {
+
+    def private static Package findUmlPackageByQualifiedName(Model umlModel, String qualifiedPackageName) {
     	val Set<Package> allPackages = umlModel.eAllContents.filter(Package).toSet
         val packages = allPackages.filter[qualifiedName == qualifiedPackageName]
         if (packages.nullOrEmpty) {
