@@ -1,8 +1,7 @@
 package tools.vitruv.applications.pcmjava.tests;
 
-import org.junit.platform.runner.JUnitPlatform;
 import org.junit.platform.suite.api.SelectClasses;
-import org.junit.runner.RunWith;
+import org.junit.platform.suite.api.Suite;
 
 import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.ClassMappingTransformationTest;
 import tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm.ClassMethodMappingTransformationTest;
@@ -34,8 +33,6 @@ import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.syst
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system.RequiredDelegationConnectorMappingTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system.SystemMappingTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.transformations.JaMoPPTest;
-
-@RunWith(JUnitPlatform.class)
 
 @SelectClasses({
 	JaMoPPTest.class,
@@ -72,6 +69,7 @@ import tools.vitruv.applications.pcmjava.tests.transformations.JaMoPPTest;
 	EjbInterfaceMappingTest.class,
 	EjbPackageMappingTest.class
 })
+@Suite
 public class PcmJavaTestSuite {
 
 }
