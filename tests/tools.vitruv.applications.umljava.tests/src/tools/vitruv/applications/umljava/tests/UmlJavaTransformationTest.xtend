@@ -56,9 +56,9 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	protected def View createUmlView() {
-		val selector = ViewTypeFactory.createBasicViewType("UML", virtualModel).createSelector()
+		val selector = virtualModel.createSelector(ViewTypeFactory.createBasicViewType("UML"));
 		
-		for (umlModel : selector.elements.filter(Model)) {
+		for (umlModel : selector.selectableElements.filter(Model)) {
 			selector.setSelected(umlModel, true)	
 		}
 		val view = selector.createView()
@@ -67,9 +67,9 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	protected def View createJavaView() {
-		val selector = ViewTypeFactory.createBasicViewType("Java", virtualModel).createSelector()
+		val selector = virtualModel.createSelector(ViewTypeFactory.createBasicViewType("Java"))
 		
-		for (javaModel : selector.elements.filter(CompilationUnit)) {
+		for (javaModel : selector.selectableElements.filter(CompilationUnit)) {
 			selector.setSelected(javaModel, true)
 		}
 		val view = selector.createView()
@@ -78,9 +78,9 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	protected def View createUmlAndJavaView() {
-		val selector = ViewTypeFactory.createBasicViewType("UML and Java", virtualModel).createSelector()
+		val selector = virtualModel.createSelector(ViewTypeFactory.createBasicViewType("UML and Java"))
 		
-		for (rootElement : selector.elements.filter[it instanceof CompilationUnit || it instanceof Model]) {
+		for (rootElement : selector.selectableElements.filter[it instanceof CompilationUnit || it instanceof Model]) {
 			selector.setSelected(rootElement, true)	
 		}
 		val view = selector.createView()
