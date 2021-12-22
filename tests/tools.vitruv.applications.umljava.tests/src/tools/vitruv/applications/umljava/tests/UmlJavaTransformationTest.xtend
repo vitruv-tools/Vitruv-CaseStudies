@@ -18,6 +18,7 @@ import org.eclipse.uml2.uml.UMLPackage
 import org.emftext.language.java.containers.CompilationUnit
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.getUniqueUmlModel
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
+import java.util.Collection
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected static val Logger logger = Logger.getLogger(UmlJavaTransformationTest)
@@ -56,31 +57,21 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	protected def View createUmlView() {
-		val selector = virtualModel.createSelector(ViewTypeFactory.createBasicViewType("UML"));
-		
-		for (umlModel : selector.selectableElements.filter(Model)) {
-			selector.setSelected(umlModel, true)	
-		}
-		val view = selector.createView()
-		assertNotNull(view, "View must not be null")
-		return view
+		createViewOfElements("UML", #{Model})
 	}
 	
-	protected def View createJavaView() {
-		val selector = virtualModel.createSelector(ViewTypeFactory.createBasicViewType("Java"))
-		
-		for (javaModel : selector.selectableElements.filter(CompilationUnit)) {
-			selector.setSelected(javaModel, true)
-		}
-		val view = selector.createView()
-		assertNotNull(view, "View must not be null")
-		return view
+	protected def View createJavaClassesView() {
+		createViewOfElements("Java classes", #{CompilationUnit})
 	}
 	
-	protected def View createUmlAndJavaView() {
-		val selector = virtualModel.createSelector(ViewTypeFactory.createBasicViewType("UML and Java"))
+	protected def View createUmlAndJavaClassesView() {
+		createViewOfElements("UML and Java classes", #{CompilationUnit, Model})
+	}
+	
+	private def View createViewOfElements(String viewNme, Collection<Class<?>> rootTypes) {
+		val selector = virtualModel.createSelector(ViewTypeFactory.createBasicViewType(viewNme))
 		
-		for (rootElement : selector.selectableElements.filter[it instanceof CompilationUnit || it instanceof Model]) {
+		for (rootElement : selector.selectableElements.filter[element | rootTypes.exists[it.isInstance(element)]]) {
 			selector.setSelected(rootElement, true)	
 		}
 		val view = selector.createView()
