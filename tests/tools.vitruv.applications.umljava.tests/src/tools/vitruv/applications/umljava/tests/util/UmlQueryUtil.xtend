@@ -36,6 +36,10 @@ class UmlQueryUtil {
 		containingPackage.getUnique(DataType)
 	}
 	
+	static def Package getUniqueUmlPackageWithName(Package containingPackage, String name) {
+		containingPackage.packagedElements.filter(Package).filter[it.name == name].claimOne
+	}
+	
 	static def Class getUniqueUmlClassWithName(Package containingPackage, String name) {
 		containingPackage.packagedElements.filter(Class).filter[it.name == name].claimOne
 	}

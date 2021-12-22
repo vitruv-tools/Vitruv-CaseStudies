@@ -19,6 +19,7 @@ import org.emftext.language.java.containers.CompilationUnit
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.getUniqueUmlModel
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
 import java.util.Collection
+import org.emftext.language.java.containers.Package
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected static val Logger logger = Logger.getLogger(UmlJavaTransformationTest)
@@ -66,6 +67,10 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	
 	protected def View createUmlAndJavaClassesView() {
 		createViewOfElements("UML and Java classes", #{CompilationUnit, Model})
+	}
+	
+	protected def View createUmlAndJavaPackagesView() {
+		createViewOfElements("UML and Java packages", #{Package, Model})
 	}
 	
 	private def View createViewOfElements(String viewNme, Collection<Class<?>> rootTypes) {

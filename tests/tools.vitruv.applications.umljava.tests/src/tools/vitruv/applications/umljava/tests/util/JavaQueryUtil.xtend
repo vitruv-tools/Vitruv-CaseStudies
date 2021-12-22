@@ -6,6 +6,7 @@ import tools.vitruv.framework.vsum.views.View
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import org.emftext.language.java.classifiers.Interface
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import org.emftext.language.java.containers.Package
 
 // TODO HK These have to finally replace the old utilities
 @Utility
@@ -14,8 +15,16 @@ class JavaQueryUtil {
 		view.javaClasses.filter[it.name == name].claimOne
 	}
 	
+	static def getUniqueJavaPackageWithName(View view, String name) {
+		view.javaPackages.filter[it.name == name].claimOne
+	}
+	
 	private static def getJavaClassifiers(View view) {
 		view.rootObjects(CompilationUnit).map[classifiers].flatten
+	}
+	
+	static def getJavaPackages(View view) {
+		view.rootObjects(Package)
 	}
 	
 	static def getJavaClasses(View view) {
