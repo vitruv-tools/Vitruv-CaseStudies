@@ -1,6 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.transformations;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Map;
@@ -102,7 +102,7 @@ public class JaMoPPTest {
 		resource.save(null);
 		jaIf.getMembers().add(ifMethod);
 		resource.save(null);
-		assertTrue("Resource of interface method is null", null != ifMethod.eResource());
+		assertTrue(null != ifMethod.eResource(), "Resource of interface method is null");
 		resource.delete(null);
 	}
 
@@ -127,7 +127,7 @@ public class JaMoPPTest {
 				this.printLayoutInformation(member);
 			}
 		}
-		assertTrue("Could not get layout information", null != compilationUnit.getLayoutInformations());
+		assertTrue(null != compilationUnit.getLayoutInformations(), "Could not get layout information");
 	}
 
 	private void printLayoutInformation(final NamedElement namedElement) {

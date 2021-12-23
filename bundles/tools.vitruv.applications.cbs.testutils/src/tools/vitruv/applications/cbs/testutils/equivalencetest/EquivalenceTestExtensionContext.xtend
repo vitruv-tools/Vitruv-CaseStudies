@@ -43,6 +43,11 @@ package class EquivalenceTestExtensionContext implements ExtensionContext {
 	override getElement() {
 		parentContext.element
 	}
+	
+	override getExecutionMode() {
+		parentContext.executionMode
+	}
+	
 
 	override getParent() {
 		Optional.of(parentContext)
