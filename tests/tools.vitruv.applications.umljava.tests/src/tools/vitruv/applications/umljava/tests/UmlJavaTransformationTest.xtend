@@ -14,7 +14,6 @@ import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
 import tools.vitruv.framework.vsum.views.View
 import tools.vitruv.framework.vsum.views.ViewTypeFactory
 import static org.junit.jupiter.api.Assertions.assertNotNull
-import org.eclipse.uml2.uml.UMLPackage
 import org.emftext.language.java.containers.CompilationUnit
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.getUniqueUmlModel
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
@@ -49,35 +48,36 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	def protected assertJavaFileNotExists(String fileName, String[] namespaces) {
 		assertThat(getUri(Path.of(buildJavaFilePath(fileName + ".java", namespaces))), isNoResource)
 	}
-	
-	protected def void createUmlModel((Model) => void modelInitialization) {
+
+	protected def void createUmlModel((Model)=>void modelInitialization) {
 		val umlView = createUmlView()
-		val root = umlView.createRoot(UMLPackage.eINSTANCE.model, MODEL_NAME.projectModelPath.uri)
-		modelInitialization.apply(root as Model)
+		val umlModel = UMLFactory.eINSTANCE.createModel
+		umlView.registerRoot(umlModel, MODEL_NAME.projectModelPath.uri)
+		modelInitialization.apply(umlModel)
 		umlView.commitChanges()
 	}
 	
 	protected def View createUmlView() {
 		createViewOfElements("UML", #{Model})
 	}
-	
+
 	protected def View createJavaClassesView() {
 		createViewOfElements("Java classes", #{CompilationUnit})
 	}
-	
+
 	protected def View createUmlAndJavaClassesView() {
 		createViewOfElements("UML and Java classes", #{CompilationUnit, Model})
 	}
-	
+
 	protected def View createUmlAndJavaPackagesView() {
 		createViewOfElements("UML and Java packages", #{Package, Model})
 	}
-	
+
 	private def View createViewOfElements(String viewNme, Collection<Class<?>> rootTypes) {
 		val selector = virtualModel.createSelector(ViewTypeFactory.createBasicViewType(viewNme))
-		
-		for (rootElement : selector.selectableElements.filter[element | rootTypes.exists[it.isInstance(element)]]) {
-			selector.setSelected(rootElement, true)	
+
+		for (rootElement : selector.selectableElements.filter[element|rootTypes.exists[it.isInstance(element)]]) {
+			selector.setSelected(rootElement, true)
 		}
 		val view = selector.createView()
 		assertNotNull(view, "View must not be null")
