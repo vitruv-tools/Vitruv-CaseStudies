@@ -11,6 +11,10 @@ import org.emftext.language.java.containers.Package
 // TODO HK These have to finally replace the old utilities
 @Utility
 class JavaQueryUtil {
+	static def getUniqueJavaCompilationUnitWithName(View view, String name) {
+		view.javaCompilationUnits.filter[it.name == name +  ".java"].claimOne
+	}
+	
 	static def getUniqueJavaClassWithName(View view, String name) {
 		view.javaClasses.filter[it.name == name].claimOne
 	}
@@ -21,6 +25,10 @@ class JavaQueryUtil {
 	
 	private static def getJavaClassifiers(View view) {
 		view.rootObjects(CompilationUnit).map[classifiers].flatten
+	}
+	
+	static def getJavaCompilationUnits(View view) {
+		view.rootObjects(CompilationUnit)
 	}
 	
 	static def getJavaPackages(View view) {

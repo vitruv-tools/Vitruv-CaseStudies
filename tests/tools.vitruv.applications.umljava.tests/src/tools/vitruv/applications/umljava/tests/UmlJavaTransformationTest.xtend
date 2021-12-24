@@ -15,10 +15,11 @@ import tools.vitruv.framework.vsum.views.View
 import tools.vitruv.framework.vsum.views.ViewTypeFactory
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import org.emftext.language.java.containers.CompilationUnit
-import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.getUniqueUmlModel
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
 import java.util.Collection
 import org.emftext.language.java.containers.Package
+import org.emftext.language.java.containers.ContainersFactory
+import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected static val Logger logger = Logger.getLogger(UmlJavaTransformationTest)
@@ -29,9 +30,9 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	private def Path getProjectModelPath(String modelName) {
 		Path.of("model").resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}
-	
+
 	override protected getChangePropagationSpecifications() {
-		return #[new UmlToJavaChangePropagationSpecification()]
+		return #[new UmlToJavaChangePropagationSpecification(), new JavaToUmlChangePropagationSpecification()]
 	}
 
 	@BeforeEach
@@ -56,7 +57,15 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		modelInitialization.apply(umlModel)
 		umlView.commitChanges()
 	}
-	
+
+	protected def void createJavaCompilationUnit((CompilationUnit)=>void modelInitialization) {
+		val javaClassesView = createJavaClassesView()
+		val compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit
+		modelInitialization.apply(compilationUnit)
+		javaClassesView.registerRoot(compilationUnit, Path.of(buildJavaFilePath(compilationUnit)).uri)
+		javaClassesView.commitChanges()
+	}
+
 	protected def View createUmlView() {
 		createViewOfElements("UML", #{Model})
 	}
