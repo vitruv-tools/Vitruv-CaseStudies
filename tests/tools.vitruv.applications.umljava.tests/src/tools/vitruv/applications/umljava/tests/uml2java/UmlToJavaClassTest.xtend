@@ -16,12 +16,11 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.clai
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.applications.umljava.tests.UmlJavaTransformationTest
 
 /**
  * This class provides tests for basic class tests in the UML to Java direction
  */
-class UmlToJavaClassTest extends UmlJavaTransformationTest {
+class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	static val DEFAULT_CLASS_NAME = "TestClass"
 	static val ADDITIONAL_CLASS_NAME = "AdditionalClass"
 	static val DEFAULT_INTERFACE_NAME = "TestInterface"

@@ -83,16 +83,13 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		assertNotNull(view, "View must not be null")
 		return view
 	}
-	
+
 	/**
-	 * Changes the UML model in the UML view and commits the performed changes.
-	 * 
-	 * Precondition: Can only be applied if single UML model exists
+	 * Changes the given view according to the given modification function and commits the performed changes.
 	 */
-	protected def void changeUmlModel((Model) => void modelModification) {
-		val umlView = createUmlView()
-		modelModification.apply(umlView.uniqueUmlModel)
-		umlView.commitChanges()
+	protected def void changeView(View view, (View)=>void modelModification) {
+		modelModification.apply(view)
+		view.commitChanges()
 	}
 
 }

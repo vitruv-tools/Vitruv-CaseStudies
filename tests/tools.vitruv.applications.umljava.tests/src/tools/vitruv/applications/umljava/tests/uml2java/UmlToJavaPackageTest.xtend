@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertEquals
-import tools.vitruv.applications.umljava.tests.UmlJavaTransformationTest
 import org.eclipse.uml2.uml.UMLFactory
 
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
@@ -18,7 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat
 /**
  * This test class contains basic test cases for package creation, renaming and deletion.
  */
-class UmlToJavaPackageTest extends UmlJavaTransformationTest {
+class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	static val PACKAGE_NAME = "rootpackage"
 	static val NESTED_PACKAGE_NAME = "nestedpackage"
 	static val PACKAGE_RENAMED = "rootpackagerenamed"
