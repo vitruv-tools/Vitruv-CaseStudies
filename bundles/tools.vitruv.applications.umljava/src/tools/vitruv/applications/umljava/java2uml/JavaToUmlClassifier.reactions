@@ -411,12 +411,13 @@ routine removeUmlSuperInterface(java::Interface jInterface, java::TypeReference 
 //=========================================== Package
 //===========================================
 
-reaction JavaPackageCreated {
+reaction JavaPackageInserted {
     after element java::Package inserted as root
     call {
     	createPackageEClassCorrespondence(newValue)
     	detectOrCreateUmlModel(newValue)
 		registerPredefinedUmlPrimitiveTypes(correspondenceModel, newValue.eResource.resourceSet)
+		potentiallyMoveUmlPackage(newValue)
 	    createOrFindUmlPackage(newValue)
     }
 }
@@ -432,6 +433,17 @@ routine createPackageEClassCorrespondence(java::Package jPackage) {
     action {
         add correspondence between jPackage and jPackage.eClass
     }
+}
+
+routine potentiallyMoveUmlPackage(java::Package jPackage) {
+	match {
+        val umlPackage = retrieve uml::Package corresponding to jPackage
+	}
+	action {
+		call {
+			addUmlElementToModelOrPackage(jPackage, umlPackage)
+		}
+	}
 }
 
 routine createOrFindUmlPackage(java::Package jPackage) {
@@ -522,20 +534,20 @@ routine removeUmlPackageOfClass(java::Package jPackage, java::ConcreteClassifier
     }
 }
 
-routine addUmlElementToModelOrPackage(java::CompilationUnit jCompUnit, uml::Classifier uClassifier) {
+routine addUmlElementToModelOrPackage(java::JavaRoot javaRoot, uml::PackageableElement umlPackageableElement) {
 	match {
         val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
 	}
     action {
        call {
-            val uPackage = if (jCompUnit.namespaces.nullOrEmpty) {
+            val uPackage = if (javaRoot.namespaces.nullOrEmpty) {
                 uModel
             } else {
-                findUmlPackage(uModel, jCompUnit.namespaces.last)
+                findUmlPackage(uModel, javaRoot.namespaces.last)
             }
             
-            if (uPackage !== uClassifier.package) {
-                addUmlElementToPackage(uClassifier, uPackage)
+            if (uPackage !== umlPackageableElement.eContainer) {
+                addUmlElementToPackage(umlPackageableElement, uPackage)
             }
         }
     }
