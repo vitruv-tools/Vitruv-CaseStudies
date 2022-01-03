@@ -139,17 +139,17 @@ routine addUmlElementToPackage(uml::PackageableElement uPackageable, uml::Packag
 
 reaction JavaCompUnitCreated {
 	after element java::CompilationUnit inserted as root
-	call potentiallyMoveClass(newValue)
+	call potentiallyMoveClassifier(newValue)
 }
 
-// If there is a corresponding class, move it
-routine potentiallyMoveClass(java::CompilationUnit compUnit) {
+// If there is a corresponding class or interface, move it
+routine potentiallyMoveClassifier(java::CompilationUnit compUnit) {
 	match {
-		val umlClass = retrieve uml::Class corresponding to compUnit
+		val umlClassifier = retrieve uml::Classifier corresponding to compUnit
 	}
 	action {
 		call {
-			addUmlElementToModelOrPackage(compUnit, umlClass)
+			addUmlElementToModelOrPackage(compUnit, umlClassifier)
 		}
 	}
 }
