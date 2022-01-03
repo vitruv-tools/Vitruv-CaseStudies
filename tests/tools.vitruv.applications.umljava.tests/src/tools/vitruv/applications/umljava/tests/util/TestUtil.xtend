@@ -163,7 +163,7 @@ class TestUtil {
 		assertTypeEquals(uParameter.type, jParameter.typeReference)
 	}
 
-	private def static void assertStaticEquals(Feature uElement, AnnotableAndModifiable jElement) {
+	def static void assertStaticEquals(Feature uElement, AnnotableAndModifiable jElement) {
 		if (uElement.static) {
 			assertTrue(jElement.hasModifier(Static))
 		} else {
@@ -180,7 +180,7 @@ class TestUtil {
 		}
 	}
 
-	private def static void assertFinalAttributeEquals(Property uAttribute, Field jAttribute) {
+	def static void assertFinalAttributeEquals(Property uAttribute, Field jAttribute) {
 		if (uAttribute.readOnly) {
 			assertTrue(jAttribute.hasModifier(Final))
 		} else {
@@ -197,7 +197,7 @@ class TestUtil {
 		}
 	}
 
-	private def static void assertFinalMethodEquals(Operation uMethod, Method jMethod) {
+	def static void assertFinalMethodEquals(Operation uMethod, Method jMethod) {
 		if (uMethod.isLeaf) {
 			assertTrue(jMethod.hasModifier(Final))
 		} else {
@@ -213,33 +213,33 @@ class TestUtil {
 		}
 	}
 
-	private def static void assertVisibilityEquals(org.eclipse.uml2.uml.NamedElement uElement,
+	def static void assertVisibilityEquals(org.eclipse.uml2.uml.NamedElement uElement,
 		AnnotableAndModifiable jElement) {
 		val jVisibility = getJavaVisibilityConstantFromUmlVisibilityKind(uElement.visibility)
 		assertJavaModifiableHasVisibility(jElement, jVisibility)
 	}
 
-	private def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Type uType, TypeReference jTypeReference) {
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Type uType, TypeReference jTypeReference) {
 		throw new IllegalArgumentException("The java TypeReference " + jTypeReference +
 			" is neither a PrimitiveType nor a NamespaceClassifierReference")
 	}
 
-	private def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Interface uInterface,
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Interface uInterface,
 		NamespaceClassifierReference namespaceRef) {
 		assertEquals(uInterface.name, getInterfaceFromTypeReference(namespaceRef).name)
 	}
 
-	private def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Class uClass,
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Class uClass,
 		NamespaceClassifierReference namespaceRef) {
 		assertEquals(uClass.name, getClassifierFromTypeReference(namespaceRef).name)
 	}
 
-	private def static dispatch void assertTypeEquals(java.lang.Void nullReference, Void voidType) {
+	def static dispatch void assertTypeEquals(java.lang.Void nullReference, Void voidType) {
 		// umlType is null, javaType is void -> Do nothing, assertion passed.
 	}
 
 	// IMPORTANT EXCEPTION: String is NOT a primitive in the Java model, which means this dispatch case needs to exist:
-	private def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
 		NamespaceClassifierReference namespaceRef) {
 		assertNotNull(uPrimType)
 		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
@@ -248,7 +248,7 @@ class TestUtil {
 			getClassifierFromTypeReference(namespaceRef).name)
 	}
 
-	private def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
 		org.emftext.language.java.types.PrimitiveType jPrimType) {
 		assertNotNull(uPrimType)
 		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
