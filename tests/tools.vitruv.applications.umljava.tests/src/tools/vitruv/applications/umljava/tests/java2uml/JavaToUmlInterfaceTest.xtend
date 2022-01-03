@@ -32,10 +32,9 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		createUmlAndJavaClassesView => [
 			val javaInterface = getUniqueJavaInterfaceWithName(name)
 			val javaCompilationUnit = getUniqueJavaCompilationUnitWithName(compilationUnitName)
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlInterface = umlModel.getUniqueUmlInterfaceWithName(name)
-			assertThat("only one element in UML model is expected to exist", umlModel.packagedElements.toSet,
-				is(#{umlInterface}))
+			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(name)
+			assertThat("only one element in UML model is expected to exist",
+				uniqueDefaultUmlModel.packagedElements.toSet, is(#{umlInterface}))
 			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.toSet,
 				is(#{javaCompilationUnit}))
 			assertThat("only one Java interface is expected to exist", javaInterfaces.toSet, is(#{javaInterface}))
@@ -47,8 +46,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		createUmlAndJavaClassesView => [
 			val javaInterface = getUniqueJavaInterfaceWithName(name)
 			val javaCompilationUnit = getUniqueJavaCompilationUnitWithName(name)
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlPackage = umlModel.getUniqueUmlPackageWithName(packageName)
+			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(packageName)
 			val umlInterface = umlPackage.getUniqueUmlInterfaceWithName(name)
 			assertThat("only one element in UML model is expected to exist", umlPackage.packagedElements.toSet,
 				is(#{umlInterface}))
@@ -61,8 +59,8 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 
 	private def assertNoInterfaceExists() {
 		createUmlView => [
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			assertThat("no element in UML model is expected to exist", umlModel.packagedElements.toSet, is(emptySet))
+			assertThat("no element in UML model is expected to exist", uniqueDefaultUmlModel.packagedElements.toSet,
+				is(emptySet))
 			assertThat("no Java interface is expected to exist", javaInterfaces.toSet, is(emptySet))
 			assertThat("no Java compilation unit is expected to exist", javaCompilationUnits.toSet, is(emptySet))
 		]
@@ -73,9 +71,8 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		createUmlView => [
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlInterface = umlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
-			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, umlModel)
+			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
+			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, uniqueDefaultUmlModel)
 		]
 	}
 
@@ -85,7 +82,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		createJavaInterfaceInPackage(#[PACKAGE_NAME], INTERFACE_NAME)
 		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
 		createUmlView => [
-			val umlPackage = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME).getUniqueUmlPackageWithName(PACKAGE_NAME)
+			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(PACKAGE_NAME)
 			val umlInterface = umlPackage.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
 			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, umlPackage)
 		]
@@ -101,9 +98,9 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		]
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_RENAMED, INTERFACE_NAME)
 		createUmlView => [
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlInterface = umlModel.getUniqueUmlInterfaceWithName(INTERFACE_RENAMED)
-			assertUmlInterfaceTraits(umlInterface, INTERFACE_RENAMED, VisibilityKind.PUBLIC_LITERAL, umlModel)
+			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_RENAMED)
+			assertUmlInterfaceTraits(umlInterface, INTERFACE_RENAMED, VisibilityKind.PUBLIC_LITERAL,
+				uniqueDefaultUmlModel)
 		]
 	}
 
@@ -118,7 +115,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		]
 		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
 		createUmlView => [
-			val umlPackage = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME).getUniqueUmlPackageWithName(PACKAGE_NAME)
+			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(PACKAGE_NAME)
 			val umlInterface = umlPackage.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
 			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, umlPackage)
 		]
@@ -153,9 +150,8 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 			]
 		]
 		createUmlAndJavaClassesView => [
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlInterface = umlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
-			val umlSuperInterface = umlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE1_NAME)
+			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
+			val umlSuperInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE1_NAME)
 			val javaInterface = getUniqueJavaInterfaceWithName(INTERFACE_NAME)
 			val javaSuperInterface = getUniqueJavaInterfaceWithName(SUPER_INTERFACE1_NAME)
 			assertUmlClassifierHasSuperClassifier(umlInterface, umlSuperInterface)
@@ -178,10 +174,9 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 			]
 		]
 		createUmlAndJavaClassesView => [
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlInterface = umlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
-			val umlSuperInterface1 = umlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE1_NAME)
-			val umlSuperInterface2 = umlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE2_NAME)
+			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
+			val umlSuperInterface1 = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE1_NAME)
+			val umlSuperInterface2 = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE2_NAME)
 			val javaInterface = getUniqueJavaInterfaceWithName(INTERFACE_NAME)
 			assertUmlClassifierHasSuperClassifier(umlInterface, umlSuperInterface1)
 			assertUmlClassifierHasSuperClassifier(umlInterface, umlSuperInterface2)
@@ -193,10 +188,9 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 			]
 		]
 		createUmlAndJavaClassesView => [
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlInterface = umlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
-			val umlSuperInterface1 = umlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE1_NAME)
-			val umlSuperInterface2 = umlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE2_NAME)
+			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
+			val umlSuperInterface1 = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE1_NAME)
+			val umlSuperInterface2 = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(SUPER_INTERFACE2_NAME)
 			val javaInterface = getUniqueJavaInterfaceWithName(INTERFACE_NAME)
 			assertUmlClassifierHasSuperClassifier(umlInterface, umlSuperInterface2)
 			assertUmlClassifierDontHaveSuperClassifier(umlInterface, umlSuperInterface1)

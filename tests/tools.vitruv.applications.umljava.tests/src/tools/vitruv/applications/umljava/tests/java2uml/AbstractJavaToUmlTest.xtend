@@ -4,14 +4,18 @@ import tools.vitruv.applications.umljava.tests.UmlJavaTransformationTest
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
-import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
+import tools.vitruv.framework.vsum.views.View
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 
 abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
-	@Accessors(PROTECTED_GETTER)
 	static val DEFAULT_UML_MODEL_NAME = "model"
 
-	protected def createJavaPackageInRootPackage(String name) {
+	protected def getUniqueDefaultUmlModel(View view) {
+		view.getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
+	}
+
+	protected def void createJavaPackageInRootPackage(String name) {
 		createJavaPackagesView => [
 			createJavaPackage[
 				it.name = name
@@ -19,11 +23,11 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 		]
 	}
 
-	protected def createJavaClassInRootPackage(String name) {
+	protected def void createJavaClassInRootPackage(String name) {
 		createJavaClassInPackage(#[], name)
 	}
 
-	protected def createJavaClassInPackage(List<String> namespace, String name) {
+	protected def void createJavaClassInPackage(List<String> namespace, String name) {
 		createJavaClassesView => [
 			createJavaCompilationUnit[
 				it.name = name + ".java"
@@ -36,11 +40,11 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 		]
 	}
 
-	protected def createJavaInterfaceInRootPackage(String name) {
+	protected def void createJavaInterfaceInRootPackage(String name) {
 		createJavaInterfaceInPackage(#[], name)
 	}
 	
-	protected def createJavaInterfaceInPackage(List<String> namespace, String name) {
+	protected def void createJavaInterfaceInPackage(List<String> namespace, String name) {
 		createJavaClassesView => [
 			createJavaCompilationUnit[
 				it.name = name + ".java"

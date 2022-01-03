@@ -21,10 +21,9 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 	private def assertSinglePackageWithName(String name) {
 		createUmlAndJavaPackagesView => [
 			val javaPackage = getUniqueJavaPackageWithName(name)
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlPackage = umlModel.getUniqueUmlPackageWithName(name)
-			assertThat("only one element in UML model is expected to exist", umlModel.packagedElements.toSet,
-				is(#{umlPackage}))
+			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(name)
+			assertThat("only one element in UML model is expected to exist",
+				uniqueDefaultUmlModel.packagedElements.toSet, is(#{umlPackage}))
 			assertThat("only one Java package is expected to exist", javaPackages.toSet, is(#{javaPackage}))
 			assertPackageEquals(umlPackage, javaPackage)
 		]
@@ -35,7 +34,7 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 		createJavaPackageInRootPackage(PACKAGE_NAME)
 		assertSinglePackageWithName(PACKAGE_NAME)
 		createUmlAndJavaPackagesView => [
-			val umlPackage = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME).getUniqueUmlPackageWithName(PACKAGE_NAME)
+			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(PACKAGE_NAME)
 			val javaPackage = getUniqueJavaPackageWithName(PACKAGE_NAME)
 			assertPackageEquals(umlPackage, javaPackage)
 		]
@@ -59,8 +58,8 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 			EcoreUtil.delete(getUniqueJavaPackageWithName(PACKAGE_NAME))
 		]
 		createUmlAndJavaPackagesView => [
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			assertThat("no element in UML model is expected to exist", umlModel.packagedElements.toSet, is(emptySet))
+			assertThat("no element in UML model is expected to exist", uniqueDefaultUmlModel.packagedElements.toSet,
+				is(emptySet))
 			assertThat("no Java package is expected to exist", javaPackages.toSet, is(emptySet))
 		]
 	}
@@ -75,11 +74,10 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 		createUmlAndJavaPackagesView => [
 			val javaPackage = getUniqueJavaPackageWithName(PACKAGE_NAME)
 			val nestedJavaPackage = getUniqueJavaPackageWithName(NESTED_PACKAGE_NAME)
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlPackage = umlModel.getUniqueUmlPackageWithName(PACKAGE_NAME)
+			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(PACKAGE_NAME)
 			val nestedUmlPackage = umlPackage.getUniqueUmlPackageWithName(NESTED_PACKAGE_NAME)
-			assertThat("only one package in UML model are expected to exist", umlModel.packagedElements.toSet,
-				is(#{umlPackage}))
+			assertThat("only one package in UML model are expected to exist",
+				uniqueDefaultUmlModel.packagedElements.toSet, is(#{umlPackage}))
 			assertThat("only one nested package in UML package are expected to exist",
 				umlPackage.packagedElements.toSet, is(#{nestedUmlPackage}))
 			assertThat("two Java packages are expected to exist", javaPackages.toSet,
@@ -101,11 +99,10 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 		createUmlAndJavaPackagesView => [
 			val javaPackage = getUniqueJavaPackageWithName(PACKAGE_NAME)
 			val nestedJavaPackage = getUniqueJavaPackageWithName(NESTED_PACKAGE_NAME)
-			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
-			val umlPackage = umlModel.getUniqueUmlPackageWithName(PACKAGE_NAME)
+			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(PACKAGE_NAME)
 			val nestedUmlPackage = umlPackage.getUniqueUmlPackageWithName(NESTED_PACKAGE_NAME)
-			assertThat("only one package in UML model are expected to exist", umlModel.packagedElements.toSet,
-				is(#{umlPackage}))
+			assertThat("only one package in UML model are expected to exist",
+				uniqueDefaultUmlModel.packagedElements.toSet, is(#{umlPackage}))
 			assertThat("only one nested package in UML package are expected to exist",
 				umlPackage.packagedElements.toSet, is(#{nestedUmlPackage}))
 			assertThat("two Java packages are expected to exist", javaPackages.toSet,
