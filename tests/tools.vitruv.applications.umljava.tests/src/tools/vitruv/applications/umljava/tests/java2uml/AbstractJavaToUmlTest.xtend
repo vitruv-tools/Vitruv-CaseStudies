@@ -20,15 +20,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	}
 
 	protected def createJavaClassInRootPackage(String name) {
-		createJavaClassesView => [
-			createJavaCompilationUnit[
-				it.name = name + ".java"
-				classifiers += ClassifiersFactory.eINSTANCE.createClass => [
-					it.name = name
-					javaVisibilityModifier = JavaVisibility.PUBLIC
-				]
-			]
-		]
+		createJavaClassInPackage(#[], name)
 	}
 
 	protected def createJavaClassInPackage(List<String> namespace, String name) {
@@ -45,9 +37,14 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	}
 
 	protected def createJavaInterfaceInRootPackage(String name) {
+		createJavaInterfaceInPackage(#[], name)
+	}
+	
+	protected def createJavaInterfaceInPackage(List<String> namespace, String name) {
 		createJavaClassesView => [
 			createJavaCompilationUnit[
 				it.name = name + ".java"
+				it.namespaces += namespace
 				classifiers += ClassifiersFactory.eINSTANCE.createInterface => [
 					it.name = name
 					javaVisibilityModifier = JavaVisibility.PUBLIC
