@@ -20,6 +20,7 @@ import java.util.Collection
 import org.emftext.language.java.containers.Package
 import org.emftext.language.java.containers.ContainersFactory
 import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
+import org.emftext.language.java.containers.JavaRoot
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected static val Logger logger = Logger.getLogger(UmlJavaTransformationTest)
@@ -51,19 +52,31 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 
 	protected def void createUmlModel((Model)=>void modelInitialization) {
-		val umlView = createUmlView()
-		val umlModel = UMLFactory.eINSTANCE.createModel
-		umlView.registerRoot(umlModel, MODEL_NAME.projectModelPath.uri)
-		modelInitialization.apply(umlModel)
-		umlView.commitChanges()
+		changeView(createUmlView()) [
+			val umlModel = UMLFactory.eINSTANCE.createModel
+			registerRoot(umlModel, MODEL_NAME.projectModelPath.uri)
+			modelInitialization.apply(umlModel)
+		]
 	}
 
-	protected def void createJavaCompilationUnit((CompilationUnit)=>void modelInitialization) {
-		val javaClassesView = createJavaClassesView()
-		val compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit
-		modelInitialization.apply(compilationUnit)
-		javaClassesView.registerRoot(compilationUnit, Path.of(buildJavaFilePath(compilationUnit)).uri)
-		javaClassesView.commitChanges()
+	protected def void createJavaCompilationUnit((CompilationUnit)=>void compilationUnitInitialization) {
+		changeView(createJavaClassesView()) [
+			val compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit
+			compilationUnitInitialization.apply(compilationUnit)
+			registerRoot(compilationUnit, Path.of(buildJavaFilePath(compilationUnit)).uri)
+		]
+	}
+
+	protected def void createJavaPackage((Package)=>void packageInitialization) {
+		changeView(createJavaPackagesView()) [
+			val package = ContainersFactory.eINSTANCE.createPackage
+			packageInitialization.apply(package)
+			registerRoot(package, Path.of(buildJavaFilePath(package)).uri)
+		]
+	}
+
+	protected def void moveJavaRootElement(View view, JavaRoot rootElement) {
+		view.moveRoot(rootElement, Path.of(buildJavaFilePath(rootElement)).uri)
 	}
 
 	protected def View createUmlView() {
@@ -72,6 +85,10 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 
 	protected def View createJavaClassesView() {
 		createViewOfElements("Java classes", #{CompilationUnit})
+	}
+
+	protected def View createJavaPackagesView() {
+		createViewOfElements("Java packages", #{Package})
 	}
 
 	protected def View createUmlAndJavaClassesView() {
