@@ -7,6 +7,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.clai
 import org.emftext.language.java.classifiers.Interface
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.emftext.language.java.containers.Package
+import org.emftext.language.java.members.InterfaceMethod
 
 // TODO HK These have to finally replace the old utilities
 @Utility
@@ -37,6 +38,10 @@ class JavaQueryUtil {
 	
 	static def getJavaClasses(View view) {
 		view.javaClassifiers.filter(Class)
+	}
+	
+	static def InterfaceMethod getUniqueJavaInterfaceOperationWithName(Interface interf, String operationName) {
+		interf.members.filter(InterfaceMethod).filter[it.name == operationName].claimOne
 	}
 	
 	static def getUniqueJavaInterfaceWithName(View view, String name) {

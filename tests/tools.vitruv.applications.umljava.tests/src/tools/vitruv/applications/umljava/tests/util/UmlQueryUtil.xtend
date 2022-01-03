@@ -8,6 +8,7 @@ import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.Operation
 
 // TODO HK These have to finally replace the old utilities
 @Utility
@@ -50,6 +51,10 @@ class UmlQueryUtil {
 	
 	static def Interface getUniqueUmlInterfaceWithName(Package containingPackage, String name) {
 		containingPackage.packagedElements.filter(Interface).filter[it.name == name].claimOne
+	}
+	
+	static def Operation getUniqueUmlInterfaceOperationWithName(Interface interf, String operationName) {
+		interf.operations.filter[it.name == operationName].claimOne
 	}	
 
 }
