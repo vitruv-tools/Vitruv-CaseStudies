@@ -26,11 +26,11 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	static val INTERFACE_NAME = "InterfaceName"
 	static val INTERFACE_NAME2 = "InterfaceName2"
 
-	private def assertSingleClassWithName(String name) {
-		assertSingleClassWithName(name, name)
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassWithNameInRootPackage(name, name)
 	}
 
-	private def assertSingleClassWithName(String name, String compilationUnitName) {
+	private def assertSingleClassWithNameInRootPackage(String name, String compilationUnitName) {
 		createUmlAndJavaClassesView => [
 			val javaClass = getUniqueJavaClassWithName(name)
 			val javaCompilationUnit = getUniqueJavaCompilationUnitWithName(compilationUnitName)
@@ -76,7 +76,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testCreateClass() {
 		createJavaClassInRootPackage(CLASS_NAME)
-		assertSingleClassWithName(CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
 			val umlClass = umlModel.getUniqueUmlClassWithName(CLASS_NAME)
@@ -110,7 +110,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 				name = CLASS_RENAMED
 			]
 		]
-		assertSingleClassWithName(CLASS_RENAMED, CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_RENAMED, CLASS_NAME)
 		createUmlView => [
 			val umlModel = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
 			val umlClass = umlModel.getUniqueUmlClassWithName(CLASS_RENAMED)
@@ -175,7 +175,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 				makeProtected
 			]
 		]
-		assertSingleClassWithName(CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME).getUniqueUmlClassWithName(CLASS_NAME)
 			assertUmlNamedElementHasVisibility(umlClass, VisibilityKind.PROTECTED_LITERAL)
@@ -185,7 +185,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 				makePrivate
 			]
 		]
-		assertSingleClassWithName(CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME).getUniqueUmlClassWithName(CLASS_NAME)
 			assertUmlNamedElementHasVisibility(umlClass, VisibilityKind.PRIVATE_LITERAL)
@@ -203,7 +203,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 				abstract = true
 			]
 		]
-		assertSingleClassWithName(CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME).getUniqueUmlClassWithName(CLASS_NAME)
 			assertThat("UML class must be abstract", umlClass.abstract, is(true))
@@ -213,7 +213,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 				abstract = false
 			]
 		]
-		assertSingleClassWithName(CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME).getUniqueUmlClassWithName(CLASS_NAME)
 			assertThat("UML class must not be abstract", umlClass.abstract, is(false))
@@ -232,7 +232,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 				final = true
 			]
 		]
-		assertSingleClassWithName(CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME).getUniqueUmlClassWithName(CLASS_NAME)
 			assertThat("UML class must be final", umlClass.finalSpecialization, is(true))
@@ -242,7 +242,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 				final = false
 			]
 		]
-		assertSingleClassWithName(CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME).getUniqueUmlClassWithName(CLASS_NAME)
 			assertThat("UML class must not be final", umlClass.finalSpecialization, is(false))
