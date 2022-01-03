@@ -46,8 +46,8 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 		val jAttribute = getCorrespondingAttribute(uAttribute)
 		val jClass2 = getCorrespondingClass(uClass2)
 		assertJavaElementHasTypeRef(jAttribute, createNamespaceClassifierReference(jClass2))
-		assertClassEquals(uClass1, jClass1)
-		assertAttributeEquals(uAttribute, jAttribute)
+		assertElementsEqual(uClass1, jClass1)
+		assertElementsEqual(uAttribute, jAttribute)
 	}
 
 	@Test
@@ -61,7 +61,7 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 		val jAttribute = getCorrespondingAttribute(uAttribute)
 		val jClass2 = getCorrespondingClass(uClass2)
 		assertJavaElementHasTypeRef(jAttribute, createNamespaceClassifierReference(jClass2))
-		assertClassEquals(uClass1, jClass1)
+		assertElementsEqual(uClass1, jClass1)
 		assertTrue(javaGetterForAttributeExists(jAttribute))
 		assertTrue(javaSetterForAttributeExists(jAttribute))
 	}

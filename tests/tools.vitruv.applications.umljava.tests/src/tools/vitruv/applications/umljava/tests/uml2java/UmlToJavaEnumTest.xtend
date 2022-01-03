@@ -52,7 +52,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 		val jEnum = getCorrespondingEnum(enumeration)
 		assertJavaEnumTraits(jEnum, STANDARD_ENUM_NAME, JavaVisibility.PRIVATE,
 			createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2))
-		assertEnumEquals(enumeration, jEnum)
+		assertElementsEqual(enumeration, jEnum)
 	}
 
 	@Test
@@ -64,7 +64,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 		assertJavaFileNotExists(ENUM_NAME, #[])
 		val jEnum = getCorrespondingEnum(uEnum)
 		assertEquals(ENUM_RENAME, uEnum.name)
-		assertEnumEquals(uEnum, jEnum)
+		assertElementsEqual(uEnum, jEnum)
 	}
 
 	@Test
@@ -82,7 +82,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 
 		val jEnum = getCorrespondingEnum(uEnum)
 		assertJavaEnumHasConstant(jEnum, LITERAL_NAME)
-		assertEnumEquals(uEnum, jEnum)
+		assertElementsEqual(uEnum, jEnum)
 	}
 
 	@Test
@@ -92,7 +92,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 
 		val jEnum = getCorrespondingEnum(uEnum)
 		assertJavaEnumDontHaveConstant(jEnum, ENUM_LITERAL_NAMES_1.head)
-		assertEnumEquals(uEnum, jEnum)
+		assertElementsEqual(uEnum, jEnum)
 	}
 
 	@Test
@@ -105,7 +105,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 		val jEnum = getCorrespondingEnum(uEnum)
 		assertJavaClassMethodTraits(jMethod, OPERATION_NAME, JavaVisibility.PUBLIC,
 			TypesFactory.eINSTANCE.createVoid, false, false, null, jEnum)
-		assertClassMethodEquals(uOperation, jMethod)
+		assertElementsEqual(uOperation, jMethod)
 	}
 
 	@Test
@@ -119,7 +119,7 @@ class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
 		val jAttr = getCorrespondingAttribute(attr)
 		assertJavaAttributeTraits(jAttr, ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
 			createNamespaceClassifierReference(jTypeClass), false, false, jEnum)
-		assertAttributeEquals(attr, jAttr)
+		assertElementsEqual(attr, jAttr)
 
 	}
 

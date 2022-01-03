@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
+import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
@@ -69,7 +69,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 		val umlInteger = getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
 		assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlInteger,
 			false, false, uClass, null, null)
-		assertAttributeEquals(uAttr, attr)
+		assertElementsEqual(uAttr, attr)
 	}
 
 	/**
@@ -88,7 +88,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 		val uTypeClass = getCorrespondingClass(typeClass)
 		assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, uTypeClass,
 			false, false, uClass, null, null)
-		assertAttributeEquals(uAttr, attr)
+		assertElementsEqual(uAttr, attr)
 	}
 
 	/**
@@ -103,7 +103,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 		val uClass = getCorrespondingClass(jClass)
 		assertEquals(ATTRIBUTE_RENAME, uAttr.name)
 		assertUmlClassDontHaveOperation(uClass, ATTRIBUTE_NAME)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 
 	/**
@@ -133,7 +133,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 		val uTypeClass = getCorrespondingClass(typeClass)
 		assertUmlPropertyTraits(uAttr, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, uTypeClass, false, false, uClass,
 			null, null)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 
 	/**
@@ -146,7 +146,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 
 		val uAttr = getCorrespondingAttribute(jAttr)
 		assertTrue(uAttr.static)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 
 	/**
@@ -159,7 +159,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 
 		val uAttr = getCorrespondingAttribute(jAttr)
 		assertTrue(uAttr.readOnly)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 
 	/**
@@ -172,13 +172,13 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 
 		var uAttr = getCorrespondingAttribute(jAttr)
 		assertUmlNamedElementHasVisibility(uAttr, VisibilityKind.PUBLIC_LITERAL)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 
 		jAttr.makeProtected
 		propagate
 
 		uAttr = getCorrespondingAttribute(jAttr)
 		assertUmlNamedElementHasVisibility(uAttr, VisibilityKind.PROTECTED_LITERAL)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 }

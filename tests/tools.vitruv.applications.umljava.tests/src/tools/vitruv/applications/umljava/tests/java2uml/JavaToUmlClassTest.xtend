@@ -4,7 +4,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
+import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
@@ -31,41 +31,11 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	}
 
 	private def assertSingleClassWithNameInRootPackage(String name, String compilationUnitName) {
-		createUmlAndJavaClassesView => [
-			val javaClass = getUniqueJavaClassWithName(name)
-			val javaCompilationUnit = getUniqueJavaCompilationUnitWithName(compilationUnitName)
-			val umlClass = uniqueDefaultUmlModel.getUniqueUmlClassWithName(name)
-			assertThat("only one element in UML model is expected to exist",
-				uniqueDefaultUmlModel.packagedElements.toSet, is(#{umlClass}))
-			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.toSet,
-				is(#{javaCompilationUnit}))
-			assertThat("only one Java class is expected to exist", javaClasses.toSet, is(#{javaClass}))
-			assertClassEquals(umlClass, javaClass)
-		]
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class, name, compilationUnitName)
 	}
 
 	private def assertSingleClassWithNameInPackage(String packageName, String name) {
-		createUmlAndJavaClassesView => [
-			val javaClass = getUniqueJavaClassWithName(name)
-			val javaCompilationUnit = getUniqueJavaCompilationUnitWithName(name)
-			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(packageName)
-			val umlClass = umlPackage.getUniqueUmlClassWithName(name)
-			assertThat("only one element in UML model is expected to exist", umlPackage.packagedElements.toSet,
-				is(#{umlClass}))
-			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.toSet,
-				is(#{javaCompilationUnit}))
-			assertThat("only one Java class is expected to exist", javaClasses.toSet, is(#{javaClass}))
-			assertClassEquals(umlClass, javaClass)
-		]
-	}
-
-	private def assertNoClassExists() {
-		createUmlView => [
-			assertThat("no element in UML model is expected to exist", uniqueDefaultUmlModel.packagedElements.toSet,
-				is(emptySet))
-			assertThat("no Java class is expected to exist", javaClasses.toSet, is(emptySet))
-			assertThat("no Java compilation unit is expected to exist", javaCompilationUnits.toSet, is(emptySet))
-		]
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class, packageName, name)
 	}
 
 	/**
@@ -146,7 +116,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 		changeView(createJavaClassesView) [
 			EcoreUtil.delete(getUniqueJavaClassWithName(CLASS_NAME))
 		]
-		assertNoClassExists()
+		assertNoClassifierExistsInRootPackage()
 	}
 
 	/**
@@ -159,7 +129,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 		changeView(createJavaClassesView) [
 			EcoreUtil.delete(getUniqueJavaCompilationUnitWithName(CLASS_NAME))
 		]
-		assertNoClassExists()
+		assertNoClassifierExistsInRootPackage()
 	}
 
 	/**
@@ -265,7 +235,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 			val umlClass = uniqueDefaultUmlModel.getUniqueUmlClassWithName(CLASS_NAME)
 			val umlSuperClass = uniqueDefaultUmlModel.getUniqueUmlClassWithName(SUPER_CLASS_NAME)
 			assertUmlClassifierHasSuperClassifier(umlClass, umlSuperClass)
-			assertClassEquals(umlClass, javaClass)
+			assertElementsEqual(umlClass, javaClass)
 		]
 	}
 
@@ -312,7 +282,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 			val umlClass = uniqueDefaultUmlModel.getUniqueUmlClassWithName(CLASS_NAME)
 			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
 			assertUmlClassHasImplement(umlClass, umlInterface)
-			assertClassEquals(umlClass, javaClass)
+			assertElementsEqual(umlClass, javaClass)
 		]
 	}
 
@@ -339,7 +309,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 			val umlSecondInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME2)
 			assertUmlClassHasImplement(umlClass, umlFirstInterface)
 			assertUmlClassHasImplement(umlClass, umlSecondInterface)
-			assertClassEquals(umlClass, javaClass)
+			assertElementsEqual(umlClass, javaClass)
 		]
 		changeView(createJavaClassesView) [
 			getUniqueJavaClassWithName(CLASS_NAME) => [
@@ -353,7 +323,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 			val umlSecondInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME2)
 			assertUmlClassDontHaveImplement(umlClass, umlFirstInterface)
 			assertUmlClassHasImplement(umlClass, umlSecondInterface)
-			assertClassEquals(umlClass, javaClass)
+			assertElementsEqual(umlClass, javaClass)
 		]
 	}
 

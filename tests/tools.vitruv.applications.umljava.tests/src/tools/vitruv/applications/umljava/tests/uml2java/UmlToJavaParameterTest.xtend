@@ -61,7 +61,7 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
 		val jParam = getCorrespondingParameter(uParam)
 		val jTypeClass = getCorrespondingClass(typeClass)
 		assertJavaParameterTraits(jParam, STANDARD_PARAMETER_NAME, createNamespaceClassifierReference(jTypeClass))
-		assertParameterEquals(uParam, jParam)
+		assertElementsEqual(uParam, jParam)
 	}
 
 	@Test
@@ -93,7 +93,7 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
 		val jParam = getCorrespondingParameter(uParam)
 		val jTypeClass = getCorrespondingClass(typeClass)
 		assertJavaParameterTraits(jParam, PARAMETER_NAME, createNamespaceClassifierReference(jTypeClass))
-		assertParameterEquals(uParam, jParam)
+		assertElementsEqual(uParam, jParam)
 	}
 
 	@Test

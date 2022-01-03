@@ -2,7 +2,7 @@ package tools.vitruv.applications.umljava.tests.java2uml
 
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
+import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
@@ -25,7 +25,7 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 			assertThat("only one element in UML model is expected to exist",
 				uniqueDefaultUmlModel.packagedElements.toSet, is(#{umlPackage}))
 			assertThat("only one Java package is expected to exist", javaPackages.toSet, is(#{javaPackage}))
-			assertPackageEquals(umlPackage, javaPackage)
+			assertElementsEqual(umlPackage, javaPackage)
 		]
 	}
 
@@ -36,7 +36,7 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 		createUmlAndJavaPackagesView => [
 			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(PACKAGE_NAME)
 			val javaPackage = getUniqueJavaPackageWithName(PACKAGE_NAME)
-			assertPackageEquals(umlPackage, javaPackage)
+			assertElementsEqual(umlPackage, javaPackage)
 		]
 	}
 
@@ -82,8 +82,8 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 				umlPackage.packagedElements.toSet, is(#{nestedUmlPackage}))
 			assertThat("two Java packages are expected to exist", javaPackages.toSet,
 				is(#{javaPackage, nestedJavaPackage}))
-			assertPackageEquals(umlPackage, javaPackage)
-			assertPackageEquals(nestedUmlPackage, nestedJavaPackage)
+			assertElementsEqual(umlPackage, javaPackage)
+			assertElementsEqual(nestedUmlPackage, nestedJavaPackage)
 		]
 	}
 
@@ -107,8 +107,8 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 				umlPackage.packagedElements.toSet, is(#{nestedUmlPackage}))
 			assertThat("two Java packages are expected to exist", javaPackages.toSet,
 				is(#{javaPackage, nestedJavaPackage}))
-			assertPackageEquals(umlPackage, javaPackage)
-			assertPackageEquals(nestedUmlPackage, nestedJavaPackage)
+			assertElementsEqual(umlPackage, javaPackage)
+			assertElementsEqual(nestedUmlPackage, nestedJavaPackage)
 		]
 	}
 

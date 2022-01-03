@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
+import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -72,7 +72,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 		val uClass = getCorrespondingClass(jClass)
 		assertUmlOperationTraits(uOperation, STANDARD_OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, false,
 			uClass, null)
-		assertClassMethodEquals(uOperation, meth)
+		assertElementsEqual(uOperation, meth)
 	}
 
 	/**
@@ -86,7 +86,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 		val uOperation = getCorrespondingMethod(jMeth)
 		val uTypeClass = getCorrespondingClass(typeClass)
 		assertUmlOperationHasReturntype(uOperation, uTypeClass)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 	}
 
 	/**
@@ -101,7 +101,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 		val uClass = getCorrespondingClass(jClass)
 		assertEquals(OPERATION_RENAME, uOperation.name)
 		assertUmlClassHasUniqueOperation(uClass, OPERATION_RENAME)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 	}
 
 	/**
@@ -129,14 +129,14 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 
 		var uOperation = getCorrespondingMethod(jMeth)
 		assertUmlFeatureHasStaticValue(uOperation, true)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 
 		jMeth.static = false
 		propagate
 
 		uOperation = getCorrespondingMethod(jMeth)
 		assertUmlFeatureHasStaticValue(uOperation, false)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 
 	}
 
@@ -151,14 +151,14 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 
 		var uOperation = getCorrespondingMethod(jMeth)
 		assertUmlOperationHasAbstractValue(uOperation, true)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 
 		jMeth.abstract = false
 		propagate
 
 		uOperation = getCorrespondingMethod(jMeth)
 		assertUmlOperationHasAbstractValue(uOperation, false)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 	}
 
 	/**
@@ -172,14 +172,14 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 
 		var uOperation = getCorrespondingMethod(jMeth)
 		assertUmlOperationHasFinalValue(uOperation, true)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 
 		jMeth.final = false
 		propagate
 
 		uOperation = getCorrespondingMethod(jMeth)
 		assertUmlOperationHasFinalValue(uOperation, false)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 	}
 
 	/**
@@ -193,14 +193,14 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 
 		var uOperation = getCorrespondingMethod(jMeth)
 		assertUmlNamedElementHasVisibility(uOperation, VisibilityKind.PROTECTED_LITERAL)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 
 		jMeth.makePrivate
 		propagate
 
 		uOperation = getCorrespondingMethod(jMeth)
 		assertUmlNamedElementHasVisibility(uOperation, VisibilityKind.PRIVATE_LITERAL)
-		assertClassMethodEquals(uOperation, jMeth)
+		assertElementsEqual(uOperation, jMeth)
 	}
 
 	/**
@@ -215,7 +215,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 		val uOperation = getCorrespondingMethod(jMeth)
 		val uParam = getCorrespondingParameter(param)
 		assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_NAME2)
-		assertParameterEquals(uParam, param)
+		assertElementsEqual(uParam, param)
 	}
 
 	/**
@@ -229,7 +229,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 		val uOperation = getCorrespondingMethod(jParamMeth)
 		val uParam = getCorrespondingParameter(jParam)
 		assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_RENAME)
-		assertParameterEquals(uParam, jParam)
+		assertElementsEqual(uParam, jParam)
 	}
 
 	/**
@@ -256,7 +256,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
 		val uParam = getCorrespondingParameter(jParam)
 		val uTypeClass = getCorrespondingClass(typeClass)
 		assertUmlParameterTraits(uParam, PARAMETER_NAME, uTypeClass)
-		assertParameterEquals(uParam, jParam)
+		assertElementsEqual(uParam, jParam)
 	}
 
 	/**
