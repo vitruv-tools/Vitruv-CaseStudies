@@ -25,6 +25,23 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 			]
 		]
 	}
+	
+	protected def void createJavaEnumInRootPackage(String name) {
+		createJavaEnumInPackage(#[], name)
+	}
+
+	protected def void createJavaEnumInPackage(List<String> namespace, String name) {
+		createJavaClassesView => [
+			createJavaCompilationUnit[
+				it.name = name + ".java"
+				it.namespaces += namespace
+				classifiers += ClassifiersFactory.eINSTANCE.createEnumeration => [
+					it.name = name
+					makePublic
+				]
+			]
+		]
+	}
 
 	protected def void createJavaClassInRootPackage(String name) {
 		createJavaClassInPackage(#[], name)
