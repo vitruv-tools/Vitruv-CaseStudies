@@ -21,55 +21,55 @@ class UmlQueryUtil {
 		view.rootObjects(Model).claimOne
 	}
 	
-	private static def <E> E getUnique(Package containingPackage, java.lang.Class<E> type) {
-		containingPackage.packagedElements.filter(type).claimOne
+	private static def <E> E containedElement(Package containingPackage, java.lang.Class<E> containedElementType) {
+		containingPackage.packagedElements.filter(containedElementType).claimOne
 	}
 	
 	static def Package getUniqueUmlPackage(Package containingPackage) {
-		containingPackage.getUnique(Package)
+		containingPackage.containedElement(Package)
 	}
 	
 	static def Class getUniqueUmlClass(Package containingPackage) {
-		containingPackage.getUnique(Class)
+		containingPackage.containedElement(Class)
 	}
 	
 	static def Interface getUniqueUmlInterface(Package containingPackage) {
-		containingPackage.getUnique(Interface)
+		containingPackage.containedElement(Interface)
 	}
 	
 	static def DataType getUniqueUmlDataType(Package containingPackage) {
-		containingPackage.getUnique(DataType)
+		containingPackage.containedElement(DataType)
 	}
 	
-	static def Model getUniqueUmlModelWithName(View view, String name) {
-		view.rootObjects(Model).filter[it.name == name].claimOne
+	static def Model containedUmlModel(View view, String modelName) {
+		view.rootObjects(Model).filter[it.name == modelName].claimOne
 	}
 	
-	static def <T extends PackageableElement> T getUniqueUmlPackagedElementWithName(Package containingPackage, java.lang.Class<T> classifierType, String name) {
-		containingPackage.packagedElements.filter(classifierType).filter[it.name == name].claimOne
+	static def <T extends PackageableElement> T containedPackageableElement(Package containingPackage, java.lang.Class<T> classifierType, String packageableElementName) {
+		containingPackage.packagedElements.filter(classifierType).filter[it.name == packageableElementName].claimOne
 	}
 	
-	static def Package getUniqueUmlPackageWithName(Package containingPackage, String name) {
-		containingPackage.getUniqueUmlPackagedElementWithName(Package, name)
+	static def Package containedPackage(Package containingPackage, String packageName) {
+		containingPackage.containedPackageableElement(Package, packageName)
 	}
 	
-	static def Class getUniqueUmlClassWithName(Package containingPackage, String name) {
-		containingPackage.getUniqueUmlPackagedElementWithName(Class, name)
+	static def Class containedClass(Package containingPackage, String className) {
+		containingPackage.containedPackageableElement(Class, className)
 	}
 	
-	static def Enumeration getUniqueUmlEnumWithName(Package containingPackage, String name) {
-		containingPackage.getUniqueUmlPackagedElementWithName(Enumeration, name)
+	static def Enumeration containedEnum(Package containingPackage, String enumName) {
+		containingPackage.containedPackageableElement(Enumeration, enumName)
 	}
 	
-	static def Interface getUniqueUmlInterfaceWithName(Package containingPackage, String name) {
-		containingPackage.getUniqueUmlPackagedElementWithName(Interface, name)
+	static def Interface containedInterface(Package containingPackage, String interfaceName) {
+		containingPackage.containedPackageableElement(Interface, interfaceName)
 	}
 	
-	static def Operation getUniqueUmlOperationWithName(Classifier containingClassifier, String operationName) {
+	static def Operation containedOperation(Classifier containingClassifier, String operationName) {
 		containingClassifier.operations.filter[it.name == operationName].claimOne
 	}
 	
-	static def Property getUniqueUmlAttributeWithName(Classifier containingClassifier, String attributeName) {
+	static def Property containedAttribute(Classifier containingClassifier, String attributeName) {
 		containingClassifier.attributes.filter[it.name == attributeName].claimOne
 	}
 	

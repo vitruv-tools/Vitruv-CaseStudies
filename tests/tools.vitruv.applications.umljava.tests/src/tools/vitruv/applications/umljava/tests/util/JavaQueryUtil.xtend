@@ -17,63 +17,63 @@ import org.emftext.language.java.members.Field
 // TODO HK These have to finally replace the old utilities
 @Utility
 class JavaQueryUtil {
-	static def getJavaCompilationUnits(View view) {
+	static def containedJavaCompilationUnits(View view) {
 		view.rootObjects(CompilationUnit)
 	}
 	
-	static def getJavaPackages(View view) {
+	static def containedJavaPackages(View view) {
 		view.rootObjects(Package)
 	}
 	
-	static def getJavaClassifiers(View view) {
+	static def containedJavaClassifiers(View view) {
 		view.rootObjects(CompilationUnit).map[classifiers].flatten
 	}
 	
-	static def <T extends Classifier> Iterable<T> getJavaClassifiersOfType(View view, java.lang.Class<T> type) {
-		view.javaClassifiers.filter(type)
+	static def <T extends Classifier> Iterable<T> containedJavaClassifiersOfType(View view, java.lang.Class<T> type) {
+		view.containedJavaClassifiers.filter(type)
 	}
 	
-	static def getJavaClasses(View view) {
-		view.getJavaClassifiersOfType(Class)
+	static def containedJavaClasses(View view) {
+		view.containedJavaClassifiersOfType(Class)
 	}
 	
-	static def getJavaInterfaces(View view) {
-		view.getJavaClassifiersOfType(Interface)
+	static def containedJavaInterfaces(View view) {
+		view.containedJavaClassifiersOfType(Interface)
 	}
 		
-	static def getUniqueJavaCompilationUnitWithName(View view, String name) {
-		view.javaCompilationUnits.filter[it.name == name +  ".java"].claimOne
+	static def containedJavaCompilationUnit(View view, String compilationUnitNameWithoutJavaSuffic) {
+		view.containedJavaCompilationUnits.filter[it.name == compilationUnitNameWithoutJavaSuffic +  ".java"].claimOne
 	}	
 	
-	static def getUniqueJavaPackageWithName(View view, String name) {
-		view.javaPackages.filter[it.name == name].claimOne
+	static def containedJavaPackage(View view, String name) {
+		view.containedJavaPackages.filter[it.name == name].claimOne
 	}
 	
-	static def <T extends Classifier> T getUniqueJavaClassifierWithName(View view, java.lang.Class<T> classifierType, String name) {
-		view.getJavaClassifiersOfType(classifierType).filter[it.name == name].claimOne
+	static def <T extends Classifier> T containedJavaClassifier(View view, java.lang.Class<T> classifierType, String classifiedName) {
+		view.containedJavaClassifiersOfType(classifierType).filter[it.name == classifiedName].claimOne
 	}
 	
-	static def getUniqueJavaClassWithName(View view, String name) {
-		view.getUniqueJavaClassifierWithName(Class, name)
+	static def containedJavaClass(View view, String className) {
+		view.containedJavaClassifier(Class, className)
 	}
 	
-	static def getUniqueJavaEnumWithName(View view, String name) {
-		view.getUniqueJavaClassifierWithName(Enumeration, name)
+	static def containedJavaEnum(View view, String enumName) {
+		view.containedJavaClassifier(Enumeration, enumName)
 	}
 	
-	static def getUniqueJavaInterfaceWithName(View view, String name) {
-		view.getUniqueJavaClassifierWithName(Interface, name)
+	static def containedJavaInterface(View view, String interfaceName) {
+		view.containedJavaClassifier(Interface, interfaceName)
 	}
 	
-	static def InterfaceMethod getUniqueJavaInterfaceOperationWithName(Interface interf, String operationName) {
-		interf.members.filter(InterfaceMethod).filter[it.name == operationName].claimOne
+	static def InterfaceMethod containedInterfaceMethod(Interface interf, String methodName) {
+		interf.members.filter(InterfaceMethod).filter[it.name == methodName].claimOne
 	}
 	
-	static def ClassMethod getUniqueJavaClassOperationWithName(ConcreteClassifier classifier, String operationName) {
-		classifier.members.filter(ClassMethod).filter[it.name == operationName].claimOne
+	static def ClassMethod containedClassMethod(ConcreteClassifier classifier, String methodName) {
+		classifier.members.filter(ClassMethod).filter[it.name == methodName].claimOne
 	}
 	
-	static def Field getUniqueJavaClassFieldWithName(ConcreteClassifier classifier, String fieldName) {
+	static def Field containedField(ConcreteClassifier classifier, String fieldName) {
 		classifier.members.filter(Field).filter[it.name == fieldName].claimOne
 	}
 

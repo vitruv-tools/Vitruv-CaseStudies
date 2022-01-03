@@ -28,7 +28,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	private def void createDefaultInterfaceWithMethod(String methodName) {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
 		changeView(createJavaClassesView) [
-			getUniqueJavaInterfaceWithName(INTERFACE_NAME) => [
+			containedJavaInterface(INTERFACE_NAME) => [
 				members += MembersFactory.eINSTANCE.createInterfaceMethod => [
 					name = methodName
 					typeReference = TypesFactory.eINSTANCE.createVoid
@@ -41,10 +41,9 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	def void testCreateInterfaceMethod() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
 		createUmlAndJavaClassesView => [
-			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
-			val umlOperation = umlInterface.getUniqueUmlOperationWithName(IOPERATION_NAME)
-			val javaInterfaceMethod = getUniqueJavaInterfaceWithName(INTERFACE_NAME).
-				getUniqueJavaInterfaceOperationWithName(IOPERATION_NAME)
+			val umlInterface = containedDefaultUmlModel.containedInterface(INTERFACE_NAME)
+			val umlOperation = umlInterface.containedOperation(IOPERATION_NAME)
+			val javaInterfaceMethod = containedJavaInterface(INTERFACE_NAME).containedInterfaceMethod(IOPERATION_NAME)
 			assertUmlOperationTraits(umlOperation, IOPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, true,
 				umlInterface, null)
 			assertElementsEqual(umlOperation, javaInterfaceMethod)
@@ -55,17 +54,16 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	def void testRenameInterfaceMethod() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
 		changeView(createJavaClassesView) [
-			getUniqueJavaInterfaceWithName(INTERFACE_NAME) => [
-				getUniqueJavaInterfaceOperationWithName(IOPERATION_NAME) => [
+			containedJavaInterface(INTERFACE_NAME) => [
+				containedInterfaceMethod(IOPERATION_NAME) => [
 					name = IOPERATION_RENAME
 				]
 			]
 		]
 		createUmlAndJavaClassesView => [
-			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
-			val umlOperation = umlInterface.getUniqueUmlOperationWithName(IOPERATION_RENAME)
-			val javaInterfaceMethod = getUniqueJavaInterfaceWithName(INTERFACE_NAME).
-				getUniqueJavaInterfaceOperationWithName(IOPERATION_RENAME)
+			val umlInterface = containedDefaultUmlModel.containedInterface(INTERFACE_NAME)
+			val umlOperation = umlInterface.containedOperation(IOPERATION_RENAME)
+			val javaInterfaceMethod = containedJavaInterface(INTERFACE_NAME).containedInterfaceMethod(IOPERATION_RENAME)
 			assertEquals(IOPERATION_RENAME, umlOperation.name)
 			assertUmlInterfaceDontHaveOperation(umlInterface, IOPERATION_NAME)
 			assertUmlOperationTraits(umlOperation, IOPERATION_RENAME, VisibilityKind.PUBLIC_LITERAL, null, false, true,
@@ -79,12 +77,12 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	def void testDeleteInterfaceMethod() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
 		changeView(createJavaClassesView) [
-			getUniqueJavaInterfaceWithName(INTERFACE_NAME) => [
-				EcoreUtil.delete(getUniqueJavaInterfaceOperationWithName(IOPERATION_NAME))
+			containedJavaInterface(INTERFACE_NAME) => [
+				EcoreUtil.delete(containedInterfaceMethod(IOPERATION_NAME))
 			]
 		]
 		createUmlView => [
-			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
+			val umlInterface = containedDefaultUmlModel.containedInterface(INTERFACE_NAME)
 			assertUmlInterfaceDontHaveOperation(umlInterface, IOPERATION_NAME)
 		]
 	}
@@ -94,19 +92,18 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
 		createJavaClassInRootPackage(TYPE_NAME)
 		changeView(createJavaClassesView) [
-			val typeClass = getUniqueJavaClassWithName(TYPE_NAME)
-			getUniqueJavaInterfaceWithName(INTERFACE_NAME) => [
-				getUniqueJavaInterfaceOperationWithName(IOPERATION_NAME) => [
+			val typeClass = containedJavaClass(TYPE_NAME)
+			containedJavaInterface(INTERFACE_NAME) => [
+				containedInterfaceMethod(IOPERATION_NAME) => [
 					typeReference = createNamespaceClassifierReference(typeClass)
 				]
 			]
 		]
 		createUmlAndJavaClassesView => [
-			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
-			val umlOperation = umlInterface.getUniqueUmlOperationWithName(IOPERATION_NAME)
-			val umlTypeClass = uniqueDefaultUmlModel.getUniqueUmlClassWithName(TYPE_NAME)
-			val javaInterfaceMethod = getUniqueJavaInterfaceWithName(INTERFACE_NAME).
-				getUniqueJavaInterfaceOperationWithName(IOPERATION_NAME)
+			val umlInterface = containedDefaultUmlModel.containedInterface(INTERFACE_NAME)
+			val umlOperation = umlInterface.containedOperation(IOPERATION_NAME)
+			val umlTypeClass = containedDefaultUmlModel.containedClass(TYPE_NAME)
+			val javaInterfaceMethod = containedJavaInterface(INTERFACE_NAME).containedInterfaceMethod(IOPERATION_NAME)
 			assertUmlOperationHasReturntype(umlOperation, umlTypeClass)
 			assertElementsEqual(umlOperation, javaInterfaceMethod)
 		]
@@ -117,9 +114,9 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
 		createJavaClassInRootPackage(TYPE_NAME)
 		changeView(createJavaClassesView) [
-			val typeClass = getUniqueJavaClassWithName(TYPE_NAME)
-			getUniqueJavaInterfaceWithName(INTERFACE_NAME) => [
-				getUniqueJavaInterfaceOperationWithName(IOPERATION_NAME) => [
+			val typeClass = containedJavaClass(TYPE_NAME)
+			containedJavaInterface(INTERFACE_NAME) => [
+				containedInterfaceMethod(IOPERATION_NAME) => [
 					parameters += ParametersFactory.eINSTANCE.createOrdinaryParameter => [
 						name = PARAMETER_NAME
 						typeReference = createNamespaceClassifierReference(typeClass)
@@ -128,10 +125,9 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		createUmlAndJavaClassesView => [
-			val umlInterface = uniqueDefaultUmlModel.getUniqueUmlInterfaceWithName(INTERFACE_NAME)
-			val umlOperation = umlInterface.getUniqueUmlOperationWithName(IOPERATION_NAME)
-			val javaInterfaceMethod = getUniqueJavaInterfaceWithName(INTERFACE_NAME).
-				getUniqueJavaInterfaceOperationWithName(IOPERATION_NAME)
+			val umlInterface = containedDefaultUmlModel.containedInterface(INTERFACE_NAME)
+			val umlOperation = umlInterface.containedOperation(IOPERATION_NAME)
+			val javaInterfaceMethod = containedJavaInterface(INTERFACE_NAME).containedInterfaceMethod(IOPERATION_NAME)
 			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_NAME)
 			assertElementsEqual(umlOperation, javaInterfaceMethod)
 		]
