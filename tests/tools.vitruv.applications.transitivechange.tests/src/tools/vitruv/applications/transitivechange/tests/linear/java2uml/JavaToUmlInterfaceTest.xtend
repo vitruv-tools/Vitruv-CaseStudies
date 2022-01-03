@@ -39,7 +39,7 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
 
 		val uInterface = getCorrespondingInterface(jInterface)
 		assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, registeredUmlModel)
-		assertInterfaceEquals(uInterface, jInterface)
+		assertElementsEqual(uInterface, jInterface)
 	}
 
 	@Test
@@ -49,7 +49,7 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
 
 		val uInterface = getCorrespondingInterface(jInterface)
 		assertEquals(INTERFACE_RENAME, uInterface.name)
-		assertInterfaceEquals(uInterface, jInterface)
+		assertElementsEqual(uInterface, jInterface)
 	}
 
 	@Test
@@ -69,7 +69,7 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
 		val uInterface = getCorrespondingInterface(jInterface)
 		val uSuperInterface = getCorrespondingInterface(superInterface)
 		assertUmlClassifierHasSuperClassifier(uInterface, uSuperInterface)
-		assertInterfaceEquals(uInterface, jInterface)
+		assertElementsEqual(uInterface, jInterface)
 	}
 
 	@Test
@@ -88,7 +88,7 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
 		val uSuperInterface2 = getCorrespondingInterface(superInterface2)
 		assertUmlClassifierHasSuperClassifier(uInterface, uSuperInterface2)
 		assertUmlClassifierDontHaveSuperClassifier(uInterface, uSuperInterface)
-		assertInterfaceEquals(uInterface, jInterface)
+		assertElementsEqual(uInterface, jInterface)
 	}
 
 }

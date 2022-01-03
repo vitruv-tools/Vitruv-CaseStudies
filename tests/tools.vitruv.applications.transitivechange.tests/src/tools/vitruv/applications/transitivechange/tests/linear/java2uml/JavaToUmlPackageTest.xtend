@@ -51,7 +51,7 @@ class JavaToUmlPackageTest extends JavaToUmlTransformationTest {
 		val uPackage = getCorrespondingPackage(jPackage)
 		assertNotNull(uPackage)
 		assertEquals(PACKAGE_NAME, uPackage.name)
-		assertPackageEquals(uPackage, jPackage)
+		assertElementsEqual(uPackage, jPackage)
 	}
 
 	@Test
@@ -61,7 +61,7 @@ class JavaToUmlPackageTest extends JavaToUmlTransformationTest {
 
 		val uPackage = getCorrespondingPackage(jPackageLevel1)
 		assertEquals(PACKAGE_RENAMED, uPackage.name)
-		assertPackageEquals(uPackage, jPackageLevel1)
+		assertElementsEqual(uPackage, jPackageLevel1)
 	}
 
 	@Test

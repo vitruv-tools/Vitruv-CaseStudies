@@ -48,7 +48,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 
 		val jPackage = getCorrespondingPackage(uPackage)
 		assertEquals(PACKAGE_NAME, jPackage.name)
-		assertPackageEquals(uPackage, jPackage)
+		assertElementsEqual(uPackage, jPackage)
 	}
 
 	@Test
@@ -61,7 +61,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 		val jPackageLevel2 = getCorrespondingPackage(uPackageLevel2)
 		assertEquals(PACKAGE_LEVEL_2, jPackageLevel2.name)
 		assertEquals(#[jPackageLevel1.name], jPackageLevel2.namespaces)
-		assertPackageEquals(uPackageLevel2, jPackageLevel2)
+		assertElementsEqual(uPackageLevel2, jPackageLevel2)
 	}
 	
 	@Test
@@ -78,7 +78,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 		val jPackageLevel2 = getCorrespondingPackage(uPackageLevel2)
 		assertEquals(PACKAGE_LEVEL_2, jPackageLevel2.name)
 		assertEquals(#[jPackageLevel1.name], jPackageLevel2.namespaces)
-		assertPackageEquals(uPackageLevel2, jPackageLevel2)
+		assertElementsEqual(uPackageLevel2, jPackageLevel2)
 	}
 
 	@Test
@@ -101,6 +101,6 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 
 		val jPackage = getCorrespondingPackage(uPackageLevel1)
 		assertEquals(PACKAGE_RENAMED, jPackage.name)
-		assertPackageEquals(uPackageLevel1, jPackage)
+		assertElementsEqual(uPackageLevel1, jPackage)
 	}
 }

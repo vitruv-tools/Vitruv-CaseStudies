@@ -50,7 +50,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
 		val uEnum = getCorrespondingEnum(enumeration)
 		assertUmlEnumTraits(uEnum, STANDARD_ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, registeredUmlModel,
 			createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2))
-		assertEnumEquals(uEnum, enumeration)
+		assertElementsEqual(uEnum, enumeration)
 	}
 
 	@Test
@@ -60,7 +60,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
 
 		val uEnum = getCorrespondingEnum(jEnum)
 		assertEquals(ENUM_RENAME, uEnum.name)
-		assertEnumEquals(uEnum, jEnum)
+		assertElementsEqual(uEnum, jEnum)
 	}
 
 	@Test
@@ -81,7 +81,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
 
 		val uEnum = getCorrespondingEnum(jEnum)
 		assertUmlEnumHasLiteral(uEnum, createUmlEnumerationLiteral(CONSTANT_NAME))
-		assertEnumEquals(uEnum, jEnum)
+		assertElementsEqual(uEnum, jEnum)
 	}
 
 	@Test
@@ -91,7 +91,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
 
 		val uEnum = getCorrespondingEnum(jEnum)
 		assertUmlEnumDontHaveLiteral(uEnum, createUmlEnumerationLiteral(ENUM_LITERAL_NAMES_1.head))
-		assertEnumEquals(uEnum, jEnum)
+		assertElementsEqual(uEnum, jEnum)
 	}
 
 	@Test
@@ -105,7 +105,7 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
 		val uEnum = getCorrespondingEnum(jEnum)
 		assertUmlOperationTraits(uOperation, OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false,
 			false, uEnum, null)
-		assertClassMethodEquals(uOperation, jMethod)
+		assertElementsEqual(uOperation, jMethod)
 	}
 
 	@Test
@@ -121,6 +121,6 @@ class JavaToUmlEnumTest extends JavaToUmlTransformationTest {
 		val uEnum = getCorrespondingEnum(jEnum)
 		assertUmlPropertyTraits(uAttr, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, uTypeClass, false, false, uEnum,
 			null, null)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 }

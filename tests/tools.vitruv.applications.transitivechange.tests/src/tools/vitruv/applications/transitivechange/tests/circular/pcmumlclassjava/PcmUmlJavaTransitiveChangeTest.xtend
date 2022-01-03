@@ -79,7 +79,7 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 	def protected checkJavaPackage(Package umlPackage) {
 		val javaPackage = getFirstCorrespondingObject(umlPackage, org.emftext.language.java.containers.Package)
 		assertEquals(umlPackage.name, javaPackage.name)
-		assertPackageEquals(umlPackage, javaPackage)
+		assertElementsEqual(umlPackage, javaPackage)
 	}
 
 	def protected checkNumberOfJavaPackages(Package umlRootPackage) {
@@ -92,7 +92,7 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 	def protected checkUmlPackage(org.emftext.language.java.containers.Package javaPackage) {
 		val umlPackage = getFirstCorrespondingObject(javaPackage, Package)
 		assertEquals(umlPackage.name, javaPackage.name)
-		assertPackageEquals(umlPackage, javaPackage)
+		assertElementsEqual(umlPackage, javaPackage)
 	}
 
 	def protected checkJavaAttribute(Property umlAttribute) {
