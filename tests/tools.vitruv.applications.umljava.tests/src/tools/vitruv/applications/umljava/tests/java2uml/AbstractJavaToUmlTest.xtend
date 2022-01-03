@@ -10,12 +10,18 @@ import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUt
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
+import org.junit.jupiter.api.BeforeEach
 
 abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
-	static val DEFAULT_UML_MODEL_NAME = "model"
+
+	@BeforeEach
+	def protected setup() {
+		userInteraction.addNextTextInput(UML_MODEL_NAME)
+		userInteraction.addNextTextInput(MODEL_FOLDER_NAME)
+	}
 
 	protected def getUniqueDefaultUmlModel(View view) {
-		view.getUniqueUmlModelWithName(DEFAULT_UML_MODEL_NAME)
+		view.getUniqueUmlModelWithName(UML_MODEL_NAME)
 	}
 
 	protected def void createJavaPackageInRootPackage(String name) {
@@ -25,7 +31,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 			]
 		]
 	}
-	
+
 	protected def void createJavaEnumInRootPackage(String name) {
 		createJavaEnumInPackage(#[], name)
 	}
@@ -63,7 +69,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	protected def void createJavaInterfaceInRootPackage(String name) {
 		createJavaInterfaceInPackage(#[], name)
 	}
-	
+
 	protected def void createJavaInterfaceInPackage(List<String> namespace, String name) {
 		createJavaClassesView => [
 			createJavaCompilationUnit[
@@ -76,8 +82,11 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 			]
 		]
 	}
-	
-	protected def assertSingleClassifierWithNameInRootPackage(Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType, Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String name, String javaCompilationUnitName) {
+
+	protected def assertSingleClassifierWithNameInRootPackage(
+		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
+		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String name,
+		String javaCompilationUnitName) {
 		createUmlAndJavaClassesView => [
 			val javaClassifier = getUniqueJavaClassifierWithName(javaClassifierType, name)
 			val javaCompilationUnit = getUniqueJavaCompilationUnitWithName(javaCompilationUnitName)
@@ -86,26 +95,30 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 				uniqueDefaultUmlModel.packagedElements.toSet, is(#{umlClassifier}))
 			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.toSet,
 				is(#{javaCompilationUnit}))
-			assertThat("only one Java classifier is expected to exist", getJavaClassifiersOfType(javaClassifierType).toSet, is(#{javaClassifier}))
+			assertThat("only one Java classifier is expected to exist",
+				getJavaClassifiersOfType(javaClassifierType).toSet, is(#{javaClassifier}))
 			assertElementsEqual(umlClassifier, javaClassifier)
 		]
 	}
-	
-	protected def assertSingleClassifierWithNameInPackage(Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType, Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String packageName, String name) {
+
+	protected def assertSingleClassifierWithNameInPackage(
+		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
+		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String packageName, String name) {
 		createUmlAndJavaClassesView => [
 			val javaClassifier = getUniqueJavaClassifierWithName(javaClassifierType, name)
 			val javaCompilationUnit = getUniqueJavaCompilationUnitWithName(name)
 			val umlPackage = uniqueDefaultUmlModel.getUniqueUmlPackageWithName(packageName)
 			val umlClassifier = umlPackage.getUniqueUmlPackagedElementWithName(umlClassifierType, name)
-			assertThat("only one element in UML model is expected to exist",
-				umlPackage.packagedElements.toSet, is(#{umlClassifier}))
+			assertThat("only one element in UML model is expected to exist", umlPackage.packagedElements.toSet,
+				is(#{umlClassifier}))
 			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.toSet,
 				is(#{javaCompilationUnit}))
-			assertThat("only one Java classifier is expected to exist", getJavaClassifiersOfType(javaClassifierType).toSet, is(#{javaClassifier}))
+			assertThat("only one Java classifier is expected to exist",
+				getJavaClassifiersOfType(javaClassifierType).toSet, is(#{javaClassifier}))
 			assertElementsEqual(umlClassifier, javaClassifier)
 		]
 	}
-	
+
 	protected def assertNoClassifierExistsInRootPackage() {
 		createUmlView => [
 			assertThat("no element in UML model is expected to exist", uniqueDefaultUmlModel.packagedElements.toSet,

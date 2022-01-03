@@ -3,8 +3,15 @@ package tools.vitruv.applications.umljava.tests.uml2java
 import tools.vitruv.applications.umljava.tests.UmlJavaTransformationTest
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.getUniqueUmlModel
 import org.eclipse.uml2.uml.Model
+import org.junit.jupiter.api.BeforeEach
 
 abstract class AbstractUmlToJavaTest extends UmlJavaTransformationTest {
+
+	@BeforeEach
+	def protected void setup() {
+		createUmlModel[name = UML_MODEL_NAME]
+	}
+
 	/**
 	 * Changes the UML model in the UML view and commits the performed changes.
 	 * 
@@ -15,4 +22,5 @@ abstract class AbstractUmlToJavaTest extends UmlJavaTransformationTest {
 			modelModification.apply(uniqueUmlModel)
 		]
 	}
+
 }

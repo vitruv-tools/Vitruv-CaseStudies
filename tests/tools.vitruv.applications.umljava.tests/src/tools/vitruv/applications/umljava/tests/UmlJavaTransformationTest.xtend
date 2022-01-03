@@ -5,7 +5,6 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory
 
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Path
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
@@ -21,26 +20,23 @@ import org.emftext.language.java.containers.Package
 import org.emftext.language.java.containers.ContainersFactory
 import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
 import org.emftext.language.java.containers.JavaRoot
+import org.eclipse.xtend.lib.annotations.Accessors
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected static val Logger logger = Logger.getLogger(UmlJavaTransformationTest)
 
 	static val MODEL_FILE_EXTENSION = "uml"
-	static val MODEL_NAME = "model"
+	@Accessors(PROTECTED_GETTER)
+	static val UML_MODEL_NAME = "model"
+	@Accessors(PROTECTED_GETTER)
+	static val MODEL_FOLDER_NAME = "model"
 
 	private def Path getProjectModelPath(String modelName) {
-		Path.of("model").resolve(modelName + "." + MODEL_FILE_EXTENSION)
+		Path.of(MODEL_FOLDER_NAME).resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}
 
 	override protected getChangePropagationSpecifications() {
 		return #[new UmlToJavaChangePropagationSpecification(), new JavaToUmlChangePropagationSpecification()]
-	}
-
-	@BeforeEach
-	def protected void setup() {
-		val umlModel = UMLFactory.eINSTANCE.createModel()
-		umlModel.name = MODEL_NAME
-		createUmlModel[name = MODEL_NAME]
 	}
 
 	def protected assertJavaFileExists(String fileName, String[] namespaces) {
@@ -54,7 +50,7 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected def void createUmlModel((Model)=>void modelInitialization) {
 		changeView(createUmlView()) [
 			val umlModel = UMLFactory.eINSTANCE.createModel
-			registerRoot(umlModel, MODEL_NAME.projectModelPath.uri)
+			registerRoot(umlModel, UML_MODEL_NAME.projectModelPath.uri)
 			modelInitialization.apply(umlModel)
 		]
 	}
