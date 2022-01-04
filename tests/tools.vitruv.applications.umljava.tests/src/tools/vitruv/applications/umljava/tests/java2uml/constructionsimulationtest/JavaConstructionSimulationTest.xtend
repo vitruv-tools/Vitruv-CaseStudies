@@ -5,18 +5,18 @@ import java.io.File
 import org.apache.commons.io.FilenameUtils
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import java.util.List
-import tools.vitruv.applications.umljava.tests.java2uml.JavaToUmlTransformationTest
 import org.junit.jupiter.api.Disabled
 import java.nio.file.Path
-import org.eclipse.emf.ecore.EObject
 import static org.eclipse.emf.common.util.URI.createFileURI
+import tools.vitruv.applications.umljava.tests.java2uml.AbstractJavaToUmlTest
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 
 /**
  * Test class for the reconstruction of existing java models
  */
 // FIXME implement loading objects correctly
 @Disabled("disfunctional because loading is not implemented correctly")
-class JavaConstructionSimulationTest extends JavaToUmlTransformationTest {
+class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 
 	/**
 	 * Tests the files from the logger project by orhan obut
@@ -48,14 +48,9 @@ class JavaConstructionSimulationTest extends JavaToUmlTransformationTest {
 
 		createAndSyncPackageInfo(directoryContents, directoryPath, namespace)
 
-		for (file : directoryContents.filter["java".equals(FilenameUtils.getExtension(name))].filter [
+		simulateConstruction(directoryContents.filter["java".equals(FilenameUtils.getExtension(name))].filter [
 			!name.equals("package-info.java")
-		]) {
-			resourceAt(Path.of(file.path)).startRecordingChanges => [
-				contents += EObject.from(createFileURI(file.path))
-			]
-			propagate
-		}
+		].map[path])
 		for (file : directoryContents.filter[it.isDirectory]) {
 			loadDirectoryContents(file.path, namespace + "." + file.name)
 		}
@@ -114,10 +109,7 @@ class JavaConstructionSimulationTest extends JavaToUmlTransformationTest {
 	def private void loadFirstFileWithTheName(File[] fileList, String name) {
 		val file = fileList.findFirst[it.name.equals(name)]
 		if (file !== null && file.exists) {
-			resourceAt(Path.of(file.path)).startRecordingChanges => [
-				contents += EObject.from(createFileURI(file.path))
-			]
-			propagate
+			simulateConstruction(#[file.path])
 		}
 	}
 
@@ -128,9 +120,16 @@ class JavaConstructionSimulationTest extends JavaToUmlTransformationTest {
 			} else {
 				packageInfos.head
 			}
-		resourceAt(Path.of(packageInfoFile.path)).startRecordingChanges => [
-			contents += EObject.from(createFileURI(packageInfoFile.path))
+		simulateConstruction(#[packageInfoFile.path])
+	}
+
+	private def void simulateConstruction(Iterable<String> pathnames) {
+		val originalResourceSet = new ResourceSetImpl()
+		changeView(createJavaClassesView()) [
+			for (pathname : pathnames) {
+				val originalModel = originalResourceSet.getResource(createFileURI(pathname), true).contents.head
+				registerRoot(originalModel, Path.of(pathname).uri)
+			}
 		]
-		propagate
 	}
 }
