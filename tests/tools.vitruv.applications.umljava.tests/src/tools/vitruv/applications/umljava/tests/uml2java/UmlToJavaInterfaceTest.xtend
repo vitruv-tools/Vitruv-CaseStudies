@@ -1,99 +1,143 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import org.eclipse.emf.common.util.BasicEList
-import org.eclipse.emf.common.util.EList
-import org.eclipse.uml2.uml.Interface
+import org.junit.jupiter.api.Test
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.CoreMatchers.is
 
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 
 /**
  * This class contains tests that deal with changes with interfaces.
  * (creating, deleting, renaming,...)
- * @author Fei
  */
-class UmlToJavaInterfaceTest extends UmlToJavaTransformationTest {
+class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
+	static val PACKAGE_NAME = "rootpackage"
 	static val INTERFACE_NAME = "InterfaceName"
 	static val INTERFACE_RENAME = "InterfaceRename"
-	static val SUPERINTERFACENAME_1 = "SuperInterfaceOne"
-	static val SUPERINTERFACENAME_2 = "SuperInterfaceTwo"
-	static val STANDARD_INTERFACE_NAME = "StandardInterfaceName"
-	var Interface uInterface
+	static val SUPER_INTERFACE_NAME_1 = "SuperInterfaceOne"
+	static val SUPER_INTERFACE_NAME_2 = "SuperInterfaceTwo"
 
-	@BeforeEach
-	def void before() {
-		uInterface = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
-		propagate
 
+	private def assertSingleInterfaceWithNameInRootPackage(String interfaceName) {
+		assertSingleInterfaceWithNameInRootPackage(interfaceName, interfaceName)
+	}
+
+	private def assertSingleInterfaceWithNameInRootPackage(String interfaceName, String compilationUnitName) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, interfaceName, compilationUnitName)
+	}
+
+	private def assertSingleInterfaceWithNameInPackage(String packageName, String interfaceName) {
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Interface, org.eclipse.uml2.uml.Interface,
+			packageName, interfaceName)
 	}
 
 	@Test
-	def testCreateInterface() {
-		val interface = createSimpleUmlInterface(rootElement, STANDARD_INTERFACE_NAME)
-		propagate
-
-		assertJavaFileExists(STANDARD_INTERFACE_NAME, #[])
-		val jInterface = getCorrespondingInterface(interface)
-		assertEquals(STANDARD_INTERFACE_NAME, jInterface.name)
+	def void testCreateInterface() {
+		createInterfaceInRootPackage(INTERFACE_NAME)
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		assertJavaFileExists(INTERFACE_NAME, #[])
+		assertJavaCompilationUnitCount(1)
 	}
-
+	
+	@Test
+	def void testCreateInterfaceInPackage() {
+		createInterfaceInPackage(PACKAGE_NAME, INTERFACE_NAME)
+		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
+		assertJavaFileExists(INTERFACE_NAME, #[PACKAGE_NAME])
+		assertJavaCompilationUnitCount(1)
+	}
+	
 	@Test
 	def testRenameInterface() {
-		uInterface.name = INTERFACE_RENAME
-		propagate
-
+		createInterfaceInRootPackage(INTERFACE_NAME)
+		changeUmlModel[
+			claimInterface(INTERFACE_NAME) => [
+				name = INTERFACE_RENAME
+			]
+		]
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_RENAME)
 		assertJavaFileExists(INTERFACE_RENAME, #[])
-		val jInterface = getCorrespondingInterface(uInterface)
-		assertEquals(INTERFACE_RENAME, jInterface.name)
+		assertJavaFileNotExists(INTERFACE_NAME, #[])
+	}
+	
+	@Test
+	def testMoveInterface() {
+		createInterfaceInRootPackage(INTERFACE_NAME)
+		createPackageInRootPackage(PACKAGE_NAME)
+		changeUmlModel[
+			val interf = claimInterface(INTERFACE_NAME)
+			claimPackage(PACKAGE_NAME) => [
+				packagedElements += interf
+			]
+		]
+		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
+		assertJavaFileExists(INTERFACE_NAME, #[PACKAGE_NAME])
 		assertJavaFileNotExists(INTERFACE_NAME, #[])
 	}
 
 	@Test
-	def testDeleteInterface() {
-		uInterface.destroy
-		propagate
-
+	def void testDeletedInterface() {
+		createInterfaceInRootPackage(INTERFACE_NAME)
+		changeUmlModel [
+			claimInterface(INTERFACE_NAME).destroy
+		]
+		assertNoClassifierExistsInRootPackage()
 		assertJavaFileNotExists(INTERFACE_NAME, #[])
 	}
-
+	
 	@Test
-	def testAddSuperInterface() {
-		val interface = createInterfaceWithTwoSuperInterfaces(STANDARD_INTERFACE_NAME, SUPERINTERFACENAME_1,
-			SUPERINTERFACENAME_2)
-		propagate
-		val jI = getCorrespondingInterface(interface)
-		assertEquals(SUPERINTERFACENAME_1, getClassifierFromTypeReference(jI.extends.get(0)).name)
-		assertEquals(SUPERINTERFACENAME_2, getClassifierFromTypeReference(jI.extends.get(1)).name)
+	def void testAddSuperInterface() {
+		createInterfaceInRootPackage(INTERFACE_NAME)
+		createInterfaceInRootPackage(SUPER_INTERFACE_NAME_1)
+		createInterfaceInRootPackage(SUPER_INTERFACE_NAME_2)
+		changeUmlModel [
+			val superInterface1 = claimInterface(SUPER_INTERFACE_NAME_1)
+			val superInterface2 = claimInterface(SUPER_INTERFACE_NAME_2)
+			claimInterface(INTERFACE_NAME) => [
+				generals += superInterface1
+				generals += superInterface2
+			]
+		]
+		createUmlAndJavaClassesView => [
+			val javaInterface = claimJavaInterface(INTERFACE_NAME)
+			val umlSuperInterface1 = defaultUmlModel.claimInterface(SUPER_INTERFACE_NAME_1)
+			val umlSuperInterface2 = defaultUmlModel.claimInterface(SUPER_INTERFACE_NAME_2)
+			assertThat("there must be two super interfaces", javaInterface.extends.size, is(2)) 
+			assertElementsEqual(umlSuperInterface1, getClassifierFromTypeReference(javaInterface.extends.get(0)))
+			assertElementsEqual(umlSuperInterface2, getClassifierFromTypeReference(javaInterface.extends.get(1)))
+		]
 	}
 
 	@Test
-	def testRemoveSuperInterface() {
-		val uInterface = createInterfaceWithTwoSuperInterfaces(STANDARD_INTERFACE_NAME, SUPERINTERFACENAME_1,
-			SUPERINTERFACENAME_2)
-		propagate
-		uInterface.generalizations.remove(0)
-		propagate
-		val jI = getCorrespondingInterface(uInterface)
-		assertTrue(jI.extends.size == 1, jI.extends.size.toString)
-		assertEquals(SUPERINTERFACENAME_2, getClassifierFromTypeReference(jI.extends.get(0)).name)
-		assertJavaFileExists(SUPERINTERFACENAME_1, #[])
-	}
-
-	/**
-	 * @return an interface named iName which inherits from two other interfaces named superName1 an superName2
-	 */
-	private def Interface createInterfaceWithTwoSuperInterfaces(String iName, String superName1, String superName2) {
-		val super1 = createSimpleUmlInterface(rootElement, superName1)
-		val super2 = createSimpleUmlInterface(rootElement, superName2)
-		val EList<Interface> supers = new BasicEList<Interface>
-		supers += super1
-		supers += super2
-		return createUmlInterfaceAndAddToPackage(rootElement, iName, supers)
+	def void testRemoveSuperInterface() {
+		createInterfaceInRootPackage(INTERFACE_NAME)
+		createInterfaceInRootPackage(SUPER_INTERFACE_NAME_1)
+		createInterfaceInRootPackage(SUPER_INTERFACE_NAME_2)
+		changeUmlModel [
+			val superInterface1 = claimInterface(SUPER_INTERFACE_NAME_1)
+			val superInterface2 = claimInterface(SUPER_INTERFACE_NAME_2)
+			claimInterface(INTERFACE_NAME) => [
+				generals += superInterface1
+				generals += superInterface2
+			]
+		]
+		changeUmlModel [
+			claimInterface(INTERFACE_NAME) => [
+				generalizations.remove(0)
+			]
+		]
+		assertJavaFileExists(SUPER_INTERFACE_NAME_1, #[])
+		createUmlAndJavaClassesView => [
+			val javaInterface = claimJavaInterface(INTERFACE_NAME)
+			val umlSuperInterface2 = defaultUmlModel.claimInterface(SUPER_INTERFACE_NAME_2)
+			assertThat("there must be one super interface", javaInterface.extends.size, is(1)) 
+			assertElementsEqual(umlSuperInterface2, getClassifierFromTypeReference(javaInterface.extends.get(0)))
+		]
+		
 	}
 
 }
