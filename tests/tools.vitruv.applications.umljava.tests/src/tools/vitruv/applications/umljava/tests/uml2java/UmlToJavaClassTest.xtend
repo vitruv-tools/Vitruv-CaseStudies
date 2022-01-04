@@ -27,12 +27,6 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	static val ADDITIONAL_CLASS_NAME = "AdditionalClass"
 	static val DEFAULT_INTERFACE_NAME = "TestInterface"
 	static val ADDITIONAL_INTERFACE_NAME = "AdditionalInterface"
-
-	private def void assertJavaCompilationUnitCount(int number) {
-		createJavaClassesView() => [
-			assertEquals(number, rootObjects.size, '''Wrong number of Java compilation units exists: «rootObjects»''')
-		]
-	}
 	
 	private def assertSingleClassWithNameInRootPackage(String name) {
 		assertSingleClassWithNameInRootPackage(name, name)
@@ -53,6 +47,13 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		createClassInRootPackage(DEFAULT_CLASS_NAME)
 		assertJavaCompilationUnitCount(1)
 		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+	}
+	
+	@Test
+	def void testCreateClassInPackage() {
+		createClassInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
+		assertJavaCompilationUnitCount(1)
+		assertSingleClassWithNameInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
 	}
 
 	@Test

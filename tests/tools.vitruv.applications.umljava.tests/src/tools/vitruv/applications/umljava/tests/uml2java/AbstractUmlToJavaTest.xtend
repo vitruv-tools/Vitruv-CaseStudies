@@ -28,48 +28,98 @@ abstract class AbstractUmlToJavaTest extends UmlJavaTransformationTest {
 			modelModification.apply(defaultUmlModel)
 		]
 	}
+	
+	protected def void assertJavaCompilationUnitCount(int number) {
+		createJavaClassesView() => [
+			assertThat("expected number of compilation units must exist", rootObjects.size, is(number))
+		]
+	}
+	
+	protected def void createPackageInRootPackage(String packageName) {
+		changeUmlModel [
+			packagedElements += UMLFactory.eINSTANCE.createPackage => [
+				it.name = packageName
+			]
+		]
+	}
 
-	protected def void createInterfaceInRootPackage(String name) {
+	protected def void createInterfaceInRootPackage(String interfaceName) {
 		changeUmlModel [
 			packagedElements += UMLFactory.eINSTANCE.createInterface => [
-				it.name = name
+				it.name = interfaceName
 				it.visibility = VisibilityKind.PUBLIC_LITERAL
 			]
 		]
 		createUmlAndJavaClassesView() => [
-			val umlInterface = defaultUmlModel.claimInterface(name)
-			val javaInterface = claimJavaInterface(name)
-			assertJavaFileExists(name, #[])
+			val umlInterface = defaultUmlModel.claimInterface(interfaceName)
+			val javaInterface = claimJavaInterface(interfaceName)
+			assertJavaFileExists(interfaceName, #[])
 			assertElementsEqual(umlInterface, javaInterface)
 		]
 	}
 	
-	protected def void createClassInRootPackage(String name) {
+	protected def void createInterfaceInPackage(String packageName, String interfaceName) {
+		createPackageInRootPackage(packageName)
+		changeUmlModel [
+			claimPackage(packageName) => [
+				packagedElements += UMLFactory.eINSTANCE.createInterface => [
+					it.name = interfaceName
+					it.visibility = VisibilityKind.PUBLIC_LITERAL
+				]
+			]
+		]
+		createUmlAndJavaClassesView() => [
+			val umlInterface = defaultUmlModel.claimPackage(packageName).claimInterface(interfaceName)
+			val javaInterface = claimJavaInterface(interfaceName)
+			assertJavaFileExists(interfaceName, #[packageName])
+			assertElementsEqual(umlInterface, javaInterface)
+		]
+	}
+	
+	protected def void createClassInRootPackage(String className) {
 		changeUmlModel [
 			packagedElements += UMLFactory.eINSTANCE.createClass => [
-				it.name = name
+				it.name = className
 				it.visibility = VisibilityKind.PUBLIC_LITERAL
 			]
 		]
-		assertJavaFileExists(name, #[])
+		assertJavaFileExists(className, #[])
 		createUmlAndJavaClassesView() => [
-			val umlClass = defaultUmlModel.claimClass(name)
-			val javaClass = claimJavaClass(name)
+			val umlClass = defaultUmlModel.claimClass(className)
+			val javaClass = claimJavaClass(className)
+			assertElementsEqual(umlClass, javaClass)
+		]
+	}
+	
+	protected def void createClassInPackage(String packageName, String className) {
+		createPackageInRootPackage(packageName)
+		changeUmlModel [
+			claimPackage(packageName) => [
+				packagedElements += UMLFactory.eINSTANCE.createClass => [
+					it.name = className
+					it.visibility = VisibilityKind.PUBLIC_LITERAL
+				]
+			]
+		]
+		assertJavaFileExists(className, #[packageName])
+		createUmlAndJavaClassesView() => [
+			val umlClass = defaultUmlModel.claimPackage(packageName).claimClass(className)
+			val javaClass = claimJavaClass(className)
 			assertElementsEqual(umlClass, javaClass)
 		]
 	}
 
-	protected def void createDataTypeInRootPackage(String name) {
+	protected def void createDataTypeInRootPackage(String dataTypeName) {
 		changeUmlModel [
 			packagedElements += UMLFactory.eINSTANCE.createDataType => [
-				it.name = name
+				it.name = dataTypeName
 			]
 		]
 		createUmlAndJavaClassesView() => [
-			val umlDataType = defaultUmlModel.claimDataType(name)
+			val umlDataType = defaultUmlModel.claimDataType(dataTypeName)
 			val javaClass = claimJavaClass(umlDataType.name)
 			assertJavaFileExists(umlDataType.name, #[])
-			assertThat("Data types must have the same name", name, is(javaClass.name))
+			assertThat("Data types must have the same name", dataTypeName, is(javaClass.name))
 		]
 	}
 }
