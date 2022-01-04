@@ -13,6 +13,9 @@ import org.emftext.language.java.classifiers.Enumeration
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.members.Field
+import org.emftext.language.java.members.Method
+import org.emftext.language.java.parameters.Parameter
+import org.emftext.language.java.members.Constructor
 
 // TODO HK These have to finally replace the old utilities
 @Utility
@@ -71,6 +74,14 @@ class JavaQueryUtil {
 	
 	static def ClassMethod claimClassMethod(ConcreteClassifier classifier, String methodName) {
 		classifier.members.filter(ClassMethod).filter[it.name == methodName].claimOne
+	}
+	
+	static def Constructor claimConstructor(ConcreteClassifier classifier) {
+		classifier.members.filter(Constructor).filter[it.name == classifier.name].claimOne
+	}
+	
+	static def Parameter claimParameter(Method method, String parameterName) {
+		method.parameters.filter[it.name == parameterName].claimOne
 	}
 	
 	static def Field claimField(ConcreteClassifier classifier, String fieldName) {

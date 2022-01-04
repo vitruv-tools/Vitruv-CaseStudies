@@ -10,7 +10,6 @@ import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElemen
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
-import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
@@ -19,8 +18,6 @@ import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUti
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.types.TypeReference
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 
@@ -44,10 +41,6 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-	}
-
-	private def loadUmlPrimitiveType(String name) {
-		getSupportedPredefinedUmlPrimitiveTypes(new ResourceSetImpl()).filter[it.name == name].claimOne
 	}
 
 	/**

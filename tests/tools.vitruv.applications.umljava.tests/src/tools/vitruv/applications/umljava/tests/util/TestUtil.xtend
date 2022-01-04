@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.fail
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import org.emftext.language.java.members.Constructor
 
 /**
  * Utility class for assertions that works bidirectional.
@@ -135,6 +136,14 @@ class TestUtil {
 		assertEquals(uLiteral.name, jConstant.name, "Enumeration literal names must be equal")
 	}
 
+	def static dispatch void assertElementsEqual(Operation uMethod, Constructor jConstructor) {
+		assertEquals(uMethod.name, jConstructor.name, "Constructor names must be equal")
+		assertStaticEquals(uMethod, jConstructor)
+		assertVisibilityEquals(uMethod, jConstructor)
+		assertEquals(null, uMethod.type, "Constructors must not have a return type")
+		assertParameterListEquals(uMethod.ownedParameters, jConstructor.parameters)
+	}
+
 	/**
 	 * It does compare the parameter of the methods
 	 */
@@ -151,7 +160,6 @@ class TestUtil {
 	/**
 	 * Interface methods = methods without body.
 	 * Also checks if uMethod is abstract.
-	 * 
 	 */
 	def static dispatch void assertElementsEqual(Operation uMethod, InterfaceMethod jMethod) {
 		assertEquals(uMethod.name, jMethod.name, "Method names must be equal")

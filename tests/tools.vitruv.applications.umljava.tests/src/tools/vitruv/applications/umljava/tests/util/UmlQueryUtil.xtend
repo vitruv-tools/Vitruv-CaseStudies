@@ -13,10 +13,17 @@ import org.eclipse.uml2.uml.PackageableElement
 import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Property
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
+import org.eclipse.uml2.uml.Parameter
 
 // TODO HK These have to finally replace the old utilities
 @Utility
 class UmlQueryUtil {
+	static def loadUmlPrimitiveType(String name) {
+		getSupportedPredefinedUmlPrimitiveTypes(new ResourceSetImpl()).filter[it.name == name].claimOne
+	}
+	
 	static def Model claimUniqueUmlModel(View view) {
 		view.rootObjects(Model).claimOne
 	}
@@ -67,6 +74,10 @@ class UmlQueryUtil {
 	
 	static def Operation claimOperation(Classifier containingClassifier, String operationName) {
 		containingClassifier.operations.filter[it.name == operationName].claimOne
+	}
+
+	static def Parameter claimParameter(Operation containingOperation, String parameterName) {
+		containingOperation.ownedParameters.filter[it.name == parameterName].claimOne
 	}
 	
 	static def Property claimAttribute(Classifier containingClassifier, String attributeName) {
