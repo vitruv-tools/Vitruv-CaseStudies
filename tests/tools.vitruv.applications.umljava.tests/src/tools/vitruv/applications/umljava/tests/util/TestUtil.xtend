@@ -86,8 +86,8 @@ class TestUtil {
 	 */
 	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.Package uPackage,
 		org.emftext.language.java.containers.Package jPackage) {
-		assertEquals(uPackage.name.toFirstLower, jPackage.name, "Package names must be equal")
-		assertEquals(getUmlParentNamespaceAsStringList(uPackage).map[toFirstLower], jPackage.namespaces,
+		assertEquals(uPackage.name, jPackage.name, "Package names must be equal")
+		assertEquals(getUmlParentNamespaceAsStringList(uPackage), jPackage.namespaces,
 			"Package namespaces names must be equal")
 	}
 
