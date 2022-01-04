@@ -73,9 +73,8 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		propagate
 
 		// PCM sets the visibility to protected because it does not know package visibility
-		uClass.visibility = VisibilityKind.PROTECTED_LITERAL
 		val jClass = getCorrespondingClass(uClass)
-		assertJavaModifiableHasVisibility(jClass, JavaVisibility.PROTECTED)
+		assertJavaModifiableHasVisibility(jClass, JavaVisibility.PACKAGE)
 		assertElementsEqual(uClass, jClass)
 	}
 

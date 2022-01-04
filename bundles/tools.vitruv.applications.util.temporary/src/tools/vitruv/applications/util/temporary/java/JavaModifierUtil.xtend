@@ -71,7 +71,7 @@ class JavaModifierUtil {
      */
     def static JavaVisibility getEnumConstantFromJavaVisibility(Modifier modifier) {
         if (modifier === null) {
-            return JavaVisibility.PROTECTED
+            return JavaVisibility.PACKAGE
         }
         switch (modifier.eClass.name) {
             case Private.simpleName: return JavaVisibility.PRIVATE
