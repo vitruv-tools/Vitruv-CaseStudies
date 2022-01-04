@@ -46,7 +46,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	def void testCreatePackage() {
 		createRootPackage(PACKAGE_NAME)
 		createUmlAndJavaPackagesView() => [
-			val umlPackage = claimUniqueUmlModel.claimPackage(PACKAGE_NAME)
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val javaPackage = claimJavaPackage(PACKAGE_NAME)
 			assertEquals(1, javaPackages.size, "exactly one Java package should exist")
 			assertElementsEqual(umlPackage, javaPackage)
@@ -57,7 +57,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	def void testCreateUppercasePackage() {
 		createRootPackage(PACKAGE_NAME.toFirstUpper)
 		createUmlAndJavaPackagesView() => [
-			val umlPackage = claimUniqueUmlModel.claimPackage(PACKAGE_NAME.toFirstUpper)
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME.toFirstUpper)
 			val javaPackage = claimJavaPackage(PACKAGE_NAME)
 			assertEquals(1, javaPackages.size, "exactly one Java package should exist")
 			assertElementsEqual(umlPackage, javaPackage)
@@ -68,7 +68,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	def void testCreateNestedPackage() {
 		createRootPackageWithNestedPackage(PACKAGE_NAME, NESTED_PACKAGE_NAME)
 		createUmlAndJavaPackagesView() => [
-			val umlRootPackage = claimUniqueUmlModel.claimPackage(PACKAGE_NAME)
+			val umlRootPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val umlNestedPackage = umlRootPackage.claimPackage(NESTED_PACKAGE_NAME)
 			val javaRootPackage = claimJavaPackage(PACKAGE_NAME)
 			val javaNestedPackage = claimJavaPackage(NESTED_PACKAGE_NAME)
@@ -83,7 +83,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	def void testCreateNestedUppercasePackage() {
 		createRootPackageWithNestedPackage(PACKAGE_NAME.toFirstUpper, NESTED_PACKAGE_NAME.toFirstUpper)
 		createUmlAndJavaPackagesView() => [
-			val umlRootPackage = claimUniqueUmlModel.claimPackage(PACKAGE_NAME.toFirstUpper)
+			val umlRootPackage = defaultUmlModel.claimPackage(PACKAGE_NAME.toFirstUpper)
 			val umlNestedPackage = umlRootPackage.claimPackage(NESTED_PACKAGE_NAME.toFirstUpper)
 			val javaRootPackage = claimJavaPackage(PACKAGE_NAME)
 			val javaNestedPackage = claimJavaPackage(NESTED_PACKAGE_NAME)
@@ -103,7 +103,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 			]
 		]
 		createUmlAndJavaPackagesView() => [
-			val umlPackage = claimUniqueUmlModel.claimPackage(PACKAGE_RENAMED)
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_RENAMED)
 			val javaPackage = claimJavaPackage(PACKAGE_RENAMED)
 			assertEquals(1, javaPackages.size, "exactly one Java package should exist")
 			assertElementsEqual(umlPackage, javaPackage)
@@ -121,7 +121,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 			]
 		]
 		createUmlAndJavaPackagesView() => [
-			val umlRootPackage = claimUniqueUmlModel.claimPackage(PACKAGE_NAME)
+			val umlRootPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val umlNestedPackage = umlRootPackage.claimPackage(NESTED_PACKAGE_NAME)
 			val javaRootPackage = claimJavaPackage(PACKAGE_NAME)
 			val javaNestedPackage = claimJavaPackage(NESTED_PACKAGE_NAME)
@@ -139,7 +139,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 			claimPackage(PACKAGE_NAME).destroy
 		]
 		createUmlAndJavaPackagesView() => [
-			assertThat("there should be no element in the UML model", claimUniqueUmlModel.packagedElements,
+			assertThat("there should be no element in the UML model", defaultUmlModel.packagedElements,
 				is(emptyList))
 			assertThat("there should be no Java packages", javaPackages, is(emptyList))
 		]

@@ -24,10 +24,6 @@ class UmlQueryUtil {
 		getSupportedPredefinedUmlPrimitiveTypes(new ResourceSetImpl()).filter[it.name == name].claimOne
 	}
 	
-	static def Model claimUniqueUmlModel(View view) {
-		view.rootObjects(Model).claimOne
-	}
-	
 	private static def <E> E claimUniqueElementOfType(Package containingPackage, java.lang.Class<E> containedElementType) {
 		containingPackage.packagedElements.filter(containedElementType).claimOne
 	}

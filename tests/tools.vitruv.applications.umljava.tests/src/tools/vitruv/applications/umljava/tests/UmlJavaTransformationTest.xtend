@@ -21,6 +21,7 @@ import org.emftext.language.java.containers.ContainersFactory
 import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
 import org.emftext.language.java.containers.JavaRoot
 import org.eclipse.xtend.lib.annotations.Accessors
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected static val Logger logger = Logger.getLogger(UmlJavaTransformationTest)
@@ -31,6 +32,10 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FOLDER_NAME = "model"
 
+	protected def getDefaultUmlModel(View view) {
+		view.claimUmlModel(UML_MODEL_NAME)
+	}
+	
 	private def Path getProjectModelPath(String modelName) {
 		Path.of(MODEL_FOLDER_NAME).resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}
