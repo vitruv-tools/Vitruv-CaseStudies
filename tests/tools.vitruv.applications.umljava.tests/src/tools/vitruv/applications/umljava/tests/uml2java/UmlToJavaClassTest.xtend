@@ -21,7 +21,9 @@ import org.eclipse.uml2.uml.UMLFactory
  * This class provides tests for basic class tests in the UML to Java direction
  */
 class UmlToJavaClassTest extends AbstractUmlToJavaTest {
+	static val PACKAGE_NAME = "rootpackage"
 	static val DEFAULT_CLASS_NAME = "TestClass"
+	static val RENAMED_CLASS_NAME = "RenamedTestClass"
 	static val ADDITIONAL_CLASS_NAME = "AdditionalClass"
 	static val DEFAULT_INTERFACE_NAME = "TestInterface"
 	static val ADDITIONAL_INTERFACE_NAME = "AdditionalInterface"
@@ -69,7 +71,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 			]
 		]
 		createUmlAndJavaClassesView() => [
-			val umlDataType = defaultUmlModel.claimUniqueUmlDataType
+			val umlDataType = defaultUmlModel.claimDataType(name)
 			val javaClass = claimJavaClass(umlDataType.name)
 			assertJavaFileExists(umlDataType.name, #[])
 			assertEquals(name, javaClass.name)
@@ -86,7 +88,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testDeletedClass() {
 		createRootPackageClass(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			claimUniqueUmlClass.destroy
+			claimClass(DEFAULT_CLASS_NAME).destroy
 		]
 		createUmlAndJavaClassesView() => [
 			assertJavaCompilationUnitCount(0)
@@ -100,10 +102,10 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testChangeClassVisibilityToPrivate() {
 		createRootPackageClass(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			claimUniqueUmlClass.visibility = VisibilityKind.PRIVATE_LITERAL
+			claimClass(DEFAULT_CLASS_NAME).visibility = VisibilityKind.PRIVATE_LITERAL
 		]
 		createUmlAndJavaClassesView() => [
-			val umlClass = defaultUmlModel.claimUniqueUmlClass
+			val umlClass = defaultUmlModel.claimClass(DEFAULT_CLASS_NAME)
 			assertJavaCompilationUnitCount(1)
 			val javaClass = claimJavaClass(umlClass.name)
 			assertJavaModifiableHasVisibility(javaClass, JavaVisibility.PRIVATE)
@@ -115,10 +117,10 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testChangeClassVisibilityToPackage() {
 		createRootPackageClass(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			claimUniqueUmlClass.visibility = VisibilityKind.PACKAGE_LITERAL
+			claimClass(DEFAULT_CLASS_NAME).visibility = VisibilityKind.PACKAGE_LITERAL
 		]
 		createUmlAndJavaClassesView() => [
-			val umlClass = defaultUmlModel.claimUniqueUmlClass
+			val umlClass = defaultUmlModel.claimClass(DEFAULT_CLASS_NAME)
 			assertJavaCompilationUnitCount(1)
 			val javaClass = claimJavaClass(umlClass.name)
 			assertJavaModifiableHasVisibility(javaClass, JavaVisibility.PACKAGE)
@@ -130,10 +132,10 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testChangeAbstractClass() {
 		createRootPackageClass(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			claimUniqueUmlClass.isAbstract = true
+			claimClass(DEFAULT_CLASS_NAME).isAbstract = true
 		]
 		createUmlAndJavaClassesView() => [
-			val umlClass = defaultUmlModel.claimUniqueUmlClass
+			val umlClass = defaultUmlModel.claimClass(DEFAULT_CLASS_NAME)
 			assertJavaCompilationUnitCount(1)
 			val javaClass = claimJavaClass(umlClass.name)
 			assertJavaModifiableAbstract(javaClass, true)
@@ -145,12 +147,12 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testRenameClass() {
 		createRootPackageClass(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			claimUniqueUmlClass.name = "RenamedClass"
+			claimClass(DEFAULT_CLASS_NAME).name = RENAMED_CLASS_NAME
 		]
 		createUmlAndJavaClassesView() => [
-			val umlClass = defaultUmlModel.claimUniqueUmlClass
+			val umlClass = defaultUmlModel.claimClass(RENAMED_CLASS_NAME)
 			assertJavaCompilationUnitCount(1)
-			assertJavaFileExists(umlClass.name, #[])
+			assertJavaFileExists(RENAMED_CLASS_NAME, #[])
 			assertJavaFileNotExists(DEFAULT_CLASS_NAME, #[])
 			val javaClass = claimJavaClass(umlClass.name)
 			assertElementsEqual(umlClass, javaClass)
@@ -161,15 +163,15 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testMoveClass() {
 		createRootPackageClass(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			val umlClass = claimUniqueUmlClass
+			val umlClass = claimClass(DEFAULT_CLASS_NAME)
 			packagedElements += UMLFactory.eINSTANCE.createPackage => [
-				name = "package"
+				name = PACKAGE_NAME
 				packagedElements += umlClass
 			]
 		]
 		createUmlAndJavaClassesView() => [
-			val umlPackage = defaultUmlModel.claimUniqueUmlPackage
-			val umlClass = umlPackage.claimUniqueUmlClass
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val umlClass = umlPackage.claimClass(DEFAULT_CLASS_NAME)
 			assertJavaCompilationUnitCount(1)
 			val javaClass = claimJavaClass(umlClass.name)
 			assertJavaFileExists(umlClass.name, #[umlPackage.name])
@@ -178,11 +180,11 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 			assertEquals(javaClass.containingPackageName.join("."), umlPackage.name)
 		]
 		changeUmlModel [
-			packagedElements += claimUniqueUmlPackage.claimUniqueUmlClass
+			packagedElements += claimPackage(PACKAGE_NAME).claimClass(DEFAULT_CLASS_NAME)
 		]
 		createUmlAndJavaClassesView() => [
-			val umlPackage = defaultUmlModel.claimUniqueUmlPackage
-			val umlClass = defaultUmlModel.claimUniqueUmlClass
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val umlClass = defaultUmlModel.claimClass(DEFAULT_CLASS_NAME)
 			assertJavaCompilationUnitCount(1)
 			val javaClass = claimJavaClass(umlClass.name)
 			assertJavaFileNotExists(umlClass.name, #[umlPackage.name])
@@ -196,10 +198,10 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testChangeFinalClass() {
 		createRootPackageClass(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			claimUniqueUmlClass.isFinalSpecialization = true
+			claimClass(DEFAULT_CLASS_NAME).isFinalSpecialization = true
 		]
 		createUmlAndJavaClassesView() => [
-			val umlClass = defaultUmlModel.claimUniqueUmlClass
+			val umlClass = defaultUmlModel.claimClass(DEFAULT_CLASS_NAME)
 			assertJavaCompilationUnitCount(1)
 			val javaClass = claimJavaClass(umlClass.name)
 			assertJavaModifiableFinal(javaClass, true)
@@ -211,7 +213,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testSuperClassChanged() {
 		createRootPackageClass(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			val existingClass = claimUniqueUmlClass
+			val existingClass = claimClass(DEFAULT_CLASS_NAME)
 			val superClass = UMLFactory.eINSTANCE.createClass
 			packagedElements += superClass => [
 				name = ADDITIONAL_CLASS_NAME
@@ -253,7 +255,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testDeletedInterface() {
 		createRootPackageInterface(DEFAULT_INTERFACE_NAME)
 		changeUmlModel [
-			claimUniqueUmlInterface.destroy
+			claimInterface(DEFAULT_INTERFACE_NAME).destroy
 		]
 		createUmlAndJavaClassesView() => [
 			assertJavaCompilationUnitCount(0)
@@ -268,10 +270,10 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		createRootPackageClass(DEFAULT_CLASS_NAME)
 		createRootPackageInterface(DEFAULT_INTERFACE_NAME)
 		changeUmlModel [
-			claimUniqueUmlClass.createInterfaceRealization("InterfaceRealization", claimUniqueUmlInterface)
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization", claimInterface(DEFAULT_INTERFACE_NAME))
 		]
 		createUmlAndJavaClassesView() => [
-			val umlClass = defaultUmlModel.claimUniqueUmlClass
+			val umlClass = defaultUmlModel.claimClass(DEFAULT_CLASS_NAME)
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertEquals(DEFAULT_INTERFACE_NAME, getClassifierFromTypeReference(javaClass.implements.head).name)
 			assertElementsEqual(umlClass, javaClass)
@@ -284,16 +286,16 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		createRootPackageInterface(DEFAULT_INTERFACE_NAME)
 		createRootPackageInterface(ADDITIONAL_INTERFACE_NAME)
 		changeUmlModel [
-			claimUniqueUmlClass.createInterfaceRealization("InterfaceRealization",
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization",
 				claimInterface(DEFAULT_INTERFACE_NAME))
-			claimUniqueUmlClass.createInterfaceRealization("InterfaceRealization2",
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization2",
 				claimInterface(ADDITIONAL_INTERFACE_NAME))
 		]
 		changeUmlModel [
-			claimUniqueUmlClass.interfaceRealizations.remove(0)
+			claimClass(DEFAULT_CLASS_NAME).interfaceRealizations.remove(0)
 		]
 		createUmlAndJavaClassesView() => [
-			val umlClass = defaultUmlModel.claimUniqueUmlClass
+			val umlClass = defaultUmlModel.claimClass(DEFAULT_CLASS_NAME)
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertEquals(1, javaClass.implements.size)
 			assertEquals("AdditionalInterface", getClassifierFromTypeReference(javaClass.implements.head).name)
@@ -309,7 +311,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		createRootPackageClass(ADDITIONAL_CLASS_NAME)
 		createRootPackageInterface(DEFAULT_INTERFACE_NAME)
 		changeUmlModel [
-			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization", claimUniqueUmlInterface)
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization", claimInterface(DEFAULT_INTERFACE_NAME))
 		]
 		createUmlAndJavaClassesView() => [
 			val firstJavaClass = claimJavaClass(DEFAULT_CLASS_NAME)
@@ -344,14 +346,14 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	def void testMoveDataType() {
 		createRootPackageDataType(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			val umlDataType = claimUniqueUmlDataType
+			val umlDataType = claimDataType(DEFAULT_CLASS_NAME)
 			packagedElements += UMLFactory.eINSTANCE.createPackage => [
-				name = "package"
+				name = PACKAGE_NAME
 				packagedElements += umlDataType
 			]
 		]
 		createUmlAndJavaClassesView() => [
-			val umlPackage = defaultUmlModel.claimUniqueUmlPackage
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertJavaFileExists(DEFAULT_CLASS_NAME, #[umlPackage.name])
 			assertJavaFileNotExists(DEFAULT_CLASS_NAME, #[])

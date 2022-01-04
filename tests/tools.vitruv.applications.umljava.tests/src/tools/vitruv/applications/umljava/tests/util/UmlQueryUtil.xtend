@@ -24,26 +24,6 @@ class UmlQueryUtil {
 		getSupportedPredefinedUmlPrimitiveTypes(new ResourceSetImpl()).filter[it.name == name].claimOne
 	}
 	
-	private static def <E> E claimUniqueElementOfType(Package containingPackage, java.lang.Class<E> containedElementType) {
-		containingPackage.packagedElements.filter(containedElementType).claimOne
-	}
-	
-	static def Package claimUniqueUmlPackage(Package containingPackage) {
-		containingPackage.claimUniqueElementOfType(Package)
-	}
-	
-	static def Class claimUniqueUmlClass(Package containingPackage) {
-		containingPackage.claimUniqueElementOfType(Class)
-	}
-	
-	static def Interface claimUniqueUmlInterface(Package containingPackage) {
-		containingPackage.claimUniqueElementOfType(Interface)
-	}
-	
-	static def DataType claimUniqueUmlDataType(Package containingPackage) {
-		containingPackage.claimUniqueElementOfType(DataType)
-	}
-	
 	static def Model claimUmlModel(View view, String modelName) {
 		view.rootObjects(Model).filter[it.name == modelName].claimOne
 	}
@@ -58,6 +38,10 @@ class UmlQueryUtil {
 	
 	static def Class claimClass(Package containingPackage, String className) {
 		containingPackage.claimPackageableElement(Class, className)
+	}
+	
+	static def DataType claimDataType(Package containingPackage, String dataTypeName) {
+		containingPackage.claimPackageableElement(DataType, dataTypeName)
 	}
 	
 	static def Enumeration claimEnum(Package containingPackage, String enumName) {
