@@ -278,7 +278,7 @@ class TestUtil {
 		NamespaceClassifierReference namespaceRef) {
 		assertNotNull(uPrimType, "Primitive type to check must not be null")
 		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
-		assertFalse(jTypeMapped instanceof Void, "Mapped primitive type is void but should not") // if the uml type is non null and supported by the transformations, then it should not be mapped to void
+		assertFalse(jTypeMapped instanceof Void, [String.format("Mapped primitive type for original type %s is void but should not", uPrimType)]) // if the uml type is non null and supported by the transformations, then it should not be mapped to void
 		assertEquals(getClassifierFromTypeReference(namespaceRef).name,
 			getClassifierFromTypeReference(jTypeMapped).name, "Type is not as expected")
 	}
@@ -287,7 +287,7 @@ class TestUtil {
 		org.emftext.language.java.types.PrimitiveType jPrimType) {
 		assertNotNull(uPrimType, "Primitive type to check must not be null")
 		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
-		assertFalse(jTypeMapped instanceof Void, "Mapped primitive type is void but should not") // if the uml type is non null and supported by the transformations, then it should not be mapped to void
+		assertFalse(jTypeMapped instanceof Void, [String.format("Mapped primitive type for original type %s is void but should not", uPrimType)]) // if the uml type is non null and supported by the transformations, then it should not be mapped to void
 		assertEquals(jPrimType.class, jTypeMapped.class, "Type is not as expected")
 	}
 
