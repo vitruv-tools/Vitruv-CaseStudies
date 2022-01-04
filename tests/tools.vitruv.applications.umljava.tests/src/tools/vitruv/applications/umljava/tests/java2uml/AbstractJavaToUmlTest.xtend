@@ -3,10 +3,8 @@ package tools.vitruv.applications.umljava.tests.java2uml
 import tools.vitruv.applications.umljava.tests.UmlJavaTransformationTest
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import java.util.List
-import tools.vitruv.framework.vsum.views.View
-import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
@@ -18,10 +16,6 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	def protected setup() {
 		userInteraction.addNextTextInput(UML_MODEL_NAME)
 		userInteraction.addNextTextInput(MODEL_FOLDER_NAME)
-	}
-
-	protected def getDefaultUmlModel(View view) {
-		view.claimUmlModel(UML_MODEL_NAME)
 	}
 
 	protected def void createJavaPackageInRootPackage(String name) {
@@ -56,7 +50,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	protected def void createJavaClassInPackage(List<String> namespace, String name) {
 		createJavaClassesView => [
 			createJavaCompilationUnit[
-				it.name = name + ".java"
+				it.name = namespaces.join(".") + name + ".java"
 				it.namespaces += namespace
 				classifiers += ClassifiersFactory.eINSTANCE.createClass => [
 					it.name = name
@@ -73,7 +67,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	protected def void createJavaInterfaceInPackage(List<String> namespace, String name) {
 		createJavaClassesView => [
 			createJavaCompilationUnit[
-				it.name = name + ".java"
+				it.name = namespaces.join(".") + name + ".java"
 				it.namespaces += namespace
 				classifiers += ClassifiersFactory.eINSTANCE.createInterface => [
 					it.name = name
@@ -106,7 +100,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String packageName, String name) {
 		createUmlAndJavaClassesView => [
 			val javaClassifier = claimJavaClassifier(javaClassifierType, name)
-			val javaCompilationUnit = claimJavaCompilationUnit(name)
+			val javaCompilationUnit = claimJavaCompilationUnit(packageName + "." + name)
 			val umlPackage = defaultUmlModel.claimPackage(packageName)
 			val umlClassifier = umlPackage.claimPackageableElement(umlClassifierType, name)
 			assertThat("only one element in UML model is expected to exist", umlPackage.packagedElements.toSet,

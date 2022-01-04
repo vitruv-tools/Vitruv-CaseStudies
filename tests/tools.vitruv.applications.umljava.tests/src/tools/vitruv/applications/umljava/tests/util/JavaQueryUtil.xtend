@@ -44,8 +44,8 @@ class JavaQueryUtil {
 		view.getJavaClassifiersOfType(Interface)
 	}
 		
-	static def claimJavaCompilationUnit(View view, String compilationUnitNameWithoutJavaSuffic) {
-		view.javaCompilationUnits.filter[it.name == compilationUnitNameWithoutJavaSuffic +  ".java"].claimOne
+	static def claimJavaCompilationUnit(View view, String compilationUnitNameWithoutJavaSuffix) {
+		view.javaCompilationUnits.filter[it.name == compilationUnitNameWithoutJavaSuffix +  ".java"].claimOne
 	}	
 	
 	static def claimJavaPackage(View view, String name) {
