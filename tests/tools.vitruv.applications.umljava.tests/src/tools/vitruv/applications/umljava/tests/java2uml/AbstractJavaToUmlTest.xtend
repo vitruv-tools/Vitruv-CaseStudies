@@ -87,10 +87,13 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 			val umlClassifier = defaultUmlModel.claimPackageableElement(umlClassifierType, name)
 			assertThat("only one element in UML model is expected to exist", defaultUmlModel.packagedElements.toSet,
 				is(#{umlClassifier}))
-			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.toSet,
-				is(#{javaCompilationUnit}))
+			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.filter [
+				!namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+			].toSet, is(#{javaCompilationUnit}))
 			assertThat("only one Java classifier is expected to exist",
-				getJavaClassifiersOfType(javaClassifierType).toSet, is(#{javaClassifier}))
+				getJavaClassifiersOfType(javaClassifierType).filter [
+					!containingCompilationUnit.namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+				].toSet, is(#{javaClassifier}))
 			assertElementsEqual(umlClassifier, javaClassifier)
 		]
 	}
@@ -105,10 +108,13 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 			val umlClassifier = umlPackage.claimPackageableElement(umlClassifierType, name)
 			assertThat("only one element in UML model is expected to exist", umlPackage.packagedElements.toSet,
 				is(#{umlClassifier}))
-			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.toSet,
-				is(#{javaCompilationUnit}))
+			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.filter [
+				!namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+			].toSet, is(#{javaCompilationUnit}))
 			assertThat("only one Java classifier is expected to exist",
-				getJavaClassifiersOfType(javaClassifierType).toSet, is(#{javaClassifier}))
+				getJavaClassifiersOfType(javaClassifierType).filter [
+					!containingCompilationUnit.namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+				].toSet, is(#{javaClassifier}))
 			assertElementsEqual(umlClassifier, javaClassifier)
 		]
 	}
