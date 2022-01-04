@@ -21,6 +21,10 @@ import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
 import org.emftext.language.java.containers.JavaRoot
 import org.eclipse.xtend.lib.annotations.Accessors
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.CoreMatchers.*
+import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	static val MODEL_FILE_EXTENSION = "uml"
@@ -32,7 +36,7 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected def getDefaultUmlModel(View view) {
 		view.claimUmlModel(UML_MODEL_NAME)
 	}
-	
+
 	private def Path getProjectModelPath(String modelName) {
 		Path.of(MODEL_FOLDER_NAME).resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}
@@ -114,6 +118,57 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected def void changeView(View view, (View)=>void modelModification) {
 		modelModification.apply(view)
 		view.commitChanges()
+	}
+
+	protected def assertSingleClassifierWithNameInRootPackage(
+		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
+		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String name,
+		String javaCompilationUnitName) {
+		createUmlAndJavaClassesView => [
+			val javaClassifier = claimJavaClassifier(javaClassifierType, name)
+			val javaCompilationUnit = claimJavaCompilationUnit(javaCompilationUnitName)
+			val umlClassifier = defaultUmlModel.claimPackageableElement(umlClassifierType, name)
+			assertThat("only one element in UML model is expected to exist", defaultUmlModel.packagedElements.toSet,
+				is(#{umlClassifier}))
+			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.filter [
+				!namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+			].toSet, is(#{javaCompilationUnit}))
+			assertThat("only one Java classifier is expected to exist",
+				getJavaClassifiersOfType(javaClassifierType).filter [
+					!containingCompilationUnit.namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+				].toSet, is(#{javaClassifier}))
+			assertElementsEqual(umlClassifier, javaClassifier)
+		]
+	}
+
+	protected def assertSingleClassifierWithNameInPackage(
+		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
+		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String packageName, String name) {
+		createUmlAndJavaClassesView => [
+			val javaClassifier = claimJavaClassifier(javaClassifierType, name)
+			val javaCompilationUnit = claimJavaCompilationUnit(packageName + "." + name)
+			val umlPackage = defaultUmlModel.claimPackage(packageName)
+			val umlClassifier = umlPackage.claimPackageableElement(umlClassifierType, name)
+			assertThat("only one element in UML model is expected to exist", umlPackage.packagedElements.toSet,
+				is(#{umlClassifier}))
+			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.filter [
+				!namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+			].toSet, is(#{javaCompilationUnit}))
+			assertThat("only one Java classifier is expected to exist",
+				getJavaClassifiersOfType(javaClassifierType).filter [
+					!containingCompilationUnit.namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+				].toSet, is(#{javaClassifier}))
+			assertElementsEqual(umlClassifier, javaClassifier)
+		]
+	}
+
+	protected def assertNoClassifierExistsInRootPackage() {
+		createUmlView => [
+			assertThat("no element in UML model is expected to exist", defaultUmlModel.packagedElements.toSet,
+				is(emptySet))
+			assertThat("no Java classifier is expected to exist", javaClassifiers.toSet, is(emptySet))
+			assertThat("no Java compilation unit is expected to exist", javaCompilationUnits.toSet, is(emptySet))
+		]
 	}
 
 }
