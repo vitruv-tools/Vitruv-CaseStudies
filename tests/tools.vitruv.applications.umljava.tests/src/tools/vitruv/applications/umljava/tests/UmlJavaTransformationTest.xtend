@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umljava.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory
 
@@ -24,8 +23,6 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
-	protected static val Logger logger = Logger.getLogger(UmlJavaTransformationTest)
-
 	static val MODEL_FILE_EXTENSION = "uml"
 	@Accessors(PROTECTED_GETTER)
 	static val UML_MODEL_NAME = "model"

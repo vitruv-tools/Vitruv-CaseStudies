@@ -88,6 +88,7 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		changeView(createJavaClassesView) [
 			moveJavaRootElement(claimJavaCompilationUnit(ENUM_NAME) => [
 				namespaces += PACKAGE_NAME
+				name = PACKAGE_NAME + "." + name
 			])
 		]
 		assertSingleEnumWithNameInPackage(PACKAGE_NAME, ENUM_NAME)

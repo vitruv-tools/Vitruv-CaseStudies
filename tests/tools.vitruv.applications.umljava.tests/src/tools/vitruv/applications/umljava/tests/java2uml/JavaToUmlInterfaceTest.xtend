@@ -80,6 +80,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		changeView(createJavaClassesView) [
 			moveJavaRootElement(claimJavaCompilationUnit(INTERFACE_NAME) => [
 				namespaces += PACKAGE_NAME
+				name = PACKAGE_NAME + "." + name
 			])
 		]
 		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)

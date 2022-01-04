@@ -96,6 +96,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 		changeView(createJavaClassesView) [
 			moveJavaRootElement(claimJavaCompilationUnit(CLASS_NAME) => [
 				namespaces += PACKAGE_NAME
+				name = PACKAGE_NAME + "." + name
 			])
 		]
 		assertSingleClassWithNameInPackage(PACKAGE_NAME, CLASS_NAME)

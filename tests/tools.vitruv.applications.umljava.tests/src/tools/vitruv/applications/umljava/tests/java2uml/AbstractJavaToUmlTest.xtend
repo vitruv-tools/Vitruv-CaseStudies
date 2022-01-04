@@ -33,7 +33,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	protected def void createJavaEnumInPackage(List<String> namespace, String name) {
 		createJavaClassesView => [
 			createJavaCompilationUnit[
-				it.name = name + ".java"
+				it.name = namespace.join("", ".", ".", [it]) + name + ".java"
 				it.namespaces += namespace
 				classifiers += ClassifiersFactory.eINSTANCE.createEnumeration => [
 					it.name = name
@@ -50,7 +50,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	protected def void createJavaClassInPackage(List<String> namespace, String name) {
 		createJavaClassesView => [
 			createJavaCompilationUnit[
-				it.name = namespaces.join(".") + name + ".java"
+				it.name = namespace.join("", ".", ".", [it]) + name + ".java"
 				it.namespaces += namespace
 				classifiers += ClassifiersFactory.eINSTANCE.createClass => [
 					it.name = name
@@ -67,7 +67,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	protected def void createJavaInterfaceInPackage(List<String> namespace, String name) {
 		createJavaClassesView => [
 			createJavaCompilationUnit[
-				it.name = namespaces.join(".") + name + ".java"
+				it.name = namespace.join("", ".", ".", [it]) + name + ".java"
 				it.namespaces += namespace
 				classifiers += ClassifiersFactory.eINSTANCE.createInterface => [
 					it.name = name
