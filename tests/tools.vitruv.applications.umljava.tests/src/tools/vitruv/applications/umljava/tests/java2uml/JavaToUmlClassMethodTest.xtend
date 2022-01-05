@@ -61,7 +61,6 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 				typeReference = createNamespaceClassifierReference(typeClass)
 			]
 		]
-		changeView(createJavaClassesView)[]
 		assertClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
