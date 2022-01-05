@@ -94,7 +94,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		assertClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)

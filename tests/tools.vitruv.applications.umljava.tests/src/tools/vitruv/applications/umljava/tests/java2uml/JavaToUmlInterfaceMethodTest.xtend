@@ -89,8 +89,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 				EcoreUtil.delete(claimInterfaceMethod(IOPERATION_NAME))
 			]
 		]
-		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
-		assertNoClassifierExistsInRootPackage()
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		createUmlView => [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			assertUmlInterfaceDontHaveOperation(umlInterface, IOPERATION_NAME)
