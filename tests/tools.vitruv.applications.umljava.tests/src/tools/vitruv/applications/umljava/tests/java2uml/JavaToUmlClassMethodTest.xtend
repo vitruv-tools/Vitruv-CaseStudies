@@ -20,6 +20,7 @@ import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUt
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.ParameterizedTest
+import tools.vitruv.framework.vsum.views.View
 
 /**
  * A test class to test the class method reactions.
@@ -36,10 +37,10 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
 			org.eclipse.uml2.uml.Class, name)
 	}
-	
+
 	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
 	}
 
 	private def createJavaClassWithMethod(String className, String methodName) {
@@ -56,10 +57,15 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	}
 
 	private def changeClassMethod(String className, String methodName, (ClassMethod)=>void changeFunction) {
+		changeClassMethod(className, methodName, [view, method|changeFunction.apply(method)])
+	}
+
+	private def changeClassMethod(String className, String methodName, (View, ClassMethod)=>void changeFunction) {
 		changeView(createJavaClassesView) [
+			val view = it
 			claimJavaClass(className) => [
 				claimClassMethod(methodName) => [
-					changeFunction.apply(it)
+					changeFunction.apply(view, it)
 				]
 			]
 		]
@@ -98,14 +104,13 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	def void testChangeReturnType() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
 		createJavaClassInRootPackage(TYPE_CLASS_NAME)
-		changeView(createJavaClassesView) [
-			val typeClass = claimJavaClass(TYPE_CLASS_NAME)
-			claimJavaClass(CLASS_NAME) => [
-				claimClassMethod(OPERATION_NAME) => [
-					typeReference = createNamespaceClassifierReference(typeClass)
-				]
+		changeClassMethod(CLASS_NAME, OPERATION_NAME) [ view, method |
+			val typeClass = view.claimJavaClass(TYPE_CLASS_NAME)
+			method => [
+				typeReference = createNamespaceClassifierReference(typeClass)
 			]
 		]
+		changeView(createJavaClassesView)[]
 		assertClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
@@ -167,8 +172,12 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testStaticMethod() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
-		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [static = true], [assertUmlFeatureHasStaticValue(it, true)])
-		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [static = false], [assertUmlFeatureHasStaticValue(it, false)])
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [static = true], [
+			assertUmlFeatureHasStaticValue(it, true)
+		])
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [static = false], [
+			assertUmlFeatureHasStaticValue(it, false)
+		])
 	}
 
 	/**
@@ -178,8 +187,12 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testAbstractMethod() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
-		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [abstract = true], [assertUmlOperationHasAbstractValue(it, true)])
-		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [abstract = false], [assertUmlOperationHasAbstractValue(it, false)])
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [abstract = true], [
+			assertUmlOperationHasAbstractValue(it, true)
+		])
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [abstract = false], [
+			assertUmlOperationHasAbstractValue(it, false)
+		])
 	}
 
 	/**
@@ -189,8 +202,12 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testFinalMethod() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
-		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [final = true], [assertUmlOperationHasFinalValue(it, true)])
-		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [final = false], [assertUmlOperationHasFinalValue(it, false)])
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [final = true], [
+			assertUmlOperationHasFinalValue(it, true)
+		])
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [final = false], [
+			assertUmlOperationHasFinalValue(it, false)
+		])
 	}
 
 	/**
@@ -198,7 +215,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	 * the corresponding UML method.
 	 */
 	@ParameterizedTest
-	@EnumSource(value = JavaVisibility, names = #["PUBLIC"], mode = EnumSource.Mode.EXCLUDE)
+	@EnumSource(value=JavaVisibility, names=#["PUBLIC"], mode=EnumSource.Mode.EXCLUDE)
 	def void testMethodVisibility(JavaVisibility visibility) {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
 		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [javaVisibilityModifier = visibility], [
@@ -263,13 +280,11 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	def void testChangeParameterType() {
 		createJavaClassWithMethodAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
 		createJavaClassInRootPackage(TYPE_CLASS_NAME)
-		changeView(createJavaClassesView) [
-			val typeClass = claimJavaClass(TYPE_CLASS_NAME)
-			claimJavaClass(CLASS_NAME) => [
-				claimClassMethod(OPERATION_NAME) => [
-					claimParameter(PARAMETER_NAME) => [
-						typeReference = createNamespaceClassifierReference(typeClass)
-					]
+		changeClassMethod(CLASS_NAME, OPERATION_NAME) [ view, method |
+			val typeClass = view.claimJavaClass(TYPE_CLASS_NAME)
+			method => [
+				claimParameter(PARAMETER_NAME) => [
+					typeReference = createNamespaceClassifierReference(typeClass)
 				]
 			]
 		]

@@ -19,6 +19,7 @@ import org.junit.jupiter.params.provider.EnumSource
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
+import org.eclipse.uml2.uml.Model
 
 /**
  * This test class checks the creating, deleting and modifying of attributes in the UML to Java
@@ -31,15 +32,6 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 	static val CLASS_NAME_2 = "ClassName2"
 	static val TYPE_CLASS_NAME = "TypeClass"
 
-//	@BeforeEach
-//	def void before() {
-//		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
-//		typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS)
-//		uAttr = createUmlAttribute(ATTRIBUTE_NAME, typeClass, VisibilityKind.PUBLIC_LITERAL, false, false)
-//		uClass.ownedAttributes += uAttr
-//		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
-//		propagate
-//	}
 	private def assertClassWithNameInRootPackage(String name) {
 		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
 			name)
@@ -58,6 +50,21 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 					name = attributeName
 					visibility = VisibilityKind.PRIVATE_LITERAL
 					type = attributeType
+				]
+			]
+		]
+	}
+
+	private def changeAttribute(String className, String attributeName, (Property)=>void changeFunction) {
+		changeAttribute(className, attributeName, [model, property|changeFunction.apply(property)])
+	}
+
+	private def changeAttribute(String className, String attributeName, (Model, Property)=>void changeFunction) {
+		changeUmlModel [
+			val model = it
+			claimClass(className) => [
+				claimAttribute(attributeName) => [
+					changeFunction.apply(model, it)
 				]
 			]
 		]
@@ -102,12 +109,8 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 	@Test
 	def void testRenameAttribute() {
 		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
-		changeUmlModel [
-			claimClass(CLASS_NAME) => [
-				claimAttribute(ATTRIBUTE_NAME) => [
-					name = ATTRIBUTE_RENAME
-				]
-			]
+		changeAttribute(CLASS_NAME, ATTRIBUTE_NAME) [ model, attribute |
+			attribute.name = ATTRIBUTE_RENAME
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createJavaClassesView => [
@@ -115,8 +118,10 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 			val javaAttribute = javaClass.claimField(ATTRIBUTE_RENAME)
 			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_RENAME, JavaVisibility.PRIVATE,
 				TypesFactory.eINSTANCE.createInt, false, false, javaClass)
-			assertThat("there must be a getter for the attribute " + javaAttribute, getJavaGettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
-			assertThat("there must be a setter for the attribute " + javaAttribute, getJavaSettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
+			assertThat("there must be a getter for the attribute " + javaAttribute,
+				getJavaGettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
+			assertThat("there must be a setter for the attribute " + javaAttribute,
+				getJavaSettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
 			assertJavaMemberContainerDontHaveMember(javaClass, ATTRIBUTE_NAME)
 		]
 	}
@@ -124,12 +129,8 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 	@Test
 	def void testDeleteAttribute() {
 		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
-		changeUmlModel [
-			claimClass(CLASS_NAME) => [
-				claimAttribute(ATTRIBUTE_NAME) => [
-					destroy()
-				]
-			]
+		changeAttribute(CLASS_NAME, ATTRIBUTE_NAME) [ model, attribute |
+			attribute.destroy()
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createJavaClassesView => [
@@ -140,12 +141,8 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 
 	private def void changeAndCheckPropertyOfAttribute(String className, String attributeName,
 		(Property)=>void changeUmlProperty, (Field)=>void validateJavaField) {
-		changeUmlModel [
-			claimClass(className) => [
-				claimAttribute(attributeName) => [
-					changeUmlProperty.apply(it)
-				]
-			]
+		changeAttribute(CLASS_NAME, ATTRIBUTE_NAME) [
+			changeUmlProperty.apply(it)
 		]
 		assertSingleClassWithNameInRootPackage(className)
 		createJavaClassesView => [
@@ -189,13 +186,9 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 	def void testChangeAttributeType() {
 		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
 		createClassInRootPackage(TYPE_CLASS_NAME)
-		changeUmlModel [
-			val typeClass = claimClass(TYPE_CLASS_NAME)
-			claimClass(CLASS_NAME) => [
-				claimAttribute(ATTRIBUTE_NAME) => [
-					type = typeClass
-				]
-			]
+		changeAttribute(CLASS_NAME, ATTRIBUTE_NAME) [ model, attribute |
+			val typeClass = model.claimClass(TYPE_CLASS_NAME)
+			attribute.type = typeClass
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
 		createJavaClassesView => [
@@ -211,9 +204,8 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 	def void testMoveAttribute() {
 		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
 		createClassInRootPackage(CLASS_NAME_2)
-		changeUmlModel [
-			val attribute = claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
-			claimClass(CLASS_NAME_2) => [
+		changeAttribute(CLASS_NAME, ATTRIBUTE_NAME) [ model, attribute |
+			model.claimClass(CLASS_NAME_2) => [
 				ownedAttributes += attribute
 			]
 		]
@@ -226,10 +218,16 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_NAME, JavaVisibility.PRIVATE,
 				TypesFactory.eINSTANCE.createInt, false, false, javaClass2)
 			assertJavaMemberContainerDontHaveMember(javaClass, ATTRIBUTE_NAME)
-			assertThat("there must be no getter for removed attribute " + ATTRIBUTE_NAME, javaClass.methods.filter[name == buildGetterName(ATTRIBUTE_NAME)].toSet, is(emptySet))
-			assertThat("there must be not setter for removed attribute " + ATTRIBUTE_NAME, javaClass.methods.filter[name == buildSetterName(ATTRIBUTE_NAME)].toSet, is(emptySet))
-			assertThat("there must be a getter for the attribute " + javaAttribute, getJavaGettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
-			assertThat("there must be a setter for the attribute " + javaAttribute, getJavaSettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
+			assertThat("there must be no getter for removed attribute " + ATTRIBUTE_NAME, javaClass.methods.filter [
+				name == buildGetterName(ATTRIBUTE_NAME)
+			].toSet, is(emptySet))
+			assertThat("there must be not setter for removed attribute " + ATTRIBUTE_NAME, javaClass.methods.filter [
+				name == buildSetterName(ATTRIBUTE_NAME)
+			].toSet, is(emptySet))
+			assertThat("there must be a getter for the attribute " + javaAttribute,
+				getJavaGettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
+			assertThat("there must be a setter for the attribute " + javaAttribute,
+				getJavaSettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
 		]
 	}
 }
