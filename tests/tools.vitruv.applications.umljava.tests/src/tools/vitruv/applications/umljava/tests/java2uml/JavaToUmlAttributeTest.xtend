@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
@@ -42,6 +41,16 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 	}
+	
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
+
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
 
 	/**
 	 * Tests the creation of an attribute with primitive type.
@@ -56,15 +65,14 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				members += createJavaGetterForAttribute(field, JavaVisibility.PRIVATE)
 			]
 		]
-		createUmlAndJavaClassesView => [
-			val javaField = claimJavaClass(CLASS_NAME).claimField(ATTRIBUTE_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
 			val umlInteger = loadUmlPrimitiveType("Integer")
 			assertUmlClassHasUniqueProperty(umlClass, ATTRIBUTE_NAME)
 			assertUmlPropertyTraits(umlAttribute, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlInteger, false,
 				false, umlClass, null, null)
-			assertElementsEqual(umlAttribute, javaField)
 		]
 	}
 
@@ -86,15 +94,14 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
-			val javaField = claimJavaClass(CLASS_NAME).claimField(ATTRIBUTE_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
 			assertUmlClassHasUniqueProperty(umlClass, ATTRIBUTE_NAME)
 			assertUmlPropertyTraits(umlAttribute, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlTypeClass, false,
 				false, umlClass, null, null)
-			assertElementsEqual(umlAttribute, javaField)
 		]
 	}
 
@@ -111,13 +118,12 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
-			val javaField = claimJavaClass(CLASS_NAME).claimField(ATTRIBUTE_RENAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_RENAME)
 			assertThat(umlAttribute.name, is(ATTRIBUTE_RENAME))
 			assertUmlClassDontHaveProperty(umlClass, ATTRIBUTE_NAME)
-			assertElementsEqual(umlAttribute, javaField)
 		]
 	}
 
@@ -134,6 +140,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			assertUmlClassDontHaveProperty(umlClass, ATTRIBUTE_NAME)
@@ -155,15 +162,14 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
-			val javaField = claimJavaClass(CLASS_NAME).claimField(ATTRIBUTE_NAME)
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
 			assertUmlClassHasUniqueProperty(umlClass, ATTRIBUTE_NAME)
 			assertUmlPropertyTraits(umlAttribute, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlTypeClass, false,
 				false, umlClass, null, null)
-			assertElementsEqual(umlAttribute, javaField)
 		]
 	}
 
@@ -180,11 +186,10 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
-			val javaField = claimJavaClass(CLASS_NAME).claimField(ATTRIBUTE_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
 			val umlAttribute = defaultUmlModel.claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
 			assertThat("UML attribute must be static", umlAttribute.static, is(true))
-			assertElementsEqual(umlAttribute, javaField)
 		]
 	}
 
@@ -201,11 +206,10 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
-			val javaField = claimJavaClass(CLASS_NAME).claimField(ATTRIBUTE_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
 			val umlAttribute = defaultUmlModel.claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
 			assertThat("UML attribute must be read only", umlAttribute.readOnly, is(true))
-			assertElementsEqual(umlAttribute, javaField)
 		]
 	}
 
@@ -222,11 +226,10 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
-			val javaField = claimJavaClass(CLASS_NAME).claimField(ATTRIBUTE_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
 			val umlAttribute = defaultUmlModel.claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
 			assertUmlNamedElementHasVisibility(umlAttribute, VisibilityKind.PUBLIC_LITERAL)
-			assertElementsEqual(umlAttribute, javaField)
 		]
 		changeView(createJavaClassesView) [
 			claimJavaClass(CLASS_NAME) => [
@@ -235,11 +238,10 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
-			val javaField = claimJavaClass(CLASS_NAME).claimField(ATTRIBUTE_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
 			val umlAttribute = defaultUmlModel.claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
 			assertUmlNamedElementHasVisibility(umlAttribute, VisibilityKind.PROTECTED_LITERAL)
-			assertElementsEqual(umlAttribute, javaField)
 		]
 	}
 }

@@ -85,7 +85,7 @@ class JavaQueryUtil {
 	}
 	
 	static def Field claimField(ConcreteClassifier classifier, String fieldName) {
-		classifier.members.filter(Field).filter[it.name == fieldName].claimOne
+		classifier.fields.filter[it.name == fieldName].claimOne
 	}
 
 }

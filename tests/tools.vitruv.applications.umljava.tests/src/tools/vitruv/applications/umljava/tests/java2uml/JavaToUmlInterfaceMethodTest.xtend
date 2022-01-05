@@ -1,7 +1,6 @@
 package tools.vitruv.applications.umljava.tests.java2uml
 
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import org.junit.jupiter.api.Test
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -37,17 +36,26 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 	}
+	
+	private def assertInterfaceWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, name)
+	}
+
+	private def assertSingleInterfaceWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, name)
+	}
 
 	@Test
 	def void testCreateInterfaceMethod() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
-		createUmlAndJavaClassesView => [
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		createUmlView => [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			val umlOperation = umlInterface.claimOperation(IOPERATION_NAME)
-			val javaInterfaceMethod = claimJavaInterface(INTERFACE_NAME).claimInterfaceMethod(IOPERATION_NAME)
 			assertUmlOperationTraits(umlOperation, IOPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, true,
 				umlInterface, null)
-			assertElementsEqual(umlOperation, javaInterfaceMethod)
 		]
 	}
 
@@ -61,15 +69,14 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		createUmlView => [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			val umlOperation = umlInterface.claimOperation(IOPERATION_RENAME)
-			val javaInterfaceMethod = claimJavaInterface(INTERFACE_NAME).claimInterfaceMethod(IOPERATION_RENAME)
 			assertThat(umlOperation.name, is(IOPERATION_RENAME))
 			assertUmlInterfaceDontHaveOperation(umlInterface, IOPERATION_NAME)
 			assertUmlOperationTraits(umlOperation, IOPERATION_RENAME, VisibilityKind.PUBLIC_LITERAL, null, false, true,
 				umlInterface, null)
-			assertElementsEqual(umlOperation, javaInterfaceMethod)
 		]
 
 	}
@@ -82,6 +89,8 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 				EcoreUtil.delete(claimInterfaceMethod(IOPERATION_NAME))
 			]
 		]
+		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
+		assertNoClassifierExistsInRootPackage()
 		createUmlView => [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			assertUmlInterfaceDontHaveOperation(umlInterface, IOPERATION_NAME)
@@ -100,12 +109,11 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
+		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		createUmlView => [
 			val umlOperation = defaultUmlModel.claimInterface(INTERFACE_NAME).claimOperation(IOPERATION_NAME)
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_NAME)
-			val javaInterfaceMethod = claimJavaInterface(INTERFACE_NAME).claimInterfaceMethod(IOPERATION_NAME)
 			assertUmlOperationHasReturntype(umlOperation, umlTypeClass)
-			assertElementsEqual(umlOperation, javaInterfaceMethod)
 		]
 	}
 
@@ -124,11 +132,10 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
+		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		createUmlView => [
 			val umlOperation = defaultUmlModel.claimInterface(INTERFACE_NAME).claimOperation(IOPERATION_NAME)
-			val javaInterfaceMethod = claimJavaInterface(INTERFACE_NAME).claimInterfaceMethod(IOPERATION_NAME)
 			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_NAME)
-			assertElementsEqual(umlOperation, javaInterfaceMethod)
 		]
 	}
 }

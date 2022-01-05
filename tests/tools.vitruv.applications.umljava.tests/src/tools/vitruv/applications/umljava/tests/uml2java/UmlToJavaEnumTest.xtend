@@ -5,7 +5,6 @@ import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import org.junit.jupiter.api.Test
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
@@ -164,15 +163,12 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 			]
 		]
 		assertEnumWithNameInRootPackage(ENUM_NAME)
-		createUmlAndJavaClassesView => [
-			val umlEnum = defaultUmlModel.claimEnum(ENUM_NAME)
-			val umlAttribute = umlEnum.claimAttribute(ATTRIBUTE_NAME)
+		createJavaClassesView => [
 			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
 			val javaEnum = claimJavaEnum(ENUM_NAME)
 			val javaAttribute = javaEnum.claimField(ATTRIBUTE_NAME)
 			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
 				createNamespaceClassifierReference(javaTypeClass), false, false, javaEnum)
-			assertElementsEqual(umlAttribute, javaAttribute)
 		]
 
 	}

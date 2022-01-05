@@ -13,12 +13,13 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 
 import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.ParameterizedTest
 
 /**
  * A test class to test the class method reactions.
@@ -33,6 +34,11 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 
 	private def assertSingleClassWithNameInRootPackage(String name) {
 		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
+	
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
 			org.eclipse.uml2.uml.Class, name)
 	}
 
@@ -77,14 +83,11 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	def void testCreateMethod() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
+		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
-			val javaClass = claimJavaClass(CLASS_NAME)
-			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
 			assertUmlOperationTraits(umlOperation, OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, false,
 				umlClass, null)
-			assertElementsEqual(umlOperation, javaMethod)
 		]
 	}
 
@@ -103,15 +106,12 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
 			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
-			val javaClass = claimJavaClass(CLASS_NAME)
-			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
-			assertElementsEqual(umlClass, javaClass)
 			assertUmlOperationHasReturntype(umlOperation, umlTypeClass)
-			assertElementsEqual(umlOperation, javaMethod)
 		]
 	}
 
@@ -125,13 +125,9 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			name = OPERATION_RENAME
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
+		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			val umlOperation = umlClass.claimOperation(OPERATION_RENAME)
-			val javaClass = claimJavaClass(CLASS_NAME)
-			val javaMethod = javaClass.claimClassMethod(OPERATION_RENAME)
 			assertUmlClassHasUniqueOperation(umlClass, OPERATION_RENAME)
-			assertElementsEqual(umlOperation, javaMethod)
 		]
 	}
 
@@ -151,6 +147,19 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 		]
 	}
 
+	private def void changeAndCheckPropertyOfMethod(String className, String methodName,
+		(org.emftext.language.java.members.ClassMethod)=>void changeJavaMethod,
+		(org.eclipse.uml2.uml.Operation)=>void validateUmlMethod) {
+		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
+			changeJavaMethod.apply(it)
+		]
+		assertSingleClassWithNameInRootPackage(className)
+		createUmlView => [
+			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
+			validateUmlMethod.apply(umlOperation)
+		]
+	}
+
 	/**
 	 * Checks if changing the static modifier also changes the static property of
 	 * the corresponding UML method.
@@ -158,30 +167,8 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testStaticMethod() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
-			static = true
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
-			val javaClass = claimJavaClass(CLASS_NAME)
-			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
-			assertUmlFeatureHasStaticValue(umlOperation, true)
-			assertElementsEqual(umlOperation, javaMethod)
-		]
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
-			static = false
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
-			val javaClass = claimJavaClass(CLASS_NAME)
-			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
-			assertUmlFeatureHasStaticValue(umlOperation, false)
-			assertElementsEqual(umlOperation, javaMethod)
-		]
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [static = true], [assertUmlFeatureHasStaticValue(it, true)])
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [static = false], [assertUmlFeatureHasStaticValue(it, false)])
 	}
 
 	/**
@@ -191,30 +178,8 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testAbstractMethod() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
-			abstract = true
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
-			val javaClass = claimJavaClass(CLASS_NAME)
-			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
-			assertUmlOperationHasAbstractValue(umlOperation, true)
-			assertElementsEqual(umlOperation, javaMethod)
-		]
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
-			abstract = false
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
-			val javaClass = claimJavaClass(CLASS_NAME)
-			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
-			assertUmlOperationHasAbstractValue(umlOperation, false)
-			assertElementsEqual(umlOperation, javaMethod)
-		]
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [abstract = true], [assertUmlOperationHasAbstractValue(it, true)])
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [abstract = false], [assertUmlOperationHasAbstractValue(it, false)])
 	}
 
 	/**
@@ -224,58 +189,21 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testFinalMethod() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
-			final = true
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
-			val javaClass = claimJavaClass(CLASS_NAME)
-			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
-			assertUmlOperationHasFinalValue(umlOperation, true)
-			assertElementsEqual(umlOperation, javaMethod)
-		]
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
-			final = false
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
-			val javaClass = claimJavaClass(CLASS_NAME)
-			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
-			assertUmlOperationHasFinalValue(umlOperation, false)
-			assertElementsEqual(umlOperation, javaMethod)
-		]
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [final = true], [assertUmlOperationHasFinalValue(it, true)])
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [final = false], [assertUmlOperationHasFinalValue(it, false)])
 	}
 
 	/**
 	 * Checks if changing the visibility modifier also changes the visibility of
 	 * the corresponding UML method.
 	 */
-	@Test
-	def void testMethodVisibility() {
+	@ParameterizedTest
+	@EnumSource(value = JavaVisibility, names = #["PUBLIC"], mode = EnumSource.Mode.EXCLUDE)
+	def void testMethodVisibility(JavaVisibility visibility) {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
-			makeProtected
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
-			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
-			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
-			assertUmlNamedElementHasVisibility(umlOperation, VisibilityKind.PROTECTED_LITERAL)
-			assertElementsEqual(umlOperation, javaMethod)
-		]
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
-			makePrivate
-		]
-		createUmlAndJavaClassesView => [
-			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
-			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
-			assertUmlNamedElementHasVisibility(umlOperation, VisibilityKind.PRIVATE_LITERAL)
-			assertElementsEqual(umlOperation, javaMethod)
-		]
+		changeAndCheckPropertyOfMethod(CLASS_NAME, OPERATION_NAME, [javaVisibilityModifier = visibility], [
+			assertUmlNamedElementHasVisibility(it, getUmlVisibilityKindFromJavaVisibilityConstant(visibility))
+		])
 	}
 
 	/**
@@ -285,13 +213,9 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	def void testCreateParameter() {
 		createJavaClassWithMethodAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
+		createUmlView => [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
-			val umlParameter = umlOperation.claimParameter(PARAMETER_NAME)
-			val javaParameter = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME).claimParameter(
-				PARAMETER_NAME)
 			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_NAME)
-			assertElementsEqual(umlParameter, javaParameter)
 		]
 	}
 
@@ -307,14 +231,10 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
+		createUmlView => [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
-			val umlParameter = umlOperation.claimParameter(PARAMETER_RENAME)
-			val javaParameter = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME).claimParameter(
-				PARAMETER_RENAME)
 			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_RENAME)
 			assertUmlOperationDontHaveParameter(umlOperation, PARAMETER_NAME)
-			assertElementsEqual(umlParameter, javaParameter)
 		]
 	}
 
@@ -353,14 +273,11 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlAndJavaClassesView => [
+		createUmlView => [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
 			val umlParameter = umlOperation.claimParameter(PARAMETER_NAME)
-			val javaParameter = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME).claimParameter(
-				PARAMETER_NAME)
 			assertUmlParameterTraits(umlParameter, PARAMETER_NAME, umlTypeClass)
-			assertElementsEqual(umlParameter, javaParameter)
 		]
 	}
 
@@ -379,11 +296,6 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlAndJavaClassesView => [
-			val umlConstructor = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(CLASS_NAME)
-			val javaConstructor = claimJavaClass(CLASS_NAME).claimConstructor()
-			assertElementsEqual(umlConstructor, javaConstructor)
-		]
 	}
 
 }
