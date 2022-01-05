@@ -1,100 +1,132 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
 import org.emftext.language.java.types.TypesFactory
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertFalse
-import static org.junit.jupiter.api.Assertions.assertNotNull
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import org.eclipse.uml2.uml.Operation
+import org.eclipse.uml2.uml.Model
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.CoreMatchers.*
 
 /**
  * This class provides basic tests for creating, deleting and changing traits of interface methods.
- * 
- * @author Fei
  */
-class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
+class UmlToJavaInterfaceMethodTest extends AbstractUmlToJavaTest {
 	static val INTERFACE_NAME = "InterfaceName"
-	static val TYPE_NAME = "TypeName"
+	static val INTERFACE_NAME_2 = "InterfaceName2"
+	static val TYPE_CLASS_NAME = "TypeName"
 	static val IOPERATION_NAME = "interfaceMethod"
-	static val STANDARD_IOPERATION_NAME = "standardInterfaceMethod"
 	static val IOPERATION_RENAME = "interfaceMethodRenamed"
-
-	var org.eclipse.uml2.uml.Interface uInterface
-	var org.eclipse.uml2.uml.Class typeClass
-	var org.eclipse.uml2.uml.Operation uOperation
-
-	@BeforeEach
-	def void before() {
-		uInterface = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
-		uOperation = createUmlInterfaceOperation(IOPERATION_NAME, null, null)
-		uInterface.ownedOperations += uOperation
-		typeClass = createSimpleUmlClass(rootElement, TYPE_NAME)
-		rootElement.packagedElements += uInterface
-		rootElement.packagedElements += typeClass
-		propagate
-	}
 
 	@Test
 	def void testCreateInterfaceMethod() {
-		val interfaceMethod = createUmlInterfaceOperation(STANDARD_IOPERATION_NAME, null, null)
-		uInterface.ownedOperations += interfaceMethod
-		propagate
-
-		val jMethod = getCorrespondingInterfaceMethod(interfaceMethod)
-		val jInterface = getCorrespondingInterface(uInterface)
-		assertJavaInterfaceMethodTraits(jMethod, STANDARD_IOPERATION_NAME, TypesFactory.eINSTANCE.createVoid, null,
-			jInterface)
-		assertElementsEqual(interfaceMethod, jMethod)
+		createInterfaceWithOperation(INTERFACE_NAME, IOPERATION_NAME)
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		createJavaClassesView => [
+			val javaInterface = claimJavaInterface(INTERFACE_NAME)
+			val javaMethod = javaInterface.claimInterfaceMethod(IOPERATION_NAME)
+			assertJavaInterfaceMethodTraits(javaMethod, IOPERATION_NAME, TypesFactory.eINSTANCE.createVoid, null,
+				javaInterface)
+		]
 	}
 
 	@Test
-	def testRenameInterfaceMethod() {
-		uOperation.name = IOPERATION_RENAME
-		propagate
-
-		val jMethod = getCorrespondingInterfaceMethod(uOperation)
-		val jInterface = getCorrespondingInterface(uInterface)
-		assertEquals(IOPERATION_RENAME, jMethod.name)
-		assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
-		assertElementsEqual(uOperation, jMethod)
+	def void testRenameInterfaceMethod() {
+		createInterfaceWithOperation(INTERFACE_NAME, IOPERATION_NAME)
+		changeMethod(INTERFACE_NAME, IOPERATION_NAME) [
+			name = IOPERATION_RENAME
+		]
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		createJavaClassesView => [
+			val javaInterface = claimJavaInterface(INTERFACE_NAME)
+			assertJavaMemberContainerDontHaveMember(javaInterface, IOPERATION_NAME)
+		]
 	}
 
 	@Test
-	def testDeleteInterfaceMethod() {
-		assertNotNull(uOperation)
-		uOperation.destroy
-		propagate
-
-		val jInterface = getCorrespondingInterface(uInterface)
-		assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
-	}
-	
-	@Test
-	def testMoveInterfaceMethod() {
-		val uInterface2 = createSimpleUmlInterface(rootElement, "InterfaceName2")
-		uInterface2.ownedOperations += uOperation
-		propagate
-		
-		val jInterface = getCorrespondingInterface(uInterface)
-		val jInterface2 = getCorrespondingInterface(uInterface2)
-		assertJavaMemberContainerDontHaveMember(jInterface, uOperation.name)
-		assertFalse(jInterface2.getMembersByName(uOperation.name).nullOrEmpty)
+	def void testDeleteInterfaceMethod() {
+		createInterfaceWithOperation(INTERFACE_NAME, IOPERATION_NAME)
+		changeMethod(INTERFACE_NAME, IOPERATION_NAME) [
+			destroy()
+		]
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		createJavaClassesView => [
+			val javaInterface = claimJavaInterface(INTERFACE_NAME)
+			assertJavaMemberContainerDontHaveMember(javaInterface, IOPERATION_NAME)
+		]
 	}
 
 	@Test
-	def testChangeInterfaceMethodReturnType() {
-		uOperation.type = typeClass
-		propagate
-
-		val jMethod = getCorrespondingInterfaceMethod(uOperation)
-		val jTypeClass = getCorrespondingClass(typeClass)
-		assertJavaElementHasTypeRef(jMethod, createNamespaceClassifierReference(jTypeClass))
-		assertElementsEqual(uOperation, jMethod)
+	def void testMoveInterfaceMethod() {
+		createInterfaceWithOperation(INTERFACE_NAME, IOPERATION_NAME)
+		createInterfaceInRootPackage(INTERFACE_NAME_2)
+		changeMethod(INTERFACE_NAME, IOPERATION_NAME) [ model, operation |
+			model.claimInterface(INTERFACE_NAME_2).ownedOperations += operation
+		]
+		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		assertInterfaceWithNameInRootPackage(INTERFACE_NAME_2)
+		createJavaClassesView => [
+			val javaInterface = claimJavaInterface(INTERFACE_NAME)
+			val javaInterface2 = claimJavaInterface(INTERFACE_NAME_2)
+			assertJavaMemberContainerDontHaveMember(javaInterface, IOPERATION_NAME)
+			assertThat(INTERFACE_NAME_2 + " must have operation " + IOPERATION_NAME,
+				javaInterface2.getMembersByName(IOPERATION_NAME).toSet, is(not(emptySet)))
+		]
 	}
+
+	@Test
+	def void testChangeInterfaceMethodReturnType() {
+		createInterfaceWithOperation(INTERFACE_NAME, IOPERATION_NAME)
+		createClassInRootPackage(TYPE_CLASS_NAME)
+		changeMethod(INTERFACE_NAME, IOPERATION_NAME) [ model, operation |
+			operation.type = model.claimClass(TYPE_CLASS_NAME)
+		]
+		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		createJavaClassesView => [
+			val javaMethod = claimJavaInterface(INTERFACE_NAME).claimInterfaceMethod(IOPERATION_NAME)
+			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
+			assertJavaElementHasTypeRef(javaMethod, createNamespaceClassifierReference(javaTypeClass))
+		]
+	}
+
+	private def void createInterfaceWithOperation(String interfaceName, String operationName) {
+		createInterfaceInRootPackage(interfaceName)
+		changeUmlModel [
+			claimInterface(interfaceName) => [
+				createOwnedOperation(operationName, null, null, null) => [
+					isAbstract = true
+				]
+			]
+		]
+	}
+
+	private def changeMethod(String interfaceName, String methodName, (Operation)=>void changeFunction) {
+		changeMethod(interfaceName, methodName, [model, operation|changeFunction.apply(operation)])
+	}
+
+	private def changeMethod(String interfaceName, String methodName, (Model, Operation)=>void changeFunction) {
+		changeUmlModel [
+			val model = it
+			claimInterface(interfaceName) => [
+				claimOperation(methodName) => [
+					changeFunction.apply(model, it)
+				]
+			]
+		]
+	}
+
+	private def assertInterfaceWithNameInRootPackage(String interfaceName) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, interfaceName)
+	}
+
+	private def assertSingleInterfaceWithNameInRootPackage(String interfaceName) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, interfaceName)
+	}
+
 }
