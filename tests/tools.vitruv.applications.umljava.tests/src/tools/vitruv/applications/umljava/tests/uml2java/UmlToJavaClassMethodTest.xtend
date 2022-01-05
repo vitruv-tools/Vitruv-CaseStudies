@@ -1,304 +1,369 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Operation
-import org.eclipse.uml2.uml.Parameter
-import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
-import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertFalse
-import static org.junit.jupiter.api.Assertions.assertNotNull
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import org.eclipse.uml2.uml.Model
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.CoreMatchers.*
+import org.emftext.language.java.members.ClassMethod
+import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.ParameterizedTest
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
 
 /**
- * A Test class to test class methods and its traits.
- * 
- * @author Fei
+ * A test class to test class methods and its traits.
  */
-class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
+class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 	static val CLASS_NAME = "ClassName"
-	static val TYPE_NAME = "TypeName"
+	static val CLASS_NAME_2 = "ClassName2"
+	static val TYPE_CLASS_NAME = "TypeName"
 	static val OPERATION_NAME = "classMethod"
-	static val STANDARD_OPERATION_NAME = "standardMethod"
 	static val OPERATION_RENAME = "classMethodRenamed"
-	static val PARAMETER_NAME = "parameterName"
 	static val DATATYPE_NAME = "DataTypeName"
+	static val DATATYPE_NAME_2 = "DataTypeName2"
 
-	var Class uClass
-	var Class typeClass
-	var Parameter uParam
-	var PrimitiveType pType
-	var Operation uOperation
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
+
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
+
+	private def assertDataTypeWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.DataType,
+			name)
+	}
+	
+	private def assertSingleDataTypeWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.DataType, name)
+	}
+
+	private def void createClassWithOperation(String className, String operationName) {
+		createClassInRootPackage(className)
+		changeUmlModel [
+			claimClass(className) => [
+				createOwnedOperation(operationName, null, null, null)
+			]
+		]
+	}
+
+	private def void createDataTypeWithOperation(String dataTypeName, String operationName) {
+		createDataTypeInRootPackage(dataTypeName)
+		changeUmlModel [
+			claimDataType(dataTypeName) => [
+				createOwnedOperation(operationName, null, null, null)
+			]
+		]
+	}
+
+	private def changeMethod(String className, String methodName, (Operation)=>void changeFunction) {
+		changeMethod(className, methodName, [model, operation|changeFunction.apply(operation)])
+	}
+
+	private def changeMethod(String className, String methodName, (Model, Operation)=>void changeFunction) {
+		changeUmlModel [
+			val model = it
+			claimClass(className) => [
+				claimOperation(methodName) => [
+					changeFunction.apply(model, it)
+				]
+			]
+		]
+	}
 
 	/**
 	 * Initializes two uml classes and a primitive type. One uml class contains 
 	 * an operation with a parameter.
 	 */
-	@BeforeEach
-	def void before() {
-		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
-		typeClass = createSimpleUmlClass(rootElement, TYPE_NAME)
-		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
-		uParam = createUmlParameter(PARAMETER_NAME, pType)
-		uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
-		uClass.ownedOperations += uOperation
-		rootElement.packagedElements += uClass
-		rootElement.packagedElements += typeClass
-		propagate
-	}
-
+//	@BeforeEach
+//	def void before() {
+//		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
+//		typeClass = createSimpleUmlClass(rootElement, TYPE_NAME)
+//		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+//		uParam = createUmlParameter(PARAMETER_NAME, pType)
+//		uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
+//		uClass.ownedOperations += uOperation
+//		rootElement.packagedElements += uClass
+//		rootElement.packagedElements += typeClass
+//		propagate
+//	}
 	/**
-	 * Tests if creating a uml operation also causes the creating of an corresponding
-	 * java method.
+	 * Tests if creating a UML operation also causes the creating of an corresponding
+	 * Java method.
 	 */
 	@Test
 	def void testCreateClassMethod() {
-		val operation = uClass.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null)
-		propagate
-
-		val jMethod = getCorrespondingClassMethod(operation)
-		val jClass = getCorrespondingClass(uClass)
-		assertNotNull(jMethod)
-		assertJavaClassMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
-			TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
-		assertElementsEqual(operation, jMethod)
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
+			assertJavaClassMethodTraits(javaMethod, OPERATION_NAME, JavaVisibility.PUBLIC,
+				TypesFactory.eINSTANCE.createVoid, false, false, null, javaClass)
+		]
 	}
 
 	/**
-	 * Tests the change of the uml method return type. Checks if
-	 * the corresponding java method adapated the corresponding type.
+	 * Tests the change of the UML method return type. Checks if
+	 * the corresponding Java method adapted the corresponding type.
 	 */
 	@Test
 	def void testChangeReturnType() {
-		uOperation.type = typeClass
-		propagate
-
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		val jTypeClass = getCorrespondingClass(typeClass)
-		assertJavaElementHasTypeRef(jMethod, createNamespaceClassifierReference(jTypeClass))
-		assertElementsEqual(uOperation, jMethod)
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		createClassInRootPackage(TYPE_CLASS_NAME)
+		changeMethod(CLASS_NAME, OPERATION_NAME) [ model, operation |
+			operation.type = model.claimClass(TYPE_CLASS_NAME)
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
+			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
+			assertJavaElementHasTypeRef(javaMethod, createNamespaceClassifierReference(javaTypeClass))
+		]
 	}
 
 	/**
-	 * Tests if renaming a method is correctly reflected on the java side.
+	 * Tests if renaming a method is correctly reflected on the Java side.
 	 */
 	@Test
-	def testRenameMethod() {
-		uOperation.name = OPERATION_RENAME
-		propagate
-
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		val jClass = getCorrespondingClass(uClass)
-		assertEquals(OPERATION_RENAME, jMethod.name)
-		assertElementsEqual(uOperation, jMethod)
-		assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
+	def void testRenameMethod() {
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		changeMethod(CLASS_NAME, OPERATION_NAME) [
+			name = OPERATION_RENAME
+		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
+		]
 	}
 
 	/**
-	 * Tests if deleting a method is correctly reflected on the java side.
+	 * Tests if deleting a method is correctly reflected on the Java side.
 	 */
 	@Test
-	def testDeleteMethod() {
-		uOperation.destroy
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
+	def void testDeleteMethod() {
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		changeMethod(CLASS_NAME, OPERATION_NAME) [
+			destroy()
+		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
+		]
 	}
-	
+
 	@Test
-	def testMoveMethod() {
-		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
-		uClass2.ownedOperations += uOperation
-		propagate
-		
-		val jClass = getCorrespondingClass(uClass)
-		val jClass2 = getCorrespondingClass(uClass2)
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
-		assertFalse(jClass2.getMembersByName(OPERATION_NAME).nullOrEmpty)
-		assertElementsEqual(uOperation, jMethod)
+	def void testMoveMethod() {
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		createClassInRootPackage(CLASS_NAME_2)
+		changeMethod(CLASS_NAME, OPERATION_NAME) [ model, method |
+			model.claimClass(CLASS_NAME_2).ownedOperations += method
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		assertClassWithNameInRootPackage(CLASS_NAME_2)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			val javaClass2 = claimJavaClass(CLASS_NAME_2)
+			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
+			assertThat(CLASS_NAME_2 + " must have operation " + OPERATION_NAME,
+				javaClass2.getMembersByName(OPERATION_NAME).toSet, is(not(emptySet)))
+		]
+	}
+
+	private def void changeAndCheckPropertyOfAttribute(String className, String methodName,
+		(Operation)=>void changeUmlMethod, (ClassMethod)=>void validateJavaMethod) {
+		changeMethod(className, methodName) [
+			changeUmlMethod.apply(it)
+		]
+		assertSingleClassWithNameInRootPackage(className)
+		createJavaClassesView => [
+			val javaMethod = claimJavaClass(className).claimClassMethod(methodName)
+			validateJavaMethod.apply(javaMethod)
+		]
 	}
 
 	/**
-	 * Tests if setting a method static correctly reflected on the java side.
+	 * Tests if setting a method static correctly reflected on the Java side.
 	 */
 	@Test
-	def testStaticMethod() {
-		uOperation.isStatic = true
-		propagate
-
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		assertJavaModifiableStatic(jMethod, true)
-		assertElementsEqual(uOperation, jMethod)
+	def void testStaticMethod() {
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, OPERATION_NAME, [isStatic = true], [
+			assertJavaModifiableStatic(it, true)
+		])
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, OPERATION_NAME, [isStatic = false], [
+			assertJavaModifiableStatic(it, false)
+		])
 	}
 
 	/**
-	 * Tests if setting a method final correctly reflected on the java side.
+	 * Tests if setting a method final correctly reflected on the Java side.
 	 */
 	@Test
-	def testFinalMethod() {
-		uOperation.isLeaf = true
-		propagate
-
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		assertJavaModifiableFinal(jMethod, true)
-		assertElementsEqual(uOperation, jMethod)
+	def void testFinalMethod() {
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, OPERATION_NAME, [isLeaf = true], [
+			assertJavaModifiableFinal(it, true)
+		])
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, OPERATION_NAME, [isLeaf = false], [
+			assertJavaModifiableFinal(it, false)
+		])
 	}
 
 	/**
-	 * Tests if setting a method abstract is correctly reflected on the java side.
+	 * Tests if setting a method abstract is correctly reflected on the Java side.
 	 */
 	@Test
 	def testAbstractMethod() {
-		uOperation.isAbstract = true
-		propagate
-
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		assertJavaModifiableAbstract(jMethod, true)
-		assertElementsEqual(uOperation, jMethod)
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, OPERATION_NAME, [isAbstract = true], [
+			assertJavaModifiableAbstract(it, true)
+		])
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, OPERATION_NAME, [isAbstract = false], [
+			assertJavaModifiableAbstract(it, false)
+		])
 	}
 
 	/**
-	 * Tests if visibility changes are propagated to the java method.
+	 * Tests if visibility changes are propagated to the Java method.
 	 */
-	@Test
-	def testMethodVisibility() {
-		uOperation.visibility = VisibilityKind.PRIVATE_LITERAL
-		propagate
-
-		var jMethod = getCorrespondingClassMethod(uOperation)
-		assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PRIVATE)
-		assertElementsEqual(uOperation, jMethod)
-
-		uOperation.visibility = VisibilityKind.PROTECTED_LITERAL
-		propagate
-
-		jMethod = getCorrespondingClassMethod(uOperation)
-		assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PROTECTED)
-		assertElementsEqual(uOperation, jMethod)
+	@ParameterizedTest
+	@EnumSource(value=VisibilityKind, names=#["PUBLIC_LITERAL"], mode=EnumSource.Mode.EXCLUDE)
+	def void testMethodVisibility(VisibilityKind visibility) {
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, OPERATION_NAME, [it.visibility = visibility], [
+			assertJavaModifiableHasVisibility(it, getJavaVisibilityConstantFromUmlVisibilityKind(visibility))
+		])
 	}
 
 	/**
 	 * Tests the creation of a method that act as constructor and checks if a 
-	 * constructor is created on the java side.
+	 * constructor is created on the Java side.
 	 */
 	@Test
-	def testCreateConstructor() {
-		val uConstr = createSimpleUmlOperation(uClass.name)
-		uClass.ownedOperations += uConstr
-		propagate
-		val jConstr = getCorrespondingConstructor(uConstr)
-		assertNotNull(jConstr)
+	def void testCreateConstructor() {
+		createClassWithOperation(CLASS_NAME, CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			claimJavaClass(CLASS_NAME).claimConstructor()
+		]
 	}
-	
+
 	@Test
-	def testMoveConstructor() {
-		val uConstr = createSimpleUmlOperation(uClass.name)
-		uClass.ownedOperations += uConstr
-		propagate
-		
-		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
-		uClass2.ownedOperations += uConstr
-		uConstr.name = uClass2.name
-		propagate
-		
-		val jClass = getCorrespondingClass(uClass)
-		val jClass2 = getCorrespondingClass(uClass2)
-		val jConstr = getCorrespondingConstructor(uConstr)
-		assertJavaMemberContainerDontHaveMember(jClass, uClass.name)
-		assertJavaMemberContainerDontHaveMember(jClass, uClass2.name)
-		assertJavaMemberContainerDontHaveMember(jClass2, uClass.name)
-		assertFalse(jClass2.getMembersByName(uConstr.name).nullOrEmpty)
-		assertNotNull(jConstr)
+	def void testMoveConstructor() {
+		createClassWithOperation(CLASS_NAME, CLASS_NAME)
+		createClassInRootPackage(CLASS_NAME_2)
+		changeMethod(CLASS_NAME, CLASS_NAME) [ model, method |
+			model.claimClass(CLASS_NAME_2).ownedOperations += method => [
+				name = CLASS_NAME_2
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		assertClassWithNameInRootPackage(CLASS_NAME_2)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			val javaClass2 = claimJavaClass(CLASS_NAME_2)
+			javaClass2.claimConstructor()
+			assertJavaMemberContainerDontHaveMember(javaClass, CLASS_NAME)
+			assertJavaMemberContainerDontHaveMember(javaClass, CLASS_NAME_2)
+			assertJavaMemberContainerDontHaveMember(javaClass2, CLASS_NAME)
+			assertThat(javaClass2.getMembersByName(CLASS_NAME_2).toSet, is(not(emptySet)))
+		]
 	}
-	
+
 	/**
 	 * Same as testMoveConstructor but the order of move and rename is switched
 	 */
 	@Test
-	def testMoveConstructor2() {
-		val uConstr = createSimpleUmlOperation(uClass.name)
-		uClass.ownedOperations += uConstr
-		propagate
-		
-		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
-		uConstr.name = uClass2.name
-		uClass2.ownedOperations += uConstr
-		propagate
-		
-		val jClass = getCorrespondingClass(uClass)
-		val jClass2 = getCorrespondingClass(uClass2)
-		val jConstr = getCorrespondingConstructor(uConstr)
-		assertJavaMemberContainerDontHaveMember(jClass, uClass.name)
-		assertJavaMemberContainerDontHaveMember(jClass, uClass2.name)
-		assertJavaMemberContainerDontHaveMember(jClass2, uClass.name)
-		assertFalse(jClass2.getMembersByName(uConstr.name).nullOrEmpty)
-		assertNotNull(jConstr)
+	def void testMoveConstructor2() {
+		createClassWithOperation(CLASS_NAME, CLASS_NAME)
+		createClassInRootPackage(CLASS_NAME_2)
+		changeMethod(CLASS_NAME, CLASS_NAME) [ model, method |
+			method => [
+				name = CLASS_NAME_2
+			]
+			model.claimClass(CLASS_NAME_2).ownedOperations += method
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		assertClassWithNameInRootPackage(CLASS_NAME_2)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			val javaClass2 = claimJavaClass(CLASS_NAME_2)
+			javaClass2.claimConstructor()
+			assertJavaMemberContainerDontHaveMember(javaClass, CLASS_NAME)
+			assertJavaMemberContainerDontHaveMember(javaClass, CLASS_NAME_2)
+			assertJavaMemberContainerDontHaveMember(javaClass2, CLASS_NAME)
+			assertThat(javaClass2.getMembersByName(CLASS_NAME_2).toSet, is(not(emptySet)))
+		]
 	}
 
 	/**
-	 * Checks if method creating in datatypes is reflected in the corresponding java class.
+	 * Checks if method creating in data types is reflected in the corresponding Java class.
 	 */
 	@Test
 	def void testCreateMethodInDataType() {
-		val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
-		val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null)
-		propagate
-
-		val jMethod = getCorrespondingClassMethod(operation)
-		val jClass = getCorrespondingClass(dataType)
-		assertNotNull(jMethod)
-		assertJavaClassMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
-			TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
-		assertElementsEqual(operation, jMethod)
+		createDataTypeWithOperation(DATATYPE_NAME, OPERATION_NAME)
+		assertSingleDataTypeWithNameInRootPackage(DATATYPE_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(DATATYPE_NAME)
+			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
+			assertJavaClassMethodTraits(javaMethod, OPERATION_NAME, JavaVisibility.PUBLIC,
+				TypesFactory.eINSTANCE.createVoid, false, false, null, javaClass)
+		]
 	}
 
 	/**
 	 * Tests the deletion of methods in data types and if the deletion is
-	 * propagated to the java model.
+	 * propagated to the Java model.
 	 */
 	@Test
-	def testDeleteMethodInDataType() {
-		val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
-		val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null)
-		propagate
-
-		var jMethod = getCorrespondingClassMethod(operation)
-		assertNotNull(jMethod)
-
-		operation.destroy
-		propagate
-
-		val jClass = getCorrespondingClass(dataType)
-		assertJavaMemberContainerDontHaveMember(jClass, STANDARD_OPERATION_NAME)
+	def void testDeleteMethodInDataType() {
+		createDataTypeWithOperation(DATATYPE_NAME, OPERATION_NAME)
+		changeUmlModel [
+			claimDataType(DATATYPE_NAME) => [
+				claimOperation(OPERATION_NAME) => [
+					destroy()	
+				]
+			]
+		]
+		assertSingleDataTypeWithNameInRootPackage(DATATYPE_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(DATATYPE_NAME)
+			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
+		]
 	}
-	
+
 	@Test
-	def testMoveMethodInDataType() {
-		val uDataType = createUmlDataType(rootElement, DATATYPE_NAME)
-		val uOperation = uDataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null)
-		propagate
-		
-		val uDataType2 = createUmlDataType(rootElement, "DataTypeName2")
-		uDataType2.ownedOperations += uOperation
-		propagate
-		
-		val jDataType = getCorrespondingClass(uDataType)
-		val jDataType2 = getCorrespondingClass(uDataType2)
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		assertJavaMemberContainerDontHaveMember(jDataType, uOperation.name)
-		assertFalse(jDataType2.getMembersByName(uOperation.name).nullOrEmpty)
-		assertElementsEqual(uOperation, jMethod)
+	def void testMoveMethodInDataType() {
+		createDataTypeWithOperation(DATATYPE_NAME, OPERATION_NAME)
+		createDataTypeInRootPackage(DATATYPE_NAME_2)
+		changeUmlModel [
+			val operation = claimDataType(DATATYPE_NAME).claimOperation(OPERATION_NAME)
+			claimDataType(DATATYPE_NAME_2) => [
+				ownedOperations += operation
+			]
+		]
+		assertDataTypeWithNameInRootPackage(DATATYPE_NAME)
+		assertDataTypeWithNameInRootPackage(DATATYPE_NAME_2)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(DATATYPE_NAME)
+			val javaClass2 = claimJavaClass(DATATYPE_NAME_2)
+			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
+			assertThat(javaClass2.getMembersByName(OPERATION_NAME).toSet, is(not(emptySet)))
+		]
 	}
 }
