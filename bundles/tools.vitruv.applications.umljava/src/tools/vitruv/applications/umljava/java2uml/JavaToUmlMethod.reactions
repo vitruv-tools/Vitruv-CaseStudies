@@ -317,7 +317,7 @@ reaction JavaElementVisibilityChanged {
 }
 
 reaction JavaElementMadePackagePrivate {
-    after element java::Modifier deleted and removed from java::Class[annotationsAndModifiers]
+    after element java::Modifier deleted and removed from java::AnnotableAndModifiable[annotationsAndModifiers]
     with oldValue instanceof Private
     || oldValue instanceof Public
     || oldValue instanceof Protected
