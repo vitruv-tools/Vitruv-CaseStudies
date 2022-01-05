@@ -29,28 +29,13 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	static val ADDITIONAL_CLASS_NAME = "AdditionalClass"
 	static val DEFAULT_INTERFACE_NAME = "TestInterface"
 	static val ADDITIONAL_INTERFACE_NAME = "AdditionalInterface"
-	
-	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
-	}
-	
-	private def assertSingleClassWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
-	}
-
-	private def assertSingleClassWithNameInPackage(String packageName, String name) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			packageName, name)
-	}
 
 	@Test
 	def void testCreateClass() {
 		createClassInRootPackage(DEFAULT_CLASS_NAME)
 		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 	}
-	
+
 	@Test
 	def void testCreateClassInPackage() {
 		createClassInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
@@ -70,7 +55,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	}
 
 	@ParameterizedTest
-	@EnumSource(value = VisibilityKind, names = #["PUBLIC_LITERAL"], mode = EnumSource.Mode.EXCLUDE)
+	@EnumSource(value=VisibilityKind, names=#["PUBLIC_LITERAL"], mode=EnumSource.Mode.EXCLUDE)
 	def void testChangeClassVisibility(VisibilityKind visibility) {
 		createClassInRootPackage(DEFAULT_CLASS_NAME)
 		changeUmlModel [
@@ -174,7 +159,8 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		createClassInRootPackage(DEFAULT_CLASS_NAME)
 		createInterfaceInRootPackage(DEFAULT_INTERFACE_NAME)
 		changeUmlModel [
-			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization", claimInterface(DEFAULT_INTERFACE_NAME))
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization",
+				claimInterface(DEFAULT_INTERFACE_NAME))
 		]
 		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		createJavaClassesView() => [
@@ -212,7 +198,8 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		createClassInRootPackage(ADDITIONAL_CLASS_NAME)
 		createInterfaceInRootPackage(DEFAULT_INTERFACE_NAME)
 		changeUmlModel [
-			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization", claimInterface(DEFAULT_INTERFACE_NAME))
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization",
+				claimInterface(DEFAULT_INTERFACE_NAME))
 		]
 		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		assertClassWithNameInRootPackage(ADDITIONAL_CLASS_NAME)
@@ -240,7 +227,8 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	@Test
 	def void testCreateDataType() {
 		createDataTypeInRootPackage(DEFAULT_CLASS_NAME)
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, DataType, DEFAULT_CLASS_NAME)
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, DataType,
+			DEFAULT_CLASS_NAME)
 	}
 
 	@Test
@@ -253,8 +241,25 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 				packagedElements += umlDataType
 			]
 		]
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, DataType, PACKAGE_NAME, DEFAULT_CLASS_NAME)
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, DataType, PACKAGE_NAME,
+			DEFAULT_CLASS_NAME)
 		assertNoClassifierWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		assertNoClassifierExistsInRootPackage()
 	}
+
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
+
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
+
+	private def assertSingleClassWithNameInPackage(String packageName, String name) {
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			packageName, name)
+	}
+
 }

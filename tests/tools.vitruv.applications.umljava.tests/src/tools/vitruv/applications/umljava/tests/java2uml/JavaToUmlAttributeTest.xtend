@@ -29,29 +29,6 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	static val CLASS_NAME = "ClassName"
 	static val TYPE_CLASS_NAME = "TypeClass"
 
-	private def void createJavaClassWithFieldOfType(String className, TypeReference type, String attributeName) {
-		createJavaClassInRootPackage(className)
-		changeView(createJavaClassesView) [
-			claimJavaClass(className) => [
-				members += MembersFactory.eINSTANCE.createField => [
-					name = attributeName
-					typeReference = type
-					makePrivate
-				]
-			]
-		]
-	}
-	
-	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			name)
-	}
-
-	private def assertSingleClassWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
-	}
-
 	/**
 	 * Tests the creation of an attribute with primitive type.
 	 * Checks if a corresponding UML attribute exists afterwards.
@@ -244,4 +221,28 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			assertUmlNamedElementHasVisibility(umlAttribute, VisibilityKind.PROTECTED_LITERAL)
 		]
 	}
+
+	private def void createJavaClassWithFieldOfType(String className, TypeReference type, String attributeName) {
+		createJavaClassInRootPackage(className)
+		changeView(createJavaClassesView) [
+			claimJavaClass(className) => [
+				members += MembersFactory.eINSTANCE.createField => [
+					name = attributeName
+					typeReference = type
+					makePrivate
+				]
+			]
+		]
+	}
+
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
+
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
+
 }

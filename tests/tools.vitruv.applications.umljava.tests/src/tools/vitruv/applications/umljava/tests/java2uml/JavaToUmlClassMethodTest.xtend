@@ -33,55 +33,6 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	static val PARAMETER_NAME = "parameterName"
 	static val PARAMETER_RENAME = "parameterRenamed"
 
-	private def assertSingleClassWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
-	}
-
-	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			name)
-	}
-
-	private def createJavaClassWithMethod(String className, String methodName) {
-		createJavaClassInRootPackage(className)
-		changeView(createJavaClassesView) [
-			claimJavaClass(className) => [
-				members += MembersFactory.eINSTANCE.createClassMethod => [
-					name = methodName
-					typeReference = TypesFactory.eINSTANCE.createVoid
-					makePublic
-				]
-			]
-		]
-	}
-
-	private def changeClassMethod(String className, String methodName, (ClassMethod)=>void changeFunction) {
-		changeClassMethod(className, methodName, [view, method|changeFunction.apply(method)])
-	}
-
-	private def changeClassMethod(String className, String methodName, (View, ClassMethod)=>void changeFunction) {
-		changeView(createJavaClassesView) [
-			val view = it
-			claimJavaClass(className) => [
-				claimClassMethod(methodName) => [
-					changeFunction.apply(view, it)
-				]
-			]
-		]
-	}
-
-	private def createJavaClassWithMethodAndParameter(String className, String methodName, String parameterName) {
-		createJavaClassWithMethod(className, methodName)
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
-			parameters += ParametersFactory.eINSTANCE.createOrdinaryParameter => [
-				name = PARAMETER_NAME
-				typeReference = createJavaPrimitiveType(JavaStandardType.INT)
-
-			]
-		]
-	}
-
 	/**
 	 * Tests if a corresponding UML method is created when a Java method is created.
 	 */
@@ -313,4 +264,52 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 	}
 
+	private def createJavaClassWithMethod(String className, String methodName) {
+		createJavaClassInRootPackage(className)
+		changeView(createJavaClassesView) [
+			claimJavaClass(className) => [
+				members += MembersFactory.eINSTANCE.createClassMethod => [
+					name = methodName
+					typeReference = TypesFactory.eINSTANCE.createVoid
+					makePublic
+				]
+			]
+		]
+	}
+
+	private def createJavaClassWithMethodAndParameter(String className, String methodName, String parameterName) {
+		createJavaClassWithMethod(className, methodName)
+		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
+			parameters += ParametersFactory.eINSTANCE.createOrdinaryParameter => [
+				name = PARAMETER_NAME
+				typeReference = createJavaPrimitiveType(JavaStandardType.INT)
+
+			]
+		]
+	}
+
+	private def changeClassMethod(String className, String methodName, (ClassMethod)=>void changeFunction) {
+		changeClassMethod(className, methodName, [view, method|changeFunction.apply(method)])
+	}
+
+	private def changeClassMethod(String className, String methodName, (View, ClassMethod)=>void changeFunction) {
+		changeView(createJavaClassesView) [
+			val view = it
+			claimJavaClass(className) => [
+				claimClassMethod(methodName) => [
+					changeFunction.apply(view, it)
+				]
+			]
+		]
+	}
+
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
+
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
 }

@@ -18,17 +18,6 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 	static val NESTED_PACKAGE_NAME = "packagenamenested"
 	static val PACKAGE_RENAMED = "packagerenamed"
 
-	private def assertSinglePackageWithName(String name) {
-		createUmlAndJavaPackagesView => [
-			val javaPackage = claimJavaPackage(name)
-			val umlPackage = defaultUmlModel.claimPackage(name)
-			assertThat("only one element in UML model is expected to exist", defaultUmlModel.packagedElements.toSet,
-				is(#{umlPackage}))
-			assertThat("only one Java package is expected to exist", javaPackages.toSet, is(#{javaPackage}))
-			assertElementsEqual(umlPackage, javaPackage)
-		]
-	}
-
 	@Test
 	def void testCreatePackage() {
 		createJavaPackageInRootPackage(PACKAGE_NAME)
@@ -109,6 +98,17 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 				is(#{javaPackage, nestedJavaPackage}))
 			assertElementsEqual(umlPackage, javaPackage)
 			assertElementsEqual(nestedUmlPackage, nestedJavaPackage)
+		]
+	}
+
+	private def assertSinglePackageWithName(String name) {
+		createUmlAndJavaPackagesView => [
+			val javaPackage = claimJavaPackage(name)
+			val umlPackage = defaultUmlModel.claimPackage(name)
+			assertThat("only one element in UML model is expected to exist", defaultUmlModel.packagedElements.toSet,
+				is(#{umlPackage}))
+			assertThat("only one Java package is expected to exist", javaPackages.toSet, is(#{javaPackage}))
+			assertElementsEqual(umlPackage, javaPackage)
 		]
 	}
 

@@ -30,75 +30,6 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 	static val DATATYPE_NAME = "DataTypeName"
 	static val DATATYPE_NAME_2 = "DataTypeName2"
 
-	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			name)
-	}
-
-	private def assertSingleClassWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
-	}
-
-	private def assertDataTypeWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.DataType,
-			name)
-	}
-	
-	private def assertSingleDataTypeWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.DataType, name)
-	}
-
-	private def void createClassWithOperation(String className, String operationName) {
-		createClassInRootPackage(className)
-		changeUmlModel [
-			claimClass(className) => [
-				createOwnedOperation(operationName, null, null, null)
-			]
-		]
-	}
-
-	private def void createDataTypeWithOperation(String dataTypeName, String operationName) {
-		createDataTypeInRootPackage(dataTypeName)
-		changeUmlModel [
-			claimDataType(dataTypeName) => [
-				createOwnedOperation(operationName, null, null, null)
-			]
-		]
-	}
-
-	private def changeMethod(String className, String methodName, (Operation)=>void changeFunction) {
-		changeMethod(className, methodName, [model, operation|changeFunction.apply(operation)])
-	}
-
-	private def changeMethod(String className, String methodName, (Model, Operation)=>void changeFunction) {
-		changeUmlModel [
-			val model = it
-			claimClass(className) => [
-				claimOperation(methodName) => [
-					changeFunction.apply(model, it)
-				]
-			]
-		]
-	}
-
-	/**
-	 * Initializes two uml classes and a primitive type. One uml class contains 
-	 * an operation with a parameter.
-	 */
-//	@BeforeEach
-//	def void before() {
-//		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
-//		typeClass = createSimpleUmlClass(rootElement, TYPE_NAME)
-//		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
-//		uParam = createUmlParameter(PARAMETER_NAME, pType)
-//		uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
-//		uClass.ownedOperations += uOperation
-//		rootElement.packagedElements += uClass
-//		rootElement.packagedElements += typeClass
-//		propagate
-//	}
 	/**
 	 * Tests if creating a UML operation also causes the creating of an corresponding
 	 * Java method.
@@ -181,18 +112,6 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
 			assertThat(CLASS_NAME_2 + " must have operation " + OPERATION_NAME,
 				javaClass2.getMembersByName(OPERATION_NAME).toSet, is(not(emptySet)))
-		]
-	}
-
-	private def void changeAndCheckPropertyOfAttribute(String className, String methodName,
-		(Operation)=>void changeUmlMethod, (ClassMethod)=>void validateJavaMethod) {
-		changeMethod(className, methodName) [
-			changeUmlMethod.apply(it)
-		]
-		assertSingleClassWithNameInRootPackage(className)
-		createJavaClassesView => [
-			val javaMethod = claimJavaClass(className).claimClassMethod(methodName)
-			validateJavaMethod.apply(javaMethod)
 		]
 	}
 
@@ -336,7 +255,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 		changeUmlModel [
 			claimDataType(DATATYPE_NAME) => [
 				claimOperation(OPERATION_NAME) => [
-					destroy()	
+					destroy()
 				]
 			]
 		]
@@ -366,4 +285,70 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 			assertThat(javaClass2.getMembersByName(OPERATION_NAME).toSet, is(not(emptySet)))
 		]
 	}
+
+	private def void createClassWithOperation(String className, String operationName) {
+		createClassInRootPackage(className)
+		changeUmlModel [
+			claimClass(className) => [
+				createOwnedOperation(operationName, null, null, null)
+			]
+		]
+	}
+
+	private def void createDataTypeWithOperation(String dataTypeName, String operationName) {
+		createDataTypeInRootPackage(dataTypeName)
+		changeUmlModel [
+			claimDataType(dataTypeName) => [
+				createOwnedOperation(operationName, null, null, null)
+			]
+		]
+	}
+
+	private def changeMethod(String className, String methodName, (Operation)=>void changeFunction) {
+		changeMethod(className, methodName, [model, operation|changeFunction.apply(operation)])
+	}
+
+	private def changeMethod(String className, String methodName, (Model, Operation)=>void changeFunction) {
+		changeUmlModel [
+			val model = it
+			claimClass(className) => [
+				claimOperation(methodName) => [
+					changeFunction.apply(model, it)
+				]
+			]
+		]
+	}
+
+	private def void changeAndCheckPropertyOfAttribute(String className, String methodName,
+		(Operation)=>void changeUmlMethod, (ClassMethod)=>void validateJavaMethod) {
+		changeMethod(className, methodName) [
+			changeUmlMethod.apply(it)
+		]
+		assertSingleClassWithNameInRootPackage(className)
+		createJavaClassesView => [
+			val javaMethod = claimJavaClass(className).claimClassMethod(methodName)
+			validateJavaMethod.apply(javaMethod)
+		]
+	}
+
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
+
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
+
+	private def assertDataTypeWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.DataType, name)
+	}
+
+	private def assertSingleDataTypeWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.DataType, name)
+	}
+
 }

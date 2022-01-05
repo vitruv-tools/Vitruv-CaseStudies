@@ -32,44 +32,6 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 	static val CLASS_NAME_2 = "ClassName2"
 	static val TYPE_CLASS_NAME = "TypeClass"
 
-	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			name)
-	}
-
-	private def assertSingleClassWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
-	}
-
-	private def void createClassWithFieldOfType(String className, String attributeName, Type attributeType) {
-		createClassInRootPackage(className)
-		changeUmlModel [
-			claimClass(className) => [
-				ownedAttributes += UMLFactory.eINSTANCE.createProperty => [
-					name = attributeName
-					visibility = VisibilityKind.PRIVATE_LITERAL
-					type = attributeType
-				]
-			]
-		]
-	}
-
-	private def changeAttribute(String className, String attributeName, (Property)=>void changeFunction) {
-		changeAttribute(className, attributeName, [model, property|changeFunction.apply(property)])
-	}
-
-	private def changeAttribute(String className, String attributeName, (Model, Property)=>void changeFunction) {
-		changeUmlModel [
-			val model = it
-			claimClass(className) => [
-				claimAttribute(attributeName) => [
-					changeFunction.apply(model, it)
-				]
-			]
-		]
-	}
-
 	@Test
 	def void testCreatePrimitiveAttribute() {
 		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
@@ -230,4 +192,43 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 				getJavaSettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
 		]
 	}
+
+	private def void createClassWithFieldOfType(String className, String attributeName, Type attributeType) {
+		createClassInRootPackage(className)
+		changeUmlModel [
+			claimClass(className) => [
+				ownedAttributes += UMLFactory.eINSTANCE.createProperty => [
+					name = attributeName
+					visibility = VisibilityKind.PRIVATE_LITERAL
+					type = attributeType
+				]
+			]
+		]
+	}
+
+	private def changeAttribute(String className, String attributeName, (Property)=>void changeFunction) {
+		changeAttribute(className, attributeName, [model, property|changeFunction.apply(property)])
+	}
+
+	private def changeAttribute(String className, String attributeName, (Model, Property)=>void changeFunction) {
+		changeUmlModel [
+			val model = it
+			claimClass(className) => [
+				claimAttribute(attributeName) => [
+					changeFunction.apply(model, it)
+				]
+			]
+		]
+	}
+
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
+
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
+
 }

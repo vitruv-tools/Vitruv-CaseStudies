@@ -31,16 +31,6 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 	static val ATTRIBUTE_NAME = "attributeName"
 	static val TYPE_CLASS_NAME = "TypeClass"
 
-	private def assertSingleEnumWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, name)
-	}
-
-	private def assertSingleEnumWithNameInPackage(String packageName, String name) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, packageName, name)
-	}
-
 	@Test
 	def void testCreateEnum() {
 		createJavaEnumInRootPackage(ENUM_NAME)
@@ -206,4 +196,15 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 			assertElementsEqual(umlAttribute, javaField)
 		]
 	}
+
+	private def assertSingleEnumWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Enumeration,
+			org.eclipse.uml2.uml.Enumeration, name)
+	}
+
+	private def assertSingleEnumWithNameInPackage(String packageName, String name) {
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Enumeration,
+			org.eclipse.uml2.uml.Enumeration, packageName, name)
+	}
+
 }

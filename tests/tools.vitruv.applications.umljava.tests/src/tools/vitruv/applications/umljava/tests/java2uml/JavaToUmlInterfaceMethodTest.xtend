@@ -25,28 +25,6 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	static val IOPERATION_RENAME = "interfaceMethodRenamed"
 	static val PARAMETER_NAME = "parameterName"
 
-	private def void createDefaultInterfaceWithMethod(String methodName) {
-		createJavaInterfaceInRootPackage(INTERFACE_NAME)
-		changeView(createJavaClassesView) [
-			claimJavaInterface(INTERFACE_NAME) => [
-				members += MembersFactory.eINSTANCE.createInterfaceMethod => [
-					name = methodName
-					typeReference = TypesFactory.eINSTANCE.createVoid
-				]
-			]
-		]
-	}
-	
-	private def assertInterfaceWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, name)
-	}
-
-	private def assertSingleInterfaceWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, name)
-	}
-
 	@Test
 	def void testCreateInterfaceMethod() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
@@ -137,4 +115,27 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_NAME)
 		]
 	}
+
+	private def void createDefaultInterfaceWithMethod(String methodName) {
+		createJavaInterfaceInRootPackage(INTERFACE_NAME)
+		changeView(createJavaClassesView) [
+			claimJavaInterface(INTERFACE_NAME) => [
+				members += MembersFactory.eINSTANCE.createInterfaceMethod => [
+					name = methodName
+					typeReference = TypesFactory.eINSTANCE.createVoid
+				]
+			]
+		]
+	}
+
+	private def assertInterfaceWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, name)
+	}
+
+	private def assertSingleInterfaceWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, name)
+	}
+
 }

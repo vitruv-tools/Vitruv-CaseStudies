@@ -20,11 +20,6 @@ class UmlToJavaAssociationTest extends AbstractUmlToJavaTest {
 	static val CLASS_NAME_1 = "ClassName1"
 	static val CLASS_NAME_2 = "ClassName2"
 
-	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			name)
-	}
-
 	@ParameterizedTest
 	@CsvSource("0,1", "1,1")
 	def void testCreateAssociationSingleValued(int lowerBound, int upperBound) {
@@ -45,7 +40,7 @@ class UmlToJavaAssociationTest extends AbstractUmlToJavaTest {
 			assertTrue(javaSetterForAttributeExists(javaAttribute))
 		]
 	}
-	
+
 	@ParameterizedTest
 	@CsvSource("0,2", "0,-1", "1,2", "1,-1", "2,2", "2,-1")
 	def void testCreateAssociationMultiValued(int lowerBound, int upperBound) {
@@ -68,5 +63,9 @@ class UmlToJavaAssociationTest extends AbstractUmlToJavaTest {
 			assertTypeEquals(createNamespaceClassifierReference(referencedJavaClass), innerTypeRef)
 		]
 	}
-	
+
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
 }

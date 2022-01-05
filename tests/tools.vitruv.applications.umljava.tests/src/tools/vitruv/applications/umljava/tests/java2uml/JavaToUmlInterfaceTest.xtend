@@ -22,21 +22,6 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 	static val SUPER_INTERFACE1_NAME = "SuperInterfaceOne"
 	static val SUPER_INTERFACE2_NAME = "SuperInterfaceTwo"
 
-	private def assertInterfaceWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, name)
-	}
-
-	private def assertSingleInterfaceWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, name)
-	}
-
-	private def assertSingleInterfaceWithNameInPackage(String packageName, String name) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, packageName, name)
-	}
-
 	@Test
 	def void testCreateInterface() {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
@@ -178,6 +163,21 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 			assertUmlClassifierHasSuperClassifier(umlInterface, umlSuperInterface2)
 			assertUmlClassifierDontHaveSuperClassifier(umlInterface, umlSuperInterface1)
 		]
+	}
+
+	private def assertInterfaceWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, name)
+	}
+
+	private def assertSingleInterfaceWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, name)
+	}
+
+	private def assertSingleInterfaceWithNameInPackage(String packageName, String name) {
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, packageName, name)
 	}
 
 }

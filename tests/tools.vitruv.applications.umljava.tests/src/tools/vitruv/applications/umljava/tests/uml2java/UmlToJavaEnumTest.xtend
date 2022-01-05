@@ -25,21 +25,6 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 	static val TYPE_CLASS_NAME = "TypeClass"
 	static val ATTRIBUTE_NAME = "attributeName"
 
-	private def assertEnumWithNameInRootPackage(String enumName) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, enumName)
-	}
-
-	private def assertSingleEnumWithNameInRootPackage(String enumName) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, enumName)
-	}
-
-	private def assertSingleEnumWithNameInPackage(String packageName, String enumName) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, packageName, enumName)
-	}
-
 	@Test
 	def void testCreateEnum() {
 		createEnumInRootPackage(ENUM_NAME)
@@ -49,7 +34,7 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 			assertJavaEnumTraits(javaEnum, ENUM_NAME, JavaVisibility.PUBLIC, #[])
 		]
 	}
-	
+
 	@Test
 	def void testCreateEnumInPackage() {
 		createEnumInPackage(PACKAGE_NAME, ENUM_NAME)
@@ -67,7 +52,7 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 		assertSingleEnumWithNameInRootPackage(ENUM_RENAME)
 		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
 	}
-	
+
 	@Test
 	def void testMoveEnum() {
 		createEnumInRootPackage(ENUM_NAME)
@@ -170,7 +155,21 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
 				createNamespaceClassifierReference(javaTypeClass), false, false, javaEnum)
 		]
+	}
 
+	private def assertEnumWithNameInRootPackage(String enumName) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Enumeration,
+			org.eclipse.uml2.uml.Enumeration, enumName)
+	}
+
+	private def assertSingleEnumWithNameInRootPackage(String enumName) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Enumeration,
+			org.eclipse.uml2.uml.Enumeration, enumName)
+	}
+
+	private def assertSingleEnumWithNameInPackage(String packageName, String enumName) {
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Enumeration,
+			org.eclipse.uml2.uml.Enumeration, packageName, enumName)
 	}
 
 }

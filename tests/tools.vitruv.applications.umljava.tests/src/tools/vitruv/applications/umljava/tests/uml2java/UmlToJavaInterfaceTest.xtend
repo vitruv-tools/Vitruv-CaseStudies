@@ -20,21 +20,6 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 	static val SUPER_INTERFACE_NAME_1 = "SuperInterfaceOne"
 	static val SUPER_INTERFACE_NAME_2 = "SuperInterfaceTwo"
 
-	private def assertInterfaceWithNameInRootPackage(String interfaceName) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, interfaceName)
-	}
-	
-	private def assertSingleInterfaceWithNameInRootPackage(String interfaceName) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, interfaceName)
-	}
-
-	private def assertSingleInterfaceWithNameInPackage(String packageName, String interfaceName) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, packageName, interfaceName)
-	}
-
 	@Test
 	def void testCreateInterface() {
 		createInterfaceInRootPackage(INTERFACE_NAME)
@@ -75,7 +60,7 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 		]
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		assertNoClassifierWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
-		
+
 	}
 
 	@Test
@@ -141,7 +126,21 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 			assertThat("there must be one super interface", javaInterface.extends.size, is(1))
 			assertElementsEqual(umlSuperInterface2, getClassifierFromTypeReference(javaInterface.extends.get(0)))
 		]
+	}
 
+	private def assertInterfaceWithNameInRootPackage(String interfaceName) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, interfaceName)
+	}
+
+	private def assertSingleInterfaceWithNameInRootPackage(String interfaceName) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, interfaceName)
+	}
+
+	private def assertSingleInterfaceWithNameInPackage(String packageName, String interfaceName) {
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, packageName, interfaceName)
 	}
 
 }

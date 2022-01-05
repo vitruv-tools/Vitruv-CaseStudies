@@ -25,28 +25,8 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	static val NESTED_PACKAGE_NAME = "nestedpackage"
 	static val PACKAGE_RENAMED = "rootpackagerenamed"
 
-	def void createRootPackage(String packageName) {
-		changeUmlModel [
-			packagedElements += UMLFactory.eINSTANCE.createPackage => [
-				it.name = packageName
-			]
-		]
-	}
-
-	def void createRootPackageWithNestedPackage(String rootPackageName, String nestedPackageName) {
-		changeUmlModel [
-			packagedElements += UMLFactory.eINSTANCE.createPackage => [
-				it.name = rootPackageName
-				packagedElements += UMLFactory.eINSTANCE.createPackage => [
-					it.name = nestedPackageName
-					it.visibility = VisibilityKind.PUBLIC_LITERAL
-				]
-			]
-		]
-	}
-
 	@ParameterizedTest
-	@ValueSource(strings = #[PACKAGE_NAME, PACKAGE_NAME_FIRST_UPPER])
+	@ValueSource(strings=#[PACKAGE_NAME, PACKAGE_NAME_FIRST_UPPER])
 	def void testCreatePackage(String packageName) {
 		createRootPackage(packageName)
 		createUmlAndJavaPackagesView() => [
@@ -58,7 +38,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = #[PACKAGE_NAME, PACKAGE_NAME_FIRST_UPPER])
+	@ValueSource(strings=#[PACKAGE_NAME, PACKAGE_NAME_FIRST_UPPER])
 	def void testCreateNestedPackage(String packageName) {
 		val nestedPackageName = packageName + "nested"
 		createRootPackageWithNestedPackage(packageName, nestedPackageName)
@@ -119,9 +99,28 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 			claimPackage(PACKAGE_NAME).destroy
 		]
 		createUmlAndJavaPackagesView() => [
-			assertThat("there should be no element in the UML model", defaultUmlModel.packagedElements,
-				is(emptyList))
+			assertThat("there should be no element in the UML model", defaultUmlModel.packagedElements, is(emptyList))
 			assertThat("there should be no Java packages", javaPackages, is(emptyList))
+		]
+	}
+
+	def void createRootPackage(String packageName) {
+		changeUmlModel [
+			packagedElements += UMLFactory.eINSTANCE.createPackage => [
+				it.name = packageName
+			]
+		]
+	}
+
+	def void createRootPackageWithNestedPackage(String rootPackageName, String nestedPackageName) {
+		changeUmlModel [
+			packagedElements += UMLFactory.eINSTANCE.createPackage => [
+				it.name = rootPackageName
+				packagedElements += UMLFactory.eINSTANCE.createPackage => [
+					it.name = nestedPackageName
+					it.visibility = VisibilityKind.PUBLIC_LITERAL
+				]
+			]
 		]
 	}
 

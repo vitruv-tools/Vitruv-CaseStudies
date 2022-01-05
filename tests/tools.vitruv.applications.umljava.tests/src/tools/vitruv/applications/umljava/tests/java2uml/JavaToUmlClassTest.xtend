@@ -30,21 +30,6 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	static val INTERFACE_NAME = "InterfaceName"
 	static val INTERFACE_NAME2 = "InterfaceName2"
 
-	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			name)
-	}
-
-	private def assertSingleClassWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
-	}
-
-	private def assertSingleClassWithNameInPackage(String packageName, String name) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			packageName, name)
-	}
-
 	/**
 	 * Tests if a corresponding Java class is created when a UML class is created.
 	 */
@@ -168,7 +153,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	 * Checks if visibility changes are propagated to the UML class.
 	 */
 	@ParameterizedTest
-	@EnumSource(value = JavaVisibility, names = #["PUBLIC"], mode = EnumSource.Mode.EXCLUDE)
+	@EnumSource(value=JavaVisibility, names=#["PUBLIC"], mode=EnumSource.Mode.EXCLUDE)
 	def void testChangeClassVisibility(JavaVisibility visibility) {
 		createJavaClassInRootPackage(CLASS_NAME)
 		changeAndCheckPropertyOfClass(CLASS_NAME, [javaVisibilityModifier = visibility], [
@@ -311,6 +296,21 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 			assertUmlClassDontHaveImplement(umlClass, umlFirstInterface)
 			assertUmlClassHasImplement(umlClass, umlSecondInterface)
 		]
+	}
+
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
+
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
+
+	private def assertSingleClassWithNameInPackage(String packageName, String name) {
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			packageName, name)
 	}
 
 }
