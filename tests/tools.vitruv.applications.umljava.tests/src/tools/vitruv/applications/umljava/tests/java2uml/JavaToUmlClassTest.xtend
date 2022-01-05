@@ -107,11 +107,14 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 		assertSingleClassWithNameInPackage(PACKAGE_NAME, CLASS_NAME)
 		assertNoClassifierWithNameInRootPackage(CLASS_NAME)
 		assertNoClassifierExistsInRootPackage()
-		createUmlView => [
-			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val umlClass = umlPackage.claimClass(CLASS_NAME)
-			assertUmlClassTraits(umlClass, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, umlPackage)
+		changeView(createJavaClassesView) [
+			moveJavaRootElement(claimJavaCompilationUnit(PACKAGE_NAME + "." + CLASS_NAME) => [
+				namespaces.clear
+				updateCompilationUnitName(CLASS_NAME)
+			])
 		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		assertNoClassifierWithNameInPackage(PACKAGE_NAME, CLASS_NAME)
 	}
 
 	/**

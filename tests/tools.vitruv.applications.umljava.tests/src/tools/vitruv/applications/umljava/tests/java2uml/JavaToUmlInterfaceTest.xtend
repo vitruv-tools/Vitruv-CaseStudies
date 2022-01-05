@@ -91,11 +91,14 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
 		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
 		assertNoClassifierExistsInRootPackage()
-		createUmlView => [
-			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val umlInterface = umlPackage.claimInterface(INTERFACE_NAME)
-			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, umlPackage)
+		changeView(createJavaClassesView) [
+			moveJavaRootElement(claimJavaCompilationUnit(PACKAGE_NAME + "." + INTERFACE_NAME) => [
+				namespaces.clear
+				updateCompilationUnitName(INTERFACE_NAME)
+			])
 		]
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		assertNoClassifierWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
 	}
 
 	@Test

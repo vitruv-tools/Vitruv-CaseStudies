@@ -65,14 +65,17 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 		createInterfaceInRootPackage(INTERFACE_NAME)
 		createPackageInRootPackage(PACKAGE_NAME)
 		changeUmlModel[
-			val interf = claimInterface(INTERFACE_NAME)
-			claimPackage(PACKAGE_NAME) => [
-				packagedElements += interf
-			]
+			claimPackage(PACKAGE_NAME).packagedElements += claimInterface(INTERFACE_NAME)
 		]
 		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
 		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
 		assertNoClassifierExistsInRootPackage()
+		changeUmlModel [
+			packagedElements += claimPackage(PACKAGE_NAME).claimInterface(INTERFACE_NAME)
+		]
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		assertNoClassifierWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
+		
 	}
 
 	@Test

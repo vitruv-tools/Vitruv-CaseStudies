@@ -95,11 +95,14 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		assertSingleEnumWithNameInPackage(PACKAGE_NAME, ENUM_NAME)
 		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
 		assertNoClassifierExistsInRootPackage()
-		createUmlView => [
-			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val umlEnum = umlPackage.claimEnum(ENUM_NAME)
-			assertUmlEnumTraits(umlEnum, ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, umlPackage, #[])
+		changeView(createJavaClassesView) [
+			moveJavaRootElement(claimJavaCompilationUnit(PACKAGE_NAME + "." + ENUM_NAME) => [
+				namespaces.clear
+				updateCompilationUnitName(ENUM_NAME)
+			])
 		]
+		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
+		assertNoClassifierWithNameInPackage(PACKAGE_NAME, ENUM_NAME)
 	}
 
 	@Test

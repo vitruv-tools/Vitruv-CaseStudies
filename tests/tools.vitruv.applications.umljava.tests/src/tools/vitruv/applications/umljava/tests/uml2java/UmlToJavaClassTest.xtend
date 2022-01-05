@@ -119,12 +119,9 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	@Test
 	def void testMoveClass() {
 		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		createPackageInRootPackage(PACKAGE_NAME)
 		changeUmlModel [
-			val umlClass = claimClass(DEFAULT_CLASS_NAME)
-			packagedElements += UMLFactory.eINSTANCE.createPackage => [
-				name = PACKAGE_NAME
-				packagedElements += umlClass
-			]
+			claimPackage(PACKAGE_NAME).packagedElements += claimClass(DEFAULT_CLASS_NAME)
 		]
 		assertSingleClassWithNameInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
 		assertNoClassifierWithNameInRootPackage(DEFAULT_CLASS_NAME)

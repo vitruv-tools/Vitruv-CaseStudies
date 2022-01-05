@@ -72,14 +72,18 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 	@Test
 	def void testMoveEnum() {
 		createEnumInRootPackage(ENUM_NAME)
+		createPackageInRootPackage(PACKAGE_NAME)
 		changeUmlModel [
-			val umlEnum = claimEnum(ENUM_NAME)
-			packagedElements += UMLFactory.eINSTANCE.createPackage => [
-				name = PACKAGE_NAME
-				packagedElements += umlEnum
-			]
+			claimPackage(PACKAGE_NAME).packagedElements += claimEnum(ENUM_NAME)
 		]
 		assertSingleEnumWithNameInPackage(PACKAGE_NAME, ENUM_NAME)
+		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
+		assertNoClassifierExistsInRootPackage()
+		changeUmlModel [
+			packagedElements += claimPackage(PACKAGE_NAME).claimEnum(ENUM_NAME)
+		]
+		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
+		assertNoClassifierWithNameInPackage(PACKAGE_NAME, ENUM_NAME)
 	}
 
 	@Test
