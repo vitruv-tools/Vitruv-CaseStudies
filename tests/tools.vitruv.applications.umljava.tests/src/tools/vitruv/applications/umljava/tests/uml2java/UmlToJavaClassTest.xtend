@@ -1,7 +1,6 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
 import org.eclipse.uml2.uml.VisibilityKind
-import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getClassifierFromTypeReference
@@ -16,6 +15,9 @@ import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUti
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.DataType
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
 
 /**
  * This class provides tests for basic class tests in the UML to Java direction
@@ -58,7 +60,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	}
 
 	@Test
-	def void testDeletedClass() {
+	def void testDeleteClass() {
 		createClassInRootPackage(DEFAULT_CLASS_NAME)
 		changeUmlModel [
 			claimClass(DEFAULT_CLASS_NAME).destroy
@@ -67,29 +69,17 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		assertNoClassifierExistsInRootPackage()
 	}
 
-	@Test
-	def void testChangeClassVisibilityToPrivate() {
+	@ParameterizedTest
+	@EnumSource(value = VisibilityKind, names = #["PUBLIC_LITERAL"], mode = EnumSource.Mode.EXCLUDE)
+	def void testChangeClassVisibility(VisibilityKind visibility) {
 		createClassInRootPackage(DEFAULT_CLASS_NAME)
 		changeUmlModel [
-			claimClass(DEFAULT_CLASS_NAME).visibility = VisibilityKind.PRIVATE_LITERAL
+			claimClass(DEFAULT_CLASS_NAME).visibility = visibility
 		]
 		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		createJavaClassesView() => [
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
-			assertJavaModifiableHasVisibility(javaClass, JavaVisibility.PRIVATE)
-		]
-	}
-
-	@Test
-	def void testChangeClassVisibilityToPackage() {
-		createClassInRootPackage(DEFAULT_CLASS_NAME)
-		changeUmlModel [
-			claimClass(DEFAULT_CLASS_NAME).visibility = VisibilityKind.PACKAGE_LITERAL
-		]
-		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
-		createJavaClassesView() => [
-			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
-			assertJavaModifiableHasVisibility(javaClass, JavaVisibility.PACKAGE)
+			assertJavaModifiableHasVisibility(javaClass, getJavaVisibilityConstantFromUmlVisibilityKind(visibility))
 		]
 	}
 

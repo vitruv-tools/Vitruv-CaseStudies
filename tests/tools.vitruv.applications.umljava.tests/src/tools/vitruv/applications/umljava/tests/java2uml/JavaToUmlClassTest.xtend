@@ -14,6 +14,10 @@ import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUt
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getUmlVisibilityKindFromJavaVisibilityConstant
 
 /**
  * A Test class to test classes and their traits.
@@ -27,8 +31,8 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	static val INTERFACE_NAME2 = "InterfaceName2"
 
 	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
 	}
 
 	private def assertSingleClassWithNameInRootPackage(String name) {
@@ -145,32 +149,31 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 		assertNoClassifierExistsInRootPackage()
 	}
 
+	private def void changeAndCheckPropertyOfClass(String className,
+		(org.emftext.language.java.classifiers.Class)=>void changeJavaClass,
+		(org.eclipse.uml2.uml.Class)=>void validateUmlClass) {
+		changeView(createJavaClassesView) [
+			claimJavaClass(className) => [
+				changeJavaClass.apply(it)
+			]
+		]
+		assertSingleClassWithNameInRootPackage(className)
+		createUmlView => [
+			val umlClass = defaultUmlModel.claimClass(className)
+			validateUmlClass.apply(umlClass)
+		]
+	}
+
 	/**
 	 * Checks if visibility changes are propagated to the UML class.
 	 */
-	@Test
-	def void testChangeClassVisibility() {
+	@ParameterizedTest
+	@EnumSource(value = JavaVisibility, names = #["PUBLIC"], mode = EnumSource.Mode.EXCLUDE)
+	def void testChangeClassVisibility(JavaVisibility visibility) {
 		createJavaClassInRootPackage(CLASS_NAME)
-		changeView(createJavaClassesView) [
-			claimJavaClass(CLASS_NAME) => [
-				makeProtected
-			]
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			assertUmlNamedElementHasVisibility(umlClass, VisibilityKind.PROTECTED_LITERAL)
-		]
-		changeView(createJavaClassesView) [
-			claimJavaClass(CLASS_NAME) => [
-				makePrivate
-			]
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			assertUmlNamedElementHasVisibility(umlClass, VisibilityKind.PRIVATE_LITERAL)
-		]
+		changeAndCheckPropertyOfClass(CLASS_NAME, [javaVisibilityModifier = visibility], [
+			assertUmlNamedElementHasVisibility(it, getUmlVisibilityKindFromJavaVisibilityConstant(visibility))
+		])
 	}
 
 	/**
@@ -179,26 +182,12 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testChangeAbstractClass() {
 		createJavaClassInRootPackage(CLASS_NAME)
-		changeView(createJavaClassesView) [
-			claimJavaClass(CLASS_NAME) => [
-				abstract = true
-			]
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			assertThat("UML class must be abstract", umlClass.abstract, is(true))
-		]
-		changeView(createJavaClassesView) [
-			claimJavaClass(CLASS_NAME) => [
-				abstract = false
-			]
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			assertThat("UML class must not be abstract", umlClass.abstract, is(false))
-		]
+		changeAndCheckPropertyOfClass(CLASS_NAME, [abstract = true], [
+			assertThat("UML class must be abstract", it.abstract, is(true))
+		])
+		changeAndCheckPropertyOfClass(CLASS_NAME, [abstract = false], [
+			assertThat("UML class must not be abstract", it.abstract, is(false))
+		])
 	}
 
 	/**
@@ -208,26 +197,12 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testChangeFinalClass() {
 		createJavaClassInRootPackage(CLASS_NAME)
-		changeView(createJavaClassesView) [
-			claimJavaClass(CLASS_NAME) => [
-				final = true
-			]
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			assertThat("UML class must be final", umlClass.finalSpecialization, is(true))
-		]
-		changeView(createJavaClassesView) [
-			claimJavaClass(CLASS_NAME) => [
-				final = false
-			]
-		]
-		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
-			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			assertThat("UML class must not be final", umlClass.finalSpecialization, is(false))
-		]
+		changeAndCheckPropertyOfClass(CLASS_NAME, [final = true], [
+			assertThat("UML class must be final", it.finalSpecialization, is(true))
+		])
+		changeAndCheckPropertyOfClass(CLASS_NAME, [final = false], [
+			assertThat("UML class must not be final", it.finalSpecialization, is(false))
+		])
 	}
 
 	/**

@@ -13,12 +13,15 @@ import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUti
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.params.provider.ValueSource
+import org.junit.jupiter.params.ParameterizedTest
 
 /**
  * This test class contains basic test cases for package creation, renaming and deletion.
  */
 class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	static val PACKAGE_NAME = "rootpackage"
+	static val PACKAGE_NAME_FIRST_UPPER = "Rootpackage"
 	static val NESTED_PACKAGE_NAME = "nestedpackage"
 	static val PACKAGE_RENAMED = "rootpackagerenamed"
 
@@ -42,52 +45,29 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 		]
 	}
 
-	@Test
-	def void testCreatePackage() {
-		createRootPackage(PACKAGE_NAME)
+	@ParameterizedTest
+	@ValueSource(strings = #[PACKAGE_NAME, PACKAGE_NAME_FIRST_UPPER])
+	def void testCreatePackage(String packageName) {
+		createRootPackage(packageName)
 		createUmlAndJavaPackagesView() => [
-			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val javaPackage = claimJavaPackage(PACKAGE_NAME)
+			val umlPackage = defaultUmlModel.claimPackage(packageName)
+			val javaPackage = claimJavaPackage(packageName)
 			assertEquals(1, javaPackages.size, "exactly one Java package should exist")
 			assertElementsEqual(umlPackage, javaPackage)
 		]
 	}
 
-	@Test
-	def void testCreateUppercasePackage() {
-		createRootPackage(PACKAGE_NAME.toFirstUpper)
+	@ParameterizedTest
+	@ValueSource(strings = #[PACKAGE_NAME, PACKAGE_NAME_FIRST_UPPER])
+	def void testCreateNestedPackage(String packageName) {
+		val nestedPackageName = packageName + "nested"
+		createRootPackageWithNestedPackage(packageName, nestedPackageName)
 		createUmlAndJavaPackagesView() => [
-			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME.toFirstUpper)
-			val javaPackage = claimJavaPackage(PACKAGE_NAME.toFirstUpper)
-			assertEquals(1, javaPackages.size, "exactly one Java package should exist")
-			assertElementsEqual(umlPackage, javaPackage)
-		]
-	}
-
-	@Test
-	def void testCreateNestedPackage() {
-		createRootPackageWithNestedPackage(PACKAGE_NAME, NESTED_PACKAGE_NAME)
-		createUmlAndJavaPackagesView() => [
-			val umlRootPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val umlNestedPackage = umlRootPackage.claimPackage(NESTED_PACKAGE_NAME)
-			val javaRootPackage = claimJavaPackage(PACKAGE_NAME)
-			val javaNestedPackage = claimJavaPackage(NESTED_PACKAGE_NAME)
-			assertEquals(PACKAGE_NAME, javaNestedPackage.namespaces.join("."))
-			assertEquals(2, javaPackages.size, "exactly two Java packages should exist")
-			assertElementsEqual(umlRootPackage, javaRootPackage)
-			assertElementsEqual(umlNestedPackage, javaNestedPackage)
-		]
-	}
-
-	@Test
-	def void testCreateNestedUppercasePackage() {
-		createRootPackageWithNestedPackage(PACKAGE_NAME.toFirstUpper, NESTED_PACKAGE_NAME.toFirstUpper)
-		createUmlAndJavaPackagesView() => [
-			val umlRootPackage = defaultUmlModel.claimPackage(PACKAGE_NAME.toFirstUpper)
-			val umlNestedPackage = umlRootPackage.claimPackage(NESTED_PACKAGE_NAME.toFirstUpper)
-			val javaRootPackage = claimJavaPackage(PACKAGE_NAME.toFirstUpper)
-			val javaNestedPackage = claimJavaPackage(NESTED_PACKAGE_NAME.toFirstUpper)
-			assertEquals(PACKAGE_NAME.toFirstUpper, javaNestedPackage.namespaces.join("."))
+			val umlRootPackage = defaultUmlModel.claimPackage(packageName)
+			val umlNestedPackage = umlRootPackage.claimPackage(nestedPackageName)
+			val javaRootPackage = claimJavaPackage(packageName)
+			val javaNestedPackage = claimJavaPackage(nestedPackageName)
+			assertEquals(packageName, javaNestedPackage.namespaces.join("."))
 			assertEquals(2, javaPackages.size, "exactly two Java packages should exist")
 			assertElementsEqual(umlRootPackage, javaRootPackage)
 			assertElementsEqual(umlNestedPackage, javaNestedPackage)
