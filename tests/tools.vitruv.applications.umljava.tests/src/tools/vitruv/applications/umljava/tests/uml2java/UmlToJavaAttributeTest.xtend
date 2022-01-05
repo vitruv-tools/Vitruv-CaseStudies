@@ -1,167 +1,235 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
-import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertFalse
-import static org.junit.jupiter.api.Assertions.assertTrue
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.uml2.uml.Type
+import org.emftext.language.java.members.Field
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.CoreMatchers.*
 
 /**
- * This Test class checks the creating, deleting and modifying of attributes in den uml to java
+ * This test class checks the creating, deleting and modifying of attributes in the UML to Java
  * direction.
- * 
- * @author Fei
  */
-class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
+class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 	static val ATTRIBUTE_NAME = "attributName"
 	static val ATTRIBUTE_RENAME = "attributeRenamed"
-	static val STANDARD_ATTRIBUTE_NAME = "standardAttributName"
 	static val CLASS_NAME = "ClassName"
-	static val TYPE_CLASS = "TypeClass"
+	static val CLASS_NAME_2 = "ClassName2"
+	static val TYPE_CLASS_NAME = "TypeClass"
 
-	var Property uAttr
-	var Class uClass
-	var Class typeClass
-	var PrimitiveType pType
+//	@BeforeEach
+//	def void before() {
+//		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
+//		typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS)
+//		uAttr = createUmlAttribute(ATTRIBUTE_NAME, typeClass, VisibilityKind.PUBLIC_LITERAL, false, false)
+//		uClass.ownedAttributes += uAttr
+//		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+//		propagate
+//	}
+	private def assertClassWithNameInRootPackage(String name) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			name)
+	}
 
-	@BeforeEach
-	def void before() {
-		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
-		typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS)
-		uAttr = createUmlAttribute(ATTRIBUTE_NAME, typeClass, VisibilityKind.PUBLIC_LITERAL, false, false)
-		uClass.ownedAttributes += uAttr
-		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
-		propagate
+	private def assertSingleClassWithNameInRootPackage(String name) {
+		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
+			org.eclipse.uml2.uml.Class, name)
+	}
+
+	private def void createClassWithFieldOfType(String className, String attributeName, Type attributeType) {
+		createClassInRootPackage(className)
+		changeUmlModel [
+			claimClass(className) => [
+				ownedAttributes += UMLFactory.eINSTANCE.createProperty => [
+					name = attributeName
+					visibility = VisibilityKind.PRIVATE_LITERAL
+					type = attributeType
+				]
+			]
+		]
 	}
 
 	@Test
-	def testCreatePrimitiveAttribute() {
-		val attr = createUmlAttribute(STANDARD_ATTRIBUTE_NAME, pType, VisibilityKind.PUBLIC_LITERAL, false, false)
-		uClass.ownedAttributes += attr
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		val jAttr = getCorrespondingAttribute(attr)
-		assertJavaAttributeTraits(jAttr, STANDARD_ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
-			TypesFactory.eINSTANCE.createInt, false, false, jClass)
-		assertElementsEqual(attr, jAttr)
+	def void testCreatePrimitiveAttribute() {
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			val javaAttribute = javaClass.claimField(ATTRIBUTE_NAME)
+			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_NAME, JavaVisibility.PRIVATE,
+				TypesFactory.eINSTANCE.createInt, false, false, javaClass)
+		]
 	}
 
 	@Test
-	def testCreateAttribute() {
-		val attr = uClass.createOwnedAttribute(STANDARD_ATTRIBUTE_NAME, typeClass)
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		val jtypeClass = getCorrespondingClass(typeClass)
-		val jAttr = getCorrespondingAttribute(attr)
-		assertJavaAttributeTraits(jAttr, STANDARD_ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
-			createNamespaceClassifierReference(jtypeClass), false, false, jClass)
-		assertElementsEqual(attr, jAttr)
-
+	def void testCreateAttribute() {
+		createClassInRootPackage(CLASS_NAME)
+		createClassInRootPackage(TYPE_CLASS_NAME)
+		changeUmlModel [
+			val typeClass = claimClass(TYPE_CLASS_NAME)
+			claimClass(CLASS_NAME) => [
+				ownedAttributes += UMLFactory.eINSTANCE.createProperty => [
+					name = ATTRIBUTE_NAME
+					visibility = VisibilityKind.PRIVATE_LITERAL
+					type = typeClass
+				]
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
+			val javaAttribute = javaClass.claimField(ATTRIBUTE_NAME)
+			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_NAME, JavaVisibility.PRIVATE,
+				createNamespaceClassifierReference(javaTypeClass), false, false, javaClass)
+		]
 	}
 
 	@Test
-	def testRenameAttribute() {
-		uAttr.name = ATTRIBUTE_RENAME
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		val jAttr = getCorrespondingAttribute(uAttr)
-		assertEquals(ATTRIBUTE_RENAME, uAttr.name)
-		assertElementsEqual(uAttr, jAttr)
-		assertTrue(javaGetterForAttributeExists(jAttr))
-		assertTrue(javaSetterForAttributeExists(jAttr))
-		assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
+	def void testRenameAttribute() {
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		changeUmlModel [
+			claimClass(CLASS_NAME) => [
+				claimAttribute(ATTRIBUTE_NAME) => [
+					name = ATTRIBUTE_RENAME
+				]
+			]
+		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			val javaAttribute = javaClass.claimField(ATTRIBUTE_RENAME)
+			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_RENAME, JavaVisibility.PRIVATE,
+				TypesFactory.eINSTANCE.createInt, false, false, javaClass)
+			assertThat("there must be a getter for the attribute " + javaAttribute, getJavaGettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
+			assertThat("there must be a setter for the attribute " + javaAttribute, getJavaSettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
+			assertJavaMemberContainerDontHaveMember(javaClass, ATTRIBUTE_NAME)
+		]
 	}
 
 	@Test
-	def testDeleteAttribute() {
-		uAttr.destroy
-		propagate
+	def void testDeleteAttribute() {
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		changeUmlModel [
+			claimClass(CLASS_NAME) => [
+				claimAttribute(ATTRIBUTE_NAME) => [
+					destroy()
+				]
+			]
+		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			assertJavaMemberContainerDontHaveMember(javaClass, ATTRIBUTE_NAME)
+		]
+	}
 
-		val jClass = getCorrespondingClass(uClass)
-		assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
+	private def void changeAndCheckPropertyOfAttribute(String className, String attributeName,
+		(Property)=>void changeUmlProperty, (Field)=>void validateJavaField) {
+		changeUmlModel [
+			claimClass(className) => [
+				claimAttribute(attributeName) => [
+					changeUmlProperty.apply(it)
+				]
+			]
+		]
+		assertSingleClassWithNameInRootPackage(className)
+		createJavaClassesView => [
+			val javaField = claimJavaClass(className).claimField(attributeName)
+			validateJavaField.apply(javaField)
+		]
 	}
 
 	@Test
 	def testStaticAttribute() {
-		uAttr.isStatic = true
-		propagate
-
-		val jAttr = getCorrespondingAttribute(uAttr)
-		assertJavaModifiableStatic(jAttr, true)
-		assertElementsEqual(uAttr, jAttr)
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, ATTRIBUTE_NAME, [isStatic = true], [
+			assertJavaModifiableStatic(it, true)
+		])
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, ATTRIBUTE_NAME, [isStatic = false], [
+			assertJavaModifiableStatic(it, false)
+		])
 	}
 
 	@Test
 	def testFinalAttribute() {
-		uAttr.isReadOnly = true
-		propagate
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, ATTRIBUTE_NAME, [isReadOnly = true], [
+			assertJavaModifiableFinal(it, true)
+		])
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, ATTRIBUTE_NAME, [isReadOnly = false], [
+			assertJavaModifiableFinal(it, false)
+		])
+	}
 
-		val jAttr = getCorrespondingAttribute(uAttr)
-		assertJavaModifiableFinal(jAttr, true)
-		assertElementsEqual(uAttr, jAttr)
+	@ParameterizedTest
+	@EnumSource(value=VisibilityKind, names=#["PRIVATE_LITERAL"], mode=EnumSource.Mode.EXCLUDE)
+	def void testAttributeVisibility(VisibilityKind visibility) {
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		changeAndCheckPropertyOfAttribute(CLASS_NAME, ATTRIBUTE_NAME, [it.visibility = visibility], [
+			assertJavaModifiableHasVisibility(it, getJavaVisibilityConstantFromUmlVisibilityKind(visibility))
+		])
 	}
 
 	@Test
-	def testAttributeVisibility() {
-		uAttr.visibility = VisibilityKind.PRIVATE_LITERAL
-		propagate
-
-		var jAttr = getCorrespondingAttribute(uAttr)
-		assertJavaModifiableHasVisibility(jAttr, JavaVisibility.PRIVATE)
-		assertElementsEqual(uAttr, jAttr)
-
-		uAttr.visibility = VisibilityKind.PACKAGE_LITERAL
-		propagate
-
-		jAttr = getCorrespondingAttribute(uAttr)
-		assertJavaModifiableHasVisibility(jAttr, JavaVisibility.PACKAGE)
-		assertElementsEqual(uAttr, jAttr)
+	def void testChangeAttributeType() {
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		createClassInRootPackage(TYPE_CLASS_NAME)
+		changeUmlModel [
+			val typeClass = claimClass(TYPE_CLASS_NAME)
+			claimClass(CLASS_NAME) => [
+				claimAttribute(ATTRIBUTE_NAME) => [
+					type = typeClass
+				]
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
+			val javaAttribute = javaClass.claimField(ATTRIBUTE_NAME)
+			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_NAME, JavaVisibility.PRIVATE,
+				createNamespaceClassifierReference(javaTypeClass), false, false, javaClass)
+		]
 	}
 
 	@Test
-	def testChangeAttributeType() {
-		uAttr.type = pType
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		val jAttr = getCorrespondingAttribute(uAttr)
-		assertJavaAttributeTraits(jAttr, ATTRIBUTE_NAME, JavaVisibility.PUBLIC, TypesFactory.eINSTANCE.createInt, false,
-			false, jClass)
-		assertElementsEqual(uAttr, jAttr)
-	}
-	
-	@Test
-	def testMoveAttribute() {
-		val uClass2 = createSimpleUmlClass(rootElement, "ClassName2")
-		uClass2.ownedAttributes += uAttr
-		propagate
-		
-		val jClass = getCorrespondingClass(uClass)
-		val jClass2 = getCorrespondingClass(uClass2)
-		val jAttr = getCorrespondingAttribute(uAttr)
-		assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
-		assertTrue(jClass.methods.filter [name == buildGetterName(ATTRIBUTE_NAME)].nullOrEmpty)
-		assertTrue(jClass.methods.filter [name == buildSetterName(ATTRIBUTE_NAME)].nullOrEmpty)
-		assertFalse(jClass2.getMembersByName(ATTRIBUTE_NAME).nullOrEmpty)
-		assertElementsEqual(uAttr, jAttr)
-		assertTrue(javaGetterForAttributeExists(jAttr))
-		assertTrue(javaSetterForAttributeExists(jAttr))
+	def void testMoveAttribute() {
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		createClassInRootPackage(CLASS_NAME_2)
+		changeUmlModel [
+			val attribute = claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
+			claimClass(CLASS_NAME_2) => [
+				ownedAttributes += attribute
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		assertClassWithNameInRootPackage(CLASS_NAME_2)
+		createJavaClassesView => [
+			val javaClass = claimJavaClass(CLASS_NAME)
+			val javaClass2 = claimJavaClass(CLASS_NAME_2)
+			val javaAttribute = javaClass2.claimField(ATTRIBUTE_NAME)
+			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_NAME, JavaVisibility.PRIVATE,
+				TypesFactory.eINSTANCE.createInt, false, false, javaClass2)
+			assertJavaMemberContainerDontHaveMember(javaClass, ATTRIBUTE_NAME)
+			assertThat("there must be no getter for removed attribute " + ATTRIBUTE_NAME, javaClass.methods.filter[name == buildGetterName(ATTRIBUTE_NAME)].toSet, is(emptySet))
+			assertThat("there must be not setter for removed attribute " + ATTRIBUTE_NAME, javaClass.methods.filter[name == buildSetterName(ATTRIBUTE_NAME)].toSet, is(emptySet))
+			assertThat("there must be a getter for the attribute " + javaAttribute, getJavaGettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
+			assertThat("there must be a setter for the attribute " + javaAttribute, getJavaSettersOfAttribute(javaAttribute).toSet, is(not(emptySet)))
+		]
 	}
 }
