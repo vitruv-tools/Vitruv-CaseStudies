@@ -43,11 +43,14 @@ class JavaUmlTestUtil {
 			assertThat("only one element in UML model is expected to exist",
 				claimUmlModel(umlModelName).packagedElements.filter(Classifier).toSet, is(#{umlClassifier}))
 			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.filter [
-				!namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+				!namespacesAsString.startsWith("java") && !namespacesAsString.startsWith("jdk") &&
+					!namespacesAsString.startsWith("sun") // Do not consider standard library compilation units
 			].toSet, is(#{javaCompilationUnit}))
 			assertThat("only one Java classifier is expected to exist",
 				getJavaClassifiersOfType(javaClassifierType).filter [
-					!containingCompilationUnit.namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+					!containingCompilationUnit.namespacesAsString.startsWith("java") &&
+						!containingCompilationUnit.namespacesAsString.startsWith("jdk") &&
+						!containingCompilationUnit.namespacesAsString.startsWith("sun") // Do not consider standard library compilation units
 				].toSet, is(#{javaClassifier}))
 		]
 	}
@@ -87,11 +90,14 @@ class JavaUmlTestUtil {
 			assertThat("only one element in UML model is expected to exist",
 				umlPackage.packagedElements.filter(Classifier).toSet, is(#{umlClassifier}))
 			assertThat("only one Java compilation unit is expected to exist", javaCompilationUnits.filter [
-				!namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+				!namespacesAsString.startsWith("java") && !namespacesAsString.startsWith("jdk") &&
+					!namespacesAsString.startsWith("sun") // Do not consider standard library compilation units
 			].toSet, is(#{javaCompilationUnit}))
 			assertThat("only one Java classifier is expected to exist",
 				getJavaClassifiersOfType(javaClassifierType).filter [
-					!containingCompilationUnit.namespacesAsString.startsWith("java") // Do not consider standard library compilation units
+					!containingCompilationUnit.namespacesAsString.startsWith("java") &&
+						!containingCompilationUnit.namespacesAsString.startsWith("jdk") &&
+						!containingCompilationUnit.namespacesAsString.startsWith("sun") // Do not consider standard library compilation units
 				].toSet, is(#{javaClassifier}))
 			assertElementsEqual(umlClassifier, javaClassifier)
 		]
