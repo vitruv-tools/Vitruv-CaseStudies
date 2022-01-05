@@ -33,7 +33,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 
 	private def assertSingleClassWithNameInRootPackage(String name) {
 		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name, name)
+			org.eclipse.uml2.uml.Class, name)
 	}
 
 	private def createJavaClassWithMethod(String className, String methodName) {
@@ -304,8 +304,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
 			claimParameter(PARAMETER_NAME) => [
 				name = PARAMETER_RENAME
-			] 
-			
+			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlAndJavaClassesView => [
@@ -328,8 +327,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
 			claimParameter(PARAMETER_NAME) => [
 				EcoreUtil.delete(it)
-			] 
-			
+			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
@@ -354,7 +352,6 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 					]
 				]
 			]
-			
 		]
 		createUmlAndJavaClassesView => [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
@@ -378,7 +375,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 				members += MembersFactory.eINSTANCE.createConstructor => [
 					name = CLASS_NAME
 					javaVisibilityModifier = JavaVisibility.PUBLIC
-				] 
+				]
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)

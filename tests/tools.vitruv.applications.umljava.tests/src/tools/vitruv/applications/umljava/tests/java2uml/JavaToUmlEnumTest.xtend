@@ -15,6 +15,7 @@ import org.emftext.language.java.members.MembersFactory
 import org.eclipse.uml2.uml.UMLFactory
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 
 /**
  * This class contains Tests for creating, deleting and renaming enumerations.
@@ -31,12 +32,8 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 	static val TYPE_CLASS_NAME = "TypeClass"
 
 	private def assertSingleEnumWithNameInRootPackage(String name) {
-		assertSingleEnumWithNameInRootPackage(name, name)
-	}
-
-	private def assertSingleEnumWithNameInRootPackage(String name, String compilationUnitName) {
 		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, name, compilationUnitName)
+			org.eclipse.uml2.uml.Enumeration, name)
 	}
 
 	private def assertSingleEnumWithNameInPackage(String packageName, String name) {
@@ -59,6 +56,8 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		createJavaPackageInRootPackage(PACKAGE_NAME)
 		createJavaEnumInPackage(#[PACKAGE_NAME], ENUM_NAME)
 		assertSingleEnumWithNameInPackage(PACKAGE_NAME, ENUM_NAME)
+		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
+		assertNoClassifierExistsInRootPackage()
 		createUmlView => [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val umlEnum = umlPackage.claimEnum(ENUM_NAME)
@@ -71,10 +70,12 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		createJavaEnumInRootPackage(ENUM_NAME)
 		changeView(createJavaClassesView) [
 			claimJavaEnum(ENUM_NAME) => [
-				name = ENUM_RENAME
+				changeNameWithCompilationUnit(ENUM_RENAME)
 			]
+			moveJavaRootElement(claimJavaCompilationUnit(ENUM_RENAME))
 		]
-		assertSingleEnumWithNameInRootPackage(ENUM_RENAME, ENUM_NAME)
+		assertSingleEnumWithNameInRootPackage(ENUM_RENAME)
+		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
 		createUmlView => [
 			val umlEnum = defaultUmlModel.claimEnum(ENUM_RENAME)
 			assertThat(umlEnum.name, is(ENUM_RENAME))
@@ -88,10 +89,12 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		changeView(createJavaClassesView) [
 			moveJavaRootElement(claimJavaCompilationUnit(ENUM_NAME) => [
 				namespaces += PACKAGE_NAME
-				name = PACKAGE_NAME + "." + name
+				updateCompilationUnitName(ENUM_NAME)
 			])
 		]
 		assertSingleEnumWithNameInPackage(PACKAGE_NAME, ENUM_NAME)
+		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
+		assertNoClassifierExistsInRootPackage()
 		createUmlView => [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val umlEnum = umlPackage.claimEnum(ENUM_NAME)
@@ -105,6 +108,7 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		changeView(createJavaClassesView) [
 			EcoreUtil.delete(claimJavaEnum(ENUM_NAME))
 		]
+		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
 		assertNoClassifierExistsInRootPackage()
 	}
 

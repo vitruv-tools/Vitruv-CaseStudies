@@ -61,6 +61,17 @@ class TestUtil {
 		assertPackageEquals(uClass.namespace as org.eclipse.uml2.uml.Package,
 			(jClass.eContainer as CompilationUnit).namespaces)
 	}
+	
+	/**
+	 * Does not compare the methods and attributes of the datatypes
+	 */
+	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.DataType uDataType,
+		org.emftext.language.java.classifiers.Class jClass) {
+		assertEquals(uDataType.name, jClass.name, "Data type and class names must be equal")
+		assertVisibilityEquals(uDataType, jClass)
+		assertPackageEquals(uDataType.namespace as org.eclipse.uml2.uml.Package,
+			(jClass.eContainer as CompilationUnit).namespaces)
+	}
 
 	/**
 	 * Does not compare the methods and attributes of the interfaces

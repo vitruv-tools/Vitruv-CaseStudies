@@ -5,6 +5,8 @@ import org.emftext.language.java.classifiers.ClassifiersFactory
 import java.util.List
 
 import org.junit.jupiter.api.BeforeEach
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import org.emftext.language.java.classifiers.ConcreteClassifier
 
 abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 
@@ -14,6 +16,19 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 		userInteraction.addNextTextInput(MODEL_FOLDER_NAME)
 	}
 
+	private def void createClassifierInCompilationUnit(ConcreteClassifier uninitializedClassifier, List<String> namespace, String classifierName) {
+		createJavaClassesView => [
+			createJavaCompilationUnit[
+				it.namespaces += namespace
+				updateCompilationUnitName(classifierName)
+				classifiers += uninitializedClassifier => [
+					name = classifierName
+					makePublic
+				]
+			]
+		]
+	}
+	
 	protected def void createJavaPackageInRootPackage(String name) {
 		createJavaPackagesView => [
 			createJavaPackage[
@@ -27,16 +42,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	}
 
 	protected def void createJavaEnumInPackage(List<String> namespace, String name) {
-		createJavaClassesView => [
-			createJavaCompilationUnit[
-				it.name = namespace.join("", ".", ".", [it]) + name + ".java"
-				it.namespaces += namespace
-				classifiers += ClassifiersFactory.eINSTANCE.createEnumeration => [
-					it.name = name
-					makePublic
-				]
-			]
-		]
+		createClassifierInCompilationUnit(ClassifiersFactory.eINSTANCE.createEnumeration, namespace, name)
 	}
 
 	protected def void createJavaClassInRootPackage(String name) {
@@ -44,16 +50,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	}
 
 	protected def void createJavaClassInPackage(List<String> namespace, String name) {
-		createJavaClassesView => [
-			createJavaCompilationUnit[
-				it.name = namespace.join("", ".", ".", [it]) + name + ".java"
-				it.namespaces += namespace
-				classifiers += ClassifiersFactory.eINSTANCE.createClass => [
-					it.name = name
-					makePublic
-				]
-			]
-		]
+		createClassifierInCompilationUnit(ClassifiersFactory.eINSTANCE.createClass, namespace, name)
 	}
 
 	protected def void createJavaInterfaceInRootPackage(String name) {
@@ -61,16 +58,7 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 	}
 
 	protected def void createJavaInterfaceInPackage(List<String> namespace, String name) {
-		createJavaClassesView => [
-			createJavaCompilationUnit[
-				it.name = namespace.join("", ".", ".", [it]) + name + ".java"
-				it.namespaces += namespace
-				classifiers += ClassifiersFactory.eINSTANCE.createInterface => [
-					it.name = name
-					makePublic
-				]
-			]
-		]
+		createClassifierInCompilationUnit(ClassifiersFactory.eINSTANCE.createInterface, namespace, name)
 	}
 
 }

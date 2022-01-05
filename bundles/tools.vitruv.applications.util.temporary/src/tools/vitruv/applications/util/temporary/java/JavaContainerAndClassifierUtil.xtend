@@ -286,8 +286,13 @@ class JavaContainerAndClassifierUtil {
 		return packageName?.substring(packageName.indexOf('.') + 1)
 	}
 
+	private def static String getCompilationUnitName(String namespacesAsString, String classifierName) {
+		namespacesAsString + classifierName + ".java"
+	}
+
 	def static String getCompilationUnitName(Package containingPackage, String className) {
-		'''«IF containingPackage !== null»«containingPackage.namespacesAsString»«containingPackage.name».«ENDIF»«className».java'''
+		getCompilationUnitName('''«IF containingPackage !== null»«containingPackage.namespacesAsString»«containingPackage.name».«ENDIF»''',
+			className)
 	}
 
 	def static String getCompilationUnitName(Optional<Package> containingPackage, String className) {
@@ -321,6 +326,18 @@ class JavaContainerAndClassifierUtil {
 			return true
 		}
 		return false
+	}
+
+	def static void updateCompilationUnitName(CompilationUnit compilationUnit, String simpleName) {
+		compilationUnit.name = getCompilationUnitName(compilationUnit.namespaces.join("", ".", ".", [it]), simpleName)
+	}
+
+	/**
+	 * Updates the classifier name together with the name of its compilation unit.
+	 */
+	def static void changeNameWithCompilationUnit(Classifier classifier, String newName) {
+		classifier.updateName(newName)
+		classifier.containingCompilationUnit?.updateCompilationUnitName(newName)
 	}
 
 }

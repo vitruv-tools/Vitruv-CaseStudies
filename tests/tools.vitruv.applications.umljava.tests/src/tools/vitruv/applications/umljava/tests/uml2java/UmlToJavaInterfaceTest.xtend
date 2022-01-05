@@ -20,37 +20,34 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 	static val SUPER_INTERFACE_NAME_1 = "SuperInterfaceOne"
 	static val SUPER_INTERFACE_NAME_2 = "SuperInterfaceTwo"
 
-
-	private def assertSingleInterfaceWithNameInRootPackage(String interfaceName) {
-		assertSingleInterfaceWithNameInRootPackage(interfaceName, interfaceName)
+	private def assertInterfaceWithNameInRootPackage(String interfaceName) {
+		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, interfaceName)
 	}
-
-	private def assertSingleInterfaceWithNameInRootPackage(String interfaceName, String compilationUnitName) {
+	
+	private def assertSingleInterfaceWithNameInRootPackage(String interfaceName) {
 		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, interfaceName, compilationUnitName)
+			org.eclipse.uml2.uml.Interface, interfaceName)
 	}
 
 	private def assertSingleInterfaceWithNameInPackage(String packageName, String interfaceName) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Interface, org.eclipse.uml2.uml.Interface,
-			packageName, interfaceName)
+		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Interface,
+			org.eclipse.uml2.uml.Interface, packageName, interfaceName)
 	}
 
 	@Test
 	def void testCreateInterface() {
 		createInterfaceInRootPackage(INTERFACE_NAME)
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		assertJavaFileExists(INTERFACE_NAME, #[])
-		assertJavaCompilationUnitCount(1)
 	}
-	
+
 	@Test
 	def void testCreateInterfaceInPackage() {
 		createInterfaceInPackage(PACKAGE_NAME, INTERFACE_NAME)
 		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
-		assertJavaFileExists(INTERFACE_NAME, #[PACKAGE_NAME])
-		assertJavaCompilationUnitCount(1)
+		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
 	}
-	
+
 	@Test
 	def testRenameInterface() {
 		createInterfaceInRootPackage(INTERFACE_NAME)
@@ -60,10 +57,9 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 			]
 		]
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_RENAME)
-		assertJavaFileExists(INTERFACE_RENAME, #[])
-		assertJavaFileNotExists(INTERFACE_NAME, #[])
+		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
 	}
-	
+
 	@Test
 	def testMoveInterface() {
 		createInterfaceInRootPackage(INTERFACE_NAME)
@@ -75,8 +71,8 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 			]
 		]
 		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
-		assertJavaFileExists(INTERFACE_NAME, #[PACKAGE_NAME])
-		assertJavaFileNotExists(INTERFACE_NAME, #[])
+		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
+		assertNoClassifierExistsInRootPackage()
 	}
 
 	@Test
@@ -85,10 +81,10 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 		changeUmlModel [
 			claimInterface(INTERFACE_NAME).destroy
 		]
+		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
 		assertNoClassifierExistsInRootPackage()
-		assertJavaFileNotExists(INTERFACE_NAME, #[])
 	}
-	
+
 	@Test
 	def void testAddSuperInterface() {
 		createInterfaceInRootPackage(INTERFACE_NAME)
@@ -102,11 +98,14 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 				generals += superInterface2
 			]
 		]
+		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE_NAME_1)
+		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE_NAME_2)
 		createUmlAndJavaClassesView => [
 			val javaInterface = claimJavaInterface(INTERFACE_NAME)
 			val umlSuperInterface1 = defaultUmlModel.claimInterface(SUPER_INTERFACE_NAME_1)
 			val umlSuperInterface2 = defaultUmlModel.claimInterface(SUPER_INTERFACE_NAME_2)
-			assertThat("there must be two super interfaces", javaInterface.extends.size, is(2)) 
+			assertThat("there must be two super interfaces", javaInterface.extends.size, is(2))
 			assertElementsEqual(umlSuperInterface1, getClassifierFromTypeReference(javaInterface.extends.get(0)))
 			assertElementsEqual(umlSuperInterface2, getClassifierFromTypeReference(javaInterface.extends.get(1)))
 		]
@@ -130,14 +129,16 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 				generalizations.remove(0)
 			]
 		]
-		assertJavaFileExists(SUPER_INTERFACE_NAME_1, #[])
+		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE_NAME_1)
+		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE_NAME_2)
 		createUmlAndJavaClassesView => [
 			val javaInterface = claimJavaInterface(INTERFACE_NAME)
 			val umlSuperInterface2 = defaultUmlModel.claimInterface(SUPER_INTERFACE_NAME_2)
-			assertThat("there must be one super interface", javaInterface.extends.size, is(1)) 
+			assertThat("there must be one super interface", javaInterface.extends.size, is(1))
 			assertElementsEqual(umlSuperInterface2, getClassifierFromTypeReference(javaInterface.extends.get(0)))
 		]
-		
+
 	}
 
 }
