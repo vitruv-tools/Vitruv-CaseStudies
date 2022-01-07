@@ -628,7 +628,7 @@ routine warnUserToUsePredefinedPrimitiveTypes() {
 	action {
 		execute {
 			userInteractor.notificationDialogBuilder
-				.message("Only predefined uml::PrimitiveTypes will be mapped."
+				.message("Only predefined uml::PrimitiveTypes will be mapped properly."
 					+ "Please use the types defined in \"pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml\" instead.")
 				.title("Warning")
 				.notificationType(NotificationType.WARNING)
