@@ -165,19 +165,4 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		]
 	}
 
-	private def assertInterfaceWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, name)
-	}
-
-	private def assertSingleInterfaceWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, name)
-	}
-
-	private def assertSingleInterfaceWithNameInPackage(String packageName, String name) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, packageName, name)
-	}
-
 }

@@ -5,9 +5,6 @@ import org.eclipse.uml2.uml.UMLFactory
 
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import java.nio.file.Path
-import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
-import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
-import static org.hamcrest.MatcherAssert.assertThat
 import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
 import tools.vitruv.framework.vsum.views.View
 import tools.vitruv.framework.vsum.views.ViewTypeFactory
@@ -21,10 +18,13 @@ import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
 import org.emftext.language.java.containers.JavaRoot
 import org.eclipse.xtend.lib.annotations.Accessors
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.JavaUmlTestUtil.*
-import tools.vitruv.applications.umljava.tests.util.JavaUmlTestUtil
+import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityValidation
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
+	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(UML_MODEL_NAME, [
+		createUmlAndJavaClassesView
+	], [it.getUri()])
+
 	static val MODEL_FILE_EXTENSION = "uml"
 	@Accessors(PROTECTED_GETTER)
 	static val UML_MODEL_NAME = "model"
@@ -41,14 +41,6 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 
 	override protected getChangePropagationSpecifications() {
 		return #[new UmlToJavaChangePropagationSpecification(), new JavaToUmlChangePropagationSpecification()]
-	}
-
-	def protected assertJavaFileExists(String fileName, String[] namespaces) {
-		assertThat(getUri(Path.of(buildJavaFilePath(fileName + ".java", namespaces))), isResource)
-	}
-
-	def protected assertJavaFileNotExists(String fileName, String[] namespaces) {
-		assertThat(getUri(Path.of(buildJavaFilePath(fileName + ".java", namespaces))), isNoResource)
 	}
 
 	protected def void createUmlModel((Model)=>void modelInitialization) {
@@ -116,85 +108,6 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected def void changeView(View view, (View)=>void modelModification) {
 		modelModification.apply(view)
 		view.commitChanges()
-	}
-
-	/**
-	 * @see JavaUmlTestUtil#assertClassifierWithNameInRootPackage
-	 */
-	protected def void assertClassifierWithNameInRootPackage(
-		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
-		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String classifierName) {
-		createUmlAndJavaClassesView => [
-			assertClassifierWithNameInRootPackage(javaClassifierType, umlClassifierType, UML_MODEL_NAME, classifierName)
-			assertJavaFileExists(classifierName, #[])
-		]
-	}
-
-	/**
-	 * @see JavaUmlTestUtil#assertSingleClassifierWithNameInRootPackage
-	 */
-	protected def void assertSingleClassifierWithNameInRootPackage(
-		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
-		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String classifierName) {
-		createUmlAndJavaClassesView => [
-			assertSingleClassifierWithNameInRootPackage(javaClassifierType, umlClassifierType, UML_MODEL_NAME,
-				classifierName)
-		]
-	}
-
-	/**
-	 * @see JavaUmlTestUtil#assertClassifierWithNameInPackage
-	 */
-	protected def void assertClassifierWithNameInPackage(
-		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
-		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String packageName, String classifierName) {
-		createUmlAndJavaClassesView => [
-			assertClassifierWithNameInPackage(javaClassifierType, umlClassifierType, UML_MODEL_NAME, packageName,
-				classifierName)
-			assertJavaFileExists(classifierName, #[packageName])
-		]
-	}
-
-	/**
-	 * @see JavaUmlTestUtil#assertSingleClassifierWithNameInPackage
-	 */
-	protected def void assertSingleClassifierWithNameInPackage(
-		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
-		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String packageName, String classifierName) {
-		assertClassifierWithNameInPackage(javaClassifierType, umlClassifierType, packageName, classifierName)
-		createUmlAndJavaClassesView => [
-			assertSingleClassifierWithNameInPackage(javaClassifierType, umlClassifierType, UML_MODEL_NAME, packageName,
-				classifierName)
-		]
-	}
-
-	/**
-	 * @see JavaUmlTestUtil#assertNoClassifierWithNameInRootPackage
-	 */
-	protected def void assertNoClassifierWithNameInRootPackage(String classifierName) {
-		createUmlAndJavaClassesView => [
-			assertNoClassifierWithNameInRootPackage(UML_MODEL_NAME, classifierName)
-			assertJavaFileNotExists(classifierName, #[])
-		]
-	}
-
-	/**
-	 * @see JavaUmlTestUtil#assertNoClassifierWithNameInPackage
-	 */
-	protected def void assertNoClassifierWithNameInPackage(String packageName, String classifierName) {
-		createUmlAndJavaClassesView => [
-			assertNoClassifierWithNameInPackage(UML_MODEL_NAME, packageName, classifierName)
-			assertJavaFileNotExists(classifierName, #[packageName])
-		]
-	}
-
-	/**
-	 * @see JavaUmlTestUtil#assertNoClassifierInRootPackage
-	 */
-	protected def void assertNoClassifierExistsInRootPackage() {
-		createUmlAndJavaClassesView => [
-			assertNoClassifierInRootPackage(UML_MODEL_NAME)
-		]
 	}
 
 }

@@ -298,19 +298,4 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 		]
 	}
 
-	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			name)
-	}
-
-	private def assertSingleClassWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
-	}
-
-	private def assertSingleClassWithNameInPackage(String packageName, String name) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			packageName, name)
-	}
-
 }

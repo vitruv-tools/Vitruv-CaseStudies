@@ -14,7 +14,6 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.clai
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.uml2.uml.DataType
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
@@ -184,11 +183,11 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 			claimClass(DEFAULT_CLASS_NAME).interfaceRealizations.remove(0)
 		]
 		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertInterfaceWithNameInRootPackage(ADDITIONAL_INTERFACE_NAME)
 		createJavaClassesView() => [
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertEquals(1, javaClass.implements.size)
 			assertEquals(ADDITIONAL_INTERFACE_NAME, getClassifierFromTypeReference(javaClass.implements.head).name)
-			assertJavaFileExists(ADDITIONAL_INTERFACE_NAME, #[])
 		]
 	}
 
@@ -227,8 +226,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 	@Test
 	def void testCreateDataType() {
 		createDataTypeInRootPackage(DEFAULT_CLASS_NAME)
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, DataType,
-			DEFAULT_CLASS_NAME)
+		assertSingleDataTypeWithNameInRootPackage(DEFAULT_CLASS_NAME)
 	}
 
 	@Test
@@ -241,25 +239,9 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 				packagedElements += umlDataType
 			]
 		]
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, DataType, PACKAGE_NAME,
-			DEFAULT_CLASS_NAME)
+		assertSingleDataTypeWithNameInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
 		assertNoClassifierWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		assertNoClassifierExistsInRootPackage()
-	}
-
-	private def assertClassWithNameInRootPackage(String name) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			name)
-	}
-
-	private def assertSingleClassWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.Class, name)
-	}
-
-	private def assertSingleClassWithNameInPackage(String packageName, String name) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			packageName, name)
 	}
 
 }

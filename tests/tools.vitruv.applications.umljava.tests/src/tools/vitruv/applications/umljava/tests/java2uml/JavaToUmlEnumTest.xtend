@@ -197,14 +197,4 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		]
 	}
 
-	private def assertSingleEnumWithNameInRootPackage(String name) {
-		assertSingleClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, name)
-	}
-
-	private def assertSingleEnumWithNameInPackage(String packageName, String name) {
-		assertSingleClassifierWithNameInPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, packageName, name)
-	}
-
 }
