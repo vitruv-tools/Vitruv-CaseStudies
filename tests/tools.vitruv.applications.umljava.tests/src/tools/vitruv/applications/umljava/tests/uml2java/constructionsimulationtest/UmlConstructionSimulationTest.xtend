@@ -18,10 +18,10 @@ class UmlConstructionSimulationTest extends AbstractUmlToJavaTest {
 	@ParameterizedTest(name="for file: {0}")
 	@DisplayName("simulate construction of existing model")
 	@CsvSource(#[
-		"model1, 2",
-		"model2, 2",
-		"MyProject, 1", // UML model from "myproject" by suresh519: https://repository.genmymodel.com/suresh519/MyProject (12.5.2017)
-		"rootModelName, 4" // UML model from the logger project by orhan obut:  https://github.com/orhanobut/logger (12.5.2017)
+		"synthetic/model1, 2",
+		"synthetic/model2, 2",
+		"suresh519/uml/MyProject, 1", // UML model from "myproject" by suresh519: https://repository.genmymodel.com/suresh519/MyProject (12.5.2017)
+		"orhanobut/uml/model, 4" // UML model from the logger project by orhan obut:  https://github.com/orhanobut/logger (12.5.2017)
 	])
 	def void testCompleteModel(String modelFileName, int numberOfAcknowledgeents) {
 		acknowledgePredefinedTypesWarning(numberOfAcknowledgeents)
