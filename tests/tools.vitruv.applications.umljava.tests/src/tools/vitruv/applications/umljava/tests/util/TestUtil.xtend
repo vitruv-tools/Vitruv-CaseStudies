@@ -41,6 +41,8 @@ import org.emftext.language.java.members.Constructor
 import org.eclipse.uml2.uml.Classifier
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.parameters.Parametrizable
+import org.eclipse.uml2.uml.Enumeration
+import org.eclipse.uml2.uml.DataType
 
 /**
  * Utility class for assertions that works bidirectional.
@@ -355,7 +357,15 @@ class TestUtil {
 		assertEquals(getClassifierFromTypeReference(namespaceRef).name, uClass.name, "Class name is not as expected")
 	}
 
-	// IMPORTANT EXCEPTION: String is NOT a primitive in the Java model, which means this dispatch case needs to exist:
+	def static dispatch void assertTypeEquals(Enumeration uEnum, NamespaceClassifierReference namespaceRef) {
+		assertEquals(getClassifierFromTypeReference(namespaceRef).name, uEnum.name, "Enumeration name is not as expected")
+	}
+	
+	def static dispatch void assertTypeEquals(DataType uDataType, NamespaceClassifierReference namespaceRef) {
+		assertEquals(getClassifierFromTypeReference(namespaceRef).name, uDataType.name, "DataType name is not as expected")
+	}
+
+	// IMPORTANT EXCEPTION: String is NOT a primitive in the Java model, which means this dispatch case needs to exist
 	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
 		NamespaceClassifierReference namespaceRef) {
 		assertNotNull(uPrimType, "Primitive type to check must not be null")
