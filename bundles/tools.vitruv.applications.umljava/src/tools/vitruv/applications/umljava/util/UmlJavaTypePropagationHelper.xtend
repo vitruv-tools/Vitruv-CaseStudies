@@ -169,13 +169,24 @@ class UmlJavaTypePropagationHelper {
 
 	def static TypeReference mapUmlPrimitiveToJavaPrimitive(PrimitiveType uType) {
 		switch (uType.name) {
-			case "Boolean":
+			case "Boolean",
+			case "boolean":
 				return TypesFactory.eINSTANCE.createBoolean
-			case "Real":
+			case "Char",
+			case "char":
+				return TypesFactory.eINSTANCE.createChar
+			case "Real",
+			case "real",
+			case "Double",
+			case "double":
 				return TypesFactory.eINSTANCE.createDouble
-			case "Integer":
+			case "Intr",
+			case "int",
+			case "Integer",
+			case "integer":
 				return TypesFactory.eINSTANCE.createInt
-			case "String":
+			case "String",
+			case "string":
 				return JavaModificationUtil.createNamespaceClassifierReferenceForName("java.lang", "String")
 			default: {
 //            	throw new IllegalArgumentException("Unknown standard primitive type name: " +  uType.name)

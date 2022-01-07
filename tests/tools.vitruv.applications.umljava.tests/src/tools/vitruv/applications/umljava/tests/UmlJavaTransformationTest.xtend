@@ -25,6 +25,7 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		createUmlAndJavaClassesView
 	], [it.getUri()])
 
+	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FILE_EXTENSION = "uml"
 	@Accessors(PROTECTED_GETTER)
 	static val UML_MODEL_NAME = "model"
@@ -35,7 +36,7 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		view.claimUmlModel(UML_MODEL_NAME)
 	}
 
-	private def Path getProjectModelPath(String modelName) {
+	protected def Path getProjectModelPath(String modelName) {
 		Path.of(MODEL_FOLDER_NAME).resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}
 
