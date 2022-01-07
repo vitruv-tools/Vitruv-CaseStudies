@@ -23,67 +23,71 @@ class JavaQueryUtil {
 	static def getJavaCompilationUnits(View view) {
 		view.rootObjects(CompilationUnit)
 	}
-	
+
 	static def getJavaPackages(View view) {
 		view.rootObjects(Package)
 	}
-	
+
 	static def getJavaClassifiers(View view) {
 		view.rootObjects(CompilationUnit).map[classifiers].flatten
 	}
-	
+
 	static def <T extends Classifier> Iterable<T> getJavaClassifiersOfType(View view, java.lang.Class<T> type) {
 		view.javaClassifiers.filter(type)
 	}
-	
+
 	static def getJavaClasses(View view) {
 		view.getJavaClassifiersOfType(Class)
 	}
-	
+
 	static def getJavaInterfaces(View view) {
 		view.getJavaClassifiersOfType(Interface)
 	}
-		
+
 	static def claimJavaCompilationUnit(View view, String compilationUnitNameWithoutJavaSuffix) {
-		view.javaCompilationUnits.filter[it.name == compilationUnitNameWithoutJavaSuffix +  ".java"].claimOne
-	}	
-	
+		view.javaCompilationUnits.filter[it.name == compilationUnitNameWithoutJavaSuffix + ".java"].claimOne
+	}
+
 	static def claimJavaPackage(View view, String name) {
 		view.javaPackages.filter[it.name == name].claimOne
 	}
-	
-	static def <T extends Classifier> T claimJavaClassifier(View view, java.lang.Class<T> classifierType, String classifiedName) {
-		view.getJavaClassifiersOfType(classifierType).filter[it.name == classifiedName].claimOne
+
+	static def <T extends Classifier> T claimJavaClassifier(View view, java.lang.Class<T> classifierType,
+		String classifierName) {
+		view.getJavaClassifiersOfType(classifierType).filter [
+			!it.containingCompilationUnit.name.startsWith("java") && // do not consider standard library classes
+			it.name == classifierName
+		].claimOne
 	}
-	
+
 	static def claimJavaClass(View view, String className) {
 		view.claimJavaClassifier(Class, className)
 	}
-	
+
 	static def claimJavaEnum(View view, String enumName) {
 		view.claimJavaClassifier(Enumeration, enumName)
 	}
-	
+
 	static def claimJavaInterface(View view, String interfaceName) {
 		view.claimJavaClassifier(Interface, interfaceName)
 	}
-	
+
 	static def InterfaceMethod claimInterfaceMethod(Interface interf, String methodName) {
 		interf.members.filter(InterfaceMethod).filter[it.name == methodName].claimOne
 	}
-	
+
 	static def ClassMethod claimClassMethod(ConcreteClassifier classifier, String methodName) {
 		classifier.members.filter(ClassMethod).filter[it.name == methodName].claimOne
 	}
-	
+
 	static def Constructor claimConstructor(ConcreteClassifier classifier) {
 		classifier.members.filter(Constructor).filter[it.name == classifier.name].claimOne
 	}
-	
+
 	static def Parameter claimParameter(Method method, String parameterName) {
 		method.parameters.filter[it.name == parameterName].claimOne
 	}
-	
+
 	static def Field claimField(ConcreteClassifier classifier, String fieldName) {
 		classifier.fields.filter[it.name == fieldName].claimOne
 	}
