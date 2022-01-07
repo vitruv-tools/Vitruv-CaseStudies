@@ -124,8 +124,7 @@ class TestUtil {
 			])
 			assertElementsEqual(umlAttribute, correspondingJavaField)
 		}
-		for (var attributeNumber = 0; attributeNumber < javaClassifier.fields.size; attributeNumber++) {
-			val javaField = javaClassifier.fields.get(attributeNumber)
+		for (javaField : javaClassifier.fields) {
 			val correspondingUmlAttribute = umlClassifier.attributes.findFirst[name == javaField.name]
 			assertNotNull(correspondingUmlAttribute, [
 				String.format("No corresponding UML attribute found for Java field %s", javaField)
@@ -147,9 +146,10 @@ class TestUtil {
 			])
 			assertElementsEqual(umlMethod, correspondingJavaMethod)
 		}
-		for (var methodNumber = 0; methodNumber < javaClassifier.methods.size; methodNumber++) {
-			val javaMethod = javaClassifier.methods.get(methodNumber)
-			if (!javaClassifier.fields.exists[name == javaMethod.name.substring(3).toFirstLower]) {
+		for (javaMethod : javaClassifier.methods) {
+			if (javaMethod.name.length < 3 || !javaClassifier.fields.exists [
+				name.toFirstLower == javaMethod.name.substring(3).toFirstLower
+			]) {
 				val correspondingUmlMethod = umlClassifier.operations.findFirst[name == javaMethod.name]
 				assertNotNull(correspondingUmlMethod, [
 					String.format("No corresponding UML method found for Java method %s", javaMethod)
@@ -218,7 +218,6 @@ class TestUtil {
 	 */
 	def static dispatch void assertElementsEqual(Operation uMethod, InterfaceMethod jMethod) {
 		assertEquals(uMethod.name, jMethod.name, "Method names must be equal")
-		assertTrue(uMethod.abstract) // jMethod is always implicitly abstract
 		assertUmlNamedElementHasVisibility(uMethod, VisibilityKind.PUBLIC_LITERAL) // JMehod is always implicitly public
 		assertTypeEquals(uMethod.type, jMethod.typeReference)
 		assertParametersEquals(uMethod, jMethod)
