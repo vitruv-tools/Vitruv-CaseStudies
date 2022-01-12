@@ -174,11 +174,31 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	}
 
 	/**
-	 * Checks if a UML parameter is created after a java parameter is created.
+	 * Checks if a UML parameter is created after a Java parameter is created.
 	 */
 	@Test
-	def void testCreateParameter() {
+	def void testCreateOrdinaryParameter() {
 		createJavaClassWithMethodAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
+			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
+			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_NAME)
+		]
+	}
+	
+	/**
+	 * Checks if a UML parameter is created after a Java parameter of variable length is created.
+	 */
+	@Test
+	def void testCreateVariableLengthParameter() {
+		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
+		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
+			parameters += ParametersFactory.eINSTANCE.createVariableLengthParameter => [
+				name = PARAMETER_NAME
+				typeReference = createJavaPrimitiveType(JavaStandardType.INT)
+
+			]
+		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
@@ -278,9 +298,9 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 
 	private def createJavaClassWithMethodAndParameter(String className, String methodName, String parameterName) {
 		createJavaClassWithMethod(className, methodName)
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
+		changeClassMethod(className, methodName) [
 			parameters += ParametersFactory.eINSTANCE.createOrdinaryParameter => [
-				name = PARAMETER_NAME
+				name = parameterName
 				typeReference = createJavaPrimitiveType(JavaStandardType.INT)
 
 			]

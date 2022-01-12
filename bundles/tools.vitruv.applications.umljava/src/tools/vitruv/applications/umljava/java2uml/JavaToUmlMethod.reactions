@@ -242,12 +242,20 @@ routine setUmlFeatureStatic(java::AnnotableAndModifiable jElem, Boolean isStatic
 //=========================================== Parameter
 //===========================================
 
-reaction JavaParameterCreated {
+reaction JavaVariableLengthParameterCreated {
+    after element java::VariableLengthParameter created and inserted in java::Parametrizable[parameters]
+    call {
+    	createUmlParameter(affectedEObject, newValue)
+    	setMultiplicityOfCorrespondingParameterToUnlimited(newValue)
+    }
+}
+
+reaction JavaOrdinaryParameterCreated {
     after element java::OrdinaryParameter created and inserted in java::Parametrizable[parameters]
     call createUmlParameter(affectedEObject, newValue)
 }
 
-routine createUmlParameter(java::Parametrizable jMeth, java::OrdinaryParameter jParam) {
+routine createUmlParameter(java::Parametrizable jMeth, java::Parameter jParam) {
     match {
         val uOperation = retrieve uml::Operation corresponding to jMeth
         require absence of uml::Parameter corresponding to jParam
@@ -263,12 +271,26 @@ routine createUmlParameter(java::Parametrizable jMeth, java::OrdinaryParameter j
     }
 }
 
+routine setMultiplicityOfCorrespondingParameterToUnlimited(java::Parameter parameter) {
+	match {
+		val umlParameter = retrieve uml::Parameter corresponding to parameter
+	}
+	action {
+		update umlParameter {
+			umlParameter => [
+				lower = 0
+				upper = LiteralUnlimitedNatural.UNLIMITED				
+			]
+		}
+	}
+}
+
 reaction JavaParameterDeleted {
-    after element java::OrdinaryParameter deleted and removed from java::Parametrizable[parameters]
+    after element java::Parameter deleted and removed from java::Parametrizable[parameters]
     call deleteJavaParameter(oldValue)
 }
 
-routine deleteJavaParameter(java::OrdinaryParameter jParam) {
+routine deleteJavaParameter(java::Parameter jParam) {
     match {
         val uParam = retrieve uml::Parameter corresponding to jParam
     }
@@ -278,11 +300,11 @@ routine deleteJavaParameter(java::OrdinaryParameter jParam) {
 }
 
 reaction JavaParameterTypeChanged {
-    after element java::TypeReference replaced at java::OrdinaryParameter[typeReference]
+    after element java::TypeReference replaced at java::Parameter[typeReference]
     call changeUmlParameterType(affectedEObject, newValue)
 }
 
-routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReference jType) {
+routine changeUmlParameterType(java::Parameter jParam, java::TypeReference jType) {
     match {
         val uParam = retrieve uml::Parameter corresponding to jParam
     }

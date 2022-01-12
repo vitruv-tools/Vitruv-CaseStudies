@@ -43,6 +43,8 @@ import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.parameters.Parametrizable
 import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.DataType
+import org.emftext.language.java.parameters.VariableLengthParameter
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 
 /**
  * Utility class for assertions that works bidirectional.
@@ -236,6 +238,9 @@ class TestUtil {
 	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.Parameter uParameter,
 		org.emftext.language.java.parameters.Parameter jParameter) {
 		assertEquals(uParameter.name, jParameter.name, "Parameter names must be equal")
+		if (jParameter instanceof VariableLengthParameter) {
+			assertEquals(LiteralUnlimitedNatural.UNLIMITED, uParameter.upper, "UML parameter for Java variable length parameter must have multiplicity *")
+		}
 		assertTypeEquals(uParameter.type, jParameter.typeReference)
 	}
 
@@ -248,15 +253,10 @@ class TestUtil {
 		} else {
 			assertEquals(uParamListWithoutReturn.size, javaMethod.parameters.size,
 				"Parameter lists must be of equal size")
-			for (uParam : uParamListWithoutReturn) {
-				val jParams = javaMethod.parameters.filter[name == uParam.name]
-				if (jParams.nullOrEmpty) {
-					fail("There is no corresponding parameter with the name '" + uParam.name + "'")
-				} else if (jParams.size > 1) {
-					println("There is more than one parameter with the name '" + uParam.name + "'")
-				} else {
-					assertElementsEqual(uParam, jParams.head)
-				}
+			for (var parameterNumber = 0; parameterNumber < uParamListWithoutReturn.size; parameterNumber++) {
+				val umlParameter = uParamListWithoutReturn.get(parameterNumber)
+				val javaParameter = javaMethod.parameters.get(parameterNumber)
+				assertElementsEqual(umlParameter, javaParameter)
 			}
 		}
 	}
