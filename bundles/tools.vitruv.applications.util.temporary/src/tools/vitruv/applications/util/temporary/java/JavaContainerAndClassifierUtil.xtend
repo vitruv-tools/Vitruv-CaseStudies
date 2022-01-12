@@ -197,7 +197,7 @@ class JavaContainerAndClassifierUtil {
 		val file = new File(directory + "/package-info.java")
 		file.createNewFile
 		val writer = new PrintWriter(file)
-		writer.println("package " + packageName + "")
+		writer.println("package " + packageName + ";")
 		writer.close
 		return file
 	}
