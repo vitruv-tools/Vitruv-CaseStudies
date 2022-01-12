@@ -21,6 +21,8 @@ import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUti
 import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityValidation
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.URI
+import org.junit.jupiter.api.BeforeEach
+import tools.vitruv.domains.java.JamoppLibraryHelper
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(UML_MODEL_NAME, [
