@@ -14,6 +14,7 @@ import org.eclipse.uml2.uml.Classifier
 import org.eclipse.emf.common.util.URI
 import java.nio.file.Path
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.isInExistingLibrary
 
 /**
  * This class provides validations for the equal existence of classifiers of different types to exist
@@ -26,8 +27,7 @@ class JavaUmlClassifierEqualityValidation {
 	val (Path)=>URI uriForProjectRelativePathProvider
 
 	def assertClassWithNameInRootPackage(String className) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			className)
+		assertClassWithNameInPackage(#[], className)
 	}
 
 	def assertSingleClassWithNameInRootPackage(String className) {
@@ -36,8 +36,12 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertClassWithNameInPackage(String packageName, String className) {
-		assertClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
-			packageName, className)
+		assertClassWithNameInPackage(#[packageName], className)
+	}
+
+	def assertClassWithNameInPackage(Iterable<String> packageNamespaces, String className) {
+		assertClassifierWithName(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+			packageNamespaces, className)
 	}
 
 	def assertSingleClassWithNameInPackage(String packageName, String className) {
@@ -46,8 +50,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertDataTypeWithNameInRootPackage(String dataTypeName) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Class,
-			org.eclipse.uml2.uml.DataType, dataTypeName)
+		assertDataTypeWithNameInPackage(#[], dataTypeName)
 	}
 
 	def assertSingleDataTypeWithNameInRootPackage(String dataTypeName) {
@@ -56,8 +59,12 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertDataTypeWithNameInPackage(String packageName, String dataTypeName) {
-		assertClassifierWithNameInPackage(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.DataType,
-			packageName, dataTypeName)
+		assertDataTypeWithNameInPackage(#[packageName], dataTypeName)
+	}
+
+	def assertDataTypeWithNameInPackage(Iterable<String> packageNamespaces, String dataTypeName) {
+		assertClassifierWithName(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.DataType,
+			packageNamespaces, dataTypeName)
 	}
 
 	def assertSingleDataTypeWithNameInPackage(String packageName, String dataTypeName) {
@@ -66,8 +73,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertEnumWithNameInRootPackage(String enumName) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, enumName)
+		assertEnumWithNameInPackage(#[], enumName)
 	}
 
 	def assertSingleEnumWithNameInRootPackage(String enumName) {
@@ -76,8 +82,12 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertEnumWithNameInPackage(String packageName, String enumName) {
-		assertClassifierWithNameInPackage(org.emftext.language.java.classifiers.Enumeration,
-			org.eclipse.uml2.uml.Enumeration, packageName, enumName)
+		assertEnumWithNameInPackage(#[packageName], enumName)
+	}
+
+	def assertEnumWithNameInPackage(Iterable<String> packageNamespaces, String enumName) {
+		assertClassifierWithName(org.emftext.language.java.classifiers.Enumeration, org.eclipse.uml2.uml.Enumeration,
+			packageNamespaces, enumName)
 	}
 
 	def assertSingleEnumWithNameInPackage(String packageName, String enumName) {
@@ -86,8 +96,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertInterfaceWithNameInRootPackage(String interfaceName) {
-		assertClassifierWithNameInRootPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, interfaceName)
+		assertInterfaceWithNameInPackage(#[], interfaceName)
 	}
 
 	def assertSingleInterfaceWithNameInRootPackage(String interfaceName) {
@@ -96,8 +105,12 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertInterfaceWithNameInPackage(String packageName, String interfaceName) {
-		assertClassifierWithNameInPackage(org.emftext.language.java.classifiers.Interface,
-			org.eclipse.uml2.uml.Interface, packageName, interfaceName)
+		assertInterfaceWithNameInPackage(#[packageName], interfaceName)
+	}
+
+	def assertInterfaceWithNameInPackage(Iterable<String> packageNamespaces, String interfaceName) {
+		assertClassifierWithName(org.emftext.language.java.classifiers.Interface, org.eclipse.uml2.uml.Interface,
+			packageNamespaces, interfaceName)
 	}
 
 	def assertSingleInterfaceWithNameInPackage(String packageName, String interfaceName) {
@@ -165,21 +178,6 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	/**
-	 * Validates that a classifier with the given name exists in the root package
-	 * with equal properties both in the UML and in the Java model.
-	 */
-	private def void assertClassifierWithNameInRootPackage(
-		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
-		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String classifierName) {
-		viewProvider.apply => [
-			val javaClassifier = claimJavaClassifier(javaClassifierType, classifierName)
-			val umlClassifier = claimUmlModel(umlModelName).claimPackageableElement(umlClassifierType, classifierName)
-			assertElementsEqual(umlClassifier, javaClassifier)
-		]
-		assertJavaFileExists(classifierName, #[])
-	}
-
-	/**
 	 * Validates that only a classifier with the given name exists in the root package
 	 * with equal properties both in the UML and in the Java model.
 	 * This will fail if the root package contains any further elements.
@@ -188,7 +186,7 @@ class JavaUmlClassifierEqualityValidation {
 		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
 		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String classifierName) {
 		viewProvider.apply => [
-			assertClassifierWithNameInRootPackage(javaClassifierType, umlClassifierType, classifierName)
+			assertClassifierWithName(javaClassifierType, umlClassifierType, #[], classifierName)
 			val javaClassifier = claimJavaClassifier(javaClassifierType, classifierName)
 			val javaCompilationUnit = claimJavaCompilationUnit(classifierName)
 			val umlClassifier = claimUmlModel(umlModelName).claimPackageableElement(umlClassifierType, classifierName)
@@ -204,19 +202,23 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	/**
-	 * Validates that a classifier with the given name exists in the package with the given name
+	 * Validates that a classifier with the given name exists in the package with the given namespaces
 	 * with equal properties both in the UML and in the Java model.
 	 */
-	private def void assertClassifierWithNameInPackage(
+	private def void assertClassifierWithName(
 		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
-		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String packageName, String classifierName) {
+		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, Iterable<String> namespaces,
+		String classifierName) {
 		viewProvider.apply => [
 			val javaClassifier = claimJavaClassifier(javaClassifierType, classifierName)
-			val umlPackage = claimUmlModel(umlModelName).claimPackage(packageName)
+			var org.eclipse.uml2.uml.Package umlPackage = claimUmlModel(umlModelName)
+			for (namespace : namespaces) {
+				umlPackage = umlPackage.claimPackage(namespace)
+			}
 			val umlClassifier = umlPackage.claimPackageableElement(umlClassifierType, classifierName)
 			assertElementsEqual(umlClassifier, javaClassifier)
 		]
-		assertJavaFileExists(classifierName, #[packageName])
+		assertJavaFileExists(classifierName, namespaces)
 	}
 
 	/**
@@ -228,7 +230,7 @@ class JavaUmlClassifierEqualityValidation {
 		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
 		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, String packageName, String classifierName) {
 		viewProvider.apply => [
-			assertClassifierWithNameInPackage(javaClassifierType, umlClassifierType, packageName, classifierName)
+			assertClassifierWithName(javaClassifierType, umlClassifierType, #[packageName], classifierName)
 			val javaClassifier = claimJavaClassifier(javaClassifierType, classifierName)
 			val javaCompilationUnit = claimJavaCompilationUnit(packageName + "." + classifierName)
 			val umlPackage = claimUmlModel(umlModelName).claimPackage(packageName)
