@@ -382,9 +382,11 @@ class TestUtil {
 		val jTypeMapped = UmlJavaTypePropagationHelper.getJavaTypeReferenceForUmlPrimitiveType(uPrimType)
 		assertFalse(jTypeMapped instanceof Void, [
 			String.format("Mapped primitive type for original type %s is void but should not", uPrimType)
-		]) // if the uml type is non null and supported by the transformations, then it should not be mapped to void
-		assertEquals(getClassifierFromTypeReference(namespaceRef).name,
-			getClassifierFromTypeReference(jTypeMapped).name, "Type is not as expected")
+		]) // if the UML type is non null and supported by the transformations, then it should not be mapped to void
+		val javaTypeName = getClassifierFromTypeReference(namespaceRef).name
+		val javaMappedTypeName = getClassifierFromTypeReference(jTypeMapped).name
+		assertEquals(if(javaTypeName == "CharSequence") "String" else javaTypeName, javaMappedTypeName,
+			"Type is not as expected")
 	}
 
 	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
