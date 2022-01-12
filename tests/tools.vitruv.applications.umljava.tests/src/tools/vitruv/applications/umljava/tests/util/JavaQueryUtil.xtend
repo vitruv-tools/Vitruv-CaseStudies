@@ -16,6 +16,7 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.members.Constructor
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.isInExistingLibrary
 
 // TODO HK These have to finally replace the old utilities
 @Utility
@@ -55,8 +56,7 @@ class JavaQueryUtil {
 	static def <T extends Classifier> T claimJavaClassifier(View view, java.lang.Class<T> classifierType,
 		String classifierName) {
 		view.getJavaClassifiersOfType(classifierType).filter [
-			!it.containingCompilationUnit.name.startsWith("java") && // do not consider standard library classes
-			it.name == classifierName
+			!it.isInExistingLibrary && it.name == classifierName
 		].claimOne
 	}
 

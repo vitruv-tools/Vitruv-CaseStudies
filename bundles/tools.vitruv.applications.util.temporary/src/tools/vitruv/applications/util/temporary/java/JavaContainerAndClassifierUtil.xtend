@@ -33,6 +33,7 @@ import org.emftext.language.java.commons.NamespaceAwareElement
 import static java.util.Collections.emptyList
 import org.emftext.language.java.containers.ContainersPackage
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
+import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
 
 /**
  * Class for java classifier, package and compilation unit util functions
@@ -139,7 +140,7 @@ class JavaContainerAndClassifierUtil {
 	/**
 	 * Removes all classifiers of the iterator which has the same name as the given classifier classif
 	 * @param iter iterator of typreferences
-	 * @param classif classifier that shoud be removed from the iterator
+	 * @param classif classifier that should be removed from the iterator
 	 */
 	def static removeClassifierFromIterator(Iterator<TypeReference> iter, ConcreteClassifier classif) {
 		while (iter.hasNext) {
@@ -338,6 +339,14 @@ class JavaContainerAndClassifierUtil {
 	def static void changeNameWithCompilationUnit(Classifier classifier, String newName) {
 		classifier.updateName(newName)
 		classifier.containingCompilationUnit?.updateCompilationUnitName(newName)
+	}
+
+	def static boolean isInExistingLibrary(CompilationUnit compilationUnit) {
+		compilationUnit.eResource.URI.isPathmap
+	}
+
+	def static boolean isInExistingLibrary(Classifier classifier) {
+		classifier.containingCompilationUnit.isInExistingLibrary
 	}
 
 }
