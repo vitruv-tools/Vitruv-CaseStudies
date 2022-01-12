@@ -480,7 +480,11 @@ routine createUmlPackage(java::Package jPackage, uml::Model uModel) {
 		        addUmlElementToPackage(uPackage, uModel)
 		    } else {
 		    	// find package by name is necessary, since jPackage does not explicitly model parent-child package relations
-		        addUmlElementToPackage(uPackage, findUmlPackage(uModel, jPackage.namespaces.last))
+		    	val parentPackage = findUmlPackage(uModel, jPackage.namespaces.last)
+		    	if (parentPackage === null) {
+		    		throw new IllegalStateException("UML package " + jPackage.namespaces + " does not exist")
+		    	}
+		        addUmlElementToPackage(uPackage, parentPackage)
 		    }
 		}
 	}
@@ -544,6 +548,9 @@ routine addUmlElementToModelOrPackage(java::JavaRoot javaRoot, uml::PackageableE
                 uModel
             } else {
                 findUmlPackage(uModel, javaRoot.namespaces.last)
+            }
+            if (uPackage === null) {
+            	throw new IllegalStateException("Package " + javaRoot.namespaces + " does not exist in UML model")
             }
             
             if (uPackage !== umlPackageableElement.eContainer) {
