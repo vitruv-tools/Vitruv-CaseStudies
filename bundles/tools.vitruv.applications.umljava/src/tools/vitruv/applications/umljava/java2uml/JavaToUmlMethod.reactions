@@ -42,7 +42,11 @@ routine createOrFindUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClas
     }
     action {
         call {
-            val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst[name == jMethod.name]
+            val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst[
+            	name == jMethod.name && 
+            	ownedParameters.filter[direction != ParameterDirectionKind.RETURN_LITERAL].size == jMethod.parameters.size &&
+            	jMethod.parameters.forall[jParameter | ownedParameters.exists[name == jParameter.name]]
+            ]
             if (foundMethod === null) {
                 createUmlClassMethod(jMethod, uClassifier)
             } else {
