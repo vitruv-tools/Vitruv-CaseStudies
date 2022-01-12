@@ -20,6 +20,8 @@ import org.emftext.language.java.types.TypeReference
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import static tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.loadUmlPrimitiveType
+import org.emftext.language.java.JavaClasspath
+import org.emftext.language.java.classifiers.ConcreteClassifier
 
 /**
  * Test class for testing the attribute reactions.
@@ -79,6 +81,34 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
 			assertUmlClassHasUniqueProperty(umlClass, ATTRIBUTE_NAME)
 			assertUmlPropertyTraits(umlAttribute, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlTypeClass, false,
+				false, umlClass, null, null)
+		]
+	}
+	
+	/**
+	 * Tests the creation of an attribute with a type that references a standard library class.
+	 * Checks if a corresponding UML attribute exists afterwards.
+	 */
+	@Test
+	def void testCreateAttributeOfStandardLibraryClass() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		changeView(createJavaClassesView) [
+			val standardLibraryClass = JavaClasspath.get().getClassifier("java.lang.Iterable") as ConcreteClassifier
+			claimJavaClass(CLASS_NAME) => [
+				members += MembersFactory.eINSTANCE.createField => [
+					name = ATTRIBUTE_NAME
+					typeReference = createNamespaceClassifierReference(standardLibraryClass)
+					makePrivate
+				]
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		createUmlView => [
+			val umlStandardLibraryClass = defaultUmlModel.claimPackage("java").claimPackage("lang").claimInterface("Iterable")
+			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
+			assertUmlClassHasUniqueProperty(umlClass, ATTRIBUTE_NAME)
+			assertUmlPropertyTraits(umlAttribute, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlStandardLibraryClass, false,
 				false, umlClass, null, null)
 		]
 	}

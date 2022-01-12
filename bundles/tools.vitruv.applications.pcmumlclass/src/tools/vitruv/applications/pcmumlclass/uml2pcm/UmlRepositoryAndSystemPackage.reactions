@@ -7,6 +7,7 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModal
 import org.eclipse.uml2.uml.UMLPackage
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.system.SystemPackage
+import org.eclipse.uml2.uml.Model
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -44,6 +45,14 @@ routine ensureModelCorrespondenceExists(uml::Model newModel) {
 
 reaction RepositoryOrSystemPackageInserted {
 	after element uml::Package inserted in uml::Package[packagedElement]
+	with {
+		// Exclude elements of existing/external libraries
+		var topmostPackage = newValue
+		while (!(topmostPackage.eContainer instanceof Model)) {
+			topmostPackage = topmostPackage.eContainer as org.eclipse.uml2.uml.Package
+		}
+		topmostPackage.name != "java" && topmostPackage.name != "jdk" && topmostPackage.name != "sun"
+	}
 	call insertCorrespondingRepositoryOrSystem(newValue, affectedEObject)
 }
 
