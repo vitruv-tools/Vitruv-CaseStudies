@@ -621,19 +621,22 @@ routine deleteJavaPackage(uml::Package uPackage) {
 
 reaction UmlPrimitiveTypeInserted {
 	after element uml::PrimitiveType inserted in uml::Model[packagedElement]
-	call warnUserToUsePredefinedPrimitiveTypes()
+	call validateSupportedPrimitiveType(newValue)
 }
 
-routine warnUserToUsePredefinedPrimitiveTypes() {
+routine validateSupportedPrimitiveType(uml::PrimitiveType type) {
 	action {
 		execute {
-			userInteractor.notificationDialogBuilder
-				.message("Only predefined uml::PrimitiveTypes will be mapped properly."
-					+ "Please use the types defined in \"pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml\" instead.")
-				.title("Warning")
-				.notificationType(NotificationType.WARNING)
-				.windowModality(WindowModality.MODAL)
-				.startInteraction
+			if (!type.isSupportedUmlPrimitiveType()) {
+				userInteractor.notificationDialogBuilder
+					.message("Only predefined uml::PrimitiveTypes will be mapped properly. "
+						+ "Please use the types defined in \"pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml\" "
+						+ "or \"pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml\" instead.")
+					.title("Warning")
+					.notificationType(NotificationType.WARNING)
+					.windowModality(WindowModality.MODAL)
+					.startInteraction
+			}
 		}
 	}
 }
