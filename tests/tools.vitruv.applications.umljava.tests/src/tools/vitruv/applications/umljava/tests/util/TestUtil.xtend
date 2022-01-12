@@ -138,21 +138,29 @@ class TestUtil {
 	private static def assertMethodsEquals(Classifier umlClassifier, ConcreteClassifier javaClassifier) {
 		for (var methodNumber = 0; methodNumber < umlClassifier.operations.size; methodNumber++) {
 			val umlMethod = umlClassifier.operations.get(methodNumber)
-			val correspondingJavaMethod = if (umlMethod.name == umlClassifier.name) {
-					javaClassifier.constructors.findFirst[name == umlMethod.name]
+			val potentialMethods = if (umlMethod.name == umlClassifier.name) {
+					javaClassifier.constructors
 				} else {
-					javaClassifier.methods.findFirst[name == umlMethod.name]
+					javaClassifier.methods
 				}
+			// Match methods in the order in which they were generated, as this is how the transformations implement it
+			// Otherwise we need to perform a complete matching of the signature here
+			val correspondingJavaMethod = potentialMethods.filter[name == umlMethod.name].get(
+				umlClassifier.operations.filter[name == umlMethod.name].toList.indexOf(umlMethod))
 			assertNotNull(correspondingJavaMethod, [
 				String.format("No corresponding Java method found for UML method %s", umlMethod)
 			])
 			assertElementsEqual(umlMethod, correspondingJavaMethod)
 		}
 		for (javaMethod : javaClassifier.methods) {
+			// Exclude getter and setter methods
 			if (javaMethod.name.length < 3 || !javaClassifier.fields.exists [
 				name.toFirstLower == javaMethod.name.substring(3).toFirstLower
 			]) {
-				val correspondingUmlMethod = umlClassifier.operations.findFirst[name == javaMethod.name]
+				// Match methods in the order in which they were generated, as this is how the transformations implement it
+				// Otherwise we need to perform a complete matching of the signature here
+				val correspondingUmlMethod = umlClassifier.operations.filter[name == javaMethod.name].get(
+					javaClassifier.methods.filter[name == javaMethod.name].toList.indexOf(javaMethod))
 				assertNotNull(correspondingUmlMethod, [
 					String.format("No corresponding UML method found for Java method %s", javaMethod)
 				])
@@ -358,11 +366,13 @@ class TestUtil {
 	}
 
 	def static dispatch void assertTypeEquals(Enumeration uEnum, NamespaceClassifierReference namespaceRef) {
-		assertEquals(getClassifierFromTypeReference(namespaceRef).name, uEnum.name, "Enumeration name is not as expected")
+		assertEquals(getClassifierFromTypeReference(namespaceRef).name, uEnum.name,
+			"Enumeration name is not as expected")
 	}
-	
+
 	def static dispatch void assertTypeEquals(DataType uDataType, NamespaceClassifierReference namespaceRef) {
-		assertEquals(getClassifierFromTypeReference(namespaceRef).name, uDataType.name, "DataType name is not as expected")
+		assertEquals(getClassifierFromTypeReference(namespaceRef).name, uDataType.name,
+			"DataType name is not as expected")
 	}
 
 	// IMPORTANT EXCEPTION: String is NOT a primitive in the Java model, which means this dispatch case needs to exist
