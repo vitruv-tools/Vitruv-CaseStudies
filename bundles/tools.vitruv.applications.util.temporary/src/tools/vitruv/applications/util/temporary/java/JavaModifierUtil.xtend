@@ -199,6 +199,21 @@ class JavaModifierUtil {
             default: throw new IllegalArgumentException("Unknown Java-Visibility: " + jVisibility)
         }
     }
+    
+    /**
+     * Returns the corresponding VisibilityKind enum constant corresponding to
+     * the visibility of the given Java element.
+     */
+    def static getUmlVisibilityKindFromJavaElement(AnnotableAndModifiable javaElement) {
+    	for (modifier : javaElement.annotationsAndModifiers) {
+    		switch (modifier) {
+    			Public: return VisibilityKind.PUBLIC_LITERAL
+    			Protected: return VisibilityKind.PROTECTED_LITERAL
+    			Private: return VisibilityKind.PRIVATE_LITERAL
+    		}
+    	}
+    	return VisibilityKind.PACKAGE_LITERAL
+    }
 
     /**
      * Returns the corresponding UMLVisibility enum constant corresponding to

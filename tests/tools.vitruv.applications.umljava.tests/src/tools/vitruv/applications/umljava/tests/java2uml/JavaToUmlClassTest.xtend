@@ -39,7 +39,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-			assertUmlClassTraits(umlClass, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, defaultUmlModel)
+			assertUmlClassTraits(umlClass, CLASS_NAME, VisibilityKind.PACKAGE_LITERAL, false, false, defaultUmlModel)
 		]
 	}
 
@@ -56,7 +56,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 		createUmlView => [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val umlClass = umlPackage.claimClass(CLASS_NAME)
-			assertUmlClassTraits(umlClass, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, umlPackage)
+			assertUmlClassTraits(umlClass, CLASS_NAME, VisibilityKind.PACKAGE_LITERAL, false, false, umlPackage)
 		]
 	}
 
@@ -76,7 +76,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 		assertNoClassifierWithNameInRootPackage(CLASS_NAME)
 		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_RENAMED)
-			assertUmlClassTraits(umlClass, CLASS_RENAMED, VisibilityKind.PUBLIC_LITERAL, false, false, defaultUmlModel)
+			assertUmlClassTraits(umlClass, CLASS_RENAMED, VisibilityKind.PACKAGE_LITERAL, false, false, defaultUmlModel)
 		]
 	}
 
@@ -153,11 +153,14 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	 * Checks if visibility changes are propagated to the UML class.
 	 */
 	@ParameterizedTest
-	@EnumSource(value=JavaVisibility, names=#["PUBLIC"], mode=EnumSource.Mode.EXCLUDE)
+	@EnumSource(value=JavaVisibility, names=#["PACKAGE"], mode=EnumSource.Mode.EXCLUDE)
 	def void testChangeClassVisibility(JavaVisibility visibility) {
 		createJavaClassInRootPackage(CLASS_NAME)
 		changeAndCheckPropertyOfClass(CLASS_NAME, [javaVisibilityModifier = visibility], [
 			assertUmlNamedElementHasVisibility(it, getUmlVisibilityKindFromJavaVisibilityConstant(visibility))
+		])
+		changeAndCheckPropertyOfClass(CLASS_NAME, [javaVisibilityModifier = JavaVisibility.PACKAGE], [
+			assertUmlNamedElementHasVisibility(it, getUmlVisibilityKindFromJavaVisibilityConstant(JavaVisibility.PACKAGE))
 		])
 	}
 

@@ -28,7 +28,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		createUmlView => [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
-			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, defaultUmlModel)
+			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PACKAGE_LITERAL, defaultUmlModel)
 		]
 	}
 
@@ -42,7 +42,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		createUmlView => [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val umlInterface = umlPackage.claimInterface(INTERFACE_NAME)
-			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, umlPackage)
+			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PACKAGE_LITERAL, umlPackage)
 		]
 	}
 
@@ -59,7 +59,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
 		createUmlView => [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_RENAMED)
-			assertUmlInterfaceTraits(umlInterface, INTERFACE_RENAMED, VisibilityKind.PUBLIC_LITERAL, defaultUmlModel)
+			assertUmlInterfaceTraits(umlInterface, INTERFACE_RENAMED, VisibilityKind.PACKAGE_LITERAL, defaultUmlModel)
 		]
 	}
 

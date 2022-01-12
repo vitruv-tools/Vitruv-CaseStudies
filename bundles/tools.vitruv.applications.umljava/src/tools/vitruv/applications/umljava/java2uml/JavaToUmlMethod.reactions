@@ -10,6 +10,7 @@ import tools.vitruv.applications.umljava.util.UmlJavaCorrespondenceTag
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -55,6 +56,7 @@ routine createUmlClassMethod(java::ClassMethod jMethod, uml::Classifier uClassif
     action {
         val uOperation = create uml::Operation and initialize {
             uOperation.name = jMethod.name;
+            uOperation.visibility = getUmlVisibilityKindFromJavaElement(jMethod)
         }
         add correspondence between uOperation and jMethod
         update uClassifier {
@@ -131,6 +133,7 @@ routine createUmlConstructor(java::Constructor jConstructor, uml::Class uClassif
     action {
         val uConstructor = create uml::Operation and initialize {
             uConstructor.name = jConstructor.name
+            uConstructor.visibility = getUmlVisibilityKindFromJavaElement(jConstructor)
         }
         add correspondence between uConstructor and jConstructor
         update uClassifier {

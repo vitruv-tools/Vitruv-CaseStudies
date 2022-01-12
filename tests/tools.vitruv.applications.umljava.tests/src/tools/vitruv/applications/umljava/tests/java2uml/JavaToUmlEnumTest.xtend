@@ -37,7 +37,7 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
 		createUmlView => [
 			val umlEnum = defaultUmlModel.claimEnum(ENUM_NAME)
-			assertUmlEnumTraits(umlEnum, ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, defaultUmlModel, #[])
+			assertUmlEnumTraits(umlEnum, ENUM_NAME, VisibilityKind.PACKAGE_LITERAL, false, false, defaultUmlModel, #[])
 		]
 	}
 
@@ -51,7 +51,7 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		createUmlView => [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val umlEnum = umlPackage.claimEnum(ENUM_NAME)
-			assertUmlEnumTraits(umlEnum, ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, umlPackage, #[])
+			assertUmlEnumTraits(umlEnum, ENUM_NAME, VisibilityKind.PACKAGE_LITERAL, false, false, umlPackage, #[])
 		]
 	}
 

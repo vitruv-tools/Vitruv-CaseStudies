@@ -13,6 +13,7 @@ import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static com.google.common.base.Preconditions.checkState
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -121,6 +122,7 @@ routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
     action {
         val uClass = create uml::Class and initialize {
             uClass.name = jClass.name;
+            uClass.visibility = getUmlVisibilityKindFromJavaElement(jClass)
         }
         call {
         	addTypeCorrespondence(jClass, uClass, jCompUnit)
@@ -347,6 +349,7 @@ routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCo
     action {
         val uInterface = create uml::Interface and initialize {
             uInterface.name = jInterface.name;
+            uInterface.visibility = getUmlVisibilityKindFromJavaElement(jInterface)
         }
 		call {
 			addTypeCorrespondence(jInterface, uInterface, jCompUnit)
@@ -540,7 +543,7 @@ routine removeUmlPackageOfClass(java::Package jPackage, java::ConcreteClassifier
 
 routine addUmlElementToModelOrPackage(java::JavaRoot javaRoot, uml::PackageableElement umlPackageableElement) {
 	match {
-        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+        val uModel = retrieve asserted uml::Model corresponding to UMLPackage.Literals.MODEL
 	}
     action {
        call {
@@ -580,6 +583,7 @@ routine createUmlEnum(java::Enumeration jEnum, java::CompilationUnit jCompUnit) 
     action {
         val uEnum = create uml::Enumeration and initialize {
             uEnum.name = jEnum.name;
+            uEnum.visibility = getUmlVisibilityKindFromJavaElement(jEnum)
         }
         call addUmlElementToModelOrPackage(jCompUnit, uEnum)
         add correspondence between uEnum and jEnum

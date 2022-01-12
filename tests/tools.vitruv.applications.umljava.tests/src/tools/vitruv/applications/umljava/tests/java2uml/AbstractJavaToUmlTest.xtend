@@ -23,7 +23,6 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 				updateCompilationUnitName(classifierName)
 				classifiers += uninitializedClassifier => [
 					name = classifierName
-					makePublic
 				]
 			]
 		]
