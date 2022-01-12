@@ -19,6 +19,8 @@ import org.emftext.language.java.containers.JavaRoot
 import org.eclipse.xtend.lib.annotations.Accessors
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityValidation
+import org.junit.jupiter.api.BeforeEach
+import tools.vitruv.domains.java.JamoppLibraryHelper
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(UML_MODEL_NAME, [
@@ -32,6 +34,11 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FOLDER_NAME = "model"
 
+	@BeforeEach
+	def void setupJavaStandardLibrary() {
+		JamoppLibraryHelper.registerStdLib
+	}
+	
 	protected def getDefaultUmlModel(View view) {
 		view.claimUmlModel(UML_MODEL_NAME)
 	}
