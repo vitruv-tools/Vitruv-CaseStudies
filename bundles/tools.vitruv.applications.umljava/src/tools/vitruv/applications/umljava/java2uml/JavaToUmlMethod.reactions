@@ -81,7 +81,11 @@ routine createOrFindUmlInterfaceMethod(java::InterfaceMethod jMethod, java::Inte
     }
     action {
         call {
-            val foundMethod = uInterface.ownedOperations.findFirst[name == jMethod.name]
+            val foundMethod = uInterface.ownedOperations.findFirst[
+            	name == jMethod.name && 
+            	ownedParameters.filter[direction != ParameterDirectionKind.RETURN_LITERAL].size == jMethod.parameters.size &&
+            	jMethod.parameters.forall[jParameter | ownedParameters.exists[name == jParameter.name]]
+            ]
             if (foundMethod === null) {
                 createUmlInterfaceMethod(jMethod, uInterface)
             } else {
