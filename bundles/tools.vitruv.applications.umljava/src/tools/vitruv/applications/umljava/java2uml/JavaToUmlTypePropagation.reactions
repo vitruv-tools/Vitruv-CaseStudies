@@ -22,7 +22,7 @@ routine propagateMethodReturnTypeChange(java::Method jMethod, uml::Parameter uRe
 	}
 }
 
-routine propagateParameterTypeChange(java::OrdinaryParameter jParam, uml::Parameter uParam) {
+routine propagateParameterTypeChange(java::Parameter jParam, uml::Parameter uParam) {
 	action {
 		call propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam)
 	}
