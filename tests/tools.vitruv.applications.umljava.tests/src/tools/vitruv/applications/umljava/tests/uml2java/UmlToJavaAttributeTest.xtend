@@ -20,6 +20,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.get
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.PrimitiveType
 
 /**
  * This test class checks the creating, deleting and modifying of attributes in the UML to Java
@@ -34,7 +35,7 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 
 	@Test
 	def void testCreatePrimitiveAttribute() {
-		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadIntegerPrimitiveType())
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
 		createJavaClassesView => [
 			val javaClass = claimJavaClass(CLASS_NAME)
@@ -70,7 +71,7 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 
 	@Test
 	def void testRenameAttribute() {
-		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadIntegerPrimitiveType())
 		changeAttribute(CLASS_NAME, ATTRIBUTE_NAME) [ model, attribute |
 			attribute.name = ATTRIBUTE_RENAME
 		]
@@ -90,7 +91,7 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 
 	@Test
 	def void testDeleteAttribute() {
-		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadIntegerPrimitiveType())
 		changeAttribute(CLASS_NAME, ATTRIBUTE_NAME) [ model, attribute |
 			attribute.destroy()
 		]
@@ -115,7 +116,7 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 
 	@Test
 	def testStaticAttribute() {
-		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadIntegerPrimitiveType())
 		changeAndCheckPropertyOfAttribute(CLASS_NAME, ATTRIBUTE_NAME, [isStatic = true], [
 			assertJavaModifiableStatic(it, true)
 		])
@@ -126,7 +127,7 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 
 	@Test
 	def testFinalAttribute() {
-		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadIntegerPrimitiveType())
 		changeAndCheckPropertyOfAttribute(CLASS_NAME, ATTRIBUTE_NAME, [isReadOnly = true], [
 			assertJavaModifiableFinal(it, true)
 		])
@@ -138,7 +139,7 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 	@ParameterizedTest
 	@EnumSource(value=VisibilityKind, names=#["PRIVATE_LITERAL"], mode=EnumSource.Mode.EXCLUDE)
 	def void testAttributeVisibility(VisibilityKind visibility) {
-		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadIntegerPrimitiveType())
 		changeAndCheckPropertyOfAttribute(CLASS_NAME, ATTRIBUTE_NAME, [it.visibility = visibility], [
 			assertJavaModifiableHasVisibility(it, getJavaVisibilityConstantFromUmlVisibilityKind(visibility))
 		])
@@ -146,7 +147,7 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 
 	@Test
 	def void testChangeAttributeType() {
-		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadUmlPrimitiveType("Integer"))
+		createClassWithFieldOfType(CLASS_NAME, ATTRIBUTE_NAME, loadIntegerPrimitiveType())
 		createClassInRootPackage(TYPE_CLASS_NAME)
 		changeAttribute(CLASS_NAME, ATTRIBUTE_NAME) [ model, attribute |
 			val typeClass = model.claimClass(TYPE_CLASS_NAME)
@@ -193,6 +194,10 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 		]
 	}
 
+	private def PrimitiveType loadIntegerPrimitiveType() {
+		loadUmlPrimitiveType("int")
+	}
+	
 	private def void createClassWithFieldOfType(String className, String attributeName, Type attributeType) {
 		createClassInRootPackage(className)
 		changeUmlModel [

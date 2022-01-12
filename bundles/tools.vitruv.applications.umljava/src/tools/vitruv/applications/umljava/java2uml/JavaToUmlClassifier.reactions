@@ -10,7 +10,7 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlClass
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlInterface
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
-import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
+import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.registerPredefinedUmlPrimitiveTypes
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static com.google.common.base.Preconditions.checkState
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*

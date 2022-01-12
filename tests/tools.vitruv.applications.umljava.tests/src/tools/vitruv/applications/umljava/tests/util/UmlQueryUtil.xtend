@@ -21,7 +21,7 @@ import org.eclipse.uml2.uml.Parameter
 @Utility
 class UmlQueryUtil {
 	static def loadUmlPrimitiveType(String name) {
-		getSupportedPredefinedUmlPrimitiveTypes(new ResourceSetImpl()).filter[it.name == name].claimOne
+		getUmlPrimitiveTypes(new ResourceSetImpl()).filter[it.name == name].claimOne
 	}
 	
 	static def Model claimUmlModel(View view, String modelName) {

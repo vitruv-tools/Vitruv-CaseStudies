@@ -44,7 +44,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS)
 		uAttr = createUmlAttribute(ATTRIBUTE_NAME, typeClass, VisibilityKind.PUBLIC_LITERAL, false, false)
 		uClass.ownedAttributes += uAttr
-		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+		pType = UmlTypeUtil.getUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "int"]
 		propagate
 	}
 

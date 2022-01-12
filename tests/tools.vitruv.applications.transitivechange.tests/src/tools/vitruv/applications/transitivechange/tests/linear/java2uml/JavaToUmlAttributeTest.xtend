@@ -66,7 +66,7 @@ class JavaToUmlAttributeTest extends JavaToUmlTransformationTest {
 
 		val uAttr = getCorrespondingAttribute(attr)
 		val uClass = getCorrespondingClass(jClass)
-		val umlInteger = getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+		val umlInteger = getUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "int"]
 		assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlInteger,
 			false, false, uClass, null, null)
 		assertElementsEqual(uAttr, attr)

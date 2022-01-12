@@ -9,7 +9,7 @@ import org.emftext.language.java.containers.ContainersPackage
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
-import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+import static extension tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static com.google.common.base.Preconditions.checkState

@@ -177,11 +177,12 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 	action {
 		execute {
 			val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(pcmRepo)
-			val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(pcmRepo)
+			val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(pcmRepo.eResource.resourceSet)
 			for (pcmType : pcmPrimitiveTypes) {
-				val umlType = PcmUmlClassHelper.mapPrimitiveTypes(pcmType, umlPrimitiveTypes)
-				if (umlType !== null)
+				val umlTypes = PcmUmlClassHelper.mapPrimitiveTypes(pcmType, umlPrimitiveTypes)
+				for (umlType : umlTypes) {
 					addPrimitiveDatatypeCorrespondence(pcmType, umlType)
+				}
 			}
 		}
 	}
@@ -189,8 +190,8 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 
 routine addPrimitiveDatatypeCorrespondence(pcm::PrimitiveDataType pcmPrimitiveType, uml::PrimitiveType umlPrimitiveType) {
 	match {
-		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged with TagLiterals.DATATYPE__TYPE
-		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged with TagLiterals.DATATYPE__TYPE
+		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged with TagLiterals.DATATYPE__TYPE with potentialTarget == umlPrimitiveType
+		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged with TagLiterals.DATATYPE__TYPE with potentialTarget == pcmPrimitiveType
 	}
 	action{
 		add correspondence between pcmPrimitiveType and umlPrimitiveType tagged with TagLiterals.DATATYPE__TYPE

@@ -7,7 +7,6 @@ import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
-import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
 import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
@@ -19,6 +18,7 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.loadUmlPrimitiveType
 
 /**
  * This class tests the change of parameter traits.
@@ -43,7 +43,7 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
 	def void before() {
 		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
 		typeClass = createSimpleUmlClass(rootElement, TYPE_NAME)
-		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+		pType = loadUmlPrimitiveType("int")
 		uParam = createUmlParameter(PARAMETER_NAME, pType)
 		uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
 		uClass.ownedOperations += uOperation

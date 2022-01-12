@@ -43,11 +43,10 @@ final class PcmUmlClassApplicationTestHelper {
 		PCM_BYTE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BYTE]
 
 		val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(resourceRetriever)
-		UML_BOOL = umlPrimitiveTypes.findFirst[it.name == "Boolean"]
-		UML_INT = umlPrimitiveTypes.findFirst[it.name == "Integer"]
-		UML_REAL = umlPrimitiveTypes.findFirst[it.name == "Real"]
-		UML_STRING = umlPrimitiveTypes.findFirst[it.name == "String"]
-		UML_UNLIMITED_NATURAL = umlPrimitiveTypes.findFirst[it.name == "UnlimitedNatural"]
+		UML_BOOL = umlPrimitiveTypes.findFirst[it.name.toLowerCase == "bool"]
+		UML_INT = umlPrimitiveTypes.findFirst[it.name.toLowerCase == "int"]
+		UML_DOUBLE = umlPrimitiveTypes.findFirst[it.name.toLowerCase == "double"]
+		UML_STRING = umlPrimitiveTypes.findFirst[it.name.toLowerCase == "string"]
 	}
 
 	val LegacyCorrespondenceRetriever correspondenceRetriever
@@ -105,9 +104,8 @@ final class PcmUmlClassApplicationTestHelper {
 
 	public val PrimitiveType UML_BOOL
 	public val PrimitiveType UML_INT
-	public val PrimitiveType UML_REAL
+	public val PrimitiveType UML_DOUBLE
 	public val PrimitiveType UML_STRING
-	public val PrimitiveType UML_UNLIMITED_NATURAL
 
 	// Repository
 	def createRepository() {

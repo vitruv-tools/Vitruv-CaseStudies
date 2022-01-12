@@ -44,7 +44,7 @@ routine changeTypeOfCorrespondingPropertyOrParameter(pcm::CollectionDataType pcm
 		val umlParameterList = retrieve many uml::Parameter corresponding to pcmCollection tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 		val umlPropertyList = retrieve many uml::Property corresponding to pcmCollection tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
 		
-		val umlPrimitiveType = retrieve optional uml::Type corresponding to newInnerType tagged with TagLiterals.DATATYPE__TYPE
+		val umlPrimitiveType = retrieve many uml::Type corresponding to newInnerType tagged with TagLiterals.DATATYPE__TYPE
 		val umlCompositeType = retrieve optional uml::Type corresponding to newInnerType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
@@ -52,7 +52,7 @@ routine changeTypeOfCorrespondingPropertyOrParameter(pcm::CollectionDataType pcm
 			if (newInnerType instanceof CollectionDataType) logger.warn(DefaultLiterals.WARNING_NESTED_COLLECTION_DATA_TYPE)
 			
 			// if the newInnerType is null or a CollectionDataType, this synchronizes the corresponding element's type to null
-			val umlType = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
+			val umlType = umlPrimitiveType.head ?: umlCompositeType.orElse(null)
 			for (umlParameter : umlParameterList) {
 				umlParameter.type = umlType
 			}

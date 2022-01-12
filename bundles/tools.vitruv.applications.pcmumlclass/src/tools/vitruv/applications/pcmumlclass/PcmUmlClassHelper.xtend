@@ -21,15 +21,17 @@ import tools.vitruv.framework.userinteraction.UserInteractor
 @Utility
 class PcmUmlClassHelper {
 
-	def static PrimitiveType mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
-		Iterable<PrimitiveType> umlPredifinedPrimitiveTypes) {
+	def static Iterable<PrimitiveType> mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
+		Iterable<PrimitiveType> umlPredefinedPrimitiveTypes) {
 		return switch (pcmPredefinedPrimitiveType.type) {
-			case PrimitiveTypeEnum.BOOL: umlPredifinedPrimitiveTypes.findFirst[it.name == "Boolean"]
-			case PrimitiveTypeEnum.INT: umlPredifinedPrimitiveTypes.findFirst[it.name == "Integer"]
-			case PrimitiveTypeEnum.DOUBLE: umlPredifinedPrimitiveTypes.findFirst[it.name == "Real"]
-			case PrimitiveTypeEnum.STRING: umlPredifinedPrimitiveTypes.findFirst[it.name == "String"]
+			case PrimitiveTypeEnum.BOOL: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "bool" || it.name.toLowerCase == "boolean"]
+			case PrimitiveTypeEnum.BYTE: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "byte"]
+			case PrimitiveTypeEnum.CHAR: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "char"]
+			case PrimitiveTypeEnum.INT: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "int" || it.name.toLowerCase == "integer"]
+			case PrimitiveTypeEnum.DOUBLE: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "double" || it.name.toLowerCase == "real"]
+			case PrimitiveTypeEnum.STRING: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "string"]
 			default: null
-		// pcm::Char, pcm::Byte, uml::UnlimitedNatural are not mapped and the user is notified if one of these types is set
+		// uml::UnlimitedNatural are not mapped and the user is notified if one of these types is set
 		}
 	}
 

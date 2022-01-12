@@ -70,12 +70,12 @@ routine setTypeOfUmlParameterOrProperty_NonCollection(
 		uml::TypedElement umlElement, uml::MultiplicityElement umlMultiplicity, // same element; Parameter or Property
 		String tag) {
 	match {
-		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmType tagged with TagLiterals.DATATYPE__TYPE
+		val umlPrimitiveType = retrieve many uml::Type corresponding to pcmType tagged with TagLiterals.DATATYPE__TYPE
 		val umlCompositeType = retrieve optional uml::Type corresponding to pcmType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
 		update umlElement {
-			umlElement.type = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
+			umlElement.type = umlPrimitiveType.head ?: umlCompositeType.orElse(null)
 		}
 		update umlMultiplicity {
 			umlMultiplicity.lower = 1
@@ -90,12 +90,12 @@ routine setTypeOfUmlParameterOrProperty_Collection(
 		uml::TypedElement umlElement, uml::MultiplicityElement umlMultiplicity, // same element; Parameter or Property
 		String tag) {
 	match {
-		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
+		val umlPrimitiveType = retrieve many uml::Type corresponding to pcmType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
 		val umlCompositeType = retrieve optional uml::Type corresponding to pcmType.innerType_CollectionDataType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
 		update umlElement {
-			umlElement.type = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
+			umlElement.type = umlPrimitiveType.head ?: umlCompositeType.orElse(null)
 		}
 		update umlMultiplicity {
 			umlMultiplicity.lower = 0

@@ -9,7 +9,6 @@ import org.emftext.language.java.types.TypesFactory
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
-import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
@@ -19,6 +18,7 @@ import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.loadUmlPrimitiveType
 
 /**
  * A Test class to test class methods and its traits.
@@ -48,7 +48,7 @@ class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
 	def void before() {
 		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
 		typeClass = createSimpleUmlClass(rootElement, TYPE_NAME)
-		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+		pType = loadUmlPrimitiveType("int")
 		uParam = createUmlParameter(PARAMETER_NAME, pType)
 		uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
 		uClass.ownedOperations += uOperation

@@ -96,7 +96,7 @@ class UmlToJavaParameterTest extends AbstractUmlToJavaTest {
 		changeUmlModel [
 			claimClass(className) => [
 				createOwnedOperation(operationName, null, null, null) => [
-					createOwnedParameter(parameterName, loadUmlPrimitiveType("Integer"))
+					createOwnedParameter(parameterName, loadUmlPrimitiveType("int"))
 				]
 			]
 		]

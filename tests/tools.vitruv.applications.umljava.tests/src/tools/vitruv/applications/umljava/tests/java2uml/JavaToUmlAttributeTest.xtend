@@ -19,6 +19,7 @@ import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.types.TypeReference
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
+import static tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.loadUmlPrimitiveType
 
 /**
  * Test class for testing the attribute reactions.
@@ -46,7 +47,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 		createUmlView => [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
-			val umlInteger = loadUmlPrimitiveType("Integer")
+			val umlInteger = loadUmlPrimitiveType("int")
 			assertUmlClassHasUniqueProperty(umlClass, ATTRIBUTE_NAME)
 			assertUmlPropertyTraits(umlAttribute, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlInteger, false,
 				false, umlClass, null, null)

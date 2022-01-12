@@ -379,7 +379,7 @@ class TestUtil {
 	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
 		NamespaceClassifierReference namespaceRef) {
 		assertNotNull(uPrimType, "Primitive type to check must not be null")
-		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
+		val jTypeMapped = UmlJavaTypePropagationHelper.getJavaTypeReferenceForUmlPrimitiveType(uPrimType)
 		assertFalse(jTypeMapped instanceof Void, [
 			String.format("Mapped primitive type for original type %s is void but should not", uPrimType)
 		]) // if the uml type is non null and supported by the transformations, then it should not be mapped to void
@@ -390,7 +390,7 @@ class TestUtil {
 	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
 		org.emftext.language.java.types.PrimitiveType jPrimType) {
 		assertNotNull(uPrimType, "Primitive type to check must not be null")
-		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
+		val jTypeMapped = UmlJavaTypePropagationHelper.getJavaTypeReferenceForUmlPrimitiveType(uPrimType)
 		assertFalse(jTypeMapped instanceof Void, [
 			String.format("Mapped primitive type for original type %s is void but should not", uPrimType)
 		]) // if the uml type is non null and supported by the transformations, then it should not be mapped to void
