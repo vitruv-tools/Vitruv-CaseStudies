@@ -19,8 +19,8 @@ import org.emftext.language.java.containers.JavaRoot
 import org.eclipse.xtend.lib.annotations.Accessors
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityValidation
-import org.junit.jupiter.api.BeforeEach
-import tools.vitruv.domains.java.JamoppLibraryHelper
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.common.util.URI
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(UML_MODEL_NAME, [
@@ -50,11 +50,15 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
 		return #[new UmlToJavaChangePropagationSpecification(), new JavaToUmlChangePropagationSpecification()]
 	}
+	
+	protected def void createAndRegisterRoot(View view, EObject rootObject, URI persistenceUri) {
+		view.registerRoot(rootObject, persistenceUri)
+	}
 
 	protected def void createUmlModel((Model)=>void modelInitialization) {
 		changeView(createUmlView()) [
 			val umlModel = UMLFactory.eINSTANCE.createModel
-			registerRoot(umlModel, UML_MODEL_NAME.projectModelPath.uri)
+			createAndRegisterRoot(umlModel, UML_MODEL_NAME.projectModelPath.uri)
 			modelInitialization.apply(umlModel)
 		]
 	}
@@ -63,7 +67,7 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		changeView(createJavaClassesView()) [
 			val compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit
 			compilationUnitInitialization.apply(compilationUnit)
-			registerRoot(compilationUnit, Path.of(buildJavaFilePath(compilationUnit)).uri)
+			createAndRegisterRoot(compilationUnit, Path.of(buildJavaFilePath(compilationUnit)).uri)
 		]
 	}
 
@@ -71,7 +75,7 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		changeView(createJavaPackagesView()) [
 			val package = ContainersFactory.eINSTANCE.createPackage
 			packageInitialization.apply(package)
-			registerRoot(package, Path.of(buildJavaFilePath(package)).uri)
+			createAndRegisterRoot(package, Path.of(buildJavaFilePath(package)).uri)
 		]
 	}
 
