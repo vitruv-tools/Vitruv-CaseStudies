@@ -11,9 +11,9 @@ import org.emftext.language.java.classifiers.ConcreteClassifier
 abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 
 	@BeforeEach
-	def protected setup() {
-		userInteraction.addNextTextInput(UML_MODEL_NAME)
-		userInteraction.addNextTextInput(MODEL_FOLDER_NAME)
+	def protected void setupUserInteractions() {
+		userInteraction.onTextInput[message.contains("enter a name for the UML root")].respondWith(UML_MODEL_NAME)
+		userInteraction.onTextInput[message.contains("enter a path for the UML root")].respondWith(MODEL_FOLDER_NAME)
 	}
 
 	private def void createClassifierInCompilationUnit(ConcreteClassifier uninitializedClassifier, List<String> namespace, String classifierName) {
