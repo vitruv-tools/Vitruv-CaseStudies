@@ -26,7 +26,7 @@ class UmlToJavaParameterTest extends AbstractUmlToJavaTest {
 	def void testCreateParameter() {
 		createClassWithOperationAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaParameter = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME).claimParameter(
 				PARAMETER_NAME)
 			assertJavaParameterTraits(javaParameter, PARAMETER_NAME, TypesFactory.eINSTANCE.createInt)
@@ -40,7 +40,7 @@ class UmlToJavaParameterTest extends AbstractUmlToJavaTest {
 			name = PARAMETER_RENAME
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
 			assertJavaMethodHasUniqueParameter(javaMethod, PARAMETER_RENAME, TypesFactory.eINSTANCE.createInt)
 			assertJavaMethodDontHaveParameter(javaMethod, PARAMETER_NAME)
@@ -55,7 +55,7 @@ class UmlToJavaParameterTest extends AbstractUmlToJavaTest {
 			destroy()
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
 			assertJavaMethodDontHaveParameter(javaMethod, PARAMETER_NAME)
 		]
@@ -69,7 +69,7 @@ class UmlToJavaParameterTest extends AbstractUmlToJavaTest {
 			parameter.type = model.claimClass(TYPE_CLASS_NAME)
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaParameter = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME).claimParameter(
 				PARAMETER_NAME)
 			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
@@ -84,7 +84,7 @@ class UmlToJavaParameterTest extends AbstractUmlToJavaTest {
 			direction = ParameterDirectionKind.RETURN_LITERAL
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
 			assertJavaElementHasTypeRef(javaMethod, TypesFactory.eINSTANCE.createInt)
 		]

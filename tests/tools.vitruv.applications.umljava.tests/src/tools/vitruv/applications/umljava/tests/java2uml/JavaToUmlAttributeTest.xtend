@@ -39,14 +39,14 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testCreatePrimitiveAttribute() {
 		createJavaClassWithFieldOfType(CLASS_NAME, createJavaPrimitiveType(JavaStandardType.INT), ATTRIBUTE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				val field = claimField(ATTRIBUTE_NAME)
 				members += createJavaGetterForAttribute(field, JavaVisibility.PRIVATE)
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
 			val umlInteger = loadUmlPrimitiveType("int")
@@ -64,7 +64,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	def void testCreateAttribute() {
 		createJavaClassInRootPackage(TYPE_CLASS_NAME)
 		createJavaClassInRootPackage(CLASS_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			val typeClass = claimJavaClass(TYPE_CLASS_NAME)
 			claimJavaClass(CLASS_NAME) => [
 				members += MembersFactory.eINSTANCE.createField => [
@@ -75,7 +75,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
@@ -84,7 +84,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				false, umlClass, null, null)
 		]
 	}
-	
+
 	/**
 	 * Tests the creation of an attribute with a type that references a standard library class.
 	 * Checks if a corresponding UML attribute exists afterwards.
@@ -92,7 +92,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testCreateAttributeOfStandardLibraryClass() {
 		createJavaClassInRootPackage(CLASS_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			val standardLibraryClass = JavaClasspath.get().getClassifier("java.lang.Iterable") as ConcreteClassifier
 			claimJavaClass(CLASS_NAME) => [
 				members += MembersFactory.eINSTANCE.createField => [
@@ -103,13 +103,14 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
-			val umlStandardLibraryClass = defaultUmlModel.claimPackage("java").claimPackage("lang").claimInterface("Iterable")
+		validateUmlView [
+			val umlStandardLibraryClass = defaultUmlModel.claimPackage("java").claimPackage("lang").
+				claimInterface("Iterable")
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
 			assertUmlClassHasUniqueProperty(umlClass, ATTRIBUTE_NAME)
-			assertUmlPropertyTraits(umlAttribute, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlStandardLibraryClass, false,
-				false, umlClass, null, null)
+			assertUmlPropertyTraits(umlAttribute, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL,
+				umlStandardLibraryClass, false, false, umlClass, null, null)
 		]
 	}
 
@@ -119,7 +120,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testRenameAttribute() {
 		createJavaClassWithFieldOfType(CLASS_NAME, createJavaPrimitiveType(JavaStandardType.INT), ATTRIBUTE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				claimField(ATTRIBUTE_NAME) => [
 					name = ATTRIBUTE_RENAME
@@ -127,7 +128,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_RENAME)
 			assertThat(umlAttribute.name, is(ATTRIBUTE_RENAME))
@@ -141,7 +142,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testDeleteAttribute() {
 		createJavaClassWithFieldOfType(CLASS_NAME, createJavaPrimitiveType(JavaStandardType.INT), ATTRIBUTE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				claimField(ATTRIBUTE_NAME) => [
 					EcoreUtil.delete(it)
@@ -149,7 +150,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			assertUmlClassDontHaveProperty(umlClass, ATTRIBUTE_NAME)
 		]
@@ -162,7 +163,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	def void testChangeAttributeType() {
 		createJavaClassInRootPackage(TYPE_CLASS_NAME)
 		createJavaClassWithFieldOfType(CLASS_NAME, createJavaPrimitiveType(JavaStandardType.INT), ATTRIBUTE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			val typeClass = claimJavaClass(TYPE_CLASS_NAME)
 			claimJavaClass(CLASS_NAME) => [
 				claimField(ATTRIBUTE_NAME) => [
@@ -171,7 +172,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlAttribute = umlClass.claimAttribute(ATTRIBUTE_NAME)
@@ -187,7 +188,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testStaticAttribute() {
 		createJavaClassWithFieldOfType(CLASS_NAME, createJavaPrimitiveType(JavaStandardType.INT), ATTRIBUTE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				claimField(ATTRIBUTE_NAME) => [
 					static = true
@@ -195,7 +196,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlAttribute = defaultUmlModel.claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
 			assertThat("UML attribute must be static", umlAttribute.static, is(true))
 		]
@@ -207,7 +208,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testFinalAttribute() {
 		createJavaClassWithFieldOfType(CLASS_NAME, createJavaPrimitiveType(JavaStandardType.INT), ATTRIBUTE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				claimField(ATTRIBUTE_NAME) => [
 					final = true
@@ -215,7 +216,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlAttribute = defaultUmlModel.claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
 			assertThat("UML attribute must be read only", umlAttribute.readOnly, is(true))
 		]
@@ -227,7 +228,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testAttributeVisibility() {
 		createJavaClassWithFieldOfType(CLASS_NAME, createJavaPrimitiveType(JavaStandardType.INT), ATTRIBUTE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				claimField(ATTRIBUTE_NAME) => [
 					makePublic
@@ -235,11 +236,11 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlAttribute = defaultUmlModel.claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
 			assertUmlNamedElementHasVisibility(umlAttribute, VisibilityKind.PUBLIC_LITERAL)
 		]
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				claimField(ATTRIBUTE_NAME) => [
 					makeProtected
@@ -247,7 +248,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlAttribute = defaultUmlModel.claimClass(CLASS_NAME).claimAttribute(ATTRIBUTE_NAME)
 			assertUmlNamedElementHasVisibility(umlAttribute, VisibilityKind.PROTECTED_LITERAL)
 		]
@@ -255,7 +256,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 
 	private def void createJavaClassWithFieldOfType(String className, TypeReference type, String attributeName) {
 		createJavaClassInRootPackage(className)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(className) => [
 				members += MembersFactory.eINSTANCE.createField => [
 					name = attributeName

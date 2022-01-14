@@ -26,7 +26,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 	def void testCreateInterface() {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PACKAGE_LITERAL, defaultUmlModel)
 		]
@@ -39,7 +39,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
 		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
 		assertNoClassifierExistsInRootPackage()
-		createUmlView => [
+		validateUmlView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val umlInterface = umlPackage.claimInterface(INTERFACE_NAME)
 			assertUmlInterfaceTraits(umlInterface, INTERFACE_NAME, VisibilityKind.PACKAGE_LITERAL, umlPackage)
@@ -49,7 +49,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testRenameInterface() {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaInterface(INTERFACE_NAME) => [
 				changeNameWithCompilationUnit(INTERFACE_RENAMED)
 			]
@@ -57,7 +57,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		]
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_RENAMED)
 		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_RENAMED)
 			assertUmlInterfaceTraits(umlInterface, INTERFACE_RENAMED, VisibilityKind.PACKAGE_LITERAL, defaultUmlModel)
 		]
@@ -67,7 +67,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 	def void testMoveInterface() {
 		createJavaPackageInRootPackage(PACKAGE_NAME)
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			moveJavaRootElement(claimJavaCompilationUnit(INTERFACE_NAME) => [
 				namespaces += PACKAGE_NAME
 				updateCompilationUnitName(INTERFACE_NAME)
@@ -76,7 +76,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		assertSingleInterfaceWithNameInPackage(PACKAGE_NAME, INTERFACE_NAME)
 		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
 		assertNoClassifierExistsInRootPackage()
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			moveJavaRootElement(claimJavaCompilationUnit(PACKAGE_NAME + "." + INTERFACE_NAME) => [
 				namespaces.clear
 				updateCompilationUnitName(INTERFACE_NAME)
@@ -89,7 +89,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testDeleteInterface() {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			EcoreUtil.delete(claimJavaInterface(INTERFACE_NAME))
 		]
 		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
@@ -99,7 +99,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testDeleteCompilationUnit() {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			EcoreUtil.delete(claimJavaCompilationUnit(INTERFACE_NAME))
 		]
 		assertNoClassifierWithNameInRootPackage(INTERFACE_NAME)
@@ -110,7 +110,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 	def void testAddSuperInterface() {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
 		createJavaInterfaceInRootPackage(SUPER_INTERFACE1_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			val superInterface = claimJavaInterface(SUPER_INTERFACE1_NAME)
 			claimJavaInterface(INTERFACE_NAME) => [
 				extends += createNamespaceClassifierReference(superInterface)
@@ -118,7 +118,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		]
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE1_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			val umlSuperInterface = defaultUmlModel.claimInterface(SUPER_INTERFACE1_NAME)
 			assertUmlClassifierHasSuperClassifier(umlInterface, umlSuperInterface)
@@ -130,7 +130,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
 		createJavaInterfaceInRootPackage(SUPER_INTERFACE1_NAME)
 		createJavaInterfaceInRootPackage(SUPER_INTERFACE2_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			val superInterface1 = claimJavaInterface(SUPER_INTERFACE1_NAME)
 			val superInterface2 = claimJavaInterface(SUPER_INTERFACE2_NAME)
 			claimJavaInterface(INTERFACE_NAME) => [
@@ -141,14 +141,14 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE1_NAME)
 		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE2_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			val umlSuperInterface1 = defaultUmlModel.claimInterface(SUPER_INTERFACE1_NAME)
 			val umlSuperInterface2 = defaultUmlModel.claimInterface(SUPER_INTERFACE2_NAME)
 			assertUmlClassifierHasSuperClassifier(umlInterface, umlSuperInterface1)
 			assertUmlClassifierHasSuperClassifier(umlInterface, umlSuperInterface2)
 		]
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaInterface(INTERFACE_NAME) => [
 				extends.remove(0)
 			]
@@ -156,7 +156,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaToUmlTest {
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE1_NAME)
 		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE2_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			val umlSuperInterface1 = defaultUmlModel.claimInterface(SUPER_INTERFACE1_NAME)
 			val umlSuperInterface2 = defaultUmlModel.claimInterface(SUPER_INTERFACE2_NAME)

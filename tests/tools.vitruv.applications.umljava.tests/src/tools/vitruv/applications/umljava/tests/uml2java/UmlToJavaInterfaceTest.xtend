@@ -89,7 +89,7 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE_NAME_1)
 		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE_NAME_2)
-		createUmlAndJavaClassesView => [
+		validateUmlAndJavaClassesView [
 			val javaInterface = claimJavaInterface(INTERFACE_NAME)
 			val umlSuperInterface1 = defaultUmlModel.claimInterface(SUPER_INTERFACE_NAME_1)
 			val umlSuperInterface2 = defaultUmlModel.claimInterface(SUPER_INTERFACE_NAME_2)
@@ -120,7 +120,7 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE_NAME_1)
 		assertInterfaceWithNameInRootPackage(SUPER_INTERFACE_NAME_2)
-		createUmlAndJavaClassesView => [
+		validateUmlAndJavaClassesView [
 			val javaInterface = claimJavaInterface(INTERFACE_NAME)
 			val umlSuperInterface2 = defaultUmlModel.claimInterface(SUPER_INTERFACE_NAME_2)
 			assertThat("there must be one super interface", javaInterface.extends.size, is(1))

@@ -40,7 +40,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	def void testCreateMethod() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
 			assertUmlOperationTraits(umlOperation, OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, false,
@@ -62,7 +62,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
 			val umlOperation = umlClass.claimOperation(OPERATION_NAME)
@@ -80,7 +80,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			name = OPERATION_RENAME
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			assertUmlClassHasUniqueOperation(umlClass, OPERATION_RENAME)
 		]
@@ -96,7 +96,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			EcoreUtil.delete(it)
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
 			assertUmlClassDontHaveOperation(umlClass, OPERATION_NAME)
 		]
@@ -109,7 +109,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			changeJavaMethod.apply(it)
 		]
 		assertSingleClassWithNameInRootPackage(className)
-		createUmlView => [
+		validateUmlView [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
 			validateUmlMethod.apply(umlOperation)
 		]
@@ -180,12 +180,12 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	def void testCreateOrdinaryParameter() {
 		createJavaClassWithMethodAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
 			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_NAME)
 		]
 	}
-	
+
 	/**
 	 * Checks if a UML parameter is created after a Java parameter of variable length is created.
 	 */
@@ -200,7 +200,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
 			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_NAME)
 		]
@@ -218,7 +218,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
 			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_RENAME)
 			assertUmlOperationDontHaveParameter(umlOperation, PARAMETER_NAME)
@@ -237,7 +237,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
 			assertUmlOperationDontHaveParameter(umlOperation, PARAMETER_NAME)
 		]
@@ -258,7 +258,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
-		createUmlView => [
+		validateUmlView [
 			val umlOperation = defaultUmlModel.claimClass(CLASS_NAME).claimOperation(OPERATION_NAME)
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
 			val umlParameter = umlOperation.claimParameter(PARAMETER_NAME)
@@ -272,7 +272,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testCreateConstructor() {
 		createJavaClassInRootPackage(CLASS_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				members += MembersFactory.eINSTANCE.createConstructor => [
 					name = CLASS_NAME
@@ -285,7 +285,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 
 	private def createJavaClassWithMethod(String className, String methodName) {
 		createJavaClassInRootPackage(className)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaClass(className) => [
 				members += MembersFactory.eINSTANCE.createClassMethod => [
 					name = methodName
@@ -312,7 +312,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	}
 
 	private def changeClassMethod(String className, String methodName, (View, ClassMethod)=>void changeFunction) {
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			val view = it
 			claimJavaClass(className) => [
 				claimClassMethod(methodName) => [

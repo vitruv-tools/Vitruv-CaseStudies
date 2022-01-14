@@ -25,9 +25,10 @@ import org.junit.jupiter.api.BeforeEach
 import tools.vitruv.domains.java.JamoppLibraryHelper
 
 class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
-	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(UML_MODEL_NAME, [
-		createUmlAndJavaClassesView
-	], [it.getUri()])
+	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(
+		UML_MODEL_NAME, [
+			createUmlAndJavaClassesView
+		], [it.getUri()])
 
 	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FILE_EXTENSION = "uml"
@@ -52,7 +53,7 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
 		return #[new UmlToJavaChangePropagationSpecification(), new JavaToUmlChangePropagationSpecification()]
 	}
-	
+
 	protected def void createAndRegisterRoot(View view, EObject rootObject, URI persistenceUri) {
 		view.registerRoot(rootObject, persistenceUri)
 	}
@@ -66,7 +67,7 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 
 	protected def void createJavaCompilationUnit((CompilationUnit)=>void compilationUnitInitialization) {
-		changeView(createJavaClassesView()) [
+		changeJavaView [
 			val compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit
 			compilationUnitInitialization.apply(compilationUnit)
 			createAndRegisterRoot(compilationUnit, Path.of(buildJavaFilePath(compilationUnit)).uri)
@@ -74,7 +75,7 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 
 	protected def void createJavaPackage((Package)=>void packageInitialization) {
-		changeView(createJavaPackagesView()) [
+		changeJavaView [
 			val package = ContainersFactory.eINSTANCE.createPackage
 			packageInitialization.apply(package)
 			createAndRegisterRoot(package, Path.of(buildJavaFilePath(package)).uri)
@@ -89,12 +90,8 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		createViewOfElements("UML", #{Model})
 	}
 
-	protected def View createJavaClassesView() {
-		createViewOfElements("Java classes", #{CompilationUnit})
-	}
-
-	protected def View createJavaPackagesView() {
-		createViewOfElements("Java packages", #{Package})
+	protected def View createJavaView() {
+		createViewOfElements("Java packages and classes", #{Package, CompilationUnit})
 	}
 
 	protected def View createUmlAndJavaClassesView() {
@@ -117,11 +114,57 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 
 	/**
-	 * Changes the given view according to the given modification function and commits the performed changes.
+	 * Changes the given view according to the given modification function, commits the performed changes
+	 * and closes the view afterwards.
 	 */
 	protected def void changeView(View view, (View)=>void modelModification) {
 		modelModification.apply(view)
 		view.commitChanges()
+		view.close()
+	}
+
+	protected def void changeUmlView((View)=>void modelModification) {
+		changeView(createUmlView) [
+			modelModification.apply(it)
+		]
+	}
+
+	protected def void changeJavaView((View)=>void modelModification) {
+		changeView(createJavaView) [
+			modelModification.apply(it)
+		]
+	}
+
+	/**
+	 * Validates the given view by applying the validation functions and closes the view afterwards.
+	 */
+	protected def void validateView(View view, (View)=>void viewValidation) {
+		viewValidation.apply(view)
+		view.close()
+	}
+
+	protected def void validateUmlView((View)=>void viewValidation) {
+		validateView(createUmlView) [
+			viewValidation.apply(it)
+		]
+	}
+
+	protected def void validateJavaView((View)=>void viewValidation) {
+		validateView(createJavaView) [
+			viewValidation.apply(it)
+		]
+	}
+
+	protected def void validateUmlAndJavaClassesView((View)=>void viewValidation) {
+		validateView(createUmlAndJavaClassesView) [
+			viewValidation.apply(it)
+		]
+	}
+	
+	protected def void validateUmlAndJavaPackagesView((View)=>void viewValidation) {
+		validateView(createUmlAndJavaPackagesView) [
+			viewValidation.apply(it)
+		]
 	}
 
 }

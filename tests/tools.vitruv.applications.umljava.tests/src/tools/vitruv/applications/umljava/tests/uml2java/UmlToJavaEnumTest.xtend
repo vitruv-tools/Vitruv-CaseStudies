@@ -29,7 +29,7 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 	def void testCreateEnum() {
 		createEnumInRootPackage(ENUM_NAME)
 		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaEnum = claimJavaEnum(ENUM_NAME)
 			assertJavaEnumTraits(javaEnum, ENUM_NAME, JavaVisibility.PUBLIC, #[])
 		]
@@ -91,7 +91,7 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 			]
 		]
 		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaEnum = claimJavaEnum(ENUM_NAME)
 			assertJavaEnumHasConstant(javaEnum, LITERAL_NAME)
 		]
@@ -111,7 +111,7 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 			]
 		]
 		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaEnum = claimJavaEnum(ENUM_NAME)
 			assertJavaEnumDontHaveConstant(javaEnum, LITERAL_NAME)
 		]
@@ -129,7 +129,7 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 			]
 		]
 		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaEnum = claimJavaEnum(ENUM_NAME)
 			val javaMethod = javaEnum.claimClassMethod(OPERATION_NAME)
 			assertJavaClassMethodTraits(javaMethod, OPERATION_NAME, JavaVisibility.PUBLIC,
@@ -148,7 +148,7 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 			]
 		]
 		assertEnumWithNameInRootPackage(ENUM_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
 			val javaEnum = claimJavaEnum(ENUM_NAME)
 			val javaAttribute = javaEnum.claimField(ATTRIBUTE_NAME)

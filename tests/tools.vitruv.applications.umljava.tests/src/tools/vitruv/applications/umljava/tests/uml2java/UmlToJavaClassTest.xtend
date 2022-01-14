@@ -61,7 +61,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 			claimClass(DEFAULT_CLASS_NAME).visibility = visibility
 		]
 		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
-		createJavaClassesView() => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertJavaModifiableHasVisibility(javaClass, getJavaVisibilityConstantFromUmlVisibilityKind(visibility))
 		]
@@ -74,7 +74,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 			claimClass(DEFAULT_CLASS_NAME).isAbstract = true
 		]
 		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
-		createJavaClassesView() => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertJavaModifiableAbstract(javaClass, true)
 		]
@@ -114,7 +114,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 			claimClass(DEFAULT_CLASS_NAME).isFinalSpecialization = true
 		]
 		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
-		createJavaClassesView() => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertJavaModifiableFinal(javaClass, true)
 		]
@@ -135,7 +135,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		assertClassWithNameInRootPackage(ADDITIONAL_CLASS_NAME)
-		createJavaClassesView() => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			val javaSuperClass = claimJavaClass(ADDITIONAL_CLASS_NAME)
 			assertHasSuperClass(javaClass, javaSuperClass)
@@ -147,7 +147,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		assertClassWithNameInRootPackage(ADDITIONAL_CLASS_NAME)
-		createJavaClassesView() => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertNull(javaClass.extends)
 		]
@@ -162,7 +162,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 				claimInterface(DEFAULT_INTERFACE_NAME))
 		]
 		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
-		createJavaClassesView() => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertEquals(DEFAULT_INTERFACE_NAME, getClassifierFromTypeReference(javaClass.implements.head).name)
 		]
@@ -184,7 +184,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		assertInterfaceWithNameInRootPackage(ADDITIONAL_INTERFACE_NAME)
-		createJavaClassesView() => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			assertEquals(1, javaClass.implements.size)
 			assertEquals(ADDITIONAL_INTERFACE_NAME, getClassifierFromTypeReference(javaClass.implements.head).name)
@@ -202,7 +202,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		assertClassWithNameInRootPackage(ADDITIONAL_CLASS_NAME)
-		createJavaClassesView() => [
+		validateJavaView [
 			val firstJavaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			val secondJavaClass = claimJavaClass(ADDITIONAL_CLASS_NAME)
 			assertEquals(DEFAULT_INTERFACE_NAME, getClassifierFromTypeReference(firstJavaClass.implements.head).name)
@@ -215,7 +215,7 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		assertClassWithNameInRootPackage(ADDITIONAL_CLASS_NAME)
-		createJavaClassesView() => [
+		validateJavaView [
 			val firstJavaClass = claimJavaClass(DEFAULT_CLASS_NAME)
 			val secondJavaClass = claimJavaClass(ADDITIONAL_CLASS_NAME)
 			assertEquals(DEFAULT_INTERFACE_NAME, getClassifierFromTypeReference(secondJavaClass.implements.head).name)

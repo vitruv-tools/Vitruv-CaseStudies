@@ -26,7 +26,7 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlToJavaTest {
 	def void testCreateInterfaceMethod() {
 		createInterfaceWithOperation(INTERFACE_NAME, IOPERATION_NAME)
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaInterface = claimJavaInterface(INTERFACE_NAME)
 			val javaMethod = javaInterface.claimInterfaceMethod(IOPERATION_NAME)
 			assertJavaInterfaceMethodTraits(javaMethod, IOPERATION_NAME, TypesFactory.eINSTANCE.createVoid, null,
@@ -41,7 +41,7 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlToJavaTest {
 			name = IOPERATION_RENAME
 		]
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaInterface = claimJavaInterface(INTERFACE_NAME)
 			assertJavaMemberContainerDontHaveMember(javaInterface, IOPERATION_NAME)
 		]
@@ -54,7 +54,7 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlToJavaTest {
 			destroy()
 		]
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaInterface = claimJavaInterface(INTERFACE_NAME)
 			assertJavaMemberContainerDontHaveMember(javaInterface, IOPERATION_NAME)
 		]
@@ -69,7 +69,7 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlToJavaTest {
 		]
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME_2)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaInterface = claimJavaInterface(INTERFACE_NAME)
 			val javaInterface2 = claimJavaInterface(INTERFACE_NAME_2)
 			assertJavaMemberContainerDontHaveMember(javaInterface, IOPERATION_NAME)
@@ -86,7 +86,7 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlToJavaTest {
 			operation.type = model.claimClass(TYPE_CLASS_NAME)
 		]
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaMethod = claimJavaInterface(INTERFACE_NAME).claimInterfaceMethod(IOPERATION_NAME)
 			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
 			assertJavaElementHasTypeRef(javaMethod, createNamespaceClassifierReference(javaTypeClass))

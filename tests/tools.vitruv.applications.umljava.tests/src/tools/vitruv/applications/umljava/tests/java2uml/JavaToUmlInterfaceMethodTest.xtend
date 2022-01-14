@@ -29,7 +29,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	def void testCreateInterfaceMethod() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			val umlOperation = umlInterface.claimOperation(IOPERATION_NAME)
 			assertUmlOperationTraits(umlOperation, IOPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, true,
@@ -40,7 +40,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testRenameInterfaceMethod() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaInterface(INTERFACE_NAME) => [
 				claimInterfaceMethod(IOPERATION_NAME) => [
 					name = IOPERATION_RENAME
@@ -48,7 +48,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			val umlOperation = umlInterface.claimOperation(IOPERATION_RENAME)
 			assertThat(umlOperation.name, is(IOPERATION_RENAME))
@@ -62,13 +62,13 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testDeleteInterfaceMethod() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaInterface(INTERFACE_NAME) => [
 				EcoreUtil.delete(claimInterfaceMethod(IOPERATION_NAME))
 			]
 		]
 		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
 			assertUmlInterfaceDontHaveOperation(umlInterface, IOPERATION_NAME)
 		]
@@ -78,7 +78,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	def void testChangeInterfaceMethodReturnType() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
 		createJavaClassInRootPackage(TYPE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			val typeClass = claimJavaClass(TYPE_NAME)
 			claimJavaInterface(INTERFACE_NAME) => [
 				claimInterfaceMethod(IOPERATION_NAME) => [
@@ -87,7 +87,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlOperation = defaultUmlModel.claimInterface(INTERFACE_NAME).claimOperation(IOPERATION_NAME)
 			val umlTypeClass = defaultUmlModel.claimClass(TYPE_NAME)
 			assertUmlOperationHasReturntype(umlOperation, umlTypeClass)
@@ -98,7 +98,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	def void testCreateInterfaceParameter() {
 		createDefaultInterfaceWithMethod(IOPERATION_NAME)
 		createJavaClassInRootPackage(TYPE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			val typeClass = claimJavaClass(TYPE_NAME)
 			claimJavaInterface(INTERFACE_NAME) => [
 				claimInterfaceMethod(IOPERATION_NAME) => [
@@ -110,7 +110,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 			]
 		]
 		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
-		createUmlView => [
+		validateUmlView [
 			val umlOperation = defaultUmlModel.claimInterface(INTERFACE_NAME).claimOperation(IOPERATION_NAME)
 			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_NAME)
 		]
@@ -118,7 +118,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 
 	private def void createDefaultInterfaceWithMethod(String methodName) {
 		createJavaInterfaceInRootPackage(INTERFACE_NAME)
-		changeView(createJavaClassesView) [
+		changeJavaView [
 			claimJavaInterface(INTERFACE_NAME) => [
 				members += MembersFactory.eINSTANCE.createInterfaceMethod => [
 					name = methodName

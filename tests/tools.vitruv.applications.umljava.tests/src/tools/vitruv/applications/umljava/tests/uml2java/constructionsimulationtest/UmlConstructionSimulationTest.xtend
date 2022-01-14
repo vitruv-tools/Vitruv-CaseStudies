@@ -32,7 +32,7 @@ class UmlConstructionSimulationTest extends AbstractUmlToJavaTest {
 			name = UML_MODEL_NAME
 		]
 		EcoreUtil.resolveAll(model)
-		changeView(createJavaClassesView()) [
+		changeJavaView [
 			createAndRegisterRoot(model, UML_MODEL_NAME.projectModelPath.uri)
 		]
 		for (class : model.packagedElements.filter(org.eclipse.uml2.uml.Class).toList) {

@@ -38,7 +38,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 	def void testCreateClassMethod() {
 		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaClass = claimJavaClass(CLASS_NAME)
 			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
 			assertJavaClassMethodTraits(javaMethod, OPERATION_NAME, JavaVisibility.PUBLIC,
@@ -58,7 +58,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 			operation.type = model.claimClass(TYPE_CLASS_NAME)
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
 			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
 			assertJavaElementHasTypeRef(javaMethod, createNamespaceClassifierReference(javaTypeClass))
@@ -75,7 +75,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 			name = OPERATION_RENAME
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaClass = claimJavaClass(CLASS_NAME)
 			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
 		]
@@ -91,7 +91,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 			destroy()
 		]
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaClass = claimJavaClass(CLASS_NAME)
 			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
 		]
@@ -106,7 +106,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
 		assertClassWithNameInRootPackage(CLASS_NAME_2)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaClass = claimJavaClass(CLASS_NAME)
 			val javaClass2 = claimJavaClass(CLASS_NAME_2)
 			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
@@ -177,7 +177,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 	def void testCreateConstructor() {
 		createClassWithOperation(CLASS_NAME, CLASS_NAME)
 		assertSingleClassWithNameInRootPackage(CLASS_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			claimJavaClass(CLASS_NAME).claimConstructor()
 		]
 	}
@@ -193,7 +193,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
 		assertClassWithNameInRootPackage(CLASS_NAME_2)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaClass = claimJavaClass(CLASS_NAME)
 			val javaClass2 = claimJavaClass(CLASS_NAME_2)
 			javaClass2.claimConstructor()
@@ -219,7 +219,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
 		assertClassWithNameInRootPackage(CLASS_NAME_2)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaClass = claimJavaClass(CLASS_NAME)
 			val javaClass2 = claimJavaClass(CLASS_NAME_2)
 			javaClass2.claimConstructor()
@@ -237,7 +237,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 	def void testCreateMethodInDataType() {
 		createDataTypeWithOperation(DATATYPE_NAME, OPERATION_NAME)
 		assertSingleDataTypeWithNameInRootPackage(DATATYPE_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DATATYPE_NAME)
 			val javaMethod = javaClass.claimClassMethod(OPERATION_NAME)
 			assertJavaClassMethodTraits(javaMethod, OPERATION_NAME, JavaVisibility.PUBLIC,
@@ -260,7 +260,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 			]
 		]
 		assertSingleDataTypeWithNameInRootPackage(DATATYPE_NAME)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DATATYPE_NAME)
 			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)
 		]
@@ -278,7 +278,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 		]
 		assertDataTypeWithNameInRootPackage(DATATYPE_NAME)
 		assertDataTypeWithNameInRootPackage(DATATYPE_NAME_2)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaClass = claimJavaClass(DATATYPE_NAME)
 			val javaClass2 = claimJavaClass(DATATYPE_NAME_2)
 			assertJavaMemberContainerDontHaveMember(javaClass, OPERATION_NAME)

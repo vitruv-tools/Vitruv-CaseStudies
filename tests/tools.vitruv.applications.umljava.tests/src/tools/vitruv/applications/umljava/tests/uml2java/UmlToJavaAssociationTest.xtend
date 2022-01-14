@@ -32,7 +32,7 @@ class UmlToJavaAssociationTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME_1)
 		assertClassWithNameInRootPackage(CLASS_NAME_2)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaAttribute = claimJavaClass(CLASS_NAME_1).claimField(CLASS_NAME_2.toFirstLower)
 			val referencedJavaClass = claimJavaClass(CLASS_NAME_2)
 			assertJavaElementHasTypeRef(javaAttribute, createNamespaceClassifierReference(referencedJavaClass))
@@ -54,7 +54,7 @@ class UmlToJavaAssociationTest extends AbstractUmlToJavaTest {
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME_1)
 		assertClassWithNameInRootPackage(CLASS_NAME_2)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaAttribute = claimJavaClass(CLASS_NAME_1).claimField(CLASS_NAME_2.toFirstLower)
 			val referencedJavaClass = claimJavaClass(CLASS_NAME_2)
 			val arrayListReference = getClassifierFromTypeReference(javaAttribute.typeReference)

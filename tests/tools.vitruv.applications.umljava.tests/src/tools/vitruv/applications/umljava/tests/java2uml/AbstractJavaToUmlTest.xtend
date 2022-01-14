@@ -16,23 +16,20 @@ abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 		userInteraction.onTextInput[message.contains("enter a path for the UML root")].respondWith(MODEL_FOLDER_NAME)
 	}
 
-	private def void createClassifierInCompilationUnit(ConcreteClassifier uninitializedClassifier, List<String> namespace, String classifierName) {
-		createJavaClassesView => [
-			createJavaCompilationUnit[
-				it.namespaces += namespace
-				updateCompilationUnitName(classifierName)
-				classifiers += uninitializedClassifier => [
-					name = classifierName
-				]
+	private def void createClassifierInCompilationUnit(ConcreteClassifier uninitializedClassifier,
+		List<String> namespace, String classifierName) {
+		createJavaCompilationUnit [
+			it.namespaces += namespace
+			updateCompilationUnitName(classifierName)
+			classifiers += uninitializedClassifier => [
+				name = classifierName
 			]
 		]
 	}
-	
+
 	protected def void createJavaPackageInRootPackage(String name) {
-		createJavaPackagesView => [
-			createJavaPackage[
-				it.name = name
-			]
+		createJavaPackage [
+			it.name = name
 		]
 	}
 
