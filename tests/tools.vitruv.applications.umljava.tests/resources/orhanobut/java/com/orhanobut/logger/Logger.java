@@ -43,6 +43,14 @@ public final class Logger {
     printer.resetSettings();
   }
 
+  public static Printer t(String tag) {
+    return printer.t(tag, printer.getSettings().getMethodCount());
+  }
+
+  public static Printer t(int methodCount) {
+    return printer.t(null, methodCount);
+  }
+
   public static Printer t(String tag, int methodCount) {
     return printer.t(tag, methodCount);
   }
@@ -55,6 +63,13 @@ public final class Logger {
     printer.d(message, args);
   }
 
+  public static void d(Object object) {
+    printer.d(object);
+  }
+
+  public static void e(String message, Object... args) {
+    printer.e(null, message, args);
+  }
 
   public static void e(Throwable throwable, String message, Object... args) {
     printer.e(throwable, message, args);

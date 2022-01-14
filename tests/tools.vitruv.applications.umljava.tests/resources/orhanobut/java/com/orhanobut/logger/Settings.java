@@ -57,9 +57,6 @@ public final class Settings {
   }
 
   public LogAdapter getLogAdapter() {
-    if (logAdapter == null) {
-      logAdapter = new AndroidLogAdapter();
-    }
     return logAdapter;
   }
 
