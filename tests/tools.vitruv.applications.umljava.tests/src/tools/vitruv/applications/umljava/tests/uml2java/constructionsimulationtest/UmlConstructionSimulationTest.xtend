@@ -28,7 +28,8 @@ class UmlConstructionSimulationTest extends AbstractUmlToJavaTest {
 	}
 
 	def private void transformUmlModelAndValidateJavaCode(String modelPath) {
-		val model = new ResourceSetImpl().getResource(URI.createFileURI(modelPath), true).firstRootEObject as Model => [
+		val resourceSet = new ResourceSetImpl()
+		val model = resourceSet.getResource(URI.createFileURI(modelPath), true).firstRootEObject as Model => [
 			name = UML_MODEL_NAME
 		]
 		EcoreUtil.resolveAll(model)
@@ -44,5 +45,7 @@ class UmlConstructionSimulationTest extends AbstractUmlToJavaTest {
 		for (enum : model.packagedElements.filter(org.eclipse.uml2.uml.Enumeration).toList) {
 			assertEnumWithNameInRootPackage(enum.name)
 		}
+		resourceSet.resources.forEach[unload()]
+		resourceSet.resources.clear()
 	}
 }
