@@ -21,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.PrimitiveType
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This test class checks the creating, deleting and modifying of attributes in the UML to Java
@@ -224,6 +225,12 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 				]
 			]
 		]
+	}
+
+	static class BidirectionalTest extends UmlToJavaAttributeTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

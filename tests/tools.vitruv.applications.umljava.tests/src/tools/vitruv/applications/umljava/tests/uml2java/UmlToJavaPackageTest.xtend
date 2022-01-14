@@ -15,6 +15,7 @@ import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.params.provider.ValueSource
 import org.junit.jupiter.params.ParameterizedTest
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This test class contains basic test cases for package creation, renaming and deletion.
@@ -122,6 +123,12 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 				]
 			]
 		]
+	}
+
+	static class BidirectionalTest extends UmlToJavaPackageTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

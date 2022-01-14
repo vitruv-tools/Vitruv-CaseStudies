@@ -18,6 +18,7 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getUmlVisibilityKindFromJavaVisibilityConstant
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * A Test class to test classes and their traits.
@@ -300,6 +301,12 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 			assertUmlClassDontHaveImplement(umlClass, umlFirstInterface)
 			assertUmlClassHasImplement(umlClass, umlSecondInterface)
 		]
+	}
+
+	static class BidirectionalTest extends JavaToUmlClassTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

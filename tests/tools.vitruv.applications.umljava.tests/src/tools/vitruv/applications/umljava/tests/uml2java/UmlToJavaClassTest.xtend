@@ -17,6 +17,7 @@ import org.eclipse.uml2.uml.UMLFactory
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This class provides tests for basic class tests in the UML to Java direction
@@ -242,6 +243,12 @@ class UmlToJavaClassTest extends AbstractUmlToJavaTest {
 		assertSingleDataTypeWithNameInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
 		assertNoClassifierWithNameInRootPackage(DEFAULT_CLASS_NAME)
 		assertNoClassifierExistsInRootPackage()
+	}
+
+	static class BidirectionalTest extends UmlToJavaClassTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

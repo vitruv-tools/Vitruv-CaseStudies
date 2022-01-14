@@ -13,6 +13,7 @@ import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.parameters.ParametersFactory
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This class contains test cases for the creation, renaming and deleting of interface methods.
@@ -126,6 +127,12 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
+	}
+
+	static class BidirectionalTest extends JavaToUmlInterfaceMethodTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

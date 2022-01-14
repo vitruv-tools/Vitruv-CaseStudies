@@ -11,6 +11,7 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Model
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This class provides basic tests for creating, deleting and changing traits of interface methods.
@@ -117,6 +118,12 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlToJavaTest {
 				]
 			]
 		]
+	}
+
+	static class BidirectionalTest extends UmlToJavaInterfaceMethodTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

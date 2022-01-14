@@ -9,6 +9,7 @@ import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUt
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import org.eclipse.emf.ecore.util.EcoreUtil
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This class contains basis tests for Java packages.
@@ -110,6 +111,12 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 			assertThat("only one Java package is expected to exist", javaPackages.toSet, is(#{javaPackage}))
 			assertElementsEqual(umlPackage, javaPackage)
 		]
+	}
+
+	static class BidirectionalTest extends JavaToUmlPackageTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

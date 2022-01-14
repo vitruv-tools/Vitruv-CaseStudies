@@ -22,9 +22,9 @@ import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityVal
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.URI
 import org.junit.jupiter.api.BeforeEach
-import tools.vitruv.domains.java.JamoppLibraryHelper
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureUnidirectionalExecution
 
-class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
+abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(
 		UML_MODEL_NAME, [
 			createUmlAndJavaClassesView
@@ -38,10 +38,10 @@ class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	static val MODEL_FOLDER_NAME = "model"
 
 	@BeforeEach
-	def void setupJavaStandardLibrary() {
-		JamoppLibraryHelper.registerStdLib
+	def setupTransformationDirection() {
+		configureUnidirectionalExecution()
 	}
-	
+
 	protected def getDefaultUmlModel(View view) {
 		view.claimUmlModel(UML_MODEL_NAME)
 	}

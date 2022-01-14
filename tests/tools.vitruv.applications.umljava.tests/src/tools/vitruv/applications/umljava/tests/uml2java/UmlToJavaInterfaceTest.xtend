@@ -8,6 +8,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This class contains tests that deal with changes with interfaces.
@@ -126,6 +127,12 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 			assertThat("there must be one super interface", javaInterface.extends.size, is(1))
 			assertElementsEqual(umlSuperInterface2, getClassifierFromTypeReference(javaInterface.extends.get(0)))
 		]
+	}
+
+	static class BidirectionalTest extends UmlToJavaInterfaceTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

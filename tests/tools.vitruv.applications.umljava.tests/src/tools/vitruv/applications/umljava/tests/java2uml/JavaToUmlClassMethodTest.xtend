@@ -21,6 +21,7 @@ import static extension tools.vitruv.applications.util.temporary.java.JavaModifi
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.ParameterizedTest
 import tools.vitruv.framework.vsum.views.View
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * A test class to test the class method reactions.
@@ -101,12 +102,12 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			assertUmlClassDontHaveOperation(umlClass, OPERATION_NAME)
 		]
 	}
-	
+
 	@Test
 	def void testMoveMethod() {
 		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
 		createJavaClassInRootPackage(TYPE_CLASS_NAME)
-		changeClassMethod(CLASS_NAME, OPERATION_NAME) [view, method |
+		changeClassMethod(CLASS_NAME, OPERATION_NAME) [ view, method |
 			view.claimJavaClass(TYPE_CLASS_NAME).members += method
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
@@ -118,7 +119,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			assertUmlClassHasUniqueOperation(umlTypeClass, OPERATION_NAME)
 		]
 	}
-	
+
 	private def void changeAndCheckPropertyOfMethod(String className, String methodName,
 		(org.emftext.language.java.members.ClassMethod)=>void changeJavaMethod,
 		(org.eclipse.uml2.uml.Operation)=>void validateUmlMethod) {
@@ -337,6 +338,12 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
+	}
+
+	static class BidirectionalTest extends JavaToUmlClassMethodTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

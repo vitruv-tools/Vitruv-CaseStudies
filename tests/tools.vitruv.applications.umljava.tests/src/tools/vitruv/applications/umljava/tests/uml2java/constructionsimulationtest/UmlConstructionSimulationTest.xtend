@@ -9,6 +9,7 @@ import org.eclipse.uml2.uml.Model
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.provider.ValueSource
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 class UmlConstructionSimulationTest extends AbstractUmlToJavaTest {
 	static val RESOURCES_FOLDER = "resources/"
@@ -48,4 +49,11 @@ class UmlConstructionSimulationTest extends AbstractUmlToJavaTest {
 		resourceSet.resources.forEach[unload()]
 		resourceSet.resources.clear()
 	}
+
+	static class BidirectionalTest extends UmlConstructionSimulationTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
+	}
+
 }

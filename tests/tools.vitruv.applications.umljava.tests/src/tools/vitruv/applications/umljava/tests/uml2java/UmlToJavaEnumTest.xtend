@@ -11,6 +11,7 @@ import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import org.eclipse.uml2.uml.UMLFactory
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * A Test class for creating, renaming and deleting enumerations.
@@ -155,6 +156,12 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
 				createNamespaceClassifierReference(javaTypeClass), false, false, javaEnum)
 		]
+	}
+
+	static class BidirectionalTest extends UmlToJavaEnumTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

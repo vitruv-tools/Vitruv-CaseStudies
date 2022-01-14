@@ -22,6 +22,7 @@ import static org.hamcrest.CoreMatchers.*
 import static tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.loadUmlPrimitiveType
 import org.emftext.language.java.JavaClasspath
 import org.emftext.language.java.classifiers.ConcreteClassifier
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * Test class for testing the attribute reactions.
@@ -265,6 +266,12 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 				]
 			]
 		]
+	}
+
+	static class BidirectionalTest extends JavaToUmlAttributeTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

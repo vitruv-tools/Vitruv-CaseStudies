@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.ParameterizedTest
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
 import org.emftext.language.java.statements.StatementsFactory
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * A test class to test class methods and its traits.
@@ -115,7 +116,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 				javaClass2.getMembersByName(OPERATION_NAME).toSet, is(not(emptySet)))
 		]
 	}
-	
+
 	@Test
 	def void testMoveMethodWithImplementation() {
 		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
@@ -127,7 +128,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 				]
 			]
 		]
-		changeMethod(CLASS_NAME, OPERATION_NAME) [model, method |
+		changeMethod(CLASS_NAME, OPERATION_NAME) [ model, method |
 			model.claimClass(CLASS_NAME_2).ownedOperations += method
 		]
 		assertClassWithNameInRootPackage(CLASS_NAME)
@@ -135,12 +136,12 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 		validateJavaView [
 			claimJavaClass(CLASS_NAME_2) => [
 				claimClassMethod(OPERATION_NAME) => [
-					assertThat("there has to be a return statement from moving the method", statements, not(is(emptyList)))
+					assertThat("there has to be a return statement from moving the method", statements,
+						not(is(emptyList)))
 				]
 			]
 		]
 	}
-	
 
 	/**
 	 * Tests if setting a method static correctly reflected on the Java side.
@@ -356,6 +357,12 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 			val javaMethod = claimJavaClass(className).claimClassMethod(methodName)
 			validateJavaMethod.apply(javaMethod)
 		]
+	}
+
+	static class BidirectionalTest extends UmlToJavaClassMethodTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

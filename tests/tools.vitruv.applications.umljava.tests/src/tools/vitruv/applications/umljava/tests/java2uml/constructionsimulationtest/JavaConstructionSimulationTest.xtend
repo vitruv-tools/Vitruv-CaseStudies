@@ -39,6 +39,7 @@ import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util
 import static tools.vitruv.domains.java.JamoppLibraryHelper.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.AfterEach
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * Test class for the reconstruction of existing java models
@@ -329,6 +330,12 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 					implementations.clear()
 				}
 			}
+		}
+	}
+
+	static class BidirectionalTest extends JavaConstructionSimulationTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
 		}
 	}
 

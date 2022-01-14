@@ -12,6 +12,7 @@ import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUti
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This test class contains basic tests for associations.
@@ -62,6 +63,12 @@ class UmlToJavaAssociationTest extends AbstractUmlToJavaTest {
 			val innerTypeRef = getInnerTypeReferenceOfCollectionTypeReference(javaAttribute.typeReference)
 			assertTypeEquals(createNamespaceClassifierReference(referencedJavaClass), innerTypeRef)
 		]
+	}
+
+	static class BidirectionalTest extends UmlToJavaAssociationTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

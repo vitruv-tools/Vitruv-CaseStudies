@@ -11,6 +11,7 @@ import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.eclipse.uml2.uml.Model
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This class tests the change of parameter traits.
@@ -119,6 +120,12 @@ class UmlToJavaParameterTest extends AbstractUmlToJavaTest {
 				]
 			]
 		]
+	}
+
+	static class BidirectionalTest extends UmlToJavaParameterTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

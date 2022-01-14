@@ -16,6 +16,7 @@ import org.eclipse.uml2.uml.UMLFactory
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 
 /**
  * This class contains Tests for creating, deleting and renaming enumerations.
@@ -195,6 +196,12 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 				false, umlEnum, null, null)
 			assertElementsEqual(umlAttribute, javaField)
 		]
+	}
+
+	static class BidirectionalTest extends JavaToUmlEnumTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }
