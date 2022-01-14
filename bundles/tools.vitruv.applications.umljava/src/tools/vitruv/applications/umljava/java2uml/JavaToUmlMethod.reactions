@@ -26,10 +26,13 @@ import routines javaToUmlTypePropagation using qualified names
 //===========================================
 
 reaction JavaClassMethodCreated {
-    after element java::ClassMethod created and inserted in java::ConcreteClassifier[members]
+    after element java::ClassMethod inserted in java::ConcreteClassifier[members]
     with (affectedEObject instanceof Class)
         || (affectedEObject instanceof Enumeration)
-    call createOrFindUmlClassMethod(newValue, affectedEObject)
+    call {
+    	createOrFindUmlClassMethod(newValue, affectedEObject)
+    	insertUmlMethod(newValue, affectedEObject)
+    }
 }
 
 routine createOrFindUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClassifier jClassifier) {
@@ -63,15 +66,15 @@ routine createUmlClassMethod(java::ClassMethod jMethod, uml::Classifier uClassif
             uOperation.visibility = getUmlVisibilityKindFromJavaElement(jMethod)
         }
         add correspondence between uOperation and jMethod
-        update uClassifier {
-            (uClassifier as OperationOwner).ownedOperations += uOperation
-        }
     }
 }
 
 reaction JavaInterfaceMethodCreated {
-    after element java::InterfaceMethod created and inserted in java::Interface[members]
-    call createOrFindUmlInterfaceMethod(newValue, affectedEObject)
+    after element java::InterfaceMethod inserted in java::Interface[members]
+    call {
+    	createOrFindUmlInterfaceMethod(newValue, affectedEObject)
+    	insertUmlMethod(newValue, affectedEObject)
+    }
 }
 
 routine createOrFindUmlInterfaceMethod(java::InterfaceMethod jMethod, java::Interface jInterface) {
@@ -102,9 +105,6 @@ routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, uml::Interface uIn
             uOperation.isAbstract = true;
         }
         add correspondence between uOperation and jMeth
-        update uInterface {
-            uInterface.ownedOperations += uOperation;
-        }
     }
 }
 
@@ -116,8 +116,11 @@ routine addUmlMethodCorrespondence(uml::Operation uOperation, java::Member jMeth
 }
 
 reaction JavaConstructorCreated {
-    after element java::Constructor created and inserted in java::ConcreteClassifier[members]
-    call createOrFindUmlConstructor(newValue, affectedEObject)
+    after element java::Constructor inserted in java::ConcreteClassifier[members]
+    call {
+    	createOrFindUmlConstructor(newValue, affectedEObject)
+    	insertUmlMethod(newValue, affectedEObject)
+    }
 }
 
 routine createOrFindUmlConstructor(java::Constructor jConstructor, java::ConcreteClassifier jClassifier) {
@@ -144,8 +147,17 @@ routine createUmlConstructor(java::Constructor jConstructor, uml::Class uClassif
             uConstructor.visibility = getUmlVisibilityKindFromJavaElement(jConstructor)
         }
         add correspondence between uConstructor and jConstructor
-        update uClassifier {
-            uClassifier.ownedOperations += uConstructor;
+    }
+}
+
+routine insertUmlMethod(java::Member javaMethod, java::ConcreteClassifier javaClassifier) {
+    match {
+        val umlMethod = retrieve uml::Operation corresponding to javaMethod 
+        val umlClassifier = retrieve uml::Classifier corresponding to javaClassifier
+    }
+    action {
+        update umlClassifier {
+            (umlClassifier as OperationOwner).ownedOperations += umlMethod
         }
     }
 }
