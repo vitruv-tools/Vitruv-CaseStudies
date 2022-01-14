@@ -14,6 +14,7 @@ import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelpe
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static com.google.common.base.Preconditions.checkState
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import java.util.ArrayList
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -507,15 +508,25 @@ routine createUmlPackage(java::Package jPackage, uml::Model uModel) {
 
 reaction JavaPackageDeleted {
     after element java::Package deleted and removed as root
-    call deleteUmlPackage(oldValue)
+    call deleteCorrespondingUmlPackage(oldValue)
 }
 
-routine deleteUmlPackage(java::Package jPackage) {
+routine deleteCorrespondingUmlPackage(java::Package jPackage) {
     match {
         val uPackage = retrieve uml::Package corresponding to jPackage
     }
     action {
-        delete uPackage
+    	call deleteUmlPackage(uPackage)
+    }
+}
+
+routine deleteUmlPackage(uml::Package umlPackage) {
+    action {
+    	call {
+    		val nestedPackages = new ArrayList(umlPackage.nestedPackages)
+    		nestedPackages.forEach[deleteUmlPackage()]
+    	}
+        delete umlPackage
     }
 }
 
