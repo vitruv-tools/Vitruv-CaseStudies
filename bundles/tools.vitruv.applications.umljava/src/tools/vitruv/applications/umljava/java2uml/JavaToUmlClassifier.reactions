@@ -460,9 +460,21 @@ routine createOrFindUmlPackage(java::Package jPackage) {
 			if(uPackage === null) {
 				createUmlPackage(jPackage, uModel)
 			} else {
+				// Existing package was created again, so delete the old one to ensure
+				// that no duplicate elements and correspondences exist
+				deleteExistingJavaPackage(uPackage)
 				addPackageCorrespondence(jPackage, uPackage)
 			}
 		}
+	}
+}
+
+routine deleteExistingJavaPackage(uml::Package umlPackage) {
+	match {
+		val javaPackage = retrieve java::Package corresponding to umlPackage
+	}
+	action {
+		delete javaPackage
 	}
 }
 
