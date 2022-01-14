@@ -44,6 +44,7 @@ import org.eclipse.xtend.lib.annotations.Delegate
  * Test class for the reconstruction of existing java models
  */
 val LOGGER = Logger.getLogger(JavaConstructionSimulationTest)
+	static val LOGGER = Logger.getLogger(JavaConstructionSimulationTest)
 
 	@BeforeAll
 	static def void registerJavaFactoriesSupportingArrays() {
