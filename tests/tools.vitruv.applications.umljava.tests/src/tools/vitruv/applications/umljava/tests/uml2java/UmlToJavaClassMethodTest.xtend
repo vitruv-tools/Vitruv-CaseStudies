@@ -325,7 +325,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 			changeUmlMethod.apply(it)
 		]
 		assertSingleClassWithNameInRootPackage(className)
-		createJavaClassesView => [
+		validateJavaView [
 			val javaMethod = claimJavaClass(className).claimClassMethod(methodName)
 			validateJavaMethod.apply(javaMethod)
 		]

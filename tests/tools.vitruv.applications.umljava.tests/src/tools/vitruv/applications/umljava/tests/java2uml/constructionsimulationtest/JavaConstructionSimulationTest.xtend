@@ -37,13 +37,11 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.expressions.Expression
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
 import static tools.vitruv.domains.java.JamoppLibraryHelper.*
-import tools.vitruv.applications.umljava.tests.TransformationDirectionConfiguration
-import org.eclipse.xtend.lib.annotations.Delegate
 
 /**
  * Test class for the reconstruction of existing java models
  */
-val LOGGER = Logger.getLogger(JavaConstructionSimulationTest)
+class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 	static val LOGGER = Logger.getLogger(JavaConstructionSimulationTest)
 
 	@BeforeAll
