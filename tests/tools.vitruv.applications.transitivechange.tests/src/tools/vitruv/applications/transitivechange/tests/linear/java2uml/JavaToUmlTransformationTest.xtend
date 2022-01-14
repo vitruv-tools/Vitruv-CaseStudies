@@ -6,7 +6,7 @@ import org.emftext.language.java.classifiers.Interface
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.members.Field
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
-import tools.vitruv.applications.umljava.tests.util.AbstractUmlJavaTest
+import tools.vitruv.applications.transitivechange.tests.util.AbstractUmlJavaTest
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Property
 import java.util.List
