@@ -6,7 +6,6 @@ import org.emftext.language.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
@@ -19,6 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
 import org.emftext.language.java.statements.StatementsFactory
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
  * A test class to test class methods and its traits.

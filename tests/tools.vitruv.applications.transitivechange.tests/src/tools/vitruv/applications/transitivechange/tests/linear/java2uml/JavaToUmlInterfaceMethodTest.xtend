@@ -1,8 +1,6 @@
 package tools.vitruv.applications.transitivechange.tests.linear.java2uml
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import org.junit.jupiter.api.Test
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -11,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This class contains test cases for the creation, renaming and deleting of interface methods.

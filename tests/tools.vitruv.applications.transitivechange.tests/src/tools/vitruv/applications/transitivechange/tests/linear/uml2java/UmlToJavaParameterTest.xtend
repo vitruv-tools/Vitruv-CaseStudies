@@ -8,8 +8,6 @@ import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
@@ -19,6 +17,8 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.loadUmlPrimitiveType
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This class tests the change of parameter traits.

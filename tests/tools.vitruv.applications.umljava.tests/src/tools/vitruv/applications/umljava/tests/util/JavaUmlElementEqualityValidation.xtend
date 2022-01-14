@@ -28,8 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
@@ -45,14 +43,16 @@ import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.DataType
 import org.emftext.language.java.parameters.VariableLengthParameter
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
  * Utility class for assertions that works bidirectional.
  */
 @Utility
-class TestUtil {
+class JavaUmlElementEqualityValidation {
 
-	static val logger = Logger.getLogger(TestUtil)
+	static val logger = Logger.getLogger(JavaUmlElementEqualityValidation)
 
 	// **************
 	// PACKAGES

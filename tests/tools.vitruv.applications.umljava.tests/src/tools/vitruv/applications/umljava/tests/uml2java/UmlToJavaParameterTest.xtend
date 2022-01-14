@@ -4,7 +4,6 @@ import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.emftext.language.java.types.TypesFactory
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import org.junit.jupiter.api.Test
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
@@ -12,6 +11,7 @@ import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUti
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.eclipse.uml2.uml.Model
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
  * This class tests the change of parameter traits.

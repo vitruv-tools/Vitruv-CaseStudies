@@ -3,7 +3,6 @@ package tools.vitruv.applications.transitivechange.tests.linear.uml2java
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.VisibilityKind
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.buildJavaFilePath
 import org.junit.jupiter.api.BeforeEach
@@ -16,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import java.nio.file.Path
 import org.emftext.language.java.containers.ContainersFactory
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This test class contains basic test cases for package creation, renaming and deletion.

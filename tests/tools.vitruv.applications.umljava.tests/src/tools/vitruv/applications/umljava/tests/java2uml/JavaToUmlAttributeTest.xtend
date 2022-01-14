@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 
@@ -23,6 +22,7 @@ import static tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.loadUmlP
 import org.emftext.language.java.JavaClasspath
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 
 /**
  * Test class for testing the attribute reactions.

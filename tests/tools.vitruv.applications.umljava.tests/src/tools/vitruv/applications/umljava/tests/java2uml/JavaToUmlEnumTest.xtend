@@ -5,8 +5,6 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
@@ -17,6 +15,8 @@ import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.assertElementsEqual
 
 /**
  * This class contains Tests for creating, deleting and renaming enumerations.

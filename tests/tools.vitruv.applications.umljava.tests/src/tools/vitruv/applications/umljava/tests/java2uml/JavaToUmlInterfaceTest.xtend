@@ -4,13 +4,13 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 
 /**
  * A Test class for interface tests. Checks their creation, renaming, deleting and the 

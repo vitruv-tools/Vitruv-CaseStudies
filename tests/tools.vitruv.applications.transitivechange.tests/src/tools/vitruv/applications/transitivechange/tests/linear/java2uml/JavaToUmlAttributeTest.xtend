@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
@@ -21,6 +19,8 @@ import org.junit.jupiter.api.BeforeEach
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * Test class for testing the attribute reactions.

@@ -5,10 +5,10 @@ import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.is
 
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.assertElementsEqual
 
 /**
  * This class contains tests that deal with changes with interfaces.

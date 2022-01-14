@@ -4,7 +4,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
@@ -19,6 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getUmlVisibilityKindFromJavaVisibilityConstant
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 
 /**
  * A Test class to test classes and their traits.

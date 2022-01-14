@@ -2,7 +2,6 @@ package tools.vitruv.applications.umljava.tests.uml2java
 
 import org.eclipse.uml2.uml.VisibilityKind
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getClassifierFromTypeReference
 import org.junit.jupiter.api.Test
 
@@ -18,6 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
  * This class provides tests for basic class tests in the UML to Java direction

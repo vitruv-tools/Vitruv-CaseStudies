@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -18,6 +16,8 @@ import org.junit.jupiter.api.BeforeEach
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * A test class to test the class method reactions.

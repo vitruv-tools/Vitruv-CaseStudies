@@ -4,7 +4,6 @@ import tools.vitruv.framework.vsum.views.View
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.assertElementsEqual
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
@@ -15,6 +14,7 @@ import org.eclipse.emf.common.util.URI
 import java.nio.file.Path
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.isInExistingLibrary
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.assertElementsEqual
 
 /**
  * This class provides validations for the equal existence of classifiers of different types to exist

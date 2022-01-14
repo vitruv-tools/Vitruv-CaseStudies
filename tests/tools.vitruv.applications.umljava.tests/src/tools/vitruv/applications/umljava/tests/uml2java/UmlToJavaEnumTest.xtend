@@ -4,7 +4,6 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import org.junit.jupiter.api.Test
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
@@ -12,6 +11,7 @@ import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUt
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import org.eclipse.uml2.uml.UMLFactory
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
  * A Test class for creating, renaming and deleting enumerations.

@@ -4,8 +4,6 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getClassifierFromTypeReference
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import org.junit.jupiter.api.BeforeEach
@@ -15,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This class provides tests for basic class tests in the uml to java direction

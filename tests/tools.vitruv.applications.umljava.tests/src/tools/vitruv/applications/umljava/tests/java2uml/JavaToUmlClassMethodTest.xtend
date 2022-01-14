@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
@@ -22,6 +21,7 @@ import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.ParameterizedTest
 import tools.vitruv.framework.vsum.views.View
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 
 /**
  * A test class to test the class method reactions.

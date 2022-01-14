@@ -2,7 +2,6 @@ package tools.vitruv.applications.umljava.tests.uml2java
 
 import org.eclipse.uml2.uml.VisibilityKind
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
@@ -16,6 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.params.provider.ValueSource
 import org.junit.jupiter.params.ParameterizedTest
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This test class contains basic test cases for package creation, renaming and deletion.

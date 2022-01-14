@@ -3,7 +3,6 @@ package tools.vitruv.applications.umljava.tests.uml2java
 import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
@@ -13,6 +12,7 @@ import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUt
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
  * This test class contains basic tests for associations.

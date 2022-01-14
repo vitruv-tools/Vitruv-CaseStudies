@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umljava.tests.java2uml
 
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import org.junit.jupiter.api.Test
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -14,6 +13,7 @@ import org.emftext.language.java.parameters.ParametersFactory
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 
 /**
  * This class contains test cases for the creation, renaming and deleting of interface methods.

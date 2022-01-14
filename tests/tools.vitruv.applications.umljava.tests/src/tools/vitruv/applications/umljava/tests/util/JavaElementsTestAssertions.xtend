@@ -37,7 +37,7 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
  * Utility class for assertions that only involves java elements.
  */
 @Utility
-class JavaTestUtil {
+class JavaElementsTestAssertions {
 
 	/**
 	 * Asserts that the given Java class has the given traits.

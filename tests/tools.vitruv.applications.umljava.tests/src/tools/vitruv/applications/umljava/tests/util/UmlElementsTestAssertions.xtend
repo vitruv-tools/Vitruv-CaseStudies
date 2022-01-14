@@ -40,7 +40,7 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
  * @author Fei
  */
 @Utility
-class UmlTestUtil {
+class UmlElementsTestAssertions {
 
 	/**
 	 * Asserts that the given class has the given traits. Does not check operations/attributes of the class.

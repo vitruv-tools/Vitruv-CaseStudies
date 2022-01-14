@@ -6,8 +6,6 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
@@ -19,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * A Test class to test classes and their traits.
