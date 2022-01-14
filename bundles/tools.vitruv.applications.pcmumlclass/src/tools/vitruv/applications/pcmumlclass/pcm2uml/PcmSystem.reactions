@@ -48,7 +48,8 @@ routine createOrFindCorrespondingSystemPackage(pcm::System pcmSystem) {
 	}
 	action {
 		call {
-			val foundPackage = findUmlPackage(umlModel, pcmSystem.entityName.toFirstLower)
+			var foundPackage = findUmlPackage(umlModel, pcmSystem.entityName.toFirstLower)
+			if (foundPackage === null) foundPackage = findUmlPackage(umlModel, pcmSystem.entityName.toFirstUpper)
 			if(foundPackage === null) {
 				createCorrespondingSystemPackage(pcmSystem, umlModel)
 			} else {

@@ -44,7 +44,7 @@ routine detectOrCreateCorrespondingComponentPackage(pcm::RepositoryComponent pcm
 	action {
 		call {
 			if (!umlComponentPackage.isPresent) {
-				val umlComponentPackageCandidate = umlRepositoryPackage.nestedPackages.findFirst[it.name == pcmComponent.entityName.toFirstLower]
+				val umlComponentPackageCandidate = umlRepositoryPackage.nestedPackages.findFirst[it.name.toFirstLower == pcmComponent.entityName.toFirstLower]
 				if (umlComponentPackageCandidate !== null) {
 					addCorrespondenceForExistingComponentPackage(pcmComponent, umlComponentPackageCandidate)
 				} else { 

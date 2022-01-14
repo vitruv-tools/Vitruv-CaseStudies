@@ -52,7 +52,8 @@ routine createOrFindUmlRepositoryPackage(pcm::Repository pcmRepo) {
 	}
 	action {
 		call {
-			val umlPackage = findUmlPackage(umlModel, pcmRepo.entityName.toFirstLower)
+			var umlPackage = findUmlPackage(umlModel, pcmRepo.entityName.toFirstLower)
+			if (umlPackage === null) umlPackage = findUmlPackage(umlModel, pcmRepo.entityName.toFirstUpper)
 			if(umlPackage === null) {
 				createUmlRepositoryPackage(pcmRepo)
 			} else {
@@ -126,7 +127,7 @@ routine changeNameOfCorrespondingRepositoryPackage(pcm::Repository pcmRepo) {
 	}
 	action {
 		update umlRepositoryPkg {
-			if (umlRepositoryPkg.name != pcmRepo.entityName.toFirstLower)
+			if (umlRepositoryPkg.name.toFirstLower != pcmRepo.entityName.toFirstLower)
 				umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower
 		}
 	}

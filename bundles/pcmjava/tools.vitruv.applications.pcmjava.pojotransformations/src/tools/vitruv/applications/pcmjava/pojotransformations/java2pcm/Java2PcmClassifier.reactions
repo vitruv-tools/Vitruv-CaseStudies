@@ -122,7 +122,7 @@ routine createOrFindRepository(java::Package javaPackage, String packageName, St
 		require absence of pcm::Repository corresponding to javaPackage tagged with newTag
 		require absence of pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
 		val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
-			with foundRepository.entityName.toFirstLower == packageName // PCM repositories can be both upper and lower case
+			with foundRepository.entityName.toFirstLower == packageName.toFirstLower // PCM repositories and Java packages can be both upper and lower case
 	}
 	action {
 		call {
@@ -182,7 +182,7 @@ routine createOrFindSystem(java::Package javaPackage, String name) {
 	 match {
 		require absence of pcm::System corresponding to javaPackage
 		val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM
-			with foundSystem.entityName.toFirstLower == javaPackage.name // PCM systems can be both upper and lower case
+			with foundSystem.entityName.toFirstLower == javaPackage.name.toFirstLower // PCM systems and Java packagescan be both upper and lower case
 	}
 	action {
 		call {

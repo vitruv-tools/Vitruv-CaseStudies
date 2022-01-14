@@ -75,7 +75,7 @@ routine detectOrCreateCorrespondingRepositoryComponent(uml::Package umlPkg, uml:
 	}
 	action {
 		call {
-			val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[entityName.toFirstLower == umlPkg.name]
+			val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[entityName.toFirstLower == umlPkg.name.toFirstLower]
 			if (pcmComponentCandidate === null) {
 				userDisambiguateCorrespondingRepositoryComponentType(umlPkg, umlParentPkg)
 			} else {
