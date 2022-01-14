@@ -37,12 +37,28 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.expressions.Expression
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
 import static tools.vitruv.domains.java.JamoppLibraryHelper.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterEach
 
 /**
  * Test class for the reconstruction of existing java models
  */
 class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 	static val LOGGER = Logger.getLogger(JavaConstructionSimulationTest)
+
+	var ResourceSet resourceSetForLoading
+
+	@BeforeEach
+	def void prepareResourceSet() {
+		resourceSetForLoading = new ResourceSetImpl().withGlobalFactories
+		resourceSetForLoading.loadOptions += Map.of(IJavaOptions.DISABLE_LAYOUT_INFORMATION_RECORDING, true)
+	}
+
+	@AfterEach
+	def void cleanupResourceSet() {
+		resourceSetForLoading.resources.forEach[unload()]
+		resourceSetForLoading.resources.clear()
+	}
 
 	@BeforeAll
 	static def void registerJavaFactoriesSupportingArrays() {
@@ -164,12 +180,10 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 	}
 
 	private def Iterable<EObject> loadRootObjects(Iterable<File> javaFiles) {
-		val originalResourceSet = new ResourceSetImpl().withGlobalFactories
-		originalResourceSet.loadOptions += Map.of(IJavaOptions.DISABLE_LAYOUT_INFORMATION_RECORDING, true)
 		LOGGER.debug("Loading models")
 		val javaRoots = javaFiles.flatMapFixed [ file |
 			LOGGER.trace("Loading model " + file.path)
-			val contents = originalResourceSet.getResource(createFileURI(file.absolutePath), true).contents
+			val contents = resourceSetForLoading.getResource(createFileURI(file.absolutePath), true).contents
 			if (!file.isPackageInfoFile) {
 				assertThat(contents.head, instanceOf(CompilationUnit))
 			} else if (file.isPackageInfoFile) {
@@ -178,7 +192,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 			contents
 		]
 		LOGGER.debug("Resolving proxies")
-		validateNoProxies(originalResourceSet)
+		validateNoProxies(resourceSetForLoading)
 		return javaRoots
 	}
 

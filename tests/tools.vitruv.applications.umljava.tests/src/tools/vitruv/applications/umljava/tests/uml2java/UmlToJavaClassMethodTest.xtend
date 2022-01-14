@@ -17,6 +17,7 @@ import org.emftext.language.java.members.ClassMethod
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.ParameterizedTest
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
+import org.emftext.language.java.statements.StatementsFactory
 
 /**
  * A test class to test class methods and its traits.
