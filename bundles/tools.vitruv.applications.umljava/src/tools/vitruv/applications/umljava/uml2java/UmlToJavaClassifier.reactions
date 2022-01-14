@@ -18,6 +18,7 @@ import static extension tools.vitruv.applications.util.temporary.uml.UmlClassifi
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static java.util.List.copyOf
+import java.util.ArrayList
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -518,6 +519,22 @@ routine checkIfUmlModelCorrespondenceExists(uml::Model newModel) {
 		add correspondence between UMLPackage.Literals.MODEL and newModel
 	}
 }
+
+reaction UmlModelRemoved {
+	after element uml::Model removed as root
+	call removeUmlModel(oldValue)
+}
+
+routine removeUmlModel(uml::Model removedModel) {
+	action {
+		call {
+			val rootPackages = new ArrayList(removedModel.nestedPackages)
+			rootPackages.forEach[deleteJavaPackage()]
+		}
+		remove correspondence between UMLPackage.Literals.MODEL and removedModel
+	}
+}
+
 
 reaction UmlPackageInserted {
 	after element uml::Package inserted in uml::Package[packagedElement]
