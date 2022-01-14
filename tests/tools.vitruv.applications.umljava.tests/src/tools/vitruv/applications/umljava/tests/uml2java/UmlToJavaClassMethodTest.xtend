@@ -114,6 +114,32 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 				javaClass2.getMembersByName(OPERATION_NAME).toSet, is(not(emptySet)))
 		]
 	}
+	
+	@Test
+	def void testMoveMethodWithImplementation() {
+		createClassWithOperation(CLASS_NAME, OPERATION_NAME)
+		createClassInRootPackage(CLASS_NAME_2)
+		changeJavaView [
+			claimJavaClass(CLASS_NAME) => [
+				claimClassMethod(OPERATION_NAME) => [
+					statements += StatementsFactory.eINSTANCE.createReturn
+				]
+			]
+		]
+		changeMethod(CLASS_NAME, OPERATION_NAME) [model, method |
+			model.claimClass(CLASS_NAME_2).ownedOperations += method
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		assertClassWithNameInRootPackage(CLASS_NAME_2)
+		validateJavaView [
+			claimJavaClass(CLASS_NAME_2) => [
+				claimClassMethod(OPERATION_NAME) => [
+					assertThat("there has to be a return statement from moving the method", statements, not(is(emptyList)))
+				]
+			]
+		]
+	}
+	
 
 	/**
 	 * Tests if setting a method static correctly reflected on the Java side.

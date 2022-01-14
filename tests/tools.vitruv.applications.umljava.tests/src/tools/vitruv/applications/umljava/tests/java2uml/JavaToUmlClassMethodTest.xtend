@@ -101,7 +101,24 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 			assertUmlClassDontHaveOperation(umlClass, OPERATION_NAME)
 		]
 	}
-
+	
+	@Test
+	def void testMoveMethod() {
+		createJavaClassWithMethod(CLASS_NAME, OPERATION_NAME)
+		createJavaClassInRootPackage(TYPE_CLASS_NAME)
+		changeClassMethod(CLASS_NAME, OPERATION_NAME) [view, method |
+			view.claimJavaClass(TYPE_CLASS_NAME).members += method
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		assertClassWithNameInRootPackage(TYPE_CLASS_NAME)
+		validateUmlView [
+			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+			assertUmlClassDontHaveOperation(umlClass, OPERATION_NAME)
+			val umlTypeClass = defaultUmlModel.claimClass(TYPE_CLASS_NAME)
+			assertUmlClassHasUniqueOperation(umlTypeClass, OPERATION_NAME)
+		]
+	}
+	
 	private def void changeAndCheckPropertyOfMethod(String className, String methodName,
 		(org.emftext.language.java.members.ClassMethod)=>void changeJavaMethod,
 		(org.eclipse.uml2.uml.Operation)=>void validateUmlMethod) {
