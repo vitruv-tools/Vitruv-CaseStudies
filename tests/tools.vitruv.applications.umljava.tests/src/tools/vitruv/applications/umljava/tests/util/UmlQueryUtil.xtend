@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
 import org.eclipse.uml2.uml.Parameter
 
-// TODO HK These have to finally replace the old utilities
 @Utility
 class UmlQueryUtil {
 	static def loadUmlPrimitiveType(String name) {

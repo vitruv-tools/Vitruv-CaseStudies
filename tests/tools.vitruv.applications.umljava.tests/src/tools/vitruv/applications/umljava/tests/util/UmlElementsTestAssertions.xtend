@@ -35,16 +35,13 @@ import static org.junit.jupiter.api.Assertions.fail
 import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
- * Class for assertions that only involves uml elements.
- * 
- * @author Fei
+ * Class for assertions that only involves UML elements.
  */
 @Utility
 class UmlElementsTestAssertions {
 
 	/**
 	 * Asserts that the given class has the given traits. Does not check operations/attributes of the class.
-	 * 
 	 */
 	def static void assertUmlClassTraits(Class uClass, String name, VisibilityKind visibility, boolean isAbstract,
 		boolean isFinal, Package uPackage) {
@@ -57,7 +54,6 @@ class UmlElementsTestAssertions {
 
 	/**
 	 * Asserts that the given interface has the given traits. Does not check operations/attributes of the interface.
-	 * 
 	 */
 	def static void assertUmlInterfaceTraits(Interface uInterface, String name, VisibilityKind visibility,
 		Package uPackage) {
@@ -69,7 +65,6 @@ class UmlElementsTestAssertions {
 	/**
 	 * Asserts that the given enum has the given traits. Does not check operations/attributes of the enum.
 	 * But it checks the enum literals if they are pairwise corresponding  to the given literals list (by name)
-	 * 
 	 */
 	def static void assertUmlEnumTraits(Enumeration uEnum, String name, VisibilityKind visibility, boolean isAbstract,
 		boolean isFinal, Package uPackage, List<EnumerationLiteral> enumLiteralList) {
@@ -81,7 +76,6 @@ class UmlElementsTestAssertions {
 
 	/**
 	 * Asserts that the given property has the given traits.
-	 * 
 	 */
 	def static void assertUmlPropertyTraits(Property uProperty, String name, VisibilityKind visibility, Type type,
 		boolean isStatic, boolean isFinal, Classifier containingClassifier, ValueSpecification lowerMultiplicity,
@@ -99,7 +93,6 @@ class UmlElementsTestAssertions {
 
 	/**
 	 * Asserts that the given operation has the given traits.
-	 * 
 	 */
 	def static void assertUmlOperationTraits(Operation uOperation, String name, VisibilityKind visibility,
 		Type returntype, boolean isStatic, boolean isAbstract, Classifier containingClassifier,
@@ -116,7 +109,6 @@ class UmlElementsTestAssertions {
 
 	/**
 	 * Asserts that the given parameter has the given traits.
-	 * 
 	 */
 	def static void assertUmlParameterTraits(Parameter uParam, String name, Type type) {
 		assertEquals(name, uParam.name, "Parameter name is not as expected")
@@ -126,7 +118,6 @@ class UmlElementsTestAssertions {
 	/**
 	 * Asserts that the two given lists contain enum literals that correspond pairwise 
 	 * by comparing their name
-	 * 
 	 */
 	def static void assertUmlEnumLiteralListEquals(List<EnumerationLiteral> expectedList,
 		List<EnumerationLiteral> actualList) {
@@ -150,7 +141,6 @@ class UmlElementsTestAssertions {
 	/**
 	 * Asserts that the two given lists contain parameters that correspond pairwise 
 	 * by comparing their name
-	 * 
 	 */
 	def static void assertUmlParameterListEquals(List<Parameter> expectedList, List<Parameter> actualList) {
 		if (expectedList.nullOrEmpty) {

@@ -18,7 +18,6 @@ import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.members.Constructor
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.isInExistingLibrary
 
-// TODO HK These have to finally replace the old utilities
 @Utility
 class JavaQueryUtil {
 	static def getJavaCompilationUnits(View view) {
