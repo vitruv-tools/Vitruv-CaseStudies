@@ -28,7 +28,7 @@ import tools.vitruv.domains.java.JamoppLibraryHelper
 
 abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(
-		UML_MODEL_NAME, [viewApplication |
+		UML_MODEL_NAME, [ viewApplication |
 			validateUmlAndJavaClassesView [
 				viewApplication.apply(it)
 			]
@@ -94,19 +94,19 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 		view.moveRoot(rootElement, Path.of(buildJavaFilePath(rootElement)).uri)
 	}
 
-	protected def View createUmlView() {
+	private def View createUmlView() {
 		createViewOfElements("UML", #{Model})
 	}
 
-	protected def View createJavaView() {
+	private def View createJavaView() {
 		createViewOfElements("Java packages and classes", #{Package, CompilationUnit})
 	}
 
-	protected def View createUmlAndJavaClassesView() {
+	private def View createUmlAndJavaClassesView() {
 		createViewOfElements("UML and Java classes", #{CompilationUnit, Model})
 	}
 
-	protected def View createUmlAndJavaPackagesView() {
+	private def View createUmlAndJavaPackagesView() {
 		createViewOfElements("UML and Java packages", #{Package, Model})
 	}
 
@@ -125,18 +125,26 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 	 * Changes the given view according to the given modification function, commits the performed changes
 	 * and closes the view afterwards.
 	 */
-	protected def void changeView(View view, (View)=>void modelModification) {
+	private def void changeView(View view, (View)=>void modelModification) {
 		modelModification.apply(view)
 		view.commitChanges()
 		view.close()
 	}
 
+	/**
+	 * Changes the UML view containing all UML models as root elements according to the given modification 
+	 * function, commits the performed changes and closes the view afterwards.
+	 */
 	protected def void changeUmlView((View)=>void modelModification) {
 		changeView(createUmlView) [
 			modelModification.apply(it)
 		]
 	}
 
+	/**
+	 * Changes the Java view containing all Java packages and classes as root elements according to the 
+	 * given modification function, commits the performed changes and closes the view afterwards.
+	 */
 	protected def void changeJavaView((View)=>void modelModification) {
 		changeView(createJavaView) [
 			modelModification.apply(it)
@@ -144,31 +152,47 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 	}
 
 	/**
-	 * Validates the given view by applying the validation functions and closes the view afterwards.
+	 * Validates the given view by applying the validation function and closes the view afterwards.
 	 */
-	protected def void validateView(View view, (View)=>void viewValidation) {
+	private def void validateView(View view, (View)=>void viewValidation) {
 		viewValidation.apply(view)
 		view.close()
 	}
 
+	/**
+	 * Validates the UML view containing all UML models by applying the validation function
+	 * and closes the view afterwards.
+	 */
 	protected def void validateUmlView((View)=>void viewValidation) {
 		validateView(createUmlView) [
 			viewValidation.apply(it)
 		]
 	}
 
+	/**
+	 * Validates the Java view containing all packages and classes by applying the validation function
+	 * and closes the view afterwards.
+	 */
 	protected def void validateJavaView((View)=>void viewValidation) {
 		validateView(createJavaView) [
 			viewValidation.apply(it)
 		]
 	}
 
+	/**
+	 * Validates the Java and UML view containing all UML models and Java classes by applying the 
+	 * validation function and closes the view afterwards.
+	 */
 	protected def void validateUmlAndJavaClassesView((View)=>void viewValidation) {
 		validateView(createUmlAndJavaClassesView) [
 			viewValidation.apply(it)
 		]
 	}
-	
+
+	/**
+	 * Validates the Java and UML view containing all UML models and Java packages by applying the 
+	 * validation function and closes the view afterwards.
+	 */
 	protected def void validateUmlAndJavaPackagesView((View)=>void viewValidation) {
 		validateView(createUmlAndJavaPackagesView) [
 			viewValidation.apply(it)

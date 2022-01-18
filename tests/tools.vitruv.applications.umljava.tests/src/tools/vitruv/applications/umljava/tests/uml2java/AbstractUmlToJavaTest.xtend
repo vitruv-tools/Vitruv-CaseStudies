@@ -17,8 +17,6 @@ abstract class AbstractUmlToJavaTest extends UmlJavaTransformationTest {
 
 	/**
 	 * Changes the UML model in the UML view and commits the performed changes.
-	 * 
-	 * Precondition: Can only be applied if single UML model exists
 	 */
 	protected def void changeUmlModel((Model)=>void modelModification) {
 		changeUmlView [
