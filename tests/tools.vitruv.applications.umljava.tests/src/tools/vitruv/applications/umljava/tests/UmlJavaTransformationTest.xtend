@@ -28,8 +28,10 @@ import tools.vitruv.domains.java.JamoppLibraryHelper
 
 abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(
-		UML_MODEL_NAME, [
-			createUmlAndJavaClassesView
+		UML_MODEL_NAME, [viewApplication |
+			validateUmlAndJavaClassesView [
+				viewApplication.apply(it)
+			]
 		], [it.getUri()])
 
 	@Accessors(PROTECTED_GETTER)

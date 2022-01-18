@@ -23,7 +23,7 @@ import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualit
 @FinalFieldsConstructor
 class JavaUmlClassifierEqualityValidation {
 	val String umlModelName
-	val ()=>View viewProvider
+	val ((View)=>void)=>void viewExecutor
 	val (Path)=>URI uriForProjectRelativePathProvider
 
 	def assertClassWithNameInRootPackage(String className) {
@@ -135,7 +135,7 @@ class JavaUmlClassifierEqualityValidation {
 	 * the UML and in the Java model.
 	 */
 	def void assertNoClassifierWithNameInRootPackage(String classifierName) {
-		viewProvider.apply => [
+		viewExecutor.apply [
 			assertThat("no classifier in UML model with name " + classifierName + " is expected to exist",
 				claimUmlModel(umlModelName).packagedElements.filter(Classifier).filter [
 					name == classifierName
@@ -155,7 +155,7 @@ class JavaUmlClassifierEqualityValidation {
 	 * the UML and in the Java model.
 	 */
 	def void assertNoClassifierWithNameInPackage(String packageName, String classifierName) {
-		viewProvider.apply => [
+		viewExecutor.apply [
 			assertThat("no classifier in UML model with name " + classifierName + " is expected to exist in package " +
 				packageName,
 				claimUmlModel(umlModelName).claimPackage(packageName).packagedElements.filter(Classifier).filter [
@@ -177,7 +177,7 @@ class JavaUmlClassifierEqualityValidation {
 	 * the UML and in the Java model.
 	 */
 	def void assertNoClassifierExistsInRootPackage() {
-		viewProvider.apply => [
+		viewExecutor.apply [
 			assertThat("no element in UML model is expected to exist",
 				claimUmlModel(umlModelName).packagedElements.filter(Classifier).toSet, is(emptySet))
 			assertThat("no Java classifier is expected to exist", javaClassifiers.filter [
@@ -197,7 +197,7 @@ class JavaUmlClassifierEqualityValidation {
 		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
 		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, Iterable<String> namespaces,
 		String classifierName) {
-		viewProvider.apply => [
+		viewExecutor.apply [
 			val javaClassifier = claimJavaClassifier(javaClassifierType, classifierName)
 			var org.eclipse.uml2.uml.Package umlPackage = claimUmlModel(umlModelName)
 			for (namespace : namespaces) {
@@ -218,7 +218,7 @@ class JavaUmlClassifierEqualityValidation {
 		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
 		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, Iterable<String> namespaces,
 		String classifierName) {
-		viewProvider.apply => [
+		viewExecutor.apply [
 			assertClassifierWithName(javaClassifierType, umlClassifierType, namespaces, classifierName)
 			val javaClassifier = claimJavaClassifier(javaClassifierType, classifierName)
 			val javaCompilationUnit = claimJavaCompilationUnit(namespaces.join("", ".", ".", [it]) + classifierName)
