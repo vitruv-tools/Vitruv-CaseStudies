@@ -30,7 +30,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	@ValueSource(strings=#[PACKAGE_NAME, PACKAGE_NAME_FIRST_UPPER])
 	def void testCreatePackage(String packageName) {
 		createRootPackage(packageName)
-		createUmlAndJavaPackagesView() => [
+		validateUmlAndJavaPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(packageName)
 			val javaPackage = claimJavaPackage(packageName)
 			assertEquals(1, javaPackages.size, "exactly one Java package should exist")
@@ -43,7 +43,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	def void testCreateNestedPackage(String packageName) {
 		val nestedPackageName = packageName + "nested"
 		createRootPackageWithNestedPackage(packageName, nestedPackageName)
-		createUmlAndJavaPackagesView() => [
+		validateUmlAndJavaPackagesView [
 			val umlRootPackage = defaultUmlModel.claimPackage(packageName)
 			val umlNestedPackage = umlRootPackage.claimPackage(nestedPackageName)
 			val javaRootPackage = claimJavaPackage(packageName)
@@ -63,7 +63,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 				name = PACKAGE_RENAMED
 			]
 		]
-		createUmlAndJavaPackagesView() => [
+		validateUmlAndJavaPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_RENAMED)
 			val javaPackage = claimJavaPackage(PACKAGE_RENAMED)
 			assertEquals(1, javaPackages.size, "exactly one Java package should exist")
@@ -81,7 +81,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 				packagedElements += toBeNestedPackage
 			]
 		]
-		createUmlAndJavaPackagesView() => [
+		validateUmlAndJavaPackagesView [
 			val umlRootPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val umlNestedPackage = umlRootPackage.claimPackage(NESTED_PACKAGE_NAME)
 			val javaRootPackage = claimJavaPackage(PACKAGE_NAME)
@@ -99,7 +99,7 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 		changeUmlModel[
 			claimPackage(PACKAGE_NAME).destroy
 		]
-		createUmlAndJavaPackagesView() => [
+		validateUmlAndJavaPackagesView [
 			assertThat("there should be no element in the UML model", defaultUmlModel.packagedElements, is(emptyList))
 			assertThat("there should be no Java packages", javaPackages, is(emptyList))
 		]
