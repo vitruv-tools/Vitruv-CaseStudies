@@ -23,6 +23,8 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.URI
 import org.junit.jupiter.api.BeforeEach
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureUnidirectionalExecution
+import org.emftext.language.java.JavaClasspath
+import tools.vitruv.domains.java.JamoppLibraryHelper
 
 abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected val extension JavaUmlClassifierEqualityValidation = new JavaUmlClassifierEqualityValidation(
@@ -39,6 +41,10 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 
 	@BeforeEach
 	def setupTransformationDirection() {
+		// Reset Java classpath before every test to ensure that caches are reset
+		// and not objects are stored and produce memory leaks
+		JavaClasspath.reset()
+		JamoppLibraryHelper.registerStdLib()
 		configureUnidirectionalExecution()
 	}
 
