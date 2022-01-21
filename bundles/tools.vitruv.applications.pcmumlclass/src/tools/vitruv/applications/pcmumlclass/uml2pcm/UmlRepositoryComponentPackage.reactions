@@ -1,5 +1,6 @@
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -75,7 +76,7 @@ routine detectOrCreateCorrespondingRepositoryComponent(uml::Package umlPkg, uml:
 	}
 	action {
 		call {
-			val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[entityName.toFirstLower == umlPkg.name.toFirstLower]
+			val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[umlPkg.isPackageFor(it)]
 			if (pcmComponentCandidate === null) {
 				userDisambiguateCorrespondingRepositoryComponentType(umlPkg, umlParentPkg)
 			} else {

@@ -15,6 +15,7 @@ import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHel
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -44,7 +45,7 @@ class RepositoryComponentConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		assertTrue(corresponds(pcmComponent, umlComponentPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE))
 		assertTrue(corresponds(pcmComponent, umlComponentImpl, TagLiterals.IPRE__IMPLEMENTATION))
 		assertTrue(corresponds(pcmComponent, umlComponentConstructor, TagLiterals.IPRE__CONSTRUCTOR))
-		assertTrue(pcmComponent.entityName.toFirstLower == umlComponentPkg.name)
+		assertTrue(umlComponentPkg.isPackageFor(pcmComponent))
 		assertTrue(pcmComponent.entityName == umlComponentPkg.name.toFirstUpper)
 		assertTrue(pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlComponentImpl.name)
 		assertTrue(pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlComponentConstructor.name)

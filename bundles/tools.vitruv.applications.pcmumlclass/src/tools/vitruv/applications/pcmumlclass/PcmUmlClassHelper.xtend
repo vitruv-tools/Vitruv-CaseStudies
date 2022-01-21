@@ -17,6 +17,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorresponde
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
 import tools.vitruv.framework.userinteraction.UserInteractor
+import org.eclipse.uml2.uml.Model
+import org.palladiosimulator.pcm.system.System
+import org.palladiosimulator.pcm.core.entity.Entity
 
 @Utility
 class PcmUmlClassHelper {
@@ -115,6 +118,20 @@ class PcmUmlClassHelper {
 		}
 
 		return pcmDataType
+	}
+
+	static def String getCorrespondingPackageName(Entity entity) {
+		return entity.entityName.toFirstLower
+	}
+
+	static def boolean isPackageFor(Package pkg, Entity entity) {
+		// We ignore the casing of packages
+		return switch (entity) {
+			Repository, System:
+				pkg.eContainer instanceof Model
+			default:
+				true 
+		} && pkg.name.toLowerCase == entity.entityName.toLowerCase
 	}
 
 }

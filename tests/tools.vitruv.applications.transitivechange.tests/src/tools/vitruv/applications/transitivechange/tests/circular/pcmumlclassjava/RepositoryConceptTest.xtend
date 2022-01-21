@@ -14,6 +14,7 @@ import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHel
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
 import org.emftext.language.java.containers.ContainersPackage
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -38,7 +39,7 @@ class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		assertTrue(EcoreUtil.equals(umlContractsPkg.nestingPackage, umlRepositoryPkg))
 		assertTrue(EcoreUtil.equals(umlDatatypesPkg.nestingPackage, umlRepositoryPkg))
 		// attribute constraints
-		assertTrue(umlRepositoryPkg.name == pcmRepo.entityName.toFirstLower)
+		assertTrue(umlRepositoryPkg.isPackageFor(pcmRepo))
 		assertTrue(umlRepositoryPkg.name.toFirstUpper == pcmRepo.entityName)
 		assertTrue(umlContractsPkg.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME)
 		assertTrue(umlDatatypesPkg.name == DefaultLiterals.DATATYPES_PACKAGE_NAME)

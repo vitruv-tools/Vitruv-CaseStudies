@@ -8,6 +8,8 @@ import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.getCorrespondingPackageName
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -52,8 +54,7 @@ routine createOrFindUmlRepositoryPackage(pcm::Repository pcmRepo) {
 	}
 	action {
 		call {
-			var umlPackage = findUmlPackage(umlModel, pcmRepo.entityName.toFirstLower)
-			if (umlPackage === null) umlPackage = findUmlPackage(umlModel, pcmRepo.entityName.toFirstUpper)
+			var umlPackage = findUmlPackage(umlModel, pcmRepo.correspondingPackageName)
 			if(umlPackage === null) {
 				createUmlRepositoryPackage(pcmRepo)
 			} else {
@@ -75,7 +76,7 @@ routine createUmlRepositoryPackage(pcm::Repository pcmRepo) {
 	}
 	action {
 		val umlRepositoryPkg = create uml::Package and initialize {
-			umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower;
+			umlRepositoryPkg.name = pcmRepo.correspondingPackageName;
 			umlModel.nestedPackages += umlRepositoryPkg
 		}
 		add correspondence between pcmRepo and umlRepositoryPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
@@ -127,8 +128,8 @@ routine changeNameOfCorrespondingRepositoryPackage(pcm::Repository pcmRepo) {
 	}
 	action {
 		update umlRepositoryPkg {
-			if (umlRepositoryPkg.name.toFirstLower != pcmRepo.entityName.toFirstLower)
-				umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower
+			if (!umlRepositoryPkg.isPackageFor(pcmRepo))
+				umlRepositoryPkg.name = pcmRepo.correspondingPackageName
 		}
 	}
 }

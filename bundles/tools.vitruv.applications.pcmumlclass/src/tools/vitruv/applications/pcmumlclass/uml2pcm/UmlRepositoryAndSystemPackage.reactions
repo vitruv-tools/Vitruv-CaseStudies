@@ -9,6 +9,7 @@ import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.system.SystemPackage
 import org.eclipse.uml2.uml.Model
 import java.util.ArrayList
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -100,7 +101,7 @@ routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package um
     match {
         require absence of pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
         val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
-            with foundRepository.entityName.toFirstLower == umlPkg.name.toFirstLower // PCM repositories and UML packages can be both upper and lower case
+           with umlPkg.isPackageFor(foundRepository)
     }
     action {
         call {
@@ -169,7 +170,7 @@ routine createOrFindCorrespondingSystem(uml::Package umlPkg, uml::Package umlPar
     match {
         require absence of pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
         val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM
-            with foundSystem.entityName.toFirstLower == umlPkg.name.toFirstLower // PCM system and UML package can be both upper and lower case
+            with umlPkg.isPackageFor(foundSystem)
     }
     action {
         call {

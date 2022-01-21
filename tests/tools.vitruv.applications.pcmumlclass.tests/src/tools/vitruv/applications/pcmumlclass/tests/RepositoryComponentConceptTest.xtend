@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import java.nio.file.Path
-
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 /**
  * This test class tests the reactions and routines that are supposed to synchronize synchronize a pcm::RepositoryComponent with 
  * its corresponding uml::Package, uml::Class (implementation), and uml::Operation (constructor).
@@ -43,7 +43,7 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(corresponds(pcmComponent, umlComponentPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE))
 		assertTrue(corresponds(pcmComponent, umlComponentImpl, TagLiterals.IPRE__IMPLEMENTATION))
 		assertTrue(corresponds(pcmComponent, umlComponentConstructor, TagLiterals.IPRE__CONSTRUCTOR))
-		assertTrue(pcmComponent.entityName.toFirstLower == umlComponentPkg.name)
+		assertTrue(umlComponentPkg.isPackageFor(pcmComponent))
 		assertTrue(pcmComponent.entityName == umlComponentPkg.name.toFirstUpper)
 		assertTrue(pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlComponentImpl.name)
 		assertTrue(pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlComponentConstructor.name)
