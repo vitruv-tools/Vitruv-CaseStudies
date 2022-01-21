@@ -24,7 +24,7 @@ class UmlQueryUtil {
 	}
 	
 	static def Model claimUmlModel(View view, String modelName) {
-		view.rootObjects(Model).filter[it.name == modelName].claimOne
+		view.getRootObjects(Model).filter[it.name == modelName].claimOne
 	}
 	
 	static def <T extends PackageableElement> T claimPackageableElement(Package containingPackage, java.lang.Class<T> packageableElementType, String packageableElementName) {

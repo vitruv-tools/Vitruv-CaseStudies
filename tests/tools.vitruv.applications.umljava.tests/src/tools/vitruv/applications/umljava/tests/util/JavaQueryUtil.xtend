@@ -21,15 +21,15 @@ import static extension tools.vitruv.applications.util.temporary.java.JavaContai
 @Utility
 class JavaQueryUtil {
 	static def getJavaCompilationUnits(View view) {
-		view.rootObjects(CompilationUnit)
+		view.getRootObjects(CompilationUnit)
 	}
 
 	static def getJavaPackages(View view) {
-		view.rootObjects(Package)
+		view.getRootObjects(Package)
 	}
 
 	static def getJavaClassifiers(View view) {
-		view.rootObjects(CompilationUnit).map[classifiers].flatten
+		view.getRootObjects(CompilationUnit).map[classifiers].flatten
 	}
 
 	static def <T extends Classifier> Iterable<T> getJavaClassifiersOfType(View view, java.lang.Class<T> type) {
