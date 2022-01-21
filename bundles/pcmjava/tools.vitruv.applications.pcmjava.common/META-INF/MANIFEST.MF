@@ -12,4 +12,5 @@ Export-Package: tools.vitruv.applications.pcmjava.common.pcm2java,
 Require-Bundle: tools.vitruv.applications.pcmjava.util,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.domains.pcm,
- tools.vitruv.domains.java
+ tools.vitruv.domains.java,
+ edu.kit.ipd.sdq.activextendannotations
