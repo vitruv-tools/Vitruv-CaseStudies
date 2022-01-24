@@ -111,7 +111,7 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 	}
 
 	private def View createViewOfElements(String viewNme, Collection<Class<?>> rootTypes) {
-		val selector = virtualModel.createSelector(ViewTypeFactory.createBasicViewType(viewNme))
+		val selector = virtualModel.createSelector(ViewTypeFactory.createIdentityMappingViewType(viewNme))
 
 		for (rootElement : selector.selectableElements.filter[element|rootTypes.exists[it.isInstance(element)]]) {
 			selector.setSelected(rootElement, true)
