@@ -42,11 +42,15 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 	static val MODEL_FOLDER_NAME = "model"
 
 	@BeforeEach
-	def setupTransformationDirection() {
+	def void setupClasspath() {
 		// Reset Java classpath before every test to ensure that caches are reset
 		// and not objects are stored and produce memory leaks
 		JavaClasspath.reset()
 		JamoppLibraryHelper.registerStdLib()
+	}
+
+	@BeforeEach
+	def setupTransformationDirection() {
 		configureUnidirectionalExecution()
 	}
 
