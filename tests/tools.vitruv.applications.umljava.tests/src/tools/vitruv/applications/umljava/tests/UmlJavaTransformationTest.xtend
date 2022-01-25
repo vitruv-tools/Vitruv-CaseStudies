@@ -1,9 +1,7 @@
 package tools.vitruv.applications.umljava.tests
 
 import org.eclipse.uml2.uml.Model
-import org.eclipse.uml2.uml.UMLFactory
 
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import java.nio.file.Path
 import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
 import tools.vitruv.framework.vsum.views.View
@@ -13,9 +11,7 @@ import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
 import java.util.Collection
 import org.emftext.language.java.containers.Package
-import org.emftext.language.java.containers.ContainersFactory
 import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
-import org.emftext.language.java.containers.JavaRoot
 import org.eclipse.xtend.lib.annotations.Accessors
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityValidation
@@ -68,34 +64,6 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 
 	protected def void createAndRegisterRoot(View view, EObject rootObject, URI persistenceUri) {
 		view.registerRoot(rootObject, persistenceUri)
-	}
-
-	protected def void createUmlModel((Model)=>void modelInitialization) {
-		changeView(createUmlView()) [
-			val umlModel = UMLFactory.eINSTANCE.createModel
-			createAndRegisterRoot(umlModel, UML_MODEL_NAME.projectModelPath.uri)
-			modelInitialization.apply(umlModel)
-		]
-	}
-
-	protected def void createJavaCompilationUnit((CompilationUnit)=>void compilationUnitInitialization) {
-		changeJavaView [
-			val compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit
-			compilationUnitInitialization.apply(compilationUnit)
-			createAndRegisterRoot(compilationUnit, Path.of(buildJavaFilePath(compilationUnit)).uri)
-		]
-	}
-
-	protected def void createJavaPackage((Package)=>void packageInitialization) {
-		changeJavaView [
-			val package = ContainersFactory.eINSTANCE.createPackage
-			packageInitialization.apply(package)
-			createAndRegisterRoot(package, Path.of(buildJavaFilePath(package)).uri)
-		]
-	}
-
-	protected def void moveJavaRootElement(View view, JavaRoot rootElement) {
-		view.moveRoot(rootElement, Path.of(buildJavaFilePath(rootElement)).uri)
 	}
 
 	private def View createUmlView() {

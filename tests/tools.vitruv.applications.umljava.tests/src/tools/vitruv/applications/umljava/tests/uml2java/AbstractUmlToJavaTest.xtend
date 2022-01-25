@@ -15,6 +15,14 @@ abstract class AbstractUmlToJavaTest extends UmlJavaTransformationTest {
 		createUmlModel[name = UML_MODEL_NAME]
 	}
 
+	protected def void createUmlModel((Model)=>void modelInitialization) {
+		changeUmlView [
+			val umlModel = UMLFactory.eINSTANCE.createModel
+			createAndRegisterRoot(umlModel, UML_MODEL_NAME.projectModelPath.uri)
+			modelInitialization.apply(umlModel)
+		]
+	}
+
 	/**
 	 * Changes the UML model in the UML view and commits the performed changes.
 	 */
