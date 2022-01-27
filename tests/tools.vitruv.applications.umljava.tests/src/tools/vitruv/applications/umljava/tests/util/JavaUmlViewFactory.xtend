@@ -16,7 +16,7 @@ import org.emftext.language.java.containers.Package
 class JavaUmlViewFactory {
 	val ViewProvider viewProvider
 
-	private def View createUmlView() {
+	def View createUmlView() {
 		createViewOfElements("UML", #{Model})
 	}
 
@@ -58,9 +58,7 @@ class JavaUmlViewFactory {
 	 * function, commits the performed changes and closes the view afterwards.
 	 */
 	def void changeUmlView((View)=>void modelModification) {
-		changeView(createUmlView) [
-			modelModification.apply(it)
-		]
+		changeView(createUmlView, modelModification)
 	}
 
 	/**
@@ -68,9 +66,7 @@ class JavaUmlViewFactory {
 	 * given modification function, commits the performed changes and closes the view afterwards.
 	 */
 	def void changeJavaView((View)=>void modelModification) {
-		changeView(createJavaView) [
-			modelModification.apply(it)
-		]
+		changeView(createJavaView, modelModification)
 	}
 
 	/**
@@ -86,9 +82,7 @@ class JavaUmlViewFactory {
 	 * and closes the view afterwards.
 	 */
 	def void validateUmlView((View)=>void viewValidation) {
-		validateView(createUmlView) [
-			viewValidation.apply(it)
-		]
+		validateView(createUmlView, viewValidation)
 	}
 
 	/**
@@ -96,9 +90,7 @@ class JavaUmlViewFactory {
 	 * and closes the view afterwards.
 	 */
 	def void validateJavaView((View)=>void viewValidation) {
-		validateView(createJavaView) [
-			viewValidation.apply(it)
-		]
+		validateView(createJavaView, viewValidation)
 	}
 
 	/**
@@ -106,9 +98,7 @@ class JavaUmlViewFactory {
 	 * validation function and closes the view afterwards.
 	 */
 	def void validateUmlAndJavaClassesView((View)=>void viewValidation) {
-		validateView(createUmlAndJavaClassesView) [
-			viewValidation.apply(it)
-		]
+		validateView(createUmlAndJavaClassesView, viewValidation)
 	}
 
 	/**
@@ -116,9 +106,7 @@ class JavaUmlViewFactory {
 	 * validation function and closes the view afterwards.
 	 */
 	def void validateUmlAndJavaPackagesView((View)=>void viewValidation) {
-		validateView(createUmlAndJavaPackagesView) [
-			viewValidation.apply(it)
-		]
+		validateView(createUmlAndJavaPackagesView, viewValidation)
 	}
 
 }
