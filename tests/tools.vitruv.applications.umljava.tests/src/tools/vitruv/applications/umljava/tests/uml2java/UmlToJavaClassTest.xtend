@@ -1,230 +1,254 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
-import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getClassifierFromTypeReference
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import org.eclipse.uml2.uml.UMLFactory
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
- * This class provides tests for basic class tests in the uml to java direction
- * @author Fei
+ * This class provides tests for basic class tests in the UML to Java direction
  */
-class UmlToJavaClassTest extends UmlToJavaTransformationTest {
-	static val CLASS_NAME = "ClassName"
-	static val DATATYPE_NAME = "DataTypeName"
-	static val STANDARD_CLASS_NAME = "StandardClassName"
-	static val CLASS_RENAME = "ClassRenamed"
-	static val SUPER_CLASS_NAME = "SuperClassName"
-	static val INTERFACE_NAME = "InterfaceName"
-	static val INTERFACE_NAME2 = "InterfaceName2"
+class UmlToJavaClassTest extends AbstractUmlToJavaTest {
+	static val PACKAGE_NAME = "rootpackage"
+	static val DEFAULT_CLASS_NAME = "TestClass"
+	static val RENAMED_CLASS_NAME = "RenamedTestClass"
+	static val ADDITIONAL_CLASS_NAME = "AdditionalClass"
+	static val DEFAULT_INTERFACE_NAME = "TestInterface"
+	static val ADDITIONAL_INTERFACE_NAME = "AdditionalInterface"
 
-	var Class uClass
-
-	@BeforeEach
-	def void before() {
-		uClass = createUmlClassAndAddToPackage(rootElement, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
-		propagate
+	@Test
+	def void testCreateClass() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
 	}
 
 	@Test
-	def testCreateClass() {
-		val c = createUmlClassAndAddToPackage(rootElement, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false,
-			false)
-		propagate
-
-		val jClass = getCorrespondingClass(c)
-		assertEquals(STANDARD_CLASS_NAME, jClass.name)
-		assertJavaFileExists(STANDARD_CLASS_NAME, #[])
+	def void testCreateClassInPackage() {
+		createClassInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
+		assertSingleClassWithNameInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
+		assertNoClassifierWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertNoClassifierExistsInRootPackage()
 	}
 
 	@Test
-	def testDeletedClass() {
-		uClass.destroy
-		propagate
+	def void testDeleteClass() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME).destroy
+		]
+		assertNoClassifierWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertNoClassifierExistsInRootPackage()
+	}
 
-		assertJavaFileNotExists(CLASS_NAME, #[])
+	@ParameterizedTest
+	@EnumSource(value=VisibilityKind, names=#["PUBLIC_LITERAL"], mode=EnumSource.Mode.EXCLUDE)
+	def void testChangeClassVisibility(VisibilityKind visibility) {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME).visibility = visibility
+		]
+		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		validateJavaView [
+			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
+			assertJavaModifiableHasVisibility(javaClass, getJavaVisibilityConstantFromUmlVisibilityKind(visibility))
+		]
 	}
 
 	@Test
-	def testChangeClassVisibility() {
-		uClass.visibility = VisibilityKind.PRIVATE_LITERAL
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		assertJavaModifiableHasVisibility(jClass, JavaVisibility.PRIVATE)
-		assertClassEquals(uClass, jClass)
-
+	def void testChangeAbstractClass() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME).isAbstract = true
+		]
+		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		validateJavaView [
+			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
+			assertJavaModifiableAbstract(javaClass, true)
+		]
 	}
 
 	@Test
-	def testChangeClassVisibility2() {
-		uClass.visibility = VisibilityKind.PACKAGE_LITERAL
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		assertJavaModifiableHasVisibility(jClass, JavaVisibility.PACKAGE)
-		assertClassEquals(uClass, jClass)
+	def void testRenameClass() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME).name = RENAMED_CLASS_NAME
+		]
+		assertSingleClassWithNameInRootPackage(RENAMED_CLASS_NAME)
+		assertNoClassifierWithNameInRootPackage(DEFAULT_CLASS_NAME)
 	}
 
 	@Test
-	def testChangeAbstractClass() {
-		uClass.isAbstract = true
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		assertJavaModifiableAbstract(jClass, true)
-		assertClassEquals(uClass, jClass)
+	def void testMoveClass() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		createPackageInRootPackage(PACKAGE_NAME)
+		changeUmlModel [
+			claimPackage(PACKAGE_NAME).packagedElements += claimClass(DEFAULT_CLASS_NAME)
+		]
+		assertSingleClassWithNameInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
+		assertNoClassifierWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertNoClassifierExistsInRootPackage()
+		changeUmlModel [
+			packagedElements += claimPackage(PACKAGE_NAME).claimClass(DEFAULT_CLASS_NAME)
+		]
+		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertNoClassifierWithNameInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
 	}
 
 	@Test
-	def testRenameClass() {
-		uClass.name = CLASS_RENAME
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		assertEquals(CLASS_RENAME, jClass.name)
-		assertJavaFileExists(CLASS_RENAME, #[])
-		assertJavaFileNotExists(CLASS_NAME, #[])
-		assertClassEquals(uClass, jClass)
-	}
-	
-	@Test
-	def testMoveClass() {
-		val uPackage = createUmlPackageAndAddToSuperPackage("package", rootElement)
-		uPackage.packagedElements += uClass
-		propagate
-		
-		var jClass = getCorrespondingClass(uClass)
-		assertJavaFileExists(CLASS_NAME, #[uPackage.name])
-		assertJavaFileNotExists(CLASS_NAME, #[])
-		assertClassEquals(uClass, jClass)
-		assertEquals(jClass.containingPackageName.join("."), uPackage.name)
-		
-		rootElement.packagedElements += uClass
-		propagate
-		
-		jClass = getCorrespondingClass(uClass)
-		assertJavaFileNotExists(CLASS_NAME, #[uPackage.name])
-		assertJavaFileExists(CLASS_NAME, #[])
-		assertClassEquals(uClass, jClass)
-		assertEquals(jClass.containingPackageName.join("."), "")
+	def void testChangeFinalClass() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME).isFinalSpecialization = true
+		]
+		assertSingleClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		validateJavaView [
+			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
+			assertJavaModifiableFinal(javaClass, true)
+		]
 	}
 
 	@Test
-	def testChangeFinalClass() {
-		uClass.isFinalSpecialization = true
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		assertJavaModifiableFinal(jClass, true)
-		assertClassEquals(uClass, jClass)
+	def void testSuperClassChanged() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		changeUmlModel [
+			val existingClass = claimClass(DEFAULT_CLASS_NAME)
+			val superClass = UMLFactory.eINSTANCE.createClass
+			packagedElements += superClass => [
+				name = ADDITIONAL_CLASS_NAME
+			]
+			existingClass => [
+				generals += superClass
+			]
+		]
+		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertClassWithNameInRootPackage(ADDITIONAL_CLASS_NAME)
+		validateJavaView [
+			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
+			val javaSuperClass = claimJavaClass(ADDITIONAL_CLASS_NAME)
+			assertHasSuperClass(javaClass, javaSuperClass)
+		]
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME) => [
+				generals.clear
+			]
+		]
+		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertClassWithNameInRootPackage(ADDITIONAL_CLASS_NAME)
+		validateJavaView [
+			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
+			assertNull(javaClass.extends)
+		]
 	}
 
 	@Test
-	def testSuperClassChanged() {
-		val superClass = createSimpleUmlClass(rootElement, SUPER_CLASS_NAME)
-		uClass.generals += superClass
-		propagate
-		var jClass = getCorrespondingClass(uClass)
-		var jSuperClass = getCorrespondingClass(superClass)
-		assertHasSuperClass(jClass, jSuperClass)
-		assertClassEquals(uClass, jClass)
-		
-		uClass.generals -= superClass
-		propagate
-		jClass = getCorrespondingClass(uClass)
-		jSuperClass = getCorrespondingClass(superClass)
-		assertTrue(jClass.extends === null)
-		assertClassEquals(uClass, jClass)
+	def void testAddClassImplements() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		createInterfaceInRootPackage(DEFAULT_INTERFACE_NAME)
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization",
+				claimInterface(DEFAULT_INTERFACE_NAME))
+		]
+		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		validateJavaView [
+			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
+			assertEquals(DEFAULT_INTERFACE_NAME, getClassifierFromTypeReference(javaClass.implements.head).name)
+		]
 	}
 
 	@Test
-	def testDeleteClassImplement() {
-		val uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
-		val uI2 = createSimpleUmlInterface(rootElement, INTERFACE_NAME2)
-		uClass.createInterfaceRealization("InterfacRealization", uI)
-		uClass.createInterfaceRealization("InterfacRealization2", uI2)
-		propagate
-
-		uClass.interfaceRealizations.remove(0)
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		assertTrue(jClass.implements.size == 1, jClass.implements.size.toString)
-		assertEquals(INTERFACE_NAME2, getClassifierFromTypeReference(jClass.implements.get(0)).name)
-		assertJavaFileExists(INTERFACE_NAME, #[])
-		assertClassEquals(uClass, jClass)
+	def void testDeleteClassImplements() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		createInterfaceInRootPackage(DEFAULT_INTERFACE_NAME)
+		createInterfaceInRootPackage(ADDITIONAL_INTERFACE_NAME)
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization",
+				claimInterface(DEFAULT_INTERFACE_NAME))
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization2",
+				claimInterface(ADDITIONAL_INTERFACE_NAME))
+		]
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME).interfaceRealizations.remove(0)
+		]
+		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertInterfaceWithNameInRootPackage(ADDITIONAL_INTERFACE_NAME)
+		validateJavaView [
+			val javaClass = claimJavaClass(DEFAULT_CLASS_NAME)
+			assertEquals(1, javaClass.implements.size)
+			assertEquals(ADDITIONAL_INTERFACE_NAME, getClassifierFromTypeReference(javaClass.implements.head).name)
+		]
 	}
 
 	@Test
-	def testAddClassImplement() {
-		val uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
-		uClass.createInterfaceRealization("InterfacRealization", uI)
-		propagate
-
-		val jClass = getCorrespondingClass(uClass)
-		assertEquals(INTERFACE_NAME, getClassifierFromTypeReference(jClass.implements.head).name)
-		assertClassEquals(uClass, jClass)
+	def void testChangeInterfaceImplementer() {
+		createClassInRootPackage(DEFAULT_CLASS_NAME)
+		createClassInRootPackage(ADDITIONAL_CLASS_NAME)
+		createInterfaceInRootPackage(DEFAULT_INTERFACE_NAME)
+		changeUmlModel [
+			claimClass(DEFAULT_CLASS_NAME).createInterfaceRealization("InterfaceRealization",
+				claimInterface(DEFAULT_INTERFACE_NAME))
+		]
+		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertClassWithNameInRootPackage(ADDITIONAL_CLASS_NAME)
+		validateJavaView [
+			val firstJavaClass = claimJavaClass(DEFAULT_CLASS_NAME)
+			val secondJavaClass = claimJavaClass(ADDITIONAL_CLASS_NAME)
+			assertEquals(DEFAULT_INTERFACE_NAME, getClassifierFromTypeReference(firstJavaClass.implements.head).name)
+			assertTrue(secondJavaClass.implements.nullOrEmpty)
+		]
+		changeUmlModel [
+			val secondUmlClass = claimClass(ADDITIONAL_CLASS_NAME)
+			val realization = claimClass(DEFAULT_CLASS_NAME).interfaceRealizations.claimOne
+			realization.implementingClassifier = secondUmlClass
+		]
+		assertClassWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertClassWithNameInRootPackage(ADDITIONAL_CLASS_NAME)
+		validateJavaView [
+			val firstJavaClass = claimJavaClass(DEFAULT_CLASS_NAME)
+			val secondJavaClass = claimJavaClass(ADDITIONAL_CLASS_NAME)
+			assertEquals(DEFAULT_INTERFACE_NAME, getClassifierFromTypeReference(secondJavaClass.implements.head).name)
+			assertTrue(firstJavaClass.implements.nullOrEmpty)
+		]
 	}
 
 	@Test
-	def testChangeInterfaceImplementer() {
-		val uClass2 = createSimpleUmlClass(rootElement, STANDARD_CLASS_NAME)
-		val uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
-		val realization = uClass.createInterfaceRealization("InterfacRealization", uI)
-		propagate
-
-		var jClass = getCorrespondingClass(uClass)
-		var jClass2 = getCorrespondingClass(uClass2)
-		assertEquals(INTERFACE_NAME, getClassifierFromTypeReference(jClass.implements.head).name)
-		assertTrue(jClass2.implements.nullOrEmpty)
-
-		realization.implementingClassifier = uClass2
-		propagate
-
-		jClass = getCorrespondingClass(uClass)
-		jClass2 = getCorrespondingClass(uClass2)
-		assertEquals(INTERFACE_NAME, getClassifierFromTypeReference(jClass2.implements.head).name)
-		assertTrue(jClass.implements.nullOrEmpty)
-
-		assertClassEquals(uClass, jClass)
-		assertClassEquals(uClass2, jClass2)
-
+	def void testCreateDataType() {
+		createDataTypeInRootPackage(DEFAULT_CLASS_NAME)
+		assertSingleDataTypeWithNameInRootPackage(DEFAULT_CLASS_NAME)
 	}
 
 	@Test
-	def testCreateDataType() {
-		val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
-		propagate
+	def void testMoveDataType() {
+		createDataTypeInRootPackage(DEFAULT_CLASS_NAME)
+		changeUmlModel [
+			val umlDataType = claimDataType(DEFAULT_CLASS_NAME)
+			packagedElements += UMLFactory.eINSTANCE.createPackage => [
+				name = PACKAGE_NAME
+				packagedElements += umlDataType
+			]
+		]
+		assertSingleDataTypeWithNameInPackage(PACKAGE_NAME, DEFAULT_CLASS_NAME)
+		assertNoClassifierWithNameInRootPackage(DEFAULT_CLASS_NAME)
+		assertNoClassifierExistsInRootPackage()
+	}
 
-		val jClass = getCorrespondingClass(dataType)
-		assertEquals(DATATYPE_NAME, jClass.name)
-		assertJavaFileExists(DATATYPE_NAME, #[])
+	static class BidirectionalTest extends UmlToJavaClassTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
-	
-	@Test
-	def testMoveDataType() {
-		val uDataType = createUmlDataType(rootElement, DATATYPE_NAME)
-		propagate
-		
-		val uPackage = createUmlPackageAndAddToSuperPackage("package", rootElement)
-		uPackage.packagedElements += uDataType
-		propagate
-		
-		val jDataType = getCorrespondingClass(uDataType)
-		assertJavaFileExists(DATATYPE_NAME, #[uPackage.name])
-		assertJavaFileNotExists(DATATYPE_NAME, #[])
-		assertEquals(DATATYPE_NAME, jDataType.name)
-		assertEquals(jDataType.containingPackageName.join("."), uPackage.name)
-	}
+
 }

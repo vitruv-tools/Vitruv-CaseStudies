@@ -326,7 +326,7 @@ routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
     match {
         val javaMethod = retrieve java::Parametrizable corresponding to uMeth
         val customType = retrieve optional java::ConcreteClassifier corresponding to umlParam.type
-        require absence of java::OrdinaryParameter corresponding to umlParam
+        require absence of java::Parameter corresponding to umlParam
     }
     action {
         val javaParam = create java::OrdinaryParameter and initialize {

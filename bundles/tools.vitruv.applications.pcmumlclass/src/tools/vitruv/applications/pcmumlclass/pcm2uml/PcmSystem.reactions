@@ -5,6 +5,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.palladiosimulator.pcm.system.SystemPackage
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.getCorrespondingPackageName
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -48,7 +49,7 @@ routine createOrFindCorrespondingSystemPackage(pcm::System pcmSystem) {
 	}
 	action {
 		call {
-			val foundPackage = findUmlPackage(umlModel, pcmSystem.entityName.toFirstLower)
+			var foundPackage = findUmlPackage(umlModel, pcmSystem.correspondingPackageName)
 			if(foundPackage === null) {
 				createCorrespondingSystemPackage(pcmSystem, umlModel)
 			} else {
@@ -70,7 +71,7 @@ routine createCorrespondingSystemPackage(pcm::System pcmSystem, uml::Model umlRo
 	}
 	action {
 		val umlSystemPackage = create uml::Package and initialize{
-			umlSystemPackage.name = pcmSystem.entityName.toFirstLower;
+			umlSystemPackage.name = pcmSystem.correspondingPackageName
 			umlRootModel.nestedPackages += umlSystemPackage
 		}
 		call addSystemPackageCorrespondence(pcmSystem, umlSystemPackage)
@@ -214,7 +215,7 @@ routine changeNameOfSystemCorrespondences(pcm::System pcmSystem, String newName)
 	}
 	action {
 		execute{
-			umlSystemPackage.ifPresent[name = newName.toFirstLower]
+			umlSystemPackage.ifPresent[name = pcmSystem.correspondingPackageName]
 			umlSystemImplementation.ifPresent[name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
 			umlSystemConstructor.ifPresent[name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
 		}

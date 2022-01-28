@@ -6,8 +6,6 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
@@ -19,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * A Test class to test classes and their traits.
@@ -50,7 +50,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 		val uClass = getCorrespondingClass(cls)
 		assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false,
 			registeredUmlModel)
-		assertClassEquals(uClass, cls)
+		assertElementsEqual(uClass, cls)
 	}
 
 	/**
@@ -63,7 +63,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 
 		val uClass = getCorrespondingClass(jClass)
 		assertEquals(CLASS_RENAMED, uClass.name)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	/**
@@ -107,14 +107,14 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 
 		var uClass = getCorrespondingClass(jClass)
 		assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PROTECTED_LITERAL)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 
 		jClass.makePrivate
 		propagate
 
 		uClass = getCorrespondingClass(jClass)
 		assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PRIVATE_LITERAL)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	/**
@@ -127,14 +127,14 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 
 		var uClass = getCorrespondingClass(jClass)
 		assertTrue(uClass.abstract)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 
 		jClass.abstract = false
 		propagate
 
 		uClass = getCorrespondingClass(jClass)
 		assertFalse(uClass.abstract)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	/**
@@ -148,14 +148,14 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 
 		var uClass = getCorrespondingClass(jClass)
 		assertTrue(uClass.finalSpecialization)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 
 		jClass.final = false
 		propagate
 
 		uClass = getCorrespondingClass(jClass)
 		assertFalse(uClass.finalSpecialization)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	/**
@@ -170,7 +170,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 		val uClass = getCorrespondingClass(jClass)
 		val uSuperClass = getCorrespondingClass(superClass)
 		assertUmlClassifierHasSuperClassifier(uClass, uSuperClass)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 
 	}
 
@@ -214,7 +214,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 		val uClass = getCorrespondingClass(jClass)
 		val uInterface = getCorrespondingInterface(implInterface)
 		assertUmlClassHasImplement(uClass, uInterface)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	/**

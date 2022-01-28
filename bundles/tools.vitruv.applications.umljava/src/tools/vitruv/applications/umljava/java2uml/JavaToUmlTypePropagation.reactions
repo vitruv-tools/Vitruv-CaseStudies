@@ -2,6 +2,10 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.UMLPackage
+import org.emftext.language.java.classifiers.Interface
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import org.emftext.language.java.classifiers.ConcreteClassifier
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -22,7 +26,7 @@ routine propagateMethodReturnTypeChange(java::Method jMethod, uml::Parameter uRe
 	}
 }
 
-routine propagateParameterTypeChange(java::OrdinaryParameter jParam, uml::Parameter uParam) {
+routine propagateParameterTypeChange(java::Parameter jParam, uml::Parameter uParam) {
 	action {
 		call propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam)
 	}
@@ -47,17 +51,99 @@ routine propagateTypeChangeToTypedMultiplicityElement(uml::TypedElement uTyped, 
 			val existingUmlType = uTyped.type
 			val jType = jElement.typeReference
 			val isCollectionReference = isCollectionTypeReference(jType)
-			val newType = if (isCollectionReference) {
+			val newJavaType = if (isCollectionReference) {
 				uMultiplicity.lower = 0
 				uMultiplicity.upper = LiteralUnlimitedNatural.UNLIMITED
-				val innerTypeRef = getInnerTypeRefOfCollectionReference(jType)
-				if(innerTypeRef !== null) getUmlTypeFromReference(innerTypeRef, correspondenceModel) else null
+				getInnerTypeRefOfCollectionReference(jType)
 			} else {
-				getUmlTypeFromReference(jType, correspondenceModel)
+				jType
 			}
-			if (!EcoreUtil.equals(existingUmlType, newType)) {
-				uTyped.type = newType
+			if (newJavaType !== null && newJavaType.target instanceof ConcreteClassifier && newJavaType.target.containingCompilationUnit.namespaces.head == "java") {
+				createExistingUmlClassifier(newJavaType.target as ConcreteClassifier)
 			}
+			val newUmlType = getUmlTypeFromReference(newJavaType, correspondenceModel)
+			if (!EcoreUtil.equals(existingUmlType, newUmlType)) {
+				uTyped.type = newUmlType
+			}
+		}
+	}
+}
+
+routine createExistingUmlClassifier(java::ConcreteClassifier existingJavaClassifier) {
+	action {
+		call {
+			createExistingUmlPackage(existingJavaClassifier.containingCompilationUnit.namespacesAsString)
+			switch (existingJavaClassifier) {
+				Interface: createExistingUmlInterface(existingJavaClassifier)
+				org.emftext.language.java.classifiers.Class: createExistingUmlClass(existingJavaClassifier)
+			}
+		}
+	}
+}
+
+routine createExistingUmlClass(java::Class existingJavaClass) {
+	match {
+		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+		require absence of uml::Class corresponding to existingJavaClass
+	}
+	action {
+		val umlClass = create uml::Class and initialize {
+			umlClass.name = existingJavaClass.name
+		}
+		execute {
+			findUmlPackage(umlModel, existingJavaClass.containingCompilationUnit.namespaces.last) => [
+				packagedElements += umlClass
+			]
+		}
+		add correspondence between existingJavaClass and umlClass
+	}
+}
+
+routine createExistingUmlInterface(java::Interface existingJavaInterface) {
+	match {
+		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+		require absence of uml::Interface corresponding to existingJavaInterface
+	}
+	action {
+		val umlInterface = create uml::Interface and initialize {
+			umlInterface.name = existingJavaInterface.name
+		}
+		execute {
+			findUmlPackage(umlModel, existingJavaInterface.containingCompilationUnit.namespaces.last) => [
+				packagedElements += umlInterface
+			]
+		}
+		add correspondence between existingJavaInterface and umlInterface
+	}
+}
+
+routine createExistingUmlPackage(String namespaces) {
+	match {
+		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+	}
+	action {
+		call {
+			var org.eclipse.uml2.uml.Package currentPackage = umlModel
+			for (namespace : namespaces.split("\\.")) {
+				val existingUmlPackage = currentPackage.packagedElements.filter(org.eclipse.uml2.uml.Package).findFirst[name == namespace]
+				currentPackage = if (existingUmlPackage !== null) {
+					existingUmlPackage
+				} else {
+					createUmlPackage(currentPackage, namespace)
+					currentPackage.packagedElements.filter(org.eclipse.uml2.uml.Package).findFirst[name == namespace]
+				}
+			}
+		}
+	}
+}
+
+routine createUmlPackage(uml::Package parentPackage, String packageName) {
+	action {
+		val umlPackage = create uml::Package and initialize {
+			umlPackage.name = packageName
+		}
+		update parentPackage {
+			parentPackage.packagedElements += umlPackage
 		}
 	}
 }

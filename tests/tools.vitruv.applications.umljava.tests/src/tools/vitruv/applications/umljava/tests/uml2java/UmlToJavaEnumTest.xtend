@@ -1,126 +1,167 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import org.eclipse.uml2.uml.UMLFactory
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
- * A Test class for creating, renaming and deleting enums.
- * Checks the adding of enum literals, attributes and methods to enums, too.
- * 
- * @author Fei
+ * A Test class for creating, renaming and deleting enumerations.
+ * Checks the adding of enumerations literals, attributes and methods to enumerations, too.
  */
-class UmlToJavaEnumTest extends UmlToJavaTransformationTest {
+class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
+	static val PACKAGE_NAME = "rootpackage"
 	static val ENUM_NAME = "EnumName"
 	static val ENUM_RENAME = "EnumRenamed"
-	static val STANDARD_ENUM_NAME = "StandardEnumName"
-	static val ENUM_LITERAL_NAMES_1 = #["RED", "BLUE", "GREEN", "YELLOW", "PURPLE"]
-	static val ENUM_LITERAL_NAMES_2 = #["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
 	static val LITERAL_NAME = "LITERALNAME"
 	static val OPERATION_NAME = "operationName"
-	static val TYPE_CLASS = "TypeClass"
+	static val TYPE_CLASS_NAME = "TypeClass"
 	static val ATTRIBUTE_NAME = "attributeName"
-	var Enumeration uEnum
-	val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
-	val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
-
-	@BeforeEach
-	def void before() {
-		uEnum = createUmlEnumAndAddToPackage(rootElement, ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, enumLiterals1)
-		propagate
-	}
 
 	@Test
 	def void testCreateEnum() {
-		val enumeration = createUmlEnumAndAddToPackage(rootElement, STANDARD_ENUM_NAME, VisibilityKind.PRIVATE_LITERAL,
-			enumLiterals2)
-		propagate
+		createEnumInRootPackage(ENUM_NAME)
+		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
+		validateJavaView [
+			val javaEnum = claimJavaEnum(ENUM_NAME)
+			assertJavaEnumTraits(javaEnum, ENUM_NAME, JavaVisibility.PUBLIC, #[])
+		]
+	}
 
-		assertJavaFileExists(STANDARD_ENUM_NAME, #[])
-		val jEnum = getCorrespondingEnum(enumeration)
-		assertJavaEnumTraits(jEnum, STANDARD_ENUM_NAME, JavaVisibility.PRIVATE,
-			createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2))
-		assertEnumEquals(enumeration, jEnum)
+	@Test
+	def void testCreateEnumInPackage() {
+		createEnumInPackage(PACKAGE_NAME, ENUM_NAME)
+		assertSingleEnumWithNameInPackage(PACKAGE_NAME, ENUM_NAME)
 	}
 
 	@Test
 	def void testRenameEnum() {
-		uEnum.name = ENUM_RENAME
-		propagate
+		createEnumInRootPackage(ENUM_NAME)
+		changeUmlModel [
+			claimEnum(ENUM_NAME) => [
+				name = ENUM_RENAME
+			]
+		]
+		assertSingleEnumWithNameInRootPackage(ENUM_RENAME)
+		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
+	}
 
-		assertJavaFileExists(ENUM_RENAME, #[])
-		assertJavaFileNotExists(ENUM_NAME, #[])
-		val jEnum = getCorrespondingEnum(uEnum)
-		assertEquals(ENUM_RENAME, uEnum.name)
-		assertEnumEquals(uEnum, jEnum)
+	@Test
+	def void testMoveEnum() {
+		createEnumInRootPackage(ENUM_NAME)
+		createPackageInRootPackage(PACKAGE_NAME)
+		changeUmlModel [
+			claimPackage(PACKAGE_NAME).packagedElements += claimEnum(ENUM_NAME)
+		]
+		assertSingleEnumWithNameInPackage(PACKAGE_NAME, ENUM_NAME)
+		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
+		assertNoClassifierExistsInRootPackage()
+		changeUmlModel [
+			packagedElements += claimPackage(PACKAGE_NAME).claimEnum(ENUM_NAME)
+		]
+		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
+		assertNoClassifierWithNameInPackage(PACKAGE_NAME, ENUM_NAME)
 	}
 
 	@Test
 	def void testDeleteEnum() {
-		uEnum.destroy
-		propagate
-
-		assertJavaFileNotExists(ENUM_NAME, #[])
+		createEnumInRootPackage(ENUM_NAME)
+		changeUmlModel [
+			claimEnum(ENUM_NAME) => [
+				destroy()
+			]
+		]
+		assertNoClassifierWithNameInRootPackage(ENUM_NAME)
+		assertNoClassifierExistsInRootPackage()
 	}
 
 	@Test
 	def void testAddEnumLiteral() {
-		uEnum.createOwnedLiteral(LITERAL_NAME)
-		propagate
-
-		val jEnum = getCorrespondingEnum(uEnum)
-		assertJavaEnumHasConstant(jEnum, LITERAL_NAME)
-		assertEnumEquals(uEnum, jEnum)
+		createEnumInRootPackage(ENUM_NAME)
+		changeUmlModel [
+			claimEnum(ENUM_NAME) => [
+				createOwnedLiteral(LITERAL_NAME)
+			]
+		]
+		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
+		validateJavaView [
+			val javaEnum = claimJavaEnum(ENUM_NAME)
+			assertJavaEnumHasConstant(javaEnum, LITERAL_NAME)
+		]
 	}
 
 	@Test
 	def void testDeleteEnumLiteral() {
-		uEnum.ownedLiterals.remove(0)
-		propagate
-
-		val jEnum = getCorrespondingEnum(uEnum)
-		assertJavaEnumDontHaveConstant(jEnum, ENUM_LITERAL_NAMES_1.head)
-		assertEnumEquals(uEnum, jEnum)
+		createEnumInRootPackage(ENUM_NAME)
+		changeUmlModel [
+			claimEnum(ENUM_NAME) => [
+				createOwnedLiteral(LITERAL_NAME)
+			]
+		]
+		changeUmlModel [
+			claimEnum(ENUM_NAME) => [
+				ownedLiterals.remove(0)
+			]
+		]
+		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
+		validateJavaView [
+			val javaEnum = claimJavaEnum(ENUM_NAME)
+			assertJavaEnumDontHaveConstant(javaEnum, LITERAL_NAME)
+		]
 	}
 
 	@Test
 	def void testAddEnumMethod() {
-		val uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, null)
-		uEnum.ownedOperations += uOperation
-		propagate
-
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		val jEnum = getCorrespondingEnum(uEnum)
-		assertJavaClassMethodTraits(jMethod, OPERATION_NAME, JavaVisibility.PUBLIC,
-			TypesFactory.eINSTANCE.createVoid, false, false, null, jEnum)
-		assertClassMethodEquals(uOperation, jMethod)
+		createEnumInRootPackage(ENUM_NAME)
+		changeUmlModel [
+			claimEnum(ENUM_NAME) => [
+				ownedOperations += UMLFactory.eINSTANCE.createOperation => [
+					name = OPERATION_NAME
+					visibility = VisibilityKind.PUBLIC_LITERAL
+				]
+			]
+		]
+		assertSingleEnumWithNameInRootPackage(ENUM_NAME)
+		validateJavaView [
+			val javaEnum = claimJavaEnum(ENUM_NAME)
+			val javaMethod = javaEnum.claimClassMethod(OPERATION_NAME)
+			assertJavaClassMethodTraits(javaMethod, OPERATION_NAME, JavaVisibility.PUBLIC,
+				TypesFactory.eINSTANCE.createVoid, false, false, null, javaEnum)
+		]
 	}
 
 	@Test
-	def testAddEnumAttribute() {
-		val typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS)
-		val attr = uEnum.createOwnedAttribute(ATTRIBUTE_NAME, typeClass)
-		propagate
+	def void testAddEnumAttribute() {
+		createClassInRootPackage(TYPE_CLASS_NAME)
+		createEnumInRootPackage(ENUM_NAME)
+		changeUmlModel [
+			val typeClass = claimClass(TYPE_CLASS_NAME)
+			claimEnum(ENUM_NAME) => [
+				createOwnedAttribute(ATTRIBUTE_NAME, typeClass)
+			]
+		]
+		assertEnumWithNameInRootPackage(ENUM_NAME)
+		validateJavaView [
+			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
+			val javaEnum = claimJavaEnum(ENUM_NAME)
+			val javaAttribute = javaEnum.claimField(ATTRIBUTE_NAME)
+			assertJavaAttributeTraits(javaAttribute, ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
+				createNamespaceClassifierReference(javaTypeClass), false, false, javaEnum)
+		]
+	}
 
-		val jEnum = getCorrespondingEnum(uEnum)
-		val jTypeClass = getCorrespondingClass(typeClass)
-		val jAttr = getCorrespondingAttribute(attr)
-		assertJavaAttributeTraits(jAttr, ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
-			createNamespaceClassifierReference(jTypeClass), false, false, jEnum)
-		assertAttributeEquals(attr, jAttr)
-
+	static class BidirectionalTest extends UmlToJavaEnumTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

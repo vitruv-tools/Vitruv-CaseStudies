@@ -1,108 +1,131 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import org.eclipse.uml2.uml.PrimitiveType
-import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
-import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertNull
-import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import org.eclipse.uml2.uml.Model
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
  * This class tests the change of parameter traits.
- * 
- * @author Fei
  */
-class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
+class UmlToJavaParameterTest extends AbstractUmlToJavaTest {
 	static val CLASS_NAME = "ClassName"
-	static val TYPE_NAME = "TypeName"
+	static val TYPE_CLASS_NAME = "TypeName"
 	static val OPERATION_NAME = "classMethod"
 	static val PARAMETER_NAME = "parameterName"
-	static val STANDARD_PARAMETER_NAME = "standardParameterName"
 	static val PARAMETER_RENAME = "parameterRenamed"
 
-	var Class uClass
-	var Class typeClass
-	var Parameter uParam
-	var PrimitiveType pType
-	var Operation uOperation
-
-	@BeforeEach
-	def void before() {
-		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
-		typeClass = createSimpleUmlClass(rootElement, TYPE_NAME)
-		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
-		uParam = createUmlParameter(PARAMETER_NAME, pType)
-		uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
-		uClass.ownedOperations += uOperation
-		rootElement.packagedElements += uClass
-		rootElement.packagedElements += typeClass
-		propagate
+	@Test
+	def void testCreateParameter() {
+		createClassWithOperationAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		validateJavaView [
+			val javaParameter = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME).claimParameter(
+				PARAMETER_NAME)
+			assertJavaParameterTraits(javaParameter, PARAMETER_NAME, TypesFactory.eINSTANCE.createInt)
+		]
 	}
 
 	@Test
-	def testCreateParameter() {
-		val uParam = createUmlParameter(STANDARD_PARAMETER_NAME, typeClass)
-		uOperation.ownedParameters += uParam
-		propagate
+	def void testRenameParameter() {
+		createClassWithOperationAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
+		changeParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME) [
+			name = PARAMETER_RENAME
+		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		validateJavaView [
+			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
+			assertJavaMethodHasUniqueParameter(javaMethod, PARAMETER_RENAME, TypesFactory.eINSTANCE.createInt)
+			assertJavaMethodDontHaveParameter(javaMethod, PARAMETER_NAME)
+		]
 
-		val jParam = getCorrespondingParameter(uParam)
-		val jTypeClass = getCorrespondingClass(typeClass)
-		assertJavaParameterTraits(jParam, STANDARD_PARAMETER_NAME, createNamespaceClassifierReference(jTypeClass))
-		assertParameterEquals(uParam, jParam)
 	}
 
 	@Test
-	def testRenameParameter() {
-		uParam.name = PARAMETER_RENAME
-		propagate
-
-		val jParam = getCorrespondingParameter(uParam)
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		assertEquals(PARAMETER_RENAME, jParam.name)
-		assertJavaMethodHasUniqueParameter(jMethod, PARAMETER_RENAME, TypesFactory.eINSTANCE.createInt)
-		assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
+	def void testDeleteParameter() {
+		createClassWithOperationAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
+		changeParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME) [
+			destroy()
+		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		validateJavaView [
+			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
+			assertJavaMethodDontHaveParameter(javaMethod, PARAMETER_NAME)
+		]
 	}
 
 	@Test
-	def testDeleteParameter() {
-		uParam.destroy
-		propagate
-
-		val jMethod = getCorrespondingClassMethod(uOperation)
-		assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
+	def void testChangeParameterType() {
+		createClassWithOperationAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
+		createClassInRootPackage(TYPE_CLASS_NAME)
+		changeParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME) [ model, parameter |
+			parameter.type = model.claimClass(TYPE_CLASS_NAME)
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		validateJavaView [
+			val javaParameter = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME).claimParameter(
+				PARAMETER_NAME)
+			val javaTypeClass = claimJavaClass(TYPE_CLASS_NAME)
+			assertJavaParameterTraits(javaParameter, PARAMETER_NAME, createNamespaceClassifierReference(javaTypeClass))
+		]
 	}
 
 	@Test
-	def testChangeParameterType() {
-		uParam.type = typeClass
-		propagate
-
-		val jParam = getCorrespondingParameter(uParam)
-		val jTypeClass = getCorrespondingClass(typeClass)
-		assertJavaParameterTraits(jParam, PARAMETER_NAME, createNamespaceClassifierReference(jTypeClass))
-		assertParameterEquals(uParam, jParam)
+	def void testChangeParameterDirectionToReturn() {
+		createClassWithOperationAndParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME)
+		changeParameter(CLASS_NAME, OPERATION_NAME, PARAMETER_NAME) [
+			direction = ParameterDirectionKind.RETURN_LITERAL
+		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		validateJavaView [
+			val javaMethod = claimJavaClass(CLASS_NAME).claimClassMethod(OPERATION_NAME)
+			assertJavaElementHasTypeRef(javaMethod, TypesFactory.eINSTANCE.createInt)
+		]
 	}
 
-	@Test
-	def testChangeParameterDirectionToReturn() {
-		uParam.direction = ParameterDirectionKind.RETURN_LITERAL
-		propagate
-		assertNull(getCorrespondingParameter(uParam))
-		var jMethod = getCorrespondingClassMethod(uOperation)
-		assertJavaElementHasTypeRef(jMethod, TypesFactory.eINSTANCE.createInt)
-
+	private def void createClassWithOperationAndParameter(String className, String operationName,
+		String parameterName) {
+		createClassInRootPackage(className)
+		changeUmlModel [
+			claimClass(className) => [
+				createOwnedOperation(operationName, null, null, null) => [
+					createOwnedParameter(parameterName, loadUmlPrimitiveType("int"))
+				]
+			]
+		]
 	}
+
+	private def changeParameter(String className, String methodName, String parameterName,
+		(Parameter)=>void changeFunction) {
+		changeParameter(className, methodName, parameterName, [model, parameter|changeFunction.apply(parameter)])
+	}
+
+	private def changeParameter(String className, String methodName, String parameterName,
+		(Model, Parameter)=>void changeFunction) {
+		changeUmlModel [
+			val model = it
+			claimClass(className) => [
+				claimOperation(methodName) => [
+					claimParameter(parameterName) => [
+						changeFunction.apply(model, it)
+					]
+				]
+			]
+		]
+	}
+
+	static class BidirectionalTest extends UmlToJavaParameterTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
+	}
+
 }

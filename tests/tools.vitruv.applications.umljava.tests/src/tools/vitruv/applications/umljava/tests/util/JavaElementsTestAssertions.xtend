@@ -34,93 +34,95 @@ import static org.junit.jupiter.api.Assertions.fail
 import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
- * Util class for assertions that only involves java elements.
- * 
- * @author Fei
+ * Utility class for assertions that only involves java elements.
  */
 @Utility
-class JavaTestUtil {
+class JavaElementsTestAssertions {
 
 	/**
-	 * Asserts that the given java class has the given traits.
+	 * Asserts that the given Java class has the given traits.
 	 */
 	def static void assertJavaClassTraits(Class jClass, String name, JavaVisibility visibility, boolean isAbstract,
 		boolean isFinal) {
-		assertEquals(name, jClass.name)
+		assertEquals(name, jClass.name, "Class name is not as expected")
 		assertJavaModifiableHasVisibility(jClass, visibility)
 		assertJavaModifiableFinal(jClass, isFinal)
 		assertJavaModifiableAbstract(jClass, isAbstract)
 	}
 
 	/**
-	 * Asserts that the given java enum has the given traits.
+	 * Asserts that the given Java enumeration has the given traits.
 	 */
 	def static void assertJavaEnumTraits(Enumeration jEnum, String name, JavaVisibility visibility,
 		List<EnumConstant> constantsList) {
-		assertEquals(name, jEnum.name)
+		assertEquals(name, jEnum.name, "Enumeration name is not as expected")
 		assertJavaModifiableHasVisibility(jEnum, visibility)
 		assertJavaEnumConstantListEquals(constantsList, jEnum.constants)
 	}
 
 	/**
-	 * Asserts that the enum constants of both given lists correspond pairwise by name.
+	 * Asserts that the enumeration constants of both given lists correspond pairwise by name.
 	 */
 	def static void assertJavaEnumConstantListEquals(List<EnumConstant> expectedList, List<EnumConstant> actualList) {
 		if (expectedList.nullOrEmpty) {
-			assertTrue(actualList.nullOrEmpty)
+			assertTrue(actualList.nullOrEmpty, [
+				String.format("Enumeration literal list should be empty but is %s", actualList)
+			])
 		} else {
-			assertEquals(expectedList.size, actualList.size)
+			assertEquals(expectedList.size, actualList.size, "Enumeration literal lists have different sizes")
 			for (const : expectedList) {
 				val correspondingConstants = actualList.filter[name == const.name]
-				if (correspondingConstants.size != 1) {
-					fail("There are 0 or more than 1 constant with the name " + const.name)
-				}
+				assertEquals(1, correspondingConstants.size, [
+					String.format("There is not exactly one corresponding enumeration constants with name %s", const.name)
+				])
 			}
 		}
 
 	}
 
 	/**
-	 * Asserts that the given java interface has the given traits.
+	 * Asserts that the given Java interface has the given traits.
 	 */
 	def static void assertJavaInterfaceTraits(Interface jInterface, String name, JavaVisibility visibility) {
-		assertEquals(name, jInterface.name)
+		assertEquals(name, jInterface.name, "Interface name is not as expected")
 		assertJavaModifiableHasVisibility(jInterface, visibility)
 	}
 
 	/**
-	 * Asserts that the given java class method has the given traits.
+	 * Asserts that the given Java class method has the given traits.
 	 */
 	def static void assertJavaClassMethodTraits(ClassMethod jMethod, String name, JavaVisibility visibility,
 		TypeReference typeRef, boolean isStatic, boolean isAbstract, List<Parameter> parameterList,
-		ConcreteClassifier containedClassifier) {
-		assertEquals(name, jMethod.name)
+		ConcreteClassifier containingClassifier) {
+		assertEquals(name, jMethod.name, "Class method name is not as expected")
 		assertJavaModifiableHasVisibility(jMethod, visibility)
 		assertJavaModifiableStatic(jMethod, isStatic)
 		assertJavaModifiableAbstract(jMethod, isAbstract)
-		assertEquals(containedClassifier.name, (jMethod.eContainer as ConcreteClassifier).name)
+		assertEquals(containingClassifier.name, (jMethod.eContainer as ConcreteClassifier).name,
+			"Method is not contained in correct classifier")
 		assertJavaParameterListEquals(jMethod.parameters, parameterList)
 	}
 
 	/**
-	 * Asserts that the given java interface method has the given traits.
+	 * Asserts that the given Java interface method has the given traits.
 	 * Asserts that the given interface method has public visibility.
 	 * Asserts that the given interface method is not static.
 	 */
 	def static void assertJavaInterfaceMethodTraits(InterfaceMethod jMethod, String name, TypeReference typeRef,
-		List<Parameter> parameterList, Interface containedInterface) {
-		assertEquals(name, jMethod.name)
+		List<Parameter> parameterList, Interface containingInterface) {
+		assertEquals(name, jMethod.name, "Interface method name is not as expected")
 		assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PUBLIC)
 		assertJavaModifiableStatic(jMethod, false)
-		assertEquals(containedInterface.name, (jMethod.eContainer as Interface).name)
+		assertEquals(containingInterface.name, (jMethod.eContainer as Interface).name,
+			"Method is not contained in correct classifier")
 		assertJavaParameterListEquals(jMethod.parameters, parameterList)
 	}
 
 	/**
-	 * Asserts that the given java parameter has the given traits.
+	 * Asserts that the given Java parameter has the given traits.
 	 */
 	def static void assertJavaParameterTraits(Parameter jParam, String name, TypeReference typeRef) {
-		assertEquals(name, jParam.name)
+		assertEquals(name, jParam.name, "Parameter name is not as expected")
 		assertJavaElementHasTypeRef(jParam, typeRef)
 	}
 
@@ -129,30 +131,31 @@ class JavaTestUtil {
 	 */
 	def static void assertJavaParameterListEquals(List<Parameter> expectedList, List<Parameter> actualList) {
 		if (expectedList.nullOrEmpty) {
-			assertTrue(actualList.nullOrEmpty)
+			assertTrue(actualList.nullOrEmpty, [String.format("Parameter list should be empty but is %s", actualList)])
 		} else {
-			assertEquals(expectedList.size, expectedList.size)
+			assertEquals(expectedList.size, expectedList.size, "Parameter literal lists have different sizes")
 			for (param : expectedList) {
 				val correspondingParams = actualList.filter[name == param.name]
-				if (correspondingParams.size != 1) {
-					fail("There are 0 or more than 1 Parameter with the name " + param.name)
-				}
+				assertEquals(1, correspondingParams.size, [
+					String.format("There are 0 or more than 1 parameters with the name %s", param.name)
+				])
 				assertJavaParameterTraits(correspondingParams.head, param.name, param.typeReference)
 			}
 		}
 	}
 
 	/**
-	 * Asserts that the given java field has the given traits.
+	 * Asserts that the given Java field has the given traits.
 	 */
 	def static void assertJavaAttributeTraits(Field jAttribute, String name, JavaVisibility visibility,
-		TypeReference typeRef, boolean isFinal, boolean isStatic, ConcreteClassifier containedClassifier) {
-		assertEquals(name, jAttribute.name)
+		TypeReference typeRef, boolean isFinal, boolean isStatic, ConcreteClassifier containingClassifier) {
+		assertEquals(name, jAttribute.name, "Attribute name is not as expected")
 		assertJavaModifiableHasVisibility(jAttribute, visibility)
 		assertJavaElementHasTypeRef(jAttribute, typeRef)
 		assertJavaModifiableFinal(jAttribute, isFinal)
 		assertJavaModifiableStatic(jAttribute, isStatic)
-		assertEquals(containedClassifier.name, (jAttribute.eContainer as ConcreteClassifier).name)
+		assertEquals(containingClassifier.name, (jAttribute.eContainer as ConcreteClassifier).name,
+			"Attribute is not contained in correct classifier")
 	}
 
 	def static void assertJavaModifiableFinal(AnnotableAndModifiable modifiable, boolean isFinal) {
@@ -210,7 +213,9 @@ class JavaTestUtil {
 		} else if (mod === null) {
 			fail("Cannot check modifier null")
 		}
-		assertTrue(modifiable.hasModifier(mod))
+		assertTrue(modifiable.hasModifier(mod), [
+			String.format("Element %s should have modifier %s but has not", modifiable, mod)
+		])
 	}
 
 	def static <T extends Modifier> void assertJavaModifiableDontHaveModifier(AnnotableAndModifiable modifiable,
@@ -220,29 +225,37 @@ class JavaTestUtil {
 		} else if (mod === null) {
 			fail("Cannot check modifier null")
 		}
-		assertFalse(modifiable.hasModifier(mod))
+		assertFalse(modifiable.hasModifier(mod), [
+			String.format("Element %s should not have modifier %s but has", modifiable, mod)
+		])
 	}
 
 	/**
-	 * Asserts that a member container (class, interface, enum) does not contain an element
+	 * Asserts that a member container (class, interface, enumeration) does not contain an element
 	 * with the given name.
 	 */
 	def static void assertJavaMemberContainerDontHaveMember(MemberContainer memContainer, String name) {
-		assertTrue(memContainer.getMembersByName(name).nullOrEmpty)
+		assertTrue(memContainer.getMembersByName(name).nullOrEmpty, [
+			String.format("Element %s should not have member %s but has", memContainer, name)
+		])
 	}
 
 	/**
-	 * Asserts that an enum has a constant with the given name.
+	 * Asserts that an enumeration has a constant with the given name.
 	 */
 	def static void assertJavaEnumHasConstant(Enumeration jEnum, String constantName) {
-		assertNotNull(jEnum.getContainedConstant(constantName))
+		assertNotNull(jEnum.getContainedConstant(constantName), [
+			String.format("Enumeration %s should have constant %s but has not", jEnum, constantName)
+		])
 	}
 
 	/**
-	 * Asserts that an enum does not have a constant with the given name.
+	 * Asserts that an enumeration does not have a constant with the given name.
 	 */
 	def static void assertJavaEnumDontHaveConstant(Enumeration jEnum, String constantName) {
-		assertNull(jEnum.getContainedConstant(constantName))
+		assertNull(jEnum.getContainedConstant(constantName), [
+			String.format("Enumeration %s should not have constant %s but has", jEnum, constantName)
+		])
 	}
 
 	/**
@@ -251,25 +264,33 @@ class JavaTestUtil {
 	def static void assertHasUniqueMethod(MemberContainer memContainer, String methodName) {
 		// getContainedMethod returns null if there is no method with the name methodName or
 		// if there are more than one method with the name methodName
-		assertNotNull(memContainer.getContainedMethod(methodName))
+		assertNotNull(memContainer.getContainedMethod(methodName), [
+			String.format("Element %s should have method %s but has not", memContainer, methodName)
+		])
 	}
 
 	/**
 	 * Asserts that a memberContainer has a field with the name fieldName
 	 */
 	def static void assertHasUniqueField(MemberContainer memContainer, String fieldName) {
-		assertNotNull(memContainer.getContainedField(fieldName))
+		assertNotNull(memContainer.getContainedField(fieldName), [
+			String.format("Element %s should have field %s but has not", memContainer, fieldName)
+		])
 	}
 
 	/**
 	 * Asserts that a given method has exactly one parameter with the given name and the given type.
 	 */
 	def static void assertJavaMethodHasUniqueParameter(Method jMethod, String paramName, TypeReference paramTypeRef) {
-		assertFalse(jMethod.parameters.nullOrEmpty)
+		assertFalse(jMethod.parameters.nullOrEmpty, [
+			String.format("Method %s should have parameter %s but has noone", jMethod, paramName)
+		])
 		val params = jMethod.parameters.filter[it.name == paramName]
-		assertTrue(params.size == 1)
+		assertEquals(1, params.size, [
+			String.format("Method %s should have single parameter %s but has %s", jMethod, paramName, params)
+		])
 		val paramToVerify = params.head
-		assertEquals(paramName, paramToVerify.name)
+		assertEquals(paramName, paramToVerify.name, "Method parameter name is not as expected")
 		assertJavaElementHasTypeRef(paramToVerify, paramTypeRef)
 	}
 
@@ -277,19 +298,22 @@ class JavaTestUtil {
 	 * Asserts that a method does not have a parameter with the given name.
 	 */
 	def static void assertJavaMethodDontHaveParameter(Method jMethod, String paramName) {
-		assertTrue(jMethod.parameters.filter[it.name == paramName].nullOrEmpty)
+		assertTrue(jMethod.parameters.filter[it.name == paramName].nullOrEmpty, [
+			String.format("Method %s should not have parameter %s but has", jMethod, paramName)
+		])
 	}
 
 	/**
-	 * Asserts that a TypedElement (parameter, attribute, method)
-	 * has the given type reference
+	 * Asserts that a TypedElement (parameter, attribute, method) has the given type reference
 	 */
 	def static void assertJavaElementHasTypeRef(TypedElement jTypedElement, TypeReference typeRef) {
 		assertTypeEquals(typeRef, jTypedElement.typeReference)
 	}
 
-	def static void assertTypeEquals(TypeReference typeRef1, TypeReference typeRef2) {
-		assertTrue(typeReferenceEquals(typeRef1, typeRef2))
+	def static void assertTypeEquals(TypeReference expected, TypeReference actual) {
+		assertTrue(typeReferenceEquals(expected, actual), [
+			String.format("Type should be %s but is %s", expected, actual)
+		])
 	}
 
 	/**
@@ -298,6 +322,7 @@ class JavaTestUtil {
 	 * @param superClass Java Super class
 	 */
 	def static void assertHasSuperClass(Class childClass, Class superClass) {
-		assertEquals(superClass.name, getClassifierFromTypeReference(childClass.extends).name)
+		assertEquals(superClass.name, getClassifierFromTypeReference(childClass.extends).name,
+			"Class has unexpected super class")
 	}
 }

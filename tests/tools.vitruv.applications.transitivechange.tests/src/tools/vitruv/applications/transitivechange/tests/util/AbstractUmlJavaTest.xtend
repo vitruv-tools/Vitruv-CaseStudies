@@ -1,4 +1,4 @@
-package tools.vitruv.applications.umljava.tests.util
+package tools.vitruv.applications.transitivechange.tests.util
 
 import org.eclipse.emf.ecore.EObject
 import org.apache.log4j.Logger

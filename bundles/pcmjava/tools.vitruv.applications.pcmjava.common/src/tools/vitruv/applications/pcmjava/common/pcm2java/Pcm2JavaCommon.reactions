@@ -37,6 +37,7 @@ import static com.google.common.base.Preconditions.checkState
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
+import static extension tools.vitruv.applications.pcmjava.common.pcm2java.PcmJavaTransformationUtil.getCorrespondingPackageName
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -100,7 +101,7 @@ routine renamePackageForRepository(pcm::Repository repository) {
 	}
 	action {
 		update rootPackage {
-			rootPackage.name = repository.entityName.toFirstLower;
+			rootPackage.name = repository.correspondingPackageName
 		}
 		call {
 			renameJavaPackage(repository, rootPackage, "contracts", "contracts");
@@ -192,7 +193,7 @@ routine changeSystemImplementationName(pcm::System system) {
 	}
 	action {
 		call {
-			renameJavaPackage(system, null, system.entityName.toFirstLower, null);
+			renameJavaPackage(system, null, system.correspondingPackageName, null);
 			renameJavaClassifier(system, systemPackage, system.entityName + "Impl");
 		}
 	}
@@ -669,7 +670,7 @@ routine createOrFindJavaPackage(EObject sourceElementMappedToPackage, java::Pack
 	match {
 		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
 		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
-		with matchingPackages.name == packageName.toFirstLower && (parentPackage === null ||
+		with matchingPackages.name.toLowerCase == packageName.toLowerCase && (parentPackage === null ||
 			matchingPackages.namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + ".")
 	}
 	action {

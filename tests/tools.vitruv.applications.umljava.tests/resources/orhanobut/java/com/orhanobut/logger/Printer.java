@@ -10,6 +10,10 @@ public interface Printer {
 
   void d(String message, Object... args);
 
+  void d(Object object);
+
+  void e(String message, Object... args);
+
   void e(Throwable throwable, String message, Object... args);
 
   void w(String message, Object... args);

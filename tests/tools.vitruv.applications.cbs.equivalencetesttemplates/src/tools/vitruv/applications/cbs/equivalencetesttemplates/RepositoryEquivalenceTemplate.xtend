@@ -29,7 +29,7 @@ abstract class RepositoryEquivalenceTemplate {
 			]
 		]
 
-		inputVariantFor(pcm.domain, 'lowercase name') [ extension view |
+		inputVariantFor(pcm.domain, 'lowercase repository name') [ extension view |
 			resourceAt('model/test'.repository).propagate [
 				contents += pcm.repository.Repository => [
 					entityName = 'test'
@@ -59,14 +59,44 @@ abstract class RepositoryEquivalenceTemplate {
 			]
 		]
 
-		inputVariantFor(java.domain, 'creating only the root package') [ extension view |
+		inputVariantFor(java.domain, 'uppercase package name') [ extension view |
+			resourceAt('src/Test/package-info'.java).propagate [
+				contents += java.containers.Package => [
+					name = 'Test'
+				]
+			]
+
+			resourceAt('src/Test/contracts/package-info'.java).propagate [
+				contents += java.containers.Package => [
+					name = 'contracts'
+					namespaces += #['Test']
+				]
+			]
+
+			resourceAt('src/Test/datatypes/package-info'.java).propagate [
+				contents += java.containers.Package => [
+					name = 'datatypes'
+					namespaces += #['Test']
+				]
+			]
+		]
+
+		inputVariantFor(java.domain, 'creating only Java root package') [ extension view |
 			resourceAt('src/test/package-info'.java).propagate [
 				contents += java.containers.Package => [
 					name = 'test'
 				]
 			]
 		].alsoCompareToMainStepOfSameDomain()
-		
+
+		inputVariantFor(java.domain, 'creating only Java root package - uppercase package name') [ extension view |
+			resourceAt('src/Test/package-info'.java).propagate [
+				contents += java.containers.Package => [
+					name = 'Test'
+				]
+			]
+		]
+
 		stepFor(uml.domain) [ extension view |
 			resourceAt('model/model'.uml).propagate [
 				contents += uml.Model => [
@@ -83,8 +113,25 @@ abstract class RepositoryEquivalenceTemplate {
 				]
 			]
 		]
-		
-		inputVariantFor(uml.domain, 'creating only the root package') [ extension view |
+
+		inputVariantFor(uml.domain, 'uppercase package name') [ extension view |
+			resourceAt('model/model'.uml).propagate [
+				contents += uml.Model => [
+					name = 'model'
+					packagedElements += uml.Package => [
+						name = 'Test'
+						packagedElements += uml.Package => [
+							name = 'contracts'
+						]
+						packagedElements += uml.Package => [
+							name = 'datatypes'
+						]
+					]
+				]
+			]
+		]
+
+		inputVariantFor(uml.domain, 'creating only UML root package') [ extension view |
 			resourceAt('model/model'.uml).propagate [
 				contents += uml.Model => [
 					name = 'model'
@@ -94,8 +141,8 @@ abstract class RepositoryEquivalenceTemplate {
 				]
 			]
 		].alsoCompareToMainStepOfSameDomain()
-		
-		inputVariantFor(uml.domain, 'creating only the root package — uppercase name') [ extension view |
+
+		inputVariantFor(uml.domain, 'creating only UML root package - uppercase package name') [ extension view |
 			resourceAt('model/model'.uml).propagate [
 				contents += uml.Model => [
 					name = 'model'
@@ -104,8 +151,8 @@ abstract class RepositoryEquivalenceTemplate {
 					]
 				]
 			]
-		].alsoCompareToMainStepOfSameDomain()
-		
+		]
+
 		return testsThatStepsAreEquivalent
 	}
 
@@ -120,7 +167,7 @@ abstract class RepositoryEquivalenceTemplate {
 			]
 		]
 
-		inputVariantFor(pcm.domain, 'lowercase name') [ extension view |
+		inputVariantFor(pcm.domain, 'lowercase repository name') [ extension view |
 			Repository.from('model/Test'.repository).propagate [
 				entityName = 'renamed'
 			]
@@ -150,24 +197,48 @@ abstract class RepositoryEquivalenceTemplate {
 			]
 		]
 
+		inputVariantFor(java.domain, 'uppercase package name') [ extension view |
+			resourceAt('src/test/package-info'.java).propagate [
+				moveTo('src/Renamed/package-info'.java)
+				Package.from(it).name = 'Renamed'
+			]
+
+			resourceAt('src/test/contracts/package-info'.java).propagate [
+				moveTo('src/Renamed/contracts/package-info'.java)
+				Package.from(it).namespaces.set(0, 'Renamed')
+			]
+
+			resourceAt('src/test/datatypes/package-info'.java).propagate [
+				moveTo('src/Renamed/datatypes/package-info'.java)
+				Package.from(it).namespaces.set(0, 'Renamed')
+			]
+		]
+
 		inputVariantFor(java.domain, 'renaming only the root package') [ extension view |
 			resourceAt('src/test/package-info'.java).propagate [
 				moveTo('src/renamed/package-info'.java)
 				Package.from(it).name = 'renamed'
 			]
 		]
-		
+
+		inputVariantFor(java.domain, 'renaming only the root package - uppercase package name') [ extension view |
+			resourceAt('src/test/package-info'.java).propagate [
+				moveTo('src/Renamed/package-info'.java)
+				Package.from(it).name = 'Renamed'
+			]
+		]
+
 		stepFor(uml.domain) [ extension view |
 			Model.from('model/model'.uml).propagate [
 				packagedElements.get(0).name = 'renamed'
 			]
 		]
-		
-		inputVariantFor(uml.domain, 'uppercase name') [ extension view |
+
+		inputVariantFor(uml.domain, 'uppercase package name') [ extension view |
 			Model.from('model/model'.uml).propagate [
 				packagedElements.get(0).name = 'Renamed'
 			]
-		].alsoCompareToMainStepOfSameDomain()
+		]
 
 		return testsThatStepsAreEquivalent
 	}
@@ -177,28 +248,36 @@ abstract class RepositoryEquivalenceTemplate {
 		dependsOn [creation(it)]
 
 		stepFor(pcm.domain) [ extension view |
-			resourceAt('model/Test'.repository).propagate [delete(emptyMap)]
+			resourceAt('model/Test'.repository).propagate[contents.clear()]
+		]
+
+		inputVariantFor(pcm.domain, 'deleting complete PCM resource') [ extension view |
+			resourceAt('model/Test'.repository).propagate[delete(emptyMap)]
 		]
 
 		stepFor(java.domain) [ extension view |
-			resourceAt('src/test/package-info'.java).propagate [delete(emptyMap)]
-			resourceAt('src/test/contracts/package-info'.java).propagate [delete(emptyMap)]
-			resourceAt('src/test/datatypes/package-info'.java).propagate [delete(emptyMap)]
+			resourceAt('src/test/package-info'.java).propagate[delete(emptyMap)]
+			resourceAt('src/test/contracts/package-info'.java) => [delete(emptyMap)]
+			resourceAt('src/test/datatypes/package-info'.java) => [delete(emptyMap)]
 		]
 
 		inputVariantFor(java.domain, 'deleting only the root package') [ extension view |
-			resourceAt('src/test/package-info'.java).propagate [delete(emptyMap)]
+			resourceAt('src/test/package-info'.java).propagate[delete(emptyMap)]
 		].alsoCompareToMainStepOfSameDomain()
-		
+
 		stepFor(uml.domain) [ extension view |
-			resourceAt('model/model'.uml).propagate [delete(emptyMap)]
-		]
-		
-		inputVariantFor(uml.domain, 'deleting only the root package') [ extension view |
 			Model.from('model/model'.uml).propagate [
 				packagedElements.remove(0)
 			]
-		].alsoCompareToMainStepOfSameDomain()
+		]
+
+		inputVariantFor(uml.domain, 'deleting complete UML model') [ extension view |
+			resourceAt('model/model'.uml).propagate[contents.clear()]
+		]
+
+		inputVariantFor(uml.domain, 'deleting complete UML resource') [ extension view |
+			resourceAt('model/model'.uml).propagate[delete(emptyMap)]
+		]
 
 		return testsThatStepsAreEquivalent
 	}

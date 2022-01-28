@@ -7,6 +7,9 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModal
 import org.eclipse.uml2.uml.UMLPackage
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.system.SystemPackage
+import org.eclipse.uml2.uml.Model
+import java.util.ArrayList
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -44,6 +47,14 @@ routine ensureModelCorrespondenceExists(uml::Model newModel) {
 
 reaction RepositoryOrSystemPackageInserted {
 	after element uml::Package inserted in uml::Package[packagedElement]
+	with {
+		// Exclude elements of existing/external libraries
+		var topmostPackage = newValue
+		while (!(topmostPackage.eContainer instanceof Model)) {
+			topmostPackage = topmostPackage.eContainer as org.eclipse.uml2.uml.Package
+		}
+		topmostPackage.name != "java" && topmostPackage.name != "jdk" && topmostPackage.name != "sun"
+	}
 	call insertCorrespondingRepositoryOrSystem(newValue, affectedEObject)
 }
 
@@ -90,7 +101,7 @@ routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package um
     match {
         require absence of pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
         val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
-            with foundRepository.entityName.toFirstLower == umlPkg.name // PCM repositories can be both upper and lower case
+           with umlPkg.isPackageFor(foundRepository)
     }
     action {
         call {
@@ -159,7 +170,7 @@ routine createOrFindCorrespondingSystem(uml::Package umlPkg, uml::Package umlPar
     match {
         require absence of pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
         val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM
-            with foundSystem.entityName.toFirstLower == umlPkg.name // PCM system can be both upper and lower case
+            with umlPkg.isPackageFor(foundSystem)
     }
     action {
         call {
@@ -211,11 +222,25 @@ routine createCorrespondingSystem(uml::Package umlPkg, uml::Package umlParentPkg
 	}
 }
 
+reaction UmlModelDeleted {
+	after element uml::Model deleted
+	call {
+		val rootPackages = new ArrayList(affectedEObject.nestedPackages)
+		rootPackages.forEach[deletePackage()]
+	}
+}
+
 reaction RepositoryOrSystemPackageDeleted {
 	after element uml::Package deleted
-	call {
-		deleteCorrespondingRepository(affectedEObject)
-		deleteCorrespondingSystem(affectedEObject)
+	call deletePackage(affectedEObject)
+}
+
+routine deletePackage(uml::Package umlPackage) {
+	action {
+		call {
+			deleteCorrespondingRepository(umlPackage)
+			deleteCorrespondingSystem(umlPackage)
+		}
 	}
 }
 

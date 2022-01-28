@@ -6,14 +6,14 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
 import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This test class contains basic test for associations.
@@ -46,8 +46,8 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 		val jAttribute = getCorrespondingAttribute(uAttribute)
 		val jClass2 = getCorrespondingClass(uClass2)
 		assertJavaElementHasTypeRef(jAttribute, createNamespaceClassifierReference(jClass2))
-		assertClassEquals(uClass1, jClass1)
-		assertAttributeEquals(uAttribute, jAttribute)
+		assertElementsEqual(uClass1, jClass1)
+		assertElementsEqual(uAttribute, jAttribute)
 	}
 
 	@Test
@@ -61,7 +61,7 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 		val jAttribute = getCorrespondingAttribute(uAttribute)
 		val jClass2 = getCorrespondingClass(uClass2)
 		assertJavaElementHasTypeRef(jAttribute, createNamespaceClassifierReference(jClass2))
-		assertClassEquals(uClass1, jClass1)
+		assertElementsEqual(uClass1, jClass1)
 		assertTrue(javaGetterForAttributeExists(jAttribute))
 		assertTrue(javaSetterForAttributeExists(jAttribute))
 	}

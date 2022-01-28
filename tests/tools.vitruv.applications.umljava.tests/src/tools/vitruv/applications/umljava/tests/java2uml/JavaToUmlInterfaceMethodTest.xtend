@@ -1,99 +1,138 @@
 package tools.vitruv.applications.umljava.tests.java2uml
 
-import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import org.junit.jupiter.api.Test
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.junit.jupiter.api.BeforeEach
 
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import org.emftext.language.java.members.MembersFactory
+import org.emftext.language.java.types.TypesFactory
+import org.emftext.language.java.parameters.ParametersFactory
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.CoreMatchers.*
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 
 /**
  * This class contains test cases for the creation, renaming and deleting of interface methods.
  * Plus, it checks the change of parameters and return types of interface methods.
- * 
- * @author Fei
  */
-class JavaToUmlInterfaceMethodTest extends JavaToUmlTransformationTest {
+class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	static val INTERFACE_NAME = "InterfaceName"
 	static val TYPE_NAME = "TypeName"
 	static val IOPERATION_NAME = "interfaceMethod"
-	static val STANDARD_IOPERATION_NAME = "standardInterfaceMethod"
 	static val IOPERATION_RENAME = "interfaceMethodRenamed"
 	static val PARAMETER_NAME = "parameterName"
 
-	var org.emftext.language.java.classifiers.Interface jInterface
-	var org.emftext.language.java.classifiers.Class typeClass
-	var org.emftext.language.java.members.InterfaceMethod jMeth
-
-	@BeforeEach
-	def void before() {
-		jInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
-		typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_NAME)
-		jMeth = createJavaInterfaceMethod(IOPERATION_NAME, null, null)
-		jInterface.members += jMeth
-		propagate
-	}
-
 	@Test
 	def void testCreateInterfaceMethod() {
-		val interfaceMethod = createJavaInterfaceMethod(STANDARD_IOPERATION_NAME, null, null)
-		jInterface.members += interfaceMethod
-		propagate
-
-		val uOperation = getCorrespondingMethod(interfaceMethod)
-		val uInterface = getCorrespondingInterface(jInterface)
-		assertUmlOperationTraits(uOperation, STANDARD_IOPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, true,
-			uInterface, null)
-		assertInterfaceMethodEquals(uOperation, interfaceMethod)
+		createDefaultInterfaceWithMethod(IOPERATION_NAME)
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		validateUmlView [
+			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
+			val umlOperation = umlInterface.claimOperation(IOPERATION_NAME)
+			assertUmlOperationTraits(umlOperation, IOPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, true,
+				umlInterface, null)
+		]
 	}
 
 	@Test
 	def void testRenameInterfaceMethod() {
-		jMeth.name = IOPERATION_RENAME
-		propagate
-
-		val uOperation = getCorrespondingMethod(jMeth)
-		val uInterface = getCorrespondingInterface(jInterface)
-		assertEquals(IOPERATION_RENAME, uOperation.name)
-		assertUmlInterfaceDontHaveOperation(uInterface, IOPERATION_NAME)
-		assertInterfaceMethodEquals(uOperation, jMeth)
+		createDefaultInterfaceWithMethod(IOPERATION_NAME)
+		changeJavaView [
+			claimJavaInterface(INTERFACE_NAME) => [
+				claimInterfaceMethod(IOPERATION_NAME) => [
+					name = IOPERATION_RENAME
+				]
+			]
+		]
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		validateUmlView [
+			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
+			val umlOperation = umlInterface.claimOperation(IOPERATION_RENAME)
+			assertThat(umlOperation.name, is(IOPERATION_RENAME))
+			assertUmlInterfaceDontHaveOperation(umlInterface, IOPERATION_NAME)
+			assertUmlOperationTraits(umlOperation, IOPERATION_RENAME, VisibilityKind.PUBLIC_LITERAL, null, false, true,
+				umlInterface, null)
+		]
 
 	}
 
 	@Test
-	def testDeleteInterfaceMethod() {
-		assertNotNull(getCorrespondingMethod(jMeth))
-		EcoreUtil.delete(jMeth)
-		propagate
-
-		val uInterface = getCorrespondingInterface(jInterface)
-		assertUmlInterfaceDontHaveOperation(uInterface, IOPERATION_NAME)
+	def void testDeleteInterfaceMethod() {
+		createDefaultInterfaceWithMethod(IOPERATION_NAME)
+		changeJavaView [
+			claimJavaInterface(INTERFACE_NAME) => [
+				EcoreUtil.delete(claimInterfaceMethod(IOPERATION_NAME))
+			]
+		]
+		assertSingleInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		validateUmlView [
+			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
+			assertUmlInterfaceDontHaveOperation(umlInterface, IOPERATION_NAME)
+		]
 	}
 
 	@Test
-	def testChangeInterfaceMethodReturnType() {
-		jMeth.typeReference = createNamespaceClassifierReference(typeClass)
-		propagate
-
-		val uOperation = getCorrespondingMethod(jMeth)
-		val utypeClass = getCorrespondingClass(typeClass)
-		assertUmlOperationHasReturntype(uOperation, utypeClass)
-		assertInterfaceMethodEquals(uOperation, jMeth)
+	def void testChangeInterfaceMethodReturnType() {
+		createDefaultInterfaceWithMethod(IOPERATION_NAME)
+		createJavaClassInRootPackage(TYPE_NAME)
+		changeJavaView [
+			val typeClass = claimJavaClass(TYPE_NAME)
+			claimJavaInterface(INTERFACE_NAME) => [
+				claimInterfaceMethod(IOPERATION_NAME) => [
+					typeReference = createNamespaceClassifierReference(typeClass)
+				]
+			]
+		]
+		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		validateUmlView [
+			val umlOperation = defaultUmlModel.claimInterface(INTERFACE_NAME).claimOperation(IOPERATION_NAME)
+			val umlTypeClass = defaultUmlModel.claimClass(TYPE_NAME)
+			assertUmlOperationHasReturntype(umlOperation, umlTypeClass)
+		]
 	}
 
 	@Test
-	def testCreateInterfaceParameter() {
-		val jParam = createJavaParameter(PARAMETER_NAME, createNamespaceClassifierReference(typeClass))
-		jMeth.parameters += jParam
-		propagate
-
-		val uOperation = getCorrespondingMethod(jMeth)
-		assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_NAME)
-		assertInterfaceMethodEquals(uOperation, jMeth)
+	def void testCreateInterfaceParameter() {
+		createDefaultInterfaceWithMethod(IOPERATION_NAME)
+		createJavaClassInRootPackage(TYPE_NAME)
+		changeJavaView [
+			val typeClass = claimJavaClass(TYPE_NAME)
+			claimJavaInterface(INTERFACE_NAME) => [
+				claimInterfaceMethod(IOPERATION_NAME) => [
+					parameters += ParametersFactory.eINSTANCE.createOrdinaryParameter => [
+						name = PARAMETER_NAME
+						typeReference = createNamespaceClassifierReference(typeClass)
+					]
+				]
+			]
+		]
+		assertInterfaceWithNameInRootPackage(INTERFACE_NAME)
+		validateUmlView [
+			val umlOperation = defaultUmlModel.claimInterface(INTERFACE_NAME).claimOperation(IOPERATION_NAME)
+			assertUmlOperationHasUniqueParameter(umlOperation, PARAMETER_NAME)
+		]
 	}
+
+	private def void createDefaultInterfaceWithMethod(String methodName) {
+		createJavaInterfaceInRootPackage(INTERFACE_NAME)
+		changeJavaView [
+			claimJavaInterface(INTERFACE_NAME) => [
+				members += MembersFactory.eINSTANCE.createInterfaceMethod => [
+					name = methodName
+					typeReference = TypesFactory.eINSTANCE.createVoid
+				]
+			]
+		]
+	}
+
+	static class BidirectionalTest extends JavaToUmlInterfaceMethodTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
+	}
+
 }

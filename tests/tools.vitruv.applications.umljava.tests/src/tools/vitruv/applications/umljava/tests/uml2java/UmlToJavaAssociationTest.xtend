@@ -1,85 +1,74 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-
-import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
- * This test class contains basic test for associations.
- * 
- * @author Fei
+ * This test class contains basic tests for associations.
  */
-class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
+class UmlToJavaAssociationTest extends AbstractUmlToJavaTest {
+	static val CLASS_NAME_1 = "ClassName1"
+	static val CLASS_NAME_2 = "ClassName2"
 
-	static val CLASSNAME_1 = "ClassName1"
-	static val CLASSNAME_2 = "ClassName2"
-
-	var org.eclipse.uml2.uml.Class uClass1
-	var org.eclipse.uml2.uml.Class uClass2
-
-	@BeforeEach
-	def void before() {
-		uClass1 = createSimpleUmlClass(rootElement, CLASSNAME_1)
-		uClass2 = createSimpleUmlClass(rootElement, CLASSNAME_2)
-		propagate
+	@ParameterizedTest
+	@CsvSource("0,1", "1,1")
+	def void testCreateAssociationSingleValued(int lowerBound, int upperBound) {
+		createClassInRootPackage(CLASS_NAME_1)
+		createClassInRootPackage(CLASS_NAME_2)
+		changeUmlModel [
+			val class1 = claimClass(CLASS_NAME_1)
+			val class2 = claimClass(CLASS_NAME_2)
+			createDirectedAssociation(class1, class2, lowerBound, upperBound)
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME_1)
+		assertClassWithNameInRootPackage(CLASS_NAME_2)
+		validateJavaView [
+			val javaAttribute = claimJavaClass(CLASS_NAME_1).claimField(CLASS_NAME_2.toFirstLower)
+			val referencedJavaClass = claimJavaClass(CLASS_NAME_2)
+			assertJavaElementHasTypeRef(javaAttribute, createNamespaceClassifierReference(referencedJavaClass))
+			assertTrue(javaGetterForAttributeExists(javaAttribute))
+			assertTrue(javaSetterForAttributeExists(javaAttribute))
+		]
 	}
 
-	@Test
-	def void testCreateAssociation1() {
-		this.userInteraction.addNextSingleSelection(0)
-		createDirectedAssociation(uClass1, uClass2, 0, 1)
-		propagate
-
-		val uAttribute = uClass1.ownedAttributes.head
-		val jClass1 = getCorrespondingClass(uClass1)
-		val jAttribute = getCorrespondingAttribute(uAttribute)
-		val jClass2 = getCorrespondingClass(uClass2)
-		assertJavaElementHasTypeRef(jAttribute, createNamespaceClassifierReference(jClass2))
-		assertClassEquals(uClass1, jClass1)
-		assertAttributeEquals(uAttribute, jAttribute)
+	@ParameterizedTest
+	@CsvSource("0,2", "0,-1", "1,2", "1,-1", "2,2", "2,-1")
+	def void testCreateAssociationMultiValued(int lowerBound, int upperBound) {
+		this.userInteraction.onNextMultipleChoiceSingleSelection().respondWithChoiceMatching[it.contains("ArrayList")]
+		createClassInRootPackage(CLASS_NAME_1)
+		createClassInRootPackage(CLASS_NAME_2)
+		changeUmlModel [
+			val class1 = claimClass(CLASS_NAME_1)
+			val class2 = claimClass(CLASS_NAME_2)
+			createDirectedAssociation(class1, class2, lowerBound, upperBound)
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME_1)
+		assertClassWithNameInRootPackage(CLASS_NAME_2)
+		validateJavaView [
+			val javaAttribute = claimJavaClass(CLASS_NAME_1).claimField(CLASS_NAME_2.toFirstLower)
+			val referencedJavaClass = claimJavaClass(CLASS_NAME_2)
+			val arrayListReference = getClassifierFromTypeReference(javaAttribute.typeReference)
+			assertEquals("ArrayList", arrayListReference.name)
+			val innerTypeRef = getInnerTypeReferenceOfCollectionTypeReference(javaAttribute.typeReference)
+			assertTypeEquals(createNamespaceClassifierReference(referencedJavaClass), innerTypeRef)
+		]
 	}
 
-	@Test
-	def void testCreateAssociation2() {
-		this.userInteraction.addNextSingleSelection(0)
-		createDirectedAssociation(uClass1, uClass2, 1, 1)
-		propagate
-
-		val uAttribute = uClass1.ownedAttributes.head
-		val jClass1 = getCorrespondingClass(uClass1)
-		val jAttribute = getCorrespondingAttribute(uAttribute)
-		val jClass2 = getCorrespondingClass(uClass2)
-		assertJavaElementHasTypeRef(jAttribute, createNamespaceClassifierReference(jClass2))
-		assertClassEquals(uClass1, jClass1)
-		assertTrue(javaGetterForAttributeExists(jAttribute))
-		assertTrue(javaSetterForAttributeExists(jAttribute))
-	}
-
-	@Test
-	def void testCreateAssociation3() {
-		this.userInteraction.addNextSingleSelection(0) // 0 is ArrayList
-		createDirectedAssociation(uClass1, uClass2, 0, LiteralUnlimitedNatural.UNLIMITED)
-		propagate
-
-		val uAttribute = uClass1.ownedAttributes.head
-
-		val jAttribute = getCorrespondingAttribute(uAttribute)
-		val jClass2 = getCorrespondingClass(uClass2)
-		val arrayListReference = getClassifierFromTypeReference(jAttribute.typeReference)
-		assertEquals("ArrayList", arrayListReference.name)
-		val innerTypeRef = getInnerTypeReferenceOfCollectionTypeReference(jAttribute.typeReference)
-		assertTypeEquals(createNamespaceClassifierReference(jClass2), innerTypeRef)
+	static class BidirectionalTest extends UmlToJavaAssociationTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

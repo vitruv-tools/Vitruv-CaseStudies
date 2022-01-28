@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertNotNull
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This class provides basic tests for creating, deleting and changing traits of interface methods.
@@ -50,7 +50,7 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
 		val jInterface = getCorrespondingInterface(uInterface)
 		assertJavaInterfaceMethodTraits(jMethod, STANDARD_IOPERATION_NAME, TypesFactory.eINSTANCE.createVoid, null,
 			jInterface)
-		assertInterfaceMethodEquals(interfaceMethod, jMethod)
+		assertElementsEqual(interfaceMethod, jMethod)
 	}
 
 	@Test
@@ -62,7 +62,7 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
 		val jInterface = getCorrespondingInterface(uInterface)
 		assertEquals(IOPERATION_RENAME, jMethod.name)
 		assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
-		assertInterfaceMethodEquals(uOperation, jMethod)
+		assertElementsEqual(uOperation, jMethod)
 	}
 
 	@Test
@@ -95,6 +95,6 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
 		val jMethod = getCorrespondingInterfaceMethod(uOperation)
 		val jTypeClass = getCorrespondingClass(typeClass)
 		assertJavaElementHasTypeRef(jMethod, createNamespaceClassifierReference(jTypeClass))
-		assertInterfaceMethodEquals(uOperation, jMethod)
+		assertElementsEqual(uOperation, jMethod)
 	}
 }

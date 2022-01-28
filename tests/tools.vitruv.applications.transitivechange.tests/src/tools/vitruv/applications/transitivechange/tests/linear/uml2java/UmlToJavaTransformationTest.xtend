@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.UMLFactory
 
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.eclipse.uml2.uml.Operation
-import tools.vitruv.applications.umljava.tests.util.AbstractUmlJavaTest
+import tools.vitruv.applications.transitivechange.tests.util.AbstractUmlJavaTest
 import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Path
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource

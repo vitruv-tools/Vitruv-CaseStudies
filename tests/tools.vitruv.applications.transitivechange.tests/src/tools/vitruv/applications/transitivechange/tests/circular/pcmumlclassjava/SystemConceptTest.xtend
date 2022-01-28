@@ -14,6 +14,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -47,7 +48,7 @@ class SystemConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		assertNotNull(umlSystemConstructor)
 		assertTrue(corresponds(pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE))
 		assertTrue(corresponds(pcmSystem, umlSystemImpl, TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(pcmSystem.entityName.toFirstLower == umlSystemPkg.name)
+		assertTrue(umlSystemPkg.isPackageFor(pcmSystem))
 		assertTrue(pcmSystem.entityName == umlSystemPkg.name.toFirstUpper)
 		assertTrue(pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlSystemImpl.name)
 		assertTrue(umlSystemImpl.isFinalSpecialization)

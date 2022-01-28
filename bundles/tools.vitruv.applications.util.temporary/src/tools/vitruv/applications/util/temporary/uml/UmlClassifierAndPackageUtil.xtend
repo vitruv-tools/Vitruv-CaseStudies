@@ -36,6 +36,7 @@ class UmlClassifierAndPackageUtil {
 
     /**
      * Searches and retrieves the UML package in the UML model that has an equal name as the given package name.
+     * The routines ignores the casing of the package names.
      * If there is more than one package with the given name, an {@link IllegalStateException} is thrown.
      * @param umlModel the UML model Model in which the UML packages should be searched
      * @param packageName the package name for which a fitting UML package should be retrieved
@@ -43,7 +44,7 @@ class UmlClassifierAndPackageUtil {
      */
     def static Package findUmlPackage(Model umlModel, String packageName) {
         val Set<Package> allPackages = umlModel.eAllContents.filter(Package).toSet
-        val packages = allPackages.filter[name == packageName]
+        val packages = allPackages.filter[name?.toLowerCase == packageName?.toLowerCase]
         if (packages.nullOrEmpty) {
             logger.warn("The UML-Package with the name " + packageName + " does not exist in the correspondence model")
             return null

@@ -20,7 +20,9 @@ interface EquivalenceTestBuilder {
 	/**
 	 * Registers an alternate input step in the provided {@code domain}, executing the provided {@code action}. This 
 	 * step will only be used as a test step. A proper step needs to be registered for {@code domain} before calling 
-	 * this method. The provided {@code name} should describe what is different in this alternative.
+	 * this method. The provided {@code name} should describe what is different in this alternative. The variant
+	 * is validated against the results of other domains using their steps with a name containing the one of this
+	 * variant or, if such a variant does not exist, the default step.
 	 */
 	def VariantOptions inputVariantFor(VitruvDomain domain, String name, Consumer<TestView> action)
 
@@ -29,10 +31,10 @@ interface EquivalenceTestBuilder {
 	 * tests created by this builder will only run if the other steps can be executed successfully before.
 	 */
 	def void dependsOn((EquivalenceTestBuilder)=>void otherTest)
-	
+
 	/**
 	 * Calls the provided {@code interactionsProvider} before starting the test run, allowing the lambda to
-	 * configure the user interations
+	 * configure the user interactions.
 	 */
 	def void userInteractions((TestUserInteraction)=>void interactionsProvider)
 

@@ -33,6 +33,7 @@ import org.emftext.language.java.commons.NamespaceAwareElement
 import static java.util.Collections.emptyList
 import org.emftext.language.java.containers.ContainersPackage
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
+import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
 
 /**
  * Class for java classifier, package and compilation unit util functions
@@ -139,7 +140,7 @@ class JavaContainerAndClassifierUtil {
 	/**
 	 * Removes all classifiers of the iterator which has the same name as the given classifier classif
 	 * @param iter iterator of typreferences
-	 * @param classif classifier that shoud be removed from the iterator
+	 * @param classif classifier that should be removed from the iterator
 	 */
 	def static removeClassifierFromIterator(Iterator<TypeReference> iter, ConcreteClassifier classif) {
 		while (iter.hasNext) {
@@ -196,7 +197,7 @@ class JavaContainerAndClassifierUtil {
 		val file = new File(directory + "/package-info.java")
 		file.createNewFile
 		val writer = new PrintWriter(file)
-		writer.println("package " + packageName + "")
+		writer.println("package " + packageName + ";")
 		writer.close
 		return file
 	}
@@ -286,8 +287,13 @@ class JavaContainerAndClassifierUtil {
 		return packageName?.substring(packageName.indexOf('.') + 1)
 	}
 
+	private def static String getCompilationUnitName(String namespacesAsString, String classifierName) {
+		namespacesAsString + classifierName + ".java"
+	}
+
 	def static String getCompilationUnitName(Package containingPackage, String className) {
-		'''«IF containingPackage !== null»«containingPackage.namespacesAsString»«containingPackage.name».«ENDIF»«className».java'''
+		getCompilationUnitName('''«IF containingPackage !== null»«containingPackage.namespacesAsString»«containingPackage.name».«ENDIF»''',
+			className)
 	}
 
 	def static String getCompilationUnitName(Optional<Package> containingPackage, String className) {
@@ -321,6 +327,26 @@ class JavaContainerAndClassifierUtil {
 			return true
 		}
 		return false
+	}
+
+	def static void updateCompilationUnitName(CompilationUnit compilationUnit, String simpleName) {
+		compilationUnit.name = getCompilationUnitName(compilationUnit.namespaces.join("", ".", ".", [it]), simpleName)
+	}
+
+	/**
+	 * Updates the classifier name together with the name of its compilation unit.
+	 */
+	def static void changeNameWithCompilationUnit(Classifier classifier, String newName) {
+		classifier.updateName(newName)
+		classifier.containingCompilationUnit?.updateCompilationUnitName(newName)
+	}
+
+	def static boolean isInExistingLibrary(CompilationUnit compilationUnit) {
+		compilationUnit.eResource.URI.isPathmap
+	}
+
+	def static boolean isInExistingLibrary(Classifier classifier) {
+		classifier.containingCompilationUnit.isInExistingLibrary
 	}
 
 }

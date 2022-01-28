@@ -4,8 +4,6 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getClassifierFromTypeReference
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import org.junit.jupiter.api.BeforeEach
@@ -15,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This class provides tests for basic class tests in the uml to java direction
@@ -63,7 +63,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 
 		val jClass = getCorrespondingClass(uClass)
 		assertJavaModifiableHasVisibility(jClass, JavaVisibility.PRIVATE)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 
 	}
 
@@ -72,11 +72,9 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		uClass.visibility = VisibilityKind.PACKAGE_LITERAL
 		propagate
 
-		// PCM sets the visibility to protected because it does not know package visibility
-		uClass.visibility = VisibilityKind.PROTECTED_LITERAL
 		val jClass = getCorrespondingClass(uClass)
-		assertJavaModifiableHasVisibility(jClass, JavaVisibility.PROTECTED)
-		assertClassEquals(uClass, jClass)
+		assertJavaModifiableHasVisibility(jClass, JavaVisibility.PACKAGE)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	@Test
@@ -86,7 +84,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 
 		val jClass = getCorrespondingClass(uClass)
 		assertJavaModifiableAbstract(jClass, true)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	@Test
@@ -98,7 +96,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		assertEquals(CLASS_RENAME, jClass.name)
 		assertJavaFileExists(CLASS_RENAME, #[])
 		assertJavaFileNotExists(CLASS_NAME, #[])
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 	
 	@Test
@@ -111,7 +109,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		var jClass = getCorrespondingClass(uClass)
 		assertJavaFileExists(CLASS_NAME, #[uPackage.name])
 		assertJavaFileNotExists(CLASS_NAME, #[])
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 		assertEquals(jClass.containingPackageName.join("."), uPackage.name)
 		
 		rootElement.packagedElements += uClass
@@ -120,7 +118,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		jClass = getCorrespondingClass(uClass)
 		assertJavaFileNotExists(CLASS_NAME, #[uPackage.name])
 		assertJavaFileExists(CLASS_NAME, #[])
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 		assertEquals(jClass.containingPackageName.join("."), "")
 	}
 
@@ -131,7 +129,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 
 		val jClass = getCorrespondingClass(uClass)
 		assertJavaModifiableFinal(jClass, true)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	@Test
@@ -142,14 +140,14 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		var jClass = getCorrespondingClass(uClass)
 		var jSuperClass = getCorrespondingClass(superClass)
 		assertHasSuperClass(jClass, jSuperClass)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 		
 		uClass.generals -= superClass
 		propagate
 		jClass = getCorrespondingClass(uClass)
 		jSuperClass = getCorrespondingClass(superClass)
 		assertTrue(jClass.extends === null)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	@Test
@@ -167,7 +165,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		assertTrue(jClass.implements.size == 1, jClass.implements.size.toString)
 		assertEquals(INTERFACE_NAME2, getClassifierFromTypeReference(jClass.implements.get(0)).name)
 		assertJavaFileExists(INTERFACE_NAME, #[])
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	@Test
@@ -178,7 +176,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 
 		val jClass = getCorrespondingClass(uClass)
 		assertEquals(INTERFACE_NAME, getClassifierFromTypeReference(jClass.implements.head).name)
-		assertClassEquals(uClass, jClass)
+		assertElementsEqual(uClass, jClass)
 	}
 
 	@Test
@@ -201,8 +199,8 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 		assertEquals(INTERFACE_NAME, getClassifierFromTypeReference(jClass2.implements.head).name)
 		assertTrue(jClass.implements.nullOrEmpty)
 
-		assertClassEquals(uClass, jClass)
-		assertClassEquals(uClass2, jClass2)
+		assertElementsEqual(uClass, jClass)
+		assertElementsEqual(uClass2, jClass2)
 
 	}
 

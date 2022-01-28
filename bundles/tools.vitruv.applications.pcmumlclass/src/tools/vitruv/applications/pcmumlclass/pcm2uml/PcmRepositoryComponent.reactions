@@ -1,6 +1,8 @@
 import org.eclipse.uml2.uml.Class
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.getCorrespondingPackageName
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -44,7 +46,7 @@ routine detectOrCreateCorrespondingComponentPackage(pcm::RepositoryComponent pcm
 	action {
 		call {
 			if (!umlComponentPackage.isPresent) {
-				val umlComponentPackageCandidate = umlRepositoryPackage.nestedPackages.findFirst[it.name == pcmComponent.entityName.toFirstLower]
+				val umlComponentPackageCandidate = umlRepositoryPackage.nestedPackages.findFirst[isPackageFor(pcmComponent)]
 				if (umlComponentPackageCandidate !== null) {
 					addCorrespondenceForExistingComponentPackage(pcmComponent, umlComponentPackageCandidate)
 				} else { 
@@ -72,7 +74,7 @@ routine createCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponen
 	}
 	action {
 		val umlComponentPackage = create uml::Package and initialize {
-			umlComponentPackage.name = pcmComponent.entityName.toFirstLower
+			umlComponentPackage.name = pcmComponent.correspondingPackageName
 			umlRepositoryPackage.packagedElements += umlComponentPackage
 		}
 		add correspondence between pcmComponent and umlComponentPackage tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
@@ -232,7 +234,7 @@ routine changeNameOfComponentCorrespondences(pcm::RepositoryComponent pcmCompone
 	}
 	action {
 		execute {
-			if (umlComponentPackage.isPresent) umlComponentPackage.get.name = pcmComponent.entityName.toFirstLower
+			if (umlComponentPackage.isPresent) umlComponentPackage.get.name = pcmComponent.correspondingPackageName
 			if (umlComponentImplementation.isPresent) umlComponentImplementation.get.name = newName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
 			if (umlComponentConstructor.isPresent) umlComponentConstructor.get.name = newName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
 		}

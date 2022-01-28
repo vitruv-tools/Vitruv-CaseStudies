@@ -33,11 +33,11 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 
 import static org.junit.jupiter.api.Assertions.*
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.transitivechange.tests.util.TransitiveChangeSetup.*
 import org.emftext.language.java.containers.ContainersPackage
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
@@ -79,7 +79,7 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 	def protected checkJavaPackage(Package umlPackage) {
 		val javaPackage = getFirstCorrespondingObject(umlPackage, org.emftext.language.java.containers.Package)
 		assertEquals(umlPackage.name, javaPackage.name)
-		assertPackageEquals(umlPackage, javaPackage)
+		assertElementsEqual(umlPackage, javaPackage)
 	}
 
 	def protected checkNumberOfJavaPackages(Package umlRootPackage) {
@@ -92,7 +92,7 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 	def protected checkUmlPackage(org.emftext.language.java.containers.Package javaPackage) {
 		val umlPackage = getFirstCorrespondingObject(javaPackage, Package)
 		assertEquals(umlPackage.name, javaPackage.name)
-		assertPackageEquals(umlPackage, javaPackage)
+		assertElementsEqual(umlPackage, javaPackage)
 	}
 
 	def protected checkJavaAttribute(Property umlAttribute) {

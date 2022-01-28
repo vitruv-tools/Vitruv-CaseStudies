@@ -1,254 +1,312 @@
 package tools.vitruv.applications.umljava.tests.java2uml
 
-import java.nio.file.Path
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
-import org.junit.jupiter.api.BeforeEach
 
-import static org.junit.jupiter.api.Assertions.assertNull
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertFalse
-import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.CoreMatchers.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getUmlVisibilityKindFromJavaVisibilityConstant
+import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 
 /**
  * A Test class to test classes and their traits.
- * 
- * @author Fei
  */
-class JavaToUmlClassTest extends JavaToUmlTransformationTest {
+class JavaToUmlClassTest extends AbstractJavaToUmlTest {
+	static val PACKAGE_NAME = "packagename"
 	static val CLASS_NAME = "ClassName"
-	static val STANDARD_CLASS_NAME = "StandardClassName"
 	static val CLASS_RENAMED = "ClassRenamed"
 	static val SUPER_CLASS_NAME = "SuperClassName"
 	static val INTERFACE_NAME = "InterfaceName"
 	static val INTERFACE_NAME2 = "InterfaceName2"
 
-	var org.emftext.language.java.classifiers.Class jClass
-
-	@BeforeEach
-	def void before() {
-		jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME)
-	}
-
 	/**
-	 * Tests if a corresponding java class is created when an uml class is created.
+	 * Tests if a corresponding Java class is created when a UML class is created.
 	 */
 	@Test
 	def void testCreateClass() {
-		val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME)
-
-		val uClass = getCorrespondingClass(cls)
-		assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false,
-			registeredUmlModel)
-		assertClassEquals(uClass, cls)
-	}
-
-	/**
-	 * Tests if renaming a java class also renames the corresponding uml class.
-	 */
-	@Test
-	def testRenameClass() {
-		jClass.name = CLASS_RENAMED
-		propagate
-
-		val uClass = getCorrespondingClass(jClass)
-		assertEquals(CLASS_RENAMED, uClass.name)
-		assertClassEquals(uClass, jClass)
-	}
-
-	/**
-	 * Tests if deleting a java class also cause the deleting of the corresponding
-	 * uml class.
-	 */
-	@Test
-	def testDeleteClass() {
-		assertNotNull(getCorrespondingClass(jClass))
-		jClass.containingCompilationUnit
-
-		EcoreUtil.delete(jClass)
-		propagate
-
-		val uClass = getUmlPackagedElementsbyName(Class, CLASS_NAME).head
-		assertNull(uClass)
-	}
-
-	/**
-	 * Tests if deleting a java compilation unit also cause the deleting of the corresponding
-	 * uml class.
-	 */
-	@Test
-	def testDeleteCompilationUnit() {
-		val compUnitFilePath = buildJavaFilePath(jClass.containingCompilationUnit)
-		assertNotNull(getCorrespondingClass(jClass))
-		resourceAt(Path.of(compUnitFilePath)).propagate [
-			delete(null)
+		createJavaClassInRootPackage(CLASS_NAME)
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		validateUmlView [
+			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+			assertUmlClassTraits(umlClass, CLASS_NAME, VisibilityKind.PACKAGE_LITERAL, false, false, defaultUmlModel)
 		]
-
-		assertTrue(getUmlPackagedElementsbyName(Class, CLASS_NAME).nullOrEmpty)
 	}
 
 	/**
-	 * Checks if visibility changes are propagated to the uml class.
+	 * Tests if a corresponding Java class is created when a UML class is created within a package.
 	 */
 	@Test
-	def testChangeClassVisibility() {
-		jClass.makeProtected
-		propagate
-
-		var uClass = getCorrespondingClass(jClass)
-		assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PROTECTED_LITERAL)
-		assertClassEquals(uClass, jClass)
-
-		jClass.makePrivate
-		propagate
-
-		uClass = getCorrespondingClass(jClass)
-		assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PRIVATE_LITERAL)
-		assertClassEquals(uClass, jClass)
+	def void testCreateClassInPackage() {
+		createJavaPackageInRootPackage(PACKAGE_NAME)
+		createJavaClassInPackage(#[PACKAGE_NAME], CLASS_NAME)
+		assertSingleClassWithNameInPackage(PACKAGE_NAME, CLASS_NAME)
+		assertNoClassifierWithNameInRootPackage(CLASS_NAME)
+		assertNoClassifierExistsInRootPackage()
+		validateUmlView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val umlClass = umlPackage.claimClass(CLASS_NAME)
+			assertUmlClassTraits(umlClass, CLASS_NAME, VisibilityKind.PACKAGE_LITERAL, false, false, umlPackage)
+		]
 	}
 
 	/**
-	 * Tests the change of the abstract value in uml.
+	 * Tests if renaming a java class also renames the corresponding UML class.
 	 */
 	@Test
-	def testChangeAbstractClass() {
-		jClass.abstract = true
-		propagate
-
-		var uClass = getCorrespondingClass(jClass)
-		assertTrue(uClass.abstract)
-		assertClassEquals(uClass, jClass)
-
-		jClass.abstract = false
-		propagate
-
-		uClass = getCorrespondingClass(jClass)
-		assertFalse(uClass.abstract)
-		assertClassEquals(uClass, jClass)
+	def void testRenameClass() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		changeJavaView [
+			claimJavaClass(CLASS_NAME) => [
+				changeNameWithCompilationUnit(CLASS_RENAMED)
+			]
+			moveJavaRootElement(claimJavaCompilationUnit(CLASS_RENAMED))
+		]
+		assertSingleClassWithNameInRootPackage(CLASS_RENAMED)
+		assertNoClassifierWithNameInRootPackage(CLASS_NAME)
+		validateUmlView [
+			val umlClass = defaultUmlModel.claimClass(CLASS_RENAMED)
+			assertUmlClassTraits(umlClass, CLASS_RENAMED, VisibilityKind.PACKAGE_LITERAL, false, false, defaultUmlModel)
+		]
 	}
 
 	/**
-	 * Checks if the changing the final value in the java class
-	 * causes the correct change in the uml class.
+	 * Tests if moving a Java class leads to the movement of the corresponding UML class.
 	 */
 	@Test
-	def testChangeFinalClass() {
-		jClass.final = true
-		propagate
-
-		var uClass = getCorrespondingClass(jClass)
-		assertTrue(uClass.finalSpecialization)
-		assertClassEquals(uClass, jClass)
-
-		jClass.final = false
-		propagate
-
-		uClass = getCorrespondingClass(jClass)
-		assertFalse(uClass.finalSpecialization)
-		assertClassEquals(uClass, jClass)
+	def void testMoveClass() {
+		createJavaPackageInRootPackage(PACKAGE_NAME)
+		createJavaClassInRootPackage(CLASS_NAME)
+		changeJavaView [
+			moveJavaRootElement(claimJavaCompilationUnit(CLASS_NAME) => [
+				namespaces += PACKAGE_NAME
+				updateCompilationUnitName(CLASS_NAME)
+			])
+		]
+		assertSingleClassWithNameInPackage(PACKAGE_NAME, CLASS_NAME)
+		assertNoClassifierWithNameInRootPackage(CLASS_NAME)
+		assertNoClassifierExistsInRootPackage()
+		changeJavaView [
+			moveJavaRootElement(claimJavaCompilationUnit(PACKAGE_NAME + "." + CLASS_NAME) => [
+				namespaces.clear
+				updateCompilationUnitName(CLASS_NAME)
+			])
+		]
+		assertSingleClassWithNameInRootPackage(CLASS_NAME)
+		assertNoClassifierWithNameInPackage(PACKAGE_NAME, CLASS_NAME)
 	}
 
 	/**
-	 * Tests if add a super class is correctly reflected on the uml side.
+	 * Tests if deleting a Java class also cause the deleting of the corresponding
+	 * UML class.
 	 */
 	@Test
-	def testSuperClassChanged() {
-		val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME)
-		jClass.extends = createNamespaceClassifierReference(superClass)
-		propagate
-
-		val uClass = getCorrespondingClass(jClass)
-		val uSuperClass = getCorrespondingClass(superClass)
-		assertUmlClassifierHasSuperClassifier(uClass, uSuperClass)
-		assertClassEquals(uClass, jClass)
-
+	def void testDeleteClass() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		changeJavaView [
+			EcoreUtil.delete(claimJavaClass(CLASS_NAME))
+		]
+		assertNoClassifierWithNameInRootPackage(CLASS_NAME)
+		assertNoClassifierExistsInRootPackage()
 	}
 
 	/**
-	 * Tests if removing a super class is reflected on the uml side.
+	 * Tests if deleting a Java compilation unit also cause the deleting of the corresponding
+	 * UML class.
 	 */
 	@Test
-	def testRemoveSuperClass() {
-		val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME)
-		jClass.extends = createNamespaceClassifierReference(superClass)
-		propagate
+	def void testDeleteCompilationUnit() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		changeJavaView [
+			EcoreUtil.delete(claimJavaCompilationUnit(CLASS_NAME))
+		]
+		assertNoClassifierWithNameInRootPackage(CLASS_NAME)
+		assertNoClassifierExistsInRootPackage()
+	}
 
-		var uClass = getCorrespondingClass(jClass)
-		val uSuperClass = getCorrespondingClass(superClass)
-		assertUmlClassifierHasSuperClassifier(uClass, uSuperClass)
-
-		EcoreUtil.delete(jClass.extends)
-		propagate
-		uClass = getCorrespondingClass(jClass)
-		assertUmlClassifierDontHaveSuperClassifier(uClass, uSuperClass)
+	private def void changeAndCheckPropertyOfClass(String className,
+		(org.emftext.language.java.classifiers.Class)=>void changeJavaClass,
+		(org.eclipse.uml2.uml.Class)=>void validateUmlClass) {
+		changeJavaView [
+			claimJavaClass(className) => [
+				changeJavaClass.apply(it)
+			]
+		]
+		assertSingleClassWithNameInRootPackage(className)
+		validateUmlView [
+			val umlClass = defaultUmlModel.claimClass(className)
+			validateUmlClass.apply(umlClass)
+		]
 	}
 
 	/**
-	 * Check the creation of an interface implementation on the uml side.
-	 * The test does currently NOT work, due to an error in the EMF monitor:
-	 * 	 The contract of an InterfaceImplementation is also represented in the supplier feature 
-	 *   and automatically added to that feature. So one change description for setting the contract
-	 *   and one for adding the supplier are generated by our monitor. When rolling them back, the supplier is
-	 *   first removed by the second change description, which results in an also removed
-	 *   contract (due to their dependency). When rolling back the second change description
-	 *   for the contract, nothing happens. Reversing this procedure results in a missing
-	 *   contract, because the change description lost the information as the supplier removal
-	 *   removed the contract as well
+	 * Checks if visibility changes are propagated to the UML class.
 	 */
-	@Test
-	def testAddClassImplement() {
-		val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
-		jClass.implements += createNamespaceClassifierReference(implInterface)
-		propagate
-
-		val uClass = getCorrespondingClass(jClass)
-		val uInterface = getCorrespondingInterface(implInterface)
-		assertUmlClassHasImplement(uClass, uInterface)
-		assertClassEquals(uClass, jClass)
+	@ParameterizedTest
+	@EnumSource(value=JavaVisibility, names=#["PACKAGE"], mode=EnumSource.Mode.EXCLUDE)
+	def void testChangeClassVisibility(JavaVisibility visibility) {
+		createJavaClassInRootPackage(CLASS_NAME)
+		changeAndCheckPropertyOfClass(CLASS_NAME, [javaVisibilityModifier = visibility], [
+			assertUmlNamedElementHasVisibility(it, getUmlVisibilityKindFromJavaVisibilityConstant(visibility))
+		])
+		changeAndCheckPropertyOfClass(CLASS_NAME, [javaVisibilityModifier = JavaVisibility.PACKAGE], [
+			assertUmlNamedElementHasVisibility(it,
+				getUmlVisibilityKindFromJavaVisibilityConstant(JavaVisibility.PACKAGE))
+		])
 	}
 
 	/**
-	 * Tests if Removing an implementation relation is correctly reflected on the java side.
-	 * The test does currently NOT work, due to an error in the EMF monitor:
-	 * 	 The contract of an InterfaceImplementation is also represented in the supplier feature 
-	 *   and automatically added to that feature. So one change description for setting the contract
-	 *   and one for adding the supplier are generated by our monitor. When rolling them back, the supplier is
-	 *   first removed by the second change description, which results in an also removed
-	 *   contract (due to their dependency). When rolling back the second change description
-	 *   for the contract, nothing happens. Reversing this procedure results in a missing
-	 *   contract, because the change description lost the information as the supplier removal
-	 *   removed the contract as well
+	 * Tests the change of the abstract value in UML.
 	 */
 	@Test
-	def testRemoveClassImplement() {
-		val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
-		val implInterface2 = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME2)
-		jClass.implements += createNamespaceClassifierReference(implInterface)
-		jClass.implements += createNamespaceClassifierReference(implInterface2)
-		propagate
+	def void testChangeAbstractClass() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		changeAndCheckPropertyOfClass(CLASS_NAME, [abstract = true], [
+			assertThat("UML class must be abstract", it.abstract, is(true))
+		])
+		changeAndCheckPropertyOfClass(CLASS_NAME, [abstract = false], [
+			assertThat("UML class must not be abstract", it.abstract, is(false))
+		])
+	}
 
-		var uClass = getCorrespondingClass(jClass)
-		var uInterface = getCorrespondingInterface(implInterface)
-		var uInterface2 = getCorrespondingInterface(implInterface2)
-		assertUmlClassHasImplement(uClass, uInterface)
-		assertUmlClassHasImplement(uClass, uInterface2)
+	/**
+	 * Checks if the changing the final value in the Java class
+	 * causes the correct change in the Uml class.
+	 */
+	@Test
+	def void testChangeFinalClass() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		changeAndCheckPropertyOfClass(CLASS_NAME, [final = true], [
+			assertThat("UML class must be final", it.finalSpecialization, is(true))
+		])
+		changeAndCheckPropertyOfClass(CLASS_NAME, [final = false], [
+			assertThat("UML class must not be final", it.finalSpecialization, is(false))
+		])
+	}
 
-		jClass.implements.remove(0)
-		propagate
+	/**
+	 * Tests if add a super class is correctly reflected on the UML side.
+	 */
+	@Test
+	def void testSuperClassChanged() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		createJavaClassInRootPackage(SUPER_CLASS_NAME)
+		changeJavaView [
+			val superClass = claimJavaClass(SUPER_CLASS_NAME)
+			claimJavaClass(CLASS_NAME) => [
+				extends = createNamespaceClassifierReference(superClass)
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		assertClassWithNameInRootPackage(SUPER_CLASS_NAME)
+		validateUmlView [
+			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+			val umlSuperClass = defaultUmlModel.claimClass(SUPER_CLASS_NAME)
+			assertUmlClassifierHasSuperClassifier(umlClass, umlSuperClass)
+		]
+	}
 
-		uClass = getCorrespondingClass(jClass)
-		assertUmlClassDontHaveImplement(uClass, uInterface)
-		assertUmlClassHasImplement(uClass, uInterface2)
+	/**
+	 * Tests if removing a super class is reflected on the UML side.
+	 */
+	@Test
+	def void testRemoveSuperClass() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		createJavaClassInRootPackage(SUPER_CLASS_NAME)
+		changeJavaView [
+			val superClass = claimJavaClass(SUPER_CLASS_NAME)
+			claimJavaClass(CLASS_NAME) => [
+				extends = createNamespaceClassifierReference(superClass)
+			]
+		]
+		changeJavaView [
+			claimJavaClass(CLASS_NAME) => [
+				EcoreUtil.delete(extends)
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		validateUmlView [
+			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+			val umlSuperClass = defaultUmlModel.claimClass(SUPER_CLASS_NAME)
+			assertUmlClassifierDontHaveSuperClassifier(umlClass, umlSuperClass)
+		]
+	}
+
+	/**
+	 * Check the creation of an interface implementation on the UML side.
+	 */
+	@Test
+	def void testAddClassImplement() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		createJavaInterfaceInRootPackage(INTERFACE_NAME)
+		changeJavaView [
+			val javaInterface = claimJavaInterface(INTERFACE_NAME)
+			claimJavaClass(CLASS_NAME) => [
+				implements += createNamespaceClassifierReference(javaInterface)
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		validateUmlView [
+			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+			val umlInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
+			assertUmlClassHasImplement(umlClass, umlInterface)
+		]
+	}
+
+	/**
+	 * Tests if removing an implementation relation is correctly reflected on the UML side.
+	 */
+	@Test
+	def void testRemoveClassImplement() {
+		createJavaClassInRootPackage(CLASS_NAME)
+		createJavaInterfaceInRootPackage(INTERFACE_NAME)
+		createJavaInterfaceInRootPackage(INTERFACE_NAME2)
+		changeJavaView [
+			val firstJavaInterface = claimJavaInterface(INTERFACE_NAME)
+			val secondJavaInterface = claimJavaInterface(INTERFACE_NAME2)
+			claimJavaClass(CLASS_NAME) => [
+				implements += createNamespaceClassifierReference(firstJavaInterface)
+				implements += createNamespaceClassifierReference(secondJavaInterface)
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		validateUmlView [
+			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+			val umlFirstInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
+			val umlSecondInterface = defaultUmlModel.claimInterface(INTERFACE_NAME2)
+			assertUmlClassHasImplement(umlClass, umlFirstInterface)
+			assertUmlClassHasImplement(umlClass, umlSecondInterface)
+		]
+		changeJavaView [
+			claimJavaClass(CLASS_NAME) => [
+				implements.remove(0)
+			]
+		]
+		assertClassWithNameInRootPackage(CLASS_NAME)
+		validateUmlView [
+			val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+			val umlFirstInterface = defaultUmlModel.claimInterface(INTERFACE_NAME)
+			val umlSecondInterface = defaultUmlModel.claimInterface(INTERFACE_NAME2)
+			assertUmlClassDontHaveImplement(umlClass, umlFirstInterface)
+			assertUmlClassHasImplement(umlClass, umlSecondInterface)
+		]
+	}
+
+	static class BidirectionalTest extends JavaToUmlClassTest {
+		override setupTransformationDirection() {
+			configureBidirectionalExecution()
+		}
 	}
 
 }

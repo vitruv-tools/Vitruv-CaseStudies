@@ -4,8 +4,6 @@ import org.eclipse.uml2.uml.Package
 import org.emftext.language.java.classifiers.Class
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.junit.jupiter.api.BeforeEach
@@ -16,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import java.nio.file.Path
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import org.junit.jupiter.api.Disabled
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This class contains basis tests for java packages.
@@ -51,7 +51,7 @@ class JavaToUmlPackageTest extends JavaToUmlTransformationTest {
 		val uPackage = getCorrespondingPackage(jPackage)
 		assertNotNull(uPackage)
 		assertEquals(PACKAGE_NAME, uPackage.name)
-		assertPackageEquals(uPackage, jPackage)
+		assertElementsEqual(uPackage, jPackage)
 	}
 
 	@Test
@@ -61,7 +61,7 @@ class JavaToUmlPackageTest extends JavaToUmlTransformationTest {
 
 		val uPackage = getCorrespondingPackage(jPackageLevel1)
 		assertEquals(PACKAGE_RENAMED, uPackage.name)
-		assertPackageEquals(uPackage, jPackageLevel1)
+		assertElementsEqual(uPackage, jPackageLevel1)
 	}
 
 	@Test

@@ -35,8 +35,8 @@
     <ownedOperation xmi:id="_RB-6sBmOEeep-rPkdJ17sQ" name="Operation2"/>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_x3ueIBmNEeep-rPkdJ17sQ" name="Class3">
-    <ownedOperation xmi:id="_By46wDtCEeej9ODbYXDXAg"/>
-    <ownedOperation xmi:id="_DiR0wDtCEeej9ODbYXDXAg"/>
+    <ownedOperation xmi:id="_By46wDtCEeej9ODbYXDXAg" name="UpperCaseOperation"/>
+    <ownedOperation xmi:id="_DiR0wDtCEeej9ODbYXDXAg" name="lowerCaseOperation"/>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_S3JskBmOEeep-rPkdJ17sQ" name="Class4">
     <ownedAttribute xmi:id="_yHe78BmOEeep-rPkdJ17sQ" name="finalAttr" type="_Tc_kkBmOEeep-rPkdJ17sQ" isReadOnly="true"/>

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import java.nio.file.Path
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Repository
@@ -35,7 +36,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(EcoreUtil.equals(umlContractsPkg.nestingPackage, umlRepositoryPkg))
 		assertTrue(EcoreUtil.equals(umlDatatypesPkg.nestingPackage, umlRepositoryPkg))
 		// attribute constraints
-		assertTrue(umlRepositoryPkg.name == pcmRepo.entityName.toFirstLower)
+		assertTrue(umlRepositoryPkg.isPackageFor(pcmRepo))
 		assertTrue(umlRepositoryPkg.name.toFirstUpper == pcmRepo.entityName)
 		assertTrue(umlContractsPkg.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME)
 		assertTrue(umlDatatypesPkg.name == DefaultLiterals.DATATYPES_PACKAGE_NAME)

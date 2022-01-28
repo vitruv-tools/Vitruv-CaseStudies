@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import java.nio.file.Path
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::System
@@ -46,7 +47,7 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(umlSystemConstructor)
 		assertTrue(corresponds(pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE))
 		assertTrue(corresponds(pcmSystem, umlSystemImpl, TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(pcmSystem.entityName.toFirstLower == umlSystemPkg.name)
+		assertTrue(umlSystemPkg.isPackageFor(pcmSystem))
 		assertTrue(pcmSystem.entityName == umlSystemPkg.name.toFirstUpper)
 		assertTrue(pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlSystemImpl.name)
 		assertTrue(umlSystemImpl.isFinalSpecialization)

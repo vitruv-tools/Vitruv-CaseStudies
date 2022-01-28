@@ -17,19 +17,24 @@ import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorresponde
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
 import tools.vitruv.framework.userinteraction.UserInteractor
+import org.eclipse.uml2.uml.Model
+import org.palladiosimulator.pcm.system.System
+import org.palladiosimulator.pcm.core.entity.Entity
 
 @Utility
 class PcmUmlClassHelper {
 
-	def static PrimitiveType mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
-		Iterable<PrimitiveType> umlPredifinedPrimitiveTypes) {
+	def static Iterable<PrimitiveType> mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
+		Iterable<PrimitiveType> umlPredefinedPrimitiveTypes) {
 		return switch (pcmPredefinedPrimitiveType.type) {
-			case PrimitiveTypeEnum.BOOL: umlPredifinedPrimitiveTypes.findFirst[it.name == "Boolean"]
-			case PrimitiveTypeEnum.INT: umlPredifinedPrimitiveTypes.findFirst[it.name == "Integer"]
-			case PrimitiveTypeEnum.DOUBLE: umlPredifinedPrimitiveTypes.findFirst[it.name == "Real"]
-			case PrimitiveTypeEnum.STRING: umlPredifinedPrimitiveTypes.findFirst[it.name == "String"]
+			case PrimitiveTypeEnum.BOOL: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "bool" || it.name.toLowerCase == "boolean"]
+			case PrimitiveTypeEnum.BYTE: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "byte"]
+			case PrimitiveTypeEnum.CHAR: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "char"]
+			case PrimitiveTypeEnum.INT: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "int" || it.name.toLowerCase == "integer"]
+			case PrimitiveTypeEnum.DOUBLE: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "double" || it.name.toLowerCase == "real"]
+			case PrimitiveTypeEnum.STRING: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "string"]
 			default: null
-		// pcm::Char, pcm::Byte, uml::UnlimitedNatural are not mapped and the user is notified if one of these types is set
+		// uml::UnlimitedNatural are not mapped and the user is notified if one of these types is set
 		}
 	}
 
@@ -113,6 +118,38 @@ class PcmUmlClassHelper {
 		}
 
 		return pcmDataType
+	}
+
+	/**
+	 * Returns the name of a UML package to which the given {@link Entity} should
+	 * be mapped. The returned name conforms to the name check performed by
+	 * {@link #isPackageFor}.
+	 * 
+	 * @param entity - 	the PCM {@link Entity} to return the name of a corresponding 
+	 * 					package for 
+	 */
+	static def String getCorrespondingPackageName(Entity entity) {
+		return entity.entityName.toFirstLower
+	}
+
+	/**
+	 * Returns whether the given UML {@link Package} realizes the given PCM
+	 * {@link Entity}. This is given if their names match and, in case of a
+	 * PCM {@link Repository} or {@link System}, if the package is at the
+	 * root level.
+	 * 
+	 * @param pkg - 	the UML {@link Package}
+	 * @param entity - 	the PCM {@link Entity}
+	 */
+	static def boolean isPackageFor(Package pkg, Entity entity) {
+		// We ignore the casing of packages
+		return switch (entity) {
+			Repository,
+			System:
+				pkg.eContainer instanceof Model
+			default:
+				true
+		} && pkg.name.toLowerCase == entity.entityName.toLowerCase
 	}
 
 }

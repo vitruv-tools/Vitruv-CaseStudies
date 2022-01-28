@@ -8,6 +8,8 @@ import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
+import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.getCorrespondingPackageName
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -52,7 +54,7 @@ routine createOrFindUmlRepositoryPackage(pcm::Repository pcmRepo) {
 	}
 	action {
 		call {
-			val umlPackage = findUmlPackage(umlModel, pcmRepo.entityName.toFirstLower)
+			var umlPackage = findUmlPackage(umlModel, pcmRepo.correspondingPackageName)
 			if(umlPackage === null) {
 				createUmlRepositoryPackage(pcmRepo)
 			} else {
@@ -74,7 +76,7 @@ routine createUmlRepositoryPackage(pcm::Repository pcmRepo) {
 	}
 	action {
 		val umlRepositoryPkg = create uml::Package and initialize {
-			umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower;
+			umlRepositoryPkg.name = pcmRepo.correspondingPackageName;
 			umlModel.nestedPackages += umlRepositoryPkg
 		}
 		add correspondence between pcmRepo and umlRepositoryPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
@@ -126,8 +128,8 @@ routine changeNameOfCorrespondingRepositoryPackage(pcm::Repository pcmRepo) {
 	}
 	action {
 		update umlRepositoryPkg {
-			if (umlRepositoryPkg.name != pcmRepo.entityName.toFirstLower)
-				umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower
+			if (!umlRepositoryPkg.isPackageFor(pcmRepo))
+				umlRepositoryPkg.name = pcmRepo.correspondingPackageName
 		}
 	}
 }
@@ -177,11 +179,12 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 	action {
 		execute {
 			val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(pcmRepo)
-			val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(pcmRepo)
+			val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(pcmRepo.eResource.resourceSet)
 			for (pcmType : pcmPrimitiveTypes) {
-				val umlType = PcmUmlClassHelper.mapPrimitiveTypes(pcmType, umlPrimitiveTypes)
-				if (umlType !== null)
+				val umlTypes = PcmUmlClassHelper.mapPrimitiveTypes(pcmType, umlPrimitiveTypes)
+				for (umlType : umlTypes) {
 					addPrimitiveDatatypeCorrespondence(pcmType, umlType)
+				}
 			}
 		}
 	}
@@ -189,8 +192,8 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 
 routine addPrimitiveDatatypeCorrespondence(pcm::PrimitiveDataType pcmPrimitiveType, uml::PrimitiveType umlPrimitiveType) {
 	match {
-		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged with TagLiterals.DATATYPE__TYPE
-		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged with TagLiterals.DATATYPE__TYPE
+		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged with TagLiterals.DATATYPE__TYPE with potentialTarget == umlPrimitiveType
+		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged with TagLiterals.DATATYPE__TYPE with potentialTarget == pcmPrimitiveType
 	}
 	action{
 		add correspondence between pcmPrimitiveType and umlPrimitiveType tagged with TagLiterals.DATATYPE__TYPE

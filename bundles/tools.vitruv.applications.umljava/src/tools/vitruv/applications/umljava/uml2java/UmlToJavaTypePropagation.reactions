@@ -61,7 +61,7 @@ routine propagateTypedMultiplicityElementTypeChanged(uml::TypedElement uElement,
 		check {
 			if(uElement !== uMultiplicity) {
 				throw new IllegalStateException("uml::TypedElement uElement and uml::MultiplicityElement uMultiplicity"
-					+ "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."
+					+ " have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."
 				)
 			}
 			true
@@ -71,7 +71,7 @@ routine propagateTypedMultiplicityElementTypeChanged(uml::TypedElement uElement,
 		execute {
 			val existingJavaTypeReference = jElement.typeReference
 			var typeReference = createTypeReference(uElement.type, jType, defaultReference, userInteractor)
-			if(uMultiplicity.lower == 0 && uMultiplicity.upper == LiteralUnlimitedNatural.UNLIMITED) {
+			if(uMultiplicity.upper == LiteralUnlimitedNatural.UNLIMITED || uMultiplicity.upper > 1) {
 				if (typeReference === defaultReference){
 					// could not create a specific typeReference for the uElement.type
 					// default to java.lang.Object as an inner type

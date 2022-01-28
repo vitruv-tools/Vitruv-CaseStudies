@@ -13,12 +13,12 @@ import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertTrue
-import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
 /**
  * This Test class checks the creating, deleting and modifying of attributes in den uml to java
@@ -44,7 +44,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS)
 		uAttr = createUmlAttribute(ATTRIBUTE_NAME, typeClass, VisibilityKind.PUBLIC_LITERAL, false, false)
 		uClass.ownedAttributes += uAttr
-		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+		pType = UmlTypeUtil.getUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "int"]
 		propagate
 	}
 
@@ -58,7 +58,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		val jAttr = getCorrespondingAttribute(attr)
 		assertJavaAttributeTraits(jAttr, STANDARD_ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
 			TypesFactory.eINSTANCE.createInt, false, false, jClass)
-		assertAttributeEquals(attr, jAttr)
+		assertElementsEqual(attr, jAttr)
 	}
 
 	@Test
@@ -71,7 +71,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		val jAttr = getCorrespondingAttribute(attr)
 		assertJavaAttributeTraits(jAttr, STANDARD_ATTRIBUTE_NAME, JavaVisibility.PUBLIC,
 			createNamespaceClassifierReference(jtypeClass), false, false, jClass)
-		assertAttributeEquals(attr, jAttr)
+		assertElementsEqual(attr, jAttr)
 
 	}
 
@@ -83,7 +83,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		val jClass = getCorrespondingClass(uClass)
 		val jAttr = getCorrespondingAttribute(uAttr)
 		assertEquals(ATTRIBUTE_RENAME, uAttr.name)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 		assertTrue(javaGetterForAttributeExists(jAttr))
 		assertTrue(javaSetterForAttributeExists(jAttr))
 		assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
@@ -105,7 +105,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 
 		val jAttr = getCorrespondingAttribute(uAttr)
 		assertJavaModifiableStatic(jAttr, true)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 
 	@Test
@@ -115,7 +115,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 
 		val jAttr = getCorrespondingAttribute(uAttr)
 		assertJavaModifiableFinal(jAttr, true)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 
 	@Test
@@ -125,14 +125,14 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 
 		var jAttr = getCorrespondingAttribute(uAttr)
 		assertJavaModifiableHasVisibility(jAttr, JavaVisibility.PRIVATE)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 
 		uAttr.visibility = VisibilityKind.PACKAGE_LITERAL
 		propagate
 
 		jAttr = getCorrespondingAttribute(uAttr)
 		assertJavaModifiableHasVisibility(jAttr, JavaVisibility.PACKAGE)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 
 	@Test
@@ -144,7 +144,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		val jAttr = getCorrespondingAttribute(uAttr)
 		assertJavaAttributeTraits(jAttr, ATTRIBUTE_NAME, JavaVisibility.PUBLIC, TypesFactory.eINSTANCE.createInt, false,
 			false, jClass)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 	}
 	
 	@Test
@@ -160,7 +160,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
 		assertTrue(jClass.methods.filter [name == buildGetterName(ATTRIBUTE_NAME)].nullOrEmpty)
 		assertTrue(jClass.methods.filter [name == buildSetterName(ATTRIBUTE_NAME)].nullOrEmpty)
 		assertFalse(jClass2.getMembersByName(ATTRIBUTE_NAME).nullOrEmpty)
-		assertAttributeEquals(uAttr, jAttr)
+		assertElementsEqual(uAttr, jAttr)
 		assertTrue(javaGetterForAttributeExists(jAttr))
 		assertTrue(javaSetterForAttributeExists(jAttr))
 	}

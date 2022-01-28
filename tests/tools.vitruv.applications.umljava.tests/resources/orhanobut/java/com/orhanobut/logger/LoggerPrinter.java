@@ -66,7 +66,8 @@ final class LoggerPrinter implements Printer {
   /**
    * Localize single tag and method count for each thread
    */
-
+  private final ThreadLocal<String> localTag = new ThreadLocal<String>();
+  private final ThreadLocal<Integer> localMethodCount = new ThreadLocal<Integer>();
 
   /**
    * It is used to determine log settings such as method count, thread info visibility
@@ -99,9 +100,9 @@ final class LoggerPrinter implements Printer {
 
   @Override public Printer t(String tag, int methodCount) {
     if (tag != null) {
-      ;
+      localTag.set(tag);
     }
-    
+    localMethodCount.set(methodCount);
     return this;
   }
 
@@ -109,6 +110,19 @@ final class LoggerPrinter implements Printer {
     log(DEBUG, null, message, args);
   }
 
+  @Override public void d(Object object) {
+    String message;
+    if (object.getClass().isArray()) {
+      message = Arrays.deepToString((Object[]) object);
+    } else {
+      message = object.toString();
+    }
+    log(DEBUG, null, message);
+  }
+
+  @Override public void e(String message, Object... args) {
+    e(null, message, args);
+  }
 
   @Override public void e(Throwable throwable, String message, Object... args) {
     log(ERROR, throwable, message, args);
@@ -184,50 +198,62 @@ final class LoggerPrinter implements Printer {
   }
 
   @Override public synchronized void log(int priority, String tag, String message, Throwable throwable) {
-	    if (settings.getLogLevel() == LogLevel.NONE) {
-	      return;
-	    }
-	    if (throwable != null && message != null) {
-	      message += " : " + Helper.getStackTraceString(throwable);
-	    }
-	    if (throwable != null && message == null) {
-	      message = Helper.getStackTraceString(throwable);
-	    }
-	    if (message == null) {
-	      message = "No message/exception is set";
-	    }
-	    int methodCount = getMethodCount();
-	    if (Helper.isEmpty(message)) {
-	      message = "Empty/NULL log message";
-	    }
+    if (settings.getLogLevel() == null) {
+      return;
+    }
+    if (throwable != null && message != null) {
+      message += " : " + Helper.getStackTraceString(throwable);
+    }
+    if (throwable != null && message == null) {
+      message = Helper.getStackTraceString(throwable);
+    }
+    if (message == null) {
+      message = "No message/exception is set";
+    }
+    int methodCount = getMethodCount();
+    if (Helper.isEmpty(message)) {
+      message = "Empty/NULL log message";
+    }
 
-	    logTopBorder(priority, tag);
-	    logHeaderContent(priority, tag, methodCount);
+    logTopBorder(priority, tag);
+    logHeaderContent(priority, tag, methodCount);
 
-	    //get bytes of message with system's default charset (which is UTF-8 for Android)
-	    byte[] bytes = message.getBytes();
-	    int length = bytes.length;
-	    if (length <= CHUNK_SIZE) {
-	      if (methodCount > 0) {
-	        logDivider(priority, tag);
-	      }
-	      logContent(priority, tag, message);
-	      logBottomBorder(priority, tag);
-	      return;
-	    }
-	    if (methodCount > 0) {
-	      logDivider(priority, tag);
-	    }
-	    for (int i = 0; i < length; i += CHUNK_SIZE) {
-	      int count = Math.min(length - i, CHUNK_SIZE);
-	      //create a new String with system's default charset (which is UTF-8 for Android)
-	      logContent(priority, tag, new String(bytes, i, count));
-	    }
-	    logBottomBorder(priority, tag);
-	  }
+    //get bytes of message with system's default charset (which is UTF-8 for Android)
+    byte[] bytes = message.getBytes();
+    int length = bytes.length;
+    if (length <= CHUNK_SIZE) {
+      if (methodCount > 0) {
+        logDivider(priority, tag);
+      }
+      logContent(priority, tag, message);
+      logBottomBorder(priority, tag);
+      return;
+    }
+    if (methodCount > 0) {
+      logDivider(priority, tag);
+    }
+    for (int i = 0; i < length; i += CHUNK_SIZE) {
+      int count = Math.min(length - i, CHUNK_SIZE);
+      //create a new String with system's default charset (which is UTF-8 for Android)
+      logContent(priority, tag, new String(bytes, i, count));
+    }
+    logBottomBorder(priority, tag);
+  }
 
   @Override public void resetSettings() {
     settings.reset();
+  }
+
+  /**
+   * This method is synchronized in order to avoid messy of logs' order.
+   */
+  private synchronized void log(int priority, Throwable throwable, String msg, Object... args) {
+    if (settings.getLogLevel() == null) {
+      return;
+    }
+    String tag = getTag();
+    String message = createMessage(msg, args);
+    log(priority, tag, message, throwable);
   }
 
   private void logTopBorder(int logType, String tag) {
@@ -329,9 +355,9 @@ final class LoggerPrinter implements Printer {
    * @return the appropriate tag based on local or global
    */
   private String getTag() {
-    String tag = "";
+    String tag = localTag.get();
     if (tag != null) {
-      
+      localTag.remove();
       return tag;
     }
     return this.tag;
@@ -342,10 +368,10 @@ final class LoggerPrinter implements Printer {
   }
 
   private int getMethodCount() {
-    Integer count = 1;
+    Integer count = localMethodCount.get();
     int result = settings.getMethodCount();
     if (count != null) {
-   
+      localMethodCount.remove();
       result = count;
     }
     if (result < 0) {
