@@ -16,7 +16,7 @@ import org.emftext.language.java.containers.Package
 class JavaUmlViewFactory {
 	val ViewProvider viewProvider
 
-	def View createUmlView() {
+	private def View createUmlView() {
 		createViewOfElements("UML", #{Model})
 	}
 
