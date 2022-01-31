@@ -177,12 +177,12 @@ routine deleteUmlClassifier(java::ConcreteClassifier jClassifier, java::Compilat
 }
 
 reaction JavaClassMadeAbstract {
-	after element java::Abstract created and inserted in java::Class[annotationsAndModifiers]
+	after element java::Abstract inserted in java::Class[annotationsAndModifiers]
 	call setUmlClassAbstract(affectedEObject, true)
 }
 
 reaction JavaClassMadeNonAbstract {
-	after element java::Abstract deleted and removed from java::Class[annotationsAndModifiers]
+	after element java::Abstract removed from java::Class[annotationsAndModifiers]
 	call setUmlClassAbstract(affectedEObject, false)
 }
 
@@ -198,12 +198,12 @@ routine setUmlClassAbstract(java::Class jClass, Boolean isAbstract) {
 }
 
 reaction JavaClassMadeFinal {
-	after element java::Final created and inserted in java::Class[annotationsAndModifiers]
+	after element java::Final inserted in java::Class[annotationsAndModifiers]
 	call setUmlClassFinal(affectedEObject, true)
 }
 
 reaction JavaClassMadeNonFinal {
-	after element java::Final deleted and removed from java::Class[annotationsAndModifiers]
+	after element java::Final removed from java::Class[annotationsAndModifiers]
 	call setUmlClassFinal(affectedEObject, false)
 }
 

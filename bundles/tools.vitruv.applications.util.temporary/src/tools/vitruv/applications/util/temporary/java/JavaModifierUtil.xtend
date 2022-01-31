@@ -216,14 +216,6 @@ class JavaModifierUtil {
     }
 
     /**
-     * Returns the corresponding UMLVisibility enum constant corresponding to
-     * the given java visibility modifier
-     */
-    def static getUMLVisibilityKindFromJavaModifier(Modifier visibilityModifier) {
-        return getUmlVisibilityKindFromJavaVisibilityConstant(getEnumConstantFromJavaVisibility(visibilityModifier))
-    }
-
-    /**
      * Sets the java visibility modifier corresponding to uVisibility to jModifiable
      * 
      * @param jModifiable the AnnotableAndModifiable for which a java visibility modifier should be set
