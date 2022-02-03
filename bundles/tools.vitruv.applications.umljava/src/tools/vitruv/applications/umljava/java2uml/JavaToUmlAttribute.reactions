@@ -113,12 +113,12 @@ routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
 }
 
 reaction JavaAttributeMadeFinal {
-    after element java::Final created and inserted in java::Field[annotationsAndModifiers]
+    after element java::Final inserted in java::Field[annotationsAndModifiers]
     call setUmlAttributeFinal(affectedEObject, true)
 }
 
 reaction JavaAttributeMadeNonFinal {
-    after element java::Final deleted and removed from java::Field[annotationsAndModifiers]
+    after element java::Final removed from java::Field[annotationsAndModifiers]
     call setUmlAttributeFinal(affectedEObject, false)
 }
 
