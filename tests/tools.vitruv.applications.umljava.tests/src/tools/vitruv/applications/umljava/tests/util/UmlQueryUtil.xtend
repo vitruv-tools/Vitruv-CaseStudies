@@ -1,21 +1,23 @@
 package tools.vitruv.applications.umljava.tests.util
 
-import org.eclipse.uml2.uml.Model
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import tools.vitruv.framework.vsum.views.View
-import org.eclipse.uml2.uml.Package
-import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.Interface
-import org.eclipse.uml2.uml.DataType
-import org.eclipse.uml2.uml.Operation
-import org.eclipse.uml2.uml.PackageableElement
-import org.eclipse.uml2.uml.Enumeration
-import org.eclipse.uml2.uml.Classifier
-import org.eclipse.uml2.uml.Property
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Classifier
+import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.Enumeration
+import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.Operation
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.PackageableElement
 import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.Property
+import tools.vitruv.framework.views.View
+
+import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
+
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 @Utility
 class UmlQueryUtil {

@@ -1,20 +1,21 @@
 package tools.vitruv.applications.umljava.tests.util
 
-import tools.vitruv.framework.vsum.views.View
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.*
-import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
-import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
-import static org.hamcrest.MatcherAssert.assertThat
-import org.eclipse.uml2.uml.Classifier
-import org.eclipse.emf.common.util.URI
 import java.nio.file.Path
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.isInExistingLibrary
+import org.eclipse.emf.common.util.URI
+import org.eclipse.uml2.uml.Classifier
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import tools.vitruv.framework.views.View
+
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.assertElementsEqual
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
+import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
+
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.isInExistingLibrary
 
 /**
  * This class provides validations for the equal existence of classifiers of different types to exist

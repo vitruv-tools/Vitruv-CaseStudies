@@ -1,16 +1,17 @@
 package tools.vitruv.applications.umljava.tests.util
 
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import tools.vitruv.framework.vsum.views.ViewProvider
-import org.eclipse.uml2.uml.Model
-import org.emftext.language.java.containers.CompilationUnit
 import java.util.Collection
-import tools.vitruv.framework.vsum.views.ViewTypeFactory
-import tools.vitruv.framework.vsum.views.View
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.not
-import static org.hamcrest.CoreMatchers.equalTo
+import org.eclipse.uml2.uml.Model
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
+import tools.vitruv.framework.views.View
+import tools.vitruv.framework.views.ViewProvider
+import tools.vitruv.framework.views.ViewTypeFactory
+
+import static org.hamcrest.CoreMatchers.equalTo
+import static org.hamcrest.CoreMatchers.not
+import static org.hamcrest.MatcherAssert.assertThat
 
 @FinalFieldsConstructor
 class JavaUmlViewFactory {
