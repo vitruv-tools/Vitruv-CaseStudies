@@ -1,20 +1,20 @@
 package tools.vitruv.applications.umljava.tests.java2uml
 
-import tools.vitruv.applications.umljava.tests.UmlJavaTransformationTest
-import org.emftext.language.java.classifiers.ClassifiersFactory
+import java.nio.file.Path
 import java.util.List
-
-import org.junit.jupiter.api.BeforeEach
-import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.containers.CompilationUnit
-
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import java.nio.file.Path
-import tools.vitruv.framework.vsum.views.View
-import org.emftext.language.java.containers.Package
 import org.emftext.language.java.containers.ContainersFactory
 import org.emftext.language.java.containers.JavaRoot
+import org.emftext.language.java.containers.Package
+import org.junit.jupiter.api.BeforeEach
+import tools.vitruv.applications.umljava.tests.UmlJavaTransformationTest
+import tools.vitruv.framework.views.View
+
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 
 abstract class AbstractJavaToUmlTest extends UmlJavaTransformationTest {
 

@@ -1,27 +1,26 @@
 package tools.vitruv.applications.umljava.tests.java2uml
 
 import org.emftext.language.java.members.ClassMethod
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.types.TypesFactory
-import org.eclipse.uml2.uml.VisibilityKind
-
 import org.junit.jupiter.api.Test
-import org.eclipse.emf.ecore.util.EcoreUtil
-
-import tools.vitruv.applications.util.temporary.java.JavaVisibility
-import tools.vitruv.applications.util.temporary.java.JavaStandardType
-
-import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
-import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.ParameterizedTest
-import tools.vitruv.framework.vsum.views.View
+import org.junit.jupiter.params.provider.EnumSource
+import tools.vitruv.applications.util.temporary.java.JavaStandardType
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import tools.vitruv.framework.views.View
+
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 /**
  * A test class to test the class method reactions.

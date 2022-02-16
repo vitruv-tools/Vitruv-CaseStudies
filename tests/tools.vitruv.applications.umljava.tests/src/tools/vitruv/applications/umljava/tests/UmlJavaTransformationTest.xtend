@@ -2,7 +2,7 @@ package tools.vitruv.applications.umljava.tests
 
 import java.nio.file.Path
 import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
-import tools.vitruv.framework.vsum.views.View
+import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
 import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
 import org.eclipse.xtend.lib.annotations.Accessors

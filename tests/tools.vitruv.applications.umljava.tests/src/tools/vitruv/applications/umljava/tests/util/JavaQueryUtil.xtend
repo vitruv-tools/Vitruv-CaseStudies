@@ -1,21 +1,22 @@
 package tools.vitruv.applications.umljava.tests.util
 
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.classifiers.Class
-import tools.vitruv.framework.vsum.views.View
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
-import org.emftext.language.java.classifiers.Interface
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import org.emftext.language.java.containers.Package
-import org.emftext.language.java.members.InterfaceMethod
+import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.Classifier
-import org.emftext.language.java.classifiers.Enumeration
-import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.classifiers.Enumeration
+import org.emftext.language.java.classifiers.Interface
+import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.containers.Package
+import org.emftext.language.java.members.ClassMethod
+import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
+import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.parameters.Parameter
-import org.emftext.language.java.members.Constructor
+import tools.vitruv.framework.views.View
+
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.isInExistingLibrary
 
 @Utility
