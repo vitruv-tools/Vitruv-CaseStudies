@@ -1,5 +1,14 @@
 package tools.vitruv.applications.pcmjava.tests.util.java2pcm;
 
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
+import static edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil.refreshAndBuildIncrementally;
+import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createPlatformResourceURI;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static tools.vitruv.domains.java.util.JavaQueryUtil.getNameFromJaMoPPType;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -80,32 +89,22 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.system.System;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
-import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createPlatformResourceURI;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
-import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.domains.java.JamoppLibraryHelper;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
-import tools.vitruv.framework.change.models.ChangePropagationAbortCause;
-import tools.vitruv.framework.change.models.ChangePropagationListener;
+import tools.vitruv.domains.pcm.PcmNamespace;
+import tools.vitruv.framework.change.propagation.ChangePropagationAbortCause;
+import tools.vitruv.framework.change.propagation.ChangePropagationListener;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
 import tools.vitruv.testutils.DisableAutoBuild;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 import tools.vitruv.testutils.UriMode;
-
-import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
-import static org.junit.jupiter.api.Assertions.fail;
-import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil.refreshAndBuildIncrementally;
 
 /**
  * Test class that contains utility methods that can be used by JaMoPP2PCM
