@@ -102,10 +102,7 @@ routine rootElementPreSetup(EObject alreadyPersistedEObject) {
 
 reaction JavaCompilationUnitInsertedAsRoot {
 	after element java::CompilationUnit inserted as root
-	call {
-	    rootElementPreSetup(newValue)
-	    newValue.classifiers.forEach[insertUmlClassifier(it, newValue)]
-	} 
+	call newValue.classifiers.forEach[insertUmlClassifier(it, newValue)]
 }
 
 reaction JavaCompilationUnitInsertedInPackage {
