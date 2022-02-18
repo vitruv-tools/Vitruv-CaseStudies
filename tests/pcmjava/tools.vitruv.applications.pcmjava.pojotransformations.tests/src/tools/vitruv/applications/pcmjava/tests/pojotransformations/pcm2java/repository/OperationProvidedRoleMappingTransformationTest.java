@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
 import org.emftext.language.java.classifiers.Class;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
@@ -97,8 +96,7 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
 		propagate();
 
 		this.assertOperationProvidedRole(operationProvidedRole);
-		final CompilationUnit jaMoPPCu = claimOne(getCorrespondingEObjects(basicComponent, CompilationUnit.class));
-		final Class jaMoPPClass = (Class) jaMoPPCu.getClassifiers().get(0);
+		final Class jaMoPPClass = claimOne(getCorrespondingEObjects(basicComponent, Class.class));
 		assertEquals(1, jaMoPPClass.getImplements().size(), "Unexpected size of implemented interfaces");
 	}
 

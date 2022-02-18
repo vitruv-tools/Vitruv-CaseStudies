@@ -60,9 +60,9 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
 
 	@SuppressWarnings("unchecked")
 	private void assertBasicComponentCorrespondences(final BasicComponent basicComponent) throws Throwable {
-		this.assertCorrespondnecesAndCompareNames(basicComponent, 3,
-				new java.lang.Class[] { CompilationUnit.class, Package.class, Class.class },
-				new String[] { basicComponent.getEntityName() + "Impl", basicComponent.getEntityName(),
+		this.assertCorrespondencesAndCompareNames(basicComponent, 2,
+				new java.lang.Class[] { Package.class, Class.class },
+				new String[] { basicComponent.getEntityName(),
 						basicComponent.getEntityName() + "Impl" });
 
 	}

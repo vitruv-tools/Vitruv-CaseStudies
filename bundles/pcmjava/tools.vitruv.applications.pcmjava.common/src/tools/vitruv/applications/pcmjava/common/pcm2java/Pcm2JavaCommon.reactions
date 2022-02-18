@@ -513,15 +513,14 @@ routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType)
 routine addSuperTypeToDataType(pcm::DataType dataType, java::TypeReference innerTypeReference, String superTypeQualifiedName) {
 	match {
 		val dataTypeImplementation = retrieve java::Class corresponding to dataType
-		val dataTypeImplementationCU = retrieve java::CompilationUnit corresponding to dataType
 	}
 	action {
-		update dataTypeImplementationCU {
+		update dataTypeImplementation.containingCompilationUnit {
 			val collectionTypeClassImport = createJavaClassImport(superTypeQualifiedName);
-			dataTypeImplementationCU.imports += collectionTypeClassImport;
+			dataTypeImplementation.containingCompilationUnit.imports += collectionTypeClassImport;
 		}
 		val namespaceClassifier = create java::NamespaceClassifierReference and initialize {
-			createNamespaceClassifierReference(namespaceClassifier, dataTypeImplementationCU.imports.filter(ClassifierImport).last.classifier);
+			createNamespaceClassifierReference(namespaceClassifier, dataTypeImplementation.containingCompilationUnit.imports.filter(ClassifierImport).last.classifier);
 			val qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
 			qualifiedTypeArgument.typeReference = innerTypeReference;
 			namespaceClassifier.classifierReferences.get(0).typeArguments += qualifiedTypeArgument;
@@ -776,7 +775,6 @@ routine createOrFindJavaInterface(pcm::Interface pcmInterface) {
 	match {
 		val contractsPackage = retrieve java::Package corresponding to pcmInterface.repository__Interface tagged with "contracts"
 		require absence of java::Interface corresponding to pcmInterface
-		require absence of java::CompilationUnit corresponding to pcmInterface
 	}
 	action {
 		call {
@@ -804,7 +802,6 @@ routine createJavaInterface(pcm::Interface pcmInterface, java::Package containin
 routine addMissingClassifierCorrespondence(pcm::NamedElement pcmElement, java::ConcreteClassifier javaClassifier) {
 	action {
 		add correspondence between javaClassifier and pcmElement
-		add correspondence between javaClassifier.containingCompilationUnit and pcmElement
 	}
 }
 
@@ -819,13 +816,11 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 			persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
 		}
 		call containingPackage.compilationUnits += compilationUnit
-		add correspondence between compilationUnit and sourceElementMappedToClass
 	}
 }
 
 routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package containingPackage, String className) {
 	match {
-		val compilationUnit = retrieve java::CompilationUnit corresponding to classSourceElement
 		// move containing model to project-relative location: buildJavaFilePath(compilationUnit)
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to classSourceElement
 	}
@@ -833,7 +828,8 @@ routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package
 		update javaClassifier {
 			javaClassifier.updateName(className.toFirstUpper)
 		}
-		update compilationUnit {
+		update javaClassifier.containingCompilationUnit {
+		    val compilationUnit = javaClassifier.containingCompilationUnit
 			val newNamespaces = new ArrayList(containingPackage.namespaces)
 			newNamespaces += containingPackage.name
 			var modified = compilationUnit.updateNamespaces(newNamespaces)
@@ -849,11 +845,9 @@ routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package
 routine deleteJavaClassifier(pcm::NamedElement sourceElement) {
 	match {
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to sourceElement
-		val compilationUnit = retrieve java::CompilationUnit corresponding to sourceElement
 	}
 	action {
-		delete javaClassifier
-		delete compilationUnit
+		delete javaClassifier.containingCompilationUnit
 	}
 }
 

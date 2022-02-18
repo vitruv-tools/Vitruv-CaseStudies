@@ -118,7 +118,7 @@ public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformatio
 	@SuppressWarnings("unchecked")
 	private void assertParameterCorrespondences(final Parameter param) throws Throwable {
 		this.assertDataTypeCorrespondence(param.getDataType__Parameter());
-		this.assertCorrespondnecesAndCompareNames(param, 1, new java.lang.Class[] { OrdinaryParameter.class },
+		this.assertCorrespondencesAndCompareNames(param, 1, new java.lang.Class[] { OrdinaryParameter.class },
 				new String[] { param.getParameterName() });
 	}
 

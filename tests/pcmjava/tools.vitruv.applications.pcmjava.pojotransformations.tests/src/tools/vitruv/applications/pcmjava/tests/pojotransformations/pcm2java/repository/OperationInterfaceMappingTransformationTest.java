@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
 import org.emftext.language.java.classifiers.Interface;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.junit.jupiter.api.Test;
 
 import org.palladiosimulator.pcm.repository.OperationInterface;
@@ -34,8 +33,8 @@ public class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransfo
 
 	@SuppressWarnings("unchecked")
 	private void assertOperationInterfaceCorrespondences(final OperationInterface opInterface) throws Throwable {
-		this.assertCorrespondnecesAndCompareNames(opInterface, 2,
-				new java.lang.Class[] { CompilationUnit.class, Interface.class },
-				new String[] { opInterface.getEntityName(), opInterface.getEntityName() });
+		this.assertCorrespondencesAndCompareNames(opInterface, 1,
+				new java.lang.Class[] { Interface.class },
+				new String[] { opInterface.getEntityName() });
 	}
 }
