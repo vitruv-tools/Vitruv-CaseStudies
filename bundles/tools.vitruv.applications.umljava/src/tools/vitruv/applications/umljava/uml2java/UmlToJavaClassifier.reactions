@@ -43,7 +43,6 @@ reaction UmlClassInserted {
 routine createOrFindJavaClass(uml::Classifier umlClassifier) {
 	match{
 		require absence of java::Class corresponding to umlClassifier
-		require absence of java::CompilationUnit corresponding to umlClassifier
 		val javaPackage = retrieve optional java::Package corresponding to umlClassifier.eContainer
 	}
 	action {
@@ -84,30 +83,25 @@ routine createJavaClass(uml::Classifier umlClassifier) {
 routine addMissingClassifierCorrespondence(uml::Classifier umlClassifier, java::ConcreteClassifier javaClassifier) {
 	action {
 		add correspondence between javaClassifier and umlClassifier
-		add correspondence between javaClassifier.containingCompilationUnit and umlClassifier
 	}
 }
 
 routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteClassifier jClassifier) {
-	match {
-		require absence of java::CompilationUnit corresponding to umlClassifier
-	}
 	action {
 		val javaCompilationUnit = create java::CompilationUnit and initialize {
 			javaCompilationUnit.classifiers += jClassifier
 		}
-		add correspondence between umlClassifier and javaCompilationUnit
 	}
 }
 
 routine insertJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPackage) {
 	match {
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
-		val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier
 		val javaPackage = retrieve optional java::Package corresponding to umlPackage
 	}
 	action {
-		update javaCompilationUnit {
+		update javaClassifier.containingCompilationUnit {
+		    val javaCompilationUnit = javaClassifier.containingCompilationUnit
 			var modified = javaCompilationUnit.updateNamespaces(javaPackage)
 			val newName = getCompilationUnitName(javaPackage, javaClassifier.name)
 			modified = javaCompilationUnit.updateName(newName) || modified
@@ -116,6 +110,7 @@ routine insertJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPack
 			}
 		}
 		call javaPackage.ifPresent [
+		    val javaCompilationUnit = javaClassifier.containingCompilationUnit
 			if (!compilationUnits.contains(javaCompilationUnit)) {
 				compilationUnits += javaCompilationUnit
 			}
@@ -132,7 +127,6 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
 	match {
 		val jPackage = retrieve optional java::Package corresponding to umlClassifier.eContainer
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
-		val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier
 		check umlClassifier.name != javaClassifier.name
 	}
 	action {
@@ -151,11 +145,9 @@ reaction UmlClassifierDeleted {
 routine deleteJavaClass(uml::Classifier umlClassifer) {
 	match {
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifer
-		val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifer
 	}
 	action {
-		delete javaClassifier
-		delete javaCompilationUnit
+	    delete javaClassifier.containingCompilationUnit
 	}
 }
 
@@ -233,7 +225,7 @@ routine deleteJavaSuperClass(uml::Generalization uGeneralization) {
 	}
 }
 
-reaction UmlSuperClassReplaced{
+reaction UmlSuperClassReplaced {
 	after element uml::Class replaced at uml::Generalization[general]
 	with {affectedEObject.specific !== null && affectedEObject.specific instanceof Class}
 	call {
@@ -460,9 +452,7 @@ routine createJavaEnum(uml::Enumeration uEnum) {
 			jEnum.name = uEnum.name
 			jEnum.makePublic
 		}
-		call {
-			createJavaCompilationUnit(uEnum, jEnum)
-		}
+		call createJavaCompilationUnit(uEnum, jEnum)
 		add correspondence between uEnum and jEnum
 	}
 }

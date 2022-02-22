@@ -416,8 +416,7 @@ routine addInterfaceCorrespondence(pcm::OperationInterface pcmInterface, java::I
 		require absence of pcm::Interface corresponding to javaInterface
 	}
 	action {
-		add correspondence between pcmInterface and javaInterface
-		add correspondence between pcmInterface and compilationUnit 
+		add correspondence between pcmInterface and javaInterface 
 	}
 }
 
@@ -615,7 +614,6 @@ routine createCollectionDataType(java::Class javaClass, java::CompilationUnit co
 routine addDataTypeCorrespondence(java::Class javaClass, java::CompilationUnit compilationUnit, pcm::DataType dataType) {
 	action {
 		add correspondence between dataType and javaClass
-		add correspondence between compilationUnit and javaClass
 	}
 }
 

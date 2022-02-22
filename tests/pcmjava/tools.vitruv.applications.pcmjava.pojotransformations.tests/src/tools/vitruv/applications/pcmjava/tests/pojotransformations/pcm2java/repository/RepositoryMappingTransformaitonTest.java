@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
 import org.emftext.language.java.classifiers.Class;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -54,11 +53,9 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
 	@SuppressWarnings("unchecked")
 	private void assertBasicComponentCorrespondences(final Repository repository, final BasicComponent basicComponent)
 			throws Throwable {
-		this.assertCorrespondnecesAndCompareNames(basicComponent, 3,
-				new java.lang.Class[] { CompilationUnit.class, Package.class, Class.class },
+		this.assertCorrespondencesAndCompareNames(basicComponent, 2,
+				new java.lang.Class[] { Package.class, Class.class },
 				new String[] {
-						repository.getEntityName() + "." + basicComponent.getEntityName() + "."
-								+ basicComponent.getEntityName() + "Impl",
 						basicComponent.getEntityName(), basicComponent.getEntityName() + "Impl" });
 
 	}

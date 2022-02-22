@@ -14,7 +14,6 @@ import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.commons.NamedElement;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.imports.Import;
 import org.emftext.language.java.instantiations.NewConstructorCall;
 import org.emftext.language.java.members.Constructor;
@@ -98,14 +97,14 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	protected void assertDataTypeCorrespondence(final DataType dataType) throws Throwable {
 		if (dataType instanceof CollectionDataType) {
 			final CollectionDataType cdt = (CollectionDataType) dataType;
-			this.assertCorrespondnecesAndCompareNames(cdt, 3,
-					new java.lang.Class[] { CompilationUnit.class, Classifier.class, TypeReference.class },
-					new String[] { cdt.getEntityName() + ".java", cdt.getEntityName(), null });
+			this.assertCorrespondencesAndCompareNames(cdt, 2,
+					new java.lang.Class[] { Classifier.class, TypeReference.class },
+					new String[] { cdt.getEntityName(), null });
 		} else if (dataType instanceof CompositeDataType) {
 			final CompositeDataType cdt = (CompositeDataType) dataType;
-			this.assertCorrespondnecesAndCompareNames(cdt, 2,
-					new java.lang.Class[] { CompilationUnit.class, Classifier.class },
-					new String[] { cdt.getEntityName() + ".java", cdt.getEntityName() });
+			this.assertCorrespondencesAndCompareNames(cdt, 1,
+					new java.lang.Class[] { Classifier.class },
+					new String[] { cdt.getEntityName() });
 		} else if (dataType instanceof PrimitiveDataType) {
 			final PrimitiveDataType pdt = (PrimitiveDataType) dataType;
 			assertTrue(null != DataTypeCorrespondenceHelper.claimJaMoPPTypeForPrimitiveDataType(pdt),
@@ -114,7 +113,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 
 	}
 
-	protected <T> Set<NamedElement> assertCorrespondnecesAndCompareNames(final EObject pcmNamedElement,
+	protected <T> Set<NamedElement> assertCorrespondencesAndCompareNames(final EObject pcmNamedElement,
 			final int expectedSize, final java.lang.Class<? extends EObject>[] expectedClasses,
 			final String[] expectedNames) throws Throwable {
 		final Iterable<EObject> correspondences = claimNotEmpty(getCorrespondingEObjects(pcmNamedElement, EObject.class));
@@ -182,7 +181,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	protected NamedElement assertSingleCorrespondence(
 			final org.palladiosimulator.pcm.core.entity.NamedElement pcmNamedElement,
 			final java.lang.Class<? extends EObject> expectedClass, final String expectedName) throws Throwable {
-		final Set<NamedElement> namedElements = this.assertCorrespondnecesAndCompareNames(pcmNamedElement, 1,
+		final Set<NamedElement> namedElements = this.assertCorrespondencesAndCompareNames(pcmNamedElement, 1,
 				new java.lang.Class[] { expectedClass }, new String[] { expectedName });
 		return namedElements.iterator().next();
 	}

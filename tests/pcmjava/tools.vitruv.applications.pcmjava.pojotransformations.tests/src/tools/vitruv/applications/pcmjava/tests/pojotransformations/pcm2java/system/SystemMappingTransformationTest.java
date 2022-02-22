@@ -4,7 +4,6 @@ import java.util.Collections;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.system.System;
@@ -56,9 +55,9 @@ public class SystemMappingTransformationTest extends Pcm2JavaTransformationTest 
 	private void assertSystem(final System system) throws Throwable {
 		final String expectedName = system.getEntityName();
 		final String expectedLowerCaseName = Character.toLowerCase(expectedName.charAt(0)) + expectedName.substring(1);
-		this.assertCorrespondnecesAndCompareNames(system, 4,
-				new Class[] { Package.class, CompilationUnit.class, org.emftext.language.java.classifiers.Class.class,
+		this.assertCorrespondencesAndCompareNames(system, 3,
+				new Class[] { Package.class, org.emftext.language.java.classifiers.Class.class,
 						EClass.class },
-				new String[] { expectedLowerCaseName, expectedName + "Impl", expectedName + "Impl", null });
+				new String[] { expectedLowerCaseName, expectedName + "Impl", null });
 	}
 }

@@ -122,6 +122,28 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 			assertUmlEnumHasLiteral(umlEnum, UMLFactory.eINSTANCE.createEnumerationLiteral => [name = CONSTANT_NAME])
 		]
 	}
+	
+	@Test
+    def void testRenameEnumConstant() {
+        createJavaEnumInRootPackage(ENUM_NAME)
+        changeJavaView [
+            claimJavaEnum(ENUM_NAME) => [
+                constants += MembersFactory.eINSTANCE.createEnumConstant => [
+                    name = CONSTANT_NAME
+                ]
+            ]
+        ]
+        changeJavaView [
+            claimJavaEnum(ENUM_NAME) => [
+                constants.head.name = CONSTANT_NAME_2
+            ]
+        ]
+        assertSingleEnumWithNameInRootPackage(ENUM_NAME)
+        validateUmlView [
+            val umlEnum = defaultUmlModel.claimEnum(ENUM_NAME)
+            assertUmlEnumHasLiteral(umlEnum, UMLFactory.eINSTANCE.createEnumerationLiteral => [name = CONSTANT_NAME_2])
+        ]
+    }
 
 	@Test
 	def void testDeleteEnumConstant() {

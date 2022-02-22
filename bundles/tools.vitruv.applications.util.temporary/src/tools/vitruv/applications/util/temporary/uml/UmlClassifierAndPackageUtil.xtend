@@ -80,6 +80,10 @@ class UmlClassifierAndPackageUtil {
         return umlModel.findUmlType(className, packageName, Class)
     }
 
+    def static Enumeration findUmlEnum(Model umlModel, String className, String packageName) {
+        return umlModel.findUmlType(className, packageName, Enumeration)
+    }
+
     def private static <T extends Type> findUmlType(Model umlModel, String typeName, String packageName, java.lang.Class<T> type) {
         val uPackage = umlModel.findUmlPackage(packageName)
         if (uPackage === null) {

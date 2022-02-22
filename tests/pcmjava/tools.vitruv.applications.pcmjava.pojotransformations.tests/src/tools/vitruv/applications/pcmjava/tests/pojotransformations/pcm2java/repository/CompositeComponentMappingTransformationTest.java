@@ -2,7 +2,6 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.rep
 
 import java.io.IOException;
 
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 
@@ -98,10 +97,9 @@ public class CompositeComponentMappingTransformationTest extends Pcm2JavaTransfo
 	@SuppressWarnings("unchecked")
 	private void assertCompositeComponentCorrespondences(final CompositeComponent compositeComponent,
 			final String expectedName) throws Throwable {
-		super.assertCorrespondnecesAndCompareNames(compositeComponent, 3,
-				new java.lang.Class[] { Package.class, org.emftext.language.java.classifiers.Class.class,
-						CompilationUnit.class },
-				new String[] { expectedName, expectedName + "Impl", expectedName + "Impl" });
+		super.assertCorrespondencesAndCompareNames(compositeComponent, 2,
+				new java.lang.Class[] { Package.class, org.emftext.language.java.classifiers.Class.class },
+				new String[] { expectedName, expectedName + "Impl" });
 	}
 
 }

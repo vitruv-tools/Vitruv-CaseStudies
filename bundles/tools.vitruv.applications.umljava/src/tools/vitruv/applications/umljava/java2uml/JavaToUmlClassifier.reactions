@@ -8,6 +8,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlClass
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlEnum
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlInterface
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.registerPredefinedUmlPrimitiveTypes
@@ -27,16 +28,11 @@ execute actions in UML
 //=========================================== All Types
 //===========================================
 
-routine addTypeCorrespondence(java::ConcreteClassifier jClassifier, uml::Type uType, java::CompilationUnit jCompUnit) {
+routine addTypeCorrespondence(java::ConcreteClassifier jClassifier, uml::Type umlType) {
 	action {
-		add correspondence between uType and jClassifier
-		add correspondence between uType and jCompUnit
+		add correspondence between umlType and jClassifier
 	}
 }
-
-//===========================================
-//=========================================== Class
-//===========================================
 
 routine detectOrCreateUmlModel(EObject alreadyPersistedEObject) { // TODO TS This routine needs to be broken up!
 	match {
@@ -91,89 +87,151 @@ routine registerUmlModelInCorrespondenceModel(uml::Model uModel) {
 	}
 }
 
-reaction JavaClassCreated {
-	after element java::Class created and inserted in java::CompilationUnit[classifiers]
-	call {
-		detectOrCreateUmlModel(affectedEObject)
-		registerPredefinedUmlPrimitiveTypes(correspondenceModel, affectedEObject.eResource.resourceSet)
-		createOrFindUmlClass(newValue, affectedEObject)
-	}
+routine rootElementPreSetup(EObject alreadyPersistedEObject) {
+    action {
+        call {
+            detectOrCreateUmlModel(alreadyPersistedEObject)
+            registerPredefinedUmlPrimitiveTypes(correspondenceModel, alreadyPersistedEObject.eResource.resourceSet)
+        }
+    }
 }
 
-routine createOrFindUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
-	match {
-		val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
-		require absence of uml::Class corresponding to jClass
-		require absence of uml::DataType corresponding to jClass
-	}
-	action {
-		call {
-			val uClass = findUmlClass(uModel, jClass.name, jCompUnit.namespaces.last)
-			if(uClass === null) {
-				createUmlClass(jClass, jCompUnit)
-			} else {
-				addTypeCorrespondence(jClass, uClass, jCompUnit)
-			}
-		}
-	}
+//===========================================
+//=========================================== CompilationUnit
+//===========================================
+
+reaction JavaCompilationUnitInsertedAsRoot {
+	after element java::CompilationUnit inserted as root
+	call newValue.classifiers.forEach[insertUmlClassifier(it, newValue)]
 }
 
-routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
-	action {
-		val uClass = create uml::Class and initialize {
-			uClass.name = jClass.name
-			uClass.visibility = getUmlVisibilityKindFromJavaElement(jClass)
-		}
-		call {
-			addTypeCorrespondence(jClass, uClass, jCompUnit)
-			addUmlElementToModelOrPackage(jCompUnit, uClass)
-		}
-	}
+reaction JavaCompilationUnitInsertedInPackage {
+    after element java::CompilationUnit inserted in java::Package[compilationUnits]
+    call {
+        rootElementPreSetup(newValue)
+        newValue.classifiers.forEach[insertUmlClassifierIntoPackage(it, affectedEObject)]
+    }
+}
+
+routine insertUmlClassifier(java::ConcreteClassifier jClassifier, java::CompilationUnit jCompUnit) {
+    match {
+        val umlClassifier = retrieve uml::Classifier corresponding to jClassifier
+    }
+    action {
+        call addUmlElementToModelOrPackage(jCompUnit, umlClassifier)
+    }
+}
+
+routine insertUmlClassifierIntoPackage(java::ConcreteClassifier jClassifier, java::Package jPackage) {
+    match {
+        val uClassifier = retrieve uml::Classifier corresponding to jClassifier
+        val uPackage = retrieve uml::Package corresponding to jPackage
+    }
+    action {
+        update uPackage {
+            uPackage.packagedElements += uClassifier
+        }
+    }
+}
+
+routine addUmlElementToModelOrPackage(java::JavaRoot javaRoot, uml::PackageableElement umlPackageableElement) {
+    match {
+        val uModel = retrieve asserted uml::Model corresponding to UMLPackage.Literals.MODEL
+    }
+    action {
+        call {
+            val uPackage = if (javaRoot.namespaces.nullOrEmpty) {
+                uModel
+            } else {
+                findUmlPackage(uModel, javaRoot.namespaces.last)
+            }
+            checkState(uPackage !== null, "Package %s does not exist in UML model", javaRoot.namespaces)
+            if (uPackage !== umlPackageableElement.eContainer) {
+                addUmlElementToPackage(umlPackageableElement, uPackage)
+            }
+        }
+    }
 }
 
 routine addUmlElementToPackage(uml::PackageableElement uPackageable, uml::Package uPackage) {
-	action {
-		update uPackage {
-			uPackage.packagedElements += uPackageable
-		}
-	}
-}
-
-reaction JavaCompUnitCreated {
-	after element java::CompilationUnit inserted as root
-	call potentiallyMoveClassifier(newValue)
-}
-
-// If there is a corresponding class or interface, move it
-routine potentiallyMoveClassifier(java::CompilationUnit compUnit) {
-	match {
-		val umlClassifier = retrieve uml::Classifier corresponding to compUnit
-	}
-	action {
-		call {
-			addUmlElementToModelOrPackage(compUnit, umlClassifier)
-		}
-	}
+    action {
+        update uPackage {
+            uPackage.packagedElements += uPackageable
+        }
+    }
 }
 
 reaction JavaCompUnitDeleted {
-	after element java::CompilationUnit deleted and removed as root
-	call deleteUmlClassifier(oldValue.classifiers.head, oldValue)
+	after element java::CompilationUnit deleted
+	call affectedEObject.classifiers.forEach[deleteUmlClassifier(it)]
 }
 
 reaction JavaClassifierDeleted {
-	after element java::ConcreteClassifier deleted and removed from java::CompilationUnit[classifiers]
-	call deleteUmlClassifier(oldValue, affectedEObject)
+	after element java::ConcreteClassifier deleted
+	call deleteUmlClassifier(affectedEObject)
 }
 
-routine deleteUmlClassifier(java::ConcreteClassifier jClassifier, java::CompilationUnit jCompUnit) {
+routine deleteUmlClassifier(java::ConcreteClassifier javaClassifier) {
 	match {
-		val uClassfier = retrieve uml::Classifier corresponding to jClassifier
+		val umlClassfier = retrieve uml::Classifier corresponding to javaClassifier
 	}
 	action {
-		delete uClassfier
-		delete jCompUnit
+		delete umlClassfier
 	}
+}
+
+reaction JavaClassifierRemoved {
+    after element java::ConcreteClassifier removed from java::CompilationUnit[classifiers]
+    call cleanUpJavaCompilationUnit(affectedEObject)
+}
+
+routine cleanUpJavaCompilationUnit(java::CompilationUnit jCompUnit) {
+    action {
+        delete jCompUnit
+    }
+}
+
+//===========================================
+//=========================================== Class
+//===========================================
+
+reaction JavaClassInserted {
+    after element java::Class inserted in java::CompilationUnit[classifiers]
+    call {
+        rootElementPreSetup(affectedEObject)
+        createOrFindUmlClass(newValue, affectedEObject)
+        insertUmlClassifier(newValue, affectedEObject)
+    }
+}
+
+routine createOrFindUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
+    match {
+        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+        require absence of uml::Class corresponding to jClass
+        require absence of uml::DataType corresponding to jClass
+    }
+    action {
+        call {
+            val uClass = findUmlClass(uModel, jClass.name, jCompUnit.namespaces.last)
+            if(uClass === null) {
+                createUmlClass(jClass, jCompUnit)
+            } else {
+                addTypeCorrespondence(jClass, uClass)
+            }
+        }
+    }
+}
+
+routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
+    action {
+        val uClass = create uml::Class and initialize {
+            uClass.name = jClass.name
+            uClass.visibility = getUmlVisibilityKindFromJavaElement(jClass)
+        }
+        call {
+            addTypeCorrespondence(jClass, uClass)
+        }
+    }
 }
 
 reaction JavaClassMadeAbstract {
@@ -258,7 +316,7 @@ routine deleteUmlSuperClassGeneralization(java::TypeReference jReference){
 }
 
 reaction JavaClassImplementAdded {
-	after element java::TypeReference created and inserted in java::Class[implements]
+	after element java::TypeReference inserted in java::Class[implements]
 	call {
 		val jInterface = getNormalizedClassifierFromTypeReference(newValue) as Interface
 		addUmlClassImplement(affectedEObject, newValue, jInterface)
@@ -320,11 +378,11 @@ routine removeUmlClassImplement(java::Class jClass, java::TypeReference jReferen
 //===========================================
 
 reaction JavaInterfaceCreated {
-	after element java::Interface created and inserted in java::CompilationUnit[classifiers]
+	after element java::Interface inserted in java::CompilationUnit[classifiers]
 	call {
-		detectOrCreateUmlModel(affectedEObject)
-		registerPredefinedUmlPrimitiveTypes(correspondenceModel, affectedEObject.eResource.resourceSet)
+		rootElementPreSetup(affectedEObject)
 		createOrFindUmlInterface(newValue, affectedEObject)
+		insertUmlClassifier(newValue, affectedEObject)
 	}
 }
 
@@ -339,7 +397,7 @@ routine createOrFindUmlInterface(java::Interface jInterface, java::CompilationUn
 			if(uInterface === null) {
 				createUmlInterface(jInterface, jCompUnit)
 			} else {
-				addTypeCorrespondence(jInterface, uInterface, jCompUnit)
+				addTypeCorrespondence(jInterface, uInterface)
 			}
 		}
 	}
@@ -352,8 +410,7 @@ routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCo
 			uInterface.visibility = getUmlVisibilityKindFromJavaElement(jInterface)
 		}
 		call {
-			addTypeCorrespondence(jInterface, uInterface, jCompUnit)
-			addUmlElementToModelOrPackage(jCompUnit, uInterface)
+			addTypeCorrespondence(jInterface, uInterface)
 		}
 	}
 }
@@ -412,17 +469,112 @@ routine removeUmlSuperInterface(java::Interface jInterface, java::TypeReference 
 }
 
 //===========================================
+//=========================================== Enum
+//===========================================
+
+reaction JavaEnumCreated {
+    after element java::Enumeration inserted in java::CompilationUnit[classifiers]
+    call {
+        rootElementPreSetup(affectedEObject)
+        createOrFindUmlEnum(newValue, affectedEObject)
+        insertUmlClassifier(newValue, affectedEObject)
+    }
+}
+
+routine createOrFindUmlEnum(java::Enumeration jEnum, java::CompilationUnit jCompUnit) {
+    match {
+        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+        require absence of uml::Enumeration corresponding to jEnum
+    }
+    action {
+        call {
+            val uEnum = findUmlEnum(uModel, jEnum.name, jCompUnit.namespaces.last)
+            if(uEnum === null) {
+                createUmlEnum(jEnum, jCompUnit)
+            } else {
+                addTypeCorrespondence(jEnum, uEnum)
+            }
+        }
+    }
+}
+
+routine createUmlEnum(java::Enumeration jEnum, java::CompilationUnit jCompUnit) {
+    match {
+        require absence of uml::Enumeration corresponding to jEnum
+    }
+    action {
+        val uEnum = create uml::Enumeration and initialize {
+            uEnum.name = jEnum.name
+            uEnum.visibility = getUmlVisibilityKindFromJavaElement(jEnum)
+        }
+        call {
+            addTypeCorrespondence(jEnum, uEnum)
+        }
+    }
+}
+
+reaction JavaEnumConstantCreated {
+    after element java::EnumConstant inserted in java::Enumeration[constants]
+    call createUmlEnumLiteral(affectedEObject, newValue)
+}
+
+routine createUmlEnumLiteral(java::Enumeration jEnum, java::EnumConstant jConstant) {
+    match {
+        val uEnum = retrieve uml::Enumeration corresponding to jEnum
+        require absence of uml::EnumerationLiteral corresponding to jConstant
+    }
+    action {
+        val uLiteral = create uml::EnumerationLiteral and initialize {
+            uLiteral.name = jConstant.name
+        }
+        add correspondence between uLiteral and jConstant
+        update uEnum {
+            uEnum.ownedLiterals += uLiteral
+        }
+    }
+}
+
+reaction JavaEnumConstantDeleted {
+    after element java::EnumConstant removed from java::Enumeration[constants]
+    call deleteUmlEnumLiteral(oldValue)
+}
+
+routine deleteUmlEnumLiteral(java::EnumConstant jConstant) {
+    match {
+        val uLiteral = retrieve uml::EnumerationLiteral corresponding to jConstant
+    }
+    action {
+        delete uLiteral
+    }
+}
+
+reaction JavaEnumConstantRenamed {
+    after attribute replaced at java::EnumConstant[name]
+    call renameUmlEnumLiteral(affectedEObject)
+}
+
+routine renameUmlEnumLiteral(java::EnumConstant jConstant) {
+    match {
+        val uLiteral = retrieve uml::EnumerationLiteral corresponding to jConstant
+    }
+    action {
+        update uLiteral {
+            uLiteral.name = jConstant.name
+        }
+    }
+}
+
+//===========================================
 //=========================================== Package
 //===========================================
 
 reaction JavaPackageInserted {
 	after element java::Package inserted as root
 	call {
+	    rootElementPreSetup(newValue)
 		createPackageEClassCorrespondence(newValue)
-		detectOrCreateUmlModel(newValue)
-		registerPredefinedUmlPrimitiveTypes(correspondenceModel, newValue.eResource.resourceSet)
-		potentiallyMoveUmlPackage(newValue)
 		createOrFindUmlPackage(newValue)
+		potentiallyMoveUmlPackage(newValue)
 	}
 }
 
@@ -505,8 +657,8 @@ routine createUmlPackage(java::Package jPackage, uml::Model uModel) {
 }
 
 reaction JavaPackageDeleted {
-	after element java::Package deleted and removed as root
-	call deleteCorrespondingUmlPackage(oldValue)
+	after element java::Package deleted
+	call deleteCorrespondingUmlPackage(affectedEObject)
 }
 
 routine deleteCorrespondingUmlPackage(java::Package jPackage) {
@@ -528,132 +680,16 @@ routine deleteUmlPackage(uml::Package umlPackage) {
 	}
 }
 
-reaction JavaCompilationUnitInsertedInPackage {
-	after element java::CompilationUnit inserted in java::Package[compilationUnits]
-	call addUmlPackageOfClass(affectedEObject, newValue.classifiers.head)
-}
-
-reaction JavaCompilationUnitRemovedFromPackage {
-	after element java::CompilationUnit removed from java::Package[compilationUnits]
-	call removeUmlPackageOfClass(affectedEObject, oldValue.classifiers.head)
-}
-
-routine addUmlPackageOfClass(java::Package jPackage, java::ConcreteClassifier jClassifier) {
-	match {
-		val uClassifier = retrieve uml::Classifier corresponding to jClassifier
-		val uPackage = retrieve uml::Package corresponding to jPackage
-	}
-	action {
-		update uPackage {
-			uPackage.packagedElements += uClassifier
-		}
-	}
-}
-
-routine removeUmlPackageOfClass(java::Package jPackage, java::ConcreteClassifier jClassifier) {
-	match {
-		val uClassifier = retrieve uml::Classifier corresponding to jClassifier
-		val uPackage = retrieve uml::Package corresponding to jPackage
-	}
-	action {
-		update uPackage {
-			uPackage.packagedElements -= uClassifier
-		}
-	}
-}
-
-routine addUmlElementToModelOrPackage(java::JavaRoot javaRoot, uml::PackageableElement umlPackageableElement) {
-	match {
-		val uModel = retrieve asserted uml::Model corresponding to UMLPackage.Literals.MODEL
-	}
-	action {
-		call {
-			val uPackage = if (javaRoot.namespaces.nullOrEmpty) {
-				uModel
-			} else {
-				findUmlPackage(uModel, javaRoot.namespaces.last)
-			}
-			checkState(uPackage !== null, "Package %s does not exist in UML model", javaRoot.namespaces)
-			if (uPackage !== umlPackageableElement.eContainer) {
-				addUmlElementToPackage(umlPackageableElement, uPackage)
-			}
-		}
-	}
-}
-
-//===========================================
-//=========================================== Enum
-//===========================================
-
-reaction JavaEnumCreated {
-	after element java::Enumeration created and inserted in java::CompilationUnit[classifiers]
-	call {
-		detectOrCreateUmlModel(affectedEObject)
-		registerPredefinedUmlPrimitiveTypes(correspondenceModel, affectedEObject.eResource.resourceSet)
-		createUmlEnum(newValue, affectedEObject)
-	}
-}
-
-routine createUmlEnum(java::Enumeration jEnum, java::CompilationUnit jCompUnit) {
-	match {
-		require absence of uml::Enumeration corresponding to jEnum
-	}
-	action {
-		val uEnum = create uml::Enumeration and initialize {
-			uEnum.name = jEnum.name
-			uEnum.visibility = getUmlVisibilityKindFromJavaElement(jEnum)
-		}
-		call addUmlElementToModelOrPackage(jCompUnit, uEnum)
-		add correspondence between uEnum and jEnum
-		add correspondence between uEnum and jCompUnit
-	}
-}
-
-reaction JavaEnumConstantCreated {
-	after element java::EnumConstant created and inserted in java::Enumeration[constants]
-	call createUmlEnumLiteral(affectedEObject, newValue)
-}
-
-routine createUmlEnumLiteral(java::Enumeration jEnum, java::EnumConstant jConstant) {
-	match {
-		val uEnum = retrieve uml::Enumeration corresponding to jEnum
-		require absence of uml::EnumerationLiteral corresponding to jConstant
-	}
-	action {
-		val uLiteral = create uml::EnumerationLiteral and initialize {
-			uLiteral.name = jConstant.name
-		}
-		add correspondence between uLiteral and jConstant
-		update uEnum {
-			uEnum.ownedLiterals += uLiteral
-		}
-	}
-}
-
-reaction JavaEnumConstantDeleted {
-	after element java::EnumConstant deleted and removed from java::Enumeration[constants]
-	call deleteUmlEnumLiteral(oldValue)
-}
-
-routine deleteUmlEnumLiteral(java::EnumConstant jConstant) {
-	match {
-		val uLiteral = retrieve uml::EnumerationLiteral corresponding to jConstant
-	}
-	action {
-		delete uLiteral
-	}
-}
-
 //===========================================
 //=========================================== Unsupported
 //===========================================
 
 reaction JavaEnumerationImplementAdded {
-	after element java::TypeReference created and inserted in java::Enumeration[implements]
+	after element java::TypeReference inserted in java::Enumeration[implements]
 	call showMessage(userInteractor, "Implement relations from enums are not supported. Please remove it from " + affectedEObject)
 }
 
 reaction JavaClassifierMadeStatic {
-	after element java::Static created and inserted in java::ConcreteClassifier[annotationsAndModifiers]
+	after element java::Static inserted in java::ConcreteClassifier[annotationsAndModifiers]
 	call showMessage(userInteractor, "Static classifiers are not supported. Please undo the change at " + affectedEObject)
 }
