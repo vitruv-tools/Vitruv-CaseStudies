@@ -48,6 +48,7 @@ import static extension java.nio.file.Files.walkFileTree
 import static extension tools.vitruv.testutils.printing.ModelPrinting.*
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import tools.vitruv.framework.propagation.ChangePropagationSpecification
+import tools.vitruv.framework.domains.VitruvDomainProviderRegistry
 
 @FinalFieldsConstructor
 package class EquivalenceTestExecutable implements Executable, AutoCloseable {
@@ -60,7 +61,9 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	val ModelComparisonSettings comparisonSettings
 	val EquivalenceTestExtensionContext extensionContext
 	@Lazy val VitruvDomainRepository propagationDomains = new VitruvDomainRepositoryImpl(
-		changePropagationSpecifications.flatMap [List.of(sourceDomain, targetDomain)].toSet
+		changePropagationSpecifications.flatMap[sourceMetamodelRootNsUris + targetMetamodelRootNsUris].flatMap [
+			VitruvDomainProviderRegistry.findDomainsForMetamodelRootNsUri(it)
+		].toSet
 	)
 
 	override execute() throws Throwable {

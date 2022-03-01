@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import edu.kit.ipd.sdq.commons.util.java.Pair;
@@ -25,7 +26,7 @@ public class CbsCommonalitiesChangePropagationSpecifications {
     // find src-gen -type f -name '*ChangePropagationSpecification.java' -printf
     // "%P\n"
     // | sed -E 's|/|.|g;s|(.*)\.java|new \1()|g' | paste -sd "," -
-    private static final Map<Pair<VitruvDomain, VitruvDomain>, ? extends Collection<? extends ChangePropagationSpecification>> allChangePropagationSpecifications = //
+    private static final Map<Pair<Set<String>, Set<String>>, ? extends Collection<? extends ChangePropagationSpecification>> allChangePropagationSpecifications = //
             Stream.of(//
                     new mir.reactions.interfaceMethodFromUML.InterfaceMethodFromUMLChangePropagationSpecification(),
                     new mir.reactions.repositoryToPCM.RepositoryToPCMChangePropagationSpecification(),
@@ -89,13 +90,13 @@ public class CbsCommonalitiesChangePropagationSpecifications {
                     new mir.reactions.repositoryFromPCM.RepositoryFromPCMChangePropagationSpecification()
                     //
                     )
-            .collect(groupingBy(spec -> new Pair<>(spec.getSourceDomain(), spec.getTargetDomain())));
+            .collect(groupingBy(spec -> new Pair<>(spec.getSourceMetamodelRootNsUris(), spec.getTargetMetamodelRootNsUris())));
 
     private static abstract class CbsCommonalitiesChangePropagationSpecification
     extends CompositeChangePropagationSpecification {
         public CbsCommonalitiesChangePropagationSpecification(VitruvDomain sourceDomain, VitruvDomain targetDomain) {
-            super(sourceDomain, targetDomain);
-            for (var spec : allChangePropagationSpecifications.get(new Pair<>(sourceDomain, targetDomain))) {
+            super(sourceDomain.getNsUris(), targetDomain.getNsUris());
+            for (var spec : allChangePropagationSpecifications.get(new Pair<>(sourceDomain.getNsUris(), targetDomain.getNsUris()))) {
                 addChangeMainprocessor(spec);
             }
         }
