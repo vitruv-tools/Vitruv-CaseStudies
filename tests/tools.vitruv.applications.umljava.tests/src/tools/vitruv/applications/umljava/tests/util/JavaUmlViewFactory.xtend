@@ -30,7 +30,7 @@ class JavaUmlViewFactory extends TestViewFactory {
 	 * function, commits the performed changes and closes the view afterwards.
 	 */
 	def void changeUmlView((View)=>void modelModification) {
-		changeView(createUmlView, modelModification)
+		changeViewRecordingChanges(createUmlView, modelModification)
 	}
 
 	/**
@@ -38,7 +38,7 @@ class JavaUmlViewFactory extends TestViewFactory {
 	 * given modification function, commits the performed changes and closes the view afterwards.
 	 */
 	def void changeJavaView((View)=>void modelModification) {
-		changeView(createJavaView, modelModification)
+		changeViewRecordingChanges(createJavaView, modelModification)
 	}
 
 	/**
