@@ -1,22 +1,14 @@
 package tools.vitruv.applications.umljava.tests.util
 
-import java.util.Collection
 import org.eclipse.uml2.uml.Model
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
 import tools.vitruv.framework.views.View
-import tools.vitruv.framework.views.ViewProvider
-import tools.vitruv.framework.views.ViewTypeFactory
-
-import static org.hamcrest.CoreMatchers.equalTo
-import static org.hamcrest.CoreMatchers.not
-import static org.hamcrest.MatcherAssert.assertThat
+import tools.vitruv.testutils.TestViewFactory
 
 @FinalFieldsConstructor
-class JavaUmlViewFactory {
-	val ViewProvider viewProvider
-
+class JavaUmlViewFactory extends TestViewFactory {
 	private def View createUmlView() {
 		createViewOfElements("UML", #{Model})
 	}
@@ -33,49 +25,22 @@ class JavaUmlViewFactory {
 		createViewOfElements("UML and Java packages", #{Package, Model})
 	}
 
-	private def View createViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
-		val selector = viewProvider.createSelector(ViewTypeFactory.createIdentityMappingViewType(viewName))
-
-		for (rootElement : selector.selectableElements.filter[element|rootTypes.exists[it.isInstance(element)]]) {
-			selector.setSelected(rootElement, true)
-		}
-		val view = selector.createView()
-		assertThat("view must not be null", view, not(equalTo(null)))
-		return view
-	}
-
 	/**
-	 * Changes the given view according to the given modification function, commits the performed changes
-	 * and closes the view afterwards.
-	 */
-	private def void changeView(View view, (View)=>void modelModification) {
-		modelModification.apply(view)
-		view.commitChanges()
-		view.close()
-	}
-
-	/**
-	 * Changes the UML view containing all UML models as root elements according to the given modification 
-	 * function, commits the performed changes and closes the view afterwards.
+	 * Changes the UML view containing all UML models as root elements 
+	 * according to the given modification function. 
+	 * Records the performed changes, commits the recorded changes, and closes the view afterwards.
 	 */
 	def void changeUmlView((View)=>void modelModification) {
-		changeView(createUmlView, modelModification)
+		changeViewRecordingChanges(createUmlView, modelModification)
 	}
 
 	/**
-	 * Changes the Java view containing all Java packages and classes as root elements according to the 
-	 * given modification function, commits the performed changes and closes the view afterwards.
+	 * Changes the Java view containing all Java packages and classes as root elements 
+	 * according to the given modification function. 
+	 * Records the performed changes, commits the recorded changes, and closes the view afterwards.
 	 */
 	def void changeJavaView((View)=>void modelModification) {
-		changeView(createJavaView, modelModification)
-	}
-
-	/**
-	 * Validates the given view by applying the validation function and closes the view afterwards.
-	 */
-	private def void validateView(View view, (View)=>void viewValidation) {
-		viewValidation.apply(view)
-		view.close()
+		changeViewRecordingChanges(createJavaView, modelModification)
 	}
 
 	/**
