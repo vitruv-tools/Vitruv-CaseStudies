@@ -16,8 +16,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		ParameterConceptTest
 
 reactions: umlRegularParameterReactions
-in reaction to changes in UML
-execute actions in PCM
+in reaction to changes in uml
+execute actions in pcm
 
 reaction RegularParameterInserted {
 	after element uml::Parameter inserted in uml::Operation[ownedParameter]

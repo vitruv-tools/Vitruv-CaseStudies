@@ -2,8 +2,8 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: combinedPcmToUmlClassReactions
-in reaction to changes in PCM
-execute actions in UML
+in reaction to changes in pcm
+execute actions in uml
 
 import pcmRepositoryReactions using qualified names
 import pcmSystemReactions using qualified names

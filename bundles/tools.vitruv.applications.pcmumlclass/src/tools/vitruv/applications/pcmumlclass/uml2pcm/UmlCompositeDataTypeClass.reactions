@@ -6,8 +6,8 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: umlCompositeDataTypeClassReactions
-in reaction to changes in UML
-execute actions in PCM
+in reaction to changes in uml
+execute actions in pcm
 
 //	The following reactions and routines synchronize a pcm::CompositeDataType in a pcm::Repository
 //	with an uml::Class in the datatypes uml::Package corresponding to the repository.

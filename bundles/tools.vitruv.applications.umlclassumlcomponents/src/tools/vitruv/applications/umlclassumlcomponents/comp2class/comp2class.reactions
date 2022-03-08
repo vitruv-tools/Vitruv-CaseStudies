@@ -13,8 +13,8 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as umlcomp
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
 
 reactions: comp2class
-in reaction to changes in UML
-execute actions in UML
+in reaction to changes in umlcomp
+execute actions in umlclass
 
 
 /*******

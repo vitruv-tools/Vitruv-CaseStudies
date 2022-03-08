@@ -13,8 +13,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		InterfaceConceptTest
 
 reactions: pcmInterfaceReactions
-in reaction to changes in PCM
-execute actions in UML
+in reaction to changes in pcm
+execute actions in uml
 
 reaction InterfaceInsertedInRepository {
 	after element pcm::OperationInterface inserted in pcm::Repository[interfaces__Repository]

@@ -23,8 +23,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		SignatureConceptTest, ParameterConceptTest, AttributeConceptTest
 
 reactions: pcmCollectionDataTypeReactions
-in reaction to changes in PCM
-execute actions in UML
+in reaction to changes in pcm
+execute actions in uml
 
 reaction CollectionDataTypeInnerTypeChanged {
 	after element replaced at pcm::CollectionDataType[innerType_CollectionDataType]

@@ -15,8 +15,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		AttributeConceptTest
 
 reactions: umlInnerDeclarationPropertyReactions
-in reaction to changes in UML
-execute actions in PCM
+in reaction to changes in uml
+execute actions in pcm
 
 reaction InnerDeclarationPropertyInserted {
 	after element uml::Property inserted in uml::Class[ownedAttribute]

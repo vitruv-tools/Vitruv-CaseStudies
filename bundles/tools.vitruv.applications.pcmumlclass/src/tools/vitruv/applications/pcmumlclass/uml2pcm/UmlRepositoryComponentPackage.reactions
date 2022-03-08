@@ -18,8 +18,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		RepositoryComponentConceptTest
 
 reactions: umlRepositoryComponentPackageReactions
-in reaction to changes in UML
-execute actions in PCM
+in reaction to changes in uml
+execute actions in pcm
 
 reaction RepositoryComponentPackageInserted {
 	after element uml::Package inserted in uml::Package[packagedElement]

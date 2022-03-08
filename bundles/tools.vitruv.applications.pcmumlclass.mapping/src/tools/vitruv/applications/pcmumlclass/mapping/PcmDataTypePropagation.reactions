@@ -18,8 +18,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		PcmParameter.reactions
 
 reactions: pcmDataTypePropagationReactions
-in reaction to changes in PCM
-execute actions in UML
+in reaction to changes in pcm
+execute actions in uml
 
 routine setUmlParameterType(
 		pcm::DataType pcmType, 
