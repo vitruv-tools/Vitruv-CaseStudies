@@ -21,8 +21,8 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
 
 reactions: javaToUmlClassifier
-in reaction to changes in Java
-execute actions in UML
+in reaction to changes in java
+execute actions in uml
 
 //===========================================
 //=========================================== All Types

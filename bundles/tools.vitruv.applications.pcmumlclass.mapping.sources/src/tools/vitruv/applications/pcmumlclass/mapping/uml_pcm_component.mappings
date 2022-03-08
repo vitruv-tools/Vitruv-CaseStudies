@@ -1,7 +1,7 @@
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
     	
-mappings: umlXpcmComponent for UML and PCM
+mappings: umlXpcmComponent for uml and pcm
  
 mapping RepositoryComponent {
 			

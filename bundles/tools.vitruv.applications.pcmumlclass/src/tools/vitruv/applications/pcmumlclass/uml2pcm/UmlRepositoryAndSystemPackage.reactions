@@ -27,8 +27,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		RepositoryConceptTest, SystemConceptTest
 
 reactions: umlRepositoryAndSystemPackageReactions
-in reaction to changes in UML
-execute actions in PCM
+in reaction to changes in uml
+execute actions in pcm
 
 reaction UmlModelCreated {
     after element uml::Model created and inserted as root

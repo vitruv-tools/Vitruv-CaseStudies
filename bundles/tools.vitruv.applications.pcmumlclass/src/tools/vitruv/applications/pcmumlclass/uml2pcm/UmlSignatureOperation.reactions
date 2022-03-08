@@ -14,8 +14,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		SignatureConceptTest
 
 reactions: umlSignatureOperationReactions
-in reaction to changes in UML
-execute actions in PCM
+in reaction to changes in uml
+execute actions in pcm
 
 reaction SignatureOperationInserted {
 	after element uml::Operation inserted in uml::Interface[ownedOperation]

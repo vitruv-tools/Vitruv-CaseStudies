@@ -12,8 +12,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //will be ignored anyway because we only import the routines
 reactions: umlXpcmRoutines 
-in reaction to changes in UML
-execute actions in PCM
+in reaction to changes in uml
+execute actions in pcm
 
 import routines pcmDataTypePropagationReactions using qualified names
 import routines umlReturnAndRegularParameterTypeReactions using qualified names

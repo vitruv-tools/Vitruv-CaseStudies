@@ -11,8 +11,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		ProvidedRoleTest
 
 reactions: pcmProvidedRoleReactions
-in reaction to changes in PCM
-execute actions in UML
+in reaction to changes in pcm
+execute actions in uml
 
 reaction ProvidedRoleInserted {
 	after element pcm::OperationProvidedRole inserted in pcm::InterfaceProvidingRequiringEntity[providedRoles_InterfaceProvidingEntity]

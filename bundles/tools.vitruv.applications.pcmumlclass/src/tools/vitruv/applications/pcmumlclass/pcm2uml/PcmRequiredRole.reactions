@@ -12,8 +12,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		RequiredRoleConceptTest
 
 reactions: pcmRequiredRoleReactions
-in reaction to changes in PCM
-execute actions in UML
+in reaction to changes in pcm
+execute actions in uml
 
 reaction RequiredRoleInserted {
 	after element pcm::OperationRequiredRole inserted in pcm::InterfaceProvidingRequiringEntity[requiredRoles_InterfaceRequiringEntity]

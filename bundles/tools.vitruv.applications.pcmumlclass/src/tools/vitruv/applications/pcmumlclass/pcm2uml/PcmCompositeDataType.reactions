@@ -15,8 +15,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		CompositeDataTypeConceptTest
 
 reactions: pcmCompositeDataTypeReactions
-in reaction to changes in PCM
-execute actions in UML
+in reaction to changes in pcm
+execute actions in uml
 
 reaction CompositeDataTypeInsertedInRepository {
 	after element pcm::CompositeDataType inserted in pcm::Repository[dataTypes__Repository]

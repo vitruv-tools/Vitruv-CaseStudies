@@ -11,8 +11,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		AttributeConceptTest
 
 reactions: pcmInnerDeclarationReactions
-in reaction to changes in PCM
-execute actions in UML
+in reaction to changes in pcm
+execute actions in uml
  
 import routines pcmDataTypePropagationReactions using qualified names
 
