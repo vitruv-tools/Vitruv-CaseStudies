@@ -26,16 +26,18 @@ class JavaUmlViewFactory extends TestViewFactory {
 	}
 
 	/**
-	 * Changes the UML view containing all UML models as root elements according to the given modification 
-	 * function, commits the performed changes and closes the view afterwards.
+	 * Changes the UML view containing all UML models as root elements 
+	 * according to the given modification function. 
+	 * Records the performed changes, commits the recorded changes, and closes the view afterwards.
 	 */
 	def void changeUmlView((View)=>void modelModification) {
 		changeViewRecordingChanges(createUmlView, modelModification)
 	}
 
 	/**
-	 * Changes the Java view containing all Java packages and classes as root elements according to the 
-	 * given modification function, commits the performed changes and closes the view afterwards.
+	 * Changes the Java view containing all Java packages and classes as root elements 
+	 * according to the given modification function. 
+	 * Records the performed changes, commits the recorded changes, and closes the view afterwards.
 	 */
 	def void changeJavaView((View)=>void modelModification) {
 		changeViewRecordingChanges(createJavaView, modelModification)
