@@ -61,7 +61,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	val ModelComparisonSettings comparisonSettings
 	val EquivalenceTestExtensionContext extensionContext
 	@Lazy val VitruvDomainRepository propagationDomains = new VitruvDomainRepositoryImpl(
-		changePropagationSpecifications.flatMap[sourceMetamodelRootNsUris + targetMetamodelRootNsUris].flatMap [
+		changePropagationSpecifications.flatMap[sourceMetamodel.nsURIs + targetMetamodel.nsURIs].flatMap [
 			VitruvDomainProviderRegistry.findDomainsForMetamodelRootNsUri(it)
 		].toSet
 	)
