@@ -119,7 +119,7 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 		UriMode uriMode,
 		ModelComparisonSettings modelComparisonSettings
 	) {
-		super(changePropagationSpecifications.flatMap[sourceMetamodel.nsURIs].flatMap [
+		super(changePropagationSpecifications.flatMap[sourceMetamodelDescriptor.nsUris].flatMap [
 			VitruvDomainProviderRegistry.findDomainsForMetamodelRootNsUri(it)
 		].toSet)
 		this.parentContext = parentContext
