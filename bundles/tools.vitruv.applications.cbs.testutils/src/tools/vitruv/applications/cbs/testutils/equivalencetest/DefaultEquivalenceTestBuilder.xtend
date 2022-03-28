@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState
 import static java.util.Comparator.comparing
 import static org.junit.jupiter.api.DynamicTest.dynamicTest
 import tools.vitruv.framework.propagation.ChangePropagationSpecification
+import tools.vitruv.framework.domains.VitruvDomainProviderRegistry
 
 abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
 	/* both maps always contain lists for all domains */
@@ -118,7 +119,9 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 		UriMode uriMode,
 		ModelComparisonSettings modelComparisonSettings
 	) {
-		super(changePropagationSpecifications.map[sourceDomain].toSet)
+		super(changePropagationSpecifications.flatMap[sourceMetamodelDescriptor.nsUris].flatMap [
+			VitruvDomainProviderRegistry.findDomainsForMetamodelRootNsUri(it)
+		].toSet)
 		this.parentContext = parentContext
 		this.changePropagationSpecifications = changePropagationSpecifications
 		this.uriMode = uriMode

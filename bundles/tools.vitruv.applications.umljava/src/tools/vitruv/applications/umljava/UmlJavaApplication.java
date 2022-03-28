@@ -3,10 +3,13 @@ package tools.vitruv.applications.umljava;
 import java.util.HashSet;
 import java.util.Set;
 
-import tools.vitruv.framework.applications.AbstractVitruvApplication;
+import tools.vitruv.domains.java.JavaDomainProvider;
+import tools.vitruv.domains.uml.UmlDomainProvider;
+import tools.vitruv.framework.applications.VitruvApplication;
+import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.framework.propagation.ChangePropagationSpecification;
 
-public class UmlJavaApplication extends AbstractVitruvApplication {
+public class UmlJavaApplication implements VitruvApplication {
 
 	@Override
 	public Set<ChangePropagationSpecification> getChangePropagationSpecifications() {
@@ -21,4 +24,8 @@ public class UmlJavaApplication extends AbstractVitruvApplication {
 		return "UML <> Java";
 	}
 
+	@Override
+	public Set<VitruvDomain> getVitruvDomains() {
+		return Set.of(new UmlDomainProvider().getDomain(), new JavaDomainProvider().getDomain());
+	}
 }
