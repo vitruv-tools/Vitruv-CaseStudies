@@ -1,3 +1,5 @@
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as PCM
+
 concept ComponentBasedSystems
 
 // Externally contained by ComponentBasedSystems:Repository.componentInterfaces
