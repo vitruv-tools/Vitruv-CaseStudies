@@ -12,6 +12,11 @@
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<properties>
+		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework/</vitruv.framework.url>
+		<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</vitruv.domains.url>
+	</properties>
+
 	<repositories>
 		<repository>
 			<id>Vitruv Framework</id>
@@ -32,18 +37,6 @@
 
 	<profiles>
 		<profile>
-			<id>nightly-update-site-framework</id>
-			<activation>
-     			<property>
-        			<name>!vitruv.framework.path</name>
-      			</property>
-      		</activation>
-			<properties>
-				<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework/</vitruv.framework.url>
-			</properties>
-		</profile>
-
-		<profile>
 			<id>local-framework</id>
 			<activation>
      			<property>
@@ -52,18 +45,6 @@
       		</activation>
 			<properties>
 				<vitruv.framework.url>file://${vitruv.framework.path}/releng/tools.vitruv.updatesite.aggregated/target/final</vitruv.framework.url>
-			</properties>
-		</profile>
-
-		<profile>
-			<id>nightly-update-site-domains</id>
-			<activation>
-     			<property>
-        			<name>!vitruv.domains.path</name>
-      			</property>
-      		</activation>
-			<properties>
-				<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</vitruv.domains.url>
 			</properties>
 		</profile>
 
