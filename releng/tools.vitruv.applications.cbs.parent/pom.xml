@@ -39,10 +39,10 @@
 		<profile>
 			<id>local-framework</id>
 			<activation>
-     			<property>
-        			<name>vitruv.framework.path</name>
-      			</property>
-      		</activation>
+				<property>
+					<name>vitruv.framework.path</name>
+				</property>
+			</activation>
 			<properties>
 				<vitruv.framework.url>file://${vitruv.framework.path}/releng/tools.vitruv.updatesite.aggregated/target/final</vitruv.framework.url>
 			</properties>
@@ -51,10 +51,10 @@
 		<profile>
 			<id>local-domains</id>
 			<activation>
-     			<property>
-        			<name>vitruv.domains.path</name>
-      			</property>
-      		</activation>
+				<property>
+					<name>vitruv.domains.path</name>
+				</property>
+			</activation>
 			<properties>
 				<vitruv.domains.url>file://${vitruv.domains.path}/releng/tools.vitruv.domains.cbs.updatesite.aggregated/target/final</vitruv.domains.url>
 			</properties>
