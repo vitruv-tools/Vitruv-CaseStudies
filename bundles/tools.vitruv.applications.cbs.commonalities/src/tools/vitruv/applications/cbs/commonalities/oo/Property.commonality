@@ -1,6 +1,9 @@
 import tools.vitruv.applications.cbs.commonalities.java.operators._
 import tools.vitruv.applications.cbs.commonalities.uml.operators._
 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as UML
+import "http://www.emftext.org/java" as Java
+
 concept ObjectOrientedDesign
 
 // Externally contained by ObjectOrientedDesign:Class.properties
