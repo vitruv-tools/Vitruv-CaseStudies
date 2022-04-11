@@ -12,16 +12,21 @@
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<properties>
+		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework/</vitruv.framework.url>
+		<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</vitruv.domains.url>
+	</properties>
+
 	<repositories>
 		<repository>
 			<id>Vitruv Framework</id>
 			<layout>p2</layout>
-			<url>https://vitruv-tools.github.io/updatesite/nightly/framework/</url>
+			<url>${vitruv.framework.url}</url>
 		</repository>
 		<repository>
 			<id>Vitruv Domains</id>
 			<layout>p2</layout>
-			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</url>
+			<url>${vitruv.domains.url}</url>
 		</repository>
 		<repository>
 			<id>Palladiosimulator</id>
@@ -31,6 +36,30 @@
 	</repositories>
 
 	<profiles>
+		<profile>
+			<id>local-framework</id>
+			<activation>
+				<property>
+					<name>vitruv.framework.path</name>
+				</property>
+			</activation>
+			<properties>
+				<vitruv.framework.url>file://${vitruv.framework.path}/releng/tools.vitruv.updatesite.aggregated/target/final</vitruv.framework.url>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>local-domains</id>
+			<activation>
+				<property>
+					<name>vitruv.domains.path</name>
+				</property>
+			</activation>
+			<properties>
+				<vitruv.domains.url>file://${vitruv.domains.path}/releng/tools.vitruv.domains.cbs.updatesite.aggregated/target/final</vitruv.domains.url>
+			</properties>
+		</profile>
+
 		<profile>
 			<id>compile-dsls</id>
 			<activation>
