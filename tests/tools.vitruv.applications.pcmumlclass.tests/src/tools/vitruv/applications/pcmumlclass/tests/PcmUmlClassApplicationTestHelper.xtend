@@ -80,6 +80,7 @@ final class PcmUmlClassApplicationTestHelper {
 
 	// here start the factory and retrieval methods
 	public static val PCM_MODEL_FILE = "model/Repository.repository"
+	public static val PCM_MODEL_SYSTEM_FILE = "model/System.system"
 	public static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
 		DefaultLiterals.UML_EXTENSION
 
