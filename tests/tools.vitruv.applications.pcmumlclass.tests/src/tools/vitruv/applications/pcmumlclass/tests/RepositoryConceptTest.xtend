@@ -29,6 +29,7 @@ import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChang
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.URI
 import org.junit.jupiter.api.BeforeEach
+import org.palladiosimulator.pcm.PcmFactory
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Repository
@@ -79,6 +80,8 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 		]
 	}
 	
+	
+	
 	protected def void createAndRegisterRoot(View view, EObject rootObject, URI persistenceUri) {
 		view.registerRoot(rootObject, persistenceUri)
 	}
@@ -97,7 +100,6 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	def void createRootPackage(String packageName) {
-		createUmlModel[name = UML_MODEL_NAME]
 		changeUmlModel [
 			packagedElements += UMLFactory.eINSTANCE.createPackage => [
 				it.name = packageName
@@ -111,13 +113,29 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	@Test
-	def void testCreateRepositoryConcept_UML() {
+	def void testCreateRepositoryConcept_UML_System() {
+		createUmlModel[name = UML_MODEL_NAME]
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_SYSTEM_FILE)
 		createRootPackage(PACKAGE_NAME)
+		
 		validateUmlAndPcmSystemView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val pcmPackage = claimPcmSystem(PACKAGE_NAME)
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+	
+	@Test
+	def void testCreateRepositoryConcept_UML_Repository() {
+		createUmlModel[name = UML_MODEL_NAME]
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		createRootPackage(PACKAGE_NAME)
+		
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME)
 			assertElementsEqual(umlPackage, pcmPackage)
 		]
 	}

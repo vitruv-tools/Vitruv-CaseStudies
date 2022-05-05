@@ -4,7 +4,7 @@ import tools.vitruv.testutils.TestViewFactory
 import tools.vitruv.framework.views.View
 import org.eclipse.uml2.uml.Model
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.palladiosimulator.pcm.repository.RepositoryPackage
+import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.system.System
 
@@ -16,7 +16,7 @@ class PcmUmlclassViewFactory extends TestViewFactory {
 	}
 
 	private def View createPcmView() {
-		createViewOfElements("Pcm packages and components", #{RepositoryPackage, RepositoryComponent})
+		createViewOfElements("Pcm packages and components", #{Repository, RepositoryComponent})
 	}
 
 	private def View createUmlAndPcmClassesView() {
@@ -24,7 +24,7 @@ class PcmUmlclassViewFactory extends TestViewFactory {
 	}
 
 	private def View createUmlAndPcmPackagesView() {
-		createViewOfElements("UML and Pcm packages", #{RepositoryPackage, Model})
+		createViewOfElements("UML and Pcm packages", #{Repository, Model})
 	}
 	
 	private def View createUmlAndPcmSystemView() {

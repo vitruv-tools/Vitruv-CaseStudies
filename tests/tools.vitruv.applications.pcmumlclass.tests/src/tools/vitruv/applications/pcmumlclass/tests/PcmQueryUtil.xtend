@@ -13,6 +13,7 @@ class PcmQueryUtil {
 	}
 	
 	static def getPcmRepository(View view) {
+		println("getRootObjects " + view.getRootObjects())
 		view.getRootObjects(Repository)
 	}
 	

@@ -25,6 +25,7 @@ import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.palladiosimulator.pcm.system.System
+import org.eclipse.emf.ecore.EObject
 
 class PcmUmlElementEqualityValidation {
 
@@ -37,15 +38,25 @@ class PcmUmlElementEqualityValidation {
 	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.Package uPackage,
 		org.palladiosimulator.pcm.system.System sysPackage) {
 		assertEquals(uPackage.name.toFirstUpper, sysPackage.entityName, "Package names must be equal")
-		println("uml namescpaces " + getUmlParentNamespaceAsStringList(uPackage))
-		if (getUmlParentNamespaceAsStringList(uPackage).isEmpty()) {
-			assertNull(sysPackage.eContainer, "Container namespaces must be null")
-		} else {
-			assertEquals(getUmlParentNamespaceAsStringList(uPackage), sysPackage.eContainer.toString,
-			"Container namespaces names must be equal")
-		}
+		assertTrue(getUmlParentNamespaceAsStringList(uPackage).isEmpty(), "There should be no UML parent package")
+		assertNull(sysPackage.eContainer, "There should be no PCM parent package")
 		
 	}
 
-
+	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.Package uPackage,
+		org.palladiosimulator.pcm.repository.Repository repoPackage) {
+		assertEquals(uPackage.name.toFirstUpper, repoPackage.entityName, "Package names must be equal")
+		
+		if (getUmlParentNamespaceAsStringList(uPackage).isEmpty()) {
+			assertNull(repoPackage.eContainer, "Container namespaces must be null")
+		} else {
+			assertEquals(getUmlParentNamespaceAsStringList(uPackage), repoPackage.eContainer.toString,
+			"Container namespaces names must be equal")
+		}
+		
+		for (EObject umlChild : uPackage.eContents) {
+			assertTrue(repoPackage.eContents.contains(umlChild), "Repository is incomplete")
+		}
+		
+	}
 }
