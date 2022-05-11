@@ -18,7 +18,7 @@ class PcmQueryUtil {
 	
 	//nötig?
 	static def claimPcmRepository(View view, String packageName) {
-		getPcmRepository(view).filter[it.entityName == packageName].iterator.next
+		getPcmRepository(view).iterator.next
 	}
 	
 	static def claimPcmSystem(View view) {

@@ -175,7 +175,19 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 
 	@Test
 	def void testRenameRepositoryConcept_PCM() {
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		
+		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+		
+		changePcmView[
+			defaultPcmModel.setEntityName(PACKAGE_RENAMED.toFirstUpper)
+		]
+		
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_RENAMED)
+			val pcmPackage = defaultPcmModel
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
 	}
 
 	@Test
