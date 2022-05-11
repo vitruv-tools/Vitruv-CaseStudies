@@ -13,16 +13,15 @@ class PcmQueryUtil {
 	}
 	
 	static def getPcmRepository(View view) {
-		println("getRootObjects " + view.getRootObjects())
 		view.getRootObjects(Repository)
 	}
 	
 	//nötig?
-	static def claimPcmRepository(View view, String name) {
-		getPcmRepository(view).iterator.next
+	static def claimPcmRepository(View view, String packageName) {
+		getPcmRepository(view).filter[it.entityName == packageName].iterator.next
 	}
 	
-	static def claimPcmSystem(View view, String name) {
+	static def claimPcmSystem(View view) {
 		getPcmSystem(view).iterator.next
 	}
 }

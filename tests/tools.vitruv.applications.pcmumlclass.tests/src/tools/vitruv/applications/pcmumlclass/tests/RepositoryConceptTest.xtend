@@ -43,7 +43,7 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FILE_EXTENSION = "uml"
 	@Accessors(PROTECTED_GETTER)
-	static val UML_MODEL_NAME = "model"
+	static val MODEL_NAME = "model"
 	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FOLDER_NAME = "model"
 	
@@ -69,18 +69,29 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 	}
 
 	protected def getDefaultUmlModel(View view) {
-		view.claimUmlModel(UML_MODEL_NAME)
+		view.claimUmlModel(MODEL_NAME)
+	}
+	
+	protected def getDefaultPcmModel(View view) {
+		view.claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 	}
 		
 	protected def void createUmlModel((Model)=>void modelInitialization) {
 		changeUmlView [
 			val umlModel = UMLFactory.eINSTANCE.createModel
-			createAndRegisterRoot(umlModel, UML_MODEL_NAME.projectModelPath.uri)
+			createAndRegisterRoot(umlModel, MODEL_NAME.projectModelPath.uri)
 			modelInitialization.apply(umlModel)
 		]
 	}
 	
-	
+	protected def void createPcmRepository(String packageName) {
+		changeUmlView [
+			val repository = RepositoryFactory.eINSTANCE.createRepository => [
+				it.entityName = packageName
+			]
+			createAndRegisterRoot(repository, MODEL_NAME.projectModelPath.uri)
+		]
+	}
 	
 	protected def void createAndRegisterRoot(View view, EObject rootObject, URI persistenceUri) {
 		view.registerRoot(rootObject, persistenceUri)
@@ -99,7 +110,13 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 		]
 	}
 	
-	def void createRootPackage(String packageName) {
+	protected def void changePcmModel((Repository)=>void modelModification) {
+		changePcmView [
+			modelModification.apply(defaultPcmModel)
+		]
+	}
+	
+	def void createUmlRootPackage(String packageName) {
 		changeUmlModel [
 			packagedElements += UMLFactory.eINSTANCE.createPackage => [
 				it.name = packageName
@@ -108,41 +125,52 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	@BeforeEach
-	def void setupViewFactory() {
+	def void setup() {
 		viewFactory = new PcmUmlclassViewFactory(virtualModel)
+		createUmlModel[name = MODEL_NAME]
 	}
 	
 	@Test
 	def void testCreateRepositoryConcept_UML_System() {
-		createUmlModel[name = UML_MODEL_NAME]
+		println("UML Sys create repository test")
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_SYSTEM_FILE)
-		createRootPackage(PACKAGE_NAME)
+		createUmlRootPackage(PACKAGE_NAME)
 		
 		validateUmlAndPcmSystemView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val pcmPackage = claimPcmSystem(PACKAGE_NAME)
+			val pcmPackage = claimPcmSystem()
 			assertElementsEqual(umlPackage, pcmPackage)
 		]
 	}
 	
 	@Test
 	def void testCreateRepositoryConcept_UML_Repository() {
-		createUmlModel[name = UML_MODEL_NAME]
+		println("UML Repo create repository test")
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		createRootPackage(PACKAGE_NAME)
+		createUmlRootPackage(PACKAGE_NAME)
 		
-		validateUmlAndPcmPackagesView [
+		validateUmlAndPcmPackagesView [ 
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val pcmPackage = claimPcmRepository(PACKAGE_NAME)
+			val pcmPackage = defaultPcmModel
 			assertElementsEqual(umlPackage, pcmPackage)
 		]
 	}
 
 	@Test
 	def void testCreateRepositoryConcept_PCM() {
+		println("PCM create repository test")
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		
+		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+		
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = defaultPcmModel
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
 	}
 
 	@Test

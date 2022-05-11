@@ -26,6 +26,7 @@ import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.palladiosimulator.pcm.system.System
 import org.eclipse.emf.ecore.EObject
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 
 class PcmUmlElementEqualityValidation {
 
@@ -54,9 +55,12 @@ class PcmUmlElementEqualityValidation {
 			"Container namespaces names must be equal")
 		}
 		
-		for (EObject umlChild : uPackage.eContents) {
-			assertTrue(repoPackage.eContents.contains(umlChild), "Repository is incomplete")
+		for (EObject pcmChild : repoPackage.eContents) {
+			assertTrue(uPackage.eContents.contains(pcmChild), "uml model is incomplete")
 		}
 		
+		// depends on if uml reaction creates these packages
+		//assertTrue(uPackage.packagedElements.exists[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME])
+		//assertTrue(uPackage.packagedElements.exists[it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME])
 	}
 }
