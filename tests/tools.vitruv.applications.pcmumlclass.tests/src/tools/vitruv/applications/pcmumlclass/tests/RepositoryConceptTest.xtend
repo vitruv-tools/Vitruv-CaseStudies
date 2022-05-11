@@ -72,7 +72,7 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 		view.claimUmlModel(MODEL_NAME)
 	}
 	
-	protected def getDefaultPcmModel(View view) {
+	protected def getDefaultPcmRepository(View view) {
 		view.claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 	}
 		
@@ -112,7 +112,7 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 	
 	protected def void changePcmModel((Repository)=>void modelModification) {
 		changePcmView [
-			modelModification.apply(defaultPcmModel)
+			modelModification.apply(defaultPcmRepository)
 		]
 	}
 	
@@ -132,7 +132,6 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 	
 	@Test
 	def void testCreateRepositoryConcept_UML_System() {
-		println("UML Sys create repository test")
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_SYSTEM_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
@@ -146,21 +145,19 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 	
 	@Test
 	def void testCreateRepositoryConcept_UML_Repository() {
-		println("UML Repo create repository test")
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 		
 		validateUmlAndPcmPackagesView [ 
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val pcmPackage = defaultPcmModel
+			val pcmPackage = defaultPcmRepository
 			assertElementsEqual(umlPackage, pcmPackage)
 		]
 	}
 
 	@Test
 	def void testCreateRepositoryConcept_PCM() {
-		println("PCM create repository test")
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
@@ -168,7 +165,24 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 		
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val pcmPackage = defaultPcmModel
+			val pcmPackage = defaultPcmRepository
+			assertElementsEqual_PCM(umlPackage, pcmPackage)
+		]
+	}
+	
+	@Test
+	def void testRenameRepositoryConcept_UML() {
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		createUmlRootPackage(PACKAGE_NAME)
+		
+		changeUmlView[
+			defaultUmlModel.getPackagedElement(PACKAGE_NAME).setName(PACKAGE_RENAMED)
+		]
+		
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_RENAMED)
+			val pcmPackage = defaultPcmRepository
 			assertElementsEqual(umlPackage, pcmPackage)
 		]
 	}
@@ -180,13 +194,13 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 		
 		changePcmView[
-			defaultPcmModel.setEntityName(PACKAGE_RENAMED.toFirstUpper)
+			defaultPcmRepository.setEntityName(PACKAGE_RENAMED.toFirstUpper)
 		]
 		
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_RENAMED)
-			val pcmPackage = defaultPcmModel
-			assertElementsEqual(umlPackage, pcmPackage)
+			val pcmPackage = claimPcmRepository(PACKAGE_RENAMED.toFirstUpper)
+			assertElementsEqual_PCM(umlPackage, pcmPackage)
 		]
 	}
 

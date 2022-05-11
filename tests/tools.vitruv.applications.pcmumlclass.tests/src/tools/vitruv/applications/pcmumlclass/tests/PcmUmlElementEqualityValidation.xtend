@@ -58,9 +58,24 @@ class PcmUmlElementEqualityValidation {
 		for (EObject pcmChild : repoPackage.eContents) {
 			assertTrue(uPackage.eContents.contains(pcmChild), "uml model is incomplete")
 		}
+	}
+	
+	def static dispatch void assertElementsEqual_PCM(org.eclipse.uml2.uml.Package uPackage,
+		org.palladiosimulator.pcm.repository.Repository repoPackage) {
+		assertEquals(uPackage.name.toFirstUpper, repoPackage.entityName, "Package names must be equal")
 		
-		// depends on if uml reaction creates these packages
-		//assertTrue(uPackage.packagedElements.exists[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME])
-		//assertTrue(uPackage.packagedElements.exists[it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME])
+		if (getUmlParentNamespaceAsStringList(uPackage).isEmpty()) {
+			assertNull(repoPackage.eContainer, "Container namespaces must be null")
+		} else {
+			assertEquals(getUmlParentNamespaceAsStringList(uPackage), repoPackage.eContainer.toString,
+			"Container namespaces names must be equal")
+		}
+		
+		for (EObject pcmChild : repoPackage.eContents) {
+			assertTrue(uPackage.eContents.contains(pcmChild), "uml model is incomplete")
+		}
+		
+		assertTrue(uPackage.packagedElements.exists[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME])
+		assertTrue(uPackage.packagedElements.exists[it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME])
 	}
 }
