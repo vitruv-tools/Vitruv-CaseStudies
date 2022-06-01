@@ -1,31 +1,14 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.palladiosimulator.pcm.repository.Repository
-import org.palladiosimulator.pcm.repository.RepositoryFactory
-import org.junit.jupiter.api.Test
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.uml2.uml.Model
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.common.util.URI
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.junit.jupiter.api.BeforeEach
-import java.nio.file.Path
-import tools.vitruv.applications.pcmumlclass.tests.PcmUmlclassViewFactory
-import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import tools.vitruv.framework.views.View
-import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
-import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
-import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertNull
-import static org.hamcrest.MatcherAssert.assertThat
-import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
-import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
+import static org.junit.jupiter.api.Assertions.assertTrue
 import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
-import static extension tools.vitruv.applications.pcmumlclass.tests.UmlQueryUtil.*
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
+import static extension tools.vitruv.applications.pcmumlclass.tests.UmlQueryUtil.*
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Repository
@@ -33,88 +16,11 @@ import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil
  * <br><br>
  * Related files: PcmRepository.reactions, UmlRepositoryAndSystemPackage.reactions
  */
-class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
-	protected var extension PcmUmlclassViewFactory viewFactory
-
-	@Accessors(PROTECTED_GETTER)
-	static val MODEL_FILE_EXTENSION = "uml"
-	@Accessors(PROTECTED_GETTER)
-	static val MODEL_NAME = "model"
-	@Accessors(PROTECTED_GETTER)
-	static val MODEL_FOLDER_NAME = "model"
+class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 
 	static val PACKAGE_NAME = "rootpackage"
 	static val PACKAGE_NAME_FIRST_UPPER = "Rootpackage"
 	static val PACKAGE_RENAMED = "rootpackagerenamed"
-
-	def protected void assertModelExists(String modelPath) {
-		val modelUri = getUri(Path.of(modelPath))
-		assertThat(modelUri, isResource)
-	}
-
-	def protected void assertModelNotExists(String modelPath) {
-		val modelUri = getUri(Path.of(modelPath))
-		assertThat(modelUri, isNoResource)
-	}
-
-	protected def getDefaultUmlModel(View view) {
-		view.claimUmlModel(MODEL_NAME)
-	}
-
-	protected def getDefaultPcmRepository(View view) {
-		view.claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
-	}
-
-	protected def void createUmlModel((Model)=>void modelInitialization) {
-		changeUmlView [
-			val umlModel = UMLFactory.eINSTANCE.createModel
-			createAndRegisterRoot(umlModel, MODEL_NAME.projectModelPath.uri)
-			modelInitialization.apply(umlModel)
-		]
-	}
-
-	protected def void createPcmRepository(String packageName) {
-		changePcmView [
-			val repository = RepositoryFactory.eINSTANCE.createRepository => [
-				it.entityName = packageName
-			]
-			createAndRegisterRoot(repository, MODEL_NAME.projectModelPath.uri)
-		]
-	}
-
-	protected def void createAndRegisterRoot(View view, EObject rootObject, URI persistenceUri) {
-		view.registerRoot(rootObject, persistenceUri)
-	}
-
-	protected def Path getProjectModelPath(String modelName) {
-		Path.of(MODEL_FOLDER_NAME).resolve(modelName + "." + MODEL_FILE_EXTENSION)
-	}
-
-	protected def void changeUmlModel((Model)=>void modelModification) {
-		changeUmlView [
-			modelModification.apply(defaultUmlModel)
-		]
-	}
-
-	protected def void changePcmModel((Repository)=>void modelModification) {
-		changePcmView [
-			modelModification.apply(defaultPcmRepository)
-		]
-	}
-
-	def void createUmlRootPackage(String packageName) {
-		changeUmlModel [
-			packagedElements += UMLFactory.eINSTANCE.createPackage => [
-				it.name = packageName
-			]
-		]
-	}
-
-	@BeforeEach
-	def void setup() {
-		viewFactory = new PcmUmlclassViewFactory(virtualModel)
-		createUmlModel[name = MODEL_NAME]
-	}
 
 	@Test
 	def void testCreateRepositoryConcept_UML_System() {
@@ -235,13 +141,6 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 		validateUmlAndPcmPackagesView [
 			assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 			assertModelNotExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		]
-	}
-
-	override protected getChangePropagationSpecifications() {
-		return #[
-			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
-			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
 		]
 	}
 
