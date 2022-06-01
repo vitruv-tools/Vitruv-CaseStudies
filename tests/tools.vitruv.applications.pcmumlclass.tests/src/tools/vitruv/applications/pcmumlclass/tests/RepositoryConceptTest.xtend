@@ -217,14 +217,52 @@ class RepositoryConceptTest extends ViewBasedVitruvApplicationTest {
 		]
 	}
 
-		
+	@Test
+	def void testDeleteRepositoryConcept_UMLModel() {
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		createUmlRootPackage(PACKAGE_NAME)
+
+		validateUmlAndPcmPackagesView [
+			assertNotNull(defaultPcmRepository)
+			assertNotNull(defaultUmlModel)
+		]
+
+		changeUmlView[
+			EcoreUtil.delete(defaultUmlModel)
+		]
+
+		validateUmlAndPcmPackagesView [
+			assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+			assertModelNotExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		]
 	}
-	
+
 	override protected getChangePropagationSpecifications() {
 		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
 		]
-		
+	}
+
+	@Test
+	def void testDeleteRepositoryConcept_UML() {
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		createUmlRootPackage(PACKAGE_NAME)
+
+		validateUmlAndPcmPackagesView [
+			assertNotNull(defaultPcmRepository)
+			assertNotNull(defaultUmlModel)
+		]
+
+		changeUmlView[
+			EcoreUtil.delete(defaultUmlModel.getNestedPackages().findFirst[it.name == PACKAGE_NAME])
+		]
+
+		validateUmlAndPcmPackagesView [
+			assertNull(defaultPcmRepository)
+			assertTrue(defaultUmlModel.getNestedPackages().empty)
+		]
 	}
 }
