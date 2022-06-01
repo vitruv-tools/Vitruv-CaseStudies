@@ -223,11 +223,18 @@ routine createCorrespondingSystem(uml::Package umlPkg, uml::Package umlParentPkg
 }
 
 reaction UmlModelDeleted {
-	after element uml::Model deleted
-	call {
-		val rootPackages = new ArrayList(affectedEObject.nestedPackages)
-		rootPackages.forEach[deletePackage()]
-	}
+    after element uml::Model deleted
+    call removedUmlModel(affectedEObject)
+}
+
+routine removedUmlModel(uml::Model removedModel) {
+    action {
+        call {
+            val rootPackages = new ArrayList(removedModel.nestedPackages)
+            rootPackages.forEach[deletePackage()]
+        }
+        remove correspondence between UMLPackage.Literals.MODEL and removedModel
+    }
 }
 
 reaction RepositoryOrSystemPackageDeleted {
