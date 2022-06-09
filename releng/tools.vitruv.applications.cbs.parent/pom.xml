@@ -13,8 +13,10 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework/</vitruv.framework.url>
-		<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</vitruv.domains.url>
+		<!-- For each project, a local updatesite can be specified by overwriting these properties. They default to the Vitruv updatesite. -->
+		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/</vitruv.framework.url>
+		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/</vitruv.dsls.url>
+		<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/</vitruv.domains.url>
 	</properties>
 
 	<repositories>
@@ -22,6 +24,11 @@
 			<id>Vitruv Framework</id>
 			<layout>p2</layout>
 			<url>${vitruv.framework.url}</url>
+		</repository>
+		<repository>
+			<id>Vitruv DSLs</id>
+			<layout>p2</layout>
+			<url>${vitruv.dsls.url}</url>
 		</repository>
 		<repository>
 			<id>Vitruv Domains</id>
@@ -45,6 +52,18 @@
 			</activation>
 			<properties>
 				<vitruv.framework.url>file://${vitruv.framework.path}/releng/tools.vitruv.updatesite.aggregated/target/final</vitruv.framework.url>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>local-dsls</id>
+			<activation>
+				<property>
+					<name>vitruv.dsls.path</name>
+				</property>
+			</activation>
+			<properties>
+				<vitruv.dsls.url>file://${vitruv.dsls.path}/releng/tools.vitruv.dsls.updatesite/target/repository</vitruv.dsls.url>
 			</properties>
 		</profile>
 
