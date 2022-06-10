@@ -11,7 +11,7 @@ import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attrib
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
-import static tools.vitruv.framework.util.XtendAssertHelper.*
+import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
 
 import static extension tools.vitruv.applications.cbs.commonalities.java.JavaVisibilityHelper.*
 import static extension tools.vitruv.domains.java.util.JavaModifierUtil.*
