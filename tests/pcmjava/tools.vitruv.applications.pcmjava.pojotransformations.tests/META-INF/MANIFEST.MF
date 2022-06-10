@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.emf.transaction,
  tools.vitruv.applications.pcmjava.pojotransformations,
  org.junit.jupiter.api,
  org.hamcrest.core,
- com.google.guava
+ com.google.guava,
+ edu.kit.ipd.sdq.commons.util.java
 Export-Package: tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java,
  tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository,
  tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system

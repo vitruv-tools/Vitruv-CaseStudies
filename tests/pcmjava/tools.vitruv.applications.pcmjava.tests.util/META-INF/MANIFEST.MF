@@ -20,7 +20,10 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.domains.java.ui,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.framework.domains.ui,
- org.eclipse.core.resources;visibility:=reexport
+ org.eclipse.core.resources;visibility:=reexport,
+ edu.kit.ipd.sdq.commons.util.java,
+ edu.kit.ipd.sdq.commons.util.eclipse,
+ edu.kit.ipd.sdq.commons.util.emf
 Export-Package: tools.vitruv.applications.pcmjava.tests.util.java2pcm,
   tools.vitruv.applications.pcmjava.tests.util.pcm2java
 Bundle-Vendor: vitruv.tools

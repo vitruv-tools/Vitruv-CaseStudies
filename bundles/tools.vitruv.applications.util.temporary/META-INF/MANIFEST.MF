@@ -9,6 +9,8 @@ Require-Bundle: tools.vitruv.domains.uml,
  tools.vitruv.domains.java,
  tools.vitruv.domains.pcm,
  edu.kit.ipd.sdq.activextendannotations,
+ edu.kit.ipd.sdq.commons.util.java,
+ edu.kit.ipd.sdq.commons.util.emf,
  tools.vitruv.extensions.dslsruntime.reactions
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: tools.vitruv.applications.util.temporary.java,

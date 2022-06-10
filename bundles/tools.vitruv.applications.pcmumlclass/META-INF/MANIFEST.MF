@@ -77,5 +77,6 @@ Require-Bundle: tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.applications.util.temporary,
  org.apache.commons.io;bundle-version="2.2.0",
- edu.kit.ipd.sdq.activextendannotations
+ edu.kit.ipd.sdq.activextendannotations,
+ edu.kit.ipd.sdq.commons.util.emf
 Bundle-Vendor: vitruv.tools

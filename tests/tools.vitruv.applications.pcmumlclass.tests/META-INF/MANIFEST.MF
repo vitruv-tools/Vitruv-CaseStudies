@@ -11,6 +11,7 @@ Require-Bundle: tools.vitruv.testutils,
  org.hamcrest.core,
  tools.vitruv.applications.pcmumlclass,
  tools.vitruv.applications.util.temporary,
- org.eclipse.xtend.lib
+ org.eclipse.xtend.lib,
+ edu.kit.ipd.sdq.commons.util.java
 Export-Package: tools.vitruv.applications.pcmumlclass.tests
 Bundle-Vendor: vitruv.tools

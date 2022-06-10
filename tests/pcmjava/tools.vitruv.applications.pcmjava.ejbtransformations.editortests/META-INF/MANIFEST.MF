@@ -10,6 +10,7 @@ Require-Bundle: org.junit.jupiter.api,
  tools.vitruv.applications.pcmjava.tests.util,
  org.eclipse.jdt.core,
  tools.vitruv.applications.pcmjava.ejbtransformations,
- org.eclipse.xtend.lib
+ org.eclipse.xtend.lib,
+ edu.kit.ipd.sdq.commons.util.java
 Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations.editortests.java2pcm
 Bundle-Vendor: vitruv.tools
