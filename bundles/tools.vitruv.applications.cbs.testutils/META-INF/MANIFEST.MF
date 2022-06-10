@@ -5,7 +5,7 @@ Bundle-SymbolicName: tools.vitruv.applications.cbs.testutils
 Bundle-Version: 0.1.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.cbs.testutils
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: tools.vitruv.testutils,
+Require-Bundle: tools.vitruv.testutils.vsum,
  tools.vitruv.domains.uml,
  tools.vitruv.domains.pcm,
  tools.vitruv.domains.java,

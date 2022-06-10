@@ -7,7 +7,7 @@ Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.jdt.core,
  org.eclipse.text,
- tools.vitruv.testutils,
+ tools.vitruv.testutils.vsum,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.tests.util,
  tools.vitruv.applications.pcmjava.pojotransformations,

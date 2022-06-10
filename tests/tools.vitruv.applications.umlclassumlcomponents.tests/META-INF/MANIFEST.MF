@@ -8,5 +8,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Fragment-Host: tools.vitruv.applications.umlclassumlcomponents
 Require-Bundle: org.junit.jupiter.api,
  org.hamcrest.core,
- tools.vitruv.testutils
+ tools.vitruv.testutils.vsum
 Bundle-Vendor: vitruv.tools
