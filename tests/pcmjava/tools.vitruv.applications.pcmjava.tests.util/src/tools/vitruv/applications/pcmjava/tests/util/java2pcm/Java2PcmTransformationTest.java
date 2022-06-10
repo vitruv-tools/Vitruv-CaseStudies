@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -311,7 +310,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	protected Package createPackageWithPackageInfo(final String... namespace) throws IOException {
-		String packageFile = StringUtils.join(namespace, "/");
+		String packageFile = String.join("/", namespace);
 		packageFile = packageFile + "/package-info.java";
 		final Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage();
 		final List<String> namespaceList = Arrays.asList(namespace);
