@@ -13,13 +13,20 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<!-- For each project, a local updatesite can be specified by overwriting these properties. They default to the Vitruv updatesite. -->
-		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/</vitruv.framework.url>
-		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/</vitruv.dsls.url>
-		<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/</vitruv.domains.url>
+		<!-- For each project, a local updatesite can be specified by overwriting these properties. They default to the Vitruv updatesites. -->
+		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework/</vitruv.framework.url>
+		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/dsls/</vitruv.dsls.url>
+		<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</vitruv.domains.url>
 	</properties>
 
 	<repositories>
+		<!-- The aggregated Vitruv updatesite to resolve all its dependencies -->
+		<repository>
+			<id>Vitruv</id>
+			<layout>p2</layout>
+			<url>https://vitruv-tools.github.io/updatesite/nightly/</url>
+		</repository>
+		<!-- The specific Vitruv project updatesites to be potentially overwritten by local builds -->
 		<repository>
 			<id>Vitruv Framework</id>
 			<layout>p2</layout>
