@@ -58,7 +58,7 @@
 				</property>
 			</activation>
 			<properties>
-				<vitruv.framework.url>file://${vitruv.framework.path}/releng/tools.vitruv.updatesite/target/repository</vitruv.framework.url>
+				<vitruv.framework.url>file:///${vitruv.framework.path}/releng/tools.vitruv.updatesite/target/repository</vitruv.framework.url>
 			</properties>
 		</profile>
 
@@ -70,7 +70,7 @@
 				</property>
 			</activation>
 			<properties>
-				<vitruv.dsls.url>file://${vitruv.dsls.path}/releng/tools.vitruv.dsls.updatesite/target/repository</vitruv.dsls.url>
+				<vitruv.dsls.url>file:///${vitruv.dsls.path}/releng/tools.vitruv.dsls.updatesite/target/repository</vitruv.dsls.url>
 			</properties>
 		</profile>
 
@@ -82,7 +82,7 @@
 				</property>
 			</activation>
 			<properties>
-				<vitruv.domains.url>file://${vitruv.domains.path}/releng/tools.vitruv.domains.cbs.updatesite/target/repository</vitruv.domains.url>
+				<vitruv.domains.url>file:///${vitruv.domains.path}/releng/tools.vitruv.domains.cbs.updatesite/target/repository</vitruv.domains.url>
 			</properties>
 		</profile>
 
