@@ -42,7 +42,7 @@ import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static com.google.common.base.Preconditions.checkNotNull
-import static extension tools.vitruv.framework.util.ObjectResolutionUtil.getHierarchicUriFragment
+import static extension tools.vitruv.framework.change.echange.id.ObjectResolutionUtil.getHierarchicUriFragment
 import org.eclipse.emf.ecore.EStructuralFeature
 
 abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
