@@ -15,5 +15,5 @@ Require-Bundle: com.google.guava,
  tools.vitruv.domains.java;visibility:=reexport,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.domains.uml;visibility:=reexport,
- tools.vitruv.testutils;visibility:=reexport
+ tools.vitruv.testutils.vsum;visibility:=reexport
 Export-Package: tools.vitruv.applications.cbs.equivalencetesttemplates

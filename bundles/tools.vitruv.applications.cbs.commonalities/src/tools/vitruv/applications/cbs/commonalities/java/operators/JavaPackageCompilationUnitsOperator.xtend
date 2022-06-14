@@ -12,7 +12,7 @@ import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.refere
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
-import static tools.vitruv.framework.util.XtendAssertHelper.*
+import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
 
 import static extension tools.vitruv.extensions.dslruntime.commonalities.helper.IntermediateModelHelper.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*

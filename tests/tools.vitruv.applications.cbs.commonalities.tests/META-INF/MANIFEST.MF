@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.xtend.lib,
  tools.vitruv.dsls.commonalities,
  org.junit.jupiter.api,
  org.junit.jupiter.params,
- tools.vitruv.testutils,
+ tools.vitruv.testutils.vsum,
  org.hamcrest.core
 Export-Package: model.pcm;x-internal:=true,
  model.uml;x-internal:=true,

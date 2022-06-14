@@ -7,6 +7,7 @@ Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Fragment-Host: tools.vitruv.applications.pcmumlcomponents
 Require-Bundle: org.junit.jupiter.api,
- tools.vitruv.testutils,
- org.hamcrest.core
+ tools.vitruv.testutils.vsum,
+ org.hamcrest.core,
+ edu.kit.ipd.sdq.commons.util.java
 Bundle-Vendor: vitruv.tools

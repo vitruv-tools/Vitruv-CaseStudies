@@ -15,7 +15,7 @@ import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util
 
 import static com.google.common.base.Preconditions.*
 import static java.util.stream.Collectors.*
-import static tools.vitruv.framework.util.XtendAssertHelper.*
+import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
 
 import static extension java.nio.file.Files.*
 import static extension tools.vitruv.extensions.dslruntime.commonalities.helper.IntermediateModelHelper.*

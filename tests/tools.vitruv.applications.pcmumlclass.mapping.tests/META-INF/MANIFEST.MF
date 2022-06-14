@@ -6,9 +6,10 @@ Bundle-Version: 0.3.0.qualifier
 Fragment-Host: tools.vitruv.applications.pcmumlclass.mapping
 Require-Bundle: tools.vitruv.applications.util.temporary,
  org.eclipse.emf.compare,
- tools.vitruv.testutils,
+ tools.vitruv.testutils.vsum,
  org.junit.jupiter.api,
- org.hamcrest.core
+ org.hamcrest.core,
+ edu.kit.ipd.sdq.commons.util.java
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.mapping.tests
 Export-Package: tools.vitruv.applications.pcmumlclass.mapping.tests;x-internal:=true,

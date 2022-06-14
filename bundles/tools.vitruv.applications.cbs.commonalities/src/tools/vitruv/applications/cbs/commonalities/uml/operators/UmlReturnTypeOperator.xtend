@@ -13,7 +13,7 @@ import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attrib
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
-import static tools.vitruv.framework.util.XtendAssertHelper.*
+import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
 
 /**
  * Maps between the intermediate representation of return type references and
