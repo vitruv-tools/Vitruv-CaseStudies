@@ -20,12 +20,6 @@
 	</properties>
 
 	<repositories>
-		<!-- The aggregated Vitruv updatesite to resolve all its dependencies -->
-		<repository>
-			<id>Vitruv</id>
-			<layout>p2</layout>
-			<url>https://vitruv-tools.github.io/updatesite/nightly/</url>
-		</repository>
 		<!-- The specific Vitruv project updatesites to be potentially overwritten by local builds -->
 		<repository>
 			<id>Vitruv Framework</id>
@@ -41,6 +35,21 @@
 			<id>Vitruv Domains</id>
 			<layout>p2</layout>
 			<url>${vitruv.domains.url}</url>
+		</repository>
+		<repository>
+			<id>SDQ Commons</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/commons/</url>
+		</repository>
+		<repository>
+			<id>XAnnotations</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/xannotations/</url>
+		</repository>
+		<repository>
+			<id>EMFText and JaMoPP (P2 Wrapper)</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/p2-wrapper/</url>
 		</repository>
 		<repository>
 			<id>Palladiosimulator</id>
