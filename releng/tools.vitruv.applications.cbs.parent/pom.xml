@@ -39,17 +39,17 @@
 		<repository>
 			<id>SDQ Commons</id>
 			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/release/commons/</url>
+			<url>https://kit-sdq.github.io/updatesite/release/commons/latest/</url>
 		</repository>
 		<repository>
 			<id>XAnnotations</id>
 			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/release/xannotations/</url>
+			<url>https://kit-sdq.github.io/updatesite/release/xannotations/latest/</url>
 		</repository>
 		<repository>
 			<id>EMFText and JaMoPP (P2 Wrapper)</id>
 			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/release/p2-wrapper/</url>
+			<url>https://kit-sdq.github.io/updatesite/release/p2-wrapper/latest/</url>
 		</repository>
 		<repository>
 			<id>Palladiosimulator</id>
