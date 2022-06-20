@@ -14,13 +14,19 @@
 
 	<properties>
 		<!-- For each project, a local updatesite can be specified by overwriting these properties. They default to the Vitruv updatesites. -->
+		<vitruv.change.url>https://vitruv-tools.github.io/updatesite/nightly/change/</vitruv.change.url>
 		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework/</vitruv.framework.url>
 		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/dsls/</vitruv.dsls.url>
 		<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</vitruv.domains.url>
 	</properties>
 
 	<repositories>
-		<!-- The specific Vitruv project updatesites to be potentially overwritten by local builds -->
+		<!-- The Vitruv project updatesites to be potentially overwritten by local builds -->
+		<repository>
+			<id>Vitruv Change</id>
+			<layout>p2</layout>
+			<url>${vitruv.change.url}</url>
+		</repository>
 		<repository>
 			<id>Vitruv Framework</id>
 			<layout>p2</layout>
@@ -59,6 +65,18 @@
 	</repositories>
 
 	<profiles>
+		<profile>
+			<id>local-change</id>
+			<activation>
+				<property>
+					<name>vitruv.change.path</name>
+				</property>
+			</activation>
+			<properties>
+				<vitruv.change.url>file:///${vitruv.change.path}/releng/tools.vitruv.change.updatesite/target/repository</vitruv.change.url>
+			</properties>
+		</profile>
+
 		<profile>
 			<id>local-framework</id>
 			<activation>
