@@ -5,7 +5,7 @@ import static tools.vitruv.applications.umlclassumlcomponents.util.SharedUtil.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 
-import static tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType.INFORMATION
+import static tools.vitruv.change.interaction.UserInteractionOptions.NotificationType.INFORMATION
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.Package

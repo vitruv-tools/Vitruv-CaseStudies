@@ -7,7 +7,7 @@ import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.framework.applications.VitruvApplication;
 import tools.vitruv.framework.domains.VitruvDomain;
-import tools.vitruv.framework.propagation.ChangePropagationSpecification;
+import tools.vitruv.change.propagation.ChangePropagationSpecification;
 
 public class UmlJavaApplication implements VitruvApplication {
 

@@ -7,7 +7,7 @@ import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.system.SystemPackage
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.core.entity.Entity

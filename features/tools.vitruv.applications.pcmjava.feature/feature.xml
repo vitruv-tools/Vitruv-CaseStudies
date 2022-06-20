@@ -23,7 +23,7 @@
       <import plugin="org.eclipse.xtend.lib"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="tools.vitruv.framework.change"/>
-      <import plugin="tools.vitruv.framework.propagation"/>
+      <import plugin="tools.vitruv.change.propagation"/>
       <import plugin="tools.vitruv.domains.pcm"/>
       <import plugin="tools.vitruv.domains.java"/>
       <import plugin="tools.vitruv.applications.util.temporary"/>

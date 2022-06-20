@@ -22,7 +22,7 @@ import static extension tools.vitruv.extensions.dslruntime.commonalities.helper.
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.containers.ContainersPackage
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
+import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 
 @ReferenceMappingOperator(
 	name = 'javaSubPackages',

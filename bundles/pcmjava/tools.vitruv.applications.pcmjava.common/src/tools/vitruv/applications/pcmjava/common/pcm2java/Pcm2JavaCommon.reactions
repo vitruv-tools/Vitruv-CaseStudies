@@ -28,7 +28,7 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.system.SystemPackage
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*

@@ -6,7 +6,7 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import org.palladiosimulator.pcm.core.composition.AssemblyContext
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.system.System
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PcmJamoppUtilsGuice.*
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*

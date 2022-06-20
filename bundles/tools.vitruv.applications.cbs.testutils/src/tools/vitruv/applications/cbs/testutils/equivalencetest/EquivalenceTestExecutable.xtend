@@ -47,7 +47,7 @@ import static tools.vitruv.testutils.printing.PrintMode.*
 import static extension java.nio.file.Files.walkFileTree
 import static extension tools.vitruv.testutils.printing.ModelPrinting.*
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
-import tools.vitruv.framework.propagation.ChangePropagationSpecification
+import tools.vitruv.change.propagation.ChangePropagationSpecification
 import tools.vitruv.framework.domains.VitruvDomainProviderRegistry
 
 @FinalFieldsConstructor

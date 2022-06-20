@@ -14,9 +14,9 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
-import tools.vitruv.framework.userinteraction.UserInteractor
+import tools.vitruv.change.correspondence.CorrespondenceModel
+import tools.vitruv.change.interaction.UserInteractionOptions.NotificationType
+import tools.vitruv.change.interaction.UserInteractor
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.system.System
 import org.palladiosimulator.pcm.core.entity.Entity

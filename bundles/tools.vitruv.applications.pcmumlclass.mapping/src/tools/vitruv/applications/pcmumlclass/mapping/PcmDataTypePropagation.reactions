@@ -1,7 +1,7 @@
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
+import tools.vitruv.change.interaction.UserInteractionOptions.NotificationType
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
