@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument
 import static com.google.common.base.Preconditions.checkState
 import static java.util.Comparator.comparing
 import static org.junit.jupiter.api.DynamicTest.dynamicTest
-import tools.vitruv.framework.propagation.ChangePropagationSpecification
+import tools.vitruv.change.propagation.ChangePropagationSpecification
 import tools.vitruv.framework.domains.VitruvDomainProviderRegistry
 
 abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {

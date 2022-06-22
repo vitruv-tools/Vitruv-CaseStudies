@@ -8,7 +8,7 @@ import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.framework.applications.VitruvApplication;
 import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.commonalities.CommonalitiesChangePropagationSpecificationProvider;
-import tools.vitruv.framework.propagation.ChangePropagationSpecification;
+import tools.vitruv.change.propagation.ChangePropagationSpecification;
 
 public class CbsCommonalitiesApplication implements VitruvApplication {
 	@Override

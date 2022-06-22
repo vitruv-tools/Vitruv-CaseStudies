@@ -1,6 +1,6 @@
 import org.eclipse.uml2.uml.UMLPackage
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.applications.util.temporary.uml.UmlModelUtil.*
 

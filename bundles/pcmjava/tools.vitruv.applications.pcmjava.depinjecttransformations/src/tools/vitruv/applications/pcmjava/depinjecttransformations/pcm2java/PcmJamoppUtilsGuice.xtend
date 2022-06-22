@@ -40,15 +40,15 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.system.System
 import tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil
-import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
-import tools.vitruv.framework.userinteraction.UserInteractor
+import tools.vitruv.change.correspondence.CorrespondenceModel
+import tools.vitruv.change.correspondence.CorrespondenceModelUtil
+import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
+import tools.vitruv.change.interaction.UserInteractor
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.*
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.palladiosimulator.pcm.repository.Repository
 

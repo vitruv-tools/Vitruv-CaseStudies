@@ -16,9 +16,9 @@ import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.domains.java.util.JavaModificationUtil
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
-import tools.vitruv.framework.userinteraction.UserInteractor
+import tools.vitruv.change.correspondence.CorrespondenceModel
+import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
+import tools.vitruv.change.interaction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*

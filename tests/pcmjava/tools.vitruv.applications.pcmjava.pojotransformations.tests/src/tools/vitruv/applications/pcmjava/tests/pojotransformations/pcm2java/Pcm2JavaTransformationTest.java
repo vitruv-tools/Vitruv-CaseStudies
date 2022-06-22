@@ -58,7 +58,7 @@ import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHel
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil;
 import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
-import tools.vitruv.framework.propagation.ChangePropagationSpecification;
+import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 
