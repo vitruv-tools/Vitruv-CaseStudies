@@ -94,7 +94,7 @@ import tools.vitruv.applications.util.temporary.java.JavaSetup;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
-import tools.vitruv.domains.pcm.PcmNamespace;
+import tools.vitruv.applications.util.temporary.pcm.PcmNamespace;
 import tools.vitruv.change.composite.description.PropagatedChange;
 import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.composite.propagation.ChangePropagationListener;

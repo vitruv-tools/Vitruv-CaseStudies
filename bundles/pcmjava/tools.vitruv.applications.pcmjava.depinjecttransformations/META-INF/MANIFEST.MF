@@ -9,13 +9,13 @@ Export-Package: mir.reactions.pcm2depInjectJava;x-internal:=true,
  mir.routines.pcm2depInjectJava;x-internal:=true,
  mir.routines.pcm2depInjectJava.pcm2javaCommon;x-internal:=true,
  tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java
-Require-Bundle: tools.vitruv.testutils,
+Require-Bundle: org.emftext.language.java,
+ org.palladiosimulator.pcm,
+ edu.kit.ipd.sdq.activextendannotations,
+ edu.kit.ipd.sdq.commons.util.java,
+ tools.vitruv.testutils,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.applications.pcmjava.common,
- tools.vitruv.applications.pcmjava.util,
- tools.vitruv.domains.java,
- tools.vitruv.domains.pcm,
- edu.kit.ipd.sdq.activextendannotations,
- edu.kit.ipd.sdq.commons.util.java
+ tools.vitruv.applications.pcmjava.util
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools

@@ -7,12 +7,12 @@ Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.xtend.lib,
  org.apache.log4j,
- tools.vitruv.change.propagation,
- tools.vitruv.domains.pcm,
- tools.vitruv.domains.java,
- tools.vitruv.applications.util.temporary;visibility:=reexport,
+ org.palladiosimulator.pcm,
+ org.emftext.language.java,
  edu.kit.ipd.sdq.activextendannotations,
- edu.kit.ipd.sdq.commons.util.java
+ edu.kit.ipd.sdq.commons.util.java,
+ tools.vitruv.change.propagation,
+ tools.vitruv.applications.util.temporary;visibility:=reexport
 Export-Package: tools.vitruv.applications.pcmjava.util.java2pcm,
  tools.vitruv.applications.pcmjava.util.pcm2java
 Bundle-Vendor: vitruv.tools

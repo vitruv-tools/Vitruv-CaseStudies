@@ -1,10 +1,9 @@
 package tools.vitruv.applications.pcmumlclass;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import tools.vitruv.domains.pcm.PcmDomainProvider;
-import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.framework.applications.VitruvApplication;
 import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
@@ -24,7 +23,7 @@ public class PcmUmlClassApplication implements VitruvApplication {
 	}
 
 	public Set<VitruvDomain> getVitruvDomains() {
-		return Set.of(new PcmDomainProvider().getDomain(), new UmlDomainProvider().getDomain());
+		return Collections.emptySet();
 	}
 
 }

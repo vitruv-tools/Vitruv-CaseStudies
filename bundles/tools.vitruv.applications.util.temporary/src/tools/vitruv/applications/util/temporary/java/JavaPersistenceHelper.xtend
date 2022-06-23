@@ -4,7 +4,6 @@ import java.util.Arrays
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
 import static com.google.common.base.Preconditions.checkState
-import tools.vitruv.domains.java.JavaNamespace
 
 class JavaPersistenceHelper {
 
@@ -12,7 +11,7 @@ class JavaPersistenceHelper {
 
 	public static val PATH_SEPARATOR = "/"
 	public static val FILE_EXTENSION_SEPARATOR = "."
-	public static val JAVA_FILE_EXTENSION = JavaNamespace.FILE_EXTENSION
+	public static val JAVA_FILE_EXTENSION = "java"
 	static val FILE_EXTENSION_WITH_SEPARATOR = FILE_EXTENSION_SEPARATOR + JAVA_FILE_EXTENSION
 
 	static def String getJavaProjectSrc() {

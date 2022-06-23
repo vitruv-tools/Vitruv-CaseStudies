@@ -4,8 +4,8 @@ Bundle-Name: Vitruv UML Class-UML Components Application
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents
 Bundle-Version: 0.3.0.qualifier
-Require-Bundle: tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.domains.uml;visibility:=reexport,
- edu.kit.ipd.sdq.activextendannotations
+Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
+ edu.kit.ipd.sdq.activextendannotations,
+ tools.vitruv.extensions.dslsruntime.reactions
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools
