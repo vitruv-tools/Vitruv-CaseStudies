@@ -92,8 +92,6 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
-import tools.vitruv.domains.java.JavaDomainProvider;
-import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
 import tools.vitruv.applications.util.temporary.pcm.PcmNamespace;
 import tools.vitruv.change.composite.description.PropagatedChange;
@@ -443,8 +441,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	private URI getURIForElementInPackage(final IPackageFragment packageFragment, final String elementName) {
-		String uriString = packageFragment.getResource().getFullPath().toString() + "/" + elementName + "."
-				+ JavaNamespace.FILE_EXTENSION;
+		String uriString = packageFragment.getResource().getFullPath().toString() + "/" + elementName + ".java";
 		return URI.createPlatformResourceURI(uriString, true);
 	}
 

@@ -79,8 +79,8 @@ public final class CompilationUnitManipulatorHelper {
 	}
 
 	public static String ensureJavaFileExtension(String entityName) {
-		if (!entityName.endsWith("." + JavaNamespace.FILE_EXTENSION)) {
-			entityName = entityName + "." + JavaNamespace.FILE_EXTENSION;
+		if (!entityName.endsWith(".java")) {
+			entityName = entityName + ".java";
 		}
 		return entityName;
 	}

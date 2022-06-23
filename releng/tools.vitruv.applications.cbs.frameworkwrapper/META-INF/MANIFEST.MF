@@ -14,7 +14,7 @@ Require-Bundle: tools.vitruv.dsls.reactions,
  tools.vitruv.change.atomic,
  tools.vitruv.change.composite,
  tools.vitruv.change.propagation,
- tools.vitruv.domains.pcm,
- tools.vitruv.domains.uml,
- tools.vitruv.domains.java
+ org.eclipse.uml2.uml,
+ org.emftext.language.java,
+ org.palladiosimulator.pcm
 Bundle-Vendor: tools.vitruv
