@@ -68,6 +68,7 @@ import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.types.TypeReference;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
@@ -191,7 +192,13 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		applicator.removeBuilder(getCurrentTestProject());
 	}
 
-	private void initializeJamopp() {
+	@BeforeAll
+	public static void setupJavaFactories() {
+		JavaSetup.prepareFactories();
+	}
+
+	@BeforeEach
+	public final void setupJavaClasspath() {
 		JavaSetup.resetClasspathAndRegisterStandardLibrary();
 	}
 
@@ -200,7 +207,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		getVirtualModel().addChangePropagationListener(this);
 		configureJavaProject(testProjectFolder);
 		addJavaBuilder();
-		initializeJamopp();
 		this.expectedNumberOfSyncs = 0;
 		logger.info("Finished test setup for project " + testEclipseProject.getName());
 	}

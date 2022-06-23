@@ -23,6 +23,7 @@ import org.emftext.language.java.statements.Statement;
 import org.emftext.language.java.types.ClassifierReference;
 import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.emftext.language.java.types.TypeReference;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.composition.CompositionFactory;
@@ -80,6 +81,16 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 
 	private Path testProjectFolder;
 	
+	@BeforeAll
+	public static void setupJavaFactories() {
+		JavaSetup.prepareFactories();
+	}
+
+	@BeforeEach
+	public final void setupJavaClasspath() {
+		JavaSetup.resetClasspathAndRegisterStandardLibrary();
+	}
+	
 	@BeforeEach
 	protected void disableTransitiveChangePropagation() {
 		this.getVirtualModel().setChangePropagationMode(ChangePropagationMode.SINGLE_STEP);
@@ -87,7 +98,6 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	
 	@BeforeEach
 	protected void setup(@TestProject Path testProjectPath) {
-		JavaSetup.resetClasspathAndRegisterStandardLibrary();
 		this.testProjectFolder = testProjectPath;
 	}
 

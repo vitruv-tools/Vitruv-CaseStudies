@@ -7,8 +7,8 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
 import tools.vitruv.testutils.LegacyVitruvApplicationTest
 import org.junit.jupiter.api.BeforeEach
-import org.emftext.language.java.JavaClasspath
-import tools.vitruv.domains.java.JamoppLibraryHelper
+import org.junit.jupiter.api.BeforeAll
+import tools.vitruv.applications.util.temporary.java.JavaSetup
 
 /**
  * Abstract class for umljava tests in both directions.
@@ -21,10 +21,14 @@ abstract class AbstractUmlJavaTest extends LegacyVitruvApplicationTest {
 
 	protected val Function<URI, Resource> resourceRetriever = [uri|uri.resourceAt]
 
+	@BeforeAll
+	def static void setupJavaFactories() {
+		JavaSetup.prepareFactories()
+	}
+
 	@BeforeEach
-	def void setupClasspathAndViewFactory() {
-		JavaClasspath.reset()
-		JamoppLibraryHelper.registerStdLib()
+	def final void setupJavaClasspath() {
+		JavaSetup.resetClasspathAndRegisterStandardLibrary()
 	}
 	
 	/**
