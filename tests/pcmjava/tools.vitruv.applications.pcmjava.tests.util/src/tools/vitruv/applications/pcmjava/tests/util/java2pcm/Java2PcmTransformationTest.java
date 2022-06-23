@@ -53,7 +53,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
-import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
@@ -91,7 +90,7 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.domains.java.JamoppLibraryHelper;
+import tools.vitruv.applications.util.temporary.java.JavaSetup;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
@@ -193,11 +192,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	private void initializeJamopp() {
-		// This is necessary because otherwise Maven tests will fail as
-		// resources from previous tests are still in the classpath and
-		// accidentally resolved
-		JavaClasspath.reset();
-		JamoppLibraryHelper.registerStdLib();
+		JavaSetup.resetClasspathAndRegisterStandardLibrary();
 	}
 
 	@BeforeEach
