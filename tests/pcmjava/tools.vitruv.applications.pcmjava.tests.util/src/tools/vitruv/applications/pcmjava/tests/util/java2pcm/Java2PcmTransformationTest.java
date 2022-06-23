@@ -97,7 +97,7 @@ import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.change.composite.description.PropagatedChange;
-import tools.vitruv.change.composite.propagation.ChangePropagationAbortCause;
+import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.composite.propagation.ChangePropagationListener;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
@@ -263,21 +263,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	@Override
-	public void startedChangePropagation() {
+	public void startedChangePropagation(VitruviusChange changeToPropagate) {
 	}
 
 	@Override
 	public void finishedChangePropagation(Iterable<PropagatedChange> changes) {
-		expectedNumberOfSyncs--;
-		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
-				+ expectedNumberOfSyncs);
-		synchronized (this) {
-			this.notifyAll();
-		}
-	}
-
-	@Override
-	public void abortedChangePropagation(ChangePropagationAbortCause cause) {
 		expectedNumberOfSyncs--;
 		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
 				+ expectedNumberOfSyncs);
