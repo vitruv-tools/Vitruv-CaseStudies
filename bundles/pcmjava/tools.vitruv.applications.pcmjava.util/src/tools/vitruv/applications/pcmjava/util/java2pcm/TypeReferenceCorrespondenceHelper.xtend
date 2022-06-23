@@ -27,7 +27,7 @@ import tools.vitruv.change.correspondence.CorrespondenceModel
 
 import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.change.interaction.UserInteractor
-import tools.vitruv.domains.pcm.util.PrimitiveTypesRepositoryLoader
+import tools.vitruv.applications.util.temporary.pcm.PrimitiveTypesRepositoryLoader
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import static com.google.common.base.Preconditions.checkState

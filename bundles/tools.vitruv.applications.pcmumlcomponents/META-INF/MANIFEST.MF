@@ -10,6 +10,7 @@ Require-Bundle: tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.framework.applications,
  tools.vitruv.extensions.dslsruntime.reactions,
  edu.kit.ipd.sdq.activextendannotations,
- edu.kit.ipd.sdq.commons.util.pcm
+ edu.kit.ipd.sdq.commons.util.pcm,
+ tools.vitruv.applications.util.temporary
 Export-Package: tools.vitruv.applications.pcmumlcomponents
 Bundle-Vendor: vitruv.tools
