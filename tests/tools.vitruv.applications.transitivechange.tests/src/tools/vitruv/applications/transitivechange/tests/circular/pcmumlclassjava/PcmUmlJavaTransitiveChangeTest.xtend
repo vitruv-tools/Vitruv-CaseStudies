@@ -37,6 +37,9 @@ import static extension tools.vitruv.applications.transitivechange.tests.util.Tr
 import org.emftext.language.java.containers.ContainersPackage
 import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
+import org.junit.jupiter.api.BeforeEach
+import org.emftext.language.java.JavaClasspath
+import tools.vitruv.domains.java.JamoppLibraryHelper
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
@@ -47,6 +50,12 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 	protected static final int ARRAY_LIST_SELECTION = 0
 	protected static boolean linearNetwork // set true (before class) to avoid the transformation between PCM and Java
 	static val logger = Logger.getLogger(typeof(PcmUmlJavaTransitiveChangeTest).simpleName)
+
+	@BeforeEach
+	def void setupJavaClasspath() {
+		JavaClasspath.reset()
+		JamoppLibraryHelper.registerStdLib()
+	}
 
 	override protected getChangePropagationSpecifications() {
 		linearNetwork.changePropagationSpecifications
