@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertEquals
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 

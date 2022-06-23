@@ -6,7 +6,7 @@ import org.emftext.language.java.JavaUniquePathConstructor
 import org.emftext.language.java.commons.NamespaceAwareElement
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
-import tools.vitruv.domains.java.util.JavaPersistenceHelper
+import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.AbstractReferenceMappingOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.ReferenceMappingOperator
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState

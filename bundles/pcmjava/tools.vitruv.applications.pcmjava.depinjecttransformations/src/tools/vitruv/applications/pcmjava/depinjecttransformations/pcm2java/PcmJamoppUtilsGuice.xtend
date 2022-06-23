@@ -45,7 +45,7 @@ import tools.vitruv.change.correspondence.CorrespondenceModelUtil
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 import tools.vitruv.change.interaction.UserInteractor
 
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.*

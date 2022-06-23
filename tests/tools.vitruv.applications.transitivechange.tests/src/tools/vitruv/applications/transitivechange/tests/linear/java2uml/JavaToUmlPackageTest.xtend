@@ -5,7 +5,7 @@ import org.emftext.language.java.classifiers.Class
 import org.junit.jupiter.api.Test
 
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import org.junit.jupiter.api.BeforeEach
 
 import static org.junit.jupiter.api.Assertions.assertNotNull

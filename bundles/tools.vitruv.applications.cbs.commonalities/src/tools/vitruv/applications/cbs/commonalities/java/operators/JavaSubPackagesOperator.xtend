@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.emftext.language.java.JavaUniquePathConstructor
 import org.emftext.language.java.containers.Package
-import tools.vitruv.domains.java.util.JavaPersistenceHelper
+import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.AbstractReferenceMappingOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.ReferenceMappingOperator
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState

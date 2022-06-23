@@ -66,7 +66,7 @@ import tools.vitruv.testutils.TestProject;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 import static org.junit.jupiter.api.Assertions.fail;
-import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
+import static tools.vitruv.applications.util.temporary.java.JavaQueryUtil.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;

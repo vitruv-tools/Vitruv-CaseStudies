@@ -1,6 +1,6 @@
 package tools.vitruv.applications.transitivechange.tests.linear.java2uml
 
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import org.eclipse.uml2.uml.Model
 import org.emftext.language.java.classifiers.Interface
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*

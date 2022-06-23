@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static tools.vitruv.domains.java.util.JavaQueryUtil.getNameFromJaMoPPType;
+import static tools.vitruv.applications.util.temporary.java.JavaQueryUtil.getNameFromJaMoPPType;
 
 import java.io.IOException;
 import java.nio.file.Path;

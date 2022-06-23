@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import tools.vitruv.applications.umljava.tests.UmlJavaTransformationTest
 import tools.vitruv.framework.views.View
 
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 

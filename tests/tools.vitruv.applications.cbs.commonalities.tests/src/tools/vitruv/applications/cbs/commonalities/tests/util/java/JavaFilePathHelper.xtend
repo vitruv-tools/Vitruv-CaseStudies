@@ -4,7 +4,7 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
 import java.util.List
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
-import tools.vitruv.domains.java.util.JavaPersistenceHelper
+import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.common.FilePathUtil.*
 

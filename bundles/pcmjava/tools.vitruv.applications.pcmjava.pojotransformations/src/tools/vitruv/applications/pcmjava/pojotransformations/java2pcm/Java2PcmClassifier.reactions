@@ -14,7 +14,7 @@ import org.palladiosimulator.pcm.core.entity.Entity
 
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimNotMany
 import static extension tools.vitruv.applications.pcmjava.common.pcm2java.PcmJavaTransformationUtil.isPackageFor
 

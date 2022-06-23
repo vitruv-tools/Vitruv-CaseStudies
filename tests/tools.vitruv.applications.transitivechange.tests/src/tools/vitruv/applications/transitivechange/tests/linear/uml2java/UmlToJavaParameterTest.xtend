@@ -10,7 +10,7 @@ import org.emftext.language.java.types.TypesFactory
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

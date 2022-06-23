@@ -29,7 +29,7 @@ import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
-import tools.vitruv.domains.java.util.JavaPersistenceHelper
+import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper
 
 import static org.junit.jupiter.api.Assertions.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
