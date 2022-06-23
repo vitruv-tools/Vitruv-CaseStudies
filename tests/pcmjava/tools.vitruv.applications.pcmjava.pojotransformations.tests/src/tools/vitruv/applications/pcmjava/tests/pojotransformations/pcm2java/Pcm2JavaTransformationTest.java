@@ -55,7 +55,7 @@ import com.google.common.collect.Iterables;
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
-import tools.vitruv.applications.util.temporary.java.JamoppLibraryHelper;
+import tools.vitruv.domains.java.JamoppLibraryHelper;
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil;
 import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
