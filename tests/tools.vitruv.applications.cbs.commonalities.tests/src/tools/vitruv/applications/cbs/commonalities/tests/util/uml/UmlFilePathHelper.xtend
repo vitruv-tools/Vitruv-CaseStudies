@@ -1,9 +1,9 @@
 package tools.vitruv.applications.cbs.commonalities.tests.util.uml
 
 import org.eclipse.uml2.uml.Model
-import tools.vitruv.domains.uml.UmlDomain
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.common.FilePathUtil.*
+import org.eclipse.uml2.uml.resource.UMLResource
 
 class UmlFilePathHelper {
 
@@ -13,7 +13,7 @@ class UmlFilePathHelper {
 	}
 
 	static def umlModelFilePath(String modelName) {
-		return MODEL_PATH.appendFile(modelName, UmlDomain.FILE_EXTENSION)
+		return MODEL_PATH.appendFile(modelName, UMLResource.FILE_EXTENSION)
 	}
 
 	static def umlModelFilePath(Model model) {
