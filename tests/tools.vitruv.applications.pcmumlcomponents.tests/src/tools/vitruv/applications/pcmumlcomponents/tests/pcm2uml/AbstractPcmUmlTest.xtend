@@ -29,6 +29,11 @@ abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
 	protected val PARAMETER_NAME_2 = "barParameter"
 	protected val ATTRIBUTE_NAME = "fooAttribute"
 
+	@BeforeEach
+	protected def void disableTransitivePropagation() {
+		this.virtualModel.transitivePropagationEnabled = false;
+	}
+	
 	protected static var Repository primitiveTypesRepository = null
 
 	private def Path getProjectModelPath(String modelName) {

@@ -15,6 +15,11 @@ abstract class AbstractUmlClassCompTest extends VitruvApplicationTest {
 	}
 
 	@BeforeEach
+	protected def void disableTransitivePropagation() {
+		this.virtualModel.transitivePropagationEnabled = false
+	}
+	
+	@BeforeEach
 	def setup() {
 		if (isInitializeTestModel()) {
 			initializeTestModel()

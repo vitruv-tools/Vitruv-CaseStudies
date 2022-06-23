@@ -12,8 +12,6 @@ import org.palladiosimulator.pcm.repository.DataType
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.domains.pcm.PcmDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.common.util.URI
@@ -53,11 +51,6 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		]
 	}
 
-	private def patchDomains() {
-		new PcmDomainProvider().domain.enableTransitiveChangePropagation
-		new UmlDomainProvider().domain.enableTransitiveChangePropagation
-	}
-
 	protected var PcmUmlClassApplicationTestHelper helper
 	protected var ResourceSet testResourceSet
 
@@ -67,7 +60,6 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 
 	@BeforeEach
 	def protected void setup() {
-		patchDomains
 		helper = new PcmUmlClassApplicationTestHelper(this, [uri|startRecordingChanges(uri.resourceAt)])
 		testResourceSet = new ResourceSetImpl()
 	}

@@ -44,7 +44,7 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 
 	@BeforeEach
 	def setupTransformationDirection() {
-		configureUnidirectionalExecution()
+		configureUnidirectionalExecution(virtualModel)
 	}
 
 	protected def getDefaultUmlModel(View view) {

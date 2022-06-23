@@ -10,11 +10,6 @@ import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 
 public class PcmUmlClassApplication implements VitruvApplication {
-
-	public PcmUmlClassApplication() {
-		patchDomains();
-	}
-
 	@Override
 	public Set<ChangePropagationSpecification> getChangePropagationSpecifications() {
 		Set<ChangePropagationSpecification> specs = new HashSet<ChangePropagationSpecification>();
@@ -28,12 +23,6 @@ public class PcmUmlClassApplication implements VitruvApplication {
 		return "PCM <-> UML Class";
 	}
 
-	private void patchDomains() {
-		new UmlDomainProvider().getDomain().enableTransitiveChangePropagation();
-		new PcmDomainProvider().getDomain().enableTransitiveChangePropagation();
-	}
-
-	@Override
 	public Set<VitruvDomain> getVitruvDomains() {
 		return Set.of(new PcmDomainProvider().getDomain(), new UmlDomainProvider().getDomain());
 	}

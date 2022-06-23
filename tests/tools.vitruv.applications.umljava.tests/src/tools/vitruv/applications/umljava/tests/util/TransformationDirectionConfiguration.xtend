@@ -1,23 +1,20 @@
 package tools.vitruv.applications.umljava.tests.util
 
-import tools.vitruv.domains.java.JavaDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
 import org.apache.log4j.Logger
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import tools.vitruv.framework.vsum.VirtualModel
 
 @Utility
 class TransformationDirectionConfiguration {
 	static val LOGGER = Logger.getLogger(TransformationDirectionConfiguration)
 
-	def static void configureUnidirectionalExecution() {
+	def static void configureUnidirectionalExecution(VirtualModel virtualModel) {
 		LOGGER.trace("Configuring for unidirectional execution")
-		new JavaDomainProvider().domain.disableTransitiveChangePropagation
-		new UmlDomainProvider().domain.disableTransitiveChangePropagation
+		virtualModel.transitivePropagationEnabled = false
 	}
 
-	def static void configureBidirectionalExecution() {
+	def static void configureBidirectionalExecution(VirtualModel virtualModel) {
 		LOGGER.trace("Configuring for bidirectional execution")
-		new JavaDomainProvider().domain.enableTransitiveChangePropagation
-		new UmlDomainProvider().domain.enableTransitiveChangePropagation
+		virtualModel.transitivePropagationEnabled = true
 	}
 }

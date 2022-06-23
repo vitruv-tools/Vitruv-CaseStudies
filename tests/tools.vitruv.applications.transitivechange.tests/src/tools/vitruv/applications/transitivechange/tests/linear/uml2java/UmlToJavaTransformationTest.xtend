@@ -40,8 +40,12 @@ abstract class UmlToJavaTransformationTest extends AbstractUmlJavaTest {
 	}
 
 	@BeforeEach
+	def protected void disableTransitivePropagation() {
+		this.virtualModel.transitivePropagationEnabled = false
+	}
+	
+	@BeforeEach
 	def protected void setup() {
-		patchDomains()
 		val umlModel = UMLFactory.eINSTANCE.createModel()
 		umlModel.name = MODEL_NAME
 		resourceAt(MODEL_NAME.projectModelPath).startRecordingChanges => [

@@ -80,6 +80,11 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	private Path testProjectFolder;
 
 	@BeforeEach
+	protected void disableTransitivePropagation() {
+		this.getVirtualModel().setTransitivePropagationEnabled(false);
+	}
+	
+	@BeforeEach
 	protected void setup(@TestProject Path testProjectPath) {
 		// This is necessary because otherwise Maven tests will fail as resources from
 		// previous

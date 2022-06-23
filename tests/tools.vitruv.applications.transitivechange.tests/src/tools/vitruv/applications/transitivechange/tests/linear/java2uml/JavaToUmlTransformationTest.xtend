@@ -29,8 +29,12 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	static val UMLMODELNAME = "rootModelName" // Name of the Uml Model used in the java2uml tests
 
 	@BeforeEach
+	protected def void disableTransitivePropagation() {
+		this.virtualModel.transitivePropagationEnabled = false
+	}
+	
+	@BeforeEach
 	def protected setup() {
-		patchDomains
 		userInteraction.addNextTextInput(UMLMODELNAME)
 		userInteraction.addNextTextInput(UMLMODELPATH)
 	}

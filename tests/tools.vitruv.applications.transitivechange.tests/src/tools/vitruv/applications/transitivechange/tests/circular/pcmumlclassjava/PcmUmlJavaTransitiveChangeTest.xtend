@@ -27,7 +27,6 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
-import org.junit.jupiter.api.BeforeEach
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
@@ -51,11 +50,6 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 
 	override protected getChangePropagationSpecifications() {
 		linearNetwork.changePropagationSpecifications
-	}
-
-	@BeforeEach
-	def void before() {
-		patchDomains() // ensures all domains execute transitively
 	}
 
 	def protected checkJavaType(Classifier umlClassifier) {

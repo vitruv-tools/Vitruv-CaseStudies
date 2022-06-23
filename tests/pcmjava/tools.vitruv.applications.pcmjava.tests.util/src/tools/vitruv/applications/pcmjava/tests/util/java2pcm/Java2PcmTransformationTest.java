@@ -130,6 +130,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return testEclipseProject;
 	}
 
+	@BeforeEach
+	protected void disableTransitivePropagation() {
+		this.getVirtualModel().setTransitivePropagationEnabled(false);
+	}
+	
 	/*
 	 * We need to use platform URIs, because the JDT AST will not recognize changes
 	 * when using file URIs.

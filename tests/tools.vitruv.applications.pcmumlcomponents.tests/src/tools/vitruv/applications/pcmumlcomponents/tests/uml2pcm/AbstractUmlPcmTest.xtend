@@ -39,6 +39,11 @@ abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
 	protected static val UML_TYPE_REAL = "Real"
 	protected static val UML_TYPE_STRING = "String"
 
+	@BeforeEach
+	protected def void disableTransitivePropagation() {
+		this.virtualModel.transitivePropagationEnabled = false
+	}
+	
 	private def Path getProjectModelPath(String modelName) {
 		Path.of("model").resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}
