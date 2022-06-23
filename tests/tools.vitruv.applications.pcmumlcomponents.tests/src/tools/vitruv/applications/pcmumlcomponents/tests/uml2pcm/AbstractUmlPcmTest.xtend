@@ -41,7 +41,7 @@ abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
 
 	@BeforeEach
 	protected def void disableTransitivePropagation() {
-		this.virtualModel.transitivePropagationEnabled = false
+		this.virtualModel.transitiveChangePropagationEnabled = false
 	}
 	
 	private def Path getProjectModelPath(String modelName) {

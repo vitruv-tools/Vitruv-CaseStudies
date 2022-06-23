@@ -10,11 +10,11 @@ class TransformationDirectionConfiguration {
 
 	def static void configureUnidirectionalExecution(VirtualModel virtualModel) {
 		LOGGER.trace("Configuring for unidirectional execution")
-		virtualModel.transitivePropagationEnabled = false
+		virtualModel.transitiveChangePropagationEnabled = false
 	}
 
 	def static void configureBidirectionalExecution(VirtualModel virtualModel) {
 		LOGGER.trace("Configuring for bidirectional execution")
-		virtualModel.transitivePropagationEnabled = true
+		virtualModel.transitiveChangePropagationEnabled = true
 	}
 }

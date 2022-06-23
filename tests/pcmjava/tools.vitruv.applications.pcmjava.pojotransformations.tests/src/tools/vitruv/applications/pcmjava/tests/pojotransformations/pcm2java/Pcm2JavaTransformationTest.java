@@ -82,7 +82,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 
 	@BeforeEach
 	protected void disableTransitivePropagation() {
-		this.getVirtualModel().setTransitivePropagationEnabled(false);
+		this.getVirtualModel().setTransitiveChangePropagationEnabled(false);
 	}
 	
 	@BeforeEach

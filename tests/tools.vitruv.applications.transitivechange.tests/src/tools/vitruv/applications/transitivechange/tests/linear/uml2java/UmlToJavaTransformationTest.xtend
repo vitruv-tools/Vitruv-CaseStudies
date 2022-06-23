@@ -41,7 +41,7 @@ abstract class UmlToJavaTransformationTest extends AbstractUmlJavaTest {
 
 	@BeforeEach
 	def protected void disableTransitivePropagation() {
-		this.virtualModel.transitivePropagationEnabled = false
+		this.virtualModel.transitiveChangePropagationEnabled = false
 	}
 	
 	@BeforeEach

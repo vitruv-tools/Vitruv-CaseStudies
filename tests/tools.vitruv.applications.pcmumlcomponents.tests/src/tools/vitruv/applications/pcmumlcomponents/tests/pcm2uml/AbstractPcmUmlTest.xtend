@@ -31,7 +31,7 @@ abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
 
 	@BeforeEach
 	protected def void disableTransitivePropagation() {
-		this.virtualModel.transitivePropagationEnabled = false;
+		this.virtualModel.transitiveChangePropagationEnabled = false;
 	}
 	
 	protected static var Repository primitiveTypesRepository = null
