@@ -24,13 +24,13 @@
          version="0.3.0.qualifier"/>
 
    <requires>
+      <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
       <import plugin="tools.vitruv.framework.applications"/>
       <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
       <import plugin="tools.vitruv.applications.pcmjava.util"/>
       <import plugin="tools.vitruv.applications.pcmjava.common"/>
-      <import plugin="tools.vitruv.domains.pcm"/>
-      <import plugin="tools.vitruv.domains.java"/>
-      <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
+      <import plugin="org.palladiosimulator.pcm"/>
+      <import plugin="org.emftext.language.java"/>
    </requires>
 
    <plugin

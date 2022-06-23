@@ -20,10 +20,10 @@
    </license>
 
    <requires>
-      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
-      <import plugin="tools.vitruv.domains.uml"/>
       <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
+      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
       <import feature="tools.vitruv.applications.util.temporary.feature"/>
+      <import plugin="org.eclipse.uml2.uml"/>
    </requires>
 
    <plugin
