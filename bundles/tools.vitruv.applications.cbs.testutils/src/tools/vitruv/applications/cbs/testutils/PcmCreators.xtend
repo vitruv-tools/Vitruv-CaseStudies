@@ -4,20 +4,22 @@ import java.nio.file.Path
 import org.palladiosimulator.pcm.PcmFactory
 import org.palladiosimulator.pcm.core.composition.CompositionFactory
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.testutils.activeannotations.ModelCreators
 
-import static tools.vitruv.domains.pcm.PcmNamespace.REPOSITORY_FILE_EXTENSION
-import static tools.vitruv.domains.pcm.PcmNamespace.SYSTEM_FILE_EXTENSION
+import static tools.vitruv.applications.util.temporary.pcm.PcmNamespace.REPOSITORY_FILE_EXTENSION
+import static tools.vitruv.applications.util.temporary.pcm.PcmNamespace.SYSTEM_FILE_EXTENSION
 import org.palladiosimulator.pcm.system.SystemFactory
+import java.util.Set
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @ModelCreators(factory=PcmFactory)
 class PcmCreators {
 	public static val pcm = new PcmCreators
 	public val repository = new PcmRepositoryCreators
 	public val core = new PcmCoreCreators
-	public val system = new PcmSystemCreators 
-	public val domain = new PcmDomainProvider().domain
+	public val system = new PcmSystemCreators
+	@Accessors
+	val MetamodelDescriptor metamodel = new MetamodelDescriptor("pcm", Set.of("repository", "system")) 
 
 	def static repository(Path path) {
 		path.resolveSibling('''«path.fileName».«REPOSITORY_FILE_EXTENSION»''')

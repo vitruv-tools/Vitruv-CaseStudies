@@ -4,12 +4,11 @@ import tools.vitruv.testutils.activeannotations.ModelCreators
 import org.emftext.language.java.JavaFactory
 import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.commons.CommonsFactory
-import tools.vitruv.domains.java.JavaDomainProvider
-import org.eclipse.xtend.lib.annotations.Accessors
 import java.nio.file.Path
-import tools.vitruv.domains.java.JavaNamespace
 import org.emftext.language.java.containers.ContainersFactory
 import org.emftext.language.java.classifiers.ClassifiersFactory
+import java.util.Set
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @ModelCreators(factory=JavaFactory)
 class JavaCreators {
@@ -19,10 +18,10 @@ class JavaCreators {
 	public val commons = new JavaCommonsCreators
 	public val containers = new JavaContainersCreators
 	@Accessors
-	val domain = new JavaDomainProvider().domain
+	val MetamodelDescriptor metamodel = new MetamodelDescriptor("java", Set.of("java"))
 
 	def static java(Path path) {
-		path.resolveSibling('''«path.fileName».«JavaNamespace.FILE_EXTENSION»''')
+		path.resolveSibling('''«path.fileName».«"java"»''')
 	}
 
 	def static java(String path) {

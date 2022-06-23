@@ -1,17 +1,17 @@
 package tools.vitruv.applications.cbs.testutils
 
-import tools.vitruv.domains.uml.UmlDomainProvider
-import org.eclipse.xtend.lib.annotations.Accessors
 import java.nio.file.Path
 import org.eclipse.uml2.uml.resource.UMLResource
 import tools.vitruv.testutils.activeannotations.ModelCreators
 import org.eclipse.uml2.uml.UMLFactory
+import java.util.Set
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @ModelCreators(factory = UMLFactory)
 class UmlCreators {
 	public static val uml = new UmlCreators
 	@Accessors
-	val domain = new UmlDomainProvider().domain
+	val MetamodelDescriptor metamodel = new MetamodelDescriptor("uml", Set.of("uml"))
 
 	def static uml(Path path) {
 		path.resolveSibling(path.fileName.toString.umlExtension)
