@@ -14,6 +14,7 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.applications.transitivechange.tests.util.TransitiveChangeSetup.*
+import tools.vitruv.change.propagation.ChangePropagationMode
 
 /**
  * Abstract super class for uml to java test cases.
@@ -40,8 +41,8 @@ abstract class UmlToJavaTransformationTest extends AbstractUmlJavaTest {
 	}
 
 	@BeforeEach
-	def protected void disableTransitivePropagation() {
-		this.virtualModel.transitiveChangePropagationEnabled = false
+	def protected void disableTransitiveChangePropagation() {
+		virtualModel.changePropagationMode = ChangePropagationMode.SINGLE_STEP
 	}
 	
 	@BeforeEach

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Path
 
 import org.eclipse.uml2.uml.Model
+import tools.vitruv.change.propagation.ChangePropagationMode
 
 abstract class AbstractUmlClassCompTest extends VitruvApplicationTest {
 	protected def Model getRootElement() {
@@ -15,8 +16,8 @@ abstract class AbstractUmlClassCompTest extends VitruvApplicationTest {
 	}
 
 	@BeforeEach
-	protected def void disableTransitivePropagation() {
-		this.virtualModel.transitiveChangePropagationEnabled = false
+	protected def void disableTransitiveChangePropagation() {
+		virtualModel.changePropagationMode = ChangePropagationMode.SINGLE_STEP
 	}
 	
 	@BeforeEach

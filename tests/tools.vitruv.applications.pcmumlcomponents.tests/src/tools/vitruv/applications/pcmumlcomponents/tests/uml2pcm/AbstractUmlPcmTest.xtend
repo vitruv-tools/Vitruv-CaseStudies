@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertEquals
 import tools.vitruv.applications.pcmumlcomponents.UmlToPcmComponentsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil
+import tools.vitruv.change.propagation.ChangePropagationMode
 
 abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml"
@@ -40,8 +41,8 @@ abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
 	protected static val UML_TYPE_STRING = "String"
 
 	@BeforeEach
-	protected def void disableTransitivePropagation() {
-		this.virtualModel.transitiveChangePropagationEnabled = false
+	protected def void disableTransitiveChangePropagation() {
+		virtualModel.changePropagationMode = ChangePropagationMode.SINGLE_STEP
 	}
 	
 	private def Path getProjectModelPath(String modelName) {

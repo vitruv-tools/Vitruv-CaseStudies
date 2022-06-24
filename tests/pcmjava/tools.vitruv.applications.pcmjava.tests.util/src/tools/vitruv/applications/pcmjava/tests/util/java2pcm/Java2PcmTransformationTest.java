@@ -99,6 +99,7 @@ import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.change.composite.description.PropagatedChange;
 import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.composite.propagation.ChangePropagationListener;
+import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
 import tools.vitruv.testutils.DisableAutoBuild;
@@ -131,8 +132,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	@BeforeEach
-	protected void disableTransitivePropagation() {
-		this.getVirtualModel().setTransitiveChangePropagationEnabled(false);
+	protected void disableTransitiveChangePropagation() {
+		this.getVirtualModel().setChangePropagationMode(ChangePropagationMode.SINGLE_STEP);
 	}
 	
 	/*

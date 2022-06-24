@@ -59,6 +59,7 @@ import tools.vitruv.domains.java.JamoppLibraryHelper;
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil;
 import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
+import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
@@ -81,8 +82,8 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 	private Path testProjectFolder;
 
 	@BeforeEach
-	protected void disableTransitivePropagation() {
-		this.getVirtualModel().setTransitiveChangePropagationEnabled(false);
+	protected void disableTransitiveChangePropagation() {
+		this.getVirtualModel().setChangePropagationMode(ChangePropagationMode.SINGLE_STEP);
 	}
 	
 	@BeforeEach

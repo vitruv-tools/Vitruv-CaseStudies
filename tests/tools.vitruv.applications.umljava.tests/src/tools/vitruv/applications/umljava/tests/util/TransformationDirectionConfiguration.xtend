@@ -3,6 +3,7 @@ package tools.vitruv.applications.umljava.tests.util
 import org.apache.log4j.Logger
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import tools.vitruv.framework.vsum.VirtualModel
+import tools.vitruv.change.propagation.ChangePropagationMode
 
 @Utility
 class TransformationDirectionConfiguration {
@@ -10,11 +11,11 @@ class TransformationDirectionConfiguration {
 
 	def static void configureUnidirectionalExecution(VirtualModel virtualModel) {
 		LOGGER.trace("Configuring for unidirectional execution")
-		virtualModel.transitiveChangePropagationEnabled = false
+		virtualModel.changePropagationMode = ChangePropagationMode.SINGLE_STEP
 	}
 
 	def static void configureBidirectionalExecution(VirtualModel virtualModel) {
 		LOGGER.trace("Configuring for bidirectional execution")
-		virtualModel.transitiveChangePropagationEnabled = true
+		virtualModel.changePropagationMode = ChangePropagationMode.TRANSITIVE_CYCLIC
 	}
 }

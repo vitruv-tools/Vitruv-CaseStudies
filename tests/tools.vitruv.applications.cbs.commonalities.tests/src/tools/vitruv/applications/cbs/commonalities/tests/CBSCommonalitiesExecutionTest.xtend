@@ -14,10 +14,16 @@ import java.nio.file.Path
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import tools.vitruv.applications.cbs.commonalities.CbsCommonalitiesApplication
+import tools.vitruv.change.propagation.ChangePropagationMode
 
 abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest {	
 	def <T> T getModels(DomainModelsProvider<T> modelsProvider) {
 		return modelsProvider.getModels(vitruvApplicationTestAdapter)
+	}
+	
+	@BeforeEach
+	def setupChangePropagationMode() {
+		virtualModel.changePropagationMode = ChangePropagationMode.TRANSITIVE_EXCEPT_LEAVES
 	}
 	
 	@BeforeEach
