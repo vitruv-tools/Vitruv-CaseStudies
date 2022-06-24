@@ -21,19 +21,16 @@
 
    <requires>
       <import plugin="org.eclipse.xtend.lib"/>
-      <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
-      <import plugin="tools.vitruv.framework.domains"/>
-      <import plugin="org.emftext.language.java"/>
-      <import plugin="org.emftext.language.java.resource"/>
-      <import plugin="org.emftext.language.java.resource.java"/>
-      <import plugin="org.apache.log4j"/>
-      <import plugin="org.eclipse.emf.ecore.xmi"/>
-      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.apache.log4j"/>
       <import plugin="tools.vitruv.framework.vsum"/>
       <import plugin="tools.vitruv.framework.domains.ui"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.eclipse"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.emf"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.java"/>
    </requires>
 
    <plugin
