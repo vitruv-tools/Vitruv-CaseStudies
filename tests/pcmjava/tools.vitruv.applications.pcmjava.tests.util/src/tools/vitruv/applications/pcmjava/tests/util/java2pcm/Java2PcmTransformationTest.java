@@ -170,14 +170,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		// We could also instantiate the applicator without using the extension point,
 		// but since this is a system anyway it also tests whether the extension is
 		// properly registered
-		Set<VitruvProjectBuilderApplicator> builderApplicators = VitruvProjectBuilderApplicator
-				.getApplicatorsForVitruvDomain(new JavaDomainProvider().getDomain());
-		assertEquals(1, builderApplicators.size());
-		for (VitruvProjectBuilderApplicator applicator : builderApplicators) {
-			applicator.setPropagateAfterBuild(true);
-			applicator.addBuilder(getCurrentTestProject(), getVirtualModel().getFolder(),
-					Collections.singleton(PcmNamespace.REPOSITORY_FILE_EXTENSION));
-		}
+		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl("Java",
+				VitruvJavaBuilder.BUILDER_ID);
+		applicator.setPropagateAfterBuild(true);
+		applicator.addBuilder(getCurrentTestProject(), getVirtualModel().getFolder(),
+			Collections.singleton(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		logger.info("Finished adding and initializing builder to project " + testEclipseProject.getName());
 	}
 
@@ -185,7 +182,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		// Explicitly remove the correct builder instead of using the extension point
 		// (like in the setup) to enforce a required dependency to the Vitruv domain UI
 		// project
-		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl(
+		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl("Java",
 				VitruvJavaBuilder.BUILDER_ID);
 		applicator.removeBuilder(getCurrentTestProject());
 	}

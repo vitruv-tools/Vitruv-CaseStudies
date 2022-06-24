@@ -14,8 +14,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.TextEdit;
 
-import tools.vitruv.domains.java.JavaNamespace;
-
 /**
  * Helper class that allows the manipulation of compilation units that causes a
  * notification of the Java monitor.
