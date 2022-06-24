@@ -167,9 +167,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	private void addJavaBuilder() {
-		// We could also instantiate the applicator without using the extension point,
-		// but since this is a system anyway it also tests whether the extension is
-		// properly registered
 		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl("Java",
 				VitruvJavaBuilder.BUILDER_ID);
 		applicator.setPropagateAfterBuild(true);
