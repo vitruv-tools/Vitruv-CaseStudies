@@ -99,6 +99,7 @@ import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.change.composite.description.PropagatedChange;
 import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.composite.propagation.ChangePropagationListener;
+import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
 import tools.vitruv.testutils.DisableAutoBuild;
@@ -130,6 +131,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return testEclipseProject;
 	}
 
+	@BeforeEach
+	protected void disableTransitiveChangePropagation() {
+		this.getVirtualModel().setChangePropagationMode(ChangePropagationMode.SINGLE_STEP);
+	}
+	
 	/*
 	 * We need to use platform URIs, because the JDT AST will not recognize changes
 	 * when using file URIs.

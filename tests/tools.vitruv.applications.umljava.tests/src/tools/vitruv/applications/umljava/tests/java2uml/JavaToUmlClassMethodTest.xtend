@@ -341,7 +341,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 
 	static class BidirectionalTest extends JavaToUmlClassMethodTest {
 		override setupTransformationDirection() {
-			configureBidirectionalExecution()
+			configureBidirectionalExecution(virtualModel)
 		}
 	}
 

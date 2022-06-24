@@ -15,6 +15,7 @@ import java.nio.file.Path
 import tools.vitruv.testutils.LegacyVitruvApplicationTest
 import tools.vitruv.applications.pcmumlcomponents.PcmToUmlComponentsChangePropagationSpecification
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
+import tools.vitruv.change.propagation.ChangePropagationMode
 
 abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository"
@@ -29,6 +30,11 @@ abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
 	protected val PARAMETER_NAME_2 = "barParameter"
 	protected val ATTRIBUTE_NAME = "fooAttribute"
 
+	@BeforeEach
+	protected def void disableTransitiveChangePropagation() {
+		virtualModel.changePropagationMode = ChangePropagationMode.SINGLE_STEP
+	}
+	
 	protected static var Repository primitiveTypesRepository = null
 
 	private def Path getProjectModelPath(String modelName) {

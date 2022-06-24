@@ -27,7 +27,6 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
-import org.junit.jupiter.api.BeforeEach
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
@@ -38,6 +37,9 @@ import static extension tools.vitruv.applications.transitivechange.tests.util.Tr
 import org.emftext.language.java.containers.ContainersPackage
 import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
+import org.junit.jupiter.api.BeforeEach
+import org.emftext.language.java.JavaClasspath
+import tools.vitruv.domains.java.JamoppLibraryHelper
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
@@ -49,13 +51,14 @@ abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest
 	protected static boolean linearNetwork // set true (before class) to avoid the transformation between PCM and Java
 	static val logger = Logger.getLogger(typeof(PcmUmlJavaTransitiveChangeTest).simpleName)
 
-	override protected getChangePropagationSpecifications() {
-		linearNetwork.changePropagationSpecifications
+	@BeforeEach
+	def void setupJavaClasspath() {
+		JavaClasspath.reset()
+		JamoppLibraryHelper.registerStdLib()
 	}
 
-	@BeforeEach
-	def void before() {
-		patchDomains() // ensures all domains execute transitively
+	override protected getChangePropagationSpecifications() {
+		linearNetwork.changePropagationSpecifications
 	}
 
 	def protected checkJavaType(Classifier umlClassifier) {

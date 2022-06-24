@@ -222,7 +222,7 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 
 	static class BidirectionalTest extends JavaToUmlEnumTest {
 		override setupTransformationDirection() {
-			configureBidirectionalExecution()
+			configureBidirectionalExecution(virtualModel)
 		}
 	}
 
