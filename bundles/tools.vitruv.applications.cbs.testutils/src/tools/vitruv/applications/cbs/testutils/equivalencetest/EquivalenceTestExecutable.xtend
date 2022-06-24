@@ -89,7 +89,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 			.withChangePropagationSpecifications(changePropagationSpecifications)
 			.buildAndInitialize()
 		new DirectoryTestView(
-			new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum, null),
+			new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum),
 			viewDirectory
 		)
 	}
@@ -205,7 +205,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	}
 
 	def private newBasicView(Path viewDirectory) {
-		new DirectoryTestView(new BasicTestView(viewDirectory, uriMode, null), viewDirectory)
+		new DirectoryTestView(new BasicTestView(viewDirectory, uriMode), viewDirectory)
 	}
 
 	@FinalFieldsConstructor

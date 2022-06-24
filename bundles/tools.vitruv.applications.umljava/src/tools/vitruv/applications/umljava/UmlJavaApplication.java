@@ -1,11 +1,9 @@
 package tools.vitruv.applications.umljava;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import tools.vitruv.framework.applications.VitruvApplication;
-import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 
 public class UmlJavaApplication implements VitruvApplication {
@@ -23,8 +21,4 @@ public class UmlJavaApplication implements VitruvApplication {
 		return "UML <> Java";
 	}
 
-	@Override
-	public Set<VitruvDomain> getVitruvDomains() {
-		return Collections.emptySet();
-	}
 }
