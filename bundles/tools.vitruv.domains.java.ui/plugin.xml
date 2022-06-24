@@ -21,8 +21,8 @@
             name="Vitruv Java Project Builder"
             point="tools.vitruv.framework.domains.ui.builder">
          <assignment
-               builderId="tools.vitruv.domains.java.ui.builder.JavaBuilder.id"
-               domain="tools.vitruv.domains.java.JavaDomain">
-         </assignment>
+         	name="Vitruv Java Project Builder"
+            builderId="tools.vitruv.domains.java.ui.builder.JavaBuilder.id"
+         />
       </extension>
 </plugin>
