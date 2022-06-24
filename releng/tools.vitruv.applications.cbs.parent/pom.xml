@@ -17,7 +17,6 @@
 		<vitruv.change.url>https://vitruv-tools.github.io/updatesite/nightly/change/</vitruv.change.url>
 		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework/</vitruv.framework.url>
 		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/dsls/</vitruv.dsls.url>
-		<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</vitruv.domains.url>
 	</properties>
 
 	<repositories>
@@ -36,11 +35,6 @@
 			<id>Vitruv DSLs</id>
 			<layout>p2</layout>
 			<url>${vitruv.dsls.url}</url>
-		</repository>
-		<repository>
-			<id>Vitruv Domains</id>
-			<layout>p2</layout>
-			<url>${vitruv.domains.url}</url>
 		</repository>
 		<repository>
 			<id>SDQ Commons</id>
@@ -98,18 +92,6 @@
 			</activation>
 			<properties>
 				<vitruv.dsls.url>file:///${vitruv.dsls.path}/releng/tools.vitruv.dsls.updatesite/target/repository</vitruv.dsls.url>
-			</properties>
-		</profile>
-
-		<profile>
-			<id>local-domains</id>
-			<activation>
-				<property>
-					<name>vitruv.domains.path</name>
-				</property>
-			</activation>
-			<properties>
-				<vitruv.domains.url>file:///${vitruv.domains.path}/releng/tools.vitruv.domains.cbs.updatesite/target/repository</vitruv.domains.url>
 			</properties>
 		</profile>
 
