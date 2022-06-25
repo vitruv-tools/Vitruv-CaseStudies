@@ -10,7 +10,7 @@ import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PcmJamoppUtilsGuice.*
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.hasSameTargetReference
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*

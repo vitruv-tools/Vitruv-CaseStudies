@@ -20,11 +20,20 @@
    </license>
 
    <requires>
-      <import plugin="tools.vitruv.domains.uml"/>
-      <import plugin="tools.vitruv.domains.java"/>
-      <import plugin="tools.vitruv.domains.pcm"/>
       <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
       <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
+      <import plugin="com.google.guava"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.eclipse.uml2.uml"/>
+      <import plugin="org.emftext.language.java"/>
+      <import plugin="org.emftext.language.java.resource"/>
+      <import plugin="org.eclipse.xtext.xbase.lib"/>
+      <import plugin="org.eclipse.xtend.lib"/>
+      <import plugin="org.eclipse.xtend.lib.macro"/>
+      <import plugin="org.palladiosimulator.pcm"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.java"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.emf"/>
+      <import plugin="tools.vitruv.change.correspondence"/>
    </requires>
 
    <plugin

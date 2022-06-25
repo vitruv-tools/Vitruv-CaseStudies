@@ -24,7 +24,7 @@ abstract class ComponentEquivalenceTemplate {
 
 			dependsOn[repository.creation(it)]
 
-			stepFor(pcm.domain) [ extension view |
+			stepFor(pcm.metamodel) [ extension view |
 				Repository.from('model/Test'.repository).propagate [
 					components__Repository += pcm.repository.create(componentType) => [
 						entityName = 'TestComponent'
@@ -32,7 +32,7 @@ abstract class ComponentEquivalenceTemplate {
 				]
 			]
 
-			inputVariantFor(pcm.domain, 'lowercase name') [ extension view |
+			inputVariantFor(pcm.metamodel, 'lowercase name') [ extension view |
 				Repository.from('model/Test'.repository).propagate [
 					components__Repository += pcm.repository.create(componentType) => [
 						entityName = 'testComponent'
@@ -40,7 +40,7 @@ abstract class ComponentEquivalenceTemplate {
 				]
 			]
 
-			stepFor(java.domain) [ extension view |
+			stepFor(java.metamodel) [ extension view |
 				userInteraction.addNextSingleSelection(componentTypeChoice /* create appropriate Component */ )
 				resourceAt('src/test/testComponent/package-info'.java).propagate [
 					contents += java.containers.Package => [
@@ -60,7 +60,7 @@ abstract class ComponentEquivalenceTemplate {
 				]
 			]
 
-			inputVariantFor(java.domain, 'creating only a package') [ extension view |
+			inputVariantFor(java.metamodel, 'creating only a package') [ extension view |
 				userInteraction.addNextSingleSelection(componentTypeChoice /* create appropriate Component */ )
 				resourceAt('src/test/testComponent/package-info'.java).propagate [
 					contents += java.containers.Package => [
@@ -68,9 +68,9 @@ abstract class ComponentEquivalenceTemplate {
 						name = 'testComponent'
 					]
 				]
-			].alsoCompareToMainStepOfSameDomain()
+			].alsoCompareToMainStepOfSameMetamodel()
 
-			inputVariantFor(java.domain, 'creating only a class') [ extension view |
+			inputVariantFor(java.metamodel, 'creating only a class') [ extension view |
 				userInteraction.addNextSingleSelection(componentTypeChoice /* create appropriate Component */ )
 				resourceAt('src/test/testComponent/TestComponentImpl'.java).propagate [
 					contents += java.containers.CompilationUnit => [
@@ -81,7 +81,7 @@ abstract class ComponentEquivalenceTemplate {
 						]
 					]
 				]
-			].alsoCompareToMainStepOfSameDomain()
+			].alsoCompareToMainStepOfSameMetamodel()
 		]
 	}
 
@@ -89,19 +89,19 @@ abstract class ComponentEquivalenceTemplate {
 	def renaming(extension ParameterizedEquivalenceTestBuilder parameterBuilder) {
 		dependsOn([creation(it)]) [ extension builder |
 
-			stepFor(pcm.domain) [ extension view |
+			stepFor(pcm.metamodel) [ extension view |
 				Repository.from('model/Test'.repository).components__Repository.get(0).propagate [
 					entityName = 'RenamedComponent'
 				]
 			]
 
-			inputVariantFor(pcm.domain, 'lowercase name') [ extension view |
+			inputVariantFor(pcm.metamodel, 'lowercase name') [ extension view |
 				Repository.from('model/Test'.repository).components__Repository.get(0).propagate [
 					entityName = 'renamedComponent'
 				]
 			]
 
-			stepFor(java.domain) [ extension view |
+			stepFor(java.metamodel) [ extension view |
 				resourceAt('src/test/testComponent/package-info'.java).propagate [
 					moveTo('src/test/renamedComponent/package-info'.java)
 					Package.from(it).name = 'renamedComponent'

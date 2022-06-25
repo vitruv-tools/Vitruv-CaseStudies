@@ -31,8 +31,8 @@ import org.palladiosimulator.pcm.system.SystemPackage
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import static com.google.common.base.Preconditions.checkState
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*

@@ -3,10 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv PCM-UML Class Mappings Application Sources
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.mapping.sources
 Bundle-Version: 0.3.0.qualifier
-Require-Bundle: tools.vitruv.extensions.dslsruntime.mappings,
- tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.domains.uml;visibility:=reexport,
- tools.vitruv.domains.pcm;visibility:=reexport
+Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
+ org.palladiosimulator.pcm;visibility:=reexport,
+ tools.vitruv.extensions.dslsruntime.mappings,
+ tools.vitruv.extensions.dslsruntime.reactions
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.mapping.sources
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: mir.reactions.umlXpcmComponent_L2R;x-internal:=true,

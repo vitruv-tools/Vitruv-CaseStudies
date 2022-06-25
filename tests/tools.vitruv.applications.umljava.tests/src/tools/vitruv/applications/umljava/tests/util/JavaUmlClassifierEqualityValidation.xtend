@@ -9,7 +9,7 @@ import tools.vitruv.framework.views.View
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.assertElementsEqual
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 

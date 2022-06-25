@@ -4,7 +4,7 @@ import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.VisibilityKind
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.buildJavaFilePath
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.buildJavaFilePath
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

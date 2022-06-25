@@ -5,7 +5,7 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.UMLFactory
 
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import org.eclipse.uml2.uml.Operation
 import tools.vitruv.applications.transitivechange.tests.util.AbstractUmlJavaTest
 import org.junit.jupiter.api.BeforeEach

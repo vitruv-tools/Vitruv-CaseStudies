@@ -9,8 +9,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: tools.vitruv.applications.pcmjava.common.pcm2java,
  mir.reactions.pcm2javaCommon,
  mir.routines.pcm2javaCommon
-Require-Bundle: tools.vitruv.applications.pcmjava.util,
+Require-Bundle: org.palladiosimulator.pcm;visibility:=reexport,
+ org.emftext.language.java;visibility:=reexport,
+ edu.kit.ipd.sdq.activextendannotations,
  tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.domains.pcm,
- tools.vitruv.domains.java,
- edu.kit.ipd.sdq.activextendannotations
+ tools.vitruv.applications.pcmjava.util

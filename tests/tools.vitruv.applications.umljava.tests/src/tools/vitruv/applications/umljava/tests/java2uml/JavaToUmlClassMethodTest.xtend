@@ -16,7 +16,7 @@ import tools.vitruv.framework.views.View
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*

@@ -14,7 +14,7 @@ import org.emftext.language.java.types.TypesFactory
 import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 import tools.vitruv.change.correspondence.CorrespondenceModel
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**

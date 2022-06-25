@@ -1,30 +1,30 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest
 
-import tools.vitruv.framework.domains.VitruvDomain
 import tools.vitruv.testutils.TestView
 import java.util.function.Consumer
 import org.junit.jupiter.api.DynamicNode
 import tools.vitruv.testutils.TestUserInteraction
+import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
 
 /**
- * Constructs an equivalence test, i.e. a test that executes steps in different domains and checks that if propagated,
+ * Constructs an equivalence test, i.e. a test that executes steps in different metamodels and checks that if propagated,
  * the steps lead to the same results.
  */
 interface EquivalenceTestBuilder {
 	/**
-	 * Registers a step in the provided {@code domain}, executing the provided {@code action}. This step will both
-	 * be used as a test step and as a reference step to compare the results of steps in other domains.
+	 * Registers a step in the provided {@code metamodel}, executing the provided {@code action}. This step will both
+	 * be used as a test step and as a reference step to compare the results of steps in other metamodels.
 	 */
-	def void stepFor(VitruvDomain domain, Consumer<TestView> action)
+	def void stepFor(MetamodelDescriptor metamodel, Consumer<TestView> action)
 
 	/**
-	 * Registers an alternate input step in the provided {@code domain}, executing the provided {@code action}. This 
-	 * step will only be used as a test step. A proper step needs to be registered for {@code domain} before calling 
+	 * Registers an alternate input step in the provided {@code metamodel}, executing the provided {@code action}. This 
+	 * step will only be used as a test step. A proper step needs to be registered for {@code metamodel} before calling 
 	 * this method. The provided {@code name} should describe what is different in this alternative. The variant
-	 * is validated against the results of other domains using their steps with a name containing the one of this
+	 * is validated against the results of other metamodels using their steps with a name containing the one of this
 	 * variant or, if such a variant does not exist, the default step.
 	 */
-	def VariantOptions inputVariantFor(VitruvDomain domain, String name, Consumer<TestView> action)
+	def VariantOptions inputVariantFor(MetamodelDescriptor metamodel, String name, Consumer<TestView> action)
 
 	/**
 	 * Declares that the steps built by this builder depend on the steps that are created by {@code otherTest}. The
@@ -43,8 +43,8 @@ interface EquivalenceTestBuilder {
 	interface VariantOptions {
 		/**
 		 * When running this variant, also make sure that the effective result of it is equal to the effective result
-		 * of the main step for this domain.
+		 * of the main step for this metamodel.
 		 */
-		def VariantOptions alsoCompareToMainStepOfSameDomain()
+		def VariantOptions alsoCompareToMainStepOfSameMetamodel()
 	}
 }

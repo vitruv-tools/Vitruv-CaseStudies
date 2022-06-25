@@ -5,11 +5,12 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmumlcomponents
 Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: tools.vitruv.domains.uml;visibility:=reexport,
- tools.vitruv.domains.pcm;visibility:=reexport,
+Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
+ org.palladiosimulator.pcm;visibility:=reexport,
+ edu.kit.ipd.sdq.activextendannotations,
+ edu.kit.ipd.sdq.commons.util.pcm,
  tools.vitruv.framework.applications,
  tools.vitruv.extensions.dslsruntime.reactions,
- edu.kit.ipd.sdq.activextendannotations,
- edu.kit.ipd.sdq.commons.util.pcm
+ tools.vitruv.applications.util.temporary
 Export-Package: tools.vitruv.applications.pcmumlcomponents
 Bundle-Vendor: vitruv.tools

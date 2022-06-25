@@ -14,6 +14,7 @@
 	<name>Test Modules</name>
 
 	<modules>
+		<module>tools.vitruv.domains.java.ui.tests</module>
 		<module>pcmjava</module>
 		<module>tools.vitruv.applications.cbs.equivalencetesttemplates</module>
 		<module>tools.vitruv.applications.cbs.equivalence.tests</module>

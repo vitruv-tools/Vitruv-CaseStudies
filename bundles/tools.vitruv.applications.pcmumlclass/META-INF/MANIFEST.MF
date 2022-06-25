@@ -71,12 +71,11 @@ Export-Package: mir.reactions.combinedPcmToUmlClassReactions;x-internal:=true,
  tools.vitruv.applications.pcmumlclass,
  tools.vitruv.applications.pcmumlclass.pcm2uml;x-internal:=true,
  tools.vitruv.applications.pcmumlclass.uml2pcm;x-internal:=true
-Require-Bundle: tools.vitruv.domains.uml;visibility:=reexport,
- tools.vitruv.domains.pcm;visibility:=reexport,
+Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
+ org.palladiosimulator.pcm;visibility:=reexport,
+ edu.kit.ipd.sdq.activextendannotations,
+ edu.kit.ipd.sdq.commons.util.emf,
  tools.vitruv.framework.applications,
  tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.applications.util.temporary,
- org.apache.commons.io;bundle-version="2.2.0",
- edu.kit.ipd.sdq.activextendannotations,
- edu.kit.ipd.sdq.commons.util.emf
+ tools.vitruv.applications.util.temporary
 Bundle-Vendor: vitruv.tools

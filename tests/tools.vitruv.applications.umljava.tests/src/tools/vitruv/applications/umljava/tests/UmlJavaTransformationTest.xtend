@@ -12,9 +12,9 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.URI
 import org.junit.jupiter.api.BeforeEach
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureUnidirectionalExecution
-import org.emftext.language.java.JavaClasspath
-import tools.vitruv.domains.java.JamoppLibraryHelper
 import tools.vitruv.applications.umljava.tests.util.JavaUmlViewFactory
+import tools.vitruv.applications.util.temporary.java.JavaSetup
+import org.junit.jupiter.api.BeforeAll
 
 abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected var extension JavaUmlViewFactory viewFactory
@@ -32,13 +32,19 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 	static val UML_MODEL_NAME = "model"
 	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FOLDER_NAME = "model"
+	
+	@BeforeAll
+	def static void setupJavaFactories() {
+		JavaSetup.prepareFactories()
+	}
 
 	@BeforeEach
-	def void setupClasspathAndViewFactory() {
-		// Reset Java classpath before every test to ensure that caches are reset
-		// and not objects are stored and produce memory leaks
-		JavaClasspath.reset()
-		JamoppLibraryHelper.registerStdLib()
+	def final void setupJavaClasspath() {
+		JavaSetup.resetClasspathAndRegisterStandardLibrary()
+	}
+	
+	@BeforeEach
+	def final void setupViewFactory() {
 		viewFactory = new JavaUmlViewFactory(virtualModel)
 	}
 

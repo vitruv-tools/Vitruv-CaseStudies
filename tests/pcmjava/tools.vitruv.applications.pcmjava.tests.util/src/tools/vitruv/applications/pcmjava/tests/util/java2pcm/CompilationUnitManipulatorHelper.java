@@ -14,8 +14,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.TextEdit;
 
-import tools.vitruv.domains.java.JavaNamespace;
-
 /**
  * Helper class that allows the manipulation of compilation units that causes a
  * notification of the Java monitor.
@@ -79,8 +77,8 @@ public final class CompilationUnitManipulatorHelper {
 	}
 
 	public static String ensureJavaFileExtension(String entityName) {
-		if (!entityName.endsWith("." + JavaNamespace.FILE_EXTENSION)) {
-			entityName = entityName + "." + JavaNamespace.FILE_EXTENSION;
+		if (!entityName.endsWith(".java")) {
+			entityName = entityName + ".java";
 		}
 		return entityName;
 	}

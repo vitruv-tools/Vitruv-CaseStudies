@@ -10,7 +10,7 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import edu.kit.ipd.sdq.activextendannotations.Utility
 
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 
 @Utility
 class Pcm2JavaHelper {
