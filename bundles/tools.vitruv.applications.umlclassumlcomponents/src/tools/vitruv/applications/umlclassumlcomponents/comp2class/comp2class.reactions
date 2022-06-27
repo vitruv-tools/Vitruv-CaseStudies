@@ -22,7 +22,7 @@ execute actions in umlclass
 ********/
 
 reaction CreatedCompModel {
-	after element umlcomp::Model created and inserted as root
+	after element umlcomp::Model inserted as root
 	call { 
 		createModelSelfCorrespondence(newValue) 
 		//createClassModel(newValue) //TODO This is currently not needed, as we are using one singular meta model  
@@ -123,7 +123,7 @@ routine changeCorrespondingVisibility(umlcomp::NamedElement compElement) {
 ************/
 
 reaction CreatedUmlComponent {
-	after element umlcomp::Component created and inserted in umlcomp::Model[packagedElement]
+	after element umlcomp::Component inserted in umlcomp::Model[packagedElement]
 	call {
 		createClassWithPackage(newValue)
 		}
@@ -178,8 +178,8 @@ routine renameClassAndPackage(umlcomp::Component umlComp, String newName) {
 
 
 reaction DeletedComp{
-	after element umlcomp::Component deleted and removed from umlcomp::Model[packagedElement]
-	call deleteClass(oldValue)
+	after element umlcomp::Component deleted
+	call deleteClass(affectedEObject)
 }
 
 routine deleteClass(umlcomp::Component umlComp) { 
@@ -215,7 +215,7 @@ routine deleteClass(umlcomp::Component umlComp) {
 ***********/
 
 reaction CreatedDatatype {
-	after element umlcomp::DataType created and inserted in umlcomp::Model[packagedElement]
+	after element umlcomp::DataType inserted in umlcomp::Model[packagedElement]
 	call {
 		val question = "Is '" + newValue.name + "' a generic/library DataType? If not a class representation will be created."
 		if ((newValue instanceof PrimitiveType) || userInteractor.modalTextYesNoUserInteractor(question))
@@ -265,7 +265,7 @@ routine createClassForDataType(umlcomp::DataType compType){
 
 
 reaction AddedDataTypeProperty{
-	after element umlcomp::Property created and inserted in umlcomp::DataType[ownedAttribute]
+	after element umlcomp::Property inserted in umlcomp::DataType[ownedAttribute]
 	call addClassDataTypeProperty(newValue, affectedEObject)
 }
 
@@ -306,8 +306,8 @@ routine changeClassDataTypeProperty(umlcomp::Property compProperty) {
 
 
 reaction AddedDataTypeOperation{
-	after element umlcomp::Operation created and inserted in umlcomp::DataType[ownedOperation]
-	call addDataTypeOperation(newValue, affectedEObject)		
+	after element umlcomp::Operation inserted in umlcomp::DataType[ownedOperation]
+	call addDataTypeOperation(newValue, affectedEObject)
 }
 
 routine addDataTypeOperation(umlcomp::Operation compOperation, umlcomp::DataType compDataType) {
@@ -445,9 +445,9 @@ reaction AddedRequiredRole {
 }
 
 reaction RemovedInterfaceRealization {
-	after element umlcomp::InterfaceRealization deleted and removed from umlcomp::Component[interfaceRealization]
+	after element umlcomp::InterfaceRealization deleted
 	call {
-		removeInterfaceRealizationForInterfaceRealization(oldValue)
+		removeInterfaceRealizationForInterfaceRealization(affectedEObject)
 	}
 }
 
@@ -464,9 +464,9 @@ routine removeInterfaceRealizationForInterfaceRealization(umlcomp::InterfaceReal
 }
 
 reaction RemovedUsage {
-	after element umlcomp::Usage deleted and removed from umlcomp::Component[packagedElement]
+	after element umlcomp::Usage deleted
 	call {
-		removeInterfaceRealizationForUsage(oldValue)
+		removeInterfaceRealizationForUsage(affectedEObject)
 	}
 }
 

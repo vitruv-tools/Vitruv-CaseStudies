@@ -29,7 +29,7 @@ import pcm2javaCommon
 // ############################# COMPOSED STRUCTURES ##############################
 
 reaction pcm2javaCommon::AddedAssemblyContextToComposedStructure {
-	after element pcm::AssemblyContext created and inserted in pcm::ComposedStructure[assemblyContexts__ComposedStructure]
+	after element pcm::AssemblyContext inserted in pcm::ComposedStructure[assemblyContexts__ComposedStructure]
 		// depInject start
 		with {
 			// do not allow multiple assembly contexts for the same basic component
@@ -77,7 +77,7 @@ routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStr
 
 // depInject: added
 reaction AddedConnector {
-	after element pcm::AssemblyConnector created and inserted in pcm::ComposedStructure[connectors__ComposedStructure]
+	after element pcm::AssemblyConnector inserted in pcm::ComposedStructure[connectors__ComposedStructure]
 	call addConnector(newValue)
 }
 
@@ -97,7 +97,7 @@ routine addConnector(pcm::AssemblyConnector assemblyConnector) {
 
 // depInject: added
 reaction AddedProvidedDelegationConnector {
-	after element pcm::ProvidedDelegationConnector created and inserted in pcm::ComposedStructure[connectors__ComposedStructure]
+	after element pcm::ProvidedDelegationConnector inserted in pcm::ComposedStructure[connectors__ComposedStructure]
 	call addedProvidedDelegationConnector(newValue, affectedEObject)
 }
 
@@ -158,7 +158,7 @@ routine pcm2javaCommon::createJavaClass(pcm::NamedElement sourceElementMappedToC
 
 reaction pcm2javaCommon::CreatedRequiredRole {
 	// depInject: slightly different trigger
-	after element pcm::OperationRequiredRole created and inserted in pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
+	after element pcm::OperationRequiredRole inserted in pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
 	call addRequiredRole(newValue)
 }
 
@@ -191,9 +191,9 @@ routine pcm2javaCommon::addRequiredRole(pcm::OperationRequiredRole requiredRole)
 
 reaction pcm2javaCommon::DeletedRequiredRole {
 	// depInject: slightly different trigger
-	after element pcm::OperationRequiredRole deleted and removed from pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
+	after element pcm::OperationRequiredRole deleted
 	call {
-		removeRequiredRole(oldValue);
+		removeRequiredRole(affectedEObject);
 	}
 }
 
@@ -228,57 +228,3 @@ routine pcm2javaCommon::createParameter(pcm::Parameter parameter) {
 		}
 	}
 }
-
-// ################################################################################
-// ##################### RESOURCE DEMANDING INTERNAL BEHAVIOR #####################
-
-//reaction CreatedResourceDemandingInternalBehavior {
-//	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-//	call createMethodForResourceDemandingBehavior(newValue)
-//}
-//
-//routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
-//	match {
-//		val componentClass = retrieve java::Class corresponding to behavior.basicComponent_ResourceDemandingInternalBehaviour
-//	}
-//	action {
-//		val javaMethod = create java::ClassMethod and initialize {
-//			javaMethod.name = behavior.entityName;
-//			javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid;
-//		}
-//		add correspondence between javaMethod and behavior // depInject
-//		update componentClass {
-//			componentClass.members += javaMethod;
-//		}
-//	}
-//}
-//
-//reaction RenameResourceDemandingInternalBehavior {
-//	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
-//	call renameMethodForResourceDemandingBehavior(affectedEObject)
-//}
-//
-//routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
-//	match {
-//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-//	}
-//	action {
-//		update javaMethod {
-//			javaMethod.name = behavior.entityName;
-//		}
-//	}
-//}
-//
-//reaction DeletedDemandingInternalBehavior {
-//	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-//	call deleteMethodForResourceDemandingBehavior(oldValue)
-//}
-//
-//routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
-//	match {
-//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-//	}
-//	action {
-//		delete javaMethod
-//	}
-//}

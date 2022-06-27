@@ -31,7 +31,7 @@ in reaction to changes in uml
 execute actions in pcm
 
 reaction UmlModelCreated {
-    after element uml::Model created and inserted as root
+    after element uml::Model inserted as root
     call ensureModelCorrespondenceExists(newValue)
 }
 

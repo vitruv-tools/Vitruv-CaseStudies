@@ -124,24 +124,24 @@ routine renamePackageForRepository(pcm::Repository repository) {
 }
 
 reaction RepositoryDeleted {
-	after element pcm::Repository deleted and removed as root
+	after element pcm::Repository deleted
 	call {
-		for (component : oldValue.components__Repository.filter(BasicComponent)) {
+		for (component : affectedEObject.components__Repository.filter(BasicComponent)) {
 			deleteJavaClassifier(component)
 			deleteJavaPackage(component, "")
 		}
-		for (interface : oldValue.interfaces__Repository.filter(OperationInterface)) {
+		for (interface : affectedEObject.interfaces__Repository.filter(OperationInterface)) {
 			deleteJavaClassifier(interface)
 		}
-		for (dataType : oldValue.dataTypes__Repository.filter(CompositeDataType)) {
+		for (dataType : affectedEObject.dataTypes__Repository.filter(CompositeDataType)) {
 			deleteJavaClassifier(dataType)
 		}
-		for (dataType : oldValue.dataTypes__Repository.filter(CollectionDataType)) {
+		for (dataType : affectedEObject.dataTypes__Repository.filter(CollectionDataType)) {
 			deleteJavaClassifier(dataType);
 		}
-		deleteJavaPackage(oldValue, "repository_root")
-		deleteJavaPackage(oldValue, "contracts")
-		deleteJavaPackage(oldValue, "datatypes")
+		deleteJavaPackage(affectedEObject, "repository_root")
+		deleteJavaPackage(affectedEObject, "contracts")
+		deleteJavaPackage(affectedEObject, "datatypes")
 	}
 }
 
@@ -150,7 +150,7 @@ reaction RepositoryDeleted {
 // ############################# COMPOSED STRUCTURES ##############################
 
 reaction CreatedSystem {
-	after element pcm::System created and inserted as root
+	after element pcm::System inserted as root
 	call {
 		addSystemCorrespondence(newValue)
 		createOrFindJavaPackage(newValue, null, newValue.entityName, "root_system");
@@ -174,11 +174,10 @@ routine createImplementationForSystem(pcm::System system) {
 }
 
 reaction DeletedSystem {
-	after element pcm::System deleted and removed as root
+	after element pcm::System removed as root
 	call {
-		val system = oldValue;
-		deleteJavaPackage(system, "root_system");
-		deleteJavaClassifier(system);
+		deleteJavaPackage(oldValue, "root_system");
+		deleteJavaClassifier(oldValue);
 	}
 }
 
@@ -200,7 +199,7 @@ routine changeSystemImplementationName(pcm::System system) {
 }
 
 reaction AddedAssemblyContextToComposedStructure {
-	after element pcm::AssemblyContext created and inserted in pcm::ComposedStructure[assemblyContexts__ComposedStructure]
+	after element pcm::AssemblyContext inserted in pcm::ComposedStructure[assemblyContexts__ComposedStructure]
 	call {
 		createOrFindAssemblyContextField(newValue, affectedEObject)
 		createOrFindAssemblyContextConstructor(newValue, affectedEObject)
@@ -337,7 +336,7 @@ routine addAssemblyContextImportCorrespondence(pcm::AssemblyContext assemblyCont
 // ################ COMPONENT REACTIONS ################
 
 reaction CreatedComponent {
-	after element pcm::RepositoryComponent created and inserted in pcm::Repository[components__Repository]
+	after element pcm::RepositoryComponent inserted in pcm::Repository[components__Repository]
 	call createComponentImplementation(newValue)
 }
 
@@ -394,10 +393,10 @@ routine renameComponentClass(pcm::RepositoryComponent component) {
 }
 
 reaction DeletedComponent {
-	after element pcm::RepositoryComponent deleted and removed from pcm::Repository[components__Repository]
+	after element pcm::RepositoryComponent deleted
 	call {
-		deleteJavaClassifier(oldValue);
-		deleteJavaPackage(oldValue, "");
+		deleteJavaClassifier(affectedEObject);
+		deleteJavaPackage(affectedEObject, "");
 	}
 }
 
@@ -405,7 +404,7 @@ reaction DeletedComponent {
 // ################ INTERFACE REACTIONS ################
 
 reaction CreatedInterface {
-	after element created and inserted in pcm::Repository[interfaces__Repository]
+	after element inserted in pcm::Repository[interfaces__Repository]
 	call createOrFindJavaInterface(newValue)
 }
 
@@ -428,7 +427,7 @@ routine renameInterface(pcm::OperationInterface interf) {
 // ################ DATA TYPES REACTIONS ################
 
 reaction CreatedCompositeDataType {
-	after element pcm::CompositeDataType created and inserted in pcm::Repository[dataTypes__Repository]
+	after element pcm::CompositeDataType inserted in pcm::Repository[dataTypes__Repository]
 	call createCompositeDataTypeImplementation(newValue)
 }
 
@@ -469,12 +468,12 @@ routine renameCompositeDataType(pcm::CompositeDataType compositeDataType) {
 }
 
 reaction DeletedCompositeDataType {
-	after element pcm::CompositeDataType deleted and removed from pcm::Repository[dataTypes__Repository]
-	call deleteJavaClassifier(oldValue)
+	after element pcm::CompositeDataType deleted
+	call deleteJavaClassifier(affectedEObject)
 }
 
 reaction CreatedCollectionDataType {
-	after element pcm::CollectionDataType created and inserted in pcm::Repository[dataTypes__Repository]
+	after element pcm::CollectionDataType inserted in pcm::Repository[dataTypes__Repository]
 	call createCollectionDataTypeImplementation(newValue)
 }
 
@@ -547,14 +546,14 @@ routine renameCollectionDataType(pcm::CollectionDataType collectionDataType) {
 }
 
 reaction DeletedCollectionDataType {
-	after element pcm::CollectionDataType deleted and removed from pcm::Repository[dataTypes__Repository]
-	call deleteJavaClassifier(oldValue)
+	after element pcm::CollectionDataType deleted
+	call deleteJavaClassifier(affectedEObject)
 }
 
 // ################ DATA TYPES - INNER DECLARATION REACTIONS ################
 
 reaction CreatedInnerDeclaration {
-	after element pcm::InnerDeclaration created and inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
+	after element pcm::InnerDeclaration inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
 	call createInnerDeclarationImplementation(newValue)
 }
 
@@ -855,8 +854,8 @@ routine deleteJavaClassifier(pcm::NamedElement sourceElement) {
 // ################ PROVIDED ROLES ####################
 
 reaction CreatedProvidedRole {
-	after element pcm::OperationProvidedRole created and inserted in pcm::InterfaceProvidingEntity[providedRoles_InterfaceProvidingEntity]
-	call addProvidedRole(newValue)
+	after element pcm::OperationProvidedRole inserted in pcm::InterfaceProvidingEntity[providedRoles_InterfaceProvidingEntity]
+	call findOrAddProvidedRole(newValue)
 }
 
 routine findOrAddProvidedRole(pcm::OperationProvidedRole providedRole) {
@@ -922,13 +921,13 @@ reaction ChangedProvidingEntityOfProvidedRole {
 }
 
 reaction DeletedProvidedRoleFromSystem {
-	after element pcm::ProvidedRole deleted and removed from pcm::System[providedRoles_InterfaceProvidingEntity]
-	call removeProvidedRole(oldValue)
+	after element pcm::ProvidedRole deleted
+	call removeProvidedRole(affectedEObject)
 }
 
 reaction DeletedProvidedRoleFromComponent {
-	after element pcm::ProvidedRole deleted and removed from pcm::RepositoryComponent[providedRoles_InterfaceProvidingEntity]
-	call removeProvidedRole(oldValue)
+	after element pcm::ProvidedRole deleted
+	call removeProvidedRole(affectedEObject)
 }
 
 routine removeProvidedRole(pcm::ProvidedRole providedRole) {
@@ -1095,7 +1094,7 @@ reaction ChangeOperationRequiredRoleInterface {
 // TODO HK Implement changing the signature interface. All components with their SEFFs have to be updated.
 // Use more reasonable correspondences than Michael
 reaction CreatedOperationSignature {
-	after element pcm::OperationSignature created and inserted in pcm::OperationInterface[signatures__OperationInterface]
+	after element pcm::OperationSignature inserted in pcm::OperationInterface[signatures__OperationInterface]
 	call createMethodForOperationSignature(newValue)
 }
 
@@ -1174,8 +1173,8 @@ routine changeInterfaceMethodReturnType(java::InterfaceMethod interfaceMethod, p
 }
 
 reaction DeletedOperationSignature {
-	after element pcm::OperationSignature deleted and removed from pcm::OperationInterface[signatures__OperationInterface]
-	call deleteMethodForOperationSignature(oldValue)
+	after element pcm::OperationSignature deleted
+	call deleteMethodForOperationSignature(affectedEObject)
 }
 
 routine deleteMethodForOperationSignature(pcm::OperationSignature operationSignature) {
@@ -1191,7 +1190,7 @@ routine deleteMethodForOperationSignature(pcm::OperationSignature operationSigna
 // ################################## PARAMETERS ##################################
 
 reaction CreatedParameter {
-	after element pcm::Parameter created and inserted in pcm::OperationSignature[parameters__OperationSignature]
+	after element pcm::Parameter inserted in pcm::OperationSignature[parameters__OperationSignature]
 	call createParameter(newValue)
 }
 
@@ -1252,7 +1251,7 @@ routine changeParameterType(pcm::Parameter parameter) {
 }
 
 reaction DeletedParameter {
-	after element pcm::Parameter deleted and removed from pcm::OperationSignature[parameters__OperationSignature]
+	after element pcm::Parameter removed from pcm::OperationSignature[parameters__OperationSignature]
 	call deleteParameter(affectedEObject, oldValue)
 }
 
@@ -1268,63 +1267,10 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 }
 
 // ################################################################################
-// ##################### RESOURCE DEMANDING INTERNAL BEHAVIOR #####################
-
-//reaction CreatedResourceDemandingInternalBehavior {
-//	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-//	call createMethodForResourceDemandingBehavior(newValue)
-//}
-//
-//routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
-//	match {
-//		val componentClass = retrieve java::Class corresponding to behavior.basicComponent_ResourceDemandingInternalBehaviour
-//	}
-//	action {
-//		val javaMethod = create java::ClassMethod and initialize {
-//			javaMethod.name = behavior.entityName;
-//			javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid;
-//		}
-//		update componentClass {
-//			componentClass.members += javaMethod;
-//		}
-//	}
-//}
-//
-//reaction RenameResourceDemandingInternalBehavior {
-//	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
-//	call renameMethodForResourceDemandingBehavior(affectedEObject)
-//}
-//
-//routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
-//	match {
-//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-//	}
-//	action {
-//		update javaMethod {
-//			javaMethod.name = behavior.entityName;
-//		}
-//	}
-//}
-//
-//reaction DeletedDemandingInternalBehavior {
-//	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-//	call deleteMethodForResourceDemandingBehavior(oldValue)
-//}
-//
-//routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
-//	match {
-//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-//	}
-//	action {
-//		delete javaMethod
-//	}
-//}
-
-// ################################################################################
 // #################################### SEFFS #####################################
 
 reaction CreatedSEFF {
-	after element pcm::ServiceEffectSpecification created and inserted in pcm::BasicComponent[serviceEffectSpecifications__BasicComponent]
+	after element pcm::ServiceEffectSpecification inserted in pcm::BasicComponent[serviceEffectSpecifications__BasicComponent]
 	call createSEFF(newValue)
 }
 
@@ -1376,8 +1322,8 @@ routine updateSEFFImplementingMethodName(pcm::ServiceEffectSpecification seff) {
 }
 
 reaction DeletedSeff {
-	after element pcm::ServiceEffectSpecification deleted and removed from pcm::BasicComponent[serviceEffectSpecifications__BasicComponent]
-	call deleteMethodForSeff(oldValue)
+	after element pcm::ServiceEffectSpecification deleted
+	call deleteMethodForSeff(affectedEObject)
 }
 
 routine deleteMethodForSeff(pcm::ServiceEffectSpecification seff) {

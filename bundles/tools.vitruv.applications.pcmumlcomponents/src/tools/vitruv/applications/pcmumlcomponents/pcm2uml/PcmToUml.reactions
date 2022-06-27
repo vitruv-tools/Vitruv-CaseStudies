@@ -53,7 +53,7 @@ routine deleteElement(pcm::NamedElement pcmElement) {
 // ############### CONTAINER REACTIONS ###############
 
 reaction CreatedPcmRepository {
-	after element pcm::Repository created and inserted as root
+	after element pcm::Repository inserted as root
 	call createUmlModel(newValue)
 }
 
@@ -80,7 +80,7 @@ routine createUmlModel(pcm::Repository pcmRepository) {
 // ############## DATA TYPES REACTIONS ###############
 
 reaction CreatedPrimitiveDataType {
-	after element pcm::PrimitiveDataType created and inserted in pcm::Repository[dataTypes__Repository]
+	after element pcm::PrimitiveDataType inserted in pcm::Repository[dataTypes__Repository]
 	call createPrimitiveDataType(newValue)
 }
 
@@ -100,8 +100,8 @@ routine createPrimitiveDataType(pcm::PrimitiveDataType dataType) {
 }
 
 reaction DeletedDataType {
-	after element pcm::DataType deleted and removed from pcm::Repository[dataTypes__Repository]
-	call deleteDataType(oldValue)
+	after element pcm::DataType deleted
+	call deleteDataType(affectedEObject)
 }
 
 routine deleteDataType(pcm::DataType dataType) {
@@ -114,7 +114,7 @@ routine deleteDataType(pcm::DataType dataType) {
 }
 
 reaction CreatedCompositeDataType {
-	after element pcm::CompositeDataType created and inserted in pcm::Repository[dataTypes__Repository]
+	after element pcm::CompositeDataType inserted in pcm::Repository[dataTypes__Repository]
 	call createCompositeDataType(newValue)
 }
 
@@ -134,7 +134,7 @@ routine createCompositeDataType(pcm::CompositeDataType dataType) {
 }
 
 reaction CreatedInnerDeclaration {
-	after element pcm::InnerDeclaration created and inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
+	after element pcm::InnerDeclaration inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
 	call createInnerDeclaration(newValue)
 }
 
@@ -309,7 +309,7 @@ routine createUmlPropertyForDatatype(uml::DataType type, pcm::InnerDeclaration c
 // ############## INTERFACE REACTIONS ################
 
 reaction CreatedPcmInterface {
-	after element created and inserted in pcm::Repository[interfaces__Repository]
+	after element inserted in pcm::Repository[interfaces__Repository]
 	call createUmlInterface(newValue)
 }
 
@@ -334,7 +334,7 @@ reaction DeletedPcmInterface {
 }
 
 reaction CreatedOperationInterfaceSignature {
-	after element created and inserted in pcm::OperationInterface[signatures__OperationInterface]
+	after element inserted in pcm::OperationInterface[signatures__OperationInterface]
 	call createOperationInterfaceSignature(newValue)
 }
 
@@ -489,11 +489,11 @@ routine removeOperationSignatureParameter(pcm::Parameter pcmParameter) {
 // ############### COMPONENT REACTIONS ###############
 
 reaction CreatedBasicPcmComponent {
-	after element pcm::BasicComponent created and inserted in pcm::Repository[components__Repository]
+	after element pcm::BasicComponent inserted in pcm::Repository[components__Repository]
 	call createUmlComponent(newValue, "basic")
 }
 reaction CreatedCompositePcmComponent {
-	after element pcm::CompositeComponent created and inserted in pcm::Repository[components__Repository]
+	after element pcm::CompositeComponent inserted in pcm::Repository[components__Repository]
 	call createUmlComponent(newValue, "composite")
 }
 routine createUmlComponent(pcm::RepositoryComponent pcmComponent, String correspondenceTag) {
@@ -516,7 +516,7 @@ reaction DeletedComponent {
 }
 
 reaction CreatedProvidedRole {
-	after element created and inserted in pcm::InterfaceProvidingEntity[providedRoles_InterfaceProvidingEntity]
+	after element inserted in pcm::InterfaceProvidingEntity[providedRoles_InterfaceProvidingEntity]
 	call createProvidedRole(affectedEObject, newValue)
 }
 routine createProvidedRole(pcm::InterfaceProvidingEntity pcmComponent, pcm::ProvidedRole pcmProvidedRole) {
