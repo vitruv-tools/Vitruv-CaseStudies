@@ -855,7 +855,7 @@ routine deleteJavaClassifier(pcm::NamedElement sourceElement) {
 
 reaction CreatedProvidedRole {
 	after element pcm::OperationProvidedRole inserted in pcm::InterfaceProvidingEntity[providedRoles_InterfaceProvidingEntity]
-	call findOrAddProvidedRole(newValue)
+	call addProvidedRole(newValue)
 }
 
 routine findOrAddProvidedRole(pcm::OperationProvidedRole providedRole) {
@@ -890,6 +890,7 @@ routine addProvidedRole(pcm::OperationProvidedRole providedRole) {
 	match {
 		val operationProvidingInterface = retrieve java::Interface corresponding to providedRole.providedInterface__OperationProvidedRole
 		val javaClass = retrieve java::Class corresponding to providedRole.providingEntity_ProvidedRole
+		require absence of java::NamespaceClassifierReference corresponding to providedRole
 	}
 	action { 
 		val namespaceClassifierReference = create java::NamespaceClassifierReference and initialize {
