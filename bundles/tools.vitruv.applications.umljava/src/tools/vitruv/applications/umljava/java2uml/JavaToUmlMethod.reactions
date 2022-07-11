@@ -163,11 +163,11 @@ routine insertUmlMethod(java::Member javaMethod, java::ConcreteClassifier javaCl
 }
 
 reaction JavaMemberDeleted {
-    after element java::Member deleted and removed from java::ConcreteClassifier[members]
+    after element java::Member deleted
     call {
-        deleteUmlMethod(oldValue)
-        deleteAccessorCorrespondence(oldValue, UmlJavaCorrespondenceTag.GETTER)
-        deleteAccessorCorrespondence(oldValue, UmlJavaCorrespondenceTag.SETTER)
+        deleteUmlMethod(affectedEObject)
+        deleteAccessorCorrespondence(affectedEObject, UmlJavaCorrespondenceTag.GETTER)
+        deleteAccessorCorrespondence(affectedEObject, UmlJavaCorrespondenceTag.SETTER)
     }
 }
 
@@ -259,7 +259,7 @@ routine setUmlFeatureStatic(java::AnnotableAndModifiable jElem, Boolean isStatic
 //===========================================
 
 reaction JavaVariableLengthParameterCreated {
-    after element java::VariableLengthParameter created and inserted in java::Parametrizable[parameters]
+    after element java::VariableLengthParameter inserted in java::Parametrizable[parameters]
     call {
         createUmlParameter(affectedEObject, newValue)
         setMultiplicityOfCorrespondingParameterToUnlimited(newValue)
@@ -267,7 +267,7 @@ reaction JavaVariableLengthParameterCreated {
 }
 
 reaction JavaOrdinaryParameterCreated {
-    after element java::OrdinaryParameter created and inserted in java::Parametrizable[parameters]
+    after element java::OrdinaryParameter inserted in java::Parametrizable[parameters]
     call createUmlParameter(affectedEObject, newValue)
 }
 
@@ -302,7 +302,7 @@ routine setMultiplicityOfCorrespondingParameterToUnlimited(java::Parameter param
 }
 
 reaction JavaParameterDeleted {
-    after element java::Parameter deleted and removed from java::Parametrizable[parameters]
+    after element java::Parameter removed from java::Parametrizable[parameters]
     call deleteJavaParameter(oldValue)
 }
 
@@ -403,11 +403,11 @@ routine renameUmlNamedElement(java::NamedElement jElement) {
 
 //An interface can theoretically have static, non-abstract methods
 reaction JavaClassMethodCreatedInInterface {
-    after element java::ClassMethod created and inserted in java::Interface[members]
+    after element java::ClassMethod inserted in java::Interface[members]
     call showMessage(userInteractor, "ClassMethods are currently not supported in Interfaces. Please delete " + newValue)
 }
 
 reaction JavaParameterMadeFinal {
-    after element java::Final created and inserted in java::Parameter[annotationsAndModifiers]
+    after element java::Final inserted in java::Parameter[annotationsAndModifiers]
     call showMessage(userInteractor, "Final parameters are not supported. Please remove the modifier from " + affectedEObject)
 }

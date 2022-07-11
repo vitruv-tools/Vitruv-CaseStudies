@@ -25,7 +25,7 @@ execute actions in umlcomp
 ********/
 
 reaction CreatedClassModel {
-	after element umlclass::Model created and inserted as root 
+	after element umlclass::Model inserted as root 
 	call createModelSelfCorrespondence(newValue)
 	//call createComponentModel(newValue) //TODO This is currently not needed, as we are using one singular meta model
 }
@@ -93,7 +93,7 @@ routine renameElement(umlclass::NamedElement classElement) {
 ********/
 
 reaction CreatedUmlClass {
-	after element umlclass::Class created and inserted in umlclass::Package[packagedElement]
+	after element umlclass::Class inserted in umlclass::Package[packagedElement]
 	call {
 		routineCreatedUmlClass(newValue, affectedEObject)
 	}
@@ -191,8 +191,8 @@ routine renameDataType(umlclass::Class umlClass) {
 }
 
 reaction DeletedClass{
-	after element umlclass::Class deleted and removed from umlclass::Package[packagedElement]
-	call deleteComponent(oldValue)
+	after element umlclass::Class deleted
+	call deleteComponent(affectedEObject)
 }
 
 routine deleteComponent(umlclass::Class umlClass) { 
@@ -210,7 +210,7 @@ routine deleteComponent(umlclass::Class umlClass) {
 ************/
 
 reaction CreatedPrimitiveDataType {
-	after element umlclass::PrimitiveType created and inserted in umlclass::Package[packagedElement]
+	after element umlclass::PrimitiveType inserted in umlclass::Package[packagedElement]
 	//call createPrimitiveDataType(newValue) //TODO This is currently not needed, as we are using one singular meta model
 	call createPrimitiveDataTypeSelfCorrespondence(newValue)
 }
@@ -234,7 +234,7 @@ routine createPrimitiveDataType(umlclass::PrimitiveType classType) {
 }
 
 reaction CreatedDataType {
-	after element umlclass::DataType created and inserted in umlclass::Package[packagedElement] 
+	after element umlclass::DataType inserted in umlclass::Package[packagedElement] 
 		with !(newValue instanceof PrimitiveType)
 	//call createDataType(newValue) //TODO This is currently not needed, as we are using one singular meta model
 	call createDataTypeSelfCorrespondence(newValue)
@@ -260,7 +260,7 @@ routine createDataType(umlclass::DataType classType) {
 }
 
 reaction AddedDataClassTypeProperty {
-    after element umlclass::Property created and inserted in umlclass::Class[ownedAttribute]
+    after element umlclass::Property inserted in umlclass::Class[ownedAttribute]
     call {
         addDataTypeProperty(affectedEObject, newValue)
     }
@@ -302,8 +302,8 @@ routine changeDataTypeProperty(umlclass::Property classProperty) {
 
 
 reaction DeletedDataTypeClassProperty {
-    after element umlclass::Property deleted and removed from umlclass::Class[ownedAttribute]
-    call deleteCompDataTypeProperty(oldValue)
+    after element umlclass::Property deleted
+    call deleteCompDataTypeProperty(affectedEObject)
 }
 
 routine deleteCompDataTypeProperty(umlclass::Property classProperty) {
@@ -337,7 +337,7 @@ routine changeDataTypeAttributeType(umlclass::Property classProperty, umlclass::
 
 
 reaction AddedDataClassTypeOperation {
-    after element umlclass::Operation created and inserted in umlclass::Class[ownedOperation]
+    after element umlclass::Operation inserted in umlclass::Class[ownedOperation]
     call {
         addDataTypeOperation(affectedEObject, newValue)
     }
@@ -379,8 +379,8 @@ routine changeDataTypeOperation(umlclass::Operation classOperation) {
 
 
 reaction DeletedDataTypeClassOperation {
-    after element umlclass::Property deleted and removed from umlclass::Class[ownedAttribute]
-    call deleteCompDataTypeProperty(oldValue)
+    after element umlclass::Property deleted
+    call deleteCompDataTypeProperty(affectedEObject)
 }
 
 routine deleteCompDataTypeOperation(umlclass::Operation classOperation) {
@@ -398,7 +398,7 @@ routine deleteCompDataTypeOperation(umlclass::Operation classOperation) {
 ***********/
 
 reaction CreatePackage {
-	after element created and inserted in umlclass::Model[packagedElement]
+	after element inserted in umlclass::Model[packagedElement]
 		with (newValue instanceof Package)
 	call createdPackage(newValue as Package)
 }
@@ -526,11 +526,11 @@ routine updateCorrespondingComponent(umlclass::Package classPackage, String oldN
 }
 
 reaction PackageDeleted {
-	after element umlclass::Package deleted and removed from umlclass::Model[packagedElement]
-	call routinePackageDeleted(oldValue, affectedEObject)
+	after element umlclass::Package deleted
+	call routinePackageDeleted(affectedEObject)
 }
 
-routine routinePackageDeleted(umlclass::Package classPackage, umlclass::Model classModel) {
+routine routinePackageDeleted(umlclass::Package classPackage) {
 	action {
 		call {
 			//Check if Package removal is illegal
@@ -698,12 +698,12 @@ routine createUsage(umlclass::InterfaceRealization classIFRealization, umlcomp::
 }
 
 
-reaction RemovedInterface {
-	after element umlclass::Interface deleted and removed from umlclass::Package[packagedElement]
-	call removeInterface(oldValue)
+reaction DeletedInterface {
+	after element umlclass::Interface deleted
+	call deleteInterface(affectedEObject)
 }
 
-routine removeInterface(umlclass::Interface classInterface) {
+routine deleteInterface(umlclass::Interface classInterface) {
 	match {
 		val compInterface = retrieve umlcomp::Interface corresponding to classInterface
 	}
@@ -735,7 +735,7 @@ routine removeInterface(umlclass::Interface classInterface) {
 
 
 reaction RemovedInterfaceRealization {
-	after element umlclass::InterfaceRealization deleted and removed from umlclass::Class[interfaceRealization]
+	after element umlclass::InterfaceRealization removed from umlclass::Class[interfaceRealization]
 	call {
 		removeInterfaceRealization(oldValue)
 		removeUsage(oldValue)

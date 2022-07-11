@@ -106,7 +106,7 @@ routine updateMultiplicityType(uml::MultiplicityElement umlElement) {
 // ############### CONTAINER REACTIONS ###############
 
 reaction CreatedUmlModel {
-	after element uml::Model created and inserted as root
+	after element uml::Model inserted as root
 	call{
 		createPcmRepository(newValue)
 		ensureUmlModelCorrespondenceExists(newValue)
@@ -137,7 +137,7 @@ routine ensureUmlModelCorrespondenceExists(uml::Model newModel) {
 // ############## DATA TYPES REACTIONS ###############
 
 reaction CreatedPrimitiveDataType {
-	after element uml::PrimitiveType created and inserted in uml::Model[packagedElement]
+	after element uml::PrimitiveType inserted in uml::Model[packagedElement]
 	call createPrimitiveDataType(newValue)
 }
 
@@ -151,7 +151,7 @@ routine createPrimitiveDataType(uml::PrimitiveType umlType) {
 }
 
 reaction CreatedDataType {
-	after element uml::DataType created and inserted in uml::Model[packagedElement] with
+	after element uml::DataType inserted in uml::Model[packagedElement] with
 		!(newValue instanceof PrimitiveType)
 	call createDataType(newValue)
 }
@@ -193,7 +193,7 @@ routine createCollectionDataType(uml::DataType umlType) {
 }
 
 reaction CreatedPropertyForDataType {
-	after element uml::Property created and inserted in uml::DataType[ownedAttribute]
+	after element uml::Property inserted in uml::DataType[ownedAttribute]
 	call createInnerDeclarationOffProperty(newValue)
 }
 
@@ -269,7 +269,7 @@ routine deleteDataType(uml::DataType umlDataType) {
 // ############### INTERFACE REACTIONS ###############
 
 reaction CreatedInterface {
-	after element uml::Interface created and inserted in uml::Model[packagedElement]
+	after element uml::Interface inserted in uml::Model[packagedElement]
 	call createInterface(newValue)
 }
 
@@ -289,7 +289,7 @@ routine createInterface(uml::Interface umlInterface) {
 }
 
 reaction CreatedInterfaceOperation {
-	after element uml::Operation created and inserted in uml::Interface[ownedOperation]
+	after element uml::Operation inserted in uml::Interface[ownedOperation]
 	call createInterfaceOperation(newValue)
 }
 
