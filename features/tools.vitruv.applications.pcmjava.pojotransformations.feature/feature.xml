@@ -26,7 +26,7 @@
    <requires>
       <import plugin="edu.kit.ipd.sdq.commons.util.pcm"/>
       <import plugin="tools.vitruv.framework.applications"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
+      <import plugin="tools.vitruv.dsls.reactions.runtime"/>
       <import plugin="tools.vitruv.applications.util.temporary"/>
       <import plugin="tools.vitruv.applications.pcmjava.util"/>
       <import plugin="tools.vitruv.applications.pcmjava.common"/>

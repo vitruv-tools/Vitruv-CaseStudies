@@ -15,7 +15,7 @@ import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.util.temporary.java.JavaModificationUtil
-import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
+import tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.change.correspondence.CorrespondenceModel
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 import tools.vitruv.change.interaction.UserInteractor

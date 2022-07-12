@@ -45,7 +45,7 @@ Require-Bundle: org.palladiosimulator.pcm;visibility:=reexport,
  org.eclipse.uml2.uml;visibility:=reexport,
  edu.kit.ipd.sdq.activextendannotations,
  tools.vitruv.extensions.dslsruntime.mappings,
- tools.vitruv.extensions.dslsruntime.reactions,
+ tools.vitruv.dsls.reactions.runtime,
  tools.vitruv.applications.util.temporary
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Eclipse-ExtensibleAPI: true

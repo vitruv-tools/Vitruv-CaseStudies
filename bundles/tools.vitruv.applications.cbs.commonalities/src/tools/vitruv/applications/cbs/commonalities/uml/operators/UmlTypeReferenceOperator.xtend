@@ -7,7 +7,7 @@ import tools.vitruv.applications.cbs.commonalities.domaincommon.operators.Abstra
 import tools.vitruv.applications.cbs.commonalities.uml.UmlPrimitiveType
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeMappingOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeType
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
+import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
 import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
 

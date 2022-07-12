@@ -9,7 +9,7 @@ import org.emftext.language.java.containers.Package
 import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.AbstractReferenceMappingOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.ReferenceMappingOperator
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
+import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
 import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*

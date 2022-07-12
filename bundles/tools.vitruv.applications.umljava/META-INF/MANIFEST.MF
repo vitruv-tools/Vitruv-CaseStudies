@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
  edu.kit.ipd.sdq.commons.util.emf,
  edu.kit.ipd.sdq.commons.util.java,
  tools.vitruv.framework.applications,
- tools.vitruv.extensions.dslsruntime.reactions,
+ tools.vitruv.dsls.reactions.runtime,
  tools.vitruv.applications.util.temporary;visibility:=reexport
 Export-Package: tools.vitruv.applications.umljava,
  tools.vitruv.applications.umljava.util

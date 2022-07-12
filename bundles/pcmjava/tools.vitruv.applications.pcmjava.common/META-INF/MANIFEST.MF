@@ -12,5 +12,5 @@ Export-Package: tools.vitruv.applications.pcmjava.common.pcm2java,
 Require-Bundle: org.palladiosimulator.pcm;visibility:=reexport,
  org.emftext.language.java;visibility:=reexport,
  edu.kit.ipd.sdq.activextendannotations,
- tools.vitruv.extensions.dslsruntime.reactions,
+ tools.vitruv.dsls.reactions.runtime,
  tools.vitruv.applications.pcmjava.util

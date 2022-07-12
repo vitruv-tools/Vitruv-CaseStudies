@@ -22,7 +22,7 @@
    <requires>
       <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
       <import plugin="tools.vitruv.framework.applications"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
+      <import plugin="tools.vitruv.dsls.reactions.runtime"/>
       <import plugin="tools.vitruv.applications.util.temporary"/>
       <import feature="tools.vitruv.applications.util.temporary.feature"/>
       <import plugin="org.eclipse.uml2.uml"/>
