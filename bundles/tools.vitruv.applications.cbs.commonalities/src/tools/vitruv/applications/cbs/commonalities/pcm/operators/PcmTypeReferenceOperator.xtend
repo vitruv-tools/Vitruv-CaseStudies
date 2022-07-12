@@ -8,11 +8,11 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import tools.vitruv.applications.cbs.commonalities.domaincommon.CommonPrimitiveType
 import tools.vitruv.applications.cbs.commonalities.domaincommon.operators.AbstractTypeReferenceOperator
 import tools.vitruv.applications.cbs.commonalities.pcm.PcmPrimitiveDataType
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeType
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
 import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
-import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
 /**
  * Maps between references to PCM types ({@link DataType}s, but also types such

@@ -7,14 +7,14 @@ import org.emftext.language.java.commons.NamespaceAwareElement
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
 import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.AbstractReferenceMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.reference.ReferenceMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.reference.AbstractReferenceMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.reference.ReferenceMappingOperator
 import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
-import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
-import static extension tools.vitruv.extensions.dslruntime.commonalities.helper.IntermediateModelHelper.*
+import static extension tools.vitruv.dsls.commonalities.runtime.helper.IntermediateModelHelper.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.containers.ContainersPackage
 import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects

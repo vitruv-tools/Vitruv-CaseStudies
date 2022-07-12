@@ -6,9 +6,9 @@ import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.ProvidedRole
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AbstractAttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeType
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AbstractAttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
 import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
 /**

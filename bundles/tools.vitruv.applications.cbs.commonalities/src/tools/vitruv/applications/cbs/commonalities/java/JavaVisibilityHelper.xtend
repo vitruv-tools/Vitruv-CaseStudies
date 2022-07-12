@@ -12,7 +12,7 @@ import org.emftext.language.java.modifiers.Public
 import tools.vitruv.applications.cbs.commonalities.oo.Visibility
 
 import static com.google.common.base.Preconditions.*
-import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 

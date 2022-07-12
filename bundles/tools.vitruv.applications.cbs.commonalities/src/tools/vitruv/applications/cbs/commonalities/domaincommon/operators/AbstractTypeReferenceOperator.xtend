@@ -4,13 +4,13 @@ import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import tools.vitruv.applications.cbs.commonalities.domaincommon.CommonPrimitiveType
-import tools.vitruv.extensions.dslruntime.commonalities.helper.IntermediateModelHelper
-import tools.vitruv.extensions.dslruntime.commonalities.intermediatemodelbase.Intermediate
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AbstractAttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.helper.IntermediateModelHelper
+import tools.vitruv.dsls.commonalities.runtime.intermediatemodelbase.Intermediate
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AbstractAttributeMappingOperator
 import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
-import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
 import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.*
 
