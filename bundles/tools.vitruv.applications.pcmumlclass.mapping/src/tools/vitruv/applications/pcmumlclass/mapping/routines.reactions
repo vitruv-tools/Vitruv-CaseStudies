@@ -3,7 +3,7 @@ import org.eclipse.uml2.uml.UMLFactory
 import tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
 
-import static tools.vitruv.extensions.dslsruntime.mappings.updates.MappingRoutineUpdateHelper.*
+import static tools.vitruv.dsls.mappings.runtime.updates.MappingRoutineUpdateHelper.*
 
 import static extension tools.vitruv.applications.pcmumlclass.mapping.MappingUpdateUtils.*
 

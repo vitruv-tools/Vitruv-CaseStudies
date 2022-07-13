@@ -1,10 +1,10 @@
 package tools.vitruv.applications.cbs.commonalities.pcm.operators
 
 import org.palladiosimulator.pcm.repository.DataType
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AbstractAttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeType
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AbstractAttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
+import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
 /**
  * Maps between references to PCM {@link DataType}s and an intermediate

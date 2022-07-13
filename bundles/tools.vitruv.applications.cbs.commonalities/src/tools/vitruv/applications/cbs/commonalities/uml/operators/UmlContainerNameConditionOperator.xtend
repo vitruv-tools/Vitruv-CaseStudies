@@ -4,8 +4,8 @@ import java.util.List
 import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.UMLPackage
-import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractNoArgumentConditionOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.ParticipationConditionOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.participation.condition.AbstractNoArgumentConditionOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.participation.condition.ParticipationConditionOperator
 
 import static com.google.common.base.Preconditions.*
 

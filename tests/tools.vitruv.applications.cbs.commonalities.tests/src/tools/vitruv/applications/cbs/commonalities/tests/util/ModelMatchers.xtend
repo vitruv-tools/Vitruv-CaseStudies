@@ -20,7 +20,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.StringDescription
 import org.hamcrest.TypeSafeMatcher
 
-import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
 @Utility
 class ModelMatchers {

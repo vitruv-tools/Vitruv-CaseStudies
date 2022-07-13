@@ -11,7 +11,7 @@ Export-Package: tools.vitruv.applications.cbs.commonalities,
  tools.vitruv.applications.cbs.commonalities.pcm,
  tools.vitruv.applications.cbs.commonalities.uml
 Require-Bundle: tools.vitruv.framework.applications,
- tools.vitruv.extensions.dslsruntime.commonalities,
+ tools.vitruv.dsls.commonalities.runtime,
  org.palladiosimulator.pcm;visibility:=reexport,
  org.eclipse.uml2.uml;visibility:=reexport,
  org.emftext.language.java;visibility:=reexport,

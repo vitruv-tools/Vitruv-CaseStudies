@@ -14,7 +14,7 @@ Require-Bundle: org.emftext.language.java,
  edu.kit.ipd.sdq.activextendannotations,
  edu.kit.ipd.sdq.commons.util.java,
  tools.vitruv.testutils,
- tools.vitruv.extensions.dslsruntime.reactions,
+ tools.vitruv.dsls.reactions.runtime,
  tools.vitruv.applications.pcmjava.common,
  tools.vitruv.applications.pcmjava.util
 Bundle-RequiredExecutionEnvironment: JavaSE-11

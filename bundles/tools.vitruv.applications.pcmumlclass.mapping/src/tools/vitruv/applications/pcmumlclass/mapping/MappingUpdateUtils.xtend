@@ -1,6 +1,6 @@
 package tools.vitruv.applications.pcmumlclass.mapping
 
-import tools.vitruv.extensions.dslsruntime.mappings.updates.MappingUpdateTransformation
+import tools.vitruv.dsls.mappings.runtime.updates.MappingUpdateTransformation
 import edu.kit.ipd.sdq.activextendannotations.Utility
 
 @Utility

@@ -23,7 +23,7 @@
       <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
       <import plugin="edu.kit.ipd.sdq.commons.util.pcm"/>
       <import plugin="tools.vitruv.framework.applications"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
+      <import plugin="tools.vitruv.dsls.reactions.runtime"/>
       <import feature="tools.vitruv.applications.util.temporary.feature"/>
       <import plugin="org.eclipse.uml2.uml"/>
       <import plugin="org.palladiosimulator.pcm"/>

@@ -3,11 +3,11 @@ package tools.vitruv.applications.cbs.commonalities.java.operators
 import java.util.List
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import org.emftext.language.java.modifiers.AnnotationInstanceOrModifier
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeType
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
+import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
-import static tools.vitruv.extensions.dslruntime.commonalities.helper.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
 /**
  * Similar to {@link JavaAbstractModifierOperator}, but inverts the value of

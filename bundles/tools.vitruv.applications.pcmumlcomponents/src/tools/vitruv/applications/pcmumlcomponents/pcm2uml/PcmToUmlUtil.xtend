@@ -17,9 +17,9 @@ import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.ParameterModifier
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
-import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorrespondence
+import tools.vitruv.dsls.reactions.runtime.correspondence.ReactionsCorrespondence
 import tools.vitruv.change.correspondence.CorrespondenceModel
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionsCorrespondenceModelViewFactory
+import tools.vitruv.dsls.reactions.runtime.ReactionsCorrespondenceModelViewFactory
 import edu.kit.ipd.sdq.activextendannotations.Utility
 
 @Utility

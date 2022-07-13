@@ -9,7 +9,7 @@ Require-Bundle: org.palladiosimulator.pcm,
  org.emftext.language.java,
  edu.kit.ipd.sdq.activextendannotations,
  tools.vitruv.framework.applications,
- tools.vitruv.extensions.dslsruntime.reactions,
+ tools.vitruv.dsls.reactions.runtime,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.common
 Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations,

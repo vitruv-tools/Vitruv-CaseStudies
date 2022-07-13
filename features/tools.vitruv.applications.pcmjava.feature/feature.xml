@@ -26,7 +26,7 @@
       <import plugin="edu.kit.ipd.sdq.commons.util.java"/>
       <import plugin="tools.vitruv.change.propagation"/>
       <import plugin="tools.vitruv.applications.util.temporary"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
+      <import plugin="tools.vitruv.dsls.reactions.runtime"/>
       <import feature="tools.vitruv.applications.util.temporary.feature"/>
       <import plugin="org.palladiosimulator.pcm"/>
       <import plugin="org.emftext.language.java"/>

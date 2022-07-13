@@ -6,6 +6,6 @@ Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents
 Bundle-Version: 0.3.0.qualifier
 Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
  edu.kit.ipd.sdq.activextendannotations,
- tools.vitruv.extensions.dslsruntime.reactions
+ tools.vitruv.dsls.reactions.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools

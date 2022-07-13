@@ -5,7 +5,7 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import java.util.Optional
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Model
-import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
+import tools.vitruv.dsls.reactions.runtime.helper.PersistenceHelper
 
 @Utility
 class UmlModelUtil {
