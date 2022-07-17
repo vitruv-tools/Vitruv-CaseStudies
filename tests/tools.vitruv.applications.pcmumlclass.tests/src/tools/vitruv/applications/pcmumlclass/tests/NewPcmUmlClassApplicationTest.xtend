@@ -32,6 +32,8 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
 import static extension tools.vitruv.applications.pcmumlclass.tests.UmlQueryUtil.*
 import static extension tools.vitruv.framework.util.ObjectResolutionUtil.getHierarchicUriFragment
+import tools.vitruv.domains.pcm.PcmDomainProvider
+import tools.vitruv.domains.uml.UmlDomainProvider
 
 abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest {
 
@@ -55,6 +57,11 @@ abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationT
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
 		]
+	}
+	
+	private def patchDomains() {
+		new PcmDomainProvider().domain.enableTransitiveChangePropagation
+		new UmlDomainProvider().domain.enableTransitiveChangePropagation
 	}
 
 	protected def getTestResource(URI uri) {
@@ -116,6 +123,7 @@ abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationT
 
 	@BeforeEach
 	def void setup() {
+		patchDomains
 		viewFactory = new PcmUmlclassViewFactory(virtualModel)
 		createUmlModel[name = MODEL_NAME]
 	}

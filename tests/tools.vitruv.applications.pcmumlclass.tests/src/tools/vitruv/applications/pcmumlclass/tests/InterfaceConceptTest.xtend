@@ -51,13 +51,16 @@ class InterfaceConceptTest extends NewPcmUmlClassApplicationTest {
 	
 	@Test
 	def void testCreateInterfaceConcept_UML() {
-		/* 
-		init_PCM()
+		
+		init_UML()
 		
 		changeUmlView [
-			println("uml root contents " + defaultUmlModel.eContents)
+			//sollte contracts schon erzeugen
+			println("uml root contents " + defaultUmlModel.getNestedPackages)
+			println("uml root contents " + defaultUmlModel.getNestedPackages.findFirst[it.name.equals("rootpackage")])
+			println("uml root contents " + defaultUmlModel.getNestedPackages.findFirst[it.name.equals("rootpackage")].nestedPackages)
 		]
-		*/
+		
 	}
 
 	@Test

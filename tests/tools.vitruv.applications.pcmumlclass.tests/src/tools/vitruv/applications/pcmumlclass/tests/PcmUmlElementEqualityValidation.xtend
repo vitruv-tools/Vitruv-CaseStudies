@@ -60,7 +60,7 @@ class PcmUmlElementEqualityValidation {
 		}
 	}
 	
-	def static dispatch void assertElementsEqual_PCM(org.eclipse.uml2.uml.Package uPackage,
+	def static dispatch void assertElementsEqual_deep(org.eclipse.uml2.uml.Package uPackage,
 		org.palladiosimulator.pcm.repository.Repository repoPackage) {
 		assertEquals(uPackage.name.toFirstUpper, repoPackage.entityName, "Package names must be equal")
 		

@@ -44,7 +44,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val pcmPackage = defaultPcmRepository
-			assertElementsEqual(umlPackage, pcmPackage)
+			assertElementsEqual_deep(umlPackage, pcmPackage)
 		]
 	}
 
@@ -57,7 +57,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val pcmPackage = defaultPcmRepository
-			assertElementsEqual_PCM(umlPackage, pcmPackage)
+			assertElementsEqual_deep(umlPackage, pcmPackage)
 		]
 	}
 
@@ -91,7 +91,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_RENAMED)
 			val pcmPackage = claimPcmRepository(PACKAGE_RENAMED.toFirstUpper)
-			assertElementsEqual_PCM(umlPackage, pcmPackage)
+			assertElementsEqual_deep(umlPackage, pcmPackage)
 		]
 	}
 
