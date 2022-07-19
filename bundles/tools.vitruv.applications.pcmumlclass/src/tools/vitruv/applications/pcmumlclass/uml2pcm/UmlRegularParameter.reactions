@@ -32,15 +32,13 @@ routine insertCorrespondingRegularParameter(uml::Parameter umlParam, uml::Operat
 		
 		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
-	action {
-		call {
-			if (pcmSignature.isPresent) {
-				detectOrCreateCorrespondingRegularParameter(umlParam, umlOperation)
-				moveCorrespondingRegularParameter(umlParam, umlOperation)
-			} else {
-				// not a synchronized context -> delete corresponding parameter if necessary
-				deleteCorrespondingRegularParameter(umlParam)				
-			}
+	update {
+		if (pcmSignature.isPresent) {
+			detectOrCreateCorrespondingRegularParameter(umlParam, umlOperation)
+			moveCorrespondingRegularParameter(umlParam, umlOperation)
+		} else {
+			// not a synchronized context -> delete corresponding parameter if necessary
+			deleteCorrespondingRegularParameter(umlParam)				
 		}
 	}
 }
@@ -51,15 +49,13 @@ routine detectOrCreateCorrespondingRegularParameter(uml::Parameter umlParam, uml
 		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER	
 		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
-	action {
-		call {
-			if (!pcmParam.isPresent) {
-				val pcmParamCandidate = pcmSignature.parameters__OperationSignature.findFirst[it.parameterName == umlParam.name]
-				if (pcmParamCandidate !== null) {
-					addCorrespondenceForExistingRegularParameter(umlParam, pcmParamCandidate)
-				} else {
-					createCorrespondingRegularParameter(umlParam, umlOperation)
-				}
+	update {
+		if (!pcmParam.isPresent) {
+			val pcmParamCandidate = pcmSignature.parameters__OperationSignature.findFirst[it.parameterName == umlParam.name]
+			if (pcmParamCandidate !== null) {
+				addCorrespondenceForExistingRegularParameter(umlParam, pcmParamCandidate)
+			} else {
+				createCorrespondingRegularParameter(umlParam, umlOperation)
 			}
 		}
 	}
@@ -70,8 +66,8 @@ routine addCorrespondenceForExistingRegularParameter(uml::Parameter umlParameter
 		require absence of pcm::Parameter corresponding to umlParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 		require absence of uml::Parameter corresponding to pcmParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
-	action {
-		add correspondence between pcmParameter and umlParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	update {
+		addCorrespondenceBetween(pcmParameter, umlParameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
 	}
 }
 
@@ -81,11 +77,12 @@ routine createCorrespondingRegularParameter(uml::Parameter umlParameter, uml::Op
 		require absence of pcm::OperationSignature corresponding to umlParameter tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER	
 		require absence of pcm::Parameter corresponding to umlParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
-	action {
-		val pcmParameter = create pcm::Parameter and initialize {
-			pcmParameter.parameterName = umlParameter.name
-		}
-		add correspondence between pcmParameter and umlParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	create {
+		val pcmParameter = new pcm::Parameter
+	}
+	update {
+		pcmParameter.parameterName = umlParameter.name
+		addCorrespondenceBetween(pcmParameter, umlParameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
 		// type propagation is done in UmlReturnAndRegularParameterType.reactions
 	}
 }
@@ -96,10 +93,8 @@ routine moveCorrespondingRegularParameter(uml::Parameter umlParam, uml::Operatio
 		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER	
 		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
-	action {
-		update pcmSignature {
-			pcmSignature.parameters__OperationSignature += pcmParam
-		}
+	update {
+		pcmSignature.parameters__OperationSignature += pcmParam
 	}
 }
 
@@ -115,10 +110,8 @@ routine removeCorrespondingRegularParameter(uml::Parameter umlParam, uml::Operat
 		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER	
 		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
-	action {
-		update pcmSignature {
-			pcmSignature.parameters__OperationSignature -= pcmParam
-		}
+	update {
+		pcmSignature.parameters__OperationSignature -= pcmParam
 	}
 }
 
@@ -132,9 +125,9 @@ routine deleteCorrespondingRegularParameter(uml::Parameter umlParam) {
 		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER	
 		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
-	action {
-		remove correspondence between pcmParam and umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-		delete pcmParam
+	update {
+		removeCorrespondenceBetween(pcmParam, umlParam, TagLiterals.PARAMETER__REGULAR_PARAMETER)
+		deleteObject(pcmParam)
 	}
 }
 
@@ -149,10 +142,8 @@ routine changeNameOfCorrespondingRegularParameter(uml::Parameter umlParam, Strin
 		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER	
 		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
-	action {
-		update pcmParam{
-			pcmParam.parameterName = newName
-		}
+	update {
+		pcmParam.parameterName = newName
 	}
 }
 
@@ -167,16 +158,14 @@ routine changeModifierOfCorrespondingRegularParameter(uml::Parameter umlParamete
 	match {
 		val pcmParameter = retrieve pcm::Parameter corresponding to umlParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
-	action {
-		update pcmParameter {
-			var matchingModifier = ParameterModifier.NONE
-			for (modifier : ParameterModifier.values) {
-				if (PcmUmlClassHelper.getMatchingParameterDirection(modifier) === umlParameter.direction) {
-					matchingModifier = modifier
-				}
+	update {
+		var matchingModifier = ParameterModifier.NONE
+		for (modifier : ParameterModifier.values) {
+			if (PcmUmlClassHelper.getMatchingParameterDirection(modifier) === umlParameter.direction) {
+				matchingModifier = modifier
 			}
-			pcmParameter.modifier__Parameter = matchingModifier
 		}
+		pcmParameter.modifier__Parameter = matchingModifier
 	}
 }
 

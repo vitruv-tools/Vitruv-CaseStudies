@@ -30,8 +30,8 @@ routine warnUserAboutImplRemoveIfIPRECorrespondenceExists(uml::Class umlClass, u
 	match {
 		val pcmRepositoryComponent = retrieve pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
-	action {
-		execute logger.warn(DefaultLiterals.WARNING_IPRE_IMPLEMENTATION_REMOVED + umlClass)
+	update {
+		logger.warn(DefaultLiterals.WARNING_IPRE_IMPLEMENTATION_REMOVED + umlClass)
 	}
 }
 
@@ -45,13 +45,11 @@ routine changeNameOfCorrespondingIPRE_Implementation(uml::Class umlClass, String
 	match {
 		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
-	action {
-		update pcmIPRE {
-			if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
-				pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
-			} else {
-				pcmIPRE.entityName = newName
-			}
+	update {
+		if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
+			pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
+		} else {
+			pcmIPRE.entityName = newName
 		}
 	}
 }

@@ -60,18 +60,16 @@ routine propagateTypeChange(uml::Parameter umlParameter) {
 		
 		val pcmOldCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
 	}
-	action {
-		execute {
-			if (pcmSignature.isPresent || pcmParameter.isPresent) { // limit context to synchronized uml::Parameters
-				val EObject pcmStoredElement = if (pcmSignature.isPresent) pcmSignature.get else pcmParameter.get
-				val pcmRepository = pcmStoredElement.eResource.allContents.filter(Repository).head
-				val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(correspondenceModel, umlParameter.type, umlParameter.lower, umlParameter.upper, pcmRepository, userInteractor)
-				if (pcmSignature.isPresent) {pcmSignature.get.returnType__OperationSignature = pcmDataType}
-				if (pcmParameter.isPresent) {pcmParameter.get.dataType__Parameter = pcmDataType}
-				
-				if(pcmOldCollectionType.isPresent  && pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType_Parameter(umlParameter)
-				if(pcmDataType instanceof CollectionDataType) addCorrespondenceForCollectionType_Parameter(umlParameter, pcmDataType)
-			}
+	update {
+		if (pcmSignature.isPresent || pcmParameter.isPresent) { // limit context to synchronized uml::Parameters
+			val EObject pcmStoredElement = if (pcmSignature.isPresent) pcmSignature.get else pcmParameter.get
+			val pcmRepository = pcmStoredElement.eResource.allContents.filter(Repository).head
+			val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(correspondenceModel, umlParameter.type, umlParameter.lower, umlParameter.upper, pcmRepository, userInteractor)
+			if (pcmSignature.isPresent) {pcmSignature.get.returnType__OperationSignature = pcmDataType}
+			if (pcmParameter.isPresent) {pcmParameter.get.dataType__Parameter = pcmDataType}
+			
+			if(pcmOldCollectionType.isPresent  && pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType_Parameter(umlParameter)
+			if(pcmDataType instanceof CollectionDataType) addCorrespondenceForCollectionType_Parameter(umlParameter, pcmDataType)
 		}
 	}
 }
@@ -80,8 +78,8 @@ routine removeCorrespondenceForOldCollectionType_Parameter(uml::Parameter umlPar
 	match {
 		val pcmCollectionType = retrieve pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 	}
-	action {
-		remove correspondence between pcmCollectionType and umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	update {
+		removeCorrespondenceBetween(pcmCollectionType, umlParameter, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 	}
 }
 
@@ -90,8 +88,8 @@ routine addCorrespondenceForCollectionType_Parameter(uml::Parameter umlParameter
 		// one Parameter can only correspond to one CollectionDataType, but one CollectionDataType can correspond to many Parameters
 		require absence of pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 	}
-	action {
-		add correspondence between pcmCollectionType and umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	update {
+		addCorrespondenceBetween(pcmCollectionType, umlParameter, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 	}
 }
 

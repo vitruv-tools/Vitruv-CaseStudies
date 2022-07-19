@@ -22,10 +22,10 @@ reaction RequiredRoleInserted {
 }
 
 routine insertCorrespondingRequiredElements(pcm::OperationRequiredRole pcmRequired, pcm::InterfaceProvidingRequiringEntity pcmIPRE) {
-	action {
-		call detectOrCreateCorrespondingRequiredConstructorParameter(pcmRequired, pcmIPRE)
-		call detectOrCreateCorrespondingRequiredField(pcmRequired, pcmIPRE)
-		call moveCorrespondingRequiredElements(pcmRequired, pcmIPRE)
+	update {
+		detectOrCreateCorrespondingRequiredConstructorParameter(pcmRequired, pcmIPRE)
+		detectOrCreateCorrespondingRequiredField(pcmRequired, pcmIPRE)
+		moveCorrespondingRequiredElements(pcmRequired, pcmIPRE)
 	}
 }
 
@@ -34,12 +34,10 @@ routine detectOrCreateCorrespondingRequiredConstructorParameter(pcm::OperationRe
 		val umlComponentConstructor = retrieve uml::Operation corresponding to pcmIPRE tagged with TagLiterals.IPRE__CONSTRUCTOR
 		val umlConstructorParameter = retrieve optional uml::Parameter corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
 	}
-	action {
-		call {
-			if (!umlConstructorParameter.isPresent) {
-				// what would be a good criterion for detecting the RequiredConstructorParameter?
-				createCorrespondingRequiredConstructorParameter(pcmRequired, pcmIPRE)
-			}
+	update {
+		if (!umlConstructorParameter.isPresent) {
+			// what would be a good criterion for detecting the RequiredConstructorParameter?
+			createCorrespondingRequiredConstructorParameter(pcmRequired, pcmIPRE)
 		}
 	}
 }
@@ -51,12 +49,13 @@ routine createCorrespondingRequiredConstructorParameter(pcm::OperationRequiredRo
 		val umlRequiredInterface = retrieve optional uml::Interface 
 			corresponding to pcmRequired.requiredInterface__OperationRequiredRole tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
-	action {
-		val umlConstructorParameter = create uml::Parameter and initialize {
-			umlConstructorParameter.name = pcmRequired.entityName
-			umlConstructorParameter.type = umlRequiredInterface.orElse(null) 
-		}
-		add correspondence between pcmRequired and umlConstructorParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	create {
+		val umlConstructorParameter = new uml::Parameter
+	}
+	update {
+		umlConstructorParameter.name = pcmRequired.entityName
+		umlConstructorParameter.type = umlRequiredInterface.orElse(null) 
+		addCorrespondenceBetween(pcmRequired, umlConstructorParameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
 	}
 }
 
@@ -65,12 +64,10 @@ routine detectOrCreateCorrespondingRequiredField(pcm::OperationRequiredRole pcmR
 		val umlComponentImpl = retrieve uml::Class corresponding to pcmIPRE tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val umlRequiredField = retrieve optional uml::Property corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
 	}
-	action {
-		call {
-			if (!umlRequiredField.isPresent) {
-				// what would be a good criterion for detecting the RequiredField?
-				createCorrespondingRequiredField(pcmRequired, pcmIPRE)
-			}
+	update {
+		if (!umlRequiredField.isPresent) {
+			// what would be a good criterion for detecting the RequiredField?
+			createCorrespondingRequiredField(pcmRequired, pcmIPRE)
 		}
 	}
 }
@@ -82,12 +79,13 @@ routine createCorrespondingRequiredField(pcm::OperationRequiredRole pcmRequired,
 		val umlRequiredInterface = retrieve optional uml::Interface 
 			corresponding to pcmRequired.requiredInterface__OperationRequiredRole tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
-	action {
-		val umlRequiredField = create uml::Property and initialize {
-			umlRequiredField.name = pcmRequired.entityName
-			umlRequiredField.type = umlRequiredInterface.orElse(null) 
-		}
-		add correspondence between pcmRequired and umlRequiredField tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
+	create {
+		val umlRequiredField = new uml::Property
+	}
+	update {
+		umlRequiredField.name = pcmRequired.entityName
+		umlRequiredField.type = umlRequiredInterface.orElse(null) 
+		addCorrespondenceBetween(pcmRequired, umlRequiredField, TagLiterals.REQUIRED_ROLE__PROPERTY)
 	}
 }
 
@@ -99,11 +97,9 @@ routine moveCorrespondingRequiredElements(pcm::OperationRequiredRole pcmRequired
 		val umlComponentImpl = retrieve uml::Class corresponding to pcmIPRE tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val umlRequiredField = retrieve uml::Property corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
 	}
-	action {
-		update umlComponentImpl {
-			umlComponentConstructor.ownedParameters += umlConstructorParameter
-			umlComponentImpl.ownedAttributes += umlRequiredField
-		}
+	update {
+		umlComponentConstructor.ownedParameters += umlConstructorParameter
+		umlComponentImpl.ownedAttributes += umlRequiredField
 	}
 }
 
@@ -121,13 +117,11 @@ routine removeCorrespondingRequiredElements(pcm::OperationRequiredRole pcmRequir
 		val umlComponentImpl = retrieve uml::Class corresponding to pcmIPRE tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val umlRequiredField = retrieve optional uml::Property corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
 	}
-	action {
-		execute {
-			if (umlConstructorParameter.isPresent) 	
-				umlComponentConstructor.ownedParameters -= umlConstructorParameter.get
-			if (umlRequiredField.isPresent)
-				umlComponentImpl.ownedAttributes -= umlRequiredField.get
-		}
+	update {
+		if (umlConstructorParameter.isPresent) 	
+			umlComponentConstructor.ownedParameters -= umlConstructorParameter.get
+		if (umlRequiredField.isPresent)
+			umlComponentImpl.ownedAttributes -= umlRequiredField.get
 	}
 }
 
@@ -137,9 +131,9 @@ reaction RequiredRoleDeleted {
 }
 
 routine deleteCorrespondingRequiredElements(pcm::OperationRequiredRole pcmRequired) {
-	action {
-		call deleteCorrespondingRequiredConstructorParameter(pcmRequired)
-		call deleteCorrespondingRequiredField(pcmRequired)
+	update {
+		deleteCorrespondingRequiredConstructorParameter(pcmRequired)
+		deleteCorrespondingRequiredField(pcmRequired)
 	}
 }
 
@@ -147,9 +141,9 @@ routine deleteCorrespondingRequiredConstructorParameter(pcm::OperationRequiredRo
 	match {
 		val umlConstructorParameter = retrieve uml::Parameter corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
 	}
-	action {
-		remove correspondence between pcmRequired and umlConstructorParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
-		delete umlConstructorParameter
+	update {
+		deleteObject(umlConstructorParameter)
+		removeCorrespondenceBetween(pcmRequired, umlConstructorParameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
 	}
 }
 
@@ -157,9 +151,9 @@ routine deleteCorrespondingRequiredField(pcm::OperationRequiredRole pcmRequired)
 	match {
 		val umlRequiredField = retrieve uml::Property corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
 	}
-	action {
-		remove correspondence between pcmRequired and umlRequiredField tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
-		delete umlRequiredField
+	update {
+		deleteObject(umlRequiredField)
+		removeCorrespondenceBetween(pcmRequired, umlRequiredField, TagLiterals.REQUIRED_ROLE__PROPERTY)
 	}
 }
 
@@ -174,11 +168,9 @@ routine changeNameOfCorrespondingRequiredElements(pcm::OperationRequiredRole pcm
 		val umlConstructorParameter = retrieve uml::Parameter corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
 		val umlRequiredField = retrieve uml::Property corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
 	}
-	action {
-		execute {
-			umlConstructorParameter.name = newName
-			umlRequiredField.name = newName
-		}
+	update {
+		umlConstructorParameter.name = newName
+		umlRequiredField.name = newName
 	}
 }
 
@@ -195,11 +187,9 @@ routine changeTypeOfCorrespondingRequiredElements(pcm::OperationRequiredRole pcm
 		
 		val umlInterface = retrieve optional uml::Interface corresponding to pcmInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
-	action {
-		execute {
-			umlConstructorParameter.type = umlInterface.orElse(null)
-			umlRequiredField.type = umlInterface.orElse(null)
-		}
+	update {
+		umlConstructorParameter.type = umlInterface.orElse(null)
+		umlRequiredField.type = umlInterface.orElse(null)
 	}
 }
 

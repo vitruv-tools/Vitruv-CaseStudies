@@ -28,12 +28,10 @@ routine addParentInterface(uml::Interface umlInterface, uml::Classifier umlNewPa
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
 		val pcmNewParent = retrieve pcm::OperationInterface corresponding to umlNewParent tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
-	action {
-		execute {
-			val isAlreadyParent = pcmInterface.parentInterfaces__Interface.contains(pcmNewParent) 
-			if (!isAlreadyParent) {
-				pcmInterface.parentInterfaces__Interface += pcmNewParent
-			}
+	update {
+		val isAlreadyParent = pcmInterface.parentInterfaces__Interface.contains(pcmNewParent) 
+		if (!isAlreadyParent) {
+			pcmInterface.parentInterfaces__Interface += pcmNewParent
 		}
 	}
 }
@@ -49,11 +47,9 @@ routine removeParentInterface(uml::Interface umlInterface, uml::Classifier umlOl
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
 		val pcmOldParent = retrieve pcm::OperationInterface corresponding to umlOldParent tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
-	action {
-		execute {
-			if (pcmInterface.parentInterfaces__Interface.contains(pcmOldParent))
-				pcmInterface.parentInterfaces__Interface -= pcmOldParent
-		}
+	update {
+		if (pcmInterface.parentInterfaces__Interface.contains(pcmOldParent))
+			pcmInterface.parentInterfaces__Interface -= pcmOldParent
 	}
 }
 
@@ -68,14 +64,11 @@ routine replaceParentInterface(uml::Generalization gen, uml::Classifier newParen
 	match {
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to gen.specific tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
-	action {
-		call {
-			if (oldParent === newParent) return; //nothing to do
-			
-			removeParentInterface(gen.specific as Interface, oldParent)
-			if (gen.general === newParent) { // delayed validity check
-				addParentInterface(gen.specific as Interface, newParent)
-			}
+	update {
+		if (oldParent === newParent) return; //nothing to do
+		removeParentInterface(gen.specific as Interface, oldParent)
+		if (gen.general === newParent) { // delayed validity check
+			addParentInterface(gen.specific as Interface, newParent)
 		}
 	}
 }

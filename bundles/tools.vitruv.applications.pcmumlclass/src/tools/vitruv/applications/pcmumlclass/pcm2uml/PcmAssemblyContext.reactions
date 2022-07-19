@@ -24,10 +24,10 @@ reaction AssemblyContextInserted {
 	call insertCorrespondingAssemblyContextProperty(newValue, affectedEObject)
 }
 
-routine insertCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssembly, pcm::ComposedProvidingRequiringEntity pcmComposite){
-	action {
-		call detectOrCreateCorrespondingAssemblyContextProperty(pcmAssembly, pcmComposite)
-		call moveCorrespondingAssemblyContextProperty(pcmAssembly, pcmComposite)
+routine insertCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssembly, pcm::ComposedProvidingRequiringEntity pcmComposite) {
+	update {
+		detectOrCreateCorrespondingAssemblyContextProperty(pcmAssembly, pcmComposite)
+		moveCorrespondingAssemblyContextProperty(pcmAssembly, pcmComposite)
 	}
 }
 
@@ -38,14 +38,12 @@ routine detectOrCreateCorrespondingAssemblyContextProperty(pcm::AssemblyContext 
 		val umlComponentImplementation = retrieve optional uml::Class 
 			corresponding to pcmAssembly.encapsulatedComponent__AssemblyContext tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
-	action{
-		call {
-			val Property umlPropertyCandidate = umlCompositeImplementation.ownedAttributes.findFirst[name == pcmAssembly.entityName]
-			if (umlPropertyCandidate === null) {
-				createCorrespondingAssemblyContextProperty(pcmAssembly, pcmComposite)
-			} else {
-				addCorrespondenceForExistingAssemblyContextProperty(pcmAssembly, umlPropertyCandidate)
-			}
+	update {
+		val Property umlPropertyCandidate = umlCompositeImplementation.ownedAttributes.findFirst[name == pcmAssembly.entityName]
+		if (umlPropertyCandidate === null) {
+			createCorrespondingAssemblyContextProperty(pcmAssembly, pcmComposite)
+		} else {
+			addCorrespondenceForExistingAssemblyContextProperty(pcmAssembly, umlPropertyCandidate)
 		}
 	}
 }
@@ -55,8 +53,8 @@ routine addCorrespondenceForExistingAssemblyContextProperty(pcm::AssemblyContext
 		require absence of uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 		require absence of pcm::AssemblyContext corresponding to umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 	}
-	action {
-		add correspondence between pcmAssembly and umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
+	update {
+		addCorrespondenceBetween(pcmAssembly, umlProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
 	}
 }
 
@@ -67,12 +65,13 @@ routine createCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssem
 		val umlInnerComponent = retrieve optional uml::Class 
 				corresponding to pcmAssembly.encapsulatedComponent__AssemblyContext tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
-	action {
-		val umlProperty = create uml::Property and initialize {
-			umlProperty.name = pcmAssembly.entityName
-		}
-		add correspondence between pcmAssembly and umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
-		call changeTypeOfCorrespondingAssemblyContextProperty(pcmAssembly, pcmAssembly.encapsulatedComponent__AssemblyContext)
+	create {
+		val umlProperty = new uml::Property
+	}
+	update {
+		umlProperty.name = pcmAssembly.entityName
+		addCorrespondenceBetween(pcmAssembly, umlProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
+		changeTypeOfCorrespondingAssemblyContextProperty(pcmAssembly, pcmAssembly.encapsulatedComponent__AssemblyContext)
 	}
 }
 
@@ -81,10 +80,8 @@ routine moveCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssembl
 		val umlCompositeImplementation = retrieve uml::Class corresponding to pcmComposite tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val umlProperty = retrieve uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 	}
-	action {
-		update umlCompositeImplementation {
-			umlCompositeImplementation.ownedAttributes += umlProperty
-		}
+	update {
+		umlCompositeImplementation.ownedAttributes += umlProperty
 	}
 }
 
@@ -99,10 +96,8 @@ routine removeCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssem
 		val umlCompositeImplementation = retrieve uml::Class corresponding to pcmComposite tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val umlProperty = retrieve uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 	}
-	action{
-		update umlCompositeImplementation {
-			umlCompositeImplementation.ownedAttributes -= umlProperty
-		}
+	update {
+		umlCompositeImplementation.ownedAttributes -= umlProperty
 	}
 }
 
@@ -115,9 +110,9 @@ routine deleteCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssem
 	match {
 		val umlProperty = retrieve uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 	}
-	action{
-		remove correspondence between pcmAssembly and umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
-		delete umlProperty
+	update {
+		deleteObject(umlProperty)
+		removeCorrespondenceBetween(pcmAssembly, umlProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
 	}
 }
 
@@ -131,10 +126,8 @@ routine changeNameOfCorrespondingAssemblyContextProperty(pcm::AssemblyContext pc
 	match {
 		val umlProperty = retrieve uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 	}
-	action{
-		update umlProperty {
-			umlProperty.name = newName
-		}
+	update {
+		umlProperty.name = newName
 	}
 }
 
@@ -149,10 +142,8 @@ routine changeTypeOfCorrespondingAssemblyContextProperty(pcm::AssemblyContext pc
 		val umlProperty = retrieve uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 		val umlComponentImplementation = retrieve optional uml::Class corresponding to pcmComonent tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
-	action{
-		update umlProperty {
-			umlProperty.type = umlComponentImplementation.orElse(null)
-		}
+	update {
+		umlProperty.type = umlComponentImplementation.orElse(null)
 	}
 }
 

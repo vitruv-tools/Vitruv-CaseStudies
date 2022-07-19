@@ -15,32 +15,29 @@ routine ensureUmlModelExists(EObject source) {
     match {
         require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
     }
-    action {
-        call {
-            var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).windowModality(WindowModality.MODAL).startInteraction
-            if (relativeModelPath.nullOrEmpty) {
-                relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
-            } else if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)) {
-                relativeModelPath += DefaultLiterals.UML_EXTENSION
-            }
-            var umlRootModel = loadPersistedModelFromSource(relativeModelPath, source)
-            umlRootModel.ifPresent[ensureUmlModelCorrespondenceExists]
-            if(umlRootModel.isEmpty) {
-                createUmlModel(source, relativeModelPath)
-            }
+    update {
+        var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).windowModality(WindowModality.MODAL).startInteraction
+        if (relativeModelPath.nullOrEmpty) {
+            relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
+        } else if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)) {
+            relativeModelPath += DefaultLiterals.UML_EXTENSION
+        }
+        var umlRootModel = loadPersistedModelFromSource(relativeModelPath, source)
+        umlRootModel.ifPresent[ensureUmlModelCorrespondenceExists]
+        if(umlRootModel.isEmpty) {
+            createUmlModel(source, relativeModelPath)
         }
     }
 }
 
-routine createUmlModel(EObject source, String relativeModelPath) { 
-    action {
-        val umlRootModel = create uml::Model and initialize {
-            umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
-        }
-        call {
-            persistProjectRelative(source, umlRootModel, relativeModelPath)
-            ensureUmlModelCorrespondenceExists(umlRootModel)
-        }
+routine createUmlModel(EObject source, String relativeModelPath) {
+	create {
+		val umlRootModel = new uml::Model
+	} 
+    update {
+    	umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
+		persistProjectRelative(source, umlRootModel, relativeModelPath)
+        ensureUmlModelCorrespondenceExists(umlRootModel)
     }
 }
 
@@ -49,7 +46,7 @@ routine ensureUmlModelCorrespondenceExists(uml::Model newModel) {
         val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
         check !alreadyCorrespondingModels.contains(newModel)
     }
-    action {
-        add correspondence between UMLPackage.Literals.MODEL and newModel
+    update {
+        addCorrespondenceBetween(UMLPackage.Literals.MODEL, newModel)
     }
 }
