@@ -17,7 +17,6 @@
 		<module>tools.vitruv.domains.java.ui</module>
 		<module>pcmjava</module>
 		<module>tools.vitruv.applications.pcmumlclass</module>
-		<module>tools.vitruv.applications.umlclassumlcomponents</module>
 		<module>tools.vitruv.applications.umljava</module>
 		<module>tools.vitruv.applications.cbs.commonalities</module>
 		<module>tools.vitruv.applications.cbs.testutils</module>
