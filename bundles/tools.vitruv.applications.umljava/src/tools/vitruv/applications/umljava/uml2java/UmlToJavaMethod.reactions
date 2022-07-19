@@ -64,25 +64,24 @@ routine createOrFindJavaConstructor(uml::Operation umlOperation, uml::Classifier
         require absence of java::Constructor corresponding to umlOperation
         require absence of java::Method corresponding to umlOperation
     }
-    action {
-        call {
-            val foundConstructor = javaClassifier.members.filter(Constructor).findFirst[name == umlOperation.name]
-            if (foundConstructor === null) {
-                createJavaConstructor(umlOperation)
-            } else {
-                addMethodCorrespondence(foundConstructor, umlOperation)
-            }
+    update {
+        val foundConstructor = javaClassifier.members.filter(Constructor).findFirst[name == umlOperation.name]
+        if (foundConstructor === null) {
+            createJavaConstructor(umlOperation)
+        } else {
+            addMethodCorrespondence(foundConstructor, umlOperation)
         }
     }
 }
 
 routine createJavaConstructor(uml::Operation umlOperation) {
-    action {
-        val javaConstructor = create java::Constructor and initialize {
-            javaConstructor.name = umlOperation.name
-            setJavaVisibility(javaConstructor, umlOperation.visibility)
-        }
-        add correspondence between umlOperation and javaConstructor
+	create {
+		val javaConstructor = new java::Constructor
+	}
+    update {
+    	javaConstructor.name = umlOperation.name
+		setJavaVisibility(javaConstructor, umlOperation.visibility)
+		addCorrespondenceBetween(umlOperation, javaConstructor)
     }
 }
 
@@ -93,26 +92,25 @@ routine createOrFindJavaClassMethod(uml::Operation umlOperation, uml::Classifier
         require absence of java::ClassMethod corresponding to umlOperation
         require absence of java::Constructor corresponding to umlOperation
     }
-    action {
-        call {
-            val foundMethod = javaClassifier.members.filter(ClassMethod).findFirst[name == umlOperation.name]
-            if (foundMethod === null) {
-                createJavaClassMethod(umlOperation)
-            } else {
-                addMethodCorrespondence(foundMethod, umlOperation)
-            }
+    update {
+        val foundMethod = javaClassifier.members.filter(ClassMethod).findFirst[name == umlOperation.name]
+        if (foundMethod === null) {
+            createJavaClassMethod(umlOperation)
+        } else {
+            addMethodCorrespondence(foundMethod, umlOperation)
         }
     }
 }
 
 routine createJavaClassMethod(uml::Operation umlOperation) {
-    action {
-        val javaMethod = create java::ClassMethod and initialize {
-            javaMethod.name = umlOperation.name
-            setJavaVisibility(javaMethod, umlOperation.visibility)
-        }
-        add correspondence between umlOperation and javaMethod
-        call setJavaMethodReturnType(umlOperation, umlOperation.getReturnResult)
+	create {
+		val javaMethod = new java::ClassMethod
+	}
+    update {
+		javaMethod.name = umlOperation.name
+        setJavaVisibility(javaMethod, umlOperation.visibility)
+        addCorrespondenceBetween(umlOperation, javaMethod)
+        setJavaMethodReturnType(umlOperation, umlOperation.getReturnResult)
     }
 }
 
@@ -121,32 +119,31 @@ routine createOrFindJavaInterfaceMethod(uml::Operation umlOperation, uml::Classi
         val javaClassifier = retrieve java::Interface corresponding to umlClassifier
         require absence of java::InterfaceMethod corresponding to umlOperation
     }
-    action {
-        call {
-            val foundMethod = javaClassifier.members.filter(InterfaceMethod).findFirst[name == umlOperation.name]
-            if (foundMethod === null) {
-                createJavaInterfaceMethod(umlOperation)
-            } else {
-                addMethodCorrespondence(foundMethod, umlOperation)
-            }
+    update {
+        val foundMethod = javaClassifier.members.filter(InterfaceMethod).findFirst[name == umlOperation.name]
+        if (foundMethod === null) {
+            createJavaInterfaceMethod(umlOperation)
+        } else {
+            addMethodCorrespondence(foundMethod, umlOperation)
         }
     }
 }
 
 routine createJavaInterfaceMethod(uml::Operation umlOperation) {
-    action {
-        val javaMethod = create java::InterfaceMethod and initialize {
-            javaMethod.name = umlOperation.name
-            javaMethod.makePublic
-        }
-        add correspondence between umlOperation and javaMethod
-        call setJavaMethodReturnType(umlOperation, umlOperation.getReturnResult)
+	create {
+		val javaMethod = new java::InterfaceMethod
+	}
+    update {
+		javaMethod.name = umlOperation.name
+		javaMethod.makePublic
+        addCorrespondenceBetween(umlOperation, javaMethod)
+        setJavaMethodReturnType(umlOperation, umlOperation.getReturnResult)
     }
 }
 
 routine addMethodCorrespondence(java::Member javaMethodOrConstructor, uml::Operation umlOperation) {
-     action {
-         add correspondence between umlOperation and javaMethodOrConstructor
+     update {
+         addCorrespondenceBetween(umlOperation, javaMethodOrConstructor)
      }
 }
 
@@ -156,10 +153,8 @@ routine insertJavaMethod(uml::Operation umlOperation, uml::Classifier umlClassif
             with javaMethod instanceof Constructor || javaMethod instanceof Method
         val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
     }
-    action {
-        update javaClassifier {
-            javaClassifier.members += javaMethod
-        }
+    update {
+		javaClassifier.members += javaMethod
     }
 }
 
@@ -173,8 +168,9 @@ routine deleteJavaMethod(uml::Operation umlOperation) {
         val javaMethod = retrieve java::Member corresponding to umlOperation 
             with javaMethod instanceof Constructor || javaMethod instanceof Method
     }
-    action {
-        delete javaMethod
+    update {
+        deleteObject(javaMethod)
+        removeCorrespondenceBetween(javaMethod, umlOperation)
     }
 }
 
@@ -190,14 +186,12 @@ routine setJavaMethodReturnType(uml::Operation uOperation, uml::Parameter uParam
         val jMethod = retrieve java::Method corresponding to uOperation
         val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uParam?.type
     }
-    action {
-        execute {
-            if (uParam !== null){
-                umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null))
-            }
-            else {
-                jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
-            }
+    update {
+        if (uParam !== null){
+            umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null))
+        }
+        else {
+            jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
         }
     }
 }
@@ -211,10 +205,8 @@ routine setStatic(uml::Operation uFeat) {
     match {
         val jMethod = retrieve java::Method corresponding to uFeat tagged with ""
     }
-    action {
-        update jMethod {
-            jMethod.static = uFeat.isStatic
-        }
+    update {
+		jMethod.static = uFeat.isStatic
     }
 }
 
@@ -228,10 +220,8 @@ routine setJavaMethodAbstract(uml::Operation uOperation) {
         val javaClass = retrieve java::Class corresponding to uOperation.class_
         val javaMethod = retrieve java::ClassMethod corresponding to uOperation
     }
-    action {
-        update javaMethod {
-            javaMethod.abstract = uOperation.abstract
-        }
+    update {
+        javaMethod.abstract = uOperation.abstract
     }    
 }
 
@@ -245,10 +235,8 @@ routine setJavaMethodFinal(uml::Operation uOperation, Boolean isFinal) {
     match {
         val jMethod = retrieve java::ClassMethod corresponding to uOperation
     }
-    action {
-        update jMethod {
-            jMethod.final = isFinal
-        }
+    update {
+        jMethod.final = isFinal
     }
 }
 
@@ -268,10 +256,8 @@ routine changeJavaElementVisibility(uml::NamedElement uElem) {
     match {
         val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem tagged with ""
     }
-    action {
-        update jElem {
-            setJavaVisibility(jElem, uElem.visibility);
-        }
+    update {
+        setJavaVisibility(jElem, uElem.visibility);
     }
 }
 
@@ -287,10 +273,8 @@ routine renameJavaNamedElement(uml::NamedElement uElem, String name) {
     match {
         val jElem = retrieve java::NamedElement corresponding to uElem
     }
-    action {
-        update jElem {
-            jElem.name = name
-        }
+    update {
+        jElem.name = name
     }
 }
 
@@ -310,8 +294,8 @@ routine createMissingJavaParameter(uml::Parameter uParameter) {
     match {
         require absence of java::OrdinaryParameter corresponding to uParameter
     }
-    action {
-        call createJavaParameter(uParameter.operation, uParameter)
+    update {
+        createJavaParameter(uParameter.operation, uParameter)
     }
 }
 
@@ -328,17 +312,16 @@ routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
         val customType = retrieve optional java::ConcreteClassifier corresponding to umlParam.type
         require absence of java::Parameter corresponding to umlParam
     }
-    action {
-        val javaParam = create java::OrdinaryParameter and initialize {
-            javaParam.name = umlParam.name;
-        }
-        update javaMethod {
-            javaMethod.parameters += javaParam;
-        }
-        add correspondence between javaParam and umlParam
-        call changeJavaParameterType(umlParam, umlParam.type)
+    create {
+    	val javaParam = new java::OrdinaryParameter
+    }
+    update {
+		javaParam.name = umlParam.name
+		javaMethod.parameters += javaParam
+        addCorrespondenceBetween(javaParam, umlParam)
+        changeJavaParameterType(umlParam, umlParam.type)
         // TODO On initialization the Interfaces or DataTypes may not yet be synchronized, 
-        // because uml changes may have already been applied and Components are synchronized before Interfaces.
+        // because UML changes may have already been applied and Components are synchronized before Interfaces.
         // But the typeChanged-Change will still occur after the containment hierarchy is established and correctly propagate the type information.
     }
 }
@@ -359,8 +342,9 @@ routine deleteJavaParameter(uml::Parameter uParam) {
     match {
         val jParam = retrieve java::OrdinaryParameter corresponding to uParam
     }
-    action {
-        delete jParam
+    update {
+        deleteObject(jParam)
+        removeCorrespondenceBetween(jParam, uParam)
     }
 }
 
@@ -375,10 +359,8 @@ routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
         val jParam = retrieve java::OrdinaryParameter corresponding to uParam
         val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uType
     }
-    action {
-        call {
-            umlToJavaTypePropagation.propagateOrdinaryParameterTypeChanged(uParam, jParam, jCustomType.orElse(null))
-        }
+    update {
+		umlToJavaTypePropagation.propagateOrdinaryParameterTypeChanged(uParam, jParam, jCustomType.orElse(null))
     }
 }
 
@@ -407,13 +389,11 @@ reaction RegularOrReturnParameterUnlimitedBoundChanged {
 }
 
 routine adaptParameterBoundChanged(uml::Operation uOperation, uml::Parameter uParam) {
-    action {
-        execute {
-            if(uParam.direction == ParameterDirectionKind.RETURN_LITERAL) {
-                setJavaMethodReturnType(uOperation, uParam)
-            } else if (uParam.direction == ParameterDirectionKind.IN_LITERAL) {
-                changeJavaParameterType(uParam, uParam.type)
-            }
+    update {
+        if(uParam.direction == ParameterDirectionKind.RETURN_LITERAL) {
+            setJavaMethodReturnType(uOperation, uParam)
+        } else if (uParam.direction == ParameterDirectionKind.IN_LITERAL) {
+            changeJavaParameterType(uParam, uParam.type)
         }
     }
 }
@@ -434,10 +414,8 @@ routine adaptParameterDirectionChangedFromReturn(uml::Operation uOperation) {
     match {
         val jMethod = retrieve java::Method corresponding to uOperation
     }
-    action {
-        update jMethod {
-            jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
-        }
+    update {
+        jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
     }
 }
 
@@ -459,8 +437,8 @@ routine adaptParameterDirectionChangedToReturn(uml::Operation uOperation, uml::P
         val jParam = retrieve optional java::OrdinaryParameter corresponding to uParam
         val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uParam.type
     }
-    action {
-        execute umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null))
+    update {
+        umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null))
     }
 }
 
