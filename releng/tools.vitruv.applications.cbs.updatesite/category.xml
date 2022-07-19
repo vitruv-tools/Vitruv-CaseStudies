@@ -33,12 +33,6 @@
    <feature id="tools.vitruv.applications.pcmjava.ejbtransformations.feature.source" version="0.3.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
-   <feature url="features/tools.vitruv.applications.pcmumlcomponents.feature_0.3.0.qualifier.jar" id="tools.vitruv.applications.pcmumlcomponents.feature" version="0.3.0.qualifier">
-      <category name="Vitruv Applications for Component-based Systems"/>
-   </feature>
-   <feature id="tools.vitruv.applications.pcmumlcomponents.feature.source" version="0.3.0.qualifier">
-      <category name="Vitruv Applications for Component-based Systems"/>
-   </feature>
    <feature url="features/tools.vitruv.applications.pcmumlclass.feature_0.3.0.qualifier.jar" id="tools.vitruv.applications.pcmumlclass.feature" version="0.3.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>

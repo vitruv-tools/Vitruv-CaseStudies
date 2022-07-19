@@ -19,7 +19,6 @@
 		<module>tools.vitruv.applications.cbs.equivalencetesttemplates</module>
 		<module>tools.vitruv.applications.cbs.equivalence.tests</module>
 		<module>tools.vitruv.applications.pcmumlclass.tests</module>
-		<module>tools.vitruv.applications.pcmumlcomponents.tests</module>
 		<module>tools.vitruv.applications.umlclassumlcomponents.tests</module>
 		<module>tools.vitruv.applications.umljava.tests</module>
 		<module>tools.vitruv.applications.transitivechange.tests</module>
