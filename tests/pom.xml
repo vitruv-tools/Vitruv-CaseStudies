@@ -15,7 +15,11 @@
 
 	<modules>
 		<module>tools.vitruv.domains.java.ui.tests</module>
-		<module>pcmjava</module>
+		<module>tools.vitruv.applications.pcmjava.pojotransformations.tests</module>
+		<module>tools.vitruv.applications.pcmjava.pojotransformations.editortests</module>
+		<module>tools.vitruv.applications.pcmjava.ejbtransformations.editortests</module>
+		<!--<module>tools.vitruv.applications.pcmjava.tests</module>-->
+		<module>tools.vitruv.applications.pcmjava.tests.util</module>
 		<module>tools.vitruv.applications.cbs.equivalencetesttemplates</module>
 		<module>tools.vitruv.applications.cbs.equivalence.tests</module>
 		<module>tools.vitruv.applications.pcmumlclass.tests</module>
