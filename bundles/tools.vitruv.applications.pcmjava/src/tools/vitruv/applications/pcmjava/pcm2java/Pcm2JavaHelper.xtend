@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.util.pcm2java
+package tools.vitruv.applications.pcmjava.pcm2java
 
 import java.util.Optional
 import org.eclipse.emf.ecore.util.EcoreUtil

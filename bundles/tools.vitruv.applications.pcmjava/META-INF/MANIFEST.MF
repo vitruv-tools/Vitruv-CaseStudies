@@ -17,5 +17,4 @@ Require-Bundle: org.emftext.language.java,
  edu.kit.ipd.sdq.activextendannotations,
  tools.vitruv.framework.applications,
  tools.vitruv.dsls.reactions.runtime,
- tools.vitruv.applications.util.temporary,
- tools.vitruv.applications.pcmjava.util
+ tools.vitruv.applications.util.temporary

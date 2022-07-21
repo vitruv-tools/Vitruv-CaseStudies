@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.util.pcm2java
+package tools.vitruv.applications.pcmjava.pcm2java
 
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType

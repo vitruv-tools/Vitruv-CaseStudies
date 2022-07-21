@@ -20,20 +20,19 @@
    </license>
 
    <requires>
-      <import plugin="org.eclipse.xtend.lib"/>
-      <import plugin="org.apache.log4j"/>
-      <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
-      <import plugin="edu.kit.ipd.sdq.commons.util.java"/>
-      <import plugin="tools.vitruv.change.propagation"/>
-      <import plugin="tools.vitruv.applications.util.temporary"/>
-      <import plugin="tools.vitruv.dsls.reactions.runtime"/>
-      <import feature="tools.vitruv.applications.util.temporary.feature"/>
-      <import plugin="org.palladiosimulator.pcm"/>
       <import plugin="org.emftext.language.java"/>
+      <import plugin="org.palladiosimulator.pcm"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.emf"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.java"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.pcm"/>
+      <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
+      <import plugin="tools.vitruv.framework.applications"/>
+      <import plugin="tools.vitruv.dsls.reactions.runtime"/>
+      <import plugin="tools.vitruv.applications.util.temporary"/>
    </requires>
 
    <plugin
-         id="tools.vitruv.applications.pcmjava.util"
+         id="tools.vitruv.applications.pcmjava"
          download-size="0"
          install-size="0"
          version="0.0.0"

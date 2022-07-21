@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.util.java2pcm
+package tools.vitruv.applications.pcmjava.java2pcm
 
 import java.util.Set
 import org.apache.log4j.Logger
