@@ -14,8 +14,8 @@ import org.palladiosimulator.pcm.repository.Repository;
 
 import com.google.common.collect.Iterables;
 
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

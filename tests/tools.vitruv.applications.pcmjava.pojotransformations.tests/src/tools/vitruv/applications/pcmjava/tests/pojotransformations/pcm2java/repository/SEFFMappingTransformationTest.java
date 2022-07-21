@@ -11,8 +11,8 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 
 import com.google.common.collect.Iterables;
 
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;

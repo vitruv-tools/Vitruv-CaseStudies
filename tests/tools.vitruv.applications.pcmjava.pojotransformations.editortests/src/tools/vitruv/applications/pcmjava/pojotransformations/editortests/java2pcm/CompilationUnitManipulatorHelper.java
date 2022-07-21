@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.tests.util.java2pcm;
+package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;

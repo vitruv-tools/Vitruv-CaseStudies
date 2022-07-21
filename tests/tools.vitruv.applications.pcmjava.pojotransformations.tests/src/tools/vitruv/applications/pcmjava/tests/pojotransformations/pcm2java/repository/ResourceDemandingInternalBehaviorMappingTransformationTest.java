@@ -10,8 +10,9 @@ import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour;
 import org.palladiosimulator.pcm.seff.SeffFactory;
 
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
+
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

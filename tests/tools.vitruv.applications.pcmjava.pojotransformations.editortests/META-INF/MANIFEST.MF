@@ -5,13 +5,20 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmjava.pojotransformations.edito
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations.editortests
 Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.eclipse.jdt.core,
- org.eclipse.text,
- tools.vitruv.testutils.vsum,
- tools.vitruv.applications.pcmjava.tests.util,
- tools.vitruv.applications.pcmjava,
+Require-Bundle: org.apache.log4j,
+ org.eclipse.core.resources;visibility:=reexport,
+ org.eclipse.jdt.core.manipulation,
+ org.eclipse.ltk.core.refactoring,
+ org.eclipse.jdt.core,org.eclipse.text,
+ org.eclipse.core.resources,
  org.junit.jupiter.api,
- org.eclipse.jdt.ui,
- edu.kit.ipd.sdq.commons.util.java
+ edu.kit.ipd.sdq.commons.util.eclipse,
+ edu.kit.ipd.sdq.commons.util.emf,
+ edu.kit.ipd.sdq.commons.util.java,
+ tools.vitruv.testutils.vsum,
+ tools.vitruv.applications.util.temporary,
+ tools.vitruv.applications.pcmjava,
+ tools.vitruv.applications.pcmjava.pojotransformations.tests,
+ tools.vitruv.domains.java.ui
 Export-Package: tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm
 Bundle-Vendor: vitruv.tools

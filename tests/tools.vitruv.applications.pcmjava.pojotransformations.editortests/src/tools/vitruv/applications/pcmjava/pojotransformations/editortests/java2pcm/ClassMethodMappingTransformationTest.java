@@ -3,7 +3,7 @@ package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2p
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 
-import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTestUtils;
 
 public class ClassMethodMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 

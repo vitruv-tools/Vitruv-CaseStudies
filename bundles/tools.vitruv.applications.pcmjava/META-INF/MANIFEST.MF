@@ -9,8 +9,8 @@ Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.pcmjava,
  tools.vitruv.applications.pcmjava.java2pcm,
  tools.vitruv.applications.pcmjava.pcm2java
-Require-Bundle: org.emftext.language.java,
- org.palladiosimulator.pcm,
+Require-Bundle: org.emftext.language.java;visibility:=reexport,
+ org.palladiosimulator.pcm;visibility:=reexport,
  edu.kit.ipd.sdq.commons.util.emf,
  edu.kit.ipd.sdq.commons.util.java,
  edu.kit.ipd.sdq.commons.util.pcm,

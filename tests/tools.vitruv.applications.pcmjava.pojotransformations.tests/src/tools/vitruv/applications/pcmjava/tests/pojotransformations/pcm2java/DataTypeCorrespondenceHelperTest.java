@@ -6,8 +6,6 @@ import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
 

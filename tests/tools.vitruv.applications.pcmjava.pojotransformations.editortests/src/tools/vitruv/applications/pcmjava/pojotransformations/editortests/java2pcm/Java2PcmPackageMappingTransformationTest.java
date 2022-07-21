@@ -7,7 +7,6 @@ import org.palladiosimulator.pcm.repository.CompositeDataType;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
-import tools.vitruv.applications.pcmjava.tests.util.java2pcm.Java2PcmTransformationTest;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 
 public class Java2PcmPackageMappingTransformationTest extends Java2PcmTransformationTest {

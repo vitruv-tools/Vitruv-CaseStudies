@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.tests.util.pcm2java;
+package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java;
 
 import java.io.IOException;
 
