@@ -6,11 +6,11 @@
 
 <plugin>
    <extension
-         id="pcmJavaPojoApplication"
-         name="PCM-Java POJO Application"
+         id="pcmJavaApplication"
+         name="PCM-Java Application"
          point="tools.vitruv.framework.applications.application">
       <application
-            class="tools.vitruv.applications.pcmjava.pojotransformations.PcmJavaPojoApplication"></application>
+            class="tools.vitruv.applications.pcmjava.PcmJavaApplication"></application>
    </extension>
 
 </plugin>

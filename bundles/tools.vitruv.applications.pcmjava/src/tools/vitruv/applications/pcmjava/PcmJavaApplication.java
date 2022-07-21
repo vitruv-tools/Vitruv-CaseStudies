@@ -1,14 +1,14 @@
-package tools.vitruv.applications.pcmjava.pojotransformations;
+package tools.vitruv.applications.pcmjava;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification;
-import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification;
+import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
+import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.framework.applications.VitruvApplication;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 
-public class PcmJavaPojoApplication implements VitruvApplication {
+public class PcmJavaApplication implements VitruvApplication {
 
 	@Override
 	public Set<ChangePropagationSpecification> getChangePropagationSpecifications() {

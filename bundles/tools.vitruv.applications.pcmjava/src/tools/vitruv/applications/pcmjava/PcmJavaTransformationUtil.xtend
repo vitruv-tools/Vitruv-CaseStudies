@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.common.pcm2java
+package tools.vitruv.applications.pcmjava
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.palladiosimulator.pcm.core.entity.Entity

@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.pojotransformations.java2pcm;
+package tools.vitruv.applications.pcmjava.java2pcm;
 
 /**
  * Possible selection the user can select during user interaction.
