@@ -9,7 +9,8 @@ Require-Bundle: org.apache.log4j,
  org.eclipse.core.resources;visibility:=reexport,
  org.eclipse.jdt.core.manipulation,
  org.eclipse.ltk.core.refactoring,
- org.eclipse.jdt.core,org.eclipse.text,
+ org.eclipse.jdt.core,
+ org.eclipse.text,
  org.eclipse.core.resources,
  org.junit.jupiter.api,
  edu.kit.ipd.sdq.commons.util.eclipse,
@@ -18,7 +19,7 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.testutils.vsum,
  tools.vitruv.applications.util.temporary,
  tools.vitruv.applications.pcmjava,
- tools.vitruv.applications.pcmjava.pojotransformations.tests,
+ tools.vitruv.applications.pcmjava.tests,
  tools.vitruv.domains.java.ui
 Export-Package: tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm
 Bundle-Vendor: vitruv.tools

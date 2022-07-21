@@ -12,7 +12,7 @@ import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
 
 public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 

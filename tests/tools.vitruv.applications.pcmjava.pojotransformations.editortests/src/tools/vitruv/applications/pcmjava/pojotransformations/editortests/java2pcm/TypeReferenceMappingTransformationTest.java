@@ -6,7 +6,7 @@ import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

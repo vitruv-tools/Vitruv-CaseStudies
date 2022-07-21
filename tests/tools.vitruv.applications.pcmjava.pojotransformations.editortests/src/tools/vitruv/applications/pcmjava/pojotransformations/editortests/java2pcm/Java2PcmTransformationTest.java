@@ -90,7 +90,7 @@ import org.palladiosimulator.pcm.system.System;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
 import tools.vitruv.applications.util.temporary.pcm.PcmNamespace;

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
