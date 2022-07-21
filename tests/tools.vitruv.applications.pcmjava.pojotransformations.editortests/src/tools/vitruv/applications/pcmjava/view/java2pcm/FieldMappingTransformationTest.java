@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
+package tools.vitruv.applications.pcmjava.view.java2pcm;
 
 import static org.junit.jupiter.api.Assertions.fail;
 

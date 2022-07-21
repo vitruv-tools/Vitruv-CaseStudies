@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Vitruv PCM-Java POJO Application Editor Tests
-Bundle-SymbolicName: tools.vitruv.applications.pcmjava.pojotransformations.editortests
-Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations.editortests
+Bundle-Name: Vitruv PCM-Java Application Editor View Tests
+Bundle-SymbolicName: tools.vitruv.applications.pcmjava.view.tests
+Automatic-Module-Name: tools.vitruv.applications.pcmjava.view.tests
 Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.apache.log4j,
@@ -21,5 +21,5 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.applications.pcmjava,
  tools.vitruv.applications.pcmjava.tests,
  tools.vitruv.domains.java.ui
-Export-Package: tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm
+Export-Package: tools.vitruv.applications.pcmjava.view.java2pcm
 Bundle-Vendor: vitruv.tools

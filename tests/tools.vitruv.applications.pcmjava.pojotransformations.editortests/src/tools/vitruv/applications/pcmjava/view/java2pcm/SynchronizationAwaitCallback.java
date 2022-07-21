@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
+package tools.vitruv.applications.pcmjava.view.java2pcm;
 
 public interface SynchronizationAwaitCallback {
 	void waitForSynchronization(int numberOfExpectedSynchronizationCalls);

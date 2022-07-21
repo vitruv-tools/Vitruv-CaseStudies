@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
+package tools.vitruv.applications.pcmjava.view.java2pcm;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.ILocalVariable;

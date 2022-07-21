@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.pojotransformations.editortests.java2pcm;
+package tools.vitruv.applications.pcmjava.view.java2pcm;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
 import static edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil.refreshAndBuildIncrementally;
