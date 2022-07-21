@@ -1,4 +1,0 @@
-package tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm
-
-class EjbJava2PcmChangePropagationSpecification extends mir.reactions.ejbjava2pcm.Ejbjava2pcmChangePropagationSpecification {
-}
