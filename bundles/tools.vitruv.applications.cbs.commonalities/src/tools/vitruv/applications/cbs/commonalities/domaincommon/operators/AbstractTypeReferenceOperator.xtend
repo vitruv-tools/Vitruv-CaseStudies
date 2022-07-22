@@ -7,7 +7,7 @@ import tools.vitruv.applications.cbs.commonalities.domaincommon.CommonPrimitiveT
 import tools.vitruv.dsls.commonalities.runtime.helper.IntermediateModelHelper
 import tools.vitruv.dsls.commonalities.runtime.intermediatemodelbase.Intermediate
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AbstractAttributeMappingOperator
-import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
+import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
 import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*

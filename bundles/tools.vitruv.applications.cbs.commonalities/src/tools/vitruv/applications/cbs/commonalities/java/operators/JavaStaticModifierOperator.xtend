@@ -7,7 +7,7 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import org.emftext.language.java.modifiers.Static
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
-import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
+import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState
 
 @AttributeMappingOperator(
 	name='javaStaticModifier',
