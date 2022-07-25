@@ -15,7 +15,8 @@ import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.util.temporary.java.JavaModificationUtil
-import tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper
+import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.getCorrespondingElements
+import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.addCorrespondence
 import tools.vitruv.change.correspondence.CorrespondenceModel
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 import tools.vitruv.change.interaction.UserInteractor
@@ -72,7 +73,7 @@ class UmlJavaTypePropagationHelper {
 
 		val classifier = getNormalizedClassifierFromTypeReference(jRef)
 		if (classifier !== null)
-			return ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, classifier, null, Type).head
+			return cm.getCorrespondingElements(classifier, Type, null).head
 		else {
 			return null
 		}
@@ -237,10 +238,11 @@ class UmlJavaTypePropagationHelper {
 			for (primitive : umlPrimitiveTypes) {
 				val unifiedType = primitive.unifiedNameForUmlPrimitiveTypeName
 				if (unifiedType !== null) {
-					val alreadyRegistered = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(correspondenceModel,
-						UMLPackage.Literals.PRIMITIVE_TYPE, unifiedType.toString, PrimitiveType).head
+					val alreadyRegistered = correspondenceModel.getCorrespondingElements(
+						UMLPackage.Literals.PRIMITIVE_TYPE, PrimitiveType, unifiedType.toString
+					).head
 					if (alreadyRegistered === null)
-						ReactionsCorrespondenceHelper.addCorrespondence(correspondenceModel, UMLPackage.Literals.PRIMITIVE_TYPE,
+						correspondenceModel.addCorrespondence(UMLPackage.Literals.PRIMITIVE_TYPE,
 							primitive, unifiedType.toString)
 				}
 			}
@@ -273,8 +275,8 @@ class UmlJavaTypePropagationHelper {
 				// check if it is of type String, which has to be mapped to an uml::PrimitiveType
 				if (getQualifiedName(classifier) == "java.lang.String" ||
 					getQualifiedName(classifier) == "java.lang.CharSequence") {
-					ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(correspondenceModel, UMLPackage.Literals.PRIMITIVE_TYPE,
-						UnifiedPrimitiveType.STRING.toString, PrimitiveType).claimOne
+					correspondenceModel.getCorrespondingElements(UMLPackage.Literals.PRIMITIVE_TYPE,
+						PrimitiveType, UnifiedPrimitiveType.STRING.toString).claimOne
 				} else {
 					return null
 				}
@@ -318,8 +320,8 @@ class UmlJavaTypePropagationHelper {
 			org.emftext.language.java.types.PrimitiveType javaTypeReference, CorrespondenceModel correspondenceModel) {
 			val unifiedPrimitiveType = javaTypeReference.unifiedNameForJavaPrimitiveTypeName
 			if (unifiedPrimitiveType !== null) {
-				ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(correspondenceModel, UMLPackage.Literals.PRIMITIVE_TYPE,
-					unifiedPrimitiveType.toString, PrimitiveType).claimOne
+				correspondenceModel.getCorrespondingElements(UMLPackage.Literals.PRIMITIVE_TYPE,
+					PrimitiveType, unifiedPrimitiveType.toString).claimOne
 			}
 		}
 
