@@ -1,7 +1,7 @@
 package tools.vitruv.applications.umlclassumlcomponents.util
 
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
-import tools.vitruv.framework.userinteraction.UserInteractor
+import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
+import tools.vitruv.change.interaction.UserInteractor
 import edu.kit.ipd.sdq.activextendannotations.Utility
 
 @Utility

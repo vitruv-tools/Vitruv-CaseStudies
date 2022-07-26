@@ -1,7 +1,5 @@
 package tools.vitruv.applications.cbs.commonalities.tests
 
-import org.emftext.language.java.JavaClasspath
-import tools.vitruv.domains.java.JamoppLibraryHelper
 import org.junit.jupiter.api.BeforeEach
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.testutils.LegacyVitruvApplicationTest
@@ -14,6 +12,8 @@ import java.nio.file.Path
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import tools.vitruv.applications.cbs.commonalities.CbsCommonalitiesApplication
+import tools.vitruv.change.propagation.ChangePropagationMode
+import tools.vitruv.applications.util.temporary.java.JavaSetup
 
 abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest {	
 	def <T> T getModels(DomainModelsProvider<T> modelsProvider) {
@@ -21,12 +21,13 @@ abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest
 	}
 	
 	@BeforeEach
+	def setupChangePropagationMode() {
+		virtualModel.changePropagationMode = ChangePropagationMode.TRANSITIVE_EXCEPT_LEAVES
+	}
+	
+	@BeforeEach
 	def protected setupJaMoPP() {
-		// This is necessary because otherwise Maven tests will fail as resources from previous
-		// tests are still in the classpath and accidentally resolved:
-		JavaClasspath.reset()
-		// We also need to freshly register the standard library again then:
-		JamoppLibraryHelper.registerStdLib
+		JavaSetup.resetClasspathAndRegisterStandardLibrary()
 	}
 	
 	override protected getChangePropagationSpecifications() {

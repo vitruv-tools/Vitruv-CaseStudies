@@ -11,7 +11,7 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import org.junit.jupiter.api.BeforeEach

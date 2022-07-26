@@ -6,36 +6,71 @@
 	<parent>
 		<groupId>tools.vitruv</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.4.0</version>
+		<version>1.4.1</version>
 	</parent>
 	<artifactId>applications-cbs-parent</artifactId>
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
+		<!-- For each project, a local updatesite can be specified by overwriting these properties. They default to the Vitruv updatesites. -->
+		<vitruv.change.url>https://vitruv-tools.github.io/updatesite/nightly/change/</vitruv.change.url>
 		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework/</vitruv.framework.url>
-		<vitruv.domains.url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</vitruv.domains.url>
+		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/dsls/</vitruv.dsls.url>
 	</properties>
 
 	<repositories>
+		<!-- The Vitruv project updatesites to be potentially overwritten by local builds -->
+		<repository>
+			<id>Vitruv Change</id>
+			<layout>p2</layout>
+			<url>${vitruv.change.url}</url>
+		</repository>
 		<repository>
 			<id>Vitruv Framework</id>
 			<layout>p2</layout>
 			<url>${vitruv.framework.url}</url>
 		</repository>
 		<repository>
-			<id>Vitruv Domains</id>
+			<id>Vitruv DSLs</id>
 			<layout>p2</layout>
-			<url>${vitruv.domains.url}</url>
+			<url>${vitruv.dsls.url}</url>
+		</repository>
+		<repository>
+			<id>SDQ Commons</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/commons/latest/</url>
+		</repository>
+		<repository>
+			<id>XAnnotations</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/xannotations/latest/</url>
+		</repository>
+		<repository>
+			<id>EMFText and JaMoPP (P2 Wrapper)</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/p2-wrapper/latest/</url>
 		</repository>
 		<repository>
 			<id>Palladiosimulator</id>
 			<layout>p2</layout>
-			<url>https://updatesite.palladio-simulator.com/palladio-core-pcm/releases/5.0.0/</url>
+			<url>https://updatesite.palladio-simulator.com/palladio-build-updatesite/releases/5.0.0/</url>
 		</repository>
 	</repositories>
 
 	<profiles>
+		<profile>
+			<id>local-change</id>
+			<activation>
+				<property>
+					<name>vitruv.change.path</name>
+				</property>
+			</activation>
+			<properties>
+				<vitruv.change.url>file:///${vitruv.change.path}/releng/tools.vitruv.change.updatesite/target/repository</vitruv.change.url>
+			</properties>
+		</profile>
+
 		<profile>
 			<id>local-framework</id>
 			<activation>
@@ -44,19 +79,19 @@
 				</property>
 			</activation>
 			<properties>
-				<vitruv.framework.url>file://${vitruv.framework.path}/releng/tools.vitruv.updatesite.aggregated/target/final</vitruv.framework.url>
+				<vitruv.framework.url>file:///${vitruv.framework.path}/releng/tools.vitruv.updatesite/target/repository</vitruv.framework.url>
 			</properties>
 		</profile>
 
 		<profile>
-			<id>local-domains</id>
+			<id>local-dsls</id>
 			<activation>
 				<property>
-					<name>vitruv.domains.path</name>
+					<name>vitruv.dsls.path</name>
 				</property>
 			</activation>
 			<properties>
-				<vitruv.domains.url>file://${vitruv.domains.path}/releng/tools.vitruv.domains.cbs.updatesite.aggregated/target/final</vitruv.domains.url>
+				<vitruv.dsls.url>file:///${vitruv.dsls.path}/releng/tools.vitruv.dsls.updatesite/target/repository</vitruv.dsls.url>
 			</properties>
 		</profile>
 
@@ -120,14 +155,6 @@
 							<languages>
 								<language>
 									<setup>tools.vitruv.dsls.reactions.ReactionsLanguageStandaloneSetup</setup>
-									<outputConfigurations>
-										<outputConfiguration>
-											<outputDirectory>${project.basedir}/src-gen</outputDirectory>
-										</outputConfiguration>
-									</outputConfigurations>
-								</language>
-								<language>
-									<setup>tools.vitruv.dsls.mappings.MappingsLanguageStandaloneSetup</setup>
 									<outputConfigurations>
 										<outputConfiguration>
 											<outputDirectory>${project.basedir}/src-gen</outputDirectory>

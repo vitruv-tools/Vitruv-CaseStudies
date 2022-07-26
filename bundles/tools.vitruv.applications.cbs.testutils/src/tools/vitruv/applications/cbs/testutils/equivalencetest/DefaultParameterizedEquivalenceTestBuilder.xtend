@@ -13,7 +13,7 @@ import tools.vitruv.applications.cbs.testutils.equivalencetest.ParameterizedEqui
 import org.eclipse.xtend.lib.annotations.Delegate
 import org.junit.jupiter.api.DynamicNode
 import java.util.Collection
-import tools.vitruv.framework.propagation.ChangePropagationSpecification
+import tools.vitruv.change.propagation.ChangePropagationSpecification
 
 @FinalFieldsConstructor
 package class DefaultParameterizedEquivalenceTestBuilder implements ParameterizedEquivalenceTestBuilder {

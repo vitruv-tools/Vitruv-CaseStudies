@@ -13,12 +13,12 @@ import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.types.Void
 import tools.vitruv.applications.cbs.commonalities.domaincommon.CommonPrimitiveType
 import tools.vitruv.applications.cbs.commonalities.domaincommon.operators.AbstractTypeReferenceOperator
-import tools.vitruv.domains.java.util.JavaModificationUtil
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeType
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
+import tools.vitruv.applications.util.temporary.java.JavaModificationUtil
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
+import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
-import static tools.vitruv.framework.util.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
 /**
  * Maps between Java's {@link TypeReference} and an intermediate representation

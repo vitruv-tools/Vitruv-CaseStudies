@@ -26,7 +26,7 @@ import org.emftext.language.java.types.TypedElement
 import org.emftext.language.java.types.TypesFactory
 
 import static tools.vitruv.applications.util.temporary.other.UriUtil.normalizeURI
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 
 /**
  * Class for type and typereference util function

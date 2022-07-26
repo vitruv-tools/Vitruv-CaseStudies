@@ -9,7 +9,7 @@ import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.cbs.commonalities.tests.oo.ClassMethodTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsBase
-import tools.vitruv.domains.java.util.JavaModificationUtil
+import tools.vitruv.applications.util.temporary.java.JavaModificationUtil
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.*
 

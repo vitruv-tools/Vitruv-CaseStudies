@@ -5,7 +5,7 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.UMLFactory
 
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import org.eclipse.uml2.uml.Operation
 import tools.vitruv.applications.transitivechange.tests.util.AbstractUmlJavaTest
 import org.junit.jupiter.api.BeforeEach
@@ -14,6 +14,7 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.applications.transitivechange.tests.util.TransitiveChangeSetup.*
+import tools.vitruv.change.propagation.ChangePropagationMode
 
 /**
  * Abstract super class for uml to java test cases.
@@ -40,8 +41,12 @@ abstract class UmlToJavaTransformationTest extends AbstractUmlJavaTest {
 	}
 
 	@BeforeEach
+	def protected void disableTransitiveChangePropagation() {
+		virtualModel.changePropagationMode = ChangePropagationMode.SINGLE_STEP
+	}
+	
+	@BeforeEach
 	def protected void setup() {
-		patchDomains()
 		val umlModel = UMLFactory.eINSTANCE.createModel()
 		umlModel.name = MODEL_NAME
 		resourceAt(MODEL_NAME.projectModelPath).startRecordingChanges => [

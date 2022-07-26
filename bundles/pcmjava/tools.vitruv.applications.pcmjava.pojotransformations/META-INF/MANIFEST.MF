@@ -9,11 +9,13 @@ Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.pcmjava.pojotransformations,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java
-Require-Bundle: tools.vitruv.framework.applications,
- tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.domains.java,
- tools.vitruv.domains.pcm,
+Require-Bundle: org.emftext.language.java,
+ org.palladiosimulator.pcm,
+ edu.kit.ipd.sdq.commons.util.emf,
+ edu.kit.ipd.sdq.commons.util.java,
+ edu.kit.ipd.sdq.commons.util.pcm,
+ tools.vitruv.framework.applications,
+ tools.vitruv.dsls.reactions.runtime,
  tools.vitruv.applications.util.temporary,
  tools.vitruv.applications.pcmjava.util,
- edu.kit.ipd.sdq.commons.util.pcm,
  tools.vitruv.applications.pcmjava.common

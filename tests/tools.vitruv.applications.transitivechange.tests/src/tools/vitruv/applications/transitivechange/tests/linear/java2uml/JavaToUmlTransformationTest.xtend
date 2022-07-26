@@ -1,6 +1,6 @@
 package tools.vitruv.applications.transitivechange.tests.linear.java2uml
 
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import org.eclipse.uml2.uml.Model
 import org.emftext.language.java.classifiers.Interface
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
@@ -17,6 +17,7 @@ import java.util.ArrayList
 import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Path
 import static tools.vitruv.applications.transitivechange.tests.util.TransitiveChangeSetup.*
+import tools.vitruv.change.propagation.ChangePropagationMode
 
 /**
  * Abstract Class for Java To UML Tests. Contains functions to create Java-CompilationUnits 
@@ -29,8 +30,12 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	static val UMLMODELNAME = "rootModelName" // Name of the Uml Model used in the java2uml tests
 
 	@BeforeEach
+	protected def void disableTransitiveChangePropagation() {
+		virtualModel.changePropagationMode = ChangePropagationMode.SINGLE_STEP
+	}
+	
+	@BeforeEach
 	def protected setup() {
-		patchDomains
 		userInteraction.addNextTextInput(UMLMODELNAME)
 		userInteraction.addNextTextInput(UMLMODELPATH)
 	}

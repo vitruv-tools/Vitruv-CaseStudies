@@ -14,7 +14,7 @@ import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.types.Void
 
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 
 /**
  * Util class with for Java-PrimitiveTypes and Java-String.

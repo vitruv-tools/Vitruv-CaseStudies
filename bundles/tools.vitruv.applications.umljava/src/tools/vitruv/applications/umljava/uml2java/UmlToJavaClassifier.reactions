@@ -6,12 +6,12 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.UMLPackage
 import org.emftext.language.java.containers.ContainersPackage
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import tools.vitruv.change.interaction.UserInteractionOptions.NotificationType
+import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 
 import static extension tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import static com.google.common.base.Preconditions.checkState
 
 import static extension tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*

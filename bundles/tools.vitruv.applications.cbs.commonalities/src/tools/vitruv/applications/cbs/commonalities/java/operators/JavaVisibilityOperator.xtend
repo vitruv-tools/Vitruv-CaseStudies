@@ -5,16 +5,16 @@ import org.apache.log4j.Logger
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import org.emftext.language.java.modifiers.AnnotationInstanceOrModifier
 import tools.vitruv.applications.cbs.commonalities.oo.Visibility
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AbstractAttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeType
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AbstractAttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
+import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
-import static tools.vitruv.framework.util.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
 import static extension tools.vitruv.applications.cbs.commonalities.java.JavaVisibilityHelper.*
-import static extension tools.vitruv.domains.java.util.JavaModifierUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 @AttributeMappingOperator(
 	name='javaVisibility',

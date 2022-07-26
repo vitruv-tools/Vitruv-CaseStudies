@@ -5,8 +5,8 @@ import org.apache.log4j.Logger
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import org.emftext.language.java.modifiers.ModifiersPackage
 import tools.vitruv.applications.cbs.commonalities.oo.Visibility
-import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractSingleArgumentConditionOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.ParticipationConditionOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.participation.condition.AbstractSingleArgumentConditionOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.participation.condition.ParticipationConditionOperator
 
 import static com.google.common.base.Preconditions.*
 

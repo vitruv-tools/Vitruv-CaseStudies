@@ -1,12 +1,12 @@
 package tools.vitruv.applications.cbs.commonalities.domaincommon.operators
 
 import org.apache.log4j.Logger
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AbstractAttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeMappingOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.mapping.attribute.AttributeType
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AbstractAttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
+import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
+import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
 
-import static tools.vitruv.framework.util.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
 /**
  * Converts between two boolean attributes, with one being the inverse of the

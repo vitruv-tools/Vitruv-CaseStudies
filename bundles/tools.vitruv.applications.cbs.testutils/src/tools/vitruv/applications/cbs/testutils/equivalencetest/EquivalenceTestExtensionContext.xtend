@@ -4,7 +4,6 @@ import org.junit.jupiter.api.^extension.ExtensionContext
 import org.junit.jupiter.api.^extension.ExtensionContext.Namespace
 import java.util.Map
 import java.util.Optional
-import tools.vitruv.framework.domains.VitruvDomain
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import java.util.HashMap
@@ -13,13 +12,14 @@ import org.junit.jupiter.api.^extension.ExtensionContextException
 import org.junit.jupiter.api.^extension.ExtensionContext.Store.CloseableResource
 import org.junit.platform.engine.support.hierarchical.ThrowableCollector
 import org.opentest4j.TestAbortedException
+import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
 
 @FinalFieldsConstructor
 package class EquivalenceTestExtensionContext implements ExtensionContext {
 	val String name
 	val int executionIndex
 	val ExtensionContext parentContext
-	val VitruvDomain testDomain
+	val MetamodelDescriptor testMetamodel
 	@Accessors
 	var Optional<Throwable> executionException = Optional.empty
 	val namespaceStores = new HashMap<ExtensionContext.Namespace, NamespaceStore>
@@ -62,7 +62,7 @@ package class EquivalenceTestExtensionContext implements ExtensionContext {
 	}
 
 	override getTags() {
-		if (testDomain === null) parentContext.tags else (parentContext.tags + #[testDomain.name]).toSet
+		if (testMetamodel === null) parentContext.tags else (parentContext.tags + #[testMetamodel.name]).toSet
 	}
 
 	override getTestClass() {

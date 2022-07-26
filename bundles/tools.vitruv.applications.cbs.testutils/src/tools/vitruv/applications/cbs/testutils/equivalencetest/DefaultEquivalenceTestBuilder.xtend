@@ -11,7 +11,6 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.junit.jupiter.api.^extension.ExtensionContext
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder.VariantOptions
-import tools.vitruv.framework.domains.VitruvDomain
 import tools.vitruv.testutils.TestUserInteraction
 import tools.vitruv.testutils.TestView
 import tools.vitruv.testutils.UriMode
@@ -20,34 +19,34 @@ import static com.google.common.base.Preconditions.checkArgument
 import static com.google.common.base.Preconditions.checkState
 import static java.util.Comparator.comparing
 import static org.junit.jupiter.api.DynamicTest.dynamicTest
-import tools.vitruv.framework.propagation.ChangePropagationSpecification
-import tools.vitruv.framework.domains.VitruvDomainProviderRegistry
+import tools.vitruv.change.propagation.ChangePropagationSpecification
+import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
 
 abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
-	/* both maps always contain lists for all domains */
-	protected val Map<VitruvDomain, List<DomainStep>> dependencySteps
-	protected val Map<VitruvDomain, List<DomainStep>> steps
+	/* both maps always contain lists for all metamodels */
+	protected val Map<MetamodelDescriptor, List<MetamodelStep>> dependencySteps
+	protected val Map<MetamodelDescriptor, List<MetamodelStep>> steps
 	protected var (TestUserInteraction)=>void userInteractionConfiguration = null
 	protected val checks = new Checks(this)
 	
-	protected new(Set<VitruvDomain> targetDomains) {
-		this.dependencySteps = mapForDomains(targetDomains)
-		this.steps = mapForDomains(targetDomains)
+	protected new(Set<MetamodelDescriptor> targetMetamodels) {
+		this.dependencySteps = tools.vitruv.applications.cbs.testutils.equivalencetest.DefaultBuilderCommon.mapForMetamodels(targetMetamodels)
+		this.steps = tools.vitruv.applications.cbs.testutils.equivalencetest.DefaultBuilderCommon.mapForMetamodels(targetMetamodels)
 	}
 	
-	def private static mapForDomains(Set<VitruvDomain> domains) {
-		val result = new TreeMap<VitruvDomain, List<DomainStep>>(comparing [name])
-		for (domain : domains) {
-			result.put(domain, new LinkedList)
+	def private static mapForMetamodels(Set<MetamodelDescriptor> metamodels) {
+		val result = new TreeMap<MetamodelDescriptor, List<MetamodelStep>>(comparing [name])
+		for (metamodel : metamodels) {
+			result.put(metamodel, new LinkedList)
 		}
 		return result
 	}
 	
-	def protected modifyIfNecessary(DomainStep domainStep) {
+	def protected modifyIfNecessary(MetamodelStep metamodelStep) {
 		if (userInteractionConfiguration !== null) {
-			new StepWithUserInteractionSetup(domainStep, userInteractionConfiguration)
+			new StepWithUserInteractionSetup(metamodelStep, userInteractionConfiguration)
 		} else {
-			domainStep
+			metamodelStep
 		}
 	}
 	
@@ -61,19 +60,15 @@ abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
 		val DefaultBuilderCommon target
 		var active = true
 
-		def forStep(VitruvDomain domain) {
-			checkArgument(
-				target.steps.containsKey(domain),
-				'''No registered «ChangePropagationSpecification.simpleName» has «domain» as source domain!'''
-			)
+		def forStep(MetamodelDescriptor metamodel) {
 			checkActive()
 		}
 
-		def forVariant(VitruvDomain domain, String name) {
-			forStep(domain)
+		def forVariant(MetamodelDescriptor metamodel, String name) {
+			forStep(metamodel)
 			checkState(
-				!target.steps.get(domain).isEmpty,
-				'''You must first register a proper step in «domain.name» before registering a variant!'''
+				!target.steps.get(metamodel).isEmpty,
+				'''You must first register a proper step in «metamodel.name» before registering a variant!'''
 			)
 			checkArgument(name !== null && !name.isBlank(), '''You must provide a name for a variant!''')
 		}
@@ -99,7 +94,7 @@ abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
 		def forFinalizing() {
 			checkState(
 				target.steps.filter[_, stepList|!stepList.isEmpty].size >= 2,
-				'Please register steps for at least two domains!'
+				'Please register steps for at least two metamodels!'
 			)
 			active = false
 		}
@@ -119,9 +114,7 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 		UriMode uriMode,
 		ModelComparisonSettings modelComparisonSettings
 	) {
-		super(changePropagationSpecifications.flatMap[sourceMetamodelDescriptor.nsUris].flatMap [
-			VitruvDomainProviderRegistry.findDomainsForMetamodelRootNsUri(it)
-		].toSet)
+		super(emptySet)
 		this.parentContext = parentContext
 		this.changePropagationSpecifications = changePropagationSpecifications
 		this.uriMode = uriMode
@@ -134,33 +127,33 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 		dependencySteps += dependencyBuilder.allDependencySteps
 	}
 
-	override stepFor(VitruvDomain domain, Consumer<TestView> action) {
-		checks.forStep(domain)
-		steps += new MainStep(domain, action)
+	override stepFor(MetamodelDescriptor metamodel, Consumer<TestView> action) {
+		checks.forStep(metamodel)
+		steps += new MainStep(metamodel, action)
 	}
 
-	override inputVariantFor(VitruvDomain domain, String name, Consumer<TestView> action) {
-		checks.forVariant(domain, name)
-		steps += new VariantStep(domain, action, name)
+	override inputVariantFor(MetamodelDescriptor metamodel, String name, Consumer<TestView> action) {
+		checks.forVariant(metamodel, name)
+		steps += new VariantStep(metamodel, action, name)
 	}
 
 	override testsThatStepsAreEquivalent() {
 		checks.forFinalizing()
 		
 		steps.entrySet.flatMap [ entry |
-			val testDomain = entry.key
+			val testMetamodel = entry.key
 			val testSteps = entry.value
 			testSteps.indexed.map [ args |
 				val testIndex = args.key
 				val testStep = modifyIfNecessary(args.value)
 					
 				val referenceSteps = testStep.determineReferenceSteps(steps)
-				var testName = '''«testDomain.name» «'\u2192' /* right arrow */ » {«FOR rd : referenceSteps.keySet SEPARATOR ', '»«rd.name»«ENDFOR»}'''
+				var testName = '''«testMetamodel.name» «'\u2192' /* right arrow */ » {«FOR rd : referenceSteps.keySet SEPARATOR ', '»«rd.name»«ENDFOR»}'''
 				if (testStep.name !== null) {
 					testName += ''' — «testStep.name»'''
 				}
 				val testContext = new EquivalenceTestExtensionContext(testName, testIndex, parentContext,
-					testStep.targetDomain)
+					testStep.targetMetamodel)
 				dynamicTest(
 					testName,
 					new EquivalenceTestExecutable(testStep, dependencySteps, referenceSteps,
@@ -175,18 +168,19 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 		this.userInteractionConfiguration = interactionsProvider
 	}
 
-	def private static <T extends DomainStep> operator_add(Map<VitruvDomain, List<DomainStep>> steps, T domainStep) {
-		steps.get(domainStep.targetDomain) += domainStep
-		return domainStep
+	def private static <T extends MetamodelStep> operator_add(Map<MetamodelDescriptor, List<MetamodelStep>> steps, T metamodelStep) {
+		steps.putIfAbsent(metamodelStep.targetMetamodel, new LinkedList());
+		steps.get(metamodelStep.targetMetamodel) += metamodelStep
+		return metamodelStep
 	}
 
 	private static class DependencyBuilder extends DefaultBuilderCommon implements EquivalenceTestBuilder  {
 		static val mockVariantOptions = new VariantOptions() {
-			override alsoCompareToMainStepOfSameDomain() { this }
+			override alsoCompareToMainStepOfSameMetamodel() { this }
 		}
 
-		new(Set<VitruvDomain> targetDomains) {
-			super(targetDomains)
+		new(Set<MetamodelDescriptor> targetMetamodels) {
+			super(targetMetamodels)
 		}
 
 		override dependsOn((EquivalenceTestBuilder)=>void otherTest) {
@@ -196,13 +190,13 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 			dependencySteps += dependencyBuilder.allDependencySteps
 		}
 
-		override stepFor(VitruvDomain domain, Consumer<TestView> action) {
-			checks.forStep(domain)
-			steps += new MainStep(domain, action)
+		override stepFor(MetamodelDescriptor metamodel, Consumer<TestView> action) {
+			checks.forStep(metamodel)
+			steps += new MainStep(metamodel, action)
 		}
 
-		override inputVariantFor(VitruvDomain domain, String name, Consumer<TestView> action) {
-			checks.forVariant(domain, name)
+		override inputVariantFor(MetamodelDescriptor metamodel, String name, Consumer<TestView> action) {
+			checks.forVariant(metamodel, name)
 			// variants are irrelevant for dependencies, so discard them
 			mockVariantOptions
 		}
@@ -214,8 +208,8 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 		
 		def getAllDependencySteps() {
 			checks.forFinalizing()
-			steps.forEach [domain, steps |
-				dependencySteps.get(domain) += steps.map [modifyIfNecessary()]
+			steps.forEach [metamodel, steps |
+				steps.map [modifyIfNecessary()].forEach[dependencySteps += it] 
 			]
 			return dependencySteps
 		}

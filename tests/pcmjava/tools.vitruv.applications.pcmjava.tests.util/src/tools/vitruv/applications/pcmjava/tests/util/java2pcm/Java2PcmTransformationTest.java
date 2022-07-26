@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static tools.vitruv.domains.java.util.JavaQueryUtil.getNameFromJaMoPPType;
+import static tools.vitruv.applications.util.temporary.java.JavaQueryUtil.getNameFromJaMoPPType;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -54,7 +53,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
-import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
@@ -70,6 +68,7 @@ import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.types.TypeReference;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
@@ -92,13 +91,13 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
-import tools.vitruv.domains.java.JamoppLibraryHelper;
-import tools.vitruv.domains.java.JavaDomainProvider;
-import tools.vitruv.domains.java.JavaNamespace;
+import tools.vitruv.applications.util.temporary.java.JavaSetup;
 import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
-import tools.vitruv.domains.pcm.PcmNamespace;
-import tools.vitruv.framework.change.propagation.ChangePropagationAbortCause;
-import tools.vitruv.framework.change.propagation.ChangePropagationListener;
+import tools.vitruv.applications.util.temporary.pcm.PcmNamespace;
+import tools.vitruv.change.composite.description.PropagatedChange;
+import tools.vitruv.change.composite.description.VitruviusChange;
+import tools.vitruv.change.composite.propagation.ChangePropagationListener;
+import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
 import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
 import tools.vitruv.testutils.DisableAutoBuild;
@@ -130,6 +129,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return testEclipseProject;
 	}
 
+	@BeforeEach
+	protected void disableTransitiveChangePropagation() {
+		this.getVirtualModel().setChangePropagationMode(ChangePropagationMode.SINGLE_STEP);
+	}
+	
 	/*
 	 * We need to use platform URIs, because the JDT AST will not recognize changes
 	 * when using file URIs.
@@ -163,17 +167,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	private void addJavaBuilder() {
-		// We could also instantiate the applicator without using the extension point,
-		// but since this is a system anyway it also tests whether the extension is
-		// properly registered
-		Set<VitruvProjectBuilderApplicator> builderApplicators = VitruvProjectBuilderApplicator
-				.getApplicatorsForVitruvDomain(new JavaDomainProvider().getDomain());
-		assertEquals(1, builderApplicators.size());
-		for (VitruvProjectBuilderApplicator applicator : builderApplicators) {
-			applicator.setPropagateAfterBuild(true);
-			applicator.addBuilder(getCurrentTestProject(), getVirtualModel().getFolder(),
-					Collections.singleton(PcmNamespace.REPOSITORY_FILE_EXTENSION));
-		}
+		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl("Java",
+				VitruvJavaBuilder.BUILDER_ID);
+		applicator.setPropagateAfterBuild(true);
+		applicator.addBuilder(getCurrentTestProject(), getVirtualModel().getFolder(),
+			Collections.singleton(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		logger.info("Finished adding and initializing builder to project " + testEclipseProject.getName());
 	}
 
@@ -181,17 +179,19 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		// Explicitly remove the correct builder instead of using the extension point
 		// (like in the setup) to enforce a required dependency to the Vitruv domain UI
 		// project
-		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl(
+		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl("Java",
 				VitruvJavaBuilder.BUILDER_ID);
 		applicator.removeBuilder(getCurrentTestProject());
 	}
 
-	private void initializeJamopp() {
-		// This is necessary because otherwise Maven tests will fail as
-		// resources from previous tests are still in the classpath and
-		// accidentally resolved
-		JavaClasspath.reset();
-		JamoppLibraryHelper.registerStdLib();
+	@BeforeAll
+	public static void setupJavaFactories() {
+		JavaSetup.prepareFactories();
+	}
+
+	@BeforeEach
+	public final void setupJavaClasspath() {
+		JavaSetup.resetClasspathAndRegisterStandardLibrary();
 	}
 
 	@BeforeEach
@@ -199,7 +199,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		getVirtualModel().addChangePropagationListener(this);
 		configureJavaProject(testProjectFolder);
 		addJavaBuilder();
-		initializeJamopp();
 		this.expectedNumberOfSyncs = 0;
 		logger.info("Finished test setup for project " + testEclipseProject.getName());
 	}
@@ -263,21 +262,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	@Override
-	public void startedChangePropagation() {
+	public void startedChangePropagation(VitruviusChange changeToPropagate) {
 	}
 
 	@Override
-	public void finishedChangePropagation() {
-		expectedNumberOfSyncs--;
-		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
-				+ expectedNumberOfSyncs);
-		synchronized (this) {
-			this.notifyAll();
-		}
-	}
-
-	@Override
-	public void abortedChangePropagation(ChangePropagationAbortCause cause) {
+	public void finishedChangePropagation(Iterable<PropagatedChange> changes) {
 		expectedNumberOfSyncs--;
 		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
 				+ expectedNumberOfSyncs);
@@ -311,7 +300,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	protected Package createPackageWithPackageInfo(final String... namespace) throws IOException {
-		String packageFile = StringUtils.join(namespace, "/");
+		String packageFile = String.join("/", namespace);
 		packageFile = packageFile + "/package-info.java";
 		final Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage();
 		final List<String> namespaceList = Arrays.asList(namespace);
@@ -446,8 +435,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	private URI getURIForElementInPackage(final IPackageFragment packageFragment, final String elementName) {
-		String uriString = packageFragment.getResource().getFullPath().toString() + "/" + elementName + "."
-				+ JavaNamespace.FILE_EXTENSION;
+		String uriString = packageFragment.getResource().getFullPath().toString() + "/" + elementName + ".java";
 		return URI.createPlatformResourceURI(uriString, true);
 	}
 

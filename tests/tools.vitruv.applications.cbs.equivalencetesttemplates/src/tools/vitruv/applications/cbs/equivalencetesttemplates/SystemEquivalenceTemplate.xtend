@@ -17,7 +17,7 @@ abstract class SystemEquivalenceTemplate {
 	def creation(extension EquivalenceTestBuilder builder) {
 		dependsOn[repository.creation(it)]
 
-		stepFor(pcm.domain) [ extension view |
+		stepFor(pcm.metamodel) [ extension view |
 			resourceAt('model/Test'.system).propagate [
 				contents += pcm.system.System => [
 					entityName = 'Test'
@@ -25,7 +25,7 @@ abstract class SystemEquivalenceTemplate {
 			]
 		]
 
-		inputVariantFor(pcm.domain, 'lowercase name') [ extension view |
+		inputVariantFor(pcm.metamodel, 'lowercase name') [ extension view |
 			resourceAt('model/test'.system).propagate [
 				contents += pcm.system.System => [
 					entityName = 'test'
@@ -33,7 +33,7 @@ abstract class SystemEquivalenceTemplate {
 			]
 		]
 
-		stepFor(java.domain) [ extension view |
+		stepFor(java.metamodel) [ extension view |
 			userInteraction.addNextSingleSelection(2 /* create a System */ )
 			resourceAt('src/test/package-info'.java).propagate [
 				contents += java.containers.Package => [
@@ -52,16 +52,16 @@ abstract class SystemEquivalenceTemplate {
 			]
 		]
 
-		inputVariantFor(java.domain, 'creating only a package') [ extension view |
+		inputVariantFor(java.metamodel, 'creating only a package') [ extension view |
 			userInteraction.addNextSingleSelection(2 /* create a System */ )
 			resourceAt('src/test/package-info'.java).propagate [
 				contents += java.containers.Package => [
 					name = 'test'
 				]
 			]
-		].alsoCompareToMainStepOfSameDomain()
+		].alsoCompareToMainStepOfSameMetamodel()
 
-		inputVariantFor(java.domain, 'creating only a class') [ extension view |
+		inputVariantFor(java.metamodel, 'creating only a class') [ extension view |
 			userInteraction.addNextSingleSelection(2 /* create a System */ )
 			resourceAt('src/test/TestImpl'.java).propagate [
 				contents += java.containers.CompilationUnit => [
@@ -72,7 +72,7 @@ abstract class SystemEquivalenceTemplate {
 					]
 				]
 			]
-		].alsoCompareToMainStepOfSameDomain()
+		].alsoCompareToMainStepOfSameMetamodel()
 
 		return testsThatStepsAreEquivalent
 	}
@@ -81,15 +81,15 @@ abstract class SystemEquivalenceTemplate {
 	def renaming(extension EquivalenceTestBuilder builder) {
 		dependsOn([creation(it)])
 
-		stepFor(pcm.domain) [ extension view |
+		stepFor(pcm.metamodel) [ extension view |
 			System.from('model/Test'.system).propagate[entityName = 'Renamed']
 		]
 
-		inputVariantFor(pcm.domain, 'lowercase name') [ extension view |
+		inputVariantFor(pcm.metamodel, 'lowercase name') [ extension view |
 			System.from('model/Test'.system).propagate[entityName = 'renamed']
 		]
 
-		stepFor(java.domain) [ extension view |
+		stepFor(java.metamodel) [ extension view |
 			resourceAt('src/test/package-info'.java).propagate [
 				moveTo('src/renamed/package-info'.java)
 				Package.from(it).name = 'renamed'

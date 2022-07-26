@@ -7,21 +7,24 @@ Bundle-Version: 0.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.apache.log4j,
  org.junit.jupiter.api,
- org.apache.commons.lang,
+ org.eclipse.core.resources;visibility:=reexport,
  org.eclipse.jdt.core.manipulation,
  org.eclipse.ltk.core.refactoring,
  org.eclipse.jdt.core,
  org.eclipse.text,
- tools.vitruv.testutils,
- tools.vitruv.applications.pcmjava.util,
- tools.vitruv.applications.pcmjava.pojotransformations,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
- tools.vitruv.domains.java;visibility:=reexport,
- tools.vitruv.domains.java.ui,
- tools.vitruv.domains.pcm;visibility:=reexport,
+ org.emftext.language.java;visibility:=reexport,
+ org.palladiosimulator.pcm;visibility:=reexport,
+ edu.kit.ipd.sdq.commons.util.java,
+ edu.kit.ipd.sdq.commons.util.eclipse,
+ edu.kit.ipd.sdq.commons.util.emf,
  tools.vitruv.framework.domains.ui,
- org.eclipse.core.resources;visibility:=reexport
+ tools.vitruv.domains.java.ui,
+ tools.vitruv.testutils.vsum,
+ tools.vitruv.applications.pcmjava.util,
+ tools.vitruv.applications.pcmjava.pojotransformations,
+ tools.vitruv.applications.util.temporary
 Export-Package: tools.vitruv.applications.pcmjava.tests.util.java2pcm,
   tools.vitruv.applications.pcmjava.tests.util.pcm2java
 Bundle-Vendor: vitruv.tools

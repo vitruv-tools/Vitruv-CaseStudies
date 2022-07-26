@@ -5,17 +5,13 @@ Bundle-SymbolicName: tools.vitruv.applications.cbs.frameworkwrapper
 Automatic-Module-Name: tools.vitruv.applications.cbs.frameworkwrapper
 Bundle-Version: 0.3.0.qualifier
 Require-Bundle: tools.vitruv.dsls.reactions,
- tools.vitruv.dsls.mappings,
  tools.vitruv.dsls.common,
  tools.vitruv.dsls.commonalities,
- tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.extensions.dslsruntime.mappings,
- tools.vitruv.framework.domains,
- tools.vitruv.framework.change,
- tools.vitruv.framework.change.echange,
- tools.vitruv.framework.propagation,
- tools.vitruv.framework.util,
- tools.vitruv.domains.pcm,
- tools.vitruv.domains.uml,
- tools.vitruv.domains.java
+ tools.vitruv.dsls.reactions.runtime,
+ tools.vitruv.change.atomic,
+ tools.vitruv.change.composite,
+ tools.vitruv.change.propagation,
+ org.eclipse.uml2.uml,
+ org.emftext.language.java,
+ org.palladiosimulator.pcm
 Bundle-Vendor: tools.vitruv

@@ -12,8 +12,6 @@ import org.palladiosimulator.pcm.repository.DataType
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.domains.pcm.PcmDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.common.util.URI
@@ -42,7 +40,7 @@ import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static com.google.common.base.Preconditions.checkNotNull
-import static extension tools.vitruv.framework.util.ObjectResolutionUtil.getHierarchicUriFragment
+import static extension tools.vitruv.change.atomic.id.ObjectResolutionUtil.getHierarchicUriFragment
 import org.eclipse.emf.ecore.EStructuralFeature
 
 abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
@@ -51,11 +49,6 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
 		]
-	}
-
-	private def patchDomains() {
-		new PcmDomainProvider().domain.enableTransitiveChangePropagation
-		new UmlDomainProvider().domain.enableTransitiveChangePropagation
 	}
 
 	protected var PcmUmlClassApplicationTestHelper helper
@@ -67,7 +60,6 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 
 	@BeforeEach
 	def protected void setup() {
-		patchDomains
 		helper = new PcmUmlClassApplicationTestHelper(this, [uri|startRecordingChanges(uri.resourceAt)])
 		testResourceSet = new ResourceSetImpl()
 	}

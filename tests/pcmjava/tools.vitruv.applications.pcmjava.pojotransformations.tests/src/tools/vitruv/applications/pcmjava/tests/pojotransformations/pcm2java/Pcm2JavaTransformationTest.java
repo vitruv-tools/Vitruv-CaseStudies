@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.commons.NamedElement;
@@ -24,6 +23,7 @@ import org.emftext.language.java.statements.Statement;
 import org.emftext.language.java.types.ClassifierReference;
 import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.emftext.language.java.types.TypeReference;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.composition.CompositionFactory;
@@ -55,16 +55,18 @@ import com.google.common.collect.Iterables;
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.tests.util.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
+import tools.vitruv.applications.util.temporary.java.JavaSetup;
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil;
 import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
-import tools.vitruv.domains.pcm.PcmNamespace;
-import tools.vitruv.framework.propagation.ChangePropagationSpecification;
+import tools.vitruv.change.propagation.ChangePropagationMode;
+import tools.vitruv.applications.util.temporary.pcm.PcmNamespace;
+import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 import static org.junit.jupiter.api.Assertions.fail;
-import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
+import static tools.vitruv.applications.util.temporary.java.JavaQueryUtil.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,13 +80,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 
 	private Path testProjectFolder;
+	
+	@BeforeAll
+	public static void setupJavaFactories() {
+		JavaSetup.prepareFactories();
+	}
 
 	@BeforeEach
+	public final void setupJavaClasspath() {
+		JavaSetup.resetClasspathAndRegisterStandardLibrary();
+	}
+	
+	@BeforeEach
+	protected void disableTransitiveChangePropagation() {
+		this.getVirtualModel().setChangePropagationMode(ChangePropagationMode.SINGLE_STEP);
+	}
+	
+	@BeforeEach
 	protected void setup(@TestProject Path testProjectPath) {
-		// This is necessary because otherwise Maven tests will fail as resources from
-		// previous
-		// tests are still in the classpath and accidentally resolved
-		JavaClasspath.reset();
 		this.testProjectFolder = testProjectPath;
 	}
 

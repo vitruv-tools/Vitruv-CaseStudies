@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static org.hamcrest.MatcherAssert.assertThat
@@ -305,7 +305,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 
 	static class BidirectionalTest extends JavaToUmlClassTest {
 		override setupTransformationDirection() {
-			configureBidirectionalExecution()
+			configureBidirectionalExecution(virtualModel)
 		}
 	}
 

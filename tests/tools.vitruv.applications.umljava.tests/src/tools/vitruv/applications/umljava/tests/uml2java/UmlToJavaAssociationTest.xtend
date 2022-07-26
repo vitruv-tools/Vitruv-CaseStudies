@@ -6,7 +6,7 @@ import static extension tools.vitruv.applications.util.temporary.java.JavaMember
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.junit.jupiter.params.ParameterizedTest
@@ -67,7 +67,7 @@ class UmlToJavaAssociationTest extends AbstractUmlToJavaTest {
 
 	static class BidirectionalTest extends UmlToJavaAssociationTest {
 		override setupTransformationDirection() {
-			configureBidirectionalExecution()
+			configureBidirectionalExecution(virtualModel)
 		}
 	}
 

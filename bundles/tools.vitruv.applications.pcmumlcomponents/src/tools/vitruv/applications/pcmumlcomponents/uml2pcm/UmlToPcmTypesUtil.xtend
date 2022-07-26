@@ -10,12 +10,12 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.domains.pcm.util.RepositoryModelLoader
-import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorrespondence
-import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
-import tools.vitruv.framework.userinteraction.UserInteractor
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionsCorrespondenceModelViewFactory
+import tools.vitruv.applications.util.temporary.pcm.RepositoryModelLoader
+import tools.vitruv.dsls.reactions.runtime.correspondence.ReactionsCorrespondence
+import tools.vitruv.change.correspondence.CorrespondenceModel
+import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
+import tools.vitruv.change.interaction.UserInteractor
+import tools.vitruv.dsls.reactions.runtime.ReactionsCorrespondenceModelViewFactory
 import org.eclipse.emf.common.util.URI
 import edu.kit.ipd.sdq.activextendannotations.Utility
 

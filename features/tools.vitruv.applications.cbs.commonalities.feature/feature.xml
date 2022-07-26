@@ -21,12 +21,13 @@
 
    <requires>
       <import plugin="tools.vitruv.framework.applications"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.commonalities"/>
-      <import plugin="tools.vitruv.domains.pcm"/>
-      <import plugin="tools.vitruv.domains.uml"/>
-      <import plugin="tools.vitruv.domains.java"/>
+      <import plugin="tools.vitruv.dsls.commonalities.runtime"/>
       <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
       <import plugin="tools.vitruv.applications.util.temporary"/>
+      <import plugin="org.palladiosimulator.pcm"/>
+      <import plugin="org.eclipse.uml2.uml"/>
+      <import plugin="org.emftext.language.java"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.emf"/>
    </requires>
 
    <plugin

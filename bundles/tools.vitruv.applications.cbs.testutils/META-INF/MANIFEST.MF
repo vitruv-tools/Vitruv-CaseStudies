@@ -5,22 +5,23 @@ Bundle-SymbolicName: tools.vitruv.applications.cbs.testutils
 Bundle-Version: 0.1.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.cbs.testutils
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: tools.vitruv.testutils,
- tools.vitruv.domains.uml,
- tools.vitruv.domains.pcm,
- tools.vitruv.domains.java,
+Require-Bundle: tools.vitruv.testutils.vsum,
+ org.eclipse.uml2.uml,
+ org.palladiosimulator.pcm,
+ org.emftext.language.java,
  com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
- edu.kit.ipd.sdq.activextendannotations,
+ edu.kit.ipd.sdq.commons.util.java,
  org.hamcrest.core,
- org.junit.jupiter.api;bundle-version=5.8.0,
+ org.junit.jupiter.api,
  org.junit.jupiter.params,
  org.junit.platform.engine,
  org.junit.platform.commons,
  org.opentest4j,
- tools.vitruv.framework.applications;visibility:=reexport
+ tools.vitruv.framework.applications;visibility:=reexport,
+ tools.vitruv.applications.util.temporary
 Export-Package: tools.vitruv.applications.cbs.testutils,
  tools.vitruv.applications.cbs.testutils.equivalencetest,
  tools.vitruv.applications.cbs.testutils.junit

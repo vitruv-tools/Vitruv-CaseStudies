@@ -12,9 +12,9 @@ import org.emftext.language.java.modifiers.Public
 import tools.vitruv.applications.cbs.commonalities.oo.Visibility
 
 import static com.google.common.base.Preconditions.*
-import static tools.vitruv.framework.util.XtendAssertHelper.*
+import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
-import static extension tools.vitruv.domains.java.util.JavaModifierUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 /**
  * Helper class for the mapping between Java's visibility modifiers and

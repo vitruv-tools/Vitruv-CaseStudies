@@ -14,7 +14,7 @@ import org.emftext.language.java.containers.CompilationUnit
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import org.emftext.language.java.members.Member
 import org.emftext.language.java.classifiers.ConcreteClassifier
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.buildJavaFilePath
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.buildJavaFilePath
 import org.emftext.language.java.classifiers.Interface
 import org.emftext.language.java.types.TypeReference
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.mapFixed
@@ -26,20 +26,20 @@ import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resou
 import org.emftext.language.java.statements.Statement
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.flatMapFixed
 import org.apache.log4j.Logger
-import org.eclipse.emf.ecore.resource.Resource
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.instanceOf
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.emftext.language.java.statements.StatementListContainer
-import org.junit.jupiter.api.BeforeAll
-import tools.vitruv.domains.java.JavaDomainProvider
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.expressions.Expression
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
-import static tools.vitruv.domains.java.JamoppLibraryHelper.*
-import org.junit.jupiter.api.BeforeEach
+import static tools.vitruv.applications.util.temporary.java.JamoppLibraryHelper.registerStdLibraryModule
+import static tools.vitruv.applications.util.temporary.java.JamoppLibraryHelper.registerLocalLibrary
 import org.junit.jupiter.api.AfterEach
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import org.junit.jupiter.api.BeforeAll
+import tools.vitruv.applications.util.temporary.java.JavaSetup
+import org.junit.jupiter.api.BeforeEach
 
 /**
  * Test class for the reconstruction of existing java models
@@ -55,24 +55,16 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 		resourceSetForLoading.loadOptions += Map.of(IJavaOptions.DISABLE_LAYOUT_INFORMATION_RECORDING, true)
 	}
 
+	@BeforeAll
+	def static setupJavaFactories() {
+		JavaSetup.prepareFactories([new JavaSourceOrClassFileResourceWithArraysDefaultFactoryImpl()])
+	}
+
 	@AfterEach
 	def void cleanupResourceSet() {
 		resourceSetForLoading.resources.forEach[unload()]
 		resourceSetForLoading.resources.clear()
-	}
-
-	@BeforeAll
-	static def void registerJavaFactoriesSupportingArrays() {
-		new JavaDomainProvider().domain
-		/* We use special Java resource factories that create the "length" field for 
-		 * arrays in the resources of an array's type. This is necessary, because these 
-		 * fields are only created when loading a Java file but not when changing it to 
-		 * have an array (like it is the case when propagating changes into a VirtualModel).
-		 */
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("java",
-			new JavaSourceOrClassFileResourceWithArraysDefaultFactoryImpl())
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("class",
-			new JavaSourceOrClassFileResourceWithArraysDefaultFactoryImpl())
+		resourceSetForLoading = null
 	}
 
 	/**
@@ -335,7 +327,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 
 	static class BidirectionalTest extends JavaConstructionSimulationTest {
 		override setupTransformationDirection() {
-			configureBidirectionalExecution()
+			configureBidirectionalExecution(virtualModel)
 		}
 	}
 

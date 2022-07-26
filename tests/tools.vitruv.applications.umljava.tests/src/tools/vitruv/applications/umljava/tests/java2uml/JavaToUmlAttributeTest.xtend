@@ -11,7 +11,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.emftext.language.java.members.MembersFactory
@@ -270,7 +270,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 
 	static class BidirectionalTest extends JavaToUmlAttributeTest {
 		override setupTransformationDirection() {
-			configureBidirectionalExecution()
+			configureBidirectionalExecution(virtualModel)
 		}
 	}
 
