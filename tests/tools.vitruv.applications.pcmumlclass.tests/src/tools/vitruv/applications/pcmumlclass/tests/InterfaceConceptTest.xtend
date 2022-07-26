@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
 import static extension tools.vitruv.applications.pcmumlclass.tests.UmlQueryUtil.*
+import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
 
 /**
  *  This test class tests the reactions and routines are supposed to synchronize a pcm::OperationInterface
@@ -23,7 +24,7 @@ class InterfaceConceptTest extends NewPcmUmlClassApplicationTest {
 
 	static val TEST_INTERFACE_NAME = "TestInterface"
 	static val PACKAGE_NAME = "rootpackage"
-	static val PACKAGE_NAME_FIRST_UPPER = "Rootpackage"
+	static val PACKAGE_NAME_FIRST_UPPER = PACKAGE_NAME.toFirstUpper
 	static val PACKAGE_RENAMED = "rootpackagerenamed"
 
 	def checkInterfaceConcept(
@@ -37,30 +38,24 @@ class InterfaceConceptTest extends NewPcmUmlClassApplicationTest {
 
 		// parent interfaces should correspond
 	}
-
-	def void init_PCM() {
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
-	}
-	
-	def void init_UML() {
-		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		createUmlRootPackage(PACKAGE_NAME)
-	}
 	
 	@Test
 	def void testCreateInterfaceConcept_UML() {
-		
 		init_UML()
-		
+
 		changeUmlView [
-			//sollte contracts schon erzeugen
-			println("uml root contents " + defaultUmlModel.getNestedPackages)
-			println("uml root contents " + defaultUmlModel.getNestedPackages.findFirst[it.name.equals("rootpackage")])
-			println("uml root contents " + defaultUmlModel.getNestedPackages.findFirst[it.name.equals("rootpackage")].nestedPackages)
+			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)
 		]
 		
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+			
+			assertNotNull(umlContractsPackage.ownedElements)
+			assertNotNull(pcmPackage.eContents)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
 	}
 
 	@Test
