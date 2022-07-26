@@ -34,6 +34,7 @@ import static extension tools.vitruv.applications.pcmumlclass.tests.UmlQueryUtil
 import static extension tools.vitruv.framework.util.ObjectResolutionUtil.getHierarchicUriFragment
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 
 abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest {
 
@@ -47,6 +48,7 @@ abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationT
 	static val PACKAGE_NAME = "rootpackage"
 	static val PACKAGE_NAME_FIRST_UPPER = "Rootpackage"
 	static val PACKAGE_RENAMED = "rootpackagerenamed"
+	static val CONTRACTS_PACKAGE = "contracts"
 
 	protected var extension PcmUmlclassViewFactory viewFactory
 	protected var PcmUmlClassApplicationTestHelper helper
@@ -101,7 +103,16 @@ abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationT
 		view.claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 	}
 	
-
+	def void init_PCM() {
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+	}
+	
+	def void init_UML() {
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		createUmlRootPackage(PACKAGE_NAME)
+	}
 
 	protected def void changeUmlModel((Model)=>void modelModification) {
 		changeUmlView [
@@ -117,13 +128,17 @@ abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationT
 		]
 	}
 	
-	protected def getRootPackage(View view) {
+	protected def getUmlRootPackage(View view) {
 		view.defaultUmlModel.claimPackage(PACKAGE_NAME)
+	}
+	
+	protected def getUmlContractsPackage(View view) {
+		view.defaultUmlModel.getNestedPackages.findFirst[it.name.equals(PACKAGE_NAME)].nestedPackages.findFirst[it.name.equals(CONTRACTS_PACKAGE)]
 	}
 
 	@BeforeEach
 	def void setup() {
-		patchDomains
+		patchDomains()
 		viewFactory = new PcmUmlclassViewFactory(virtualModel)
 		createUmlModel[name = MODEL_NAME]
 	}

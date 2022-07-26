@@ -37,14 +37,12 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 
 	@Test
 	def void testCreateRepositoryConcept_UML_Repository() {
-		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		createUmlRootPackage(PACKAGE_NAME)
+		init_UML
 
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
-			val pcmPackage = defaultPcmRepository
-			assertElementsEqual_deep(umlPackage, pcmPackage)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+			assertElementsEqual(umlPackage, pcmPackage)
 		]
 	}
 
@@ -57,7 +55,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val pcmPackage = defaultPcmRepository
-			assertElementsEqual_deep(umlPackage, pcmPackage)
+			assertElementsEqual(umlPackage, pcmPackage)
 		]
 	}
 
@@ -91,7 +89,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_RENAMED)
 			val pcmPackage = claimPcmRepository(PACKAGE_RENAMED.toFirstUpper)
-			assertElementsEqual_deep(umlPackage, pcmPackage)
+			assertElementsEqual(umlPackage, pcmPackage)
 		]
 	}
 
