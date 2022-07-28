@@ -13,7 +13,7 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper
+import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.getCorrespondingElements
 import tools.vitruv.change.correspondence.CorrespondenceModel
 import tools.vitruv.change.interaction.UserInteractionOptions.NotificationType
 import tools.vitruv.change.interaction.UserInteractor
@@ -69,18 +69,18 @@ class PcmUmlClassHelper {
 	}
 
 	def private static boolean isRepositoryPackage(Package pkg, CorrespondenceModel corrModel) {
-		return !ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, pkg,
-			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE, Repository).nullOrEmpty
+		return !corrModel.getCorrespondingElements(pkg, Repository,
+			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE).nullOrEmpty
 	}
 
 	def static getCorrespondingPcmDataType(CorrespondenceModel corrModel, Type umlType, int lower, int upper,
 		Repository pcmRepository, UserInteractor userInteractor) {
 		if(umlType === null) return null
 
-		val pcmPrimitiveType = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, umlType,
-			TagLiterals.DATATYPE__TYPE, PrimitiveDataType)
-		val pcmCompositeType = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, umlType,
-			TagLiterals.COMPOSITE_DATATYPE__CLASS, CompositeDataType)
+		val pcmPrimitiveType = corrModel.getCorrespondingElements(umlType,
+			PrimitiveDataType, TagLiterals.DATATYPE__TYPE)
+		val pcmCompositeType = corrModel.getCorrespondingElements(umlType,
+			CompositeDataType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		val pcmSimpleType = #[pcmPrimitiveType.head, pcmCompositeType.head].findFirst[it !== null]
 
 		if (umlType !== null && pcmSimpleType === null) {
