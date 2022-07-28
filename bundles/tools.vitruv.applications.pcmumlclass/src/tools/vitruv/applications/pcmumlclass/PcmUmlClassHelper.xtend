@@ -13,13 +13,12 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.getCorrespondingElements
-import tools.vitruv.change.correspondence.CorrespondenceModel
 import tools.vitruv.change.interaction.UserInteractionOptions.NotificationType
 import tools.vitruv.change.interaction.UserInteractor
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.system.System
 import org.palladiosimulator.pcm.core.entity.Entity
+import tools.vitruv.applications.util.temporary.other.CorrespondenceRetriever
 
 @Utility
 class PcmUmlClassHelper {
@@ -58,30 +57,30 @@ class PcmUmlClassHelper {
 	 * @return 
 	 * 		true, if any nesting package of pkg correspond to a pcm::Repository according to the correspondenceModel
 	 */
-	def static boolean isContainedInRepositoryHierarchy(Package pkg, CorrespondenceModel correspondenceModel) {
+	def static boolean isContainedInRepositoryHierarchy(Package pkg, CorrespondenceRetriever correspondenceRetriever) {
 		var parentPkg = pkg.nestingPackage
 		var repositoryFound = false
 		while (parentPkg !== null && !repositoryFound) {
-			repositoryFound = repositoryFound || isRepositoryPackage(parentPkg, correspondenceModel)
+			repositoryFound = repositoryFound || isRepositoryPackage(parentPkg, correspondenceRetriever)
 			parentPkg = parentPkg.nestingPackage
 		}
 		return repositoryFound
 	}
 
-	def private static boolean isRepositoryPackage(Package pkg, CorrespondenceModel corrModel) {
-		return !corrModel.getCorrespondingElements(pkg, Repository,
-			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE).nullOrEmpty
+	def private static boolean isRepositoryPackage(Package pkg, CorrespondenceRetriever correspondenceRetriever) {
+		return correspondenceRetriever.retrieveCorrespondingElement(pkg, Repository,
+			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE) !== null
 	}
 
-	def static getCorrespondingPcmDataType(CorrespondenceModel corrModel, Type umlType, int lower, int upper,
-		Repository pcmRepository, UserInteractor userInteractor) {
+	def static getCorrespondingPcmDataType(Type umlType, int lower, int upper,
+		Repository pcmRepository, UserInteractor userInteractor, CorrespondenceRetriever correspondenceRetriever) {
 		if(umlType === null) return null
 
-		val pcmPrimitiveType = corrModel.getCorrespondingElements(umlType,
-			PrimitiveDataType, TagLiterals.DATATYPE__TYPE)
-		val pcmCompositeType = corrModel.getCorrespondingElements(umlType,
-			CompositeDataType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
-		val pcmSimpleType = #[pcmPrimitiveType.head, pcmCompositeType.head].findFirst[it !== null]
+		val pcmPrimitiveType = correspondenceRetriever.retrieveCorrespondingElement(umlType,
+			PrimitiveDataType, TagLiterals.DATATYPE__TYPE) as PrimitiveDataType 
+		val pcmCompositeType = correspondenceRetriever.retrieveCorrespondingElement(umlType,
+			CompositeDataType, TagLiterals.COMPOSITE_DATATYPE__CLASS) as CompositeDataType
+		val pcmSimpleType = #[pcmPrimitiveType, pcmCompositeType].findFirst[it !== null]
 
 		if (umlType !== null && pcmSimpleType === null) {
 			// warn user that a non-synchronized DataType has been set where it should not

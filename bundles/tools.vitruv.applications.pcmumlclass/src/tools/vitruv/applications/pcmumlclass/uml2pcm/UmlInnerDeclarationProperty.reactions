@@ -178,7 +178,9 @@ routine propagateTypeChange(uml::Property umlProperty) {
 	}
 	update {
 		val pcmRepository = pcmInnerDeclaration.eResource.allContents.filter(Repository).head
-		val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(correspondenceModel, umlProperty.type, umlProperty.lower, umlProperty.upper, pcmRepository, userInteractor)
+		val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(umlProperty.type, umlProperty.lower, umlProperty.upper, pcmRepository, userInteractor, [sourceElement, expectedType, tag |
+			getCorrespondingElement(sourceElement, expectedType, null, tag, false)
+		])
 		pcmInnerDeclaration.datatype_InnerDeclaration = pcmDataType
 		
 		if(pcmOldCollectionType.isPresent && pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType(umlProperty)

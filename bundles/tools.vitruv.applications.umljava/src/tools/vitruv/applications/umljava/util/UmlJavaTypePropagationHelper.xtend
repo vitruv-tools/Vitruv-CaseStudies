@@ -23,7 +23,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.eclipse.emf.ecore.resource.ResourceSet
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.getUmlPrimitiveTypes
-import org.eclipse.emf.ecore.EObject
+import tools.vitruv.applications.util.temporary.other.CorrespondenceRetriever
 
 /**
  * Helper class for the UML <-> Java - reactions. Contains functions for handling java::TypeReferences
@@ -152,11 +152,6 @@ class UmlJavaTypePropagationHelper {
 
 	def static isSupportedUmlPrimitiveType(PrimitiveType umlPrimitiveType) {
 		PrimitiveTypesPropagation.isSupportedUmlPrimitiveType(umlPrimitiveType)
-	}
-
-	static interface CorrespondenceRetriever {
-		def EObject retrieveCorrespondingElement(EObject sourceElement,
-			Class<? extends EObject> correspondingElementType, String tag)
 	}
 
 	def static getNotRegisteredPrimitiveTypesWithUnifiedNames(CorrespondenceRetriever correspondenceRetriever,
