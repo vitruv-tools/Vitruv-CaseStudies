@@ -60,7 +60,9 @@ routine propagateTypeChangeToTypedMultiplicityElement(uml::TypedElement uTyped, 
 		if (newJavaType !== null && newJavaType.target instanceof ConcreteClassifier && newJavaType.target.containingCompilationUnit.namespaces.head == "java") {
 			createExistingUmlClassifier(newJavaType.target as ConcreteClassifier)
 		}
-		val newUmlType = getUmlTypeFromReference(newJavaType, correspondenceModel)
+		val newUmlType = getUmlTypeFromReference(newJavaType, [sourceElement, expectedType, tag |
+			getCorrespondingElement(sourceElement, expectedType, null, tag, false)
+		])
 		if (!EcoreUtil.equals(existingUmlType, newUmlType)) {
 			uTyped.type = newUmlType
 		}

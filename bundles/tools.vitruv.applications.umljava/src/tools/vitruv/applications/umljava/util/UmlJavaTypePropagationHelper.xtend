@@ -15,18 +15,15 @@ import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.util.temporary.java.JavaModificationUtil
-import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.getCorrespondingElements
-import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.addCorrespondence
-import tools.vitruv.change.correspondence.CorrespondenceModel
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 import tools.vitruv.change.interaction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import org.eclipse.emf.ecore.resource.ResourceSet
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.getUmlPrimitiveTypes
+import org.eclipse.emf.ecore.EObject
 
 /**
  * Helper class for the UML <-> Java - reactions. Contains functions for handling java::TypeReferences
@@ -51,37 +48,43 @@ class UmlJavaTypePropagationHelper {
 		return supportedCollectionTypes.get(selectedType)
 	}
 
-	def static dispatch Type getUmlTypeFromReference(Void jRef, CorrespondenceModel cm) {
+	def static dispatch Type getUmlTypeFromReference(Void jRef, CorrespondenceRetriever correspondenceRetriever) {
 		return null
 	}
 
-	def static dispatch Type getUmlTypeFromReference(TypeReference jRef, CorrespondenceModel cm) {
+	def static dispatch Type getUmlTypeFromReference(TypeReference jRef,
+		CorrespondenceRetriever correspondenceRetriever) {
 		return null
 	}
 
-	def static dispatch Type getUmlTypeFromReference(org.emftext.language.java.types.PrimitiveType jRef,
-		CorrespondenceModel cm) {
-		return PrimitiveTypesPropagation.mapJavaPrimitiveTypeToUmlPrimitiveType(jRef, cm)
+	def static dispatch Type getUmlTypeFromReference(
+		org.emftext.language.java.types.PrimitiveType jRef,
+		CorrespondenceRetriever correspondenceRetriever
+	) {
+		return PrimitiveTypesPropagation.mapJavaPrimitiveTypeToUmlPrimitiveType(jRef, correspondenceRetriever)
 	}
 
-	def static dispatch Type getUmlTypeFromReference(ClassifierReference jRef, CorrespondenceModel cm) {
+	def static dispatch Type getUmlTypeFromReference(ClassifierReference jRef,
+		CorrespondenceRetriever correspondenceRetriever) {
 		// it could be a wrapped primitive type or java.lang.String
-		val umlPrimitive = PrimitiveTypesPropagation.mapJavaPrimitiveTypeToUmlPrimitiveType(jRef, cm)
+		val umlPrimitive = PrimitiveTypesPropagation.
+			mapJavaPrimitiveTypeToUmlPrimitiveType(jRef, correspondenceRetriever)
 		if (umlPrimitive !== null) {
 			return umlPrimitive
 		}
 
 		val classifier = getNormalizedClassifierFromTypeReference(jRef)
 		if (classifier !== null)
-			return cm.getCorrespondingElements(classifier, Type, null).head
+			return correspondenceRetriever.retrieveCorrespondingElement(classifier, Type, null) as Type
 		else {
 			return null
 		}
 	}
 
-	def static dispatch Type getUmlTypeFromReference(NamespaceClassifierReference jRef, CorrespondenceModel cm) {
+	def static dispatch Type getUmlTypeFromReference(NamespaceClassifierReference jRef,
+		CorrespondenceRetriever correspondenceRetriever) {
 		return if (!jRef.classifierReferences.nullOrEmpty)
-			getUmlTypeFromReference(jRef.classifierReferences.head, cm)
+			getUmlTypeFromReference(jRef.classifierReferences.head, correspondenceRetriever)
 		else
 			null
 	}
@@ -142,17 +145,23 @@ class UmlJavaTypePropagationHelper {
 		}
 		return typeReference
 	}
-	
+
 	def static getJavaTypeReferenceForUmlPrimitiveType(PrimitiveType umlPrimitiveType) {
 		PrimitiveTypesPropagation.mapUmlPrimitiveTypeToJavaPrimitiveType(umlPrimitiveType)
 	}
-	
+
 	def static isSupportedUmlPrimitiveType(PrimitiveType umlPrimitiveType) {
 		PrimitiveTypesPropagation.isSupportedUmlPrimitiveType(umlPrimitiveType)
 	}
-	
-	def static registerPredefinedUmlPrimitiveTypes(CorrespondenceModel correspondenceModel, ResourceSet resourceSet) {
-		PrimitiveTypesPropagation.registerPredefinedUmlPrimitiveTypes(correspondenceModel, resourceSet)
+
+	static interface CorrespondenceRetriever {
+		def EObject retrieveCorrespondingElement(EObject sourceElement,
+			Class<? extends EObject> correspondingElementType, String tag)
+	}
+
+	def static getNotRegisteredPrimitiveTypesWithUnifiedNames(CorrespondenceRetriever correspondenceRetriever,
+		ResourceSet resourceSet) {
+		PrimitiveTypesPropagation.getNotRegisteredPrimitiveTypesWithUnifiedNames(correspondenceRetriever, resourceSet)
 	}
 
 	private static class PrimitiveTypesPropagation {
@@ -228,24 +237,31 @@ class UmlJavaTypePropagationHelper {
 				default: null
 			}
 		}
-		
+
 		def static isSupportedUmlPrimitiveType(PrimitiveType umlPrimitiveType) {
 			umlPrimitiveType.unifiedNameForUmlPrimitiveTypeName !== null
 		}
 
-		def static registerPredefinedUmlPrimitiveTypes(CorrespondenceModel correspondenceModel, ResourceSet resourceSet) {
-			var List<PrimitiveType> umlPrimitiveTypes = getUmlPrimitiveTypes(resourceSet)
-			for (primitive : umlPrimitiveTypes) {
-				val unifiedType = primitive.unifiedNameForUmlPrimitiveTypeName
-				if (unifiedType !== null) {
-					val alreadyRegistered = correspondenceModel.getCorrespondingElements(
-						UMLPackage.Literals.PRIMITIVE_TYPE, PrimitiveType, unifiedType.toString
-					).head
-					if (alreadyRegistered === null)
-						correspondenceModel.addCorrespondence(UMLPackage.Literals.PRIMITIVE_TYPE,
-							primitive, unifiedType.toString)
-				}
+		def static Iterable<Pair<PrimitiveType, String>> getNotRegisteredPrimitiveTypesWithUnifiedNames(
+			CorrespondenceRetriever correspondenceRetriever, ResourceSet resourceSet) {
+			val notRegisteredPrimitiveTypes = getUmlPrimitiveTypes(resourceSet).filter [
+				hasCorrespondingElement(it, correspondenceRetriever)
+			]
+			return notRegisteredPrimitiveTypes.map[it -> unifiedNameForUmlPrimitiveTypeName.toString]
+		}
+
+		private def static hasCorrespondingElement(PrimitiveType primitiveType,
+			CorrespondenceRetriever correspondenceRetriever) {
+			val unifiedType = primitiveType.unifiedNameForUmlPrimitiveTypeName
+			if (unifiedType !== null) {
+				val alreadyRegisteredElement = correspondenceRetriever.retrieveCorrespondingElement(
+					UMLPackage.Literals.PRIMITIVE_TYPE,
+					PrimitiveType,
+					unifiedType.toString
+				)
+				return alreadyRegisteredElement === null
 			}
+			return false
 		}
 
 		/**
@@ -265,18 +281,19 @@ class UmlJavaTypePropagationHelper {
 		 * @return
 		 * 		the mapped uml::PrimitiveType or null if no matching mapping exists
 		 */
-		def static dispatch PrimitiveType mapJavaPrimitiveTypeToUmlPrimitiveType(TypeReference javaTypeReference, CorrespondenceModel correspondenceModel) {
+		def static dispatch PrimitiveType mapJavaPrimitiveTypeToUmlPrimitiveType(TypeReference javaTypeReference,
+			CorrespondenceRetriever correspondenceRetriever) {
 			val classifier = getNormalizedClassifierFromTypeReference(javaTypeReference)
 			if (classifier !== null) {
 				// check if it is a wrapped primitive type
 				val unwrappedPrimitive = unwrapWrappedPrimitiveType(javaTypeReference)
 				if (unwrappedPrimitive !== null)
-					return mapJavaPrimitiveTypeToUmlPrimitiveType(unwrappedPrimitive, correspondenceModel)
+					return mapJavaPrimitiveTypeToUmlPrimitiveType(unwrappedPrimitive, correspondenceRetriever)
 				// check if it is of type String, which has to be mapped to an uml::PrimitiveType
 				if (getQualifiedName(classifier) == "java.lang.String" ||
 					getQualifiedName(classifier) == "java.lang.CharSequence") {
-					correspondenceModel.getCorrespondingElements(UMLPackage.Literals.PRIMITIVE_TYPE,
-						PrimitiveType, UnifiedPrimitiveType.STRING.toString).claimOne
+					correspondenceRetriever.retrieveCorrespondingElement(UMLPackage.Literals.PRIMITIVE_TYPE,
+						PrimitiveType, UnifiedPrimitiveType.STRING.toString) as PrimitiveType
 				} else {
 					return null
 				}
@@ -317,11 +334,12 @@ class UmlJavaTypePropagationHelper {
 		}
 
 		def static dispatch PrimitiveType mapJavaPrimitiveTypeToUmlPrimitiveType(
-			org.emftext.language.java.types.PrimitiveType javaTypeReference, CorrespondenceModel correspondenceModel) {
+			org.emftext.language.java.types.PrimitiveType javaTypeReference,
+			CorrespondenceRetriever correspondenceRetriever) {
 			val unifiedPrimitiveType = javaTypeReference.unifiedNameForJavaPrimitiveTypeName
 			if (unifiedPrimitiveType !== null) {
-				correspondenceModel.getCorrespondingElements(UMLPackage.Literals.PRIMITIVE_TYPE,
-					PrimitiveType, unifiedPrimitiveType.toString).claimOne
+				correspondenceRetriever.retrieveCorrespondingElement(UMLPackage.Literals.PRIMITIVE_TYPE, PrimitiveType,
+					unifiedPrimitiveType.toString) as PrimitiveType
 			}
 		}
 
