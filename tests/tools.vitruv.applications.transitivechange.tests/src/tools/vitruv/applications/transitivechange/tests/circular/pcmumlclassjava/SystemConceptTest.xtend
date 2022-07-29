@@ -8,7 +8,7 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.system.System
 import org.palladiosimulator.pcm.system.SystemFactory
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
+import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 
