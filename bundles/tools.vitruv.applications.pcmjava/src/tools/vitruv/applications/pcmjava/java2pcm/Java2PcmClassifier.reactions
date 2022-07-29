@@ -56,7 +56,7 @@ routine createOrFindArchitecturalElement(java::Package javaPackage, String conta
 			PACKAGE with containerPackage.name == containerName
 		require absence of pcm::RepositoryComponent corresponding to javaPackage
 		// ensure that we are not the root package (happens when the root package is being moved)
-		require absence of pcm::Repository corresponding to javaPackage tagged with "package_root"
+		require absence of pcm::Repository corresponding to javaPackage tagged "package_root"
 	}
 	update {
 		val rootPackageName = getRootPackageName(javaPackage.name)
@@ -70,7 +70,7 @@ routine createOrFindArchitecturalElement(java::Package javaPackage, String conta
 
 routine createOrFindArchitecturalElementInPackage(java::Package javaPackage, java::Package containingPackage, String rootPackageName) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to containingPackage tagged with "package_root"
+		val pcmRepository = retrieve pcm::Repository corresponding to containingPackage tagged "package_root"
 		require absence of pcm::RepositoryComponent corresponding to javaPackage
 	}
 	update {
@@ -115,7 +115,7 @@ routine createArchitecturalElement(java::Package javaPackage, String name, Strin
 
 routine createOrFindRepository(java::Package javaPackage, String packageName, String newTag) {
 	match {
-		require absence of pcm::Repository corresponding to javaPackage tagged with newTag
+		require absence of pcm::Repository corresponding to javaPackage tagged newTag
 		require absence of pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
 		val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.
 			REPOSITORY with javaPackage.isPackageFor(foundRepository)
@@ -255,7 +255,7 @@ reaction JavaPackageRemoved {
 
 routine removeRepository(java::Package javaPackage) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage tagged with "package_root"
+		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage tagged "package_root"
 	}
 	update {
 		removeObject(pcmRepository)
@@ -265,7 +265,7 @@ routine removeRepository(java::Package javaPackage) {
 
 routine removeSystem(java::Package javaPackage) {
 	match {
-		val pcmSystem = retrieve pcm::System corresponding to javaPackage tagged with "root_system"
+		val pcmSystem = retrieve pcm::System corresponding to javaPackage tagged "root_system"
 	}
 	update {
 		removeObject(pcmSystem)
@@ -285,7 +285,7 @@ routine removeComponent(java::Package javaPackage) {
 
 routine renameRepository(java::Package javaPackage) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage tagged with "package_root"
+		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage tagged "package_root"
 	}
 	update {
 		pcmRepository.entityName = javaPackage.name.toFirstUpper
@@ -294,7 +294,7 @@ routine renameRepository(java::Package javaPackage) {
 
 routine renameSystem(java::Package javaPackage) {
 	match {
-		val pcmSystem = retrieve pcm::System corresponding to javaPackage tagged with "root_system"
+		val pcmSystem = retrieve pcm::System corresponding to javaPackage tagged "root_system"
 	}
 	update {
 		pcmSystem.entityName = javaPackage.name.toFirstUpper
@@ -321,7 +321,7 @@ routine createOrFindPCMInterface(java::Interface javaInterface, java::Compilatio
 		val containingPackage = retrieve java::Package corresponding to ContainersPackage.Literals.
 			PACKAGE with containingPackage.namespacesAsString + containingPackage.name + "." ==
 			compilationUnit.namespacesAsString
-		val pcmRepository = retrieve optional pcm::Repository corresponding to containingPackage tagged with "contracts"
+		val pcmRepository = retrieve optional pcm::Repository corresponding to containingPackage tagged "contracts"
 		require absence of pcm::OperationInterface corresponding to javaInterface
 	}
 	update {
@@ -454,7 +454,7 @@ reaction ClassCreated {
 routine classMapping(java::Class javaClass, java::CompilationUnit compilationUnit, java::Package javaPackage) {
 	match {
 		val pcmRepository = retrieve pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
-		val datatypesPackage = retrieve java::Package corresponding to pcmRepository tagged with "datatypes"
+		val datatypesPackage = retrieve java::Package corresponding to pcmRepository tagged "datatypes"
 	}
 	update {
 		if (javaPackage !== null && javaPackage.name == datatypesPackage.name) {
@@ -497,7 +497,7 @@ routine createElement(java::Class javaClass, java::Package javaPackage, java::Co
 		require absence of pcm::DataType corresponding to javaClass
 		require absence of pcm::InterfaceProvidingRequiringEntity corresponding to javaClass
 		val pcmRepository = retrieve pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
-		val javaRootPackage = retrieve java::Package corresponding to pcmRepository tagged with "package_root"
+		val javaRootPackage = retrieve java::Package corresponding to pcmRepository tagged "package_root"
 	}
 	update {
 		createArchitecturalElement(javaRootPackage, javaClass.name, compilationUnit.namespaces.head)
@@ -641,7 +641,7 @@ routine createJavaSubPackages(java::Package javaPackage) {
  */
 routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package parentPackage, String packageName, String newTag) {
 	match {
-		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
+		require absence of java::Package corresponding to sourceElementMappedToPackage tagged newTag
 	}
 	create {
 		val javaPackage = new java::Package

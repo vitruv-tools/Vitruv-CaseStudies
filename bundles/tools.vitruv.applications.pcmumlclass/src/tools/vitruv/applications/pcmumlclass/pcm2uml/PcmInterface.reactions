@@ -30,9 +30,9 @@ routine insertCorrespondingInterface(pcm::OperationInterface pcmInterface, pcm::
 
 routine detectOrCreateInterfaceCandidate(pcm::OperationInterface pcmInterface, pcm::Repository pcmRepository) {
 	match {
-		val umlContractsPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.
+		val umlContractsPackage = retrieve uml::Package corresponding to pcmRepository tagged TagLiterals.
 			REPOSITORY_TO_CONTRACTS_PACKAGE
-		val umlInterface = retrieve optional uml::Interface corresponding to pcmInterface tagged with TagLiterals.
+		val umlInterface = retrieve optional uml::Interface corresponding to pcmInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {
@@ -52,7 +52,7 @@ routine detectOrCreateInterfaceCandidate(pcm::OperationInterface pcmInterface, p
 
 routine attemptAddingCorrespondenceForExistingInterfaceCandidate(pcm::OperationInterface pcmInterface, pcm::Repository pcmRepository, uml::Interface umlInterfaceCandidate) {
 	match {
-		require absence of pcm::OperationInterface corresponding to umlInterfaceCandidate tagged with TagLiterals.
+		require absence of pcm::OperationInterface corresponding to umlInterfaceCandidate tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {
@@ -62,9 +62,9 @@ routine attemptAddingCorrespondenceForExistingInterfaceCandidate(pcm::OperationI
 
 routine createInterfaceCorrespondence(pcm::OperationInterface pcmInterface, pcm::Repository pcmRepository) {
 	match {
-		val umlContractsPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.
+		val umlContractsPackage = retrieve uml::Package corresponding to pcmRepository tagged TagLiterals.
 			REPOSITORY_TO_CONTRACTS_PACKAGE
-		require absence of uml::Interface corresponding to pcmInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		require absence of uml::Interface corresponding to pcmInterface tagged TagLiterals.INTERFACE_TO_INTERFACE
 	}
 	create {
 		val umlInterface = new uml::Interface
@@ -77,9 +77,9 @@ routine createInterfaceCorrespondence(pcm::OperationInterface pcmInterface, pcm:
 
 routine moveCorrespondingInterface(pcm::OperationInterface pcmInterface, pcm::Repository pcmRepository) {
 	match {
-		val umlContractsPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.
+		val umlContractsPackage = retrieve uml::Package corresponding to pcmRepository tagged TagLiterals.
 			REPOSITORY_TO_CONTRACTS_PACKAGE
-		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged with TagLiterals.
+		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {
@@ -95,9 +95,9 @@ reaction InterfaceRemovedFromRepository {
 
 routine removeCorrespondingInterface(pcm::OperationInterface pcmInterface, pcm::Repository pcmRepository) {
 	match {
-		val umlContractsPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.
+		val umlContractsPackage = retrieve uml::Package corresponding to pcmRepository tagged TagLiterals.
 			REPOSITORY_TO_CONTRACTS_PACKAGE
-		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged with TagLiterals.
+		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {
@@ -112,7 +112,7 @@ reaction InterfaceDeleted {
 
 routine deleteCorrespondingInterface(pcm::OperationInterface pcmInterface) {
 	match {
-		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged with TagLiterals.
+		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {
@@ -129,7 +129,7 @@ reaction InterfaceRenamed {
 
 routine renameCorrespondingInterface(pcm::OperationInterface pcmInterface, String newName) {
 	match {
-		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged with TagLiterals.
+		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {
@@ -145,9 +145,9 @@ reaction ParentInterfaceAdded {
 
 routine addParentInterfaceToCorrespondingInterface(pcm::OperationInterface pcmInterface, pcm::OperationInterface pcmParentInterface) {
 	match {
-		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged with TagLiterals.
+		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
-		val umlParentInterface = retrieve uml::Interface corresponding to pcmParentInterface tagged with TagLiterals.
+		val umlParentInterface = retrieve uml::Interface corresponding to pcmParentInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	create {
@@ -167,9 +167,9 @@ reaction ParentInterfaceRemoved {
 
 routine removeParentInterfaceFromCorrespondingInterface(pcm::OperationInterface pcmInterface, pcm::OperationInterface pcmParentInterface) {
 	match {
-		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged with TagLiterals.
+		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
-		val umlParentInterface = retrieve uml::Interface corresponding to pcmParentInterface tagged with TagLiterals.
+		val umlParentInterface = retrieve uml::Interface corresponding to pcmParentInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {

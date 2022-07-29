@@ -89,7 +89,7 @@ routine createRepositorySubPackages(pcm::Repository repository) {
 
 routine renamePackageForRepository(pcm::Repository repository) {
 	match {
-		val rootPackage = retrieve java::Package corresponding to repository tagged with "repository_root"
+		val rootPackage = retrieve java::Package corresponding to repository tagged "repository_root"
 	}
 	update {
 		rootPackage.name = repository.correspondingPackageName
@@ -330,7 +330,7 @@ reaction CreatedComponent {
 routine createComponentImplementation(pcm::RepositoryComponent component) {
 	match {
 		val repositoryPackage = retrieve java::Package corresponding to component.
-			repository__RepositoryComponent tagged with "repository_root"
+			repository__RepositoryComponent tagged "repository_root"
 	}
 	update {
 		createOrFindJavaPackage(component, repositoryPackage, component.entityName, null);
@@ -579,8 +579,8 @@ reaction RenameInnerDeclaration {
 routine renameInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) {
 	match {
 		val compositeTypeField = retrieve java::Field corresponding to innerDeclaration
-		val compositeTypeGetterMethod = retrieve java::ClassMethod corresponding to innerDeclaration tagged with "getter"
-		val compositeTypeSetterMethod = retrieve java::ClassMethod corresponding to innerDeclaration tagged with "setter"
+		val compositeTypeGetterMethod = retrieve java::ClassMethod corresponding to innerDeclaration tagged "getter"
+		val compositeTypeSetterMethod = retrieve java::ClassMethod corresponding to innerDeclaration tagged "setter"
 	}
 	update {
 		compositeTypeField.name = innerDeclaration.entityName;
@@ -610,8 +610,8 @@ routine changeTypeOfInnerDeclarationImplementation(pcm::InnerDeclaration innerDe
 routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, java::TypeReference newTypeReference) {
 	match {
 		val compositeTypeField = retrieve java::Field corresponding to innerDeclaration
-		val compositeTypeGetterMethod = retrieve java::Method corresponding to innerDeclaration tagged with "getter"
-		val compositeTypeSetterMethod = retrieve java::Method corresponding to innerDeclaration tagged with "setter"
+		val compositeTypeGetterMethod = retrieve java::Method corresponding to innerDeclaration tagged "getter"
+		val compositeTypeSetterMethod = retrieve java::Method corresponding to innerDeclaration tagged "setter"
 	}
 	update {
 		compositeTypeField.typeReference = EcoreUtil.copy(newTypeReference);
@@ -627,7 +627,7 @@ routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, java:
 // ################ JAVA PACKAGE ROUTINES ################
 routine createOrFindJavaPackage(EObject sourceElementMappedToPackage, java::Package parentPackage, String packageName, String newTag) {
 	match {
-		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
+		require absence of java::Package corresponding to sourceElementMappedToPackage tagged newTag
 		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.
 			PACKAGE with matchingPackages.name.toLowerCase == packageName.toLowerCase && (parentPackage === null ||
 			matchingPackages.namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + ".")
@@ -649,7 +649,7 @@ routine addPackageCorrespondence(EObject sourceElementMappedToPackage, java::Pac
 
 routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package parentPackage, String packageName, String newTag) {
 	match {
-		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
+		require absence of java::Package corresponding to sourceElementMappedToPackage tagged newTag
 	}
 	create {
 		val javaPackage = new java::Package
@@ -670,7 +670,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 
 routine renameJavaPackage(pcm::NamedElement sourceElementMappedToPackage, java::Package parentPackage, String packageName, String expectedTag) {
 	match {
-		val javaPackage = retrieve java::Package corresponding to sourceElementMappedToPackage tagged with expectedTag // move containing model to project-relative location: buildJavaFilePath(javaPackage)
+		val javaPackage = retrieve java::Package corresponding to sourceElementMappedToPackage tagged expectedTag // move containing model to project-relative location: buildJavaFilePath(javaPackage)
 	}
 	update {
 		val newNamespaces = newArrayList
@@ -688,7 +688,7 @@ routine renameJavaPackage(pcm::NamedElement sourceElementMappedToPackage, java::
 
 routine deleteJavaPackage(pcm::NamedElement sourceElementMappedToPackage, String expectedTag) {
 	match {
-		val javaPackage = retrieve java::Package corresponding to sourceElementMappedToPackage tagged with expectedTag
+		val javaPackage = retrieve java::Package corresponding to sourceElementMappedToPackage tagged expectedTag
 	}
 	update {
 		removeObject(javaPackage)
@@ -727,7 +727,7 @@ routine createJavaClass(pcm::NamedElement sourceElementMappedToClass, java::Pack
 routine createOrFindJavaInterface(pcm::Interface pcmInterface) {
 	match {
 		val contractsPackage = retrieve java::Package corresponding to pcmInterface.
-			repository__Interface tagged with "contracts"
+			repository__Interface tagged "contracts"
 		require absence of java::Interface corresponding to pcmInterface
 	}
 	update {

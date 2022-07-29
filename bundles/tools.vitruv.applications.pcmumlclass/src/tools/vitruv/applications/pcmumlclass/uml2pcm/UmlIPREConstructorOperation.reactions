@@ -25,7 +25,7 @@ reaction IPREConstructorOperationNameChanged {
 
 routine changeNameOfCorrespondingIPRE_Constructor(uml::Operation umlOperation, String newName) {
 	match {
-		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged with TagLiterals.
+		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged TagLiterals.
 			IPRE__CONSTRUCTOR
 	}
 	update {

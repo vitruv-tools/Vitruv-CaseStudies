@@ -52,11 +52,11 @@ reaction RegularOrReturnParameterUpperChanged2 {
 
 routine propagateTypeChange(uml::Parameter umlParameter) {
 	match {
-		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlParameter tagged with TagLiterals.
+		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlParameter tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
-		val pcmParameter = retrieve optional pcm::Parameter corresponding to umlParameter tagged with TagLiterals.
+		val pcmParameter = retrieve optional pcm::Parameter corresponding to umlParameter tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
-		val pcmOldCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.
+		val pcmOldCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParameter tagged TagLiterals.
 			COLLECTION_DATATYPE__PROPERTY
 	}
 	update {
@@ -85,7 +85,7 @@ routine propagateTypeChange(uml::Parameter umlParameter) {
 
 routine removeCorrespondenceForOldCollectionType_Parameter(uml::Parameter umlParameter) {
 	match {
-		val pcmCollectionType = retrieve pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.
+		val pcmCollectionType = retrieve pcm::CollectionDataType corresponding to umlParameter tagged TagLiterals.
 			COLLECTION_DATATYPE__PARAMETER
 	}
 	update {
@@ -96,7 +96,7 @@ routine removeCorrespondenceForOldCollectionType_Parameter(uml::Parameter umlPar
 routine addCorrespondenceForCollectionType_Parameter(uml::Parameter umlParameter, pcm::CollectionDataType pcmCollectionType) {
 	match {
 		// one Parameter can only correspond to one CollectionDataType, but one CollectionDataType can correspond to many Parameters
-		require absence of pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.
+		require absence of pcm::CollectionDataType corresponding to umlParameter tagged TagLiterals.
 			COLLECTION_DATATYPE__PARAMETER
 	}
 	update {

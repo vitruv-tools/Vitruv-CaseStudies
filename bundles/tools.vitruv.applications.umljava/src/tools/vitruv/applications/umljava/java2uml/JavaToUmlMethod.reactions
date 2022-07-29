@@ -36,8 +36,8 @@ routine createOrFindUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClas
 	match {
 		val uClassifier = retrieve uml::Classifier corresponding to jClassifier with uClassifier instanceof OperationOwner
 		require absence of uml::Operation corresponding to jMethod
-		require absence of uml::Property corresponding to jMethod tagged with UmlJavaCorrespondenceTag.GETTER
-		require absence of uml::Property corresponding to jMethod tagged with UmlJavaCorrespondenceTag.SETTER
+		require absence of uml::Property corresponding to jMethod tagged UmlJavaCorrespondenceTag.GETTER
+		require absence of uml::Property corresponding to jMethod tagged UmlJavaCorrespondenceTag.SETTER
 	}
 	update {
 		val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst [
@@ -168,7 +168,7 @@ reaction JavaMemberDeleted {
 
 routine deleteUmlMethod(java::Member jMem) {
 	match {
-		val uMem = retrieve uml::NamedElement corresponding to jMem tagged with ""
+		val uMem = retrieve uml::NamedElement corresponding to jMem tagged ""
 	}
 	update {
 		removeObject(uMem)
@@ -178,7 +178,7 @@ routine deleteUmlMethod(java::Member jMem) {
 
 routine deleteAccessorCorrespondence(java::Member jMember, String tag) {
 	match {
-		val uProperty = retrieve uml::Property corresponding to jMember tagged with tag
+		val uProperty = retrieve uml::Property corresponding to jMember tagged tag
 	}
 	update {
 		removeCorrespondenceBetween(uProperty, jMember, tag)
@@ -354,7 +354,7 @@ reaction JavaVisibilityModifierRemoved {
 
 routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem) {
 	match {
-		val uElem = retrieve uml::NamedElement corresponding to jElem tagged with ""
+		val uElem = retrieve uml::NamedElement corresponding to jElem tagged ""
 	}
 	update {
 		uElem.visibility = getUmlVisibilityKindFromJavaElement(jElem)
@@ -369,7 +369,7 @@ reaction JavaNamedElementRenamed {
 
 routine renameUmlNamedElement(java::NamedElement jElement) {
 	match {
-		val uElement = retrieve uml::NamedElement corresponding to jElement tagged with ""
+		val uElement = retrieve uml::NamedElement corresponding to jElement tagged ""
 	}
 	update {
 		uElement.name = jElement.name

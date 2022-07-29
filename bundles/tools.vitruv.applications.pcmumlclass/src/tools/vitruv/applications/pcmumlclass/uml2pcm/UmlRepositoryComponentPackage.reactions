@@ -32,7 +32,7 @@ reaction RepositoryComponentPackageInserted {
 routine detectDatatypesSubpackage(uml::Package umlPackage, uml::Package umlParentPackage) {
 	match {
 		check umlPackage.name == DefaultLiterals.DATATYPES_PACKAGE_NAME
-		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPackage tagged with TagLiterals.
+		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPackage tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
 	update {
@@ -43,7 +43,7 @@ routine detectDatatypesSubpackage(uml::Package umlPackage, uml::Package umlParen
 routine detectContractsSubpackage(uml::Package umlPackage, uml::Package umlParentPackage) {
 	match {
 		check umlPackage.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME
-		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPackage tagged with TagLiterals.
+		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPackage tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
 	update {
@@ -53,11 +53,11 @@ routine detectContractsSubpackage(uml::Package umlPackage, uml::Package umlParen
 
 routine insertCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package umlParentPkg) {
 	match {
-		val pcmRepository = retrieve optional pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.
+		val pcmRepository = retrieve optional pcm::Repository corresponding to umlParentPkg tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		require absence of pcm::Repository corresponding to umlPkg tagged with TagLiterals.
+		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.
 			REPOSITORY_TO_CONTRACTS_PACKAGE
-		require absence of pcm::Repository corresponding to umlPkg tagged with TagLiterals.
+		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.
 			REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	update {
@@ -73,9 +73,9 @@ routine insertCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package
 
 routine detectOrCreateCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package umlParentPkg) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.
+		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		require absence of pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.
+		require absence of pcm::RepositoryComponent corresponding to umlPkg tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
@@ -90,9 +90,9 @@ routine detectOrCreateCorrespondingRepositoryComponent(uml::Package umlPkg, uml:
 
 routine addCorrespondenceForExistingRepositoryComponent(uml::Package umlPkg, pcm::RepositoryComponent pcmComponent) {
 	match {
-		require absence of pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.
+		require absence of pcm::RepositoryComponent corresponding to umlPkg tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
-		require absence of uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		require absence of uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
@@ -151,9 +151,9 @@ routine createCorrespondingSubSystem(uml::Package umlPkg, uml::Package umlParent
 
 routine moveCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package umlParentPkg) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.
+		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlPkg tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
@@ -169,9 +169,9 @@ reaction RepositoryComponentPackageRemoved {
 
 routine removeCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package umlParentPkg) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.
+		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlPkg tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
@@ -186,7 +186,7 @@ reaction PackageDeleted {
 
 routine deleteCorrespondingRepositoryComponent(uml::Package umlComponentPkg) {
 	match {
-		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlComponentPkg tagged with TagLiterals.
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlComponentPkg tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
@@ -203,7 +203,7 @@ reaction RepositoryComponentPackageRenamed {
 
 routine changeNameOfCorrespondingRepositoryComponent(uml::Package umlPkg, String newName) {
 	match {
-		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlPkg tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {

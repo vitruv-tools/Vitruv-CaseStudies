@@ -39,9 +39,9 @@ routine insertCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponen
 
 routine detectOrCreateCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository) {
 	match {
-		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.
+		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		val umlComponentPackage = retrieve optional uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentPackage = retrieve optional uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
@@ -58,9 +58,9 @@ routine detectOrCreateCorrespondingComponentPackage(pcm::RepositoryComponent pcm
 
 routine addCorrespondenceForExistingComponentPackage(pcm::RepositoryComponent pcmComponent, uml::Package umlComponentPackage) {
 	match {
-		require absence of uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		require absence of uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
-		require absence of pcm::RepositoryComponent corresponding to umlComponentPackage tagged with TagLiterals.
+		require absence of pcm::RepositoryComponent corresponding to umlComponentPackage tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
@@ -70,9 +70,9 @@ routine addCorrespondenceForExistingComponentPackage(pcm::RepositoryComponent pc
 
 routine createCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository) {
 	match {
-		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.
+		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		require absence of uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		require absence of uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	create {
@@ -87,9 +87,9 @@ routine createCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponen
 
 routine detectOrCreateCorrespondingComponentImplementation(pcm::RepositoryComponent pcmComponent) {
 	match {
-		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
-		val umlComponentImplementation = retrieve optional uml::Class corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentImplementation = retrieve optional uml::Class corresponding to pcmComponent tagged TagLiterals.
 			IPRE__IMPLEMENTATION
 	}
 	update {
@@ -108,8 +108,8 @@ routine detectOrCreateCorrespondingComponentImplementation(pcm::RepositoryCompon
 
 routine addCorrespondenceForExistingComponentImplementation(pcm::RepositoryComponent pcmComponent, uml::Class umlComponentImplementation) {
 	match {
-		require absence of uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
-		require absence of pcm::RepositoryComponent corresponding to umlComponentImplementation tagged with TagLiterals.
+		require absence of uml::Class corresponding to pcmComponent tagged TagLiterals.IPRE__IMPLEMENTATION
+		require absence of pcm::RepositoryComponent corresponding to umlComponentImplementation tagged TagLiterals.
 			IPRE__IMPLEMENTATION
 	}
 	update {
@@ -119,9 +119,9 @@ routine addCorrespondenceForExistingComponentImplementation(pcm::RepositoryCompo
 
 routine createCorrespondingComponentImplementation(pcm::RepositoryComponent pcmComponent) {
 	match {
-		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
-		require absence of uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+		require absence of uml::Class corresponding to pcmComponent tagged TagLiterals.IPRE__IMPLEMENTATION
 	}
 	create {
 		val umlComponentImplementation = new uml::Class
@@ -136,9 +136,9 @@ routine createCorrespondingComponentImplementation(pcm::RepositoryComponent pcmC
 
 routine detectOrCreateCorrespondingComponentConstructor(pcm::RepositoryComponent pcmComponent) {
 	match {
-		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		val umlComponentConstructor = retrieve optional uml::Operation corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentConstructor = retrieve optional uml::Operation corresponding to pcmComponent tagged TagLiterals.
 			IPRE__CONSTRUCTOR
 	}
 	update {
@@ -157,8 +157,8 @@ routine detectOrCreateCorrespondingComponentConstructor(pcm::RepositoryComponent
 
 routine addCorrespondenceForExistingComponentConstructor(pcm::RepositoryComponent pcmComponent, uml::Operation umlComponentConstructor) {
 	match {
-		require absence of uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
-		require absence of pcm::RepositoryComponent corresponding to umlComponentConstructor tagged with TagLiterals.
+		require absence of uml::Operation corresponding to pcmComponent tagged TagLiterals.IPRE__CONSTRUCTOR
+		require absence of pcm::RepositoryComponent corresponding to umlComponentConstructor tagged TagLiterals.
 			IPRE__CONSTRUCTOR
 	}
 	update {
@@ -168,9 +168,9 @@ routine addCorrespondenceForExistingComponentConstructor(pcm::RepositoryComponen
 
 routine createCorrespondingComponentConstructor(pcm::RepositoryComponent pcmComponent) {
 	match {
-		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		require absence of uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
+		require absence of uml::Operation corresponding to pcmComponent tagged TagLiterals.IPRE__CONSTRUCTOR
 	}
 	create {
 		val umlComponentConstructor = new uml::Operation
@@ -184,9 +184,9 @@ routine createCorrespondingComponentConstructor(pcm::RepositoryComponent pcmComp
 
 routine moveCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository) {
 	match {
-		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.
+		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
@@ -202,9 +202,9 @@ reaction RepositoryComponentRemoved {
 
 routine removeCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository) {
 	match {
-		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.
+		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
@@ -219,11 +219,11 @@ reaction RepositoryComponentDeleted {
 
 routine deleteCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent) {
 	match {
-		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
-		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		val umlComponentConstructor = retrieve uml::Operation corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentConstructor = retrieve uml::Operation corresponding to pcmComponent tagged TagLiterals.
 			IPRE__CONSTRUCTOR
 	}
 	update {
@@ -243,11 +243,11 @@ reaction RepositoryComponentNameChanged {
 
 routine changeNameOfComponentCorrespondences(pcm::RepositoryComponent pcmComponent, String newName) {
 	match {
-		val umlComponentPackage = retrieve optional uml::Package corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentPackage = retrieve optional uml::Package corresponding to pcmComponent tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
-		val umlComponentImplementation = retrieve optional uml::Class corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentImplementation = retrieve optional uml::Class corresponding to pcmComponent tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		val umlComponentConstructor = retrieve optional uml::Operation corresponding to pcmComponent tagged with TagLiterals.
+		val umlComponentConstructor = retrieve optional uml::Operation corresponding to pcmComponent tagged TagLiterals.
 			IPRE__CONSTRUCTOR
 	}
 	update {

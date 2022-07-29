@@ -23,9 +23,9 @@ reaction InterfaceGeneralizationAdded {
 
 routine addParentInterface(uml::Interface umlInterface, uml::Classifier umlNewParent) {
 	match {
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
-		val pcmNewParent = retrieve pcm::OperationInterface corresponding to umlNewParent tagged with TagLiterals.
+		val pcmNewParent = retrieve pcm::OperationInterface corresponding to umlNewParent tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {
@@ -44,9 +44,9 @@ reaction InterfaceGeneralizationRemoved {
 
 routine removeParentInterface(uml::Interface umlInterface, uml::Classifier umlOldParent) {
 	match {
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
-		val pcmOldParent = retrieve pcm::OperationInterface corresponding to umlOldParent tagged with TagLiterals.
+		val pcmOldParent = retrieve pcm::OperationInterface corresponding to umlOldParent tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {
@@ -64,7 +64,7 @@ reaction ParentInterfaceReplaced {
 
 routine replaceParentInterface(uml::Generalization gen, uml::Classifier newParent, uml::Classifier oldParent) {
 	match {
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to gen.specific tagged with TagLiterals.
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to gen.specific tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
 	}
 	update {

@@ -86,9 +86,9 @@ routine insertJavaField(uml::Property umlProperty, uml::Classifier umlClassifier
 	match {
 		val javaField = retrieve java::Field corresponding to umlProperty
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
-		val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlJavaCorrespondenceTag.
+		val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged UmlJavaCorrespondenceTag.
 			GETTER
-		val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlJavaCorrespondenceTag.
+		val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged UmlJavaCorrespondenceTag.
 			SETTER
 	}
 	update {
@@ -106,9 +106,9 @@ reaction UmlAttributeDeleted {
 routine deleteJavaField(uml::Property umlProperty) {
 	match {
 		val javaField = retrieve java::Field corresponding to umlProperty
-		val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlJavaCorrespondenceTag.
+		val javaGetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged UmlJavaCorrespondenceTag.
 			GETTER
-		val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged with UmlJavaCorrespondenceTag.
+		val javaSetter = retrieve optional java::ClassMethod corresponding to umlProperty tagged UmlJavaCorrespondenceTag.
 			SETTER
 	}
 	update {
@@ -121,7 +121,7 @@ routine deleteJavaField(uml::Property umlProperty) {
 
 routine deleteJavaAccessor(uml::Property umlProperty, String tag) {
 	match {
-		val javaAccessor = retrieve java::ClassMethod corresponding to umlProperty tagged with tag
+		val javaAccessor = retrieve java::ClassMethod corresponding to umlProperty tagged tag
 	}
 	update {
 		removeObject(javaAccessor)
@@ -150,7 +150,7 @@ reaction UmlAttributeMadeStatic {
 
 routine setStatic(uml::Property umlAttr) {
 	match {
-		val jAttr = retrieve java::Field corresponding to umlAttr tagged with ""
+		val jAttr = retrieve java::Field corresponding to umlAttr tagged ""
 	}
 	update {
 		jAttr.static = umlAttr.isStatic
@@ -179,9 +179,9 @@ routine changeJavaAttributeType(uml::Property uAttribute) {
 	match {
 		val jAttribute = retrieve java::Field corresponding to uAttribute
 		val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uAttribute.type
-		val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlJavaCorrespondenceTag.
+		val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged UmlJavaCorrespondenceTag.
 			GETTER
-		val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlJavaCorrespondenceTag.
+		val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged UmlJavaCorrespondenceTag.
 			SETTER
 	}
 	update {
@@ -225,9 +225,9 @@ reaction UmlAttributeRenamed {
 routine renameJavaAttribute(String newName, String oldName, uml::Property uAttribute) {
 	match {
 		val jAttribute = retrieve java::Field corresponding to uAttribute
-		val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlJavaCorrespondenceTag.
+		val jGetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged UmlJavaCorrespondenceTag.
 			GETTER
-		val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged with UmlJavaCorrespondenceTag.
+		val jSetter = retrieve optional java::ClassMethod corresponding to uAttribute tagged UmlJavaCorrespondenceTag.
 			SETTER
 	}
 	update {

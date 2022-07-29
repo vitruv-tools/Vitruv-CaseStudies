@@ -26,7 +26,7 @@ reaction IPREClassRemoved {
 
 routine warnUserAboutImplRemoveIfIPRECorrespondenceExists(uml::Class umlClass, uml::Package umlPackage) {
 	match {
-		val pcmRepositoryComponent = retrieve pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.
+		val pcmRepositoryComponent = retrieve pcm::RepositoryComponent corresponding to umlClass tagged TagLiterals.
 			IPRE__IMPLEMENTATION
 	}
 	update {
@@ -42,7 +42,7 @@ reaction IPREClassNameChanged {
 
 routine changeNameOfCorrespondingIPRE_Implementation(uml::Class umlClass, String newName) {
 	match {
-		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlClass tagged with TagLiterals.
+		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlClass tagged TagLiterals.
 			IPRE__IMPLEMENTATION
 	}
 	update {

@@ -52,8 +52,8 @@ routine setTypeOfUmlParameterOrProperty(pcm::DataType pcmType, uml::TypedElement
 
 routine setTypeOfUmlParameterOrProperty_NonCollection(pcm::DataType pcmType, uml::TypedElement umlElement, uml::MultiplicityElement umlMultiplicity, String tag) { // same element; Parameter or Property
 	match {
-		val umlPrimitiveType = retrieve many uml::Type corresponding to pcmType tagged with TagLiterals.DATATYPE__TYPE
-		val umlCompositeType = retrieve optional uml::Type corresponding to pcmType tagged with TagLiterals.
+		val umlPrimitiveType = retrieve many uml::Type corresponding to pcmType tagged TagLiterals.DATATYPE__TYPE
+		val umlCompositeType = retrieve optional uml::Type corresponding to pcmType tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
 	}
 	update {
@@ -67,9 +67,9 @@ routine setTypeOfUmlParameterOrProperty_NonCollection(pcm::DataType pcmType, uml
 routine setTypeOfUmlParameterOrProperty_Collection(pcm::CollectionDataType pcmType, uml::TypedElement umlElement, uml::MultiplicityElement umlMultiplicity, String tag) { // same element; Parameter or Property
 	match {
 		val umlPrimitiveType = retrieve many uml::Type corresponding to pcmType.
-			innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
+			innerType_CollectionDataType tagged TagLiterals.DATATYPE__TYPE
 		val umlCompositeType = retrieve optional uml::Type corresponding to pcmType.
-			innerType_CollectionDataType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+			innerType_CollectionDataType tagged TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	update {
 		umlElement.type = umlPrimitiveType.head ?: umlCompositeType.orElse(null)
@@ -82,7 +82,7 @@ routine setTypeOfUmlParameterOrProperty_Collection(pcm::CollectionDataType pcmTy
 
 routine removeOldCollectionDataTypeCorrespondence(uml::TypedElement umlElement, String tag) { // Parameter or Property
 	match {
-		val oldCollectionType = retrieve pcm::CollectionDataType corresponding to umlElement tagged with tag
+		val oldCollectionType = retrieve pcm::CollectionDataType corresponding to umlElement tagged tag
 	}
 	update {
 		removeCorrespondenceBetween(oldCollectionType, umlElement, tag)
@@ -91,7 +91,7 @@ routine removeOldCollectionDataTypeCorrespondence(uml::TypedElement umlElement, 
 
 routine addCollectionDataTypeCorrespondence(pcm::CollectionDataType pcmType, uml::TypedElement umlElement, String tag) { // Parameter or Property
 	match {
-		require absence of pcm::CollectionDataType corresponding to umlElement tagged with tag
+		require absence of pcm::CollectionDataType corresponding to umlElement tagged tag
 	}
 	update {
 		addCorrespondenceBetween(pcmType, umlElement, tag)

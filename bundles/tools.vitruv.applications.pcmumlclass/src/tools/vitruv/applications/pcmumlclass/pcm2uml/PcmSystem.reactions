@@ -42,7 +42,7 @@ routine addSystemCorrespondence(pcm::System pcmSystem) {
 
 routine createOrFindCorrespondingSystemPackage(pcm::System pcmSystem) {
 	match {
-		require absence of uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		require absence of uml::Package corresponding to pcmSystem tagged TagLiterals.SYSTEM__SYSTEM_PACKAGE
 		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
 	}
 	update {
@@ -63,7 +63,7 @@ routine addSystemPackageCorrespondence(pcm::System pcmSystem, uml::Package umlPa
 
 routine createCorrespondingSystemPackage(pcm::System pcmSystem, uml::Model umlRootModel) {
 	match {
-		require absence of uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		require absence of uml::Package corresponding to pcmSystem tagged TagLiterals.SYSTEM__SYSTEM_PACKAGE
 	}
 	create {
 		val umlSystemPackage = new uml::Package
@@ -77,9 +77,9 @@ routine createCorrespondingSystemPackage(pcm::System pcmSystem, uml::Model umlRo
 
 routine detectOrCreateCorrespondingSystemImplementation(pcm::System pcmSystem) {
 	match {
-		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged TagLiterals.
 			SYSTEM__SYSTEM_PACKAGE
-		require absence of uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+		require absence of uml::Class corresponding to pcmSystem tagged TagLiterals.IPRE__IMPLEMENTATION
 	}
 	update {
 		val umlSystemImplementationCandidate = umlSystemPackage.packagedElements.filter(Class).findFirst [
@@ -95,8 +95,8 @@ routine detectOrCreateCorrespondingSystemImplementation(pcm::System pcmSystem) {
 
 routine addCorrespondenceForExistingSystemImplementation(pcm::System pcmSystem, uml::Class umlSystemImplementation) {
 	match {
-		require absence of uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
-		require absence of pcm::System corresponding to umlSystemImplementation tagged with TagLiterals.
+		require absence of uml::Class corresponding to pcmSystem tagged TagLiterals.IPRE__IMPLEMENTATION
+		require absence of pcm::System corresponding to umlSystemImplementation tagged TagLiterals.
 			IPRE__IMPLEMENTATION
 	}
 	update {
@@ -106,9 +106,9 @@ routine addCorrespondenceForExistingSystemImplementation(pcm::System pcmSystem, 
 
 routine createCorrespondingSystemImplementation(pcm::System pcmSystem) {
 	match {
-		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged TagLiterals.
 			SYSTEM__SYSTEM_PACKAGE
-		require absence of uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+		require absence of uml::Class corresponding to pcmSystem tagged TagLiterals.IPRE__IMPLEMENTATION
 	}
 	create {
 		val umlSystemImplementation = new uml::Class
@@ -123,9 +123,9 @@ routine createCorrespondingSystemImplementation(pcm::System pcmSystem) {
 
 routine detectOrCreateCorrespondingSystemConstructor(pcm::System pcmSystem) {
 	match {
-		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		require absence of uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
+		require absence of uml::Operation corresponding to pcmSystem tagged TagLiterals.IPRE__CONSTRUCTOR
 	}
 	update {
 		val umlSystemConstructorCandidate = umlSystemImplementation.ownedOperations.findFirst [
@@ -141,8 +141,8 @@ routine detectOrCreateCorrespondingSystemConstructor(pcm::System pcmSystem) {
 
 routine addCorrespondenceForExistingSystemConstructor(pcm::System pcmSystem, uml::Operation umlSystemConstructor) {
 	match {
-		require absence of uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
-		require absence of pcm::System corresponding to umlSystemConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
+		require absence of uml::Operation corresponding to pcmSystem tagged TagLiterals.IPRE__CONSTRUCTOR
+		require absence of pcm::System corresponding to umlSystemConstructor tagged TagLiterals.IPRE__CONSTRUCTOR
 	}
 	update {
 		addCorrespondenceBetween(pcmSystem, umlSystemConstructor, TagLiterals.IPRE__CONSTRUCTOR)
@@ -151,9 +151,9 @@ routine addCorrespondenceForExistingSystemConstructor(pcm::System pcmSystem, uml
 
 routine createCorrespondingSystemConstructor(pcm::System pcmSystem) {
 	match {
-		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		require absence of uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
+		require absence of uml::Operation corresponding to pcmSystem tagged TagLiterals.IPRE__CONSTRUCTOR
 	}
 	create {
 		val umlSystemConstructor = new uml::Operation
@@ -176,7 +176,7 @@ reaction SystemDeleted {
 
 routine deleteCorrespondenceToSystemPackage(pcm::System pcmSystem) {
 	match {
-		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged TagLiterals.
 			SYSTEM__SYSTEM_PACKAGE
 	}
 	update {
@@ -187,7 +187,7 @@ routine deleteCorrespondenceToSystemPackage(pcm::System pcmSystem) {
 
 routine deleteCorrespondenceToSystemImplementation(pcm::System pcmSystem) {
 	match {
-		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged TagLiterals.
 			IPRE__IMPLEMENTATION
 	}
 	update {
@@ -197,7 +197,7 @@ routine deleteCorrespondenceToSystemImplementation(pcm::System pcmSystem) {
 
 routine deleteCorrespondenceToSystemConstructor(pcm::System pcmSystem) {
 	match {
-		val umlSystemConstructor = retrieve uml::Operation corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemConstructor = retrieve uml::Operation corresponding to pcmSystem tagged TagLiterals.
 			IPRE__CONSTRUCTOR
 	}
 	update {
@@ -213,11 +213,11 @@ reaction SystemNameChanged {
 
 routine changeNameOfSystemCorrespondences(pcm::System pcmSystem, String newName) {
 	match {
-		val umlSystemPackage = retrieve optional uml::Package corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemPackage = retrieve optional uml::Package corresponding to pcmSystem tagged TagLiterals.
 			SYSTEM__SYSTEM_PACKAGE
-		val umlSystemImplementation = retrieve optional uml::Class corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemImplementation = retrieve optional uml::Class corresponding to pcmSystem tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		val umlSystemConstructor = retrieve optional uml::Operation corresponding to pcmSystem tagged with TagLiterals.
+		val umlSystemConstructor = retrieve optional uml::Operation corresponding to pcmSystem tagged TagLiterals.
 			IPRE__CONSTRUCTOR
 	}
 	update {

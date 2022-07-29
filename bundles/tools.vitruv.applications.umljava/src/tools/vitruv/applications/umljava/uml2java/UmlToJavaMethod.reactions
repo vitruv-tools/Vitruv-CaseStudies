@@ -198,7 +198,7 @@ reaction UmlOperationMadeStatic {
 
 routine setStatic(uml::Operation uFeat) {
 	match {
-		val jMethod = retrieve java::Method corresponding to uFeat tagged with ""
+		val jMethod = retrieve java::Method corresponding to uFeat tagged ""
 	}
 	update {
 		jMethod.static = uFeat.isStatic
@@ -246,7 +246,7 @@ reaction UmlElementVisibilityChanged {
 
 routine changeJavaElementVisibility(uml::NamedElement uElem) {
 	match {
-		val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem tagged with ""
+		val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem tagged ""
 	}
 	update {
 		setJavaVisibility(jElem, uElem.visibility);

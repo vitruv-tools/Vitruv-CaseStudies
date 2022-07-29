@@ -26,11 +26,11 @@ reaction RegularParameterInserted {
 
 routine insertCorrespondingRegularParameter(uml::Parameter umlParam, uml::Operation umlOperation) {
 	match {
-		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlOperation tagged with TagLiterals.
+		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlOperation tagged TagLiterals.
 			SIGNATURE__OPERATION
-		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.
+		require absence of pcm::OperationSignature corresponding to umlParam tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
-		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged with TagLiterals.
+		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
 	}
 	update {
@@ -46,11 +46,11 @@ routine insertCorrespondingRegularParameter(uml::Parameter umlParam, uml::Operat
 
 routine detectOrCreateCorrespondingRegularParameter(uml::Parameter umlParam, uml::Operation umlOperation) {
 	match {
-		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged with TagLiterals.
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged TagLiterals.
 			SIGNATURE__OPERATION
-		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.
+		require absence of pcm::OperationSignature corresponding to umlParam tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
-		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged with TagLiterals.
+		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
 	}
 	update {
@@ -69,9 +69,9 @@ routine detectOrCreateCorrespondingRegularParameter(uml::Parameter umlParam, uml
 
 routine addCorrespondenceForExistingRegularParameter(uml::Parameter umlParameter, pcm::Parameter pcmParameter) {
 	match {
-		require absence of pcm::Parameter corresponding to umlParameter tagged with TagLiterals.
+		require absence of pcm::Parameter corresponding to umlParameter tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
-		require absence of uml::Parameter corresponding to pcmParameter tagged with TagLiterals.
+		require absence of uml::Parameter corresponding to pcmParameter tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
 	}
 	update {
@@ -81,11 +81,11 @@ routine addCorrespondenceForExistingRegularParameter(uml::Parameter umlParameter
 
 routine createCorrespondingRegularParameter(uml::Parameter umlParameter, uml::Operation umlOperation) {
 	match {
-		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged with TagLiterals.
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged TagLiterals.
 			SIGNATURE__OPERATION
-		require absence of pcm::OperationSignature corresponding to umlParameter tagged with TagLiterals.
+		require absence of pcm::OperationSignature corresponding to umlParameter tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
-		require absence of pcm::Parameter corresponding to umlParameter tagged with TagLiterals.
+		require absence of pcm::Parameter corresponding to umlParameter tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
 	}
 	create {
@@ -100,11 +100,11 @@ routine createCorrespondingRegularParameter(uml::Parameter umlParameter, uml::Op
 
 routine moveCorrespondingRegularParameter(uml::Parameter umlParam, uml::Operation umlOperation) {
 	match {
-		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged with TagLiterals.
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged TagLiterals.
 			SIGNATURE__OPERATION
-		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.
+		require absence of pcm::OperationSignature corresponding to umlParam tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
-		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.
+		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
 	}
 	update {
@@ -120,11 +120,11 @@ reaction RegularParameterRemoved {
 
 routine removeCorrespondingRegularParameter(uml::Parameter umlParam, uml::Operation umlOperation) {
 	match {
-		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged with TagLiterals.
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged TagLiterals.
 			SIGNATURE__OPERATION
-		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.
+		require absence of pcm::OperationSignature corresponding to umlParam tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
-		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.
+		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
 	}
 	update {
@@ -139,9 +139,9 @@ reaction RegularParameterDeleted {
 
 routine deleteCorrespondingRegularParameter(uml::Parameter umlParam) {
 	match {
-		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.
+		require absence of pcm::OperationSignature corresponding to umlParam tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
-		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.
+		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
 	}
 	update {
@@ -158,9 +158,9 @@ reaction RegularParameterNameChanged {
 
 routine changeNameOfCorrespondingRegularParameter(uml::Parameter umlParam, String newName) {
 	match {
-		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.
+		require absence of pcm::OperationSignature corresponding to umlParam tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
-		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.
+		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
 	}
 	update {
@@ -177,7 +177,7 @@ reaction RegularParameterDirectionChanged {
 // pcm::ParameterDirectionKind import can't be resolved for some reason -> retrieve from element
 routine changeModifierOfCorrespondingRegularParameter(uml::Parameter umlParameter) {
 	match {
-		val pcmParameter = retrieve pcm::Parameter corresponding to umlParameter tagged with TagLiterals.
+		val pcmParameter = retrieve pcm::Parameter corresponding to umlParameter tagged TagLiterals.
 			PARAMETER__REGULAR_PARAMETER
 	}
 	update {

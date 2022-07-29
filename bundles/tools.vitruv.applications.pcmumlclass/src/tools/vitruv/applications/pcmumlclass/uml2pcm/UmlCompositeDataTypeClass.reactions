@@ -27,7 +27,7 @@ reaction CompositeDatyTypeClassInserted {
 
 routine insertCorrespondingCompositeDataType(uml::Class umlClass, uml::Package umlPackage) {
 	match {
-		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPackage tagged with TagLiterals.
+		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPackage tagged TagLiterals.
 			REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	update {
@@ -42,9 +42,9 @@ routine insertCorrespondingCompositeDataType(uml::Class umlClass, uml::Package u
 
 routine detectOrCreateCorrespondingCompositeDataType(uml::Class umlClass, uml::Package umlPackage) {
 	match {
-		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged with TagLiterals.
+		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged TagLiterals.
 			REPOSITORY_TO_DATATYPES_PACKAGE
-		require absence of pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.
+		require absence of pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
 	}
 	update {
@@ -66,7 +66,7 @@ routine detectOrCreateCorrespondingCompositeDataType(uml::Class umlClass, uml::P
 
 routine createCorrespondingCompositeDataType(uml::Class umlClass, uml::Package umlPackage) {
 	match {
-		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged with TagLiterals.
+		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged TagLiterals.
 			REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	create {
@@ -80,9 +80,9 @@ routine createCorrespondingCompositeDataType(uml::Class umlClass, uml::Package u
 
 routine addCorrespondenceForExistingCompositeDataType(pcm::CompositeDataType pcmCompositeType, uml::Class umlClass) {
 	match {
-		require absence of pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.
+		require absence of pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
-		require absence of uml::Class corresponding to pcmCompositeType tagged with TagLiterals.
+		require absence of uml::Class corresponding to pcmCompositeType tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
 	}
 	update {
@@ -92,9 +92,9 @@ routine addCorrespondenceForExistingCompositeDataType(pcm::CompositeDataType pcm
 
 routine moveCorrespondingCompositeDataType(uml::Class umlClass, uml::Package umlPackage) {
 	match {
-		val pcmCompositeType = retrieve asserted pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.
+		val pcmCompositeType = retrieve asserted pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
-		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged with TagLiterals.
+		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged TagLiterals.
 			REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	update {
@@ -110,9 +110,9 @@ reaction CompositeDataTypeClassRemoved {
 
 routine removeCorrespondingCompositeType(uml::Class umlClass, uml::Package umlPackage) {
 	match {
-		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.
+		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
-		val pcmRepository = retrieve pcm::Repository corresponding to umlPackage tagged with TagLiterals.
+		val pcmRepository = retrieve pcm::Repository corresponding to umlPackage tagged TagLiterals.
 			REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	update {
@@ -127,7 +127,7 @@ reaction CompositeDataTypeClassDeleted {
 
 routine deleteCorrespondingCompositeDataType(uml::Class umlClass) {
 	match {
-		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.
+		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
 	}
 	update {
@@ -144,7 +144,7 @@ reaction CompositeDataTypeClassNameChanged {
 
 routine changeNameOfCorrespondingCompositeDataType(uml::Class umlClass, String newName) {
 	match {
-		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.
+		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
 	}
 	update {
