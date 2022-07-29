@@ -111,7 +111,7 @@ routine deleteCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssem
 		val umlProperty = retrieve uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 	}
 	update {
-		deleteObject(umlProperty)
+		removeObject(umlProperty)
 		removeCorrespondenceBetween(pcmAssembly, umlProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
 	}
 }

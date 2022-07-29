@@ -178,7 +178,7 @@ routine deleteCorrespondingRepositoryComponent(uml::Package umlComponentPkg) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmComponent, umlComponentPkg)
-		deleteObject(pcmComponent)
+		removeObject(pcmComponent)
 	}
 }
 

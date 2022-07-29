@@ -140,7 +140,7 @@ routine deleteJavaClass(uml::Classifier umlClassifier) {
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
 	}
 	update {
-	    deleteObject(javaClassifier.containingCompilationUnit)
+	    removeObject(javaClassifier.containingCompilationUnit)
 	    removeCorrespondenceBetween(javaClassifier.containingCompilationUnit, umlClassifier)
 	}
 }
@@ -209,7 +209,7 @@ routine deleteJavaSuperClass(uml::Generalization uGeneralization) {
 		val jReference = retrieve java::TypeReference corresponding to uGeneralization
 	}
 	update {
-		deleteObject(jReference)
+		removeObject(jReference)
 		removeCorrespondenceBetween(jReference, uGeneralization)
 	}
 }
@@ -273,7 +273,7 @@ routine deleteJavaClassImplementsReference(uml::InterfaceRealization uRealizatio
 	}
 	update {
 		uRealization.clients -= uClass
-		deleteObject(jReference)
+		removeObject(jReference)
 		removeCorrespondenceBetween(jReference, uRealization)
 	}
 }
@@ -396,7 +396,7 @@ routine deleteJavaSuperInterface(uml::Generalization uGeneralization) {
 		val jReference = retrieve java::TypeReference corresponding to uGeneralization
 	}
 	update {
-		deleteObject(jReference)
+		removeObject(jReference)
 		removeCorrespondenceBetween(jReference, uGeneralization)
 	}
 }
@@ -469,7 +469,7 @@ routine deleteJavaEnumConstant(uml::EnumerationLiteral uLiteral) {
 		val jConst = retrieve java::EnumConstant corresponding to uLiteral
 	}
 	update {
-		deleteObject(jConst)
+		removeObject(jConst)
 		removeCorrespondenceBetween(jConst, uLiteral)
 	}
 }
@@ -597,7 +597,7 @@ routine deleteJavaPackage(uml::Package uPackage) {
 		uPackage.packagedElements.filter(org.eclipse.uml2.uml.Package).forEach[deleteJavaPackage()]
 		uPackage.packagedElements.filter(org.eclipse.uml2.uml.Class).forEach[deleteJavaClass()]
 		jPackage.ifPresent[
-			deleteObject(it)
+			removeObject(it)
 			removeCorrespondenceBetween(uPackage, it)
 		]
 	}

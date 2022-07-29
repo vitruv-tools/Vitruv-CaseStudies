@@ -126,7 +126,7 @@ routine deleteCorrespondingProvidedRole(uml::InterfaceRealization umlRealization
 	}
 	update {
 		removeCorrespondenceBetween(pcmProvided, umlRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
-		deleteObject(pcmProvided)
+		removeObject(pcmProvided)
 	}
 }
 

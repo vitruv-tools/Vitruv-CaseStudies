@@ -142,7 +142,7 @@ routine deleteCorrespondingRequiredConstructorParameter(pcm::OperationRequiredRo
 		val umlConstructorParameter = retrieve uml::Parameter corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
 	}
 	update {
-		deleteObject(umlConstructorParameter)
+		removeObject(umlConstructorParameter)
 		removeCorrespondenceBetween(pcmRequired, umlConstructorParameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
 	}
 }
@@ -152,7 +152,7 @@ routine deleteCorrespondingRequiredField(pcm::OperationRequiredRole pcmRequired)
 		val umlRequiredField = retrieve uml::Property corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
 	}
 	update {
-		deleteObject(umlRequiredField)
+		removeObject(umlRequiredField)
 		removeCorrespondenceBetween(pcmRequired, umlRequiredField, TagLiterals.REQUIRED_ROLE__PROPERTY)
 	}
 }

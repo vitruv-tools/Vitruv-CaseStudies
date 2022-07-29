@@ -257,7 +257,7 @@ routine removeRepository(java::Package javaPackage) {
 		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage tagged with "package_root"
 	}
 	update {
-		deleteObject(pcmRepository)
+		removeObject(pcmRepository)
 		removeCorrespondenceBetween(javaPackage, pcmRepository)
 	}
 }
@@ -267,7 +267,7 @@ routine removeSystem(java::Package javaPackage) {
 		val pcmSystem = retrieve pcm::System corresponding to javaPackage tagged with "root_system"
 	}
 	update {
-		deleteObject(pcmSystem)
+		removeObject(pcmSystem)
 		removeCorrespondenceBetween(javaPackage, pcmSystem)
 	}
 }
@@ -277,7 +277,7 @@ routine removeComponent(java::Package javaPackage) {
 		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to javaPackage
 	}
 	update {
-		deleteObject(pcmComponent)
+		removeObject(pcmComponent)
 		removeCorrespondenceBetween(javaPackage, pcmComponent)
 	}
 }

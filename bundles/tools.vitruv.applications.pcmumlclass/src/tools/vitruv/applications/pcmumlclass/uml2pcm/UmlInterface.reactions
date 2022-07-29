@@ -110,7 +110,7 @@ routine deleteCorrespondingInterface(uml::Interface umlInterface) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmInterface, umlInterface, TagLiterals.INTERFACE_TO_INTERFACE)
-		deleteObject(pcmInterface)
+		removeObject(pcmInterface)
 	}
 }
 

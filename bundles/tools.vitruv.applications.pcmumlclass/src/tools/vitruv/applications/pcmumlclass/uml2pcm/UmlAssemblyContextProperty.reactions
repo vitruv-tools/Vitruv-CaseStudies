@@ -124,7 +124,7 @@ routine deleteCorrespondingAssemblyContext(uml::Property umlProperty) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmAssemblyContext, umlProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
-		deleteObject(pcmAssemblyContext)
+		removeObject(pcmAssemblyContext)
 	}
 }
 

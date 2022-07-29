@@ -111,7 +111,7 @@ routine deleteCorrespondingRegularParameter(pcm::Parameter pcmParam) {
 		val umlParameter = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
 	update {
-		deleteObject(umlParameter)
+		removeObject(umlParameter)
 		removeCorrespondenceBetween(pcmParam, umlParameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
 	}
 }

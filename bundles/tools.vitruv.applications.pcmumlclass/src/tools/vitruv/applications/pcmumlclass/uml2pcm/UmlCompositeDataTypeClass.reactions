@@ -118,7 +118,7 @@ routine deleteCorrespondingCompositeDataType(uml::Class umlClass) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmCompositeType, umlClass, TagLiterals.COMPOSITE_DATATYPE__CLASS)
-		deleteObject(pcmCompositeType)
+		removeObject(pcmCompositeType)
 	}
 }
 

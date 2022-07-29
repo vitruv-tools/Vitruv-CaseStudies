@@ -120,7 +120,7 @@ routine deleteCorrespondingInnerDeclaration(uml::Property umlProperty) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmInnerDeclaration, umlProperty, TagLiterals.INNER_DECLARATION__PROPERTY)
-		deleteObject(pcmInnerDeclaration)
+		removeObject(pcmInnerDeclaration)
 	}
 }
 

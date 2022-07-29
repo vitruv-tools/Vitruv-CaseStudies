@@ -110,7 +110,7 @@ routine deleteCorrespondingInterface(pcm::OperationInterface pcmInterface) {
 		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE  
 	}
 	update {
-		deleteObject(umlInterface)
+		removeObject(umlInterface)
 		removeCorrespondenceBetween(pcmInterface, umlInterface, TagLiterals.INTERFACE_TO_INTERFACE)
 	}
 }

@@ -109,7 +109,7 @@ routine deleteCorrespondingCompositeTypeClass(pcm::CompositeDataType pcmType) {
 		val umlCompositeClass = retrieve uml::Class corresponding to pcmType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	update {
-		deleteObject(umlCompositeClass)
+		removeObject(umlCompositeClass)
 		removeCorrespondenceBetween(pcmType, umlCompositeClass, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 	}
 }

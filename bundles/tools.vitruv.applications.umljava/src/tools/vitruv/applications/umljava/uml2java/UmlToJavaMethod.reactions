@@ -169,7 +169,7 @@ routine deleteJavaMethod(uml::Operation umlOperation) {
             with javaMethod instanceof Constructor || javaMethod instanceof Method
     }
     update {
-        deleteObject(javaMethod)
+        removeObject(javaMethod)
         removeCorrespondenceBetween(javaMethod, umlOperation)
     }
 }
@@ -343,7 +343,7 @@ routine deleteJavaParameter(uml::Parameter uParam) {
         val jParam = retrieve java::OrdinaryParameter corresponding to uParam
     }
     update {
-        deleteObject(jParam)
+        removeObject(jParam)
         removeCorrespondenceBetween(jParam, uParam)
     }
 }

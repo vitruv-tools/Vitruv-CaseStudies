@@ -687,7 +687,7 @@ routine deleteJavaPackage(pcm::NamedElement sourceElementMappedToPackage, String
 		val javaPackage = retrieve java::Package corresponding to sourceElementMappedToPackage tagged with expectedTag
 	}
 	update {
-		deleteObject(javaPackage)
+		removeObject(javaPackage)
 		removeCorrespondenceBetween(sourceElementMappedToPackage, javaPackage)
 	}
 }
@@ -794,7 +794,7 @@ routine deleteJavaClassifier(pcm::NamedElement sourceElement) {
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to sourceElement
 	}
 	update {
-		deleteObject(javaClassifier.containingCompilationUnit)
+		removeObject(javaClassifier.containingCompilationUnit)
 		removeCorrespondenceBetween(sourceElement, javaClassifier.containingCompilationUnit)
 	}
 }
@@ -882,9 +882,9 @@ routine removeProvidedRole(pcm::ProvidedRole providedRole) {
 		val typeReference = retrieve java::TypeReference corresponding to providedRole
 	}
 	update {
-		deleteObject(typeReference.pureClassifierReference) // seems to be necessary to properly delete reference if it is a NamespaceClassifierReference
+		removeObject(typeReference.pureClassifierReference) // seems to be necessary to properly delete reference if it is a NamespaceClassifierReference
 		removeCorrespondenceBetween(typeReference.pureClassifierReference, providedRole)
-		deleteObject(typeReference)
+		removeObject(typeReference)
 		removeCorrespondenceBetween(typeReference, providedRole)
 	}
 }
@@ -960,9 +960,9 @@ routine removeRequiredRole(pcm::RequiredRole requiredRole) {
 		val javaClass = retrieve java::Class corresponding to requiredRole
 	}
 	update {
-		deleteObject(requiredInterfaceImport)
+		removeObject(requiredInterfaceImport)
 		removeCorrespondenceBetween(requiredInterfaceImport, requiredRole)
-		deleteObject(requiredInterfaceField)
+		removeObject(requiredInterfaceField)
 		removeCorrespondenceBetween(requiredInterfaceField, requiredRole)
 		removeCorrespondenceBetween(javaClass, requiredRole)
 		for (ctor : javaClass.members.filter(typeof(Constructor))) {
@@ -1003,7 +1003,7 @@ routine removeCorrespondingParameterFromConstructor(java::Constructor ctor, pcm:
 			with ctor.parameters.contains(param)
 	}
 	update {
-		deleteObject(param)
+		removeObject(param)
 		removeCorrespondenceBetween(correspondenceSource, param)
 	}
 }
@@ -1113,7 +1113,7 @@ routine deleteMethodForOperationSignature(pcm::OperationSignature operationSigna
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to operationSignature
 	}
 	update {
-		deleteObject(interfaceMethod)
+		removeObject(interfaceMethod)
 		removeCorrespondenceBetween(interfaceMethod, operationSignature)
 	}
 }
@@ -1189,7 +1189,7 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 	}
 	update {
-		deleteObject(javaParameter)
+		removeObject(javaParameter)
 		removeCorrespondenceBetween(javaParameter, parameter)
 	}
 }
@@ -1255,7 +1255,7 @@ routine deleteMethodForSeff(pcm::ServiceEffectSpecification seff) {
 		val classMethod = retrieve java::ClassMethod corresponding to seff
 	}
 	update {
-		deleteObject(classMethod)
+		removeObject(classMethod)
 		removeCorrespondenceBetween(seff, classMethod)
 	}
 }

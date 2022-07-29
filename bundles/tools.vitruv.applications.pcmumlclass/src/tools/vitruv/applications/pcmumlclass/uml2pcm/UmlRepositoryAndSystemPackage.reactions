@@ -236,7 +236,7 @@ routine deleteCorrespondingRepository(uml::Package umlRepositoryPkg) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmRepository, umlRepositoryPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
-		deleteObject(pcmRepository)
+		removeObject(pcmRepository)
 	}
 }
 
@@ -246,7 +246,7 @@ routine deleteCorrespondingSystem(uml::Package umlSystemPkg) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
-		deleteObject(pcmSystem)
+		removeObject(pcmSystem)
 	}
 }
 

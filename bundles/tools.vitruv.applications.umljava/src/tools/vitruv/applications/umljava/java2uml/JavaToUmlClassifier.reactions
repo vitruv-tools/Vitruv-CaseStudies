@@ -166,7 +166,7 @@ routine deleteUmlClassifier(java::ConcreteClassifier javaClassifier) {
 		val umlClassifier = retrieve uml::Classifier corresponding to javaClassifier
 	}
 	update {
-		deleteObject(umlClassifier)
+		removeObject(umlClassifier)
 		removeCorrespondenceBetween(umlClassifier, javaClassifier)
 	}
 }
@@ -178,7 +178,7 @@ reaction JavaClassifierRemoved {
 
 routine cleanUpJavaCompilationUnit(java::CompilationUnit jCompUnit) {
     update {
-        deleteObject(jCompUnit)
+        removeObject(jCompUnit)
     }
 }
 
@@ -293,7 +293,7 @@ routine deleteUmlSuperClassGeneralization(java::TypeReference jReference){
 		val uGeneralization = retrieve uml::Generalization corresponding to jReference
 	}
 	update {
-		deleteObject(uGeneralization)
+		removeObject(uGeneralization)
 		removeCorrespondenceBetween(jReference, uGeneralization)
 	}
 }
@@ -348,7 +348,7 @@ routine removeUmlClassImplement(java::Class jClass, java::TypeReference jReferen
 	}
 	update {
 		uClass.interfaceRealizations -= uRealization
-		deleteObject(uRealization)
+		removeObject(uRealization)
 		removeCorrespondenceBetween(jReference, uRealization)
 	}
 }
@@ -439,7 +439,7 @@ routine removeUmlSuperInterface(java::Interface jInterface, java::TypeReference 
 		val uGeneralization = retrieve uml::Generalization corresponding to jReference
 	}
 	update {
-		deleteObject(uGeneralization)
+		removeObject(uGeneralization)
 		removeCorrespondenceBetween(jReference, uGeneralization)
 	}
 }
@@ -516,7 +516,7 @@ routine deleteUmlEnumLiteral(java::EnumConstant jConstant) {
         val uLiteral = retrieve uml::EnumerationLiteral corresponding to jConstant
     }
     update {
-        deleteObject(uLiteral)
+        removeObject(uLiteral)
         removeCorrespondenceBetween(uLiteral, jConstant)
     }
 }
@@ -594,7 +594,7 @@ routine deleteExistingJavaPackage(uml::Package umlPackage) {
 		val javaPackage = retrieve java::Package corresponding to umlPackage
 	}
 	update {
-		deleteObject(javaPackage)
+		removeObject(javaPackage)
 		removeCorrespondenceBetween(umlPackage, javaPackage)
 	}
 }
@@ -641,7 +641,7 @@ routine deleteUmlPackage(uml::Package umlPackage) {
 	update {
 		val nestedPackages = new ArrayList(umlPackage.nestedPackages)
 		nestedPackages.forEach[deleteUmlPackage()]
-		deleteObject(umlPackage)
+		removeObject(umlPackage)
 	}
 }
 

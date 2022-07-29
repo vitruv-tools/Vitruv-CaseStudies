@@ -127,7 +127,7 @@ routine deleteCorrespondingRegularParameter(uml::Parameter umlParam) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmParam, umlParam, TagLiterals.PARAMETER__REGULAR_PARAMETER)
-		deleteObject(pcmParam)
+		removeObject(pcmParam)
 	}
 }
 

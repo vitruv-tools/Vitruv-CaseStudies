@@ -107,7 +107,7 @@ routine deleteCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute) {
 		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
 	}
 	update {
-		deleteObject(umlAttribute)
+		removeObject(umlAttribute)
 		removeCorrespondenceBetween(pcmAttribute, umlAttribute, TagLiterals.INNER_DECLARATION__PROPERTY)
 	}
 }

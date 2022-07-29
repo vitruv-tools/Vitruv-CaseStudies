@@ -175,7 +175,7 @@ routine deleteCorrespondenceToSystemPackage(pcm::System pcmSystem) {
 		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
 	}
 	update {
-		deleteObject(umlSystemPackage)
+		removeObject(umlSystemPackage)
 		removeCorrespondenceBetween(pcmSystem, umlSystemPackage, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
 	}
 }

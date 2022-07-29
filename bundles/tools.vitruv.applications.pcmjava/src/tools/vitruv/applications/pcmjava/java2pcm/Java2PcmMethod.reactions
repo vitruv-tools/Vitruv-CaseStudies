@@ -69,7 +69,7 @@ routine deleteParameter(java::OrdinaryParameter javaParameter) {
 		val pcmParameter = retrieve pcm::Parameter corresponding to javaParameter
 	}
 	update {
-		deleteObject(pcmParameter)
+		removeObject(pcmParameter)
 		removeCorrespondenceBetween(javaParameter, pcmParameter)
 	}
 }

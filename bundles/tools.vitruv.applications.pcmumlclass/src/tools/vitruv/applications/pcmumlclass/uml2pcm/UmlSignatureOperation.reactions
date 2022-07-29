@@ -116,7 +116,7 @@ routine deleteCorrespondingSignature(uml::Operation umlOperation) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmSignature, umlOperation, TagLiterals.SIGNATURE__OPERATION)
-		deleteObject(pcmSignature)
+		removeObject(pcmSignature)
 	}
 }
 

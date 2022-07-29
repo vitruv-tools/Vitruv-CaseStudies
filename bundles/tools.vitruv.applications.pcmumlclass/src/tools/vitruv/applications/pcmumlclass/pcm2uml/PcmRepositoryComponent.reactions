@@ -206,7 +206,7 @@ routine deleteCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponen
 		val umlComponentConstructor = retrieve uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
 	}
 	update {
-		deleteObject(umlComponentPackage)
+		removeObject(umlComponentPackage)
 		removeCorrespondenceBetween(pcmComponent, umlComponentPackage,TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 		removeCorrespondenceBetween(pcmComponent, umlComponentImplementation, TagLiterals.IPRE__IMPLEMENTATION)
 		removeCorrespondenceBetween(pcmComponent, umlComponentConstructor, TagLiterals.IPRE__CONSTRUCTOR)

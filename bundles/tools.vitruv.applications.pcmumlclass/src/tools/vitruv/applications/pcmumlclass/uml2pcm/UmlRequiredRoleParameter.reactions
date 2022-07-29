@@ -127,7 +127,7 @@ routine parameter_deleteCorrespondingRequiredRole(uml::Parameter umlParameter) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmRequired, umlParameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
-		deleteObject(pcmRequired)
+		removeObject(pcmRequired)
 	}
 }
 

@@ -108,7 +108,7 @@ routine deleteCorrespondingProvidedRealization(pcm::OperationProvidedRole pcmPro
 		val umlRealization = retrieve uml::InterfaceRealization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
 	update {
-		deleteObject(umlRealization)
+		removeObject(umlRealization)
 		removeCorrespondenceBetween(pcmProvided, umlRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
 	}
 }

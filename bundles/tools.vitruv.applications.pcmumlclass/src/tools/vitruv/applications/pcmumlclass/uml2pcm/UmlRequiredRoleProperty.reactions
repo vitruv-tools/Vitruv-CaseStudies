@@ -126,7 +126,7 @@ routine deleteCorrespondingRequiredRole(uml::Property umlProperty) {
 	}
 	update {
 		removeCorrespondenceBetween(pcmRequired, umlProperty, TagLiterals.REQUIRED_ROLE__PROPERTY)
-		deleteObject(pcmRequired)
+		removeObject(pcmRequired)
 	}
 }
 

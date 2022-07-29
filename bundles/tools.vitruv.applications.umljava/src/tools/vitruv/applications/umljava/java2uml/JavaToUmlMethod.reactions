@@ -171,7 +171,7 @@ routine deleteUmlMethod(java::Member jMem) {
         val uMem = retrieve uml::NamedElement corresponding to jMem tagged with ""
     }
     update {
-        deleteObject(uMem)
+        removeObject(uMem)
         removeCorrespondenceBetween(uMem, jMem)
     }
 }
@@ -298,7 +298,7 @@ routine deleteJavaParameter(java::Parameter jParam) {
         val uParam = retrieve uml::Parameter corresponding to jParam
     }
     update {
-        deleteObject(uParam)
+        removeObject(uParam)
         removeCorrespondenceBetween(uParam, jParam)
     }
 }

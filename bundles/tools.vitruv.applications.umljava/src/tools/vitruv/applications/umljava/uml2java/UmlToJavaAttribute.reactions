@@ -109,7 +109,7 @@ routine deleteJavaField(uml::Property umlProperty) {
 
     }
     update {
-        deleteObject(javaField)
+        removeObject(javaField)
         removeCorrespondenceBetween(javaField, umlProperty)
     	deleteJavaAccessor(umlProperty, UmlJavaCorrespondenceTag.GETTER)
     	deleteJavaAccessor(umlProperty, UmlJavaCorrespondenceTag.SETTER)
@@ -121,7 +121,7 @@ routine deleteJavaAccessor(uml::Property umlProperty, String tag) {
 		val javaAccessor = retrieve java::ClassMethod corresponding to umlProperty tagged with tag
 	}
 	update {
-		deleteObject(javaAccessor)
+		removeObject(javaAccessor)
 		removeCorrespondenceBetween(javaAccessor, umlProperty)
 	}
 }

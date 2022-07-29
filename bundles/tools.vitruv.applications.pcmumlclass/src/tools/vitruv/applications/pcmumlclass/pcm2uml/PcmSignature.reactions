@@ -172,7 +172,7 @@ routine deleteCorrespondingOperation(pcm::OperationSignature pcmSignature) {
 		val umlReturnParam = retrieve uml::Parameter corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
 	}
 	update {
-		deleteObject(umlOperation)
+		removeObject(umlOperation)
 		removeCorrespondenceBetween(pcmSignature, umlOperation, TagLiterals.SIGNATURE__OPERATION)
 		removeCorrespondenceBetween(pcmSignature, umlReturnParam, TagLiterals.SIGNATURE__RETURN_PARAMETER)
 	}
