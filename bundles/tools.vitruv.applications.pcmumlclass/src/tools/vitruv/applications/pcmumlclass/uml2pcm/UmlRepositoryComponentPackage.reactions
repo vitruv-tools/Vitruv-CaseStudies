@@ -55,10 +55,8 @@ routine insertCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package
 	match {
 		val pcmRepository = retrieve optional pcm::Repository corresponding to umlParentPkg tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.
-			REPOSITORY_TO_CONTRACTS_PACKAGE
-		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.
-			REPOSITORY_TO_DATATYPES_PACKAGE
+		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	update {
 		if (pcmRepository.isPresent) {
@@ -92,8 +90,7 @@ routine addCorrespondenceForExistingRepositoryComponent(uml::Package umlPkg, pcm
 	match {
 		require absence of pcm::RepositoryComponent corresponding to umlPkg tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
-		require absence of uml::Package corresponding to pcmComponent tagged TagLiterals.
-			REPOSITORY_COMPONENT__PACKAGE
+		require absence of uml::Package corresponding to pcmComponent tagged TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
 	update {
 		addCorrespondenceBetween(pcmComponent, umlPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)

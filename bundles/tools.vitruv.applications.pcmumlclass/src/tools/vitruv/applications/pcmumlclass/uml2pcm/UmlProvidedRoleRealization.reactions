@@ -48,8 +48,8 @@ routine detectOrCreateCorrespondingProvidedRole(uml::InterfaceRealization umlRea
 	match {
 		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlRealization.
-			contract tagged TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlRealization.contract tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
 		require absence of pcm::OperationProvidedRole corresponding to umlRealization tagged TagLiterals.
 			PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
@@ -80,8 +80,8 @@ routine createCorrespondingProvidedRole(uml::InterfaceRealization umlRealization
 	match {
 		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlRealization.
-			contract tagged TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlRealization.contract tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
 		require absence of pcm::OperationProvidedRole corresponding to umlRealization tagged TagLiterals.
 			PROVIDED_ROLE__INTERFACE_REALIZATION
 	}

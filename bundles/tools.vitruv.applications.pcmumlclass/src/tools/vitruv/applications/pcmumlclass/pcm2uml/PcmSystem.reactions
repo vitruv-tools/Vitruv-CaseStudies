@@ -96,8 +96,7 @@ routine detectOrCreateCorrespondingSystemImplementation(pcm::System pcmSystem) {
 routine addCorrespondenceForExistingSystemImplementation(pcm::System pcmSystem, uml::Class umlSystemImplementation) {
 	match {
 		require absence of uml::Class corresponding to pcmSystem tagged TagLiterals.IPRE__IMPLEMENTATION
-		require absence of pcm::System corresponding to umlSystemImplementation tagged TagLiterals.
-			IPRE__IMPLEMENTATION
+		require absence of pcm::System corresponding to umlSystemImplementation tagged TagLiterals.IPRE__IMPLEMENTATION
 	}
 	update {
 		addCorrespondenceBetween(pcmSystem, umlSystemImplementation, TagLiterals.IPRE__IMPLEMENTATION)

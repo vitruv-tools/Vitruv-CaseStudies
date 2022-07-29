@@ -48,8 +48,8 @@ routine detectOrCreateCorrespondingAssemblyContext(uml::Property umlProperty, um
 	match {
 		val pcmCompositeComponent = retrieve pcm::ComposedProvidingRequiringEntity corresponding to umlComponent tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		val pcmInnerComponent = retrieve pcm::RepositoryComponent corresponding to umlProperty.
-			type tagged TagLiterals.IPRE__IMPLEMENTATION
+		val pcmInnerComponent = retrieve pcm::RepositoryComponent corresponding to umlProperty.type tagged TagLiterals.
+			IPRE__IMPLEMENTATION
 		require absence of pcm::AssemblyContext corresponding to umlProperty tagged TagLiterals.
 			ASSEMBLY_CONTEXT__PROPERTY
 	}
@@ -81,8 +81,8 @@ routine createCorrespondingAssemblyContext(uml::Property umlProperty, uml::Class
 	match {
 		val pcmCompositeComponent = retrieve pcm::ComposedProvidingRequiringEntity corresponding to umlComponent tagged TagLiterals.
 			IPRE__IMPLEMENTATION
-		val pcmInnerComponent = retrieve pcm::RepositoryComponent corresponding to umlProperty.
-			type tagged TagLiterals.IPRE__IMPLEMENTATION
+		val pcmInnerComponent = retrieve pcm::RepositoryComponent corresponding to umlProperty.type tagged TagLiterals.
+			IPRE__IMPLEMENTATION
 		require absence of pcm::AssemblyContext corresponding to umlProperty tagged TagLiterals.
 			ASSEMBLY_CONTEXT__PROPERTY
 	}

@@ -44,8 +44,7 @@ routine changeTypeOfCorrespondingPropertyOrParameter(pcm::CollectionDataType pcm
 			COLLECTION_DATATYPE__PARAMETER
 		val umlPropertyList = retrieve many uml::Property corresponding to pcmCollection tagged TagLiterals.
 			COLLECTION_DATATYPE__PROPERTY
-		val umlPrimitiveType = retrieve many uml::Type corresponding to newInnerType tagged TagLiterals.
-			DATATYPE__TYPE
+		val umlPrimitiveType = retrieve many uml::Type corresponding to newInnerType tagged TagLiterals.DATATYPE__TYPE
 		val umlCompositeType = retrieve optional uml::Type corresponding to newInnerType tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
 	}

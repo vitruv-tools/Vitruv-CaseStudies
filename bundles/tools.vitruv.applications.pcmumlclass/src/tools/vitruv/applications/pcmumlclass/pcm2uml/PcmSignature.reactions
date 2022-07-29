@@ -97,8 +97,7 @@ routine attemptAddingCorrespondenceForExistingReturnParamCandidate(pcm::Operatio
 	match {
 		val umlOperation = retrieve asserted uml::Operation corresponding to pcmSignature tagged TagLiterals.
 			SIGNATURE__OPERATION
-		require absence of uml::Parameter corresponding to pcmSignature tagged TagLiterals.
-			SIGNATURE__RETURN_PARAMETER
+		require absence of uml::Parameter corresponding to pcmSignature tagged TagLiterals.SIGNATURE__RETURN_PARAMETER
 		require absence of pcm::OperationSignature corresponding to umlReturnParamCandidate tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
 	}
@@ -128,8 +127,7 @@ routine createCorrespondingReturnParameter(pcm::OperationSignature pcmSignature)
 	match {
 		val umlOperation = retrieve asserted uml::Operation corresponding to pcmSignature tagged TagLiterals.
 			SIGNATURE__OPERATION
-		require absence of uml::Parameter corresponding to pcmSignature tagged TagLiterals.
-			SIGNATURE__RETURN_PARAMETER
+		require absence of uml::Parameter corresponding to pcmSignature tagged TagLiterals.SIGNATURE__RETURN_PARAMETER
 	}
 	create {
 		val umlReturnParam = new uml::Parameter
@@ -147,8 +145,7 @@ routine moveCorrespondingOperation(pcm::OperationSignature pcmSignature, pcm::Op
 	match {
 		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
-		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged TagLiterals.
-			SIGNATURE__OPERATION
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged TagLiterals.SIGNATURE__OPERATION
 	}
 	update {
 		umlInterface.ownedOperations += umlOperation
@@ -165,8 +162,7 @@ routine removeCorrespondingOperation(pcm::OperationSignature pcmSignature, pcm::
 	match {
 		val umlInterface = retrieve uml::Interface corresponding to pcmInterface tagged TagLiterals.
 			INTERFACE_TO_INTERFACE
-		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged TagLiterals.
-			SIGNATURE__OPERATION
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged TagLiterals.SIGNATURE__OPERATION
 	}
 	update {
 		umlInterface.ownedOperations -= umlOperation
@@ -180,8 +176,7 @@ reaction SignatureDeleted {
 
 routine deleteCorrespondingOperation(pcm::OperationSignature pcmSignature) {
 	match {
-		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged TagLiterals.
-			SIGNATURE__OPERATION
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged TagLiterals.SIGNATURE__OPERATION
 		val umlReturnParam = retrieve uml::Parameter corresponding to pcmSignature tagged TagLiterals.
 			SIGNATURE__RETURN_PARAMETER
 	}
@@ -200,8 +195,7 @@ reaction SignatureRenamed {
 
 routine renameCorrespondingOperation(pcm::OperationSignature pcmSignature, String newName) {
 	match {
-		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged TagLiterals.
-			SIGNATURE__OPERATION
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged TagLiterals.SIGNATURE__OPERATION
 	}
 	update {
 		umlOperation.name = newName

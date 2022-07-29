@@ -98,8 +98,7 @@ routine userDisambiguateRepositoryOrSystemCreation(uml::Package umlPkg, uml::Pac
 
 routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package umlParentPkg) {
 	match {
-		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.
-			REPOSITORY_TO_REPOSITORY_PACKAGE
+		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.
 			REPOSITORY with umlPkg.isPackageFor(foundRepository)
 	}
@@ -249,8 +248,7 @@ routine deleteCorrespondingRepository(uml::Package umlRepositoryPkg) {
 
 routine deleteCorrespondingSystem(uml::Package umlSystemPkg) {
 	match {
-		val pcmSystem = retrieve pcm::System corresponding to umlSystemPkg tagged TagLiterals.
-			SYSTEM__SYSTEM_PACKAGE
+		val pcmSystem = retrieve pcm::System corresponding to umlSystemPkg tagged TagLiterals.SYSTEM__SYSTEM_PACKAGE
 	}
 	update {
 		removeCorrespondenceBetween(pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
@@ -268,8 +266,7 @@ routine renameCorrespondingRepositoryOrSystem(uml::Package umlPkg, String newNam
 	match {
 		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPkg tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		val pcmSystem = retrieve optional pcm::System corresponding to umlPkg tagged TagLiterals.
-			SYSTEM__SYSTEM_PACKAGE
+		val pcmSystem = retrieve optional pcm::System corresponding to umlPkg tagged TagLiterals.SYSTEM__SYSTEM_PACKAGE
 	}
 	update {
 		if (pcmRepository.isPresent)

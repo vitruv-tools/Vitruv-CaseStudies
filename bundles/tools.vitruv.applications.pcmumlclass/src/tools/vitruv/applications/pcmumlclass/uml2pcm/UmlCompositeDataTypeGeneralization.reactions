@@ -64,8 +64,8 @@ reaction CompositeDataTypeGeneralizationTypeChanged {
 
 routine replaceCollectionDatatypeParent(uml::Generalization gen, uml::Classifier umlNewParent, uml::Classifier umlOldParent) {
 	match {
-		val pcmCompositeDataType = retrieve pcm::CompositeDataType corresponding to gen.
-			specific tagged TagLiterals.COMPOSITE_DATATYPE__CLASS
+		val pcmCompositeDataType = retrieve pcm::CompositeDataType corresponding to gen.specific tagged TagLiterals.
+			COMPOSITE_DATATYPE__CLASS
 	}
 	update {
 		removeCompositeDatatypeParent(gen.specific as Class, umlOldParent)

@@ -58,8 +58,7 @@ routine detectOrCreateCorrespondingComponentPackage(pcm::RepositoryComponent pcm
 
 routine addCorrespondenceForExistingComponentPackage(pcm::RepositoryComponent pcmComponent, uml::Package umlComponentPackage) {
 	match {
-		require absence of uml::Package corresponding to pcmComponent tagged TagLiterals.
-			REPOSITORY_COMPONENT__PACKAGE
+		require absence of uml::Package corresponding to pcmComponent tagged TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 		require absence of pcm::RepositoryComponent corresponding to umlComponentPackage tagged TagLiterals.
 			REPOSITORY_COMPONENT__PACKAGE
 	}
@@ -72,8 +71,7 @@ routine createCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponen
 	match {
 		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged TagLiterals.
 			REPOSITORY_TO_REPOSITORY_PACKAGE
-		require absence of uml::Package corresponding to pcmComponent tagged TagLiterals.
-			REPOSITORY_COMPONENT__PACKAGE
+		require absence of uml::Package corresponding to pcmComponent tagged TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
 	create {
 		val umlComponentPackage = new uml::Package
@@ -252,10 +250,10 @@ routine changeNameOfComponentCorrespondences(pcm::RepositoryComponent pcmCompone
 	}
 	update {
 		if(umlComponentPackage.isPresent) umlComponentPackage.get.name = pcmComponent.correspondingPackageName
-		if(umlComponentImplementation.isPresent) umlComponentImplementation.get.name = newName.toFirstUpper +
-			DefaultLiterals.IMPLEMENTATION_SUFFIX
-		if(umlComponentConstructor.isPresent) umlComponentConstructor.get.name = newName.toFirstUpper +
-			DefaultLiterals.IMPLEMENTATION_SUFFIX
+		if (umlComponentImplementation.isPresent)
+			umlComponentImplementation.get.name = newName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
+		if (umlComponentConstructor.isPresent)
+			umlComponentConstructor.get.name = newName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
 	}
 }
 

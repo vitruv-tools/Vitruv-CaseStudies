@@ -49,8 +49,7 @@ routine detectOrCreateCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute,
 
 routine addCorrespondenceForExistingAttribute(pcm::InnerDeclaration pcmAttribute, uml::Property umlAttribute) {
 	match {
-		require absence of uml::Property corresponding to pcmAttribute tagged TagLiterals.
-			INNER_DECLARATION__PROPERTY
+		require absence of uml::Property corresponding to pcmAttribute tagged TagLiterals.INNER_DECLARATION__PROPERTY
 		require absence of pcm::InnerDeclaration corresponding to umlAttribute tagged TagLiterals.
 			INNER_DECLARATION__PROPERTY
 	}
@@ -63,8 +62,7 @@ routine createCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::Co
 	match {
 		val umlComposite = retrieve uml::Class corresponding to pcmComposite tagged TagLiterals.
 			COMPOSITE_DATATYPE__CLASS
-		require absence of uml::Property corresponding to pcmAttribute tagged TagLiterals.
-			INNER_DECLARATION__PROPERTY
+		require absence of uml::Property corresponding to pcmAttribute tagged TagLiterals.INNER_DECLARATION__PROPERTY
 	}
 	create {
 		val umlAttribute = new uml::Property

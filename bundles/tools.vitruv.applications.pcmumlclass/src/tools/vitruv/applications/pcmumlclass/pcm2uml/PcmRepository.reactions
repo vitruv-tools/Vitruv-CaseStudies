@@ -47,8 +47,7 @@ routine addRepositoryCorrespondence(pcm::Repository pcmRepository) {
 routine createOrFindUmlRepositoryPackage(pcm::Repository pcmRepo) {
 	match {
 		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
-		require absence of uml::Package corresponding to pcmRepo tagged TagLiterals.
-			REPOSITORY_TO_REPOSITORY_PACKAGE
+		require absence of uml::Package corresponding to pcmRepo tagged TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
 	update {
 		var umlPackage = findUmlPackage(umlModel, pcmRepo.correspondingPackageName)
@@ -187,9 +186,11 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 
 routine addPrimitiveDatatypeCorrespondence(pcm::PrimitiveDataType pcmPrimitiveType, uml::PrimitiveType umlPrimitiveType) {
 	match {
-	require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged TagLiterals.DATATYPE__TYPE with potentialTarget == umlPrimitiveType
-		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged TagLiterals.DATATYPE__TYPE with potentialTarget == pcmPrimitiveType
-}
+		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged TagLiterals.
+			DATATYPE__TYPE with potentialTarget == umlPrimitiveType
+		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged TagLiterals.
+			DATATYPE__TYPE with potentialTarget == pcmPrimitiveType
+	}
 	update {
 		addCorrespondenceBetween(pcmPrimitiveType, umlPrimitiveType, TagLiterals.DATATYPE__TYPE)
 	}

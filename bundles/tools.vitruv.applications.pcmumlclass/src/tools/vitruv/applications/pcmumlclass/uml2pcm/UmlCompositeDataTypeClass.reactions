@@ -44,8 +44,7 @@ routine detectOrCreateCorrespondingCompositeDataType(uml::Class umlClass, uml::P
 	match {
 		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged TagLiterals.
 			REPOSITORY_TO_DATATYPES_PACKAGE
-		require absence of pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.
-			COMPOSITE_DATATYPE__CLASS
+		require absence of pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	update {
 		val candidates = pcmRepository.dataTypes__Repository.filter(CompositeDataType).filter [ type |
@@ -80,10 +79,8 @@ routine createCorrespondingCompositeDataType(uml::Class umlClass, uml::Package u
 
 routine addCorrespondenceForExistingCompositeDataType(pcm::CompositeDataType pcmCompositeType, uml::Class umlClass) {
 	match {
-		require absence of pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.
-			COMPOSITE_DATATYPE__CLASS
-		require absence of uml::Class corresponding to pcmCompositeType tagged TagLiterals.
-			COMPOSITE_DATATYPE__CLASS
+		require absence of pcm::CompositeDataType corresponding to umlClass tagged TagLiterals.COMPOSITE_DATATYPE__CLASS
+		require absence of uml::Class corresponding to pcmCompositeType tagged TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	update {
 		addCorrespondenceBetween(pcmCompositeType, umlClass, TagLiterals.COMPOSITE_DATATYPE__CLASS)

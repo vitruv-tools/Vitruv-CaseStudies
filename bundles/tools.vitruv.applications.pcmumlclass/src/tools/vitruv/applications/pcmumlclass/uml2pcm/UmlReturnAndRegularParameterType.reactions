@@ -74,11 +74,10 @@ routine propagateTypeChange(uml::Parameter umlParameter) {
 				pcmParameter.get.dataType__Parameter = pcmDataType
 			}
 
-			if(pcmOldCollectionType.isPresent &&
-				pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType_Parameter(
-				umlParameter)
-			if(pcmDataType instanceof CollectionDataType) addCorrespondenceForCollectionType_Parameter(umlParameter,
-				pcmDataType)
+			if (pcmOldCollectionType.isPresent && pcmOldCollectionType.get !== pcmDataType)
+				removeCorrespondenceForOldCollectionType_Parameter(umlParameter)
+			if (pcmDataType instanceof CollectionDataType)
+				addCorrespondenceForCollectionType_Parameter(umlParameter, pcmDataType)
 		}
 	}
 }
