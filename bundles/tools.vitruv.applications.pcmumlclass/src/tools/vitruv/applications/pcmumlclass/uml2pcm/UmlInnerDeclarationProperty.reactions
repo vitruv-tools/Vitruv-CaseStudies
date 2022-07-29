@@ -4,7 +4,7 @@ import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reactions and routines synchronize a pcm::InnerDeclaration with its corresponding uml::Property
@@ -13,7 +13,6 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	Related files: 
 //		PcmInnerDeclaration.reactions, 
 //		AttributeConceptTest
-
 reactions: umlInnerDeclarationPropertyReactions
 in reaction to changes in uml
 execute actions in pcm
@@ -26,7 +25,8 @@ reaction InnerDeclarationPropertyInserted {
 
 routine insertCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Class umlCompositeType) {
 	match {
-		val pcmCompositeType = retrieve optional pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS 
+		val pcmCompositeType = retrieve optional pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.
+			COMPOSITE_DATATYPE__CLASS
 	}
 	update {
 		if (pcmCompositeType.isPresent) {
@@ -41,13 +41,16 @@ routine insertCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Clas
 
 routine detectOrCreateCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Class umlCompositeType) {
 	match {
-		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS 
-		val pcmInnerDeclaration = retrieve optional pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.
+			COMPOSITE_DATATYPE__CLASS
+		val pcmInnerDeclaration = retrieve optional pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.
+			INNER_DECLARATION__PROPERTY
 	}
 	update {
 		if (!pcmInnerDeclaration.isPresent) {
-			val pcmInnerDeclarationCandidate = pcmCompositeType.innerDeclaration_CompositeDataType
-					.findFirst[it.entityName === umlProperty.name]
+			val pcmInnerDeclarationCandidate = pcmCompositeType.innerDeclaration_CompositeDataType.findFirst [
+				it.entityName === umlProperty.name
+			]
 			if (pcmInnerDeclarationCandidate !== null) {
 				addCorrespondenceForExistingInnerDeclaration(umlProperty, pcmInnerDeclarationCandidate)
 			} else {
@@ -59,8 +62,10 @@ routine detectOrCreateCorrespondingInnerDeclaration(uml::Property umlProperty, u
 
 routine addCorrespondenceForExistingInnerDeclaration(uml::Property umlProperty, pcm::InnerDeclaration pcmInnerDeclaration) {
 	match {
-		require absence of uml::Property corresponding to pcmInnerDeclaration tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-		require absence of pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		require absence of uml::Property corresponding to pcmInnerDeclaration tagged with TagLiterals.
+			INNER_DECLARATION__PROPERTY
+		require absence of pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.
+			INNER_DECLARATION__PROPERTY
 	}
 	update {
 		addCorrespondenceBetween(pcmInnerDeclaration, umlProperty, TagLiterals.INNER_DECLARATION__PROPERTY)
@@ -69,8 +74,10 @@ routine addCorrespondenceForExistingInnerDeclaration(uml::Property umlProperty, 
 
 routine createCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Class umlCompositeType) {
 	match {
-		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		require absence of pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.
+			COMPOSITE_DATATYPE__CLASS
+		require absence of pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.
+			INNER_DECLARATION__PROPERTY
 	}
 	create {
 		val pcmInnerDeclaration = new pcm::InnerDeclaration
@@ -85,8 +92,10 @@ routine createCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Clas
 
 routine moveCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Class umlCompositeType) {
 	match {
-		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.
+			COMPOSITE_DATATYPE__CLASS
+		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.
+			INNER_DECLARATION__PROPERTY
 	}
 	update {
 		pcmCompositeType.innerDeclaration_CompositeDataType += pcmInnerDeclaration
@@ -95,14 +104,16 @@ routine moveCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Class 
 
 reaction InnerDeclarationPropertyRemoved {
 	after element uml::Property removed from uml::Class[ownedAttribute]
-	with !affectedEObject.ownedAttributes.contains(oldValue) //validity check
+	with !affectedEObject.ownedAttributes.contains(oldValue) // validity check
 	call removeCorrespondingInnerDeclaration(oldValue, affectedEObject)
 }
 
 routine removeCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Class umlCompositeType) {
 	match {
-		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.
+			COMPOSITE_DATATYPE__CLASS
+		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.
+			INNER_DECLARATION__PROPERTY
 	}
 	update {
 		pcmCompositeType.innerDeclaration_CompositeDataType -= pcmInnerDeclaration
@@ -116,7 +127,8 @@ reaction InnerDeclarationPropertyDeleted {
 
 routine deleteCorrespondingInnerDeclaration(uml::Property umlProperty) {
 	match {
-		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.
+			INNER_DECLARATION__PROPERTY
 	}
 	update {
 		removeCorrespondenceBetween(pcmInnerDeclaration, umlProperty, TagLiterals.INNER_DECLARATION__PROPERTY)
@@ -132,7 +144,8 @@ reaction InnerDeclarationPropertyNameChanged {
 
 routine changeNameOfCorrespondingInnerDeclaration(uml::Property umlProperty, String newName) {
 	match {
-		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.
+			INNER_DECLARATION__PROPERTY
 	}
 	update {
 		pcmInnerDeclaration.entityName = newName
@@ -141,8 +154,7 @@ routine changeNameOfCorrespondingInnerDeclaration(uml::Property umlProperty, Str
 
 reaction InnerDeclarationPropertyTypeChanged {
 	after element replaced at uml::Property[type]
-	with affectedEObject.type === newValue 
-		&& oldValue !== newValue
+	with affectedEObject.type === newValue && oldValue !== newValue
 	call propagateTypeChange(affectedEObject)
 }
 
@@ -153,8 +165,7 @@ reaction InnerDeclarationPropertyLowerChanged {
 
 reaction InnerDeclarationPropertyLowerChanged2 {
 	after attribute replaced at uml::LiteralInteger[value]
-	with affectedEObject.owner instanceof Property 
-		&& affectedEObject.value == newValue
+	with affectedEObject.owner instanceof Property && affectedEObject.value == newValue
 	call propagateTypeChange(affectedEObject.owner as Property)
 }
 
@@ -165,32 +176,35 @@ reaction InnerDeclarationPropertyUpperChanged {
 
 reaction InnerDeclarationPropertyUpperChanged2 {
 	after attribute replaced at uml::LiteralUnlimitedNatural[value]
-	with affectedEObject.owner instanceof Property 
-		&& affectedEObject.value == newValue
+	with affectedEObject.owner instanceof Property && affectedEObject.value == newValue
 	call propagateTypeChange(affectedEObject.owner as Property)
 }
 
 routine propagateTypeChange(uml::Property umlProperty) {
 	match {
-		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-		
-		val pcmOldCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.
+			INNER_DECLARATION__PROPERTY
+		val pcmOldCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.
+			COLLECTION_DATATYPE__PROPERTY
 	}
 	update {
 		val pcmRepository = pcmInnerDeclaration.eResource.allContents.filter(Repository).head
-		val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(umlProperty.type, umlProperty.lower, umlProperty.upper, pcmRepository, userInteractor, [sourceElement, expectedType, tag |
-			getCorrespondingElement(sourceElement, expectedType, null, tag, false)
-		])
+		val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(umlProperty.type, umlProperty.lower,
+			umlProperty.upper, pcmRepository, userInteractor, [ sourceElement, expectedType, tag |
+				getCorrespondingElement(sourceElement, expectedType, null, tag, false)
+			])
 		pcmInnerDeclaration.datatype_InnerDeclaration = pcmDataType
-		
-		if(pcmOldCollectionType.isPresent && pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType(umlProperty)
+
+		if(pcmOldCollectionType.isPresent &&
+			pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType(umlProperty)
 		if(pcmDataType instanceof CollectionDataType) addCorrespondenceForCollectionType(umlProperty, pcmDataType)
 	}
 }
 
 routine removeCorrespondenceForOldCollectionType(uml::Property umlProperty) {
 	match {
-		val pcmCollectionType = retrieve pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+		val pcmCollectionType = retrieve pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.
+			COLLECTION_DATATYPE__PROPERTY
 	}
 	update {
 		removeCorrespondenceBetween(pcmCollectionType, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
@@ -200,7 +214,8 @@ routine removeCorrespondenceForOldCollectionType(uml::Property umlProperty) {
 routine addCorrespondenceForCollectionType(uml::Property umlProperty, pcm::CollectionDataType pcmCollectionType) {
 	match {
 		// one Parameter can only correspond to one CollectionDataType, but one CollectionDataType can correspond to many Parameters
-		require absence of pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+		require absence of pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.
+			COLLECTION_DATATYPE__PROPERTY
 	}
 	update {
 		addCorrespondenceBetween(pcmCollectionType, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)

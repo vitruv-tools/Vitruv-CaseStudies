@@ -11,125 +11,125 @@ execute actions in uml
 import routines javaToUmlTypePropagation using qualified names
 
 reaction JavaAttributeCreatedInClass {
-    after element java::Field inserted in java::Class[members]
-    call createOrFindUmlAttributeInClass(affectedEObject, newValue)
+	after element java::Field inserted in java::Class[members]
+	call createOrFindUmlAttributeInClass(affectedEObject, newValue)
 }
 
 reaction JavaAttributeCreatedInEnum {
-    after element java::Field inserted in java::Enumeration[members]
-    call createOrFindUmlAttributeInEnum(affectedEObject, newValue)
+	after element java::Field inserted in java::Enumeration[members]
+	call createOrFindUmlAttributeInEnum(affectedEObject, newValue)
 }
 
 routine addAttributeCorrespondence(uml::Property umlAttribute, java::Field javaField) {
-     update {
-         addCorrespondenceBetween(umlAttribute, javaField)
-     }
+	update {
+		addCorrespondenceBetween(umlAttribute, javaField)
+	}
 }
 
 //UML-Enumeration, UML-Class don't have a common superclass for "having ownedAttributes".
 //Therefore we implemented two separate routines
 routine createOrFindUmlAttributeInEnum(java::Enumeration javaEnum, java::Field javaField) {
-    match {
-        val umlEnum = retrieve uml::Enumeration corresponding to javaEnum
-        require absence of uml::Property corresponding to javaField
-    }
-    update {
-        val foundAttribute = umlEnum.ownedAttributes.filter[name == javaField.name].claimNotMany
-        if (foundAttribute === null) {
-            createUmlAttributeInEnum(javaEnum, javaField)
-        } else {
-            addAttributeCorrespondence(foundAttribute, javaField)
-        }
-    }
+	match {
+		val umlEnum = retrieve uml::Enumeration corresponding to javaEnum
+		require absence of uml::Property corresponding to javaField
+	}
+	update {
+		val foundAttribute = umlEnum.ownedAttributes.filter[name == javaField.name].claimNotMany
+		if (foundAttribute === null) {
+			createUmlAttributeInEnum(javaEnum, javaField)
+		} else {
+			addAttributeCorrespondence(foundAttribute, javaField)
+		}
+	}
 }
 
 routine createOrFindUmlAttributeInClass(java::Class javaClass, java::Field javaField) {
-    match {
-        val umlClass = retrieve uml::Class corresponding to javaClass
-        require absence of uml::Property corresponding to javaField
-    }
-    update {
-        val foundAttribute = umlClass.ownedAttributes.filter[name == javaField.name].claimNotMany
-        if (foundAttribute === null) {
-            createUmlAttributeInClass(javaClass, javaField)
-        } else {
-            addAttributeCorrespondence(foundAttribute, javaField)
-        }
-    }
+	match {
+		val umlClass = retrieve uml::Class corresponding to javaClass
+		require absence of uml::Property corresponding to javaField
+	}
+	update {
+		val foundAttribute = umlClass.ownedAttributes.filter[name == javaField.name].claimNotMany
+		if (foundAttribute === null) {
+			createUmlAttributeInClass(javaClass, javaField)
+		} else {
+			addAttributeCorrespondence(foundAttribute, javaField)
+		}
+	}
 }
 
 //UML-Enumeration, UML-Class don't have a common superclass for "having ownedAttributes".
 //Therefore we implemented two separate routines
 routine createUmlAttributeInEnum(java::Enumeration jEnum, java::Field jAttr) {
-    match {
-        val uEnum = retrieve uml::Enumeration corresponding to jEnum
-        require absence of uml::Property corresponding to jAttr
-    }
-    create {
-    	val uAttr = new uml::Property
-    }
-    update {
+	match {
+		val uEnum = retrieve uml::Enumeration corresponding to jEnum
+		require absence of uml::Property corresponding to jAttr
+	}
+	create {
+		val uAttr = new uml::Property
+	}
+	update {
 		uAttr.name = jAttr.name
-        addCorrespondenceBetween(uAttr, jAttr)
-        uEnum.ownedAttributes += uAttr
-    }
+		addCorrespondenceBetween(uAttr, jAttr)
+		uEnum.ownedAttributes += uAttr
+	}
 }
 
 routine createUmlAttributeInClass(java::Class jClass, java::Field jAttr) {
-    match {
-        val uClass = retrieve uml::Class corresponding to jClass
-        require absence of uml::Property corresponding to jAttr
-    }
-    create {
-    	val uAttr = new uml::Property
-   	}
-    update {
+	match {
+		val uClass = retrieve uml::Class corresponding to jClass
+		require absence of uml::Property corresponding to jAttr
+	}
+	create {
+		val uAttr = new uml::Property
+	}
+	update {
 		uAttr.name = jAttr.name;
-        addCorrespondenceBetween(uAttr, jAttr)
+		addCorrespondenceBetween(uAttr, jAttr)
 		uClass.ownedAttributes += uAttr
-    }
+	}
 }
 
 reaction JavaAttributeTypeChanged {
-    after element java::TypeReference replaced at java::Field[typeReference]
-    call {
-        changeUmlAttributeType(affectedEObject, newValue)
-        }
+	after element java::TypeReference replaced at java::Field[typeReference]
+	call {
+		changeUmlAttributeType(affectedEObject, newValue)
+	}
 }
 
 routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
-    match {
-        val uAttr = retrieve uml::Property corresponding to jAttr
-    }
-    update {
-        javaToUmlTypePropagation.propagateAttributeTypeChange(jAttr, uAttr)
-    }
+	match {
+		val uAttr = retrieve uml::Property corresponding to jAttr
+	}
+	update {
+		javaToUmlTypePropagation.propagateAttributeTypeChange(jAttr, uAttr)
+	}
 }
 
 reaction JavaAttributeMadeFinal {
-    after element java::Final inserted in java::Field[annotationsAndModifiers]
-    call setUmlAttributeFinal(affectedEObject, true)
+	after element java::Final inserted in java::Field[annotationsAndModifiers]
+	call setUmlAttributeFinal(affectedEObject, true)
 }
 
 reaction JavaAttributeMadeNonFinal {
-    after element java::Final removed from java::Field[annotationsAndModifiers]
-    call setUmlAttributeFinal(affectedEObject, false)
+	after element java::Final removed from java::Field[annotationsAndModifiers]
+	call setUmlAttributeFinal(affectedEObject, false)
 }
 
 routine setUmlAttributeFinal(java::Field jAttr, Boolean isFinal) {
-    match {
-        val uAttr = retrieve uml::Property corresponding to jAttr 
-    }
-    update {
+	match {
+		val uAttr = retrieve uml::Property corresponding to jAttr
+	}
+	update {
 		uAttr.isReadOnly = isFinal
-    }
+	}
 }
 
 //===========================================
 //=========================================== Unsupported
 //===========================================
-
 reaction JavaAttributeCreatedInInterface {
-    after element java::Field inserted in java::Interface[members]
-    call showMessage(userInteractor, "Adding fields to " + affectedEObject.class.simpleName +" is not supported. Please remove " + newValue)
+	after element java::Field inserted in java::Interface[members]
+	call showMessage(userInteractor,
+		"Adding fields to " + affectedEObject.class.simpleName + " is not supported. Please remove " + newValue)
 }

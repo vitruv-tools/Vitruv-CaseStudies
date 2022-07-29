@@ -1,7 +1,7 @@
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reactions and routines synchronize a pcm::InterfaceProvidingRequiringEntity (RepositoryComponent or System) 
@@ -13,7 +13,6 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	Related files: 
 //		PcmRepositoryComponent.reactions, PcmSystem.reactions
 //		RepositoryComponentConceptTest, SystemConceptTest
-
 reactions: umlIPREConstructorOperationReactions
 in reaction to changes in uml
 execute actions in pcm
@@ -26,11 +25,13 @@ reaction IPREConstructorOperationNameChanged {
 
 routine changeNameOfCorrespondingIPRE_Constructor(uml::Operation umlOperation, String newName) {
 	match {
-		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged with TagLiterals.IPRE__CONSTRUCTOR
+		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged with TagLiterals.
+			IPRE__CONSTRUCTOR
 	}
 	update {
 		if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
-			pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
+			pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).
+				toFirstUpper
 		} else {
 			pcmIPRE.entityName = newName
 		}
