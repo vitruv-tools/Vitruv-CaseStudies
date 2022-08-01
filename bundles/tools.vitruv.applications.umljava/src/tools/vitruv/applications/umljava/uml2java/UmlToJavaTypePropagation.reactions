@@ -17,37 +17,30 @@ execute actions in java
 routine propagatePropertyTypeChanged(uml::Property uProperty, java::Field jElement,
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 ) {
-	action {
-		call {
-			propagateTypedMultiplicityElementTypeChanged_defaultObject(uProperty, uProperty, jElement, jType)
-		}
+	update {
+		propagateTypedMultiplicityElementTypeChanged_defaultObject(uProperty, uProperty, jElement, jType)
 	}
 }
 
 routine propagateReturnParameterTypeChanged(uml::Parameter uReturnParameter, java::Method jMethod,
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 ) {
-	action {
-		call {
-			if (uReturnParameter.direction !== ParameterDirectionKind.RETURN_LITERAL) {
-				throw new IllegalStateException("An uml::Parameter with direction!=RETURN_LITERAL cannot be synchronized with a java::Method.")
-			}
-			propagateTypedMultiplicityElementTypeChanged_defaultVoid(uReturnParameter, uReturnParameter, jMethod, jType)
+	update {
+		if (uReturnParameter.direction !== ParameterDirectionKind.RETURN_LITERAL) {
+			throw new IllegalStateException("An uml::Parameter with direction!=RETURN_LITERAL cannot be synchronized with a java::Method.")
 		}
+		propagateTypedMultiplicityElementTypeChanged_defaultVoid(uReturnParameter, uReturnParameter, jMethod, jType)
 	}
 }
 
 routine propagateOrdinaryParameterTypeChanged(uml::Parameter uParameter, java::OrdinaryParameter jParameter,
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 ) {
-	action {
-		call {
-			if (uParameter.direction === ParameterDirectionKind.RETURN_LITERAL) {
-				throw new IllegalStateException("An uml::Parameter with direction==RETURN_LITERAL cannot be synchronized with a java::Parameter.")
-			}
-			else{
-				propagateTypedMultiplicityElementTypeChanged_defaultObject(uParameter, uParameter, jParameter, jType)
-			}
+	update {
+		if (uParameter.direction === ParameterDirectionKind.RETURN_LITERAL) {
+			throw new IllegalStateException("An uml::Parameter with direction==RETURN_LITERAL cannot be synchronized with a java::Parameter.")
+		} else {
+			propagateTypedMultiplicityElementTypeChanged_defaultObject(uParameter, uParameter, jParameter, jType)
 		}
 	}
 }
@@ -67,30 +60,28 @@ routine propagateTypedMultiplicityElementTypeChanged(uml::TypedElement uElement,
 			true
 		}
 	}
-	action {
-		execute {
-			val existingJavaTypeReference = jElement.typeReference
-			var typeReference = createTypeReference(uElement.type, jType, defaultReference, userInteractor)
-			if(uMultiplicity.upper == LiteralUnlimitedNatural.UNLIMITED || uMultiplicity.upper > 1) {
-				if (typeReference === defaultReference){
-					// could not create a specific typeReference for the uElement.type
-					// default to java.lang.Object as an inner type
-					typeReference = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass)
-				}
-				if (isCollectionTypeReference(jElement.typeReference)) {
-					// reuse previously selected CollectionType
-					val collectionClassifier = getNormalizedClassifierFromTypeReference(jElement.typeReference) as ConcreteClassifier
-					typeReference = createCollectionTypeReference(collectionClassifier, typeReference)
-				} else {
-					// no previously selected CollectionType
-					val Class<?> collectionType = userSelectCollectionType(userInteractor)
-					typeReference = createCollectionTypeReference(collectionType, typeReference)
-				}
+	update {
+		val existingJavaTypeReference = jElement.typeReference
+		var typeReference = createTypeReference(uElement.type, jType, defaultReference, userInteractor)
+		if(uMultiplicity.upper == LiteralUnlimitedNatural.UNLIMITED || uMultiplicity.upper > 1) {
+			if (typeReference === defaultReference){
+				// could not create a specific typeReference for the uElement.type
+				// default to java.lang.Object as an inner type
+				typeReference = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass)
 			}
-			if (!EcoreUtil.equals(existingJavaTypeReference, typeReference)) {
-				jElement.typeReference = typeReference
-				addJavaImport(jElement.containingCompilationUnit, typeReference)				
+			if (isCollectionTypeReference(jElement.typeReference)) {
+				// reuse previously selected CollectionType
+				val collectionClassifier = getNormalizedClassifierFromTypeReference(jElement.typeReference) as ConcreteClassifier
+				typeReference = createCollectionTypeReference(collectionClassifier, typeReference)
+			} else {
+				// no previously selected CollectionType
+				val Class<?> collectionType = userSelectCollectionType(userInteractor)
+				typeReference = createCollectionTypeReference(collectionType, typeReference)
 			}
+		}
+		if (!EcoreUtil.equals(existingJavaTypeReference, typeReference)) {
+			jElement.typeReference = typeReference
+			addJavaImport(jElement.containingCompilationUnit, typeReference)				
 		}
 	}
 }
@@ -99,11 +90,9 @@ routine propagateTypedMultiplicityElementTypeChanged_defaultObject(uml::TypedEle
 		java::TypedElement jElement, // java::Field, java::Parameter, or java::Method
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 ) {
-	action {
-		call {
-			val objectNsRef = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass) // default to java.lang.Object
-			propagateTypedMultiplicityElementTypeChanged(uElement, uMultiplicity, jElement, jType, objectNsRef)
-		}
+	update {
+		val objectNsRef = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass) // default to java.lang.Object
+		propagateTypedMultiplicityElementTypeChanged(uElement, uMultiplicity, jElement, jType, objectNsRef)
 	}
 }
 
@@ -111,11 +100,9 @@ routine propagateTypedMultiplicityElementTypeChanged_defaultVoid(uml::TypedEleme
 		java::TypedElement jElement, // java::Field, java::Parameter, or java::Method
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 ) {
-	action {
-		call {
-			val voidRef = TypesFactory.eINSTANCE.createVoid
-			propagateTypedMultiplicityElementTypeChanged(uElement, uMultiplicity, jElement, jType, voidRef)
-		}
+	update {
+		val voidRef = TypesFactory.eINSTANCE.createVoid
+		propagateTypedMultiplicityElementTypeChanged(uElement, uMultiplicity, jElement, jType, voidRef)
 	}
 }
 	

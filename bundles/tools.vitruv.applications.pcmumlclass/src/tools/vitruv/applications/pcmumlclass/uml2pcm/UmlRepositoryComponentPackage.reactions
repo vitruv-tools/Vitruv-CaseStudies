@@ -35,8 +35,8 @@ routine detectDatatypesSubpackage(uml::Package umlPackage, uml::Package umlParen
 		check umlPackage.name == DefaultLiterals.DATATYPES_PACKAGE_NAME
 		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPackage tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
-	action {
-		add correspondence between umlPackage and pcmRepository tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+	update {
+		addCorrespondenceBetween(umlPackage, pcmRepository, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
 	}
 }
 
@@ -45,8 +45,8 @@ routine detectContractsSubpackage(uml::Package umlPackage, uml::Package umlParen
 		check umlPackage.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME
 		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPackage tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
-	action {
-		add correspondence between umlPackage and pcmRepository tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+	update {
+		addCorrespondenceBetween(umlPackage, pcmRepository, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
 	}
 }
 
@@ -56,15 +56,13 @@ routine insertCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package
 		require absence of pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
 		require absence of pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
 	}
-	action {
-		call {
-			if (pcmRepository.isPresent) {
-				detectOrCreateCorrespondingRepositoryComponent(umlPkg, umlParentPkg)
-				moveCorrespondingRepositoryComponent(umlPkg, umlParentPkg)
-			} else {
-				// context does not match, delete correspondence if necessary
-				deleteCorrespondingRepositoryComponent(umlPkg)
-			}
+	update {
+		if (pcmRepository.isPresent) {
+			detectOrCreateCorrespondingRepositoryComponent(umlPkg, umlParentPkg)
+			moveCorrespondingRepositoryComponent(umlPkg, umlParentPkg)
+		} else {
+			// context does not match, delete correspondence if necessary
+			deleteCorrespondingRepositoryComponent(umlPkg)
 		}
 	}
 }
@@ -74,14 +72,12 @@ routine detectOrCreateCorrespondingRepositoryComponent(uml::Package umlPkg, uml:
 		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		require absence of pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
-	action {
-		call {
-			val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[umlPkg.isPackageFor(it)]
-			if (pcmComponentCandidate === null) {
-				userDisambiguateCorrespondingRepositoryComponentType(umlPkg, umlParentPkg)
-			} else {
-				addCorrespondenceForExistingRepositoryComponent(umlPkg, pcmComponentCandidate)
-			}
+	update {
+		val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[umlPkg.isPackageFor(it)]
+		if (pcmComponentCandidate === null) {
+			userDisambiguateCorrespondingRepositoryComponentType(umlPkg, umlParentPkg)
+		} else {
+			addCorrespondenceForExistingRepositoryComponent(umlPkg, pcmComponentCandidate)
 		}
 	}
 }
@@ -91,56 +87,57 @@ routine addCorrespondenceForExistingRepositoryComponent(uml::Package umlPkg, pcm
 		require absence of pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 		require absence of uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
-	action{
-		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	update {
+		addCorrespondenceBetween(pcmComponent, umlPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 	}
 }
 
 routine userDisambiguateCorrespondingRepositoryComponentType(uml::Package umlPkg, uml::Package umlParentPkg) {
-	action {
-		execute {
-			val componentType = userInteractor.singleSelectionDialogBuilder
-					.message(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__REQUEST)
-					.choices(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__OPTIONS)
-					.startInteraction
-					
-			switch (componentType) {
-				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT: 
-					createCorrespondingBasicComponent(umlPkg, umlParentPkg)
-				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT:
-					createCorrespondingCompositeComponent(umlPkg, umlParentPkg)
-				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__SUB_SYSTEM:
-					createCorrespondingSubSystem(umlPkg, umlParentPkg)
-				default: return //do nothing
-			}
+	update {
+		val componentType = userInteractor.singleSelectionDialogBuilder
+				.message(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__REQUEST)
+				.choices(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__OPTIONS)
+				.startInteraction
+				
+		switch (componentType) {
+			case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT: 
+				createCorrespondingBasicComponent(umlPkg, umlParentPkg)
+			case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT:
+				createCorrespondingCompositeComponent(umlPkg, umlParentPkg)
+			case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__SUB_SYSTEM:
+				createCorrespondingSubSystem(umlPkg, umlParentPkg)
+			default: return //do nothing
 		}
 	}
 }
 
 routine createCorrespondingBasicComponent(uml::Package umlPkg, uml::Package umlParentPkg) {
-	action {
-		val pcmComponent = create pcm::BasicComponent and initialize {
-			pcmComponent.entityName = umlPkg.name?.toFirstUpper
-		}
-		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	create {
+		val pcmComponent = new pcm::BasicComponent
+	}
+	update {
+		pcmComponent.entityName = umlPkg.name?.toFirstUpper
+		addCorrespondenceBetween(pcmComponent, umlPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 	}
 }
 
 routine createCorrespondingCompositeComponent(uml::Package umlPkg, uml::Package umlParentPkg) {
-	action {
-		val pcmComponent = create pcm::CompositeComponent and initialize {
-			pcmComponent.entityName = umlPkg.name?.toFirstUpper
-		}
-		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	create {
+		val pcmComponent = new pcm::CompositeComponent
+	}
+	update {
+		pcmComponent.entityName = umlPkg.name?.toFirstUpper
+		addCorrespondenceBetween(pcmComponent, umlPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 	}
 }
 
 routine createCorrespondingSubSystem(uml::Package umlPkg, uml::Package umlParentPkg) {
-	action {
-		val pcmComponent = create pcm::SubSystem and initialize {
-			pcmComponent.entityName = umlPkg.name?.toFirstUpper
-		}
-		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	create {
+		val pcmComponent = new pcm::SubSystem
+	}
+	update {
+		pcmComponent.entityName = umlPkg.name?.toFirstUpper
+		addCorrespondenceBetween(pcmComponent, umlPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 	}
 }
 
@@ -149,10 +146,8 @@ routine moveCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package u
 		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
-	action {
-		update pcmRepository {
-			pcmRepository.components__Repository += pcmComponent
-		}
+	update {
+		pcmRepository.components__Repository += pcmComponent
 	}
 }
 
@@ -167,10 +162,8 @@ routine removeCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package
 		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
-	action {
-		update pcmRepository {
-			pcmRepository.components__Repository -= pcmComponent
-		}
+	update {
+		pcmRepository.components__Repository -= pcmComponent
 	}
 }
 
@@ -183,9 +176,9 @@ routine deleteCorrespondingRepositoryComponent(uml::Package umlComponentPkg) {
 	match {
 		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlComponentPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
-	action {
-		remove correspondence between pcmComponent and umlComponentPkg
-		delete pcmComponent
+	update {
+		removeCorrespondenceBetween(pcmComponent, umlComponentPkg)
+		removeObject(pcmComponent)
 	}
 }
 
@@ -199,10 +192,8 @@ routine changeNameOfCorrespondingRepositoryComponent(uml::Package umlPkg, String
 	match {
 		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
-	action {
-		update pcmComponent {
-			pcmComponent.entityName = newName?.toFirstUpper
-		}
+	update {
+		pcmComponent.entityName = newName?.toFirstUpper
 	}
 }
 

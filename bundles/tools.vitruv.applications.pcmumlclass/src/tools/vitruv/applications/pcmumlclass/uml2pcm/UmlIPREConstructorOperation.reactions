@@ -28,13 +28,11 @@ routine changeNameOfCorrespondingIPRE_Constructor(uml::Operation umlOperation, S
 	match {
 		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged with TagLiterals.IPRE__CONSTRUCTOR
 	}
-	action {
-		update pcmIPRE {
-			if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
-				pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
-			} else {
-				pcmIPRE.entityName = newName
-			}
+	update {
+		if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
+			pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
+		} else {
+			pcmIPRE.entityName = newName
 		}
 	}
 }
