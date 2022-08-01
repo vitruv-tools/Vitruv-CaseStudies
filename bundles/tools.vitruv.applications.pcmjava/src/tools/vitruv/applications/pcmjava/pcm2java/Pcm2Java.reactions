@@ -888,8 +888,11 @@ routine removeProvidedRole(pcm::ProvidedRole providedRole) {
 		val typeReference = retrieve java::TypeReference corresponding to providedRole
 	}
 	update {
-		removeObject(typeReference.pureClassifierReference) // seems to be necessary to properly delete reference if it is a NamespaceClassifierReference
-		removeCorrespondenceBetween(typeReference.pureClassifierReference, providedRole)
+		if (typeReference.pureClassifierReference !== null) {
+			val pureClassifierReference = typeReference.pureClassifierReference
+			removeObject(pureClassifierReference) // seems to be necessary to properly delete reference if it is a NamespaceClassifierReference
+			removeCorrespondenceBetween(pureClassifierReference, providedRole)
+		}
 		removeObject(typeReference)
 		removeCorrespondenceBetween(typeReference, providedRole)
 	}

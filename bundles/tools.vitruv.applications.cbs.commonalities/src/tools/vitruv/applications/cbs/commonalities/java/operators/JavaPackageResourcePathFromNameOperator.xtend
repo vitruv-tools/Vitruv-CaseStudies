@@ -10,9 +10,7 @@ import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState
 import static com.google.common.base.Preconditions.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
-import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 import org.emftext.language.java.containers.ContainersPackage
-import java.util.List
 
 @AttributeMappingOperator(
 	name='javaPackageResourcePathFromName',
@@ -61,7 +59,7 @@ class JavaPackageResourcePathFromNameOperator extends AbstractAttributeMappingOp
 	
 	private def registerUniqueJavaPackageCorrespondence() {
 		if (!correspondenceModel.getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE).contains(javaPackage)) {
-			correspondenceModel.createAndAddCorrespondence(List.of(javaPackage), List.of(ContainersPackage.Literals.PACKAGE))
+			correspondenceModel.addCorrespondenceBetween(javaPackage, ContainersPackage.Literals.PACKAGE, null)
 		}
 	}
 
