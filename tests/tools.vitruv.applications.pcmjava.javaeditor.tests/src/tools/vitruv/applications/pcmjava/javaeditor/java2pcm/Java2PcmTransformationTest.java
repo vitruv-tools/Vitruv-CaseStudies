@@ -109,7 +109,7 @@ import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.Resour
  */
 @SuppressWarnings("restriction")
 public abstract class Java2PcmTransformationTest extends LegacyVitruvApplicationTest {
-	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
+	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class);
 	private static final int MAXIMUM_EDIT_WAITING_TIME = 5000;
 
 	protected Package mainPackage;
@@ -117,7 +117,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	private IProject testEclipseProject;
 
-	private Map<URI, URI> modifiedResourceOldToNewURIs;
+	private Map<URI, URI> oldToNewURIsOfModifiedResources;
 	private volatile boolean isWaitingForFinishingsEdits = false;
 
 	protected IProject getCurrentTestProject() {
@@ -161,7 +161,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	@BeforeEach
 	public void cleanupModifiedResources() {
-		this.modifiedResourceOldToNewURIs = new HashMap<>();
+		this.oldToNewURIsOfModifiedResources = new HashMap<>();
 	}
 
 	@AfterEach
@@ -169,15 +169,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		getIJavaProject().close();
 	}
 
-	private void saveCurrentResourceStateForRenameAndRegisterForSynchronization(final URI resourceURI,
+	private void saveCurrentStateOfRenamedResourceAndRegisterForChangePropagation(final URI resourceURI,
 			final URI newResourceURI) {
-		modifiedResourceOldToNewURIs.put(resourceURI, newResourceURI);
+		oldToNewURIsOfModifiedResources.put(resourceURI, newResourceURI);
+		// Access the resource such that the initial state is present in the test view
 		resourceAt(resourceURI);
 	}
 
-	private void saveCurrentResourceStateAndRegisterForSynchronization(final URI resourceURI) {
-		modifiedResourceOldToNewURIs.put(resourceURI, resourceURI);
-		resourceAt(resourceURI);
+	private void saveCurrentStateOfResourceAndRegisterForSynchronization(final URI resourceURI) {
+		saveCurrentStateOfRenamedResourceAndRegisterForChangePropagation(resourceURI, resourceURI);
 	}
 
 	private Resource loadResourceIndependentFromView(final URI resourceURI) {
@@ -194,7 +194,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		jaMoPPPackage.setName(namespaceList.get(namespaceList.size() - 1));
 		jaMoPPPackage.getNamespaces().addAll(namespaceList.subList(0, namespaceList.size() - 1));
 		URI createPackageURI = getUri(Path.of(getPathInProjectForSrcFile(packageFile)));
-		saveCurrentResourceStateAndRegisterForSynchronization(createPackageURI);
+		saveCurrentStateOfResourceAndRegisterForSynchronization(createPackageURI);
 		final Resource resource = loadResourceIndependentFromView(createPackageURI);
 		resource.getContents().add(jaMoPPPackage);
 		resource.save(null);
@@ -205,13 +205,13 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	private ICompilationUnit createCompilationUnit(IPackageFragment packageFragment, String cuName)
 			throws JavaModelException {
 		URI createdCompilationUnitURI = getURIForElementInPackage(packageFragment, cuName);
-		saveCurrentResourceStateAndRegisterForSynchronization(createdCompilationUnitURI);
+		saveCurrentStateOfResourceAndRegisterForSynchronization(createdCompilationUnitURI);
 		ICompilationUnit compilationUnit = packageFragment.createCompilationUnit(cuName + ".java", "", false, null);
 		return compilationUnit;
 	}
 
 	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits) throws JavaModelException {
-		saveCurrentResourceStateAndRegisterForSynchronization(URIUtil.createPlatformResourceURI(cu.getResource()));
+		saveCurrentStateOfResourceAndRegisterForSynchronization(URIUtil.createPlatformResourceURI(cu.getResource()));
 		cu.becomeWorkingCopy(new NullProgressMonitor());
 		for (final TextEdit edit : edits) {
 			cu.applyTextEdit(edit, null);
@@ -243,7 +243,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		}
 		refreshProject();
 		StateBasedChangeResolutionStrategy changeResolutionStrategy = new DefaultStateBasedChangeResolutionStrategy();
-		for (Entry<URI, URI> modifiedResourceURI : modifiedResourceOldToNewURIs.entrySet()) {
+		for (Entry<URI, URI> modifiedResourceURI : oldToNewURIsOfModifiedResources.entrySet()) {
 			Resource currentResource = loadResourceIndependentFromView(modifiedResourceURI.getValue());
 			VitruviusChange change = changeResolutionStrategy.getChangeSequenceBetween(currentResource,
 					resourceAt(modifiedResourceURI.getKey()));
@@ -251,7 +251,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			record(resourceAt(modifiedResourceURI.getKey()).getResourceSet(),
 					resourceSet -> unresolvedChange.resolveAndApply(resourceSet));
 		}
-		modifiedResourceOldToNewURIs.clear();
+		oldToNewURIsOfModifiedResources.clear();
 		propagate();
 		renewResourceCache();
 	}
@@ -288,7 +288,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final IJavaElement javaPackage = JavaCore.create(iFolder);
 		String packageFile = String.join("/", packageToRename.getNamespaces());
 		packageFile = packageFile + "/" + newName + "/package-info.java";
-		saveCurrentResourceStateForRenameAndRegisterForSynchronization(resource.getURI(),
+		saveCurrentStateOfRenamedResourceAndRegisterForChangePropagation(resource.getURI(),
 				getUri(Path.of(getPathInProjectForSrcFile(packageFile))));
 		this.refactorRenameJavaElement(newQualifiedName, javaPackage, IJavaRefactorings.RENAME_PACKAGE);
 		final Package newPackage = this.findJaMoPPPackageWithName(newQualifiedName);
@@ -843,9 +843,9 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final ICompilationUnit interfaceCompilationUnit = CompilationUnitManipulatorHelper
 				.findICompilationUnitWithClassName(implementingInterfaceName, this.getCurrentTestProject());
 		final String namespace = interfaceCompilationUnit.getType(implementingInterfaceName).getFullyQualifiedName();
-		saveCurrentResourceStateAndRegisterForSynchronization(
+		saveCurrentStateOfResourceAndRegisterForSynchronization(
 				URIUtil.createPlatformResourceURI(interfaceCompilationUnit.getResource()));
-		saveCurrentResourceStateAndRegisterForSynchronization(
+		saveCurrentStateOfResourceAndRegisterForSynchronization(
 				URIUtil.createPlatformResourceURI(classCompilationUnit.getResource()));
 		classCompilationUnit.createImport(namespace, null, null);
 	}
