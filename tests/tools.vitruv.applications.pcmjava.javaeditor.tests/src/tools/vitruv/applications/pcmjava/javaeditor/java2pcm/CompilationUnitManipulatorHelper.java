@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -11,8 +10,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.text.edits.InsertEdit;
-import org.eclipse.text.edits.TextEdit;
 
 /**
  * Helper class that allows the manipulation of compilation units that causes a
@@ -24,20 +21,13 @@ import org.eclipse.text.edits.TextEdit;
 public final class CompilationUnitManipulatorHelper {
 
 	private CompilationUnitManipulatorHelper() {
-
 	}
 
-	public static void editCompilationUnit(final ICompilationUnit cu,
-			SynchronizationAwaitCallback synchronizationCallback, final TextEdit... edits) throws JavaModelException {
-		cu.becomeWorkingCopy(new NullProgressMonitor());
-		for (final TextEdit edit : edits) {
-			cu.applyTextEdit(edit, null);
+	public static String ensureJavaFileExtension(String entityName) {
+		if (!entityName.endsWith(".java")) {
+			entityName = entityName + ".java";
 		}
-		cu.reconcile(ICompilationUnit.NO_AST, false, null, null);
-		cu.commitWorkingCopy(false, new NullProgressMonitor());
-		cu.discardWorkingCopy();
-		cu.save(null, true);
-		synchronizationCallback.waitForSynchronization(1);
+		return entityName;
 	}
 
 	public static ICompilationUnit findICompilationUnitWithClassName(String entityName,
@@ -65,24 +55,6 @@ public final class CompilationUnitManipulatorHelper {
 		throw new RuntimeException("Could not find a compilation unit with name " + entityName);
 	}
 
-	public static ICompilationUnit addMethodToCompilationUnit(final String compilationUnitName,
-			final String methodString, final IProject currentTestProject,
-			SynchronizationAwaitCallback synchronizerCallback) throws JavaModelException {
-		final ICompilationUnit cu = findICompilationUnitWithClassName(compilationUnitName, currentTestProject);
-		final IType firstType = cu.getAllTypes()[0];
-		final int offset = CompilationUnitManipulatorHelper.getOffsetForClassifierManipulation(firstType);
-		final InsertEdit insertEdit = new InsertEdit(offset, methodString);
-		editCompilationUnit(cu, synchronizerCallback, insertEdit);
-		return cu;
-	}
-
-	public static String ensureJavaFileExtension(String entityName) {
-		if (!entityName.endsWith(".java")) {
-			entityName = entityName + ".java";
-		}
-		return entityName;
-	}
-
 	public static int getOffsetForClassifierManipulation(final IType firstType) throws JavaModelException {
 		final int posOfFirstBracket = firstType.getCompilationUnit().getSource().indexOf("{");
 		return posOfFirstBracket + 1;
@@ -91,17 +63,6 @@ public final class CompilationUnitManipulatorHelper {
 	public static int getOffsetForAddingAnntationToClass(final IType firstType) throws JavaModelException {
 		final int posOfFirstBracket = firstType.getCompilationUnit().getSource().indexOf("public");
 		return posOfFirstBracket - 1;
-	}
-
-	public static int getOffsetToInsertInMethodInCompilationUnit(final ICompilationUnit compUnit,
-			final String methodName) throws JavaModelException {
-		final IType firstType = compUnit.getAllTypes()[0];
-		final String source = firstType.getCompilationUnit().getSource();
-		final int methodOffset = source.indexOf(methodName);
-		final String sourceMethod = source.substring(methodOffset, source.length());
-		final int inMethodOffset = sourceMethod.indexOf("{");
-		final int offset = methodOffset + inMethodOffset + 1;
-		return offset;
 	}
 
 	public static int getOffsetForAddingAnntationToField(final IType type, final String fieldName)
@@ -113,5 +74,4 @@ public final class CompilationUnitManipulatorHelper {
 		}
 		throw new RuntimeException("Could not find field " + fieldName + " in class " + type.getElementName());
 	}
-
 }

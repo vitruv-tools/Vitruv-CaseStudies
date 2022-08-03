@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
-import static edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil.refreshAndBuildIncrementally;
 import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createPlatformResourceURI;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,9 +12,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -30,6 +31,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -70,7 +72,6 @@ import org.emftext.language.java.types.TypeReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
@@ -92,18 +93,14 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
-import tools.vitruv.domains.java.ui.builder.VitruvJavaBuilder;
-import tools.vitruv.applications.util.temporary.pcm.PcmNamespace;
-import tools.vitruv.change.composite.description.PropagatedChange;
 import tools.vitruv.change.composite.description.VitruviusChange;
-import tools.vitruv.change.composite.propagation.ChangePropagationListener;
 import tools.vitruv.change.propagation.ChangePropagationMode;
-import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicator;
-import tools.vitruv.framework.domains.ui.builder.VitruvProjectBuilderApplicatorImpl;
-import tools.vitruv.testutils.DisableAutoBuild;
+import tools.vitruv.framework.views.changederivation.DefaultStateBasedChangeResolutionStrategy;
+import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 import tools.vitruv.testutils.UriMode;
+import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.loadOrCreateResource;
 
 /**
  * Test class that contains utility methods that can be used by JaMoPP2PCM
@@ -111,44 +108,28 @@ import tools.vitruv.testutils.UriMode;
  *
  */
 @SuppressWarnings("restriction")
-@ExtendWith(DisableAutoBuild.class)
-public abstract class Java2PcmTransformationTest extends LegacyVitruvApplicationTest
-		implements ChangePropagationListener, SynchronizationAwaitCallback {
-
-	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
-
-	private static int MAXIMUM_SYNC_WAITING_TIME = 25000;
+public abstract class Java2PcmTransformationTest extends LegacyVitruvApplicationTest {
+	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class);
+	private static final int MAXIMUM_EDIT_WAITING_TIME = 5000;
 
 	protected Package mainPackage;
 	protected Package secondPackage;
-	private volatile int expectedNumberOfSyncs;
 
 	private IProject testEclipseProject;
+
+	private Map<URI, URI> oldToNewURIsOfModifiedResources;
+	private volatile boolean isWaitingForFinishingsEdits = false;
 
 	protected IProject getCurrentTestProject() {
 		return testEclipseProject;
 	}
 
-	@BeforeEach
-	protected void disableTransitiveChangePropagation() {
-		this.getVirtualModel().setChangePropagationMode(ChangePropagationMode.SINGLE_STEP);
-	}
-	
 	/*
-	 * We need to use platform URIs, because the JDT AST will not recognize changes
-	 * when using file URIs.
+	 * JDT functionality requires platform URIs.
 	 */
 	@Override
 	protected UriMode getUriMode() {
 		return UriMode.PLATFORM_URIS;
-	}
-
-	private void refreshAndBuildProject() {
-		try {
-			refreshAndBuildIncrementally(testEclipseProject);
-		} catch (IllegalStateException e) {
-			fail("Failure during project reload and build");
-		}
 	}
 
 	private void refreshProject() {
@@ -160,126 +141,123 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		}
 	}
 
-	private void configureJavaProject(Path testProjectFolder) {
-		String projectName = testProjectFolder.getFileName().toString();
-		testEclipseProject = IProjectUtil.createProjectAt(projectName, testProjectFolder);
-		IProjectUtil.configureAsJavaProject(testEclipseProject);
-	}
-
-	private void addJavaBuilder() {
-		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl("Java",
-				VitruvJavaBuilder.BUILDER_ID);
-		applicator.setPropagateAfterBuild(true);
-		applicator.addBuilder(getCurrentTestProject(), getVirtualModel().getFolder(),
-			Collections.singleton(PcmNamespace.REPOSITORY_FILE_EXTENSION));
-		logger.info("Finished adding and initializing builder to project " + testEclipseProject.getName());
-	}
-
-	private void removeJavaBuilder() {
-		// Explicitly remove the correct builder instead of using the extension point
-		// (like in the setup) to enforce a required dependency to the Vitruv domain UI
-		// project
-		VitruvProjectBuilderApplicator applicator = new VitruvProjectBuilderApplicatorImpl("Java",
-				VitruvJavaBuilder.BUILDER_ID);
-		applicator.removeBuilder(getCurrentTestProject());
-	}
-
 	@BeforeAll
 	public static void setupJavaFactories() {
 		JavaSetup.prepareFactories();
 	}
 
 	@BeforeEach
-	public final void setupJavaClasspath() {
+	public void setupJavaProject(@TestProject Path testProjectFolder) {
+		String projectName = testProjectFolder.getFileName().toString();
+		testEclipseProject = IProjectUtil.createProjectAt(projectName, testProjectFolder);
+		IProjectUtil.configureAsJavaProject(testEclipseProject);
 		JavaSetup.resetClasspathAndRegisterStandardLibrary();
 	}
 
 	@BeforeEach
-	public synchronized void beforeTest(@TestProject Path testProjectFolder) {
-		getVirtualModel().addChangePropagationListener(this);
-		configureJavaProject(testProjectFolder);
-		addJavaBuilder();
-		this.expectedNumberOfSyncs = 0;
-		logger.info("Finished test setup for project " + testEclipseProject.getName());
+	public void disableTransitiveChangePropagation() {
+		this.getVirtualModel().setChangePropagationMode(ChangePropagationMode.SINGLE_STEP);
+	}
+
+	@BeforeEach
+	public void cleanupModifiedResources() {
+		this.oldToNewURIsOfModifiedResources = new HashMap<>();
 	}
 
 	@AfterEach
-	public void afterTest() throws JavaModelException, CoreException {
-		removeJavaBuilder();
-		// Trigger a final build and close the project to ensure that monitoring is
-		// stopped and no resources are still in use by pending operations, which makes
-		// the cleanup of the test view (deleting test files) fail
-		refreshAndBuildProject();
+	public void closeJavaProject() throws JavaModelException, CoreException {
 		getIJavaProject().close();
-		// If there have been further unexpected synchronizations (either during the
-		// final build or even before), something went wrong
-		if (expectedNumberOfSyncs < 0) {
-			logger.fatal("There have been more change notifications than expected in project "
-					+ testEclipseProject.getName());
-			fail("There have been more change notifications than expected");
-		}
-		getVirtualModel().removeChangePropagationListener(this);
+	}
+
+	private void saveCurrentStateOfRenamedResourceAndRegisterForChangePropagation(final URI resourceURI,
+			final URI newResourceURI) {
+		oldToNewURIsOfModifiedResources.put(resourceURI, newResourceURI);
+		// Access the resource such that the initial state is present in the test view
+		resourceAt(resourceURI);
+	}
+
+	private void saveCurrentStateOfResourceAndRegisterForSynchronization(final URI resourceURI) {
+		saveCurrentStateOfRenamedResourceAndRegisterForChangePropagation(resourceURI, resourceURI);
+	}
+
+	private Resource loadResourceIndependentFromView(final URI resourceURI) {
+		ResourceSet resourceSet = new ResourceSetImpl();
+		Resource resource = loadOrCreateResource(resourceSet, resourceURI);
+		return resource;
+	}
+
+	protected Package createPackageWithPackageInfo(final String... namespace) throws IOException {
+		String packageFile = String.join("/", namespace);
+		packageFile = packageFile + "/package-info.java";
+		final Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage();
+		final List<String> namespaceList = Arrays.asList(namespace);
+		jaMoPPPackage.setName(namespaceList.get(namespaceList.size() - 1));
+		jaMoPPPackage.getNamespaces().addAll(namespaceList.subList(0, namespaceList.size() - 1));
+		URI createPackageURI = getUri(Path.of(getPathInProjectForSrcFile(packageFile)));
+		saveCurrentStateOfResourceAndRegisterForSynchronization(createPackageURI);
+		final Resource resource = loadResourceIndependentFromView(createPackageURI);
+		resource.getContents().add(jaMoPPPackage);
+		resource.save(null);
+		propagateChanges();
+		return jaMoPPPackage;
+	}
+
+	private ICompilationUnit createCompilationUnit(IPackageFragment packageFragment, String cuName)
+			throws JavaModelException {
+		URI createdCompilationUnitURI = getURIForElementInPackage(packageFragment, cuName);
+		saveCurrentStateOfResourceAndRegisterForSynchronization(createdCompilationUnitURI);
+		ICompilationUnit compilationUnit = packageFragment.createCompilationUnit(cuName + ".java", "", false, null);
+		return compilationUnit;
 	}
 
 	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits) throws JavaModelException {
-		CompilationUnitManipulatorHelper.editCompilationUnit(cu, this, edits);
+		saveCurrentStateOfResourceAndRegisterForSynchronization(URIUtil.createPlatformResourceURI(cu.getResource()));
+		cu.becomeWorkingCopy(new NullProgressMonitor());
+		for (final TextEdit edit : edits) {
+			cu.applyTextEdit(edit, null);
+		}
+		cu.reconcile(ICompilationUnit.NO_AST, false, null, null);
+		cu.commitWorkingCopy(false, new NullProgressMonitor());
+		cu.discardWorkingCopy();
+		cu.save(new NullProgressMonitor() {
+			public void done() {
+				Java2PcmTransformationTest.this.isWaitingForFinishingsEdits = false;
+				Java2PcmTransformationTest.this.notifyAll();
+			}
+		}, true);
+		propagateChanges();
 	}
 
-	public void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
-		expectedNumberOfSyncs += numberOfExpectedSynchronizationCalls;
-		logger.debug("Starting to wait for finished synchronization in test " + testEclipseProject.getName()
-				+ ". Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: "
-				+ expectedNumberOfSyncs);
+	public void propagateChanges() {
+		logger.debug("Starting to wait for edits to be finished");
 		try {
-			// There are still some processes running for which we have to wait to ensure
-			// that we can load the resources during change propagation and check them afterwards.
-			// Probably the Eclipse save job has not finished before we start the change
-			// propagation process and before we check the models afterwards. Until we have found 
-			// out how to fix that, we need to wait a high enough amount of time to ensure that 
-			// no failures occur.
-			Thread.sleep(150);
-			// Trigger the build to start change propagation
-			refreshAndBuildProject();
-			int wakeups = 0;
-			while (expectedNumberOfSyncs > 0) {
-				synchronized (this) {
-					wait(MAXIMUM_SYNC_WAITING_TIME);
-				}
-				wakeups++;
-				// If we had more wakeups than expected synchronization calls, we had a timeout
-				// and so the synchronization has not finished as expected
-				if (wakeups > numberOfExpectedSynchronizationCalls) {
-					logger.error("Waiting for synchronization timed out in project " + testEclipseProject.getName());
-					fail("Waiting for synchronization timed out");
+			if (isWaitingForFinishingsEdits) {
+				wait(MAXIMUM_EDIT_WAITING_TIME);
+				if (isWaitingForFinishingsEdits) {
+					logger.error("Waiting for edits timed out in project " + testEclipseProject.getName());
+					fail("Waiting for edits timed out");
 				}
 			}
-			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			fail("An interrupt occurred unexpectedly");
 		}
 		refreshProject();
-		logger.debug("Finished waiting for synchronization in project " + testEclipseProject.getName());
-	}
-
-	@Override
-	public void startedChangePropagation(VitruviusChange changeToPropagate) {
-	}
-
-	@Override
-	public void finishedChangePropagation(Iterable<PropagatedChange> changes) {
-		expectedNumberOfSyncs--;
-		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
-				+ expectedNumberOfSyncs);
-		synchronized (this) {
-			this.notifyAll();
+		StateBasedChangeResolutionStrategy changeResolutionStrategy = new DefaultStateBasedChangeResolutionStrategy();
+		for (Entry<URI, URI> modifiedResourceURI : oldToNewURIsOfModifiedResources.entrySet()) {
+			Resource currentResource = loadResourceIndependentFromView(modifiedResourceURI.getValue());
+			VitruviusChange change = changeResolutionStrategy.getChangeSequenceBetween(currentResource,
+					resourceAt(modifiedResourceURI.getKey()));
+			VitruviusChange unresolvedChange = change.unresolve();
+			record(resourceAt(modifiedResourceURI.getKey()).getResourceSet(),
+					resourceSet -> unresolvedChange.resolveAndApply(resourceSet));
 		}
+		oldToNewURIsOfModifiedResources.clear();
+		propagate();
+		renewResourceCache();
 	}
 
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
 		this.mainPackage = this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
-		// Contracts and datatypes packages are created by change propagation and recorded by the Java monitor,
-		// so trigger their processing by the monitor
-		waitForSynchronization(2);
 		final Repository repo = claimOne(getCorrespondingEObjects(this.mainPackage, Repository.class));
 		return repo;
 	}
@@ -290,7 +268,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
 
-	protected <T extends EObject> T createSecondPackage(final Class<T> correspondingType, final String... namespace) throws Throwable {
+	protected <T extends EObject> T createSecondPackage(final Class<T> correspondingType, final String... namespace)
+			throws Throwable {
 		this.secondPackage = this.createPackageWithPackageInfo(namespace);
 		return claimOne(getCorrespondingEObjects(this.secondPackage, correspondingType));
 	}
@@ -299,30 +278,20 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		this.secondPackage = this.createPackageWithPackageInfo(namespace);
 	}
 
-	protected Package createPackageWithPackageInfo(final String... namespace) throws IOException {
-		String packageFile = String.join("/", namespace);
-		packageFile = packageFile + "/package-info.java";
-		final Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage();
-		final List<String> namespaceList = Arrays.asList(namespace);
-		jaMoPPPackage.setName(namespaceList.get(namespaceList.size() - 1));
-		jaMoPPPackage.getNamespaces().addAll(namespaceList.subList(0, namespaceList.size() - 1));
-		final Resource resource = resourceAt(Path.of(getPathInProjectForSrcFile(packageFile)));
-		resource.getContents().add(jaMoPPPackage);
-		resource.save(null);
-		waitForSynchronization(1);
-		return jaMoPPPackage;
-	}
-
-	protected Package renamePackage(final Package packageToRename, String newName) throws CoreException {
+	protected Package renamePackage(final Package packageToRename, final String newName) throws CoreException {
 		final Resource resource = packageToRename.eResource();
 		final IFile iFile = URIUtil.getIFileForEMFUri(resource.getURI());
 		IPath iPath = iFile.getProjectRelativePath();
 		iPath = iPath.removeLastSegments(1);
-		newName = packageToRename.getNamespacesAsString() + newName;
+		final String newQualifiedName = packageToRename.getNamespacesAsString() + newName;
 		final IFolder iFolder = iFile.getProject().getFolder(iPath);
 		final IJavaElement javaPackage = JavaCore.create(iFolder);
-		this.refactorRenameJavaElement(newName, javaPackage, IJavaRefactorings.RENAME_PACKAGE);
-		final Package newPackage = this.findJaMoPPPackageWithName(newName);
+		String packageFile = String.join("/", packageToRename.getNamespaces());
+		packageFile = packageFile + "/" + newName + "/package-info.java";
+		saveCurrentStateOfRenamedResourceAndRegisterForChangePropagation(resource.getURI(),
+				getUri(Path.of(getPathInProjectForSrcFile(packageFile))));
+		this.refactorRenameJavaElement(newQualifiedName, javaPackage, IJavaRefactorings.RENAME_PACKAGE);
+		final Package newPackage = this.findJaMoPPPackageWithName(newQualifiedName);
 		return newPackage;
 	}
 
@@ -341,11 +310,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		refactoring.checkFinalConditions(monitor);
 		final Change change = refactoring.createChange(monitor);
 		change.perform(monitor);
-		waitForSynchronization(1);
+		propagateChanges();
 	}
 
-	protected <T extends EObject> T renameClassifierWithName(final String entityName, final String newName, final Class<T> type)
-			throws Throwable {
+	protected <T extends EObject> T renameClassifierWithName(final String entityName, final String newName,
+			final Class<T> type) throws Throwable {
 		try {
 			final ICompilationUnit cu = CompilationUnitManipulatorHelper
 					.findICompilationUnitWithClassName(entityName + ".java", this.getCurrentTestProject());
@@ -400,19 +369,21 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return "src/" + srcFilePath;
 	}
 
-	protected <T extends EObject> T addClassInSecondPackage(final Class<T> classOfCorrespondingObject) throws Throwable {
+	protected <T extends EObject> T addClassInSecondPackage(final Class<T> classOfCorrespondingObject)
+			throws Throwable {
 		final T createdEObject = this.addClassInPackage(this.secondPackage, classOfCorrespondingObject);
 		return createdEObject;
 	}
 
-	protected <T extends EObject> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject)
-			throws Throwable {
+	protected <T extends EObject> T addClassInPackage(final Package packageForClass,
+			final Class<T> classOfCorrespondingObject) throws Throwable {
 		final String implementingClassName = Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME;
 		return this.addClassInPackage(packageForClass, classOfCorrespondingObject, implementingClassName);
 	}
 
-	protected <T extends EObject> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject,
-			final String implementingClassName) throws CoreException, InterruptedException {
+	protected <T extends EObject> T addClassInPackage(final Package packageForClass,
+			final Class<T> classOfCorrespondingObject, final String implementingClassName)
+			throws CoreException, InterruptedException {
 		final Classifier jaMoPPClass = this.createClassInPackage(packageForClass, implementingClassName);
 		final Iterable<T> eObjectsByType = getCorrespondingEObjects(jaMoPPClass, classOfCorrespondingObject);
 		return claimOne(eObjectsByType);
@@ -575,7 +546,8 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	protected OperationInterface createInterfaceInPackage(String packageNamespace, final String interfaceName,
 			boolean claimOne) throws CoreException {
 		final Classifier jaMoPPIf = createJaMoPPInterfaceInPackage(packageNamespace, interfaceName);
-		Iterable<OperationInterface> correspondingOpInterfaces = getCorrespondingEObjects(jaMoPPIf, OperationInterface.class);
+		Iterable<OperationInterface> correspondingOpInterfaces = getCorrespondingEObjects(jaMoPPIf,
+				OperationInterface.class);
 		if (claimOne) {
 			return claimOne(correspondingOpInterfaces);
 		}
@@ -600,7 +572,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			throws JavaModelException {
 		String lineDelimiter = null;
 		lineDelimiter = StubUtility.getLineDelimiterUsed(packageFragment.getJavaProject());
-		ICompilationUnit compilationUnit = packageFragment.createCompilationUnit(cuName + ".java", "", false, null);
+		ICompilationUnit compilationUnit = createCompilationUnit(packageFragment, cuName);
 		InsertEdit edit = new InsertEdit(0, "package " + packageFragment.getElementName() + ";" + lineDelimiter
 				+ lineDelimiter + "public " + typeName + " " + cuName + " { }");
 		editCompilationUnit(compilationUnit, edit);
@@ -648,16 +620,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	protected OperationSignature addMethodToInterfaceWithCorrespondence(final String interfaceName,
 			final String methodName) throws Throwable, JavaModelException {
 		final String methodString = "\nvoid " + methodName + "();\n";
-		final ICompilationUnit cu = CompilationUnitManipulatorHelper.addMethodToCompilationUnit(interfaceName,
-				methodString, this.getCurrentTestProject(), this);
+		final ICompilationUnit cu = addMethodToCompilationUnit(interfaceName, methodString,
+				this.getCurrentTestProject());
 		return this.findOperationSignatureForJaMoPPMethodInCompilationUnit(methodName, interfaceName, cu);
 	}
 
 	protected ResourceDemandingSEFF addClassMethodToClassThatOverridesInterfaceMethod(final String className,
 			final String methodName) throws Throwable {
 		final String methodString = "\n\tpublic void " + methodName + " () {\n\t}\n";
-		final ICompilationUnit icu = CompilationUnitManipulatorHelper.addMethodToCompilationUnit(className,
-				methodString, this.getCurrentTestProject(), this);
+		final ICompilationUnit icu = addMethodToCompilationUnit(className, methodString, this.getCurrentTestProject());
 		final Method jaMoPPMethod = this.findJaMoPPMethodInICU(icu, methodName);
 		final ClassMethod classMethod = (ClassMethod) jaMoPPMethod;
 		return claimOne(getCorrespondingEObjects(classMethod, ResourceDemandingSEFF.class));
@@ -858,7 +829,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		for (final TypeReference implementsReference : classImplements) {
 			logger.debug("Implements data: " + implementsReference.getTarget());
 			final Iterable<OperationProvidedRole> correspondingEObjects = getCorrespondingEObjects(implementsReference,
-							OperationProvidedRole.class);
+					OperationProvidedRole.class);
 			logger.debug("Corresponding provided roles: " + correspondingEObjects);
 			if (null != correspondingEObjects && correspondingEObjects.iterator().hasNext()) {
 				return correspondingEObjects.iterator().next();
@@ -872,11 +843,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final ICompilationUnit interfaceCompilationUnit = CompilationUnitManipulatorHelper
 				.findICompilationUnitWithClassName(implementingInterfaceName, this.getCurrentTestProject());
 		final String namespace = interfaceCompilationUnit.getType(implementingInterfaceName).getFullyQualifiedName();
+		saveCurrentStateOfResourceAndRegisterForSynchronization(
+				URIUtil.createPlatformResourceURI(interfaceCompilationUnit.getResource()));
+		saveCurrentStateOfResourceAndRegisterForSynchronization(
+				URIUtil.createPlatformResourceURI(classCompilationUnit.getResource()));
 		classCompilationUnit.createImport(namespace, null, null);
 	}
 
-	protected <T extends EObject> T addFieldToClassWithName(final String className, final String fieldType, final String fieldName,
-			final Class<T> correspondingType) throws Throwable {
+	protected <T extends EObject> T addFieldToClassWithName(final String className, final String fieldType,
+			final String fieldName, final Class<T> correspondingType) throws Throwable {
 		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
 		if (!fieldType.equals("String")) {
@@ -901,9 +876,9 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	// add Annotation via the framework
-	protected <T extends EObject> T addAnnotationToClassifier(final AnnotableAndModifiable annotable, final String annotationName,
-			final String annotationParameter, final Class<T> classOfCorrespondingObject, final String className)
-			throws Throwable {
+	protected <T extends EObject> T addAnnotationToClassifier(final AnnotableAndModifiable annotable,
+			final String annotationName, final String annotationParameter, final Class<T> classOfCorrespondingObject,
+			final String className) throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
 				this.getCurrentTestProject());
 		final IType type = cu.getType(className);
@@ -948,6 +923,17 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				"OperationInterface name does not equals the expected interface Name.");
 		assertEquals(repo.getId(), opIf.getRepository__Interface().getId(),
 				"The created operation interface is not in the repository");
+	}
+
+	public ICompilationUnit addMethodToCompilationUnit(final String compilationUnitName, final String methodString,
+			final IProject currentTestProject) throws JavaModelException {
+		final ICompilationUnit cu = CompilationUnitManipulatorHelper
+				.findICompilationUnitWithClassName(compilationUnitName, currentTestProject);
+		final IType firstType = cu.getAllTypes()[0];
+		final int offset = CompilationUnitManipulatorHelper.getOffsetForClassifierManipulation(firstType);
+		final InsertEdit insertEdit = new InsertEdit(offset, methodString);
+		editCompilationUnit(cu, insertEdit);
+		return cu;
 	}
 
 }

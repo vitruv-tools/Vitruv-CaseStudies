@@ -19,7 +19,6 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.testutils.vsum,
  tools.vitruv.applications.util.temporary,
  tools.vitruv.applications.pcmjava,
- tools.vitruv.applications.pcmjava.tests,
- tools.vitruv.domains.java.ui
+ tools.vitruv.applications.pcmjava.tests
 Export-Package: tools.vitruv.applications.pcmjava.javaeditor.java2pcm
 Bundle-Vendor: vitruv.tools
