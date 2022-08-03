@@ -11,7 +11,7 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlEnum
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlInterface
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
-import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.registerPredefinedUmlPrimitiveTypes
+import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.getNotRegisteredPrimitiveTypesWithUnifiedNames
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static com.google.common.base.Preconditions.checkState
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
@@ -88,8 +88,19 @@ routine registerUmlModelInCorrespondenceModel(uml::Model uModel) {
 routine rootElementPreSetup(EObject alreadyPersistedEObject) {
     update {
         detectOrCreateUmlModel(alreadyPersistedEObject)
-        registerPredefinedUmlPrimitiveTypes(correspondenceModel, alreadyPersistedEObject.eResource.resourceSet)
+        registerPredefinedUmlPrimitiveTypes(alreadyPersistedEObject)
     }
+}
+
+routine registerPredefinedUmlPrimitiveTypes(EObject alreadyPersistedEObject) {
+	update {
+		getNotRegisteredPrimitiveTypesWithUnifiedNames([sourceElement, expectedType, tag |
+			getCorrespondingElement(sourceElement, expectedType, null, tag, false)
+		], alreadyPersistedEObject.eResource.resourceSet).forEach[
+			addCorrespondenceBetween(UMLPackage.Literals.PRIMITIVE_TYPE,
+				it.key, it.value)
+		]
+	}
 }
 
 //===========================================

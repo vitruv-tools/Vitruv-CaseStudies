@@ -64,7 +64,9 @@ routine insertCorrespondingRepositoryOrSystem(uml::Package umlPackage, uml::Pack
 		val pcmSystem = retrieve optional pcm::System corresponding to umlPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
 	}
 	update {
-		if(!PcmUmlClassHelper.isContainedInRepositoryHierarchy(umlPackage, correspondenceModel)) {
+		if(!PcmUmlClassHelper.isContainedInRepositoryHierarchy(umlPackage, [sourceElement, expectedType, tag |
+			getCorrespondingElement(sourceElement, expectedType, null, tag, false)
+		])) {
 			if (!pcmRepository.isPresent && !pcmSystem.isPresent)
 				userDisambiguateRepositoryOrSystemCreation(umlPackage, umlParentPackage)
 			//no move-operation necessary since both repository and system are root elements

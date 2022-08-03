@@ -7,12 +7,11 @@ import tools.vitruv.applications.cbs.commonalities.domaincommon.CommonPrimitiveT
 import tools.vitruv.dsls.commonalities.runtime.helper.IntermediateModelHelper
 import tools.vitruv.dsls.commonalities.runtime.intermediatemodelbase.Intermediate
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AbstractAttributeMappingOperator
-import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
+import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
 import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
-
-import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.*
+import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.getCorrespondingElements
 
 /**
  * Abstract base class for operators mapping between a domain specific
@@ -192,8 +191,8 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 		assertTrue(domainType !== null)
 		assertTrue(domainType instanceof EObject)
 		// We get the corresponding intermediate type via the correspondence model:
-		val intermediateTypes = correspondenceModel.getCorrespondingObjectsOfType(domainType as EObject, null,
-			Intermediate).toList
+		val intermediateTypes = correspondenceModel.getCorrespondingElements(domainType as EObject, Intermediate, null).
+			toList
 		checkState(intermediateTypes.size <= 1, '''Found more than one corresponding intermediate for «
 			participationDomainName» type '«domainType.asString»'!''')
 		val intermediateType = intermediateTypes.head // can be null
@@ -209,8 +208,7 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 	protected def T getCorrespondingDomainType(Intermediate intermediateType) {
 		assertTrue(intermediateType !== null)
 		// We get the corresponding domain type via the correspondence model:
-		val domainTypes = correspondenceModel.getCorrespondingObjectsOfType(intermediateType, null,
-			domainTypeClass).toList
+		val domainTypes = correspondenceModel.getCorrespondingElements(intermediateType, domainTypeClass, null).toList
 		checkState(domainTypes.size <= 1, '''Found more than one corresponding «participationDomainName» type for«
 			» intermediate type '«intermediateType»': «domainTypes»''')
 		val domainType = domainTypes.head // can be null
