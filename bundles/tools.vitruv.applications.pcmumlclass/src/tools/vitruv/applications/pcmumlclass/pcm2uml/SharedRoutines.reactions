@@ -1,10 +1,9 @@
 import org.eclipse.uml2.uml.UMLPackage
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
-
 import static tools.vitruv.applications.util.temporary.uml.UmlModelUtil.*
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: sharedRoutines
@@ -12,41 +11,43 @@ in reaction to changes in pcm
 execute actions in uml
 
 routine ensureUmlModelExists(EObject source) {
-    match {
-        require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
-    }
-    update {
-        var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).windowModality(WindowModality.MODAL).startInteraction
-        if (relativeModelPath.nullOrEmpty) {
-            relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
-        } else if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)) {
-            relativeModelPath += DefaultLiterals.UML_EXTENSION
-        }
-        var umlRootModel = loadPersistedModelFromSource(relativeModelPath, source)
-        umlRootModel.ifPresent[ensureUmlModelCorrespondenceExists]
-        if(umlRootModel.isEmpty) {
-            createUmlModel(source, relativeModelPath)
-        }
-    }
+	match {
+		require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
+	}
+	update {
+		var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).
+			windowModality(WindowModality.MODAL).startInteraction
+		if (relativeModelPath.nullOrEmpty) {
+			relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
+				DefaultLiterals.UML_EXTENSION
+		} else if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)) {
+			relativeModelPath += DefaultLiterals.UML_EXTENSION
+		}
+		var umlRootModel = loadPersistedModelFromSource(relativeModelPath, source)
+		umlRootModel.ifPresent[ensureUmlModelCorrespondenceExists]
+		if (umlRootModel.isEmpty) {
+			createUmlModel(source, relativeModelPath)
+		}
+	}
 }
 
 routine createUmlModel(EObject source, String relativeModelPath) {
 	create {
 		val umlRootModel = new uml::Model
-	} 
-    update {
-    	umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
+	}
+	update {
+		umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
 		persistProjectRelative(source, umlRootModel, relativeModelPath)
-        ensureUmlModelCorrespondenceExists(umlRootModel)
-    }
+		ensureUmlModelCorrespondenceExists(umlRootModel)
+	}
 }
 
 routine ensureUmlModelCorrespondenceExists(uml::Model newModel) {
-    match {
-        val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
-        check !alreadyCorrespondingModels.contains(newModel)
-    }
-    update {
-        addCorrespondenceBetween(UMLPackage.Literals.MODEL, newModel)
-    }
+	match {
+		val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
+		check !alreadyCorrespondingModels.contains(newModel)
+	}
+	update {
+		addCorrespondenceBetween(UMLPackage.Literals.MODEL, newModel)
+	}
 }

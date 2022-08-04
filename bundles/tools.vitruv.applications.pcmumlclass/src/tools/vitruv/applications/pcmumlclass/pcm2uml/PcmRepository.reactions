@@ -5,7 +5,6 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import org.palladiosimulator.pcm.repository.RepositoryPackage
-
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
 import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
 import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.getCorrespondingPackageName
@@ -21,7 +20,6 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 // Related files:
 // UmlRepositoryAndSystemPackage.reactions
 // RepositoryConceptTest
-
 reactions: pcmRepositoryReactions
 in reaction to changes in pcm
 execute actions in uml
@@ -49,11 +47,11 @@ routine addRepositoryCorrespondence(pcm::Repository pcmRepository) {
 routine createOrFindUmlRepositoryPackage(pcm::Repository pcmRepo) {
 	match {
 		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
-		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		require absence of uml::Package corresponding to pcmRepo tagged TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
 	update {
 		var umlPackage = findUmlPackage(umlModel, pcmRepo.correspondingPackageName)
-		if(umlPackage === null) {
+		if (umlPackage === null) {
 			createUmlRepositoryPackage(pcmRepo)
 		} else {
 			addPackageCorrespondence(pcmRepo, umlPackage)
@@ -83,26 +81,33 @@ routine createUmlRepositoryPackage(pcm::Repository pcmRepo) {
 
 routine createUmlContractsPackage(pcm::Repository pcmRepo) {
 	match {
-		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged TagLiterals.
+			REPOSITORY_TO_REPOSITORY_PACKAGE
+		require absence of uml::Package corresponding to pcmRepo tagged TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
 	}
 	update {
-		//look for candidate before creating a new Package
-		var umlContractsPkg = umlRepositoryPkg.nestedPackages.findFirst[pkg | pkg.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
+		// look for candidate before creating a new Package
+		var umlContractsPkg = umlRepositoryPkg.nestedPackages.findFirst [ pkg |
+			pkg.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME
+		]
 		if (umlContractsPkg === null) {
 			umlContractsPkg = umlRepositoryPkg.createNestedPackage(DefaultLiterals.CONTRACTS_PACKAGE_NAME)
 		}
 		addCorrespondenceBetween(pcmRepo, umlContractsPkg, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
 	}
 }
+
 routine createUmlDatatypesPackage(pcm::Repository pcmRepo) {
 	match {
-		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged TagLiterals.
+			REPOSITORY_TO_REPOSITORY_PACKAGE
+		require absence of uml::Package corresponding to pcmRepo tagged TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	update {
-		//look for candidate before creating a new Package
-		var umlDatatypesPkg = umlRepositoryPkg.nestedPackages.findFirst[pkg | pkg.name == DefaultLiterals.DATATYPES_PACKAGE_NAME]
+		// look for candidate before creating a new Package
+		var umlDatatypesPkg = umlRepositoryPkg.nestedPackages.findFirst [ pkg |
+			pkg.name == DefaultLiterals.DATATYPES_PACKAGE_NAME
+		]
 		if (umlDatatypesPkg === null) {
 			umlDatatypesPkg = umlRepositoryPkg.createNestedPackage(DefaultLiterals.DATATYPES_PACKAGE_NAME)
 		}
@@ -118,7 +123,8 @@ reaction RepositoryNameChanged {
 
 routine changeNameOfCorrespondingRepositoryPackage(pcm::Repository pcmRepo) {
 	match {
-		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged TagLiterals.
+			REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
 	update {
 		if (!umlRepositoryPkg.isPackageFor(pcmRepo))
@@ -134,37 +140,37 @@ reaction RepositoryDeleted {
 routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo) {
 	match {
 		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
-		val umlRepositoryPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		val umlContractsPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
-		val umlDatatypesPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+		val umlRepositoryPkg = retrieve optional uml::Package corresponding to pcmRepo tagged TagLiterals.
+			REPOSITORY_TO_REPOSITORY_PACKAGE
+		val umlContractsPkg = retrieve optional uml::Package corresponding to pcmRepo tagged TagLiterals.
+			REPOSITORY_TO_CONTRACTS_PACKAGE
+		val umlDatatypesPkg = retrieve optional uml::Package corresponding to pcmRepo tagged TagLiterals.
+			REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	update {
 		// remove correspondences, UML model contents if desired
-		umlRepositoryPkg.ifPresent[umlRepositoryPackage |
-			removeCorrespondenceBetween(
-				pcmRepo, umlRepositoryPackage, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
+		umlRepositoryPkg.ifPresent [ umlRepositoryPackage |
+			removeCorrespondenceBetween(pcmRepo, umlRepositoryPackage, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
 			// ask if the corresponding model should also be deleted
-			val deleteCorrespondingUmlRepository = userInteractor.confirmationDialogBuilder
-					.message(DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL).startInteraction
+			val deleteCorrespondingUmlRepository = userInteractor.confirmationDialogBuilder.message(
+				DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL).startInteraction
 
-			if (deleteCorrespondingUmlRepository) {// DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES
+			if (deleteCorrespondingUmlRepository) { // DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES
 				umlContractsPkg.ifPresent[umlRepositoryPackage.packagedElements -= it]
 				umlDatatypesPkg.ifPresent[umlRepositoryPackage.packagedElements -= it]
 				umlModel.packagedElements -= umlRepositoryPackage // remove parent package last to allow the recorder to notice the child package deletion
 			}
 		]
-		umlContractsPkg.ifPresent[removeCorrespondenceBetween(
-			pcmRepo, it, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)]
-		umlDatatypesPkg.ifPresent[removeCorrespondenceBetween(
-			pcmRepo, it, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)]
+		umlContractsPkg.ifPresent[removeCorrespondenceBetween(pcmRepo, it, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)]
+		umlDatatypesPkg.ifPresent[removeCorrespondenceBetween(pcmRepo, it, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)]
 	}
 }
-
 
 //Primitive Datatypes are bootstraped in
 routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 	match {
-		val umlDatatypesPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+		val umlDatatypesPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged TagLiterals.
+			REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	update {
 		val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(pcmRepo)
@@ -180,8 +186,10 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 
 routine addPrimitiveDatatypeCorrespondence(pcm::PrimitiveDataType pcmPrimitiveType, uml::PrimitiveType umlPrimitiveType) {
 	match {
-		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged with TagLiterals.DATATYPE__TYPE with potentialTarget == umlPrimitiveType
-		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged with TagLiterals.DATATYPE__TYPE with potentialTarget == pcmPrimitiveType
+		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged TagLiterals.
+			DATATYPE__TYPE with potentialTarget == umlPrimitiveType
+		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged TagLiterals.
+			DATATYPE__TYPE with potentialTarget == pcmPrimitiveType
 	}
 	update {
 		addCorrespondenceBetween(pcmPrimitiveType, umlPrimitiveType, TagLiterals.DATATYPE__TYPE)

@@ -3,7 +3,7 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.eclipse.uml2.uml.Interface
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reactions and routines synchronize a pcm::OperationRequiredRole of a pcm::InterfaceProvidingRequiringEntity (IPRE)
@@ -13,7 +13,6 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		PcmRequiredRole.reactions, 
 //		UmlRequiredRoleProperty.reactions,
 //		RequiredRoleConceptTest
-
 reactions: umlRequiredRoleParameterReactions
 in reaction to changes in uml
 execute actions in pcm
@@ -26,13 +25,15 @@ reaction RequiredRoleParameterInserted {
 
 routine parameter_insertCorrespondingRequiredRole(uml::Parameter umlParameter, uml::Operation umlConstructor) {
 	match {
-		val pcmComponent = retrieve optional pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
-		val pcmInterface = retrieve optional pcm::OperationInterface corresponding to umlParameter.type tagged with TagLiterals.INTERFACE_TO_INTERFACE 
-		val pcmRequired = retrieve optional pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+		val pcmComponent = retrieve optional pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged TagLiterals.
+			IPRE__CONSTRUCTOR
+		val pcmInterface = retrieve optional pcm::OperationInterface corresponding to umlParameter.
+			type tagged TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmRequired = retrieve optional pcm::OperationRequiredRole corresponding to umlParameter tagged TagLiterals.
+			REQUIRED_ROLE__PARAMETER
 	}
 	update {
-		if (pcmComponent.isPresent 
-			&& (pcmInterface.isPresent || umlParameter.type === null) // allow 'null' for uninitialized Generalizations
+		if (pcmComponent.isPresent && (pcmInterface.isPresent || umlParameter.type === null) // allow 'null' for uninitialized Generalizations
 		) {
 			parameter_detectOrCreateCorrespondingRequiredRole(umlParameter, umlConstructor)
 			parameter_moveCorrespondingRequiredRole(umlParameter, umlConstructor)
@@ -45,15 +46,19 @@ routine parameter_insertCorrespondingRequiredRole(uml::Parameter umlParameter, u
 
 routine parameter_detectOrCreateCorrespondingRequiredRole(uml::Parameter umlParameter, uml::Operation umlConstructor) {
 	match {
-		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlParameter.type tagged with TagLiterals.INTERFACE_TO_INTERFACE
-		val pcmRequired = retrieve optional pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged TagLiterals.
+			IPRE__CONSTRUCTOR
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlParameter.type tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
+		val pcmRequired = retrieve optional pcm::OperationRequiredRole corresponding to umlParameter tagged TagLiterals.
+			REQUIRED_ROLE__PARAMETER
 	}
 	update {
 		if (!pcmRequired.isPresent) {
-			val pcmRequiredCandidate = pcmComponent.requiredRoles_InterfaceRequiringEntity
-				.filter(OperationRequiredRole)
-				.findFirst[it.requiredInterface__OperationRequiredRole === pcmInterface && it.entityName == umlParameter.name]
+			val pcmRequiredCandidate = pcmComponent.requiredRoles_InterfaceRequiringEntity.filter(
+				OperationRequiredRole).findFirst [
+				it.requiredInterface__OperationRequiredRole === pcmInterface && it.entityName == umlParameter.name
+			]
 			if (pcmRequiredCandidate !== null) {
 				parameter_addCorrespondenceForExistingRequiredRole(umlParameter, pcmRequiredCandidate)
 			} else {
@@ -64,9 +69,10 @@ routine parameter_detectOrCreateCorrespondingRequiredRole(uml::Parameter umlPara
 }
 
 routine parameter_addCorrespondenceForExistingRequiredRole(uml::Parameter umlParameter, pcm::OperationRequiredRole pcmRequired) {
-	match{
-		require absence of uml::Parameter corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
-		require absence of pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	match {
+		require absence of uml::Parameter corresponding to pcmRequired tagged TagLiterals.REQUIRED_ROLE__PARAMETER
+		require absence of pcm::OperationRequiredRole corresponding to umlParameter tagged TagLiterals.
+			REQUIRED_ROLE__PARAMETER
 	}
 	update {
 		addCorrespondenceBetween(pcmRequired, umlParameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
@@ -74,10 +80,13 @@ routine parameter_addCorrespondenceForExistingRequiredRole(uml::Parameter umlPar
 }
 
 routine parameter_createCorrespondingRequiredRole(uml::Parameter umlParameter, uml::Operation umlConstructor) {
-	match{
-		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlParameter.type tagged with TagLiterals.INTERFACE_TO_INTERFACE
-		require absence of pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	match {
+		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged TagLiterals.
+			IPRE__CONSTRUCTOR
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlParameter.type tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
+		require absence of pcm::OperationRequiredRole corresponding to umlParameter tagged TagLiterals.
+			REQUIRED_ROLE__PARAMETER
 	}
 	create {
 		val pcmRequired = new pcm::OperationRequiredRole
@@ -91,9 +100,11 @@ routine parameter_createCorrespondingRequiredRole(uml::Parameter umlParameter, u
 }
 
 routine parameter_moveCorrespondingRequiredRole(uml::Parameter umlParameter, uml::Operation umlConstructor) {
-	match{
-		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
-		val pcmRequired = retrieve pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	match {
+		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged TagLiterals.
+			IPRE__CONSTRUCTOR
+		val pcmRequired = retrieve pcm::OperationRequiredRole corresponding to umlParameter tagged TagLiterals.
+			REQUIRED_ROLE__PARAMETER
 	}
 	update {
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += pcmRequired
@@ -102,14 +113,16 @@ routine parameter_moveCorrespondingRequiredRole(uml::Parameter umlParameter, uml
 
 reaction RequiredRolePropertyRemoved {
 	after element uml::Parameter removed from uml::Operation[ownedParameter]
-	with !affectedEObject.ownedParameters.contains(oldValue) //validity check
+	with !affectedEObject.ownedParameters.contains(oldValue) // validity check
 	call parameter_removeCorrespondingRequiredRole(oldValue, affectedEObject)
 }
 
 routine parameter_removeCorrespondingRequiredRole(uml::Parameter umlParameter, uml::Operation umlConstructor) {
-	match{
-		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
-		val pcmRequired = retrieve pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	match {
+		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlConstructor tagged TagLiterals.
+			IPRE__CONSTRUCTOR
+		val pcmRequired = retrieve pcm::OperationRequiredRole corresponding to umlParameter tagged TagLiterals.
+			REQUIRED_ROLE__PARAMETER
 	}
 	update {
 		pcmComponent.requiredRoles_InterfaceRequiringEntity -= pcmRequired
@@ -123,7 +136,8 @@ reaction RequiredRolePropertyDeleted {
 
 routine parameter_deleteCorrespondingRequiredRole(uml::Parameter umlParameter) {
 	match {
-		val pcmRequired = retrieve pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+		val pcmRequired = retrieve pcm::OperationRequiredRole corresponding to umlParameter tagged TagLiterals.
+			REQUIRED_ROLE__PARAMETER
 	}
 	update {
 		removeCorrespondenceBetween(pcmRequired, umlParameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
@@ -139,13 +153,13 @@ reaction RequiredRoleParameterNameChanged {
 
 routine parameter_changeNameOfCorrespondingRequiredRole(uml::Parameter umlParameter, String newName) {
 	match {
-		val pcmRequired = retrieve pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER 
+		val pcmRequired = retrieve pcm::OperationRequiredRole corresponding to umlParameter tagged TagLiterals.
+			REQUIRED_ROLE__PARAMETER
 	}
 	update {
 		pcmRequired.entityName = newName
 	}
 }
-
 
 reaction RequiredRoleParameterTypeChanged {
 	after element uml::Interface replaced at uml::Parameter[type]
@@ -155,21 +169,24 @@ reaction RequiredRoleParameterTypeChanged {
 
 routine parameter_changeTypeOfCorrespondingRequiredRole(uml::Parameter umlParameter, uml::Interface umlNewInterface) {
 	match {
-		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlParameter.owner tagged with TagLiterals.IPRE__CONSTRUCTOR
-		val pcmRequired = retrieve optional pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER 
-		val pcmNewInterface = retrieve optional pcm::OperationInterface corresponding to umlNewInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlParameter.
+			owner tagged TagLiterals.IPRE__CONSTRUCTOR
+		val pcmRequired = retrieve optional pcm::OperationRequiredRole corresponding to umlParameter tagged TagLiterals.
+			REQUIRED_ROLE__PARAMETER
+		val pcmNewInterface = retrieve optional pcm::OperationInterface corresponding to umlNewInterface tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
 	}
 	update {
 		if (!pcmRequired.isPresent && pcmNewInterface.isPresent) {
 			parameter_createCorrespondingRequiredRole(umlParameter, umlParameter.owner as Operation)
 		} else if (pcmRequired.isPresent && pcmNewInterface.isPresent) {
 			pcmRequired.get.requiredInterface__OperationRequiredRole = pcmNewInterface.get
-		} else if(pcmRequired.isPresent && umlNewInterface === null) {
-			//might be a transitional state -> keep correspondence, but synchronize 'null'
+		} else if (pcmRequired.isPresent && umlNewInterface === null) {
+			// might be a transitional state -> keep correspondence, but synchronize 'null'
 			pcmRequired.get.requiredInterface__OperationRequiredRole = null
 		} else {
-			logger.warn("The type of a uml::Property in a pcm::OperationRequiredRole ~ uml::Property correspondence"
-						+ "has been set to a non-OperationInterface type. This is against convention and the corresponding OperationRequiredRole will be deleted.")
+			logger.warn("The type of a uml::Property in a pcm::OperationRequiredRole ~ uml::Property correspondence" +
+				"has been set to a non-OperationInterface type. This is against convention and the corresponding OperationRequiredRole will be deleted.")
 			parameter_deleteCorrespondingRequiredRole(umlParameter)
 		}
 	}

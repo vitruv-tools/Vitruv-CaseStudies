@@ -34,13 +34,14 @@ routine propagateParameterTypeChange(java::Parameter jParam, uml::Parameter uPar
 
 // ******** general variants to reduce code duplication. If possible please use the facade routines above
 routine propagateTypeChangeToTypedMultiplicityElement(uml::TypedElement uTyped, uml::MultiplicityElement uMultiplicity, // same element -- uml::Property or uml::Parameter
-		java::TypedElement jElement // java::Field, java::Parameter, or java::Method
+java::TypedElement jElement // java::Field, java::Parameter, or java::Method
 ) {
 	match {
 		check {
-			if(uTyped !== uMultiplicity) {
-				throw new IllegalStateException("uml::TypedElement uTyped, uml::MultiplicityElement uMultiplicity"
-					+ "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."
+			if (uTyped !== uMultiplicity) {
+				throw new IllegalStateException(
+					"uml::TypedElement uTyped, uml::MultiplicityElement uMultiplicity" +
+						"have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."
 				)
 			}
 			true
@@ -51,16 +52,17 @@ routine propagateTypeChangeToTypedMultiplicityElement(uml::TypedElement uTyped, 
 		val jType = jElement.typeReference
 		val isCollectionReference = isCollectionTypeReference(jType)
 		val newJavaType = if (isCollectionReference) {
-			uMultiplicity.lower = 0
-			uMultiplicity.upper = LiteralUnlimitedNatural.UNLIMITED
-			getInnerTypeRefOfCollectionReference(jType)
-		} else {
-			jType
-		}
-		if (newJavaType !== null && newJavaType.target instanceof ConcreteClassifier && newJavaType.target.containingCompilationUnit.namespaces.head == "java") {
+				uMultiplicity.lower = 0
+				uMultiplicity.upper = LiteralUnlimitedNatural.UNLIMITED
+				getInnerTypeRefOfCollectionReference(jType)
+			} else {
+				jType
+			}
+		if (newJavaType !== null && newJavaType.target instanceof ConcreteClassifier &&
+			newJavaType.target.containingCompilationUnit.namespaces.head == "java") {
 			createExistingUmlClassifier(newJavaType.target as ConcreteClassifier)
 		}
-		val newUmlType = getUmlTypeFromReference(newJavaType, [sourceElement, expectedType, tag |
+		val newUmlType = getUmlTypeFromReference(newJavaType, [ sourceElement, expectedType, tag |
 			getCorrespondingElement(sourceElement, expectedType, null, tag, false)
 		])
 		if (!EcoreUtil.equals(existingUmlType, newUmlType)) {
@@ -120,7 +122,9 @@ routine createExistingUmlPackage(String namespaces) {
 	update {
 		var org.eclipse.uml2.uml.Package currentPackage = umlModel
 		for (namespace : namespaces.split("\\.")) {
-			val existingUmlPackage = currentPackage.packagedElements.filter(org.eclipse.uml2.uml.Package).findFirst[name == namespace]
+			val existingUmlPackage = currentPackage.packagedElements.filter(org.eclipse.uml2.uml.Package).findFirst [
+				name == namespace
+			]
 			currentPackage = if (existingUmlPackage !== null) {
 				existingUmlPackage
 			} else {

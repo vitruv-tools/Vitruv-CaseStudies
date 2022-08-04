@@ -1,20 +1,17 @@
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.emftext.language.java.classifiers.ConcreteClassifier
-
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.hasSameSignature
 import static extension tools.vitruv.applications.pcmjava.java2pcm.TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference
 import static extension tools.vitruv.applications.pcmjava.java2pcm.TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference
 
-import "http://www.emftext.org/java" as java 
+import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: java2PcmMethod
 in reaction to changes in java
 execute actions in pcm
-
 
 // General:
 reaction MemberRenamed {
@@ -25,7 +22,8 @@ reaction MemberRenamed {
 
 routine renameMember(java::Member javaMember) {
 	match {
-		val pcmElement = retrieve pcm::NamedElement corresponding to javaMember}
+		val pcmElement = retrieve pcm::NamedElement corresponding to javaMember
+	}
 	update {
 		pcmElement.entityName = javaMember.name
 	}
@@ -58,8 +56,8 @@ routine createParameter(java::OrdinaryParameter javaParameter, java::Parametriza
 reaction ParameterDeleted {
 	after element java::OrdinaryParameter removed from java::Parametrizable[parameters]
 	call {
-		//oldValue has no correspondence element, but it should
-		//this seems to be a bug. If fixed it should have a correspondence and work.
+		// oldValue has no correspondence element, but it should
+		// this seems to be a bug. If fixed it should have a correspondence and work.
 		deleteParameter(oldValue)
 	}
 }
@@ -102,10 +100,10 @@ routine changeParameterType(java::TypeReference newType, java::Parameter javaPar
 	}
 	update {
 		pcmParameter.dataType__Parameter = if (javaParameter.typeReference !== null) {
-				javaParameter.typeReference.getDataTypeFromTypeReference(correspondenceModel, userInteractor, null)
-			} else {
-				null
-			}
+			javaParameter.typeReference.getDataTypeFromTypeReference(correspondenceModel, userInteractor, null)
+		} else {
+			null
+		}
 	}
 }
 
@@ -135,35 +133,39 @@ routine createInnerDeclaration(java::ConcreteClassifier classifier, java::Field 
 	update {
 		innerDeclaration.entityName = javaField.name
 		innerDeclaration.datatype_InnerDeclaration = if (javaField.typeReference !== null) {
-				javaField.typeReference.getDataTypeFromTypeReference(correspondenceModel, userInteractor, null)
-			} else {
-				null
-			}
-			innerDeclaration.compositeDataType_InnerDeclaration = compositeDataType
+			javaField.typeReference.getDataTypeFromTypeReference(correspondenceModel, userInteractor, null)
+		} else {
+			null
+		}
+		innerDeclaration.compositeDataType_InnerDeclaration = compositeDataType
 		addCorrespondenceBetween(innerDeclaration, javaField)
 	}
 }
 
 routine createOrFindAssemblyContext(java::ConcreteClassifier classifier, java::Field javaField) {
-    match {
-        val composedProvidingRequiringEntity = retrieve pcm::ComposedProvidingRequiringEntity corresponding to classifier
-        val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to getClassifierFromTypeReference(javaField.typeReference)
-        require absence of pcm::AssemblyContext corresponding to javaField
-    }
-    update {
-        val pcmAssemblyContextCandidate = composedProvidingRequiringEntity.assemblyContexts__ComposedStructure.findFirst[entityName === javaField.name]
-        if (pcmAssemblyContextCandidate === null) {
-            createAssemblyContext(classifier, javaField)
-        } else {
-            addAssemblyContextCorrespondence(pcmAssemblyContextCandidate, javaField)
-        }
-    }
+	match {
+		val composedProvidingRequiringEntity = retrieve pcm::ComposedProvidingRequiringEntity corresponding to classifier
+		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to getClassifierFromTypeReference(
+			javaField.typeReference)
+		require absence of pcm::AssemblyContext corresponding to javaField
+	}
+	update {
+		val pcmAssemblyContextCandidate = composedProvidingRequiringEntity.assemblyContexts__ComposedStructure.findFirst [
+			entityName === javaField.name
+		]
+		if (pcmAssemblyContextCandidate === null) {
+			createAssemblyContext(classifier, javaField)
+		} else {
+			addAssemblyContextCorrespondence(pcmAssemblyContextCandidate, javaField)
+		}
+	}
 }
 
 routine createAssemblyContext(java::ConcreteClassifier classifier, java::Field javaField) {
 	match {
 		val composedProvidingRequiringEntity = retrieve pcm::ComposedProvidingRequiringEntity corresponding to classifier
-		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to getClassifierFromTypeReference(javaField.typeReference)
+		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to getClassifierFromTypeReference(
+			javaField.typeReference)
 	}
 	create {
 		val assemblyContext = new pcm::AssemblyContext
@@ -171,35 +173,40 @@ routine createAssemblyContext(java::ConcreteClassifier classifier, java::Field j
 	update {
 		assemblyContext.entityName = javaField.name
 		assemblyContext.encapsulatedComponent__AssemblyContext = repositoryComponent
-		assemblyContext.parentStructure__AssemblyContext = composedProvidingRequiringEntity	
+		assemblyContext.parentStructure__AssemblyContext = composedProvidingRequiringEntity
 		addCorrespondenceBetween(assemblyContext, javaField)
 	}
 }
 
 routine addAssemblyContextCorrespondence(pcm::AssemblyContext assemblyContext, java::Field javaField) {
-    update {
-        addCorrespondenceBetween(assemblyContext, javaField)
-    }
+	update {
+		addCorrespondenceBetween(assemblyContext, javaField)
+	}
 }
 
 routine fieldCreatedCorrespondingToOperationInterface(java::Classifier classifier, java::Field javaField) {
 	match {
 		val correspondingInterface = retrieve pcm::OperationInterface corresponding to classifier
-		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to javaField.containingConcreteClassifier
+		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to javaField.
+			containingConcreteClassifier
 	}
 	update {
 		createOperationRequiredRoleCorrespondingToField(javaField, correspondingInterface, repositoryComponent)
 	}
 }
+
 routine fieldCreatedCorrespondingToRepositoryComponent(java::Classifier classifier, java::Field javaField) {
 	match {
 		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to classifier
-		val concreteRepositoryComponent = retrieve pcm::RepositoryComponent corresponding to javaField.containingConcreteClassifier
+		val concreteRepositoryComponent = retrieve pcm::RepositoryComponent corresponding to javaField.
+			containingConcreteClassifier
 	}
 	update {
-		var operationProvidedRoles = repositoryComponent.providedRoles_InterfaceProvidingEntity.filter(OperationProvidedRole)
+		var operationProvidedRoles = repositoryComponent.providedRoles_InterfaceProvidingEntity.filter(
+			OperationProvidedRole)
 		for (providedRole : operationProvidedRoles) {
-			createOperationRequiredRoleCorrespondingToField(javaField, providedRole.providedInterface__OperationProvidedRole, concreteRepositoryComponent)
+			createOperationRequiredRoleCorrespondingToField(javaField,
+				providedRole.providedInterface__OperationProvidedRole, concreteRepositoryComponent)
 		}
 	}
 }
@@ -228,10 +235,10 @@ routine changeInnerDeclarationType(java::TypeReference typeReference, java::Fiel
 	}
 	update {
 		innerDeclaration.datatype_InnerDeclaration = if (typeReference !== null) {
-				typeReference.getDataTypeFromTypeReference(correspondenceModel, userInteractor, null)
-			} else {
-				null
-			}
+			typeReference.getDataTypeFromTypeReference(correspondenceModel, userInteractor, null)
+		} else {
+			null
+		}
 	}
 }
 
@@ -253,7 +260,7 @@ routine createSeffFromImplementingInterfaces(java::ClassMethod classMethod, java
 routine createSeffFromImplementingInterface(java::ClassMethod classMethod, java::Class javaClass, java::Interface javaInterface) {
 	match {
 		val operationInterface = retrieve pcm::OperationInterface corresponding to javaInterface
-	} 
+	}
 	update {
 		val methods = javaInterface.methods.filter[hasSameSignature(classMethod)]
 		for (method : methods) {
@@ -280,13 +287,14 @@ routine createSEFF(java::Method javaMethod, java::Class javaClass, java::ClassMe
 
 // Interface Method:
 reaction InterfaceMethodCreated {
-	after element java::InterfaceMethod inserted in java::Interface[members] 
+	after element java::InterfaceMethod inserted in java::Interface[members]
 	call createPCMSignature(newValue)
 }
 
 routine createPCMSignature(java::InterfaceMethod interfaceMethod) {
 	match {
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to interfaceMethod.containingConcreteClassifier
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to interfaceMethod.
+			containingConcreteClassifier
 	}
 	create {
 		val operationSignature = new pcm::OperationSignature
@@ -308,12 +316,13 @@ routine changeReturnType(java::Method javaMethod, java::TypeReference typeRefere
 	match {
 		val operationSignature = retrieve pcm::OperationSignature corresponding to javaMethod
 	}
-	 update {
+	update {
 		val repository = operationSignature.interface__OperationSignature.repository__Interface
 		operationSignature.returnType__OperationSignature = if (typeReference !== null) {
-				typeReference.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel, userInteractor, repository, javaMethod.arrayDimension)
-			} else {
-				null
-			}
-	 }
+			typeReference.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel, userInteractor, repository,
+				javaMethod.arrayDimension)
+		} else {
+			null
+		}
+	}
 }

@@ -2,7 +2,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reaction and routine synchronize the inner type of a pcm::CollectionDataType 
@@ -23,7 +23,6 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		PcmSignature.reactions, PcmParameter.reactions, PcmInnerDeclaration.reactions
 //		UmlReturnAndRegularParameterType.reactions, UmlInnerDeclarationProperty.reactions
 //		SignatureConceptTest, ParameterConceptTest, AttributeConceptTest
-
 reactions: pcmCollectionDataTypeReactions
 in reaction to changes in pcm
 execute actions in uml
@@ -41,15 +40,17 @@ reaction CollectionDataTypeInnerTypeChanged {
  */
 routine changeTypeOfCorrespondingPropertyOrParameter(pcm::CollectionDataType pcmCollection, pcm::DataType newInnerType) {
 	match {
-		val umlParameterList = retrieve many uml::Parameter corresponding to pcmCollection tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
-		val umlPropertyList = retrieve many uml::Property corresponding to pcmCollection tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
-		
-		val umlPrimitiveType = retrieve many uml::Type corresponding to newInnerType tagged with TagLiterals.DATATYPE__TYPE
-		val umlCompositeType = retrieve optional uml::Type corresponding to newInnerType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+		val umlParameterList = retrieve many uml::Parameter corresponding to pcmCollection tagged TagLiterals.
+			COLLECTION_DATATYPE__PARAMETER
+		val umlPropertyList = retrieve many uml::Property corresponding to pcmCollection tagged TagLiterals.
+			COLLECTION_DATATYPE__PROPERTY
+		val umlPrimitiveType = retrieve many uml::Type corresponding to newInnerType tagged TagLiterals.DATATYPE__TYPE
+		val umlCompositeType = retrieve optional uml::Type corresponding to newInnerType tagged TagLiterals.
+			COMPOSITE_DATATYPE__CLASS
 	}
 	update {
-		if (newInnerType instanceof CollectionDataType) logger.warn(DefaultLiterals.WARNING_NESTED_COLLECTION_DATA_TYPE)
-		
+		if(newInnerType instanceof CollectionDataType) logger.warn(DefaultLiterals.WARNING_NESTED_COLLECTION_DATA_TYPE)
+
 		// if the newInnerType is null or a CollectionDataType, this synchronizes the corresponding element's type to null
 		val umlType = umlPrimitiveType.head ?: umlCompositeType.orElse(null)
 		for (umlParameter : umlParameterList) {
@@ -57,7 +58,7 @@ routine changeTypeOfCorrespondingPropertyOrParameter(pcm::CollectionDataType pcm
 		}
 		for (umlProperty : umlPropertyList) {
 			umlProperty.type = umlType
-	}
+		}
 	}
 }
 

@@ -25,24 +25,23 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	Related files:
 //		PcmRepository.reactions, PcmSystem.reactions
 //		RepositoryConceptTest, SystemConceptTest
-
 reactions: umlRepositoryAndSystemPackageReactions
 in reaction to changes in uml
 execute actions in pcm
 
 reaction UmlModelCreated {
-    after element uml::Model inserted as root
-    call ensureModelCorrespondenceExists(newValue)
+	after element uml::Model inserted as root
+	call ensureModelCorrespondenceExists(newValue)
 }
 
 routine ensureModelCorrespondenceExists(uml::Model newModel) {
-    match {
-        val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
-        check !alreadyCorrespondingModels.contains(newModel)
-    }
-    update {
-        addCorrespondenceBetween(UMLPackage.Literals.MODEL, newModel)
-    }
+	match {
+		val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
+		check !alreadyCorrespondingModels.contains(newModel)
+	}
+	update {
+		addCorrespondenceBetween(UMLPackage.Literals.MODEL, newModel)
+	}
 }
 
 reaction RepositoryOrSystemPackageInserted {
@@ -60,16 +59,18 @@ reaction RepositoryOrSystemPackageInserted {
 
 routine insertCorrespondingRepositoryOrSystem(uml::Package umlPackage, uml::Package umlParentPackage) {
 	match {
-		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPackage tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		val pcmSystem = retrieve optional pcm::System corresponding to umlPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPackage tagged TagLiterals.
+			REPOSITORY_TO_REPOSITORY_PACKAGE
+		val pcmSystem = retrieve optional pcm::System corresponding to umlPackage tagged TagLiterals.
+			SYSTEM__SYSTEM_PACKAGE
 	}
 	update {
-		if(!PcmUmlClassHelper.isContainedInRepositoryHierarchy(umlPackage, [sourceElement, expectedType, tag |
+		if (!PcmUmlClassHelper.isContainedInRepositoryHierarchy(umlPackage, [ sourceElement, expectedType, tag |
 			getCorrespondingElement(sourceElement, expectedType, null, tag, false)
 		])) {
 			if (!pcmRepository.isPresent && !pcmSystem.isPresent)
 				userDisambiguateRepositoryOrSystemCreation(umlPackage, umlParentPackage)
-			//no move-operation necessary since both repository and system are root elements
+		// no move-operation necessary since both repository and system are root elements
 		} else {
 			// nested component repositories and component based systems are not allowed
 			deleteCorrespondingRepository(umlPackage)
@@ -80,50 +81,50 @@ routine insertCorrespondingRepositoryOrSystem(uml::Package umlPackage, uml::Pack
 
 routine userDisambiguateRepositoryOrSystemCreation(uml::Package umlPkg, uml::Package umlParentPkg) {
 	update {
-		val pcmElementType = userInteractor.singleSelectionDialogBuilder
-				.message(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REQUEST)
-				.choices(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__OPTIONS)
-				.windowModality(WindowModality.MODAL)
-				.startInteraction
+		val pcmElementType = userInteractor.singleSelectionDialogBuilder.message(
+			DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REQUEST).choices(
+			DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__OPTIONS).windowModality(WindowModality.MODAL).
+			startInteraction
 		switch (pcmElementType) {
 			case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY:
-					createOrFindCorrespondingRepository(umlPkg, umlParentPkg)
+				createOrFindCorrespondingRepository(umlPkg, umlParentPkg)
 			case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM:
-					createOrFindCorrespondingSystem(umlPkg, umlParentPkg)
-			default: return //do nothing
+				createOrFindCorrespondingSystem(umlPkg, umlParentPkg)
+			default:
+				return // do nothing
 		}
 	}
 }
 
 routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package umlParentPkg) {
-    match {
-        require absence of pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-        val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
-           with umlPkg.isPackageFor(foundRepository)
-    }
-    update {
-        if (foundRepository.isPresent) {
-            ensureFirstCaseUpperCaseRepositoryNaming(foundRepository.get, umlPkg)
-            addRepositoryCorrespondence(foundRepository.get, umlPkg)
-        } else {
-            createCorrespondingRepository(umlPkg, umlParentPkg)
-        }
-    }
+	match {
+		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.
+			REPOSITORY with umlPkg.isPackageFor(foundRepository)
+	}
+	update {
+		if (foundRepository.isPresent) {
+			ensureFirstCaseUpperCaseRepositoryNaming(foundRepository.get, umlPkg)
+			addRepositoryCorrespondence(foundRepository.get, umlPkg)
+		} else {
+			createCorrespondingRepository(umlPkg, umlParentPkg)
+		}
+	}
 }
 
 routine ensureFirstCaseUpperCaseRepositoryNaming(pcm::Repository pcmRepository, uml::Package umlPackage) {
-    match {
-       check pcmRepository.entityName == umlPackage.name
-    }
-    update {
+	match {
+		check pcmRepository.entityName == umlPackage.name
+	}
+	update {
 		pcmRepository.entityName = umlPackage.name.toFirstUpper
-    }
+	}
 }
 
 routine addRepositoryCorrespondence(pcm::Repository pcmRepository, uml::Package umlPkg) {
-    update {
-        addCorrespondenceBetween(pcmRepository, umlPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
-    }
+	update {
+		addCorrespondenceBetween(pcmRepository, umlPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
+	}
 }
 
 routine createCorrespondingRepository(uml::Package umlPkg, uml::Package umlParentPkg) {
@@ -136,21 +137,22 @@ routine createCorrespondingRepository(uml::Package umlPkg, uml::Package umlParen
 		addCorrespondenceBetween(pcmRepository, RepositoryPackage.Literals.REPOSITORY)
 		val fileExtension = DefaultLiterals.PCM_REPOSITORY_EXTENSION
 
-		var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH).startInteraction
+		var relativeModelPath = userInteractor.textInputDialogBuilder.message(
+			DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH).startInteraction
 		if (relativeModelPath.nullOrEmpty) {
 			relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME;
 		}
 
-		//check if a model at the specified path already exists; if so, append a number
-		//remove extension for now, so that it is easier to add a suffix if necessary
+		// check if a model at the specified path already exists; if so, append a number
+		// remove extension for now, so that it is easier to add a suffix if necessary
 		if (relativeModelPath.endsWith(fileExtension)) {
 			relativeModelPath.substring(0, relativeModelPath.length - fileExtension.length)
 		}
 		var uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + fileExtension)
-		while(URIUtil.existsResourceAtUri(uri)) {
+		while (URIUtil.existsResourceAtUri(uri)) {
 			uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + "-2" + fileExtension)
 		}
-		//append file extension now
+		// append file extension now
 		if (!relativeModelPath.endsWith(fileExtension)) {
 			relativeModelPath += fileExtension
 		}
@@ -160,24 +162,24 @@ routine createCorrespondingRepository(uml::Package umlPkg, uml::Package umlParen
 }
 
 routine createOrFindCorrespondingSystem(uml::Package umlPkg, uml::Package umlParentPkg) {
-    match {
-        require absence of pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
-        val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM
-            with umlPkg.isPackageFor(foundSystem)
-    }
-    update {
-        if (foundSystem.isPresent) {
-            addSystemCorrespondence(foundSystem.get, umlPkg)
-        } else {
-            createCorrespondingSystem(umlPkg, umlParentPkg)
-        }
-    }
+	match {
+		require absence of pcm::System corresponding to umlPkg tagged TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM with umlPkg.
+			isPackageFor(foundSystem)
+	}
+	update {
+		if (foundSystem.isPresent) {
+			addSystemCorrespondence(foundSystem.get, umlPkg)
+		} else {
+			createCorrespondingSystem(umlPkg, umlParentPkg)
+		}
+	}
 }
 
 routine addSystemCorrespondence(pcm::System pcmSystem, uml::Package umlPkg) {
-    update {
-        addCorrespondenceBetween(pcmSystem, umlPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
-    }
+	update {
+		addCorrespondenceBetween(pcmSystem, umlPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
+	}
 }
 
 routine createCorrespondingSystem(uml::Package umlPkg, uml::Package umlParentPkg) {
@@ -187,23 +189,24 @@ routine createCorrespondingSystem(uml::Package umlPkg, uml::Package umlParentPkg
 	update {
 		pcmSystem.entityName = umlPkg.name?.toFirstUpper
 		addCorrespondenceBetween(pcmSystem, umlPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
-		addCorrespondenceBetween(pcmSystem,  SystemPackage.Literals.SYSTEM)
+		addCorrespondenceBetween(pcmSystem, SystemPackage.Literals.SYSTEM)
 		val fileExtension = DefaultLiterals.PCM_SYSTEM_EXTENSION
-		var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH).startInteraction
+		var relativeModelPath = userInteractor.textInputDialogBuilder.message(
+			DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH).startInteraction
 		if (relativeModelPath.nullOrEmpty) {
 			relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_SYSTEM_FILE_NAME;
 		}
 
-		//check if a model at the specified path already exists; if so, append a number
-		//remove extension for now, so that it is easier to add a suffix if necessary
+		// check if a model at the specified path already exists; if so, append a number
+		// remove extension for now, so that it is easier to add a suffix if necessary
 		if (relativeModelPath.endsWith(fileExtension)) {
 			relativeModelPath.substring(0, relativeModelPath.length - fileExtension.length)
 		}
 		var uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + fileExtension)
-		while(URIUtil.existsResourceAtUri(uri)) {
+		while (URIUtil.existsResourceAtUri(uri)) {
 			uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + "-2" + fileExtension)
 		}
-		//append file extension now
+		// append file extension now
 		if (!relativeModelPath.endsWith(fileExtension)) {
 			relativeModelPath += fileExtension
 		}
@@ -234,7 +237,8 @@ routine deletePackage(uml::Package umlPackage) {
 
 routine deleteCorrespondingRepository(uml::Package umlRepositoryPkg) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to umlRepositoryPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val pcmRepository = retrieve pcm::Repository corresponding to umlRepositoryPkg tagged TagLiterals.
+			REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
 	update {
 		removeCorrespondenceBetween(pcmRepository, umlRepositoryPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
@@ -244,7 +248,7 @@ routine deleteCorrespondingRepository(uml::Package umlRepositoryPkg) {
 
 routine deleteCorrespondingSystem(uml::Package umlSystemPkg) {
 	match {
-		val pcmSystem = retrieve pcm::System corresponding to umlSystemPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val pcmSystem = retrieve pcm::System corresponding to umlSystemPkg tagged TagLiterals.SYSTEM__SYSTEM_PACKAGE
 	}
 	update {
 		removeCorrespondenceBetween(pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
@@ -260,8 +264,9 @@ reaction RepositoryOrSystemPackageRenamed {
 
 routine renameCorrespondingRepositoryOrSystem(uml::Package umlPkg, String newName) {
 	match {
-		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		val pcmSystem = retrieve optional pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPkg tagged TagLiterals.
+			REPOSITORY_TO_REPOSITORY_PACKAGE
+		val pcmSystem = retrieve optional pcm::System corresponding to umlPkg tagged TagLiterals.SYSTEM__SYSTEM_PACKAGE
 	}
 	update {
 		if (pcmRepository.isPresent)
