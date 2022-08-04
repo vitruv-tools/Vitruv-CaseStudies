@@ -187,9 +187,9 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 routine addPrimitiveDatatypeCorrespondence(pcm::PrimitiveDataType pcmPrimitiveType, uml::PrimitiveType umlPrimitiveType) {
 	match {
 		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged TagLiterals.
-			DATATYPE__TYPE with potentialTarget == umlPrimitiveType
+			DATATYPE__TYPE with it == umlPrimitiveType
 		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged TagLiterals.
-			DATATYPE__TYPE with potentialTarget == pcmPrimitiveType
+			DATATYPE__TYPE with it == pcmPrimitiveType
 	}
 	update {
 		addCorrespondenceBetween(pcmPrimitiveType, umlPrimitiveType, TagLiterals.DATATYPE__TYPE)

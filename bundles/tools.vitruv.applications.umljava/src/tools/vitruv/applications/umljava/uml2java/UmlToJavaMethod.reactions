@@ -145,8 +145,8 @@ routine addMethodCorrespondence(java::Member javaMethodOrConstructor, uml::Opera
 
 routine insertJavaMethod(uml::Operation umlOperation, uml::Classifier umlClassifier) {
 	match {
-		val javaMethod = retrieve java::Member corresponding to umlOperation with javaMethod instanceof Constructor ||
-			javaMethod instanceof Method
+		val javaMethod = retrieve java::Member corresponding to umlOperation with it instanceof Constructor ||
+			it instanceof Method
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
 	}
 	update {
@@ -161,8 +161,8 @@ reaction UmlMethodDeleted {
 
 routine deleteJavaMethod(uml::Operation umlOperation) {
 	match {
-		val javaMethod = retrieve java::Member corresponding to umlOperation with javaMethod instanceof Constructor ||
-			javaMethod instanceof Method
+		val javaMethod = retrieve java::Member corresponding to umlOperation with it instanceof Constructor ||
+			it instanceof Method
 	}
 	update {
 		removeObject(javaMethod)

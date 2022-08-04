@@ -512,8 +512,7 @@ routine createOrFindJavaPackage(uml::Package uPackage) {
 	match {
 		require absence of java::Package corresponding to uPackage
 		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.
-			PACKAGE with matchingPackages.namespacesAsString + matchingPackages.name ==
-			getUmlNamespaceAsString(uPackage)
+			PACKAGE with namespacesAsString + name == getUmlNamespaceAsString(uPackage)
 	}
 	update {
 		if (matchingPackages.empty) {

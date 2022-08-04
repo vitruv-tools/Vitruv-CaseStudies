@@ -100,7 +100,7 @@ routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package um
 	match {
 		require absence of pcm::Repository corresponding to umlPkg tagged TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.
-			REPOSITORY with umlPkg.isPackageFor(foundRepository)
+			REPOSITORY with umlPkg.isPackageFor(it)
 	}
 	update {
 		if (foundRepository.isPresent) {
@@ -165,7 +165,7 @@ routine createOrFindCorrespondingSystem(uml::Package umlPkg, uml::Package umlPar
 	match {
 		require absence of pcm::System corresponding to umlPkg tagged TagLiterals.SYSTEM__SYSTEM_PACKAGE
 		val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM with umlPkg.
-			isPackageFor(foundSystem)
+			isPackageFor(it)
 	}
 	update {
 		if (foundSystem.isPresent) {

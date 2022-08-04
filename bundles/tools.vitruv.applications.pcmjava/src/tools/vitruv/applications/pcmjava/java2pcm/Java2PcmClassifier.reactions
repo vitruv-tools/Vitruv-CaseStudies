@@ -53,7 +53,7 @@ routine createPackageEClassCorrespondence(java::Package jPackage) {
 routine createOrFindArchitecturalElement(java::Package javaPackage, String containerName) {
 	match {
 		val containerPackage = retrieve optional java::Package corresponding to ContainersPackage.Literals.
-			PACKAGE with containerPackage.name == containerName
+			PACKAGE with name == containerName
 		require absence of pcm::RepositoryComponent corresponding to javaPackage
 		// ensure that we are not the root package (happens when the root package is being moved)
 		require absence of pcm::Repository corresponding to javaPackage tagged "package_root"
@@ -118,7 +118,7 @@ routine createOrFindRepository(java::Package javaPackage, String packageName, St
 		require absence of pcm::Repository corresponding to javaPackage tagged newTag
 		require absence of pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
 		val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.
-			REPOSITORY with javaPackage.isPackageFor(foundRepository)
+			REPOSITORY with javaPackage.isPackageFor(it)
 	}
 	update {
 		if (foundRepository.isPresent) {
@@ -171,7 +171,7 @@ routine createOrFindSystem(java::Package javaPackage, String name) {
 	match {
 		require absence of pcm::System corresponding to javaPackage
 		val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM with javaPackage.
-			isPackageFor(foundSystem)
+			isPackageFor(it)
 	}
 	update {
 		if (foundSystem.isPresent) {
@@ -318,9 +318,8 @@ reaction InterfaceCreated {
 
 routine createOrFindPCMInterface(java::Interface javaInterface, java::CompilationUnit compilationUnit) {
 	match {
-		val containingPackage = retrieve java::Package corresponding to ContainersPackage.Literals.
-			PACKAGE with containingPackage.namespacesAsString + containingPackage.name + "." ==
-			compilationUnit.namespacesAsString
+		val containingPackage = retrieve java::Package corresponding to ContainersPackage.Literals.PACKAGE with 
+			namespacesAsString + name + "." == compilationUnit.namespacesAsString
 		val pcmRepository = retrieve optional pcm::Repository corresponding to containingPackage tagged "contracts"
 		require absence of pcm::OperationInterface corresponding to javaInterface
 	}
