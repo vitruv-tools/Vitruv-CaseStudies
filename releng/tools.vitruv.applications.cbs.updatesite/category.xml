@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/tools.vitruv.domains.java.feature_2.1.0.qualifier.jar" id="tools.vitruv.domains.java.feature" version="2.1.0.qualifier">
-      <category name="Vitruv Applications for Component-based Systems"/>
-   </feature>
-   <feature id="tools.vitruv.domains.java.feature.source" version="2.1.0.qualifier">
-      <category name="Vitruv Applications for Component-based Systems"/>
-   </feature>
    <feature url="features/tools.vitruv.applications.util.temporary.feature_0.3.0.qualifier.jar" id="tools.vitruv.applications.util.temporary.feature" version="0.3.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
