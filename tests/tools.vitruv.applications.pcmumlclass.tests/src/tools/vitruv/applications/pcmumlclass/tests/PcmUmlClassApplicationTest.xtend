@@ -113,7 +113,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	}
 
 	def protected corresponds(EObject a, EObject b, String tag) {
-		return EcoreUtil.equals(b, getCorrespondingEObjects(a, b.class, tag).head)
+		return getCorrespondingEObjects(a, b.class, tag).exists[EcoreUtil.equals(it, b)]
 	}
 
 	// DataType consistency constraints defined here because it is used in multiple tests
