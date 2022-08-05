@@ -358,8 +358,7 @@ reaction RenameComponent {
 routine renameComponentPackageAndClass(pcm::RepositoryComponent component) {
 	match {
 		val repositoryPackage = retrieve java::Package corresponding to component.
-			repository__RepositoryComponent with repositoryPackage.name ==
-			component.repository__RepositoryComponent.entityName
+			repository__RepositoryComponent with name == component.repository__RepositoryComponent.entityName
 	}
 	update {
 		renameJavaPackage(component, repositoryPackage, component.entityName, null);
@@ -398,8 +397,8 @@ reaction RenamedInterface {
 
 routine renameInterface(pcm::OperationInterface interf) {
 	match {
-		val contractsPackage = retrieve java::Package corresponding to interf.
-			repository__Interface with contractsPackage.name == "contracts"
+		val contractsPackage = retrieve java::Package corresponding to interf.repository__Interface with name ==
+			"contracts"
 	}
 	update {
 		renameJavaClassifier(interf, contractsPackage, interf.entityName)
@@ -416,7 +415,7 @@ reaction CreatedCompositeDataType {
 routine createCompositeDataTypeImplementation(pcm::CompositeDataType compositeDataType) {
 	match {
 		val datatypesPackage = retrieve java::Package corresponding to compositeDataType.
-			repository__DataType with datatypesPackage.name == "datatypes"
+			repository__DataType with name == "datatypes"
 	}
 	update {
 		createOrFindDataTypeClass(compositeDataType, datatypesPackage)
@@ -441,7 +440,7 @@ reaction RenamedCompositeDataType {
 routine renameCompositeDataType(pcm::CompositeDataType compositeDataType) {
 	match {
 		val datatypesPackage = retrieve java::Package corresponding to compositeDataType.
-			repository__DataType with datatypesPackage.name == "datatypes"
+			repository__DataType with name == "datatypes"
 	}
 	update {
 		renameJavaClassifier(compositeDataType, datatypesPackage, compositeDataType.entityName)
@@ -461,8 +460,8 @@ reaction CreatedCollectionDataType {
 routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType) {
 	match {
 		val innerTypeClass = retrieve optional java::Class corresponding to dataType.innerType_CollectionDataType
-		val datatypesPackage = retrieve java::Package corresponding to dataType.
-			repository__DataType with datatypesPackage.name == "datatypes"
+		val datatypesPackage = retrieve java::Package corresponding to dataType.repository__DataType with name ==
+			"datatypes"
 	}
 	update {
 		// create correct (and in case of primitive types wrapped) type reference for the inner type
@@ -517,7 +516,7 @@ reaction RenamedCollectionDataType {
 routine renameCollectionDataType(pcm::CollectionDataType collectionDataType) {
 	match {
 		val datatypesPackage = retrieve java::Package corresponding to collectionDataType.
-			repository__DataType with datatypesPackage.name == "datatypes"
+			repository__DataType with name == "datatypes"
 	}
 	update {
 		renameJavaClassifier(collectionDataType, datatypesPackage, collectionDataType.entityName)
@@ -629,8 +628,8 @@ routine createOrFindJavaPackage(EObject sourceElementMappedToPackage, java::Pack
 	match {
 		require absence of java::Package corresponding to sourceElementMappedToPackage tagged newTag
 		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.
-			PACKAGE with matchingPackages.name.toLowerCase == packageName.toLowerCase && (parentPackage === null ||
-			matchingPackages.namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + ".")
+			PACKAGE with name.toLowerCase == packageName.toLowerCase && (parentPackage === null ||
+			namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + ".")
 	}
 	update {
 		if (matchingPackages.empty) {
@@ -1007,7 +1006,7 @@ routine removeParameterToFieldAssignmentFromConstructor(java::Constructor ctor, 
 routine removeCorrespondingParameterFromConstructor(java::Constructor ctor, pcm::NamedElement correspondenceSource) {
 	match {
 		val param = retrieve java::OrdinaryParameter corresponding to correspondenceSource with ctor.parameters.
-			contains(param)
+			contains(it)
 	}
 	update {
 		removeObject(param)
