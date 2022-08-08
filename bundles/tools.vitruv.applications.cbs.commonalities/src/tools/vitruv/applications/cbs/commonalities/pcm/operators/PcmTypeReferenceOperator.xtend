@@ -10,7 +10,7 @@ import tools.vitruv.applications.cbs.commonalities.domaincommon.operators.Abstra
 import tools.vitruv.applications.cbs.commonalities.pcm.PcmPrimitiveDataType
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
-import tools.vitruv.dsls.reactions.runtime.ReactionExecutionState
+import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState
 
 import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 

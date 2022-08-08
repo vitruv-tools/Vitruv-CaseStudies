@@ -8,7 +8,7 @@ import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.emf.ecore.resource.ResourceSet
 
 @Utility
-class UmlTypeUtil { // TODO Place as central utility in UML domain
+class UmlTypeUtil {
     static val UML_JAVA_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml")
     static val UML_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
 

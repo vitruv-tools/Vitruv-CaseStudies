@@ -6,7 +6,7 @@ import org.eclipse.uml2.uml.UMLFactory
 import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
+import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper

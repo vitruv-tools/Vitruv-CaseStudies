@@ -1,7 +1,7 @@
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.palladiosimulator.pcm.repository.OperationInterface
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reactions and routines synchronize a pcm::OperationInterface
@@ -13,7 +13,6 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		PcmInterface.reactions
 //		UmlInterfaceGeneralization.reactions
 //		InterfaceConceptTest
-
 reactions: umlInterfaceReactions
 in reaction to changes in uml
 execute actions in pcm
@@ -25,67 +24,72 @@ reaction InterfaceInserted {
 
 routine insertCorrespondingInterface(uml::Interface umlInterface, uml::Package umlPackage) {
 	match {
-		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPackage tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+		val pcmRepository = retrieve optional pcm::Repository corresponding to umlPackage tagged TagLiterals.
+			REPOSITORY_TO_CONTRACTS_PACKAGE
 	}
-	action {
-		call {
-			if (pcmRepository.isPresent) {
-				detectOrCreateCorrespondingInterface(umlInterface, umlPackage) 
-				moveCorrespondingInterface(umlInterface, umlPackage) 
-			} else {
-				deleteCorrespondingInterface(umlInterface) 
-			}
+	update {
+		if (pcmRepository.isPresent) {
+			detectOrCreateCorrespondingInterface(umlInterface, umlPackage)
+			moveCorrespondingInterface(umlInterface, umlPackage)
+		} else {
+			deleteCorrespondingInterface(umlInterface)
 		}
 	}
 }
+
 routine detectOrCreateCorrespondingInterface(uml::Interface umlInterface, uml::Package umlPackage) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to umlPackage tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
-		require absence of pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmRepository = retrieve pcm::Repository corresponding to umlPackage tagged TagLiterals.
+			REPOSITORY_TO_CONTRACTS_PACKAGE
+		require absence of pcm::OperationInterface corresponding to umlInterface tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
 	}
-	action {
-		call {
-			val pcmInterfaceCandidate = pcmRepository.interfaces__Repository.filter(OperationInterface).findFirst[it.entityName == umlInterface.name]
-			if (pcmInterfaceCandidate !== null) {
-				addCorrespondenceForExistingInterface(umlInterface, pcmInterfaceCandidate)
-			} else {
-				createCorrespondingInterface(umlInterface, umlPackage)
-			}
+	update {
+		val pcmInterfaceCandidate = pcmRepository.interfaces__Repository.filter(OperationInterface).findFirst [
+			it.entityName == umlInterface.name
+		]
+		if (pcmInterfaceCandidate !== null) {
+			addCorrespondenceForExistingInterface(umlInterface, pcmInterfaceCandidate)
+		} else {
+			createCorrespondingInterface(umlInterface, umlPackage)
 		}
 	}
 }
 
 routine addCorrespondenceForExistingInterface(uml::Interface umlInterface, pcm::OperationInterface pcmInterface) {
 	match {
-		require absence of pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
-		require absence of uml::Interface corresponding to pcmInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		require absence of pcm::OperationInterface corresponding to umlInterface tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
+		require absence of uml::Interface corresponding to pcmInterface tagged TagLiterals.INTERFACE_TO_INTERFACE
 	}
-	action {
-		add correspondence between pcmInterface and umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+	update {
+		addCorrespondenceBetween(pcmInterface, umlInterface, TagLiterals.INTERFACE_TO_INTERFACE)
 	}
 }
 
 routine createCorrespondingInterface(uml::Interface umlInterface, uml::Package umlPackage) {
 	match {
-		require absence of pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		require absence of pcm::OperationInterface corresponding to umlInterface tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
 	}
-	action {
-		val pcmInterface = create pcm::OperationInterface and initialize {
-			pcmInterface.entityName = umlInterface.name
-		}
-		add correspondence between pcmInterface and umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+	create {
+		val pcmInterface = new pcm::OperationInterface
+	}
+	update {
+		pcmInterface.entityName = umlInterface.name
+		addCorrespondenceBetween(pcmInterface, umlInterface, TagLiterals.INTERFACE_TO_INTERFACE)
 	}
 }
 
 routine moveCorrespondingInterface(uml::Interface umlInterface, uml::Package umlPackage) {
 	match {
-		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
-		val pcmInterface = retrieve asserted pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged TagLiterals.
+			REPOSITORY_TO_CONTRACTS_PACKAGE
+		val pcmInterface = retrieve asserted pcm::OperationInterface corresponding to umlInterface tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
 	}
-	action {
-		update pcmRepository {
-			pcmRepository.interfaces__Repository += pcmInterface
-		}
+	update {
+		pcmRepository.interfaces__Repository += pcmInterface
 	}
 }
 
@@ -96,13 +100,13 @@ reaction InterfaceRemoved {
 
 routine removeCorrespondingInterface(uml::Interface umlInterface, uml::Package umlPackage) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to umlPackage tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmRepository = retrieve pcm::Repository corresponding to umlPackage tagged TagLiterals.
+			REPOSITORY_TO_CONTRACTS_PACKAGE
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
 	}
-	action {
-		update pcmRepository {
-			pcmRepository.interfaces__Repository -= pcmInterface
-		}
+	update {
+		pcmRepository.interfaces__Repository -= pcmInterface
 	}
 }
 
@@ -113,28 +117,28 @@ reaction InterfaceDeleted {
 
 routine deleteCorrespondingInterface(uml::Interface umlInterface) {
 	match {
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
 	}
-	action {
-		remove correspondence between pcmInterface and umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
-		delete pcmInterface
+	update {
+		removeCorrespondenceBetween(pcmInterface, umlInterface, TagLiterals.INTERFACE_TO_INTERFACE)
+		removeObject(pcmInterface)
 	}
 }
 
 reaction InterfaceRenamed {
 	after attribute replaced at uml::Interface[name]
-	with affectedEObject.name == newValue //validity check
+	with affectedEObject.name == newValue // validity check
 	call renameCorrespondingInterface(affectedEObject, newValue)
 }
 
 routine renameCorrespondingInterface(uml::Interface umlInterface, String newName) {
 	match {
-		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged TagLiterals.
+			INTERFACE_TO_INTERFACE
 	}
-	action {
-		update pcmInterface {
-			pcmInterface.entityName = umlInterface.name
-		}
+	update {
+		pcmInterface.entityName = umlInterface.name
 	}
 }
 

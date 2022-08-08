@@ -1,4 +1,0 @@
-package tools.vitruv.applications.umlclassumlcomponents.class2comp
-
-class UmlClass2UmlCompChangePropagation extends mir.reactions.class2comp.Class2compChangePropagationSpecification {
-}

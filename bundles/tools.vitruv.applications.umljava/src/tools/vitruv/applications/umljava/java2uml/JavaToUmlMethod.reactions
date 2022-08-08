@@ -8,7 +8,6 @@ import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
 import tools.vitruv.applications.umljava.util.UmlJavaCorrespondenceTag
-
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
@@ -24,390 +23,371 @@ import routines javaToUmlTypePropagation using qualified names
 //===========================================
 //=========================================== Method
 //===========================================
-
 reaction JavaClassMethodCreated {
-    after element java::ClassMethod inserted in java::ConcreteClassifier[members]
-    with (affectedEObject instanceof Class)
-        || (affectedEObject instanceof Enumeration)
-    call {
-        createOrFindUmlClassMethod(newValue, affectedEObject)
-        insertUmlMethod(newValue, affectedEObject)
-    }
+	after element java::ClassMethod inserted in java::ConcreteClassifier[members]
+	with (affectedEObject instanceof Class) || (affectedEObject instanceof Enumeration)
+	call {
+		createOrFindUmlClassMethod(newValue, affectedEObject)
+		insertUmlMethod(newValue, affectedEObject)
+	}
 }
 
 routine createOrFindUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClassifier jClassifier) {
-     match {
-        val uClassifier = retrieve uml::Classifier corresponding to jClassifier
-            with uClassifier instanceof OperationOwner
-        require absence of uml::Operation corresponding to jMethod
-        require absence of uml::Property corresponding to jMethod tagged with UmlJavaCorrespondenceTag.GETTER
-        require absence of uml::Property corresponding to jMethod tagged with UmlJavaCorrespondenceTag.SETTER
-    }
-    action {
-        call {
-            val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst[
-                name == jMethod.name && 
-                ownedParameters.filter[direction != ParameterDirectionKind.RETURN_LITERAL].size == jMethod.parameters.size &&
-                jMethod.parameters.forall[jParameter | ownedParameters.exists[name == jParameter.name]]
-            ]
-            if (foundMethod === null) {
-                createUmlClassMethod(jMethod, uClassifier)
-            } else {
-                addUmlMethodCorrespondence(foundMethod, jMethod)
-            }
-        }
-    }
+	match {
+		val uClassifier = retrieve uml::Classifier corresponding to jClassifier with it instanceof OperationOwner
+		require absence of uml::Operation corresponding to jMethod
+		require absence of uml::Property corresponding to jMethod tagged UmlJavaCorrespondenceTag.GETTER
+		require absence of uml::Property corresponding to jMethod tagged UmlJavaCorrespondenceTag.SETTER
+	}
+	update {
+		val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst [
+			name == jMethod.name &&
+				ownedParameters.filter[direction != ParameterDirectionKind.RETURN_LITERAL].size ==
+					jMethod.parameters.size && jMethod.parameters.forall [ jParameter |
+					ownedParameters.exists[name == jParameter.name]
+				]
+		]
+		if (foundMethod === null) {
+			createUmlClassMethod(jMethod, uClassifier)
+		} else {
+			addUmlMethodCorrespondence(foundMethod, jMethod)
+		}
+	}
 }
 
 routine createUmlClassMethod(java::ClassMethod jMethod, uml::Classifier uClassifier) {
-    action {
-        val uOperation = create uml::Operation and initialize {
-            uOperation.name = jMethod.name
-            uOperation.visibility = getUmlVisibilityKindFromJavaElement(jMethod)
-        }
-        add correspondence between uOperation and jMethod
-    }
+	create {
+		val uOperation = new uml::Operation
+	}
+	update {
+		uOperation.name = jMethod.name
+		uOperation.visibility = getUmlVisibilityKindFromJavaElement(jMethod)
+		addCorrespondenceBetween(uOperation, jMethod)
+	}
 }
 
 reaction JavaInterfaceMethodCreated {
-    after element java::InterfaceMethod inserted in java::Interface[members]
-    call {
-        createOrFindUmlInterfaceMethod(newValue, affectedEObject)
-        insertUmlMethod(newValue, affectedEObject)
-    }
+	after element java::InterfaceMethod inserted in java::Interface[members]
+	call {
+		createOrFindUmlInterfaceMethod(newValue, affectedEObject)
+		insertUmlMethod(newValue, affectedEObject)
+	}
 }
 
 routine createOrFindUmlInterfaceMethod(java::InterfaceMethod jMethod, java::Interface jInterface) {
-     match {
-        val uInterface = retrieve uml::Interface corresponding to jInterface
-        require absence of uml::Operation corresponding to jMethod
-    }
-    action {
-        call {
-            val foundMethod = uInterface.ownedOperations.findFirst[
-                name == jMethod.name && 
-                ownedParameters.filter[direction != ParameterDirectionKind.RETURN_LITERAL].size == jMethod.parameters.size &&
-                jMethod.parameters.forall[jParameter | ownedParameters.exists[name == jParameter.name]]
-            ]
-            if (foundMethod === null) {
-                createUmlInterfaceMethod(jMethod, uInterface)
-            } else {
-                addUmlMethodCorrespondence(foundMethod, jMethod)
-            }
-        }
-    }
+	match {
+		val uInterface = retrieve uml::Interface corresponding to jInterface
+		require absence of uml::Operation corresponding to jMethod
+	}
+	update {
+		val foundMethod = uInterface.ownedOperations.findFirst [
+			name == jMethod.name &&
+				ownedParameters.filter[direction != ParameterDirectionKind.RETURN_LITERAL].size ==
+					jMethod.parameters.size && jMethod.parameters.forall [ jParameter |
+					ownedParameters.exists[name == jParameter.name]
+				]
+		]
+		if (foundMethod === null) {
+			createUmlInterfaceMethod(jMethod, uInterface)
+		} else {
+			addUmlMethodCorrespondence(foundMethod, jMethod)
+		}
+	}
 }
 
 routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, uml::Interface uInterface) {
-    action {
-        val uOperation = create uml::Operation and initialize {
-            uOperation.name = jMeth.name
-            uOperation.isAbstract = true
-        }
-        add correspondence between uOperation and jMeth
-    }
+	create {
+		val uOperation = new uml::Operation
+	}
+	update {
+		uOperation.name = jMeth.name
+		uOperation.isAbstract = true
+		addCorrespondenceBetween(uOperation, jMeth)
+	}
 }
 
-// Shared between interface methods, class methods and constructors:
+// Shared between interface methods, class methods, constructors:
 routine addUmlMethodCorrespondence(uml::Operation uOperation, java::Member jMethodOrConstructor) {
-    action {
-        add correspondence between uOperation and jMethodOrConstructor
-    }
+	update {
+		addCorrespondenceBetween(uOperation, jMethodOrConstructor)
+	}
 }
 
 reaction JavaConstructorCreated {
-    after element java::Constructor inserted in java::ConcreteClassifier[members]
-    call {
-        createOrFindUmlConstructor(newValue, affectedEObject)
-        insertUmlMethod(newValue, affectedEObject)
-    }
+	after element java::Constructor inserted in java::ConcreteClassifier[members]
+	call {
+		createOrFindUmlConstructor(newValue, affectedEObject)
+		insertUmlMethod(newValue, affectedEObject)
+	}
 }
 
 routine createOrFindUmlConstructor(java::Constructor jConstructor, java::ConcreteClassifier jClassifier) {
-     match {
-        val uClassifier = retrieve uml::Class corresponding to jClassifier
-        require absence of uml::Operation corresponding to jConstructor
-    }
-    action {
-        call {
-            val foundConstructor = uClassifier.ownedOperations.findFirst[name == jConstructor.name]
-            if (foundConstructor === null) {
-                createUmlConstructor(jConstructor, uClassifier)
-            } else {
-                addUmlMethodCorrespondence(foundConstructor, jConstructor)
-            }
-        }
-    }
+	match {
+		val uClassifier = retrieve uml::Class corresponding to jClassifier
+		require absence of uml::Operation corresponding to jConstructor
+	}
+	update {
+		val foundConstructor = uClassifier.ownedOperations.findFirst[name == jConstructor.name]
+		if (foundConstructor === null) {
+			createUmlConstructor(jConstructor, uClassifier)
+		} else {
+			addUmlMethodCorrespondence(foundConstructor, jConstructor)
+		}
+	}
 }
 
 routine createUmlConstructor(java::Constructor jConstructor, uml::Class uClassifier) {
-    action {
-        val uConstructor = create uml::Operation and initialize {
-            uConstructor.name = jConstructor.name
-            uConstructor.visibility = getUmlVisibilityKindFromJavaElement(jConstructor)
-        }
-        add correspondence between uConstructor and jConstructor
-    }
+	create {
+		val uConstructor = new uml::Operation
+	}
+	update {
+		uConstructor.name = jConstructor.name
+		uConstructor.visibility = getUmlVisibilityKindFromJavaElement(jConstructor)
+		addCorrespondenceBetween(uConstructor, jConstructor)
+	}
 }
 
 routine insertUmlMethod(java::Member javaMethod, java::ConcreteClassifier javaClassifier) {
-    match {
-        val umlMethod = retrieve uml::Operation corresponding to javaMethod 
-        val umlClassifier = retrieve uml::Classifier corresponding to javaClassifier
-    }
-    action {
-        update umlClassifier {
-            (umlClassifier as OperationOwner).ownedOperations += umlMethod
-        }
-    }
+	match {
+		val umlMethod = retrieve uml::Operation corresponding to javaMethod
+		val umlClassifier = retrieve uml::Classifier corresponding to javaClassifier
+	}
+	update {
+		(umlClassifier as OperationOwner).ownedOperations += umlMethod
+	}
 }
 
 reaction JavaMemberDeleted {
-    after element java::Member deleted
-    call {
-        deleteUmlMethod(affectedEObject)
-        deleteAccessorCorrespondence(affectedEObject, UmlJavaCorrespondenceTag.GETTER)
-        deleteAccessorCorrespondence(affectedEObject, UmlJavaCorrespondenceTag.SETTER)
-    }
+	after element java::Member deleted
+	call {
+		deleteUmlMethod(affectedEObject)
+		deleteAccessorCorrespondence(affectedEObject, UmlJavaCorrespondenceTag.GETTER)
+		deleteAccessorCorrespondence(affectedEObject, UmlJavaCorrespondenceTag.SETTER)
+	}
 }
 
 routine deleteUmlMethod(java::Member jMem) {
-    match {
-        val uMem = retrieve uml::NamedElement corresponding to jMem tagged with ""
-    }
-    action {
-        delete uMem
-    }
+	match {
+		val uMem = retrieve uml::NamedElement corresponding to jMem tagged ""
+	}
+	update {
+		removeObject(uMem)
+		removeCorrespondenceBetween(uMem, jMem)
+	}
 }
 
 routine deleteAccessorCorrespondence(java::Member jMember, String tag) {
-    match {
-        val uProperty = retrieve uml::Property corresponding to jMember tagged with tag
-    }
-    action {
-        remove correspondence between uProperty and jMember tagged with tag
-    }
+	match {
+		val uProperty = retrieve uml::Property corresponding to jMember tagged tag
+	}
+	update {
+		removeCorrespondenceBetween(uProperty, jMember, tag)
+	}
 }
 
 reaction JavaMethodMadeAbstract {
-    after element java::Abstract inserted in java::ClassMethod[annotationsAndModifiers]
-    call  {
-        setUmlMethodAbstract(affectedEObject, true)
-    }
+	after element java::Abstract inserted in java::ClassMethod[annotationsAndModifiers]
+	call {
+		setUmlMethodAbstract(affectedEObject, true)
+	}
 }
 
 reaction JavaMethodMadeNonAbstract {
-    after element java::Abstract removed from java::ClassMethod[annotationsAndModifiers]
-    call setUmlMethodAbstract(affectedEObject, false)
+	after element java::Abstract removed from java::ClassMethod[annotationsAndModifiers]
+	call setUmlMethodAbstract(affectedEObject, false)
 }
 
 routine setUmlMethodAbstract(java::ClassMethod jMeth, Boolean isAbstract) {
-    match {
-        val uOperation = retrieve uml::Operation corresponding to jMeth
-    }
-    action {
-        update uOperation {
-            uOperation.isAbstract = isAbstract
-        }
-    }
+	match {
+		val uOperation = retrieve uml::Operation corresponding to jMeth
+	}
+	update {
+		uOperation.isAbstract = isAbstract
+	}
 }
 
 reaction JavaMethodMadeFinal {
-    after element java::Final inserted in java::ClassMethod[annotationsAndModifiers]
-    call setUmlMethodFinal(affectedEObject, true)
+	after element java::Final inserted in java::ClassMethod[annotationsAndModifiers]
+	call setUmlMethodFinal(affectedEObject, true)
 }
 
 reaction JavaMethodMadeNonFinal {
-    after element java::Final removed from java::ClassMethod[annotationsAndModifiers]
-    call setUmlMethodFinal(affectedEObject, false)
+	after element java::Final removed from java::ClassMethod[annotationsAndModifiers]
+	call setUmlMethodFinal(affectedEObject, false)
 }
 
 routine setUmlMethodFinal(java::Method jMethod, Boolean isFinal) {
-    match {
-        val uOperation = retrieve uml::Operation corresponding to jMethod
-    }
-    action {
-        update uOperation {
-            uOperation.isLeaf = isFinal
-        }
-    }
+	match {
+		val uOperation = retrieve uml::Operation corresponding to jMethod
+	}
+	update {
+		uOperation.isLeaf = isFinal
+	}
 }
 
 reaction JavaElementMadeStatic {
-    after element java::Static inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
-    call setUmlFeatureStatic(affectedEObject, true)
+	after element java::Static inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
+	call setUmlFeatureStatic(affectedEObject, true)
 }
 
 reaction JavaMethodMadeNonStatic {
-    after element java::Static removed from java::AnnotableAndModifiable[annotationsAndModifiers]
-    call setUmlFeatureStatic(affectedEObject, false)
+	after element java::Static removed from java::AnnotableAndModifiable[annotationsAndModifiers]
+	call setUmlFeatureStatic(affectedEObject, false)
 }
+
 //UML-Feature =  {Property, Operation}
 routine setUmlFeatureStatic(java::AnnotableAndModifiable jElem, Boolean isStatic) {
-    match {
-        val uFeature = retrieve uml::Feature corresponding to jElem
-    }
-    action {
-        update uFeature {
-            uFeature.isStatic = isStatic
-        }
-    }
+	match {
+		val uFeature = retrieve uml::Feature corresponding to jElem
+	}
+	update {
+		uFeature.isStatic = isStatic
+	}
 }
 
 //===========================================
 //=========================================== Parameter
 //===========================================
-
 reaction JavaVariableLengthParameterCreated {
-    after element java::VariableLengthParameter inserted in java::Parametrizable[parameters]
-    call {
-        createUmlParameter(affectedEObject, newValue)
-        setMultiplicityOfCorrespondingParameterToUnlimited(newValue)
-    }
+	after element java::VariableLengthParameter inserted in java::Parametrizable[parameters]
+	call {
+		createUmlParameter(affectedEObject, newValue)
+		setMultiplicityOfCorrespondingParameterToUnlimited(newValue)
+	}
 }
 
 reaction JavaOrdinaryParameterCreated {
-    after element java::OrdinaryParameter inserted in java::Parametrizable[parameters]
-    call createUmlParameter(affectedEObject, newValue)
+	after element java::OrdinaryParameter inserted in java::Parametrizable[parameters]
+	call createUmlParameter(affectedEObject, newValue)
 }
 
 routine createUmlParameter(java::Parametrizable jMeth, java::Parameter jParam) {
-    match {
-        val uOperation = retrieve uml::Operation corresponding to jMeth
-        require absence of uml::Parameter corresponding to jParam
-    }
-    action {
-        val uParam = create uml::Parameter and initialize {
-            uParam.name = jParam.name
-        }
-        add correspondence between uParam and jParam
-        update uOperation {
-            uOperation.ownedParameters += uParam
-        }
-    }
+	match {
+		val uOperation = retrieve uml::Operation corresponding to jMeth
+		require absence of uml::Parameter corresponding to jParam
+	}
+	create {
+		val uParam = new uml::Parameter
+	}
+	update {
+		uParam.name = jParam.name
+		addCorrespondenceBetween(uParam, jParam)
+		uOperation.ownedParameters += uParam
+	}
 }
 
 routine setMultiplicityOfCorrespondingParameterToUnlimited(java::Parameter parameter) {
-    match {
-        val umlParameter = retrieve uml::Parameter corresponding to parameter
-    }
-    action {
-        update umlParameter {
-            umlParameter => [
-                lower = 0
-                upper = LiteralUnlimitedNatural.UNLIMITED
-            ]
-        }
-    }
+	match {
+		val umlParameter = retrieve uml::Parameter corresponding to parameter
+	}
+	update {
+		umlParameter => [
+			lower = 0
+			upper = LiteralUnlimitedNatural.UNLIMITED
+		]
+	}
 }
 
 reaction JavaParameterDeleted {
-    after element java::Parameter removed from java::Parametrizable[parameters]
-    call deleteJavaParameter(oldValue)
+	after element java::Parameter removed from java::Parametrizable[parameters]
+	call deleteJavaParameter(oldValue)
 }
 
 routine deleteJavaParameter(java::Parameter jParam) {
-    match {
-        val uParam = retrieve uml::Parameter corresponding to jParam
-    }
-    action{
-        delete uParam
-    }
+	match {
+		val uParam = retrieve uml::Parameter corresponding to jParam
+	}
+	update {
+		removeObject(uParam)
+		removeCorrespondenceBetween(uParam, jParam)
+	}
 }
 
 reaction JavaParameterTypeChanged {
-    after element java::TypeReference replaced at java::Parameter[typeReference]
-    call changeUmlParameterType(affectedEObject, newValue)
+	after element java::TypeReference replaced at java::Parameter[typeReference]
+	call changeUmlParameterType(affectedEObject, newValue)
 }
 
 routine changeUmlParameterType(java::Parameter jParam, java::TypeReference jType) {
-    match {
-        val uParam = retrieve uml::Parameter corresponding to jParam
-    }
-    action {
-        call javaToUmlTypePropagation.propagateParameterTypeChange(jParam, uParam)
-    }
+	match {
+		val uParam = retrieve uml::Parameter corresponding to jParam
+	}
+	update {
+		javaToUmlTypePropagation.propagateParameterTypeChange(jParam, uParam)
+	}
 }
 
 reaction JavaReturnTypeChanged {
-    after element java::TypeReference replaced at java::Method[typeReference]
-    call changeUmlReturnType(affectedEObject, newValue)
+	after element java::TypeReference replaced at java::Method[typeReference]
+	call changeUmlReturnType(affectedEObject, newValue)
 }
 
 routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
-    match {
-        val uOperation = retrieve uml::Operation corresponding to jMeth
-    }
-    action {
-        execute {
-            var uParam = uOperation.getReturnResult
-            if (uParam === null){
-                // create a new return parameter
-                uParam = uOperation.createOwnedParameter("returnParameter", null)
-                uParam.direction = ParameterDirectionKind.RETURN_LITERAL
-            }
-            javaToUmlTypePropagation.propagateMethodReturnTypeChange(jMeth, uParam)
-        }
-    }
+	match {
+		val uOperation = retrieve uml::Operation corresponding to jMeth
+	}
+	update {
+		var uParam = uOperation.getReturnResult
+		if (uParam === null) {
+			// create a new return parameter
+			uParam = uOperation.createOwnedParameter("returnParameter", null)
+			uParam.direction = ParameterDirectionKind.RETURN_LITERAL
+		}
+		javaToUmlTypePropagation.propagateMethodReturnTypeChange(jMeth, uParam)
+	}
 }
 
 //===========================================
 //=========================================== General
 //=========================================== 
-
 reaction JavaVisibilityModifierInserted {
-    after element java::Modifier inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
-    with newValue instanceof Public || newValue instanceof Private || newValue instanceof Protected
-    call changeUmlNamedElementVisibility(affectedEObject)
+	after element java::Modifier inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
+	with newValue instanceof Public || newValue instanceof Private || newValue instanceof Protected
+	call changeUmlNamedElementVisibility(affectedEObject)
 }
 
 reaction JavaVisibilityModifierRemoved {
-    after element java::Modifier removed from java::AnnotableAndModifiable[annotationsAndModifiers]
-    with oldValue instanceof Private
-    || oldValue instanceof Public
-    || oldValue instanceof Protected
-    call changeUmlNamedElementVisibility(affectedEObject)
+	after element java::Modifier removed from java::AnnotableAndModifiable[annotationsAndModifiers]
+	with oldValue instanceof Private || oldValue instanceof Public || oldValue instanceof Protected
+	call changeUmlNamedElementVisibility(affectedEObject)
 }
 
 routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem) {
-    match {
-        val uElem = retrieve uml::NamedElement corresponding to jElem tagged with ""
-    }
-    action {
-        update uElem {
-            uElem.visibility = getUmlVisibilityKindFromJavaElement(jElem)
-        }
-    }
+	match {
+		val uElem = retrieve uml::NamedElement corresponding to jElem tagged ""
+	}
+	update {
+		uElem.visibility = getUmlVisibilityKindFromJavaElement(jElem)
+	}
 }
 
 reaction JavaNamedElementRenamed {
-    after attribute replaced at java::NamedElement[name]
-    with !(affectedEObject instanceof CompilationUnit)
-    call renameUmlNamedElement(affectedEObject)
+	after attribute replaced at java::NamedElement[name]
+	with !(affectedEObject instanceof CompilationUnit)
+	call renameUmlNamedElement(affectedEObject)
 }
 
 routine renameUmlNamedElement(java::NamedElement jElement) {
-    match {
-        val uElement = retrieve uml::NamedElement corresponding to jElement tagged with ""
-    }
-    action {
-        update uElement {
-            uElement.name = jElement.name
-        }
-    }
+	match {
+		val uElement = retrieve uml::NamedElement corresponding to jElement tagged ""
+	}
+	update {
+		uElement.name = jElement.name
+	}
 }
 
 //===========================================
 //=========================================== Unsupported
 //===========================================
-
 //An interface can theoretically have static, non-abstract methods
 reaction JavaClassMethodCreatedInInterface {
-    after element java::ClassMethod inserted in java::Interface[members]
-    call showMessage(userInteractor, "ClassMethods are currently not supported in Interfaces. Please delete " + newValue)
+	after element java::ClassMethod inserted in java::Interface[members]
+	call showMessage(userInteractor,
+		"ClassMethods are currently not supported in Interfaces. Please delete " + newValue)
 }
 
 reaction JavaParameterMadeFinal {
-    after element java::Final inserted in java::Parameter[annotationsAndModifiers]
-    call showMessage(userInteractor, "Final parameters are not supported. Please remove the modifier from " + affectedEObject)
+	after element java::Final inserted in java::Parameter[annotationsAndModifiers]
+	call showMessage(userInteractor,
+		"Final parameters are not supported. Please remove the modifier from " + affectedEObject)
 }
