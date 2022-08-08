@@ -18,6 +18,9 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Support Longpaths [Windows]
+        if: matrix.os == 'windows-latest'
+        run: git config --system core.longpaths true
       - name: Checkout
         uses: actions/checkout@v3
       - name: Cache
