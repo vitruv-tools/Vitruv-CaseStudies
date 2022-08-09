@@ -99,7 +99,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	protected def <O extends EObject> O clearResourcesAndReloadRoot(O modelElement) {
 		stopRecordingChanges(modelElement.eResource)
 		val resourceURI = modelElement.eResource.URI
-		renewResourceCache
+		disposeViewResources()
 
 		val rootElement = EObject.from(resourceURI) as O
 		if (rootElement !== null) {

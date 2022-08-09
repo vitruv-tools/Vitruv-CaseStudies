@@ -253,7 +253,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		}
 		oldToNewURIsOfModifiedResources.clear();
 		propagate();
-		renewResourceCache();
+		disposeViewResources();
 	}
 
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
