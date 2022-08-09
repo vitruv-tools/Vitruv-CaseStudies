@@ -12,8 +12,8 @@ import org.junit.jupiter.api.^extension.ExtensionContext
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder.VariantOptions
 import tools.vitruv.testutils.TestUserInteraction
-import tools.vitruv.testutils.TestView
-import tools.vitruv.testutils.UriMode
+import tools.vitruv.testutils.views.TestView
+import tools.vitruv.testutils.views.UriMode
 
 import static com.google.common.base.Preconditions.checkArgument
 import static com.google.common.base.Preconditions.checkState

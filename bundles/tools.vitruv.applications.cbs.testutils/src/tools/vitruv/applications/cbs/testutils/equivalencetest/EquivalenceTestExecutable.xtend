@@ -23,12 +23,12 @@ import org.junit.jupiter.api.function.Executable
 import org.opentest4j.TestAbortedException
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.framework.vsum.VirtualModelBuilder
-import tools.vitruv.testutils.BasicTestView
-import tools.vitruv.testutils.ChangePublishingTestView
+import tools.vitruv.testutils.views.BasicTestView
+import tools.vitruv.testutils.views.ChangePublishingTestView
 import tools.vitruv.testutils.TestProjectManager
 import tools.vitruv.testutils.TestUserInteraction
-import tools.vitruv.testutils.TestView
-import tools.vitruv.testutils.UriMode
+import tools.vitruv.testutils.views.TestView
+import tools.vitruv.testutils.views.UriMode
 import tools.vitruv.testutils.printing.DefaultPrintIdProvider
 import tools.vitruv.testutils.printing.ModelPrinting
 import tools.vitruv.testutils.printing.PrintIdProvider

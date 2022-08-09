@@ -4,7 +4,7 @@ import java.util.List
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.jupiter.api.^extension.ExtensionContext
-import tools.vitruv.testutils.UriMode
+import tools.vitruv.testutils.views.UriMode
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.applications.cbs.testutils.equivalencetest.ParameterizedEquivalenceTestBuilder.NamedParameter
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer

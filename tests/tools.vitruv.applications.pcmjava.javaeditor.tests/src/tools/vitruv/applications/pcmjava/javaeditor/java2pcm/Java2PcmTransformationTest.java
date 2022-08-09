@@ -99,7 +99,7 @@ import tools.vitruv.framework.views.changederivation.DefaultStateBasedChangeReso
 import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
-import tools.vitruv.testutils.UriMode;
+import tools.vitruv.testutils.views.UriMode;
 import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.loadOrCreateResource;
 
 /**
