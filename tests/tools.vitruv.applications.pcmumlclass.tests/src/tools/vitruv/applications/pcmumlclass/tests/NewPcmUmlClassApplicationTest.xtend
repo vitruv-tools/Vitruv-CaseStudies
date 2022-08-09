@@ -14,8 +14,6 @@ import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChang
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
-import tools.vitruv.domains.pcm.PcmDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
@@ -46,11 +44,6 @@ abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationT
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
 		]
-	}
-
-	private def patchDomains() {
-		new PcmDomainProvider().domain.enableTransitiveChangePropagation
-		new UmlDomainProvider().domain.enableTransitiveChangePropagation
 	}
 
 	protected def getTestResource(URI uri) {
@@ -127,7 +120,6 @@ abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationT
 
 	@BeforeEach
 	def void setup() {
-		patchDomains()
 		viewFactory = new PcmUmlclassViewFactory(virtualModel)
 		createUmlModel[name = MODEL_NAME]
 	}
