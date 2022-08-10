@@ -8,3 +8,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.dsls.demo.insurancepersons.tests,
  tools.vitruv.testutils.vsum,
  org.junit.jupiter.api
+Bundle-Vendor: vitruv.tools
