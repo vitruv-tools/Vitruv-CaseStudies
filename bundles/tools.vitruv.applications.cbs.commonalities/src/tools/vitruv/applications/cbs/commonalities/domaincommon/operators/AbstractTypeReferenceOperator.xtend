@@ -11,7 +11,6 @@ import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
 import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
-import static extension tools.vitruv.dsls.reactions.runtime.helper.ReactionsCorrespondenceHelper.getCorrespondingElements
 
 /**
  * Abstract base class for operators mapping between a domain specific
@@ -191,7 +190,7 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 		assertTrue(domainType !== null)
 		assertTrue(domainType instanceof EObject)
 		// We get the corresponding intermediate type via the correspondence model:
-		val intermediateTypes = correspondenceModel.getCorrespondingElements(domainType as EObject, Intermediate, null).
+		val intermediateTypes = correspondenceModel.getCorrespondingEObjects(domainType as EObject).filter(Intermediate).
 			toList
 		checkState(intermediateTypes.size <= 1, '''Found more than one corresponding intermediate for «
 			participationDomainName» type '«domainType.asString»'!''')
@@ -208,7 +207,7 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 	protected def T getCorrespondingDomainType(Intermediate intermediateType) {
 		assertTrue(intermediateType !== null)
 		// We get the corresponding domain type via the correspondence model:
-		val domainTypes = correspondenceModel.getCorrespondingElements(intermediateType, domainTypeClass, null).toList
+		val domainTypes = correspondenceModel.getCorrespondingEObjects(intermediateType).filter(domainTypeClass).toList
 		checkState(domainTypes.size <= 1, '''Found more than one corresponding «participationDomainName» type for«
 			» intermediate type '«intermediateType»': «domainTypes»''')
 		val domainType = domainTypes.head // can be null
