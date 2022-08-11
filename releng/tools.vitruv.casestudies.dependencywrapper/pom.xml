@@ -8,6 +8,6 @@
         <version>0.3.0-SNAPSHOT</version>
         <relativePath>../tools.vitruv.applications.cbs.parent</relativePath>
     </parent>
-    <artifactId>tools.vitruv.applications.cbs.frameworkwrapper</artifactId>
+    <artifactId>tools.vitruv.casestudies.dependencywrapper</artifactId>
     <packaging>eclipse-plugin</packaging>
 </project>

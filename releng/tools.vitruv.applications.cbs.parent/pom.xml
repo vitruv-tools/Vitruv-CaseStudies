@@ -187,7 +187,7 @@
 						<dependencies>
 							<dependency>
 								<groupId>tools.vitruv</groupId>
-								<artifactId>tools.vitruv.applications.cbs.frameworkwrapper</artifactId>
+								<artifactId>tools.vitruv.casestudies.dependencywrapper</artifactId>
 								<version>0.3.0-SNAPSHOT</version>
 							</dependency>
 							<dependency>
