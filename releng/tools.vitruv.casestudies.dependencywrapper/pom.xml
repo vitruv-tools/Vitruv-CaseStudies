@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>tools.vitruv</groupId>
-        <artifactId>applications-cbs-parent</artifactId>
+        <artifactId>case-studies-parent</artifactId>
         <version>0.3.0-SNAPSHOT</version>
-        <relativePath>../tools.vitruv.applications.cbs.parent</relativePath>
+        <relativePath>../tools.vitruv.casestudies.parent</relativePath>
     </parent>
     <artifactId>tools.vitruv.casestudies.dependencywrapper</artifactId>
     <packaging>eclipse-plugin</packaging>
