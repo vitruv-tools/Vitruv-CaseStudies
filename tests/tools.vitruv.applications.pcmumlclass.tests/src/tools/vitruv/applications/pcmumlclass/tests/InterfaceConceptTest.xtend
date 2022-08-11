@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
 import static extension tools.vitruv.applications.pcmumlclass.tests.UmlQueryUtil.*
-import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 
 /**
  *  This test class tests the reactions and routines are supposed to synchronize a pcm::OperationInterface
@@ -84,7 +83,7 @@ class InterfaceConceptTest extends NewPcmUmlClassApplicationTest {
 			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)
 			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
 		]
-		
+
 		changeUmlView[
 			umlContractsPackage.claimInterface(TEST_INTERFACE_NAME).name = NEW_TEST_INTERFACE_NAME
 		]
@@ -109,13 +108,15 @@ class InterfaceConceptTest extends NewPcmUmlClassApplicationTest {
 			var pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
 			pcmInterface.entityName = TEST_INTERFACE_NAME
 			defaultPcmRepository.interfaces__Repository += pcmInterface
-			assertEquals(TEST_INTERFACE_NAME, (defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
+				"There should be exactly one element in list.")
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
 		]
-		
+
 		changePcmView [
-			assertEquals(1, defaultPcmRepository.interfaces__Repository.size, "There should be exactly one element in list.")
-			(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName = NEW_TEST_INTERFACE_NAME
-			
+			(defaultPcmRepository.interfaces__Repository.
+				get(0) as OperationInterface).entityName = NEW_TEST_INTERFACE_NAME
 		]
 
 		validateUmlAndPcmPackagesView [
@@ -124,7 +125,61 @@ class InterfaceConceptTest extends NewPcmUmlClassApplicationTest {
 
 			assertNotNull(umlContractsPackage.ownedElements)
 			assertNotNull(pcmPackage.eContents)
-			assertEquals(NEW_TEST_INTERFACE_NAME, (defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+			assertEquals(NEW_TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testDeleteInterfaceConcept_UML() {
+		init_UML()
+
+		changeUmlView [
+			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)
+			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
+		]
+
+		changeUmlView[
+			umlContractsPackage.claimInterface(TEST_INTERFACE_NAME).destroy
+		]
+
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertTrue(umlContractsPackage.ownedElements.empty)
+			assertTrue(pcmPackage.eContents.empty)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testDeleteInterfaceConcept_PCM() {
+		init_PCM()
+
+		changePcmView [
+			var pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
+			pcmInterface.entityName = TEST_INTERFACE_NAME
+			defaultPcmRepository.interfaces__Repository += pcmInterface
+			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
+				"There should be exactly one element in list.")
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+		]
+
+		changePcmView [
+			defaultPcmRepository.interfaces__Repository.remove(0)
+		]
+
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertTrue(umlContractsPackage.ownedElements.empty)
+			assertTrue(pcmPackage.eContents.empty)
 
 			assertElementsEqual(umlPackage, pcmPackage)
 		]
