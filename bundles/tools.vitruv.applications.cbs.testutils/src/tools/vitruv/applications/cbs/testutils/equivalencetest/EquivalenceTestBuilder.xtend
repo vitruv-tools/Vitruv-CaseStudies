@@ -1,6 +1,6 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest
 
-import tools.vitruv.testutils.TestView
+import tools.vitruv.testutils.views.TestView
 import java.util.function.Consumer
 import org.junit.jupiter.api.DynamicNode
 import tools.vitruv.testutils.TestUserInteraction

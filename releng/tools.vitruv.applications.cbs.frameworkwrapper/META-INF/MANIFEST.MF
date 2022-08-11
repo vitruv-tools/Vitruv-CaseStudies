@@ -13,5 +13,14 @@ Require-Bundle: tools.vitruv.dsls.reactions,
  tools.vitruv.change.propagation,
  org.eclipse.uml2.uml,
  org.emftext.language.java,
- org.palladiosimulator.pcm
+ org.palladiosimulator.pcm,
+ edu.kit.ipd.sdq.metamodels.families,
+ edu.kit.ipd.sdq.metamodels.insurance,
+ edu.kit.ipd.sdq.metamodels.persons,
+ tools.vitruv.dsls.demo.familiespersons,
+ tools.vitruv.dsls.demo.familiespersons.tests,
+ tools.vitruv.dsls.demo.insurancefamilies,
+ tools.vitruv.dsls.demo.insurancefamilies.tests,
+ tools.vitruv.dsls.demo.insurancepersons,
+ tools.vitruv.dsls.demo.insurancepersons.tests
 Bundle-Vendor: tools.vitruv

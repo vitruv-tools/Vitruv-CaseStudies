@@ -90,7 +90,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
 		uPackageLevel1.destroy
 		propagate
 		
-		renewResourceCache
+		disposeViewResources()
 		assertTrue(resourceAt(Path.of(expectedPackagePath)).contents.empty, "Java package still exists")
 	}
 

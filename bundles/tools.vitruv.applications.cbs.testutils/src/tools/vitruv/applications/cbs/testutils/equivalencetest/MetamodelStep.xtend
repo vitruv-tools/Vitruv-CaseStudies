@@ -3,7 +3,7 @@ package tools.vitruv.applications.cbs.testutils.equivalencetest
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import java.util.function.Consumer
 import org.eclipse.xtend.lib.annotations.Accessors
-import tools.vitruv.testutils.TestView
+import tools.vitruv.testutils.views.TestView
 import java.util.Map
 import java.util.Collection
 import org.eclipse.xtend.lib.annotations.Delegate
