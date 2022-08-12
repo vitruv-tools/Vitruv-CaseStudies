@@ -36,7 +36,7 @@ public final class DefaultLiterals {
 	public static final int USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__SUB_SYSTEM = 2;
 	public static final int USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__NOTHING = 3;
 
-	public static final String USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REQUEST = "This package can correspond to a PCM::Repository or a PCM::System model. Please select the correspondence you want to create:";
+	public static final String USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REQUEST = "This package can correspond to a pcm::Repository or a pcm::System model. Please select the correspondence you want to create:";
 	public static final List<String> USER_DISAMBIGUATE_REPOSITORY_SYSTEM__OPTIONS = Arrays.asList("Repository",
 		"System", "No Correspondence");
 	public static final int USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY = 0;

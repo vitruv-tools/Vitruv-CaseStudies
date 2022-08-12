@@ -1,24 +1,24 @@
-import "http://palladiosimulator.org/PalladioComponentModel/5.2" as PCM
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 concept ComponentBasedSystems
 
 // Externally contained by ComponentBasedSystems:Repository.componentInterfaces
 referenced commonality ComponentInterface {
 
-	// Externally contained by PCM:Repository.interfaces__Repository
-	with PCM:OperationInterface
+	// Externally contained by pcm:Repository.interfaces__Repository
+	with pcm:OperationInterface
 
 	// Externally contained by ObjectOrientedDesign:Package.interfaces
 	with ObjectOrientedDesign:Interface
 
 	has name {
-		= PCM:OperationInterface.entityName
+		= pcm:OperationInterface.entityName
 
 		= ObjectOrientedDesign:Interface.name
 	}
 
 	has operations referencing ComponentBasedSystems:Operation {
-		= PCM:OperationInterface.signatures__OperationInterface
+		= pcm:OperationInterface.signatures__OperationInterface
 
 		= ObjectOrientedDesign:Interface.methods
 	}
