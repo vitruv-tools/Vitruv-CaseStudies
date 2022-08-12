@@ -1,16 +1,16 @@
 import tools.vitruv.applications.cbs.commonalities.java.operators._
 import tools.vitruv.applications.cbs.commonalities.uml.operators._
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as UML
-import "http://www.emftext.org/java" as Java
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
 
 concept ObjectOrientedDesign
 
 // Optionally externally contained by ObjectOrientedDesign:Package.classes
 commonality Class {
 
-	// Optionally externally contained by UML:Package.packagedElement
-	with UML:(Class, single Model, Resource)
+	// Optionally externally contained by uml:Package.packagedElement
+	with uml:(Class, single Model, Resource)
 	whereat {
 		Class in Model,
 		Model in Resource,
@@ -22,10 +22,10 @@ commonality Class {
 		Resource.fileExtension = "uml"
 	}
 
-	// Optionally externally contained by Java:Package.javaPackageCompilationUnits
+	// Optionally externally contained by java:Package.javaPackageCompilationUnits
 	// Note: We only support one classifier per compilation unit currently. Supporting multiple classifiers would
 	// require use to have a separate commonality to represent the CompilationUnit.
-	with Java:(Class, CompilationUnit, Resource)
+	with java:(Class, CompilationUnit, Resource)
 	whereat {
 		Class in CompilationUnit.classifiers,
 		CompilationUnit in Resource,
@@ -34,67 +34,67 @@ commonality Class {
 	}
 
 	has name {
-		= UML:Class.name
+		= uml:Class.name
 
-		= Java:Class.name
+		= java:Class.name
 		// CompilationUnit name schema: '<dot-separated-namespaces>.<name>.java'
-		-> javaCompilationUnitName(Java:CompilationUnit.name, Java:CompilationUnit)
-		-> Java:Resource.name
+		-> javaCompilationUnitName(java:CompilationUnit.name, java:CompilationUnit)
+		-> java:Resource.name
 	}
 
 	has visibility {
-		= umlVisibility(UML:Class.visibility)
+		= umlVisibility(uml:Class.visibility)
 
-		= javaVisibility(Java:Class.annotationsAndModifiers, Java:Class)
+		= javaVisibility(java:Class.annotationsAndModifiers, java:Class)
 	}
 
 	has final {
-		= UML:Class.isFinalSpecialization
+		= uml:Class.isFinalSpecialization
 
-		= javaFinalModifier(Java:Class.annotationsAndModifiers, Java:Class)
+		= javaFinalModifier(java:Class.annotationsAndModifiers, java:Class)
 	}
 
 	has abstract {
-		= UML:Class.isAbstract
+		= uml:Class.isAbstract
 
-		= javaAbstractModifier(Java:Class.annotationsAndModifiers, Java:Class)
+		= javaAbstractModifier(java:Class.annotationsAndModifiers, java:Class)
 	}
 
 	// Note: No 'static' attribute, since UML has no equivalent to represent this.
 
 	has superClass {
 		// TODO We do no react to changes of the 'general' reference currently.
-		= umlSingleGeneralization(UML:Class.generalization, "ObjectOrientedDesign")
+		= umlSingleGeneralization(uml:Class.generalization, "ObjectOrientedDesign")
 
-		= javaTypeReferenceOrNull(Java:Class.^extends, "ObjectOrientedDesign")
+		= javaTypeReferenceOrNull(java:Class.^extends, "ObjectOrientedDesign")
 	}
 
 	has implementedInterfaces {
 		// TODO We do no react to changes of the 'contract' reference currently.
-		= umlInterfaceRealizations(UML:Class.interfaceRealization, "ObjectOrientedDesign")
+		= umlInterfaceRealizations(uml:Class.interfaceRealization, "ObjectOrientedDesign")
 
-		= javaTypeReferences(Java:Class.implements, "ObjectOrientedDesign")
+		= javaTypeReferences(java:Class.implements, "ObjectOrientedDesign")
 	}
 
 	has properties referencing ObjectOrientedDesign:Property {
-		= UML:Class.ownedAttribute
+		= uml:Class.ownedAttribute
 
-		// Note: Any elements that are not of type Java:Field are implicitly ignored.
-		= Java:Class.members
+		// Note: Any elements that are not of type java:Field are implicitly ignored.
+		= java:Class.members
 	}
 
 	has constructors referencing ObjectOrientedDesign:Constructor {
 		// Note: The participation conditions ensure that we only match constructor operations.
-		= UML:Class.ownedOperation
+		= uml:Class.ownedOperation
 
-		// Note: Any elements that are not of type Java:Constructor are implicitly ignored.
-		= Java:Class.members
+		// Note: Any elements that are not of type java:Constructor are implicitly ignored.
+		= java:Class.members
 	}
 
 	has methods referencing ObjectOrientedDesign:ClassMethod {
-		= UML:Class.ownedOperation
+		= uml:Class.ownedOperation
 
-		// Note: Any elements that are not of type Java:ClassMethod are implicitly ignored.
-		= Java:Class.members
+		// Note: Any elements that are not of type java:ClassMethod are implicitly ignored.
+		= java:Class.members
 	}
 }

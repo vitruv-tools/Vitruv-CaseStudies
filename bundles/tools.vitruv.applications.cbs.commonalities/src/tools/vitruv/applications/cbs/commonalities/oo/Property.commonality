@@ -1,53 +1,53 @@
 import tools.vitruv.applications.cbs.commonalities.java.operators._
 import tools.vitruv.applications.cbs.commonalities.uml.operators._
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as UML
-import "http://www.emftext.org/java" as Java
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
 
 concept ObjectOrientedDesign
 
 // Externally contained by ObjectOrientedDesign:Class.properties
 referenced commonality Property {
 
-	// Externally contained by UML:Class.ownedAttribute
-	with UML:Property
+	// Externally contained by uml:Class.ownedAttribute
+	with uml:Property
 	whereat {
 		// TODO We only support single-valued properties currently.
 		-> Property.lower = 1,
 		-> Property.upper = 1
 	}
 
-	// Externally contained by Java:Class.members
-	with Java:Field
+	// Externally contained by java:Class.members
+	with java:Field
 
 	has name {
-		= UML:Property.name
+		= uml:Property.name
 
-		= Java:Field.name
+		= java:Field.name
 	}
 
 	has visibility {
-		= umlVisibility(UML:Property.visibility)
+		= umlVisibility(uml:Property.visibility)
 
-		= javaVisibility(Java:Field.annotationsAndModifiers, Java:Field)
+		= javaVisibility(java:Field.annotationsAndModifiers, java:Field)
 	}
 
 	has ^static {
-		= UML:Property.isStatic
+		= uml:Property.isStatic
 
-		= javaStaticModifier(Java:Field.annotationsAndModifiers, Java:Field)
+		= javaStaticModifier(java:Field.annotationsAndModifiers, java:Field)
 	}
 
 	has final {
-		= UML:Property.isReadOnly
+		= uml:Property.isReadOnly
 
-		= javaFinalModifier(Java:Field.annotationsAndModifiers, Java:Field)
+		= javaFinalModifier(java:Field.annotationsAndModifiers, java:Field)
 	}
 
 	has type {
-		= umlTypeReference(UML:Property.type, "ObjectOrientedDesign")
+		= umlTypeReference(uml:Property.type, "ObjectOrientedDesign")
 
-		= javaTypeReference(Java:Field.typeReference, "ObjectOrientedDesign")
+		= javaTypeReference(java:Field.typeReference, "ObjectOrientedDesign")
 	}
 
 	// TODO multiplicity, i.e. multi-valued vs single-valued

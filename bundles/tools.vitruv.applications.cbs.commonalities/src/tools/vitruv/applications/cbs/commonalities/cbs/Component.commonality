@@ -2,15 +2,15 @@ import tools.vitruv.applications.cbs.commonalities.domaincommon.operators._
 import tools.vitruv.applications.cbs.commonalities.oo.operators._
 import tools.vitruv.applications.cbs.commonalities.pcm.operators._
 
-import "http://palladiosimulator.org/PalladioComponentModel/5.2" as PCM
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 concept ComponentBasedSystems
 
 // Externally contained by ComponentBasedSystems:Repository.components
 referenced commonality Component {
 
-	// Externally contained by PCM:Repository.components__Repository
-	with PCM:BasicComponent
+	// Externally contained by pcm:Repository.components__Repository
+	with pcm:BasicComponent
 
 	// Contained by ObjectOrientedDesign:RepositoryPackage.subPackages
 	with ObjectOrientedDesign:(
@@ -26,7 +26,7 @@ referenced commonality Component {
 	}
 
 	has name {
-		= PCM:BasicComponent.entityName
+		= pcm:BasicComponent.entityName
 
 		= prefix(ObjectOrientedDesign:ComponentClass.name, "Impl")
 		-> firstUpper(ObjectOrientedDesign:ComponentPackage.name)
@@ -34,7 +34,7 @@ referenced commonality Component {
 
 	has providedRoles {
 		// TODO We do not react to changes of the interfaces provided by these ProvidedRoles currently.
-		= pcmProvidedRoles(PCM:BasicComponent.providedRoles_InterfaceProvidingEntity, "ComponentBasedSystems")
+		= pcmProvidedRoles(pcm:BasicComponent.providedRoles_InterfaceProvidingEntity, "ComponentBasedSystems")
 
 		= ooTypeReferences(ObjectOrientedDesign:ComponentClass.implementedInterfaces, "ComponentBasedSystems")
 	}
