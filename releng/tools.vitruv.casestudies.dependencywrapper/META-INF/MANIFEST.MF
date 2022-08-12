@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: tools.vitruv.applications.cbs.frameworkwrapper
-Bundle-SymbolicName: tools.vitruv.applications.cbs.frameworkwrapper
-Automatic-Module-Name: tools.vitruv.applications.cbs.frameworkwrapper
+Bundle-Name: tools.vitruv.casestudies.dependencywrapper
+Bundle-SymbolicName: tools.vitruv.casestudies.dependencywrapper
+Automatic-Module-Name: tools.vitruv.casestudies.dependencywrapper
 Bundle-Version: 0.3.0.qualifier
 Require-Bundle: tools.vitruv.dsls.reactions,
  tools.vitruv.dsls.common,
