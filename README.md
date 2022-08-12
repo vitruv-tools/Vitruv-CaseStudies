@@ -6,7 +6,7 @@
 [Vitruv](https://vitruv.tools) is a framework for view-based software development. It assumes different models to be used for describing a software system,
 which are automatically kept consistent by the framework and its applications. For general information on Vitruv, see our [GitHub Organisation](https://github.com/vitruv-tools) and our [Wiki](https://github.com/vitruv-tools/.github/wiki).
 
-This project contains case studies, in particular an application of the Vitruv framework in the domain of component-based systems engineering. It provides functionality for creating views on Java code, UML models and PCM models ([Palladio component models](https://github.com/palladiosimulator)) and for preserving consistency between such models. In addition, it provides tests cases for demo applications based on the simple [families, persons and insurance metamodels](https://github.com/kit-sdq/DemoMetamodels) defined in the [DSLs repository](https://github.com/vitruv-tools/Vitruv-DSLs).
+This project contains case studies, in particular an application of the Vitruv framework in the domain of component-based systems engineering. It provides functionality for creating views on Java code, UML models and PCM models ([Palladio component models](https://github.com/palladiosimulator)) and for preserving consistency between such models. In addition, it provides test cases for demo applications based on the simple [families, persons and insurance metamodels](https://github.com/kit-sdq/DemoMetamodels) defined in the [DSLs repository](https://github.com/vitruv-tools/Vitruv-DSLs).
 
 ## Installation
 
