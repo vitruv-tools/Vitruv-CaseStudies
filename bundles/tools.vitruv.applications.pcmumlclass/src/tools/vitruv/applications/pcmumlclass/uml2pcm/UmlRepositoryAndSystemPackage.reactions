@@ -104,7 +104,7 @@ routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package um
 	}
 	update {
 		if (foundRepository.isPresent) {
-			ensureFirstCaseUpperCaseRepositoryNaming(foundRepository.get, umlPkg)
+			ensureFirstCaseUpperCase(foundRepository.get, umlPkg)
 			addRepositoryCorrespondence(foundRepository.get, umlPkg)
 		} else {
 			createCorrespondingRepository(umlPkg, umlParentPkg)
@@ -112,12 +112,12 @@ routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package um
 	}
 }
 
-routine ensureFirstCaseUpperCaseRepositoryNaming(pcm::Repository pcmRepository, uml::Package umlPackage) {
+routine ensureFirstCaseUpperCase(pcm::NamedElement pcmElement, uml::Package umlPackage) {
 	match {
-		check pcmRepository.entityName == umlPackage.name
+		check pcmElement.entityName != umlPackage.name
 	}
 	update {
-		pcmRepository.entityName = umlPackage.name.toFirstUpper
+		pcmElement.entityName = umlPackage.name.toFirstUpper
 	}
 }
 
@@ -169,6 +169,7 @@ routine createOrFindCorrespondingSystem(uml::Package umlPkg, uml::Package umlPar
 	}
 	update {
 		if (foundSystem.isPresent) {
+			ensureFirstCaseUpperCase(foundSystem.get, umlPkg)
 			addSystemCorrespondence(foundSystem.get, umlPkg)
 		} else {
 			createCorrespondingSystem(umlPkg, umlParentPkg)
