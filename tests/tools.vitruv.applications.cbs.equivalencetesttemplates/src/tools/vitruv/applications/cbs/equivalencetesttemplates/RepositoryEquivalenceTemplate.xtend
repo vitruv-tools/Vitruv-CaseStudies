@@ -1,18 +1,19 @@
 package tools.vitruv.applications.cbs.equivalencetesttemplates
 
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.TestFactory
-import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder
-import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
-import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
-import static extension tools.vitruv.applications.cbs.testutils.UmlCreators.*
-import org.palladiosimulator.pcm.repository.Repository
-import org.emftext.language.java.containers.Package
-import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
 import org.eclipse.uml2.uml.Model
-import org.junit.jupiter.api.TestMethodOrder
+import org.emftext.language.java.containers.Package
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.TestMethodOrder
+import org.palladiosimulator.pcm.repository.Repository
+import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder
+import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
+
+import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
+import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
+import static extension tools.vitruv.applications.cbs.testutils.UmlCreators.*
 
 @TestMethodOrder(OrderAnnotation)
 @InheritableDisplayName("repositories")

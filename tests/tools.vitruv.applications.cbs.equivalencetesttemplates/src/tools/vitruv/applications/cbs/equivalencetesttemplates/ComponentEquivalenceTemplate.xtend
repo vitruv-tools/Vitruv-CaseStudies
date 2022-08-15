@@ -1,15 +1,17 @@
 package tools.vitruv.applications.cbs.equivalencetesttemplates
 
+import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.containers.Package
+import org.emftext.language.java.modifiers.ModifiersFactory
 import org.junit.jupiter.api.TestFactory
-import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
-import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
-import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.CompositeComponent
+import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.cbs.testutils.equivalencetest.ParameterizedEquivalenceTestBuilder
-import org.emftext.language.java.containers.Package
-import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
+
+import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
+import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
 
 @InheritableDisplayName("components")
 abstract class ComponentEquivalenceTemplate {
@@ -55,6 +57,11 @@ abstract class ComponentEquivalenceTemplate {
 						classifiers += java.classifiers.Class => [
 							name = 'TestComponentImpl'
 							makePublic()
+							addModifier(ModifiersFactory.eINSTANCE.createFinal)
+							members += java.members.Constructor => [
+								name = 'TestComponentImpl'
+								makePublic()
+							]
 						]
 					]
 				]
@@ -78,6 +85,11 @@ abstract class ComponentEquivalenceTemplate {
 						classifiers += java.classifiers.Class => [
 							name = 'TestComponentImpl'
 							makePublic()
+							addModifier(ModifiersFactory.eINSTANCE.createFinal)
+							members += java.members.Constructor => [
+								name = 'TestComponentImpl'
+								makePublic()
+							]
 						]
 					]
 				]
@@ -111,7 +123,10 @@ abstract class ComponentEquivalenceTemplate {
 					moveTo('src/test/renamedComponent/RenamedComponentImpl'.java)
 					CompilationUnit.from(it) => [
 						namespaces.set(1, 'renamedComponent')
-						name = 'RenamedComponentImpl'
+						classifiers.get(0) => [
+							name = 'RenamedComponentImpl'
+							members.get(0).name = 'RenamedComponentImpl'
+						]
 					]
 				]
 			]

@@ -1,13 +1,15 @@
 package tools.vitruv.applications.cbs.equivalencetesttemplates
 
-import org.junit.jupiter.api.TestFactory
-import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
-import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
-import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder
-import org.palladiosimulator.pcm.system.System
-import org.emftext.language.java.containers.Package
 import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.containers.Package
+import org.emftext.language.java.modifiers.ModifiersFactory
+import org.junit.jupiter.api.TestFactory
+import org.palladiosimulator.pcm.system.System
+import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder
 import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
+
+import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
+import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
 
 @InheritableDisplayName("systems")
 abstract class SystemEquivalenceTemplate {
@@ -43,6 +45,11 @@ abstract class SystemEquivalenceTemplate {
 					classifiers += java.classifiers.Class => [
 						name = 'TestImpl'
 						makePublic()
+						addModifier(ModifiersFactory.eINSTANCE.createFinal)
+						members += java.members.Constructor => [
+							name = 'TestImpl'
+							makePublic()
+						]
 					]
 				]
 			]
@@ -63,6 +70,11 @@ abstract class SystemEquivalenceTemplate {
 					classifiers += java.classifiers.Class => [
 						name = 'TestImpl'
 						makePublic()
+						addModifier(ModifiersFactory.eINSTANCE.createFinal)
+						members += java.members.Constructor => [
+							name = 'TestImpl'
+							makePublic()
+						]
 					]
 				]
 			]
@@ -93,7 +105,10 @@ abstract class SystemEquivalenceTemplate {
 				moveTo('src/renamed/RenamedImpl'.java)
 				CompilationUnit.from(it) => [
 					namespaces.set(0, 'renamed')
-					classifiers.get(0).name = 'RenamedImpl'
+					classifiers.get(0) => [
+						name = 'RenamedImpl'
+						members.get(0).name = 'RenamedImpl'
+					]
 				]
 			]
 		]
