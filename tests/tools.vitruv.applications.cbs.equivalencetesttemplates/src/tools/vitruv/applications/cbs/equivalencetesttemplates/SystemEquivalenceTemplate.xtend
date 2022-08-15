@@ -11,12 +11,9 @@ import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
 
 @InheritableDisplayName("systems")
 abstract class SystemEquivalenceTemplate {
-	abstract protected def RepositoryEquivalenceTemplate getRepository()
 
 	@TestFactory
 	def creation(extension EquivalenceTestBuilder builder) {
-		dependsOn[repository.creation(it)]
-
 		stepFor(pcm.metamodel) [ extension view |
 			resourceAt('model/Test'.system).propagate [
 				contents += pcm.system.System => [
@@ -34,7 +31,6 @@ abstract class SystemEquivalenceTemplate {
 		]
 
 		stepFor(java.metamodel) [ extension view |
-			userInteraction.addNextSingleSelection(2 /* create a System */ )
 			resourceAt('src/test/package-info'.java).propagate [
 				contents += java.containers.Package => [
 					name = 'test'
@@ -53,7 +49,6 @@ abstract class SystemEquivalenceTemplate {
 		]
 
 		inputVariantFor(java.metamodel, 'creating only a package') [ extension view |
-			userInteraction.addNextSingleSelection(2 /* create a System */ )
 			resourceAt('src/test/package-info'.java).propagate [
 				contents += java.containers.Package => [
 					name = 'test'
@@ -62,7 +57,6 @@ abstract class SystemEquivalenceTemplate {
 		].alsoCompareToMainStepOfSameMetamodel()
 
 		inputVariantFor(java.metamodel, 'creating only a class') [ extension view |
-			userInteraction.addNextSingleSelection(2 /* create a System */ )
 			resourceAt('src/test/TestImpl'.java).propagate [
 				contents += java.containers.CompilationUnit => [
 					namespaces += #['test']
