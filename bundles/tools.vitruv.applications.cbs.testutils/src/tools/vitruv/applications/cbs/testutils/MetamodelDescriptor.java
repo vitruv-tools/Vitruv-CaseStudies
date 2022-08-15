@@ -14,7 +14,10 @@ public class MetamodelDescriptor {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return fileExtensions.equals(fileExtensions);
+		if (obj instanceof MetamodelDescriptor) {
+			return fileExtensions.equals(((MetamodelDescriptor)obj).fileExtensions);
+		}
+		return false;
 	}
 	
 	@Override
