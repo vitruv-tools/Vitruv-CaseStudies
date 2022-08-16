@@ -20,7 +20,6 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.junit.jupiter.api.function.Executable
-import org.opentest4j.TestAbortedException
 import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.change.propagation.ChangePropagationSpecification
@@ -100,7 +99,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		newBasicView(testProjectManager.getProject("", extensionContext))
 	}
 
-	def private executeDependencies(TestView testView, TestView referenceView) throws TestAbortedException {
+	def private executeDependencies(TestView testView, TestView referenceView) {
 		for (dependencyTestStep : dependencySteps.getOrDefault(testStep.targetMetamodel, emptyList)) {
 			dependencyTestStep.executeIn(testView)
 		}
