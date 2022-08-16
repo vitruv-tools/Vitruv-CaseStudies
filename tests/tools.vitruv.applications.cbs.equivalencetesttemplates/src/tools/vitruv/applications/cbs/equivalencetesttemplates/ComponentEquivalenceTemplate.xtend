@@ -84,24 +84,6 @@ abstract class ComponentEquivalenceTemplate {
 					]
 				]
 			].alsoCompareToMainStepOfSameMetamodel()
-
-			inputVariantFor(java.metamodel, 'creating only a class') [ extension view |
-				userInteraction.addNextSingleSelection(componentTypeChoice /* create appropriate Component */ )
-				resourceAt('src/test/testComponent/TestComponentImpl'.java).propagate [
-					contents += java.containers.CompilationUnit => [
-						namespaces += #['test', 'testComponent']
-						classifiers += java.classifiers.Class => [
-							name = 'TestComponentImpl'
-							makePublic()
-							addModifier(ModifiersFactory.eINSTANCE.createFinal)
-							members += java.members.Constructor => [
-								name = 'TestComponentImpl'
-								makePublic()
-							]
-						]
-					]
-				]
-			].alsoCompareToMainStepOfSameMetamodel()
 		]
 	}
 

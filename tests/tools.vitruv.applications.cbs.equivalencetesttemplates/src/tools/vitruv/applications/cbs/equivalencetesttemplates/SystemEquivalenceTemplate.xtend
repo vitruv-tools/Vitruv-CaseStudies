@@ -70,23 +70,6 @@ abstract class SystemEquivalenceTemplate {
 			]
 		].alsoCompareToMainStepOfSameMetamodel()
 
-		inputVariantFor(java.metamodel, 'creating only a class') [ extension view |
-			resourceAt('src/test/TestImpl'.java).propagate [
-				contents += java.containers.CompilationUnit => [
-					namespaces += #['test']
-					classifiers += java.classifiers.Class => [
-						name = 'TestImpl'
-						makePublic()
-						addModifier(ModifiersFactory.eINSTANCE.createFinal)
-						members += java.members.Constructor => [
-							name = 'TestImpl'
-							makePublic()
-						]
-					]
-				]
-			]
-		].alsoCompareToMainStepOfSameMetamodel()
-
 		return testsThatStepsAreEquivalent
 	}
 
