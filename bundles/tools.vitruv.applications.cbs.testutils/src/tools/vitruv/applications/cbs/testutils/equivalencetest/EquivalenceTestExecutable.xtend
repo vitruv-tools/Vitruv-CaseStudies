@@ -5,12 +5,14 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.Collection
+import java.util.HashSet
 import java.util.LinkedHashSet
 import java.util.List
 import java.util.Map
 import java.util.Optional
 import java.util.Set
 import java.util.function.Predicate
+import org.eclipse.emf.common.notify.Notifier
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -33,6 +35,7 @@ import tools.vitruv.testutils.printing.PrintIdProvider
 import tools.vitruv.testutils.printing.UriReplacingPrinter
 import tools.vitruv.testutils.views.BasicTestView
 import tools.vitruv.testutils.views.ChangePublishingTestView
+import tools.vitruv.testutils.views.NonTransactionalTestView
 import tools.vitruv.testutils.views.TestView
 import tools.vitruv.testutils.views.UriMode
 
@@ -102,7 +105,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		newBasicView(testProjectManager.getProject("", extensionContext))
 	}
 
-	def private executeDependencies(TestView testView, TestView referenceView) throws TestAbortedException {
+	def private executeDependencies(NonTransactionalTestView testView, NonTransactionalTestView referenceView) throws TestAbortedException {
 		for (dependencyTestStep : dependencySteps.getOrDefault(testStep.targetMetamodel, emptyList)) {
 			dependencyTestStep.executeIn(testView)
 		}
@@ -192,13 +195,13 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	}
 
 	def private newBasicView(Path viewDirectory) {
-		new DirectoryTestView(new BasicTestView(viewDirectory, uriMode), viewDirectory)
+		new DirectoryTestView(new NonTransactionalBasicTestView(viewDirectory, uriMode), viewDirectory)
 	}
 
 	@FinalFieldsConstructor
-	private static class DirectoryTestView implements TestView {
+	private static class DirectoryTestView implements NonTransactionalTestView {
 		@Delegate
-		val TestView delegate
+		val NonTransactionalTestView delegate
 		@Accessors
 		val Path directory
 	}
@@ -245,5 +248,44 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 					appendModelValueSet(unexpectedResources, MULTI_LINE_LIST, idProvider)
 			}
 		}
+	}
+	
+	/**
+	 * A class to allow modifications to multiple resources in one test step.
+	 * This class is only meant as a workaround. For further development, the entire 
+	 * resource access in the tests should be refactored to use @{link tools.vitruv.framework.views.View Views}.
+	 */
+	private static class NonTransactionalBasicTestView extends BasicTestView implements NonTransactionalTestView {
+		var changedNotifiers = new HashSet<Notifier>()
+		
+		new(Path persistenceDirectory, UriMode uriMode) {
+			super(persistenceDirectory, uriMode)
+		}
+		
+		override propagate() {
+			for (notifier : changedNotifiers) {
+				notifier.propagate []
+			}
+			changedNotifiers.clear
+			return emptyList
+		}
+		
+		override <T extends Notifier> startRecordingChanges(T notifier) {
+			changedNotifiers.add(notifier)
+			return notifier
+		}
+		
+		override <T extends Notifier> stopRecordingChanges(T notifier) {
+			return notifier
+		}
+		
+		override disposeViewResources() {
+			throw new UnsupportedOperationException("view lifecycle operations are not supported for this specific test view")
+		}
+		
+		override setDisposeViewResourcesAfterPropagation(boolean enabled) {
+			throw new UnsupportedOperationException("view lifecycle operations are not supported for this specific test view")
+		}
+		
 	}
 }

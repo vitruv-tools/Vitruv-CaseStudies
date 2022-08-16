@@ -1,19 +1,19 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest
 
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import java.util.Collection
+import java.util.Map
 import java.util.function.Consumer
 import org.eclipse.xtend.lib.annotations.Accessors
-import tools.vitruv.testutils.views.TestView
-import java.util.Map
-import java.util.Collection
 import org.eclipse.xtend.lib.annotations.Delegate
-import tools.vitruv.testutils.TestUserInteraction
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
+import tools.vitruv.testutils.TestUserInteraction
+import tools.vitruv.testutils.views.NonTransactionalTestView
 
 package interface MetamodelStep {
 	def MetamodelDescriptor getTargetMetamodel()
 
-	def void executeIn(TestView testView)
+	def void executeIn(NonTransactionalTestView testView)
 
 	def String getName()
 
@@ -25,9 +25,9 @@ package interface MetamodelStep {
 package class MainStep implements MetamodelStep {
 	@Accessors
 	val MetamodelDescriptor targetMetamodel
-	val Consumer<TestView> action
+	val Consumer<NonTransactionalTestView> action
 
-	override executeIn(TestView testView) {
+	override executeIn(NonTransactionalTestView testView) {
 		action.accept(testView)
 	}
 
@@ -43,12 +43,12 @@ package class MainStep implements MetamodelStep {
 package class VariantStep implements MetamodelStep, EquivalenceTestBuilder.VariantOptions {
 	@Accessors
 	val MetamodelDescriptor targetMetamodel
-	val Consumer<TestView> action
+	val Consumer<NonTransactionalTestView> action
 	@Accessors
 	val String name
 	var includeSameMetamodel = false
 
-	override executeIn(TestView testView) {
+	override executeIn(NonTransactionalTestView testView) {
 		action.accept(testView)
 	}
 
@@ -73,7 +73,7 @@ package class StepWithUserInteractionSetup implements MetamodelStep {
 	@Delegate val MetamodelStep delegate
 	val (TestUserInteraction)=>void userInteractionSetup
 
-	override executeIn(TestView testView) {
+	override executeIn(NonTransactionalTestView testView) {
 		userInteractionSetup.apply(testView.userInteraction)
 		delegate.executeIn(testView)
 		testView.userInteraction.clearResponses()
