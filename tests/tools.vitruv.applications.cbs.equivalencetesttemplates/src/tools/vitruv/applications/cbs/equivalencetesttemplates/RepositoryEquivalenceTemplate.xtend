@@ -39,47 +39,67 @@ abstract class RepositoryEquivalenceTemplate {
 		]
 
 		stepFor(java.metamodel) [ extension view |
-			resourceAt('src/test/package-info'.java).propagate [
+			val mainPackageResource = resourceAt('src/test/package-info'.java)
+			mainPackageResource.startRecordingChanges
+			mainPackageResource => [
 				contents += java.containers.Package => [
 					name = 'test'
 				]
 			]
+			mainPackageResource.stopRecordingChanges
 
-			resourceAt('src/test/contracts/package-info'.java).propagate [
+			val contractsPackageResource = resourceAt('src/test/contracts/package-info'.java)
+			contractsPackageResource.startRecordingChanges
+			contractsPackageResource => [
 				contents += java.containers.Package => [
 					name = 'contracts'
 					namespaces += #['test']
 				]
 			]
+			contractsPackageResource.stopRecordingChanges
 
-			resourceAt('src/test/datatypes/package-info'.java).propagate [
+			val datatypesPackageResource = resourceAt('src/test/datatypes/package-info'.java)
+			datatypesPackageResource.startRecordingChanges
+			datatypesPackageResource => [
 				contents += java.containers.Package => [
 					name = 'datatypes'
 					namespaces += #['test']
 				]
 			]
+			datatypesPackageResource.stopRecordingChanges
+			propagate
 		]
 
 		inputVariantFor(java.metamodel, 'uppercase package name') [ extension view |
-			resourceAt('src/Test/package-info'.java).propagate [
+			val mainPackageResource = resourceAt('src/Test/package-info'.java)
+			mainPackageResource.startRecordingChanges
+			mainPackageResource => [
 				contents += java.containers.Package => [
 					name = 'Test'
 				]
 			]
+			mainPackageResource.stopRecordingChanges
 
-			resourceAt('src/Test/contracts/package-info'.java).propagate [
+			val contractsPackageResource = resourceAt('src/Test/contracts/package-info'.java)
+			contractsPackageResource.startRecordingChanges
+			contractsPackageResource => [
 				contents += java.containers.Package => [
 					name = 'contracts'
 					namespaces += #['Test']
 				]
 			]
+			contractsPackageResource.stopRecordingChanges
 
-			resourceAt('src/Test/datatypes/package-info'.java).propagate [
+			val datatypesPackageResource = resourceAt('src/Test/datatypes/package-info'.java)
+			datatypesPackageResource.startRecordingChanges
+			datatypesPackageResource => [
 				contents += java.containers.Package => [
 					name = 'datatypes'
 					namespaces += #['Test']
 				]
 			]
+			datatypesPackageResource.stopRecordingChanges
+			propagate
 		]
 
 		inputVariantFor(java.metamodel, 'creating only Java root package') [ extension view |

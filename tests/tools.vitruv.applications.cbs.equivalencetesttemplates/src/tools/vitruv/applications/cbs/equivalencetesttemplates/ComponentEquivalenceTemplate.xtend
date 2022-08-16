@@ -44,14 +44,20 @@ abstract class ComponentEquivalenceTemplate {
 
 			stepFor(java.metamodel) [ extension view |
 				userInteraction.addNextSingleSelection(componentTypeChoice /* create appropriate Component */ )
-				resourceAt('src/test/testComponent/package-info'.java).propagate [
+
+				val packageResource = resourceAt('src/test/testComponent/package-info'.java)
+				packageResource.startRecordingChanges
+				packageResource => [
 					contents += java.containers.Package => [
 						namespaces += 'test'
 						name = 'testComponent'
 					]
 				]
+				packageResource.stopRecordingChanges
 
-				resourceAt('src/test/testComponent/TestComponentImpl'.java).propagate [
+				val compilationUnitResource = resourceAt('src/test/testComponent/TestComponentImpl'.java)
+				compilationUnitResource.startRecordingChanges
+				compilationUnitResource => [
 					contents += java.containers.CompilationUnit => [
 						namespaces += #['test', 'testComponent']
 						classifiers += java.classifiers.Class => [
@@ -65,6 +71,8 @@ abstract class ComponentEquivalenceTemplate {
 						]
 					]
 				]
+				compilationUnitResource.stopRecordingChanges
+				propagate
 			]
 
 			inputVariantFor(java.metamodel, 'creating only a package') [ extension view |
@@ -114,12 +122,17 @@ abstract class ComponentEquivalenceTemplate {
 			]
 
 			stepFor(java.metamodel) [ extension view |
-				resourceAt('src/test/testComponent/package-info'.java).propagate [
+				val packageResource = resourceAt('src/test/testComponent/package-info'.java)
+				packageResource.startRecordingChanges
+				packageResource => [
 					moveTo('src/test/renamedComponent/package-info'.java)
 					Package.from(it).name = 'renamedComponent'
 				]
+				packageResource.stopRecordingChanges
 
-				resourceAt('src/test/testComponent/TestComponentImpl'.java).propagate [
+				val compilationUnitResource = resourceAt('src/test/testComponent/TestComponentImpl'.java)
+				compilationUnitResource.startRecordingChanges
+				compilationUnitResource => [
 					moveTo('src/test/renamedComponent/RenamedComponentImpl'.java)
 					CompilationUnit.from(it) => [
 						namespaces.set(1, 'renamedComponent')
@@ -129,6 +142,8 @@ abstract class ComponentEquivalenceTemplate {
 						]
 					]
 				]
+				compilationUnitResource.stopRecordingChanges
+				propagate
 			]
 		]
 	}

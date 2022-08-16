@@ -33,13 +33,18 @@ abstract class SystemEquivalenceTemplate {
 		]
 
 		stepFor(java.metamodel) [ extension view |
-			resourceAt('src/test/package-info'.java).propagate [
+			val packageResource = resourceAt('src/test/package-info'.java)
+			packageResource.startRecordingChanges
+			packageResource => [
 				contents += java.containers.Package => [
 					name = 'test'
 				]
 			]
+			packageResource.stopRecordingChanges
 
-			resourceAt('src/test/TestImpl'.java).propagate [
+			val compilationUnitResource = resourceAt('src/test/TestImpl'.java)
+			compilationUnitResource.startRecordingChanges
+			compilationUnitResource => [
 				contents += java.containers.CompilationUnit => [
 					namespaces += #['test']
 					classifiers += java.classifiers.Class => [
@@ -53,6 +58,8 @@ abstract class SystemEquivalenceTemplate {
 					]
 				]
 			]
+			compilationUnitResource.stopRecordingChanges
+			propagate
 		]
 
 		inputVariantFor(java.metamodel, 'creating only a package') [ extension view |
@@ -96,12 +103,17 @@ abstract class SystemEquivalenceTemplate {
 		]
 
 		stepFor(java.metamodel) [ extension view |
-			resourceAt('src/test/package-info'.java).propagate [
+			val packageResource = resourceAt('src/test/package-info'.java)
+			packageResource.startRecordingChanges
+			packageResource => [
 				moveTo('src/renamed/package-info'.java)
 				Package.from(it).name = 'renamed'
 			]
+			packageResource.stopRecordingChanges
 
-			resourceAt('src/test/TestImpl'.java).propagate [
+			val compilationUnitResource = resourceAt('src/test/TestImpl'.java)
+			compilationUnitResource.startRecordingChanges
+			compilationUnitResource => [
 				moveTo('src/renamed/RenamedImpl'.java)
 				CompilationUnit.from(it) => [
 					namespaces.set(0, 'renamed')
@@ -111,6 +123,8 @@ abstract class SystemEquivalenceTemplate {
 					]
 				]
 			]
+			compilationUnitResource.stopRecordingChanges
+			propagate
 		]
 
 		return testsThatStepsAreEquivalent
