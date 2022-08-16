@@ -42,7 +42,10 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static com.google.common.base.Preconditions.checkNotNull
 import static extension tools.vitruv.change.atomic.id.ObjectResolutionUtil.getHierarchicUriFragment
 import org.eclipse.emf.ecore.EStructuralFeature
+import org.junit.jupiter.api.^extension.ExtendWith
+import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 
+@ExtendWith(RegisterMetamodelsInStandalone)
 abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
 		return #[
