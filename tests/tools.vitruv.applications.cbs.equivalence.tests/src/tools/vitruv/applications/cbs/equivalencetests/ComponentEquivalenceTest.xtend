@@ -48,34 +48,31 @@ class ComponentEquivalenceTest {
 			stepFor(java.metamodel) [ extension view |
 				userInteraction.addNextSingleSelection(componentTypeChoice /* create appropriate Component */ )
 
-				val packageResource = resourceAt('src/test/testComponent/package-info'.java)
-				packageResource.startRecordingChanges
-				packageResource => [
+				resourceAt('src/test/testComponent/package-info'.java).propagate [
 					contents += java.containers.Package => [
 						namespaces += 'test'
 						name = 'testComponent'
 					]
 				]
-				packageResource.stopRecordingChanges
 
-				val compilationUnitResource = resourceAt('src/test/testComponent/TestComponentImpl'.java)
-				compilationUnitResource.startRecordingChanges
-				compilationUnitResource => [
-					contents += java.containers.CompilationUnit => [
-						namespaces += #['test', 'testComponent']
-						classifiers += java.classifiers.Class => [
-							name = 'TestComponentImpl'
-							makePublic()
-							addModifier(ModifiersFactory.eINSTANCE.createFinal)
-							members += java.members.Constructor => [
-								name = 'TestComponentImpl'
-								makePublic()
+				resourceAt('src/test/testComponent/TestComponentImpl'.java) => [
+					if (contents.empty) {
+						propagate [
+							contents += java.containers.CompilationUnit => [
+								namespaces += #['test', 'testComponent']
+								classifiers += java.classifiers.Class => [
+									name = 'TestComponentImpl'
+									makePublic()
+									addModifier(ModifiersFactory.eINSTANCE.createFinal)
+									members += java.members.Constructor => [
+										name = 'TestComponentImpl'
+										makePublic()
+									]
+								]
 							]
 						]
-					]
+					}
 				]
-				compilationUnitResource.stopRecordingChanges
-				propagate
 			]
 
 			inputVariantFor(java.metamodel, 'creating only a package') [ extension view |
@@ -107,28 +104,34 @@ class ComponentEquivalenceTest {
 			]
 
 			stepFor(java.metamodel) [ extension view |
-				val packageResource = resourceAt('src/test/testComponent/package-info'.java)
-				packageResource.startRecordingChanges
-				packageResource => [
-					moveTo('src/test/renamedComponent/package-info'.java)
-					Package.from(it).name = 'renamedComponent'
+				userInteraction.addNextSingleSelection(3 /* do nothing */ )
+				resourceAt('src/test/renamedComponent/package-info'.java).propagate [
+					contents += java.containers.Package => [
+						namespaces += 'test'
+						name = 'renamedComponent'
+					]
 				]
-				packageResource.stopRecordingChanges
 
-				val compilationUnitResource = resourceAt('src/test/testComponent/TestComponentImpl'.java)
-				compilationUnitResource.startRecordingChanges
-				compilationUnitResource => [
-					moveTo('src/test/renamedComponent/RenamedComponentImpl'.java)
+				resourceAt('src/test/testComponent/TestComponentImpl'.java).propagate [
+					val originalPackage = Package.from(resourceAt('src/test/testComponent/package-info'.java))
+					originalPackage.compilationUnits += CompilationUnit.from(it)
+					it.moveTo('src/test/renamedComponent/RenamedComponentImpl'.java)
 					CompilationUnit.from(it) => [
 						namespaces.set(1, 'renamedComponent')
+						name = 'RenamedComponentImpl'
 						classifiers.get(0) => [
 							name = 'RenamedComponentImpl'
 							members.get(0).name = 'RenamedComponentImpl'
 						]
 					]
 				]
-				compilationUnitResource.stopRecordingChanges
-				propagate
+
+				val originalPackage = resourceAt('src/test/testComponent/package-info'.java)
+				if (!originalPackage.contents.empty) {
+					originalPackage.propagate [
+						contents.clear()
+					]
+				}
 			]
 		]
 	}

@@ -43,33 +43,31 @@ class SystemEquivalenceTest {
 		]
 
 		stepFor(java.metamodel) [ extension view |
-			val packageResource = resourceAt('src/test/package-info'.java)
-			packageResource.startRecordingChanges
-			packageResource => [
+			resourceAt('src/test/package-info'.java).propagate [
 				contents += java.containers.Package => [
 					name = 'test'
 				]
 			]
-			packageResource.stopRecordingChanges
 
-			val compilationUnitResource = resourceAt('src/test/TestImpl'.java)
-			compilationUnitResource.startRecordingChanges
-			compilationUnitResource => [
-				contents += java.containers.CompilationUnit => [
-					namespaces += #['test']
-					classifiers += java.classifiers.Class => [
-						name = 'TestImpl'
-						makePublic()
-						addModifier(ModifiersFactory.eINSTANCE.createFinal)
-						members += java.members.Constructor => [
-							name = 'TestImpl'
-							makePublic()
+			resourceAt('src/test/TestImpl'.java) => [
+				if (contents.empty) {
+					propagate [
+						contents += java.containers.CompilationUnit => [
+							namespaces += #['test']
+							classifiers += java.classifiers.Class => [
+								name = 'TestImpl'
+								makePublic()
+								addModifier(ModifiersFactory.eINSTANCE.createFinal)
+								members += java.members.Constructor => [
+									name = 'TestImpl'
+									makePublic()
+								]
+							]
+
 						]
 					]
-				]
+				}
 			]
-			compilationUnitResource.stopRecordingChanges
-			propagate
 		]
 
 		inputVariantFor(java.metamodel, 'creating only a package') [ extension view |
@@ -96,17 +94,16 @@ class SystemEquivalenceTest {
 		]
 
 		stepFor(java.metamodel) [ extension view |
-			val packageResource = resourceAt('src/test/package-info'.java)
-			packageResource.startRecordingChanges
-			packageResource => [
-				moveTo('src/renamed/package-info'.java)
-				Package.from(it).name = 'renamed'
+			userInteraction.addNextSingleSelection(2 /* do nothing */ )
+			resourceAt('src/renamed/package-info'.java).propagate [
+				contents += java.containers.Package => [
+					name = 'renamed'
+				]
 			]
-			packageResource.stopRecordingChanges
 
-			val compilationUnitResource = resourceAt('src/test/TestImpl'.java)
-			compilationUnitResource.startRecordingChanges
-			compilationUnitResource => [
+			resourceAt('src/test/TestImpl'.java).propagate [
+				val originalPackage = Package.from(resourceAt('src/test/package-info'.java))
+				originalPackage.compilationUnits += CompilationUnit.from(it)
 				moveTo('src/renamed/RenamedImpl'.java)
 				CompilationUnit.from(it) => [
 					namespaces.set(0, 'renamed')
@@ -116,8 +113,13 @@ class SystemEquivalenceTest {
 					]
 				]
 			]
-			compilationUnitResource.stopRecordingChanges
-			propagate
+
+			val originalPackage = resourceAt('src/test/package-info'.java)
+			if (!originalPackage.contents.empty) {
+				originalPackage.propagate [
+					contents.clear()
+				]
+			}
 		]
 
 		return testsThatStepsAreEquivalent
