@@ -5,14 +5,12 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.Collection
-import java.util.HashSet
 import java.util.LinkedHashSet
 import java.util.List
 import java.util.Map
 import java.util.Optional
 import java.util.Set
 import java.util.function.Predicate
-import org.eclipse.emf.common.notify.Notifier
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -35,7 +33,6 @@ import tools.vitruv.testutils.printing.PrintIdProvider
 import tools.vitruv.testutils.printing.UriReplacingPrinter
 import tools.vitruv.testutils.views.BasicTestView
 import tools.vitruv.testutils.views.ChangePublishingTestView
-import tools.vitruv.testutils.views.NonTransactionalTestView
 import tools.vitruv.testutils.views.TestView
 import tools.vitruv.testutils.views.UriMode
 
@@ -86,11 +83,9 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
 		val changePropagationSpecifications = this.changePropagationSpecifications
 		val userInteraction = new TestUserInteraction
-		val vsum = new VirtualModelBuilder()
-			.withStorageFolder(vsumDirectory)
-			.withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(userInteraction))
-			.withChangePropagationSpecifications(changePropagationSpecifications)
-			.buildAndInitialize()
+		val vsum = new VirtualModelBuilder().withStorageFolder(vsumDirectory).withUserInteractorForResultProvider(
+			new TestUserInteraction.ResultProvider(userInteraction)).
+			withChangePropagationSpecifications(changePropagationSpecifications).buildAndInitialize()
 		new DirectoryTestView(
 			new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum),
 			viewDirectory
@@ -105,7 +100,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		newBasicView(testProjectManager.getProject("", extensionContext))
 	}
 
-	def private executeDependencies(NonTransactionalTestView testView, NonTransactionalTestView referenceView) throws TestAbortedException {
+	def private executeDependencies(TestView testView, TestView referenceView) throws TestAbortedException {
 		for (dependencyTestStep : dependencySteps.getOrDefault(testStep.targetMetamodel, emptyList)) {
 			dependencyTestStep.executeIn(testView)
 		}
@@ -126,9 +121,9 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 			val referenceFiles = referenceView.directory.dataFiles [ file |
 				referenceMetamodels.exists[file.belongsTo(it)]
 			]
-	
+
 			assertThat(testView, containsExactlyResources(referenceView, referenceFiles))
-	
+
 			referenceFiles.forEach [ model |
 				val referenceResource = referenceView.resourceAt(model)
 				val referenceMetamodel = checkNotNull(
@@ -136,7 +131,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 					'''Cannot find metamodel of «referenceResource»!'''
 				)
 				val filters = comparisonSettings.getEqualityOptionsForMetamodel(referenceMetamodel)
-	
+
 				assertThat(testView.resourceAt(model), containsModelOf(referenceResource, filters))
 			]
 		}
@@ -178,7 +173,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	}
 
 	def static private belongsTo(Path path, MetamodelDescriptor metamodel) {
-		metamodel.fileExtensions.exists [path.toString.endsWith('''.«it»''')]
+		metamodel.fileExtensions.exists[path.toString.endsWith('''.«it»''')]
 	}
 
 	def static private belongsTo(Resource resource, MetamodelDescriptor metamodel) {
@@ -195,13 +190,13 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	}
 
 	def private newBasicView(Path viewDirectory) {
-		new DirectoryTestView(new NonTransactionalBasicTestView(viewDirectory, uriMode), viewDirectory)
+		new DirectoryTestView(new BasicTestView(viewDirectory, uriMode), viewDirectory)
 	}
 
 	@FinalFieldsConstructor
-	private static class DirectoryTestView implements NonTransactionalTestView {
+	private static class DirectoryTestView implements TestView {
 		@Delegate
-		val NonTransactionalTestView delegate
+		val TestView delegate
 		@Accessors
 		val Path directory
 	}
@@ -215,27 +210,26 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		val PrintIdProvider idProvider = new DefaultPrintIdProvider()
 
 		override describeTo(Description description) {
-			description.appendText("exactly these resource paths to exist in the test view: ")
-				.appendPrintResult [
-					printSet(referenceFiles, MULTI_LINE_LIST) [ subTarget, path |
-						subTarget.print(path.toString)
-					]
+			description.appendText("exactly these resource paths to exist in the test view: ").appendPrintResult [
+				printSet(referenceFiles, MULTI_LINE_LIST) [ subTarget, path |
+					subTarget.print(path.toString)
 				]
+			]
 		}
 
 		override matchesSafely(DirectoryTestView testView) {
 			testFiles = testView.directory.dataFiles [ file |
-				referenceMetamodels.exists [file.belongsTo(it)]
+				referenceMetamodels.exists[file.belongsTo(it)]
 			]
 			return testFiles == referenceFiles
 		}
 
 		override describeMismatchSafely(DirectoryTestView testView, Description mismatchDescription) {
-			val missingResources = (new LinkedHashSet(referenceFiles) => [removeAll(testFiles)])
-				.mapFixedTo(new LinkedHashSet) [referenceView.resourceAt(it)]
-			val unexpectedResources = (new LinkedHashSet(testFiles) => [removeAll(referenceFiles)])
-				.mapFixedTo(new LinkedHashSet) [referenceView.resourceAt(it)]
-			
+			val missingResources = (new LinkedHashSet(referenceFiles) => [removeAll(testFiles)]).mapFixedTo(
+				new LinkedHashSet)[referenceView.resourceAt(it)]
+			val unexpectedResources = (new LinkedHashSet(testFiles) => [removeAll(referenceFiles)]).mapFixedTo(
+				new LinkedHashSet)[referenceView.resourceAt(it)]
+
 			if (!missingResources.isEmpty) {
 				mismatchDescription.appendText("the following resources are missing in the test view: ").
 					appendModelValueSet(missingResources, MULTI_LINE_LIST, idProvider)
@@ -249,43 +243,5 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 			}
 		}
 	}
-	
-	/**
-	 * A class to allow modifications to multiple resources in one test step.
-	 * This class is only meant as a workaround. For further development, the entire 
-	 * resource access in the tests should be refactored to use @{link tools.vitruv.framework.views.View Views}.
-	 */
-	private static class NonTransactionalBasicTestView extends BasicTestView implements NonTransactionalTestView {
-		var changedNotifiers = new HashSet<Notifier>()
-		
-		new(Path persistenceDirectory, UriMode uriMode) {
-			super(persistenceDirectory, uriMode)
-		}
-		
-		override propagate() {
-			for (notifier : changedNotifiers) {
-				notifier.propagate []
-			}
-			changedNotifiers.clear
-			return emptyList
-		}
-		
-		override <T extends Notifier> startRecordingChanges(T notifier) {
-			changedNotifiers.add(notifier)
-			return notifier
-		}
-		
-		override <T extends Notifier> stopRecordingChanges(T notifier) {
-			return notifier
-		}
-		
-		override disposeViewResources() {
-			throw new UnsupportedOperationException("view lifecycle operations are not supported for this specific test view")
-		}
-		
-		override setDisposeViewResourcesAfterPropagation(boolean enabled) {
-			throw new UnsupportedOperationException("view lifecycle operations are not supported for this specific test view")
-		}
-		
-	}
+
 }

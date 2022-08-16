@@ -8,12 +8,12 @@ import org.eclipse.xtend.lib.annotations.Delegate
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
 import tools.vitruv.testutils.TestUserInteraction
-import tools.vitruv.testutils.views.NonTransactionalTestView
+import tools.vitruv.testutils.views.TestView
 
 package interface MetamodelStep {
 	def MetamodelDescriptor getTargetMetamodel()
 
-	def void executeIn(NonTransactionalTestView testView)
+	def void executeIn(TestView testView)
 
 	def String getName()
 
@@ -25,9 +25,9 @@ package interface MetamodelStep {
 package class MainStep implements MetamodelStep {
 	@Accessors
 	val MetamodelDescriptor targetMetamodel
-	val Consumer<NonTransactionalTestView> action
+	val Consumer<TestView> action
 
-	override executeIn(NonTransactionalTestView testView) {
+	override executeIn(TestView testView) {
 		action.accept(testView)
 	}
 
@@ -43,12 +43,12 @@ package class MainStep implements MetamodelStep {
 package class VariantStep implements MetamodelStep, EquivalenceTestBuilder.VariantOptions {
 	@Accessors
 	val MetamodelDescriptor targetMetamodel
-	val Consumer<NonTransactionalTestView> action
+	val Consumer<TestView> action
 	@Accessors
 	val String name
 	var includeSameMetamodel = false
 
-	override executeIn(NonTransactionalTestView testView) {
+	override executeIn(TestView testView) {
 		action.accept(testView)
 	}
 
@@ -73,7 +73,7 @@ package class StepWithUserInteractionSetup implements MetamodelStep {
 	@Delegate val MetamodelStep delegate
 	val (TestUserInteraction)=>void userInteractionSetup
 
-	override executeIn(NonTransactionalTestView testView) {
+	override executeIn(TestView testView) {
 		userInteractionSetup.apply(testView.userInteraction)
 		delegate.executeIn(testView)
 		testView.userInteraction.clearResponses()

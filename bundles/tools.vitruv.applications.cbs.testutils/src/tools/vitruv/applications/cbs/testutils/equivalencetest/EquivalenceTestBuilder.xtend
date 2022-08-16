@@ -4,7 +4,7 @@ import java.util.function.Consumer
 import org.junit.jupiter.api.DynamicNode
 import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
 import tools.vitruv.testutils.TestUserInteraction
-import tools.vitruv.testutils.views.NonTransactionalTestView
+import tools.vitruv.testutils.views.TestView
 
 /**
  * Constructs an equivalence test, i.e. a test that executes steps in different metamodels and checks that if propagated,
@@ -15,7 +15,7 @@ interface EquivalenceTestBuilder {
 	 * Registers a step in the provided {@code metamodel}, executing the provided {@code action}. This step will both
 	 * be used as a test step and as a reference step to compare the results of steps in other metamodels.
 	 */
-	def void stepFor(MetamodelDescriptor metamodel, Consumer<NonTransactionalTestView> action)
+	def void stepFor(MetamodelDescriptor metamodel, Consumer<TestView> action)
 
 	/**
 	 * Registers an alternate input step in the provided {@code metamodel}, executing the provided {@code action}. This 
@@ -24,7 +24,7 @@ interface EquivalenceTestBuilder {
 	 * is validated against the results of other metamodels using their steps with a name containing the one of this
 	 * variant or, if such a variant does not exist, the default step.
 	 */
-	def VariantOptions inputVariantFor(MetamodelDescriptor metamodel, String name, Consumer<NonTransactionalTestView> action)
+	def VariantOptions inputVariantFor(MetamodelDescriptor metamodel, String name, Consumer<TestView> action)
 
 	/**
 	 * Declares that the steps built by this builder depend on the steps that are created by {@code otherTest}. The

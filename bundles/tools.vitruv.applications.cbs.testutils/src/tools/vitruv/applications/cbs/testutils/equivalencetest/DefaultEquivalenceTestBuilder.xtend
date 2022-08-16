@@ -14,13 +14,13 @@ import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder.VariantOptions
 import tools.vitruv.change.propagation.ChangePropagationSpecification
 import tools.vitruv.testutils.TestUserInteraction
-import tools.vitruv.testutils.views.NonTransactionalTestView
 import tools.vitruv.testutils.views.UriMode
 
 import static com.google.common.base.Preconditions.checkArgument
 import static com.google.common.base.Preconditions.checkState
 import static java.util.Comparator.comparing
 import static org.junit.jupiter.api.DynamicTest.dynamicTest
+import tools.vitruv.testutils.views.TestView
 
 abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
 	/* both maps always contain lists for all metamodels */
@@ -127,12 +127,12 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 		dependencySteps += dependencyBuilder.allDependencySteps
 	}
 
-	override stepFor(MetamodelDescriptor metamodel, Consumer<NonTransactionalTestView> action) {
+	override stepFor(MetamodelDescriptor metamodel, Consumer<TestView> action) {
 		checks.forStep(metamodel)
 		steps += new MainStep(metamodel, action)
 	}
 
-	override inputVariantFor(MetamodelDescriptor metamodel, String name, Consumer<NonTransactionalTestView> action) {
+	override inputVariantFor(MetamodelDescriptor metamodel, String name, Consumer<TestView> action) {
 		checks.forVariant(metamodel, name)
 		steps += new VariantStep(metamodel, action, name)
 	}
@@ -190,12 +190,12 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 			dependencySteps += dependencyBuilder.allDependencySteps
 		}
 
-		override stepFor(MetamodelDescriptor metamodel, Consumer<NonTransactionalTestView> action) {
+		override stepFor(MetamodelDescriptor metamodel, Consumer<TestView> action) {
 			checks.forStep(metamodel)
 			steps += new MainStep(metamodel, action)
 		}
 
-		override inputVariantFor(MetamodelDescriptor metamodel, String name, Consumer<NonTransactionalTestView> action) {
+		override inputVariantFor(MetamodelDescriptor metamodel, String name, Consumer<TestView> action) {
 			checks.forVariant(metamodel, name)
 			// variants are irrelevant for dependencies, so discard them
 			mockVariantOptions
