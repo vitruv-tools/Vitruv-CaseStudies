@@ -46,7 +46,7 @@ jobs:
         with:
           deploy_key: ${{ secrets.UPDATE_SITE_DEPLOY_KEY }}
           external_repository: vitruv-tools/updatesite
-          destination_dir: nightly/applications/cbs
+          destination_dir: nightly/case-studies
           publish_dir: releng/tools.vitruv.applications.cbs.updatesite/target/repository
           publish_branch: main
           user_name: 'github-actions[bot]'
@@ -63,7 +63,7 @@ jobs:
         with:
           deploy_key: ${{ secrets.UPDATE_SITE_DEPLOY_KEY }}
           external_repository: vitruv-tools/updatesite
-          destination_dir: release/applications/cbs/${{ steps.releaseVersion.outputs.tag }}
+          destination_dir: release/case-studies/${{ steps.releaseVersion.outputs.tag }}
           publish_dir: releng/tools.vitruv.applications.cbs.updatesite/target/repository
           publish_branch: main
           user_name: 'github-actions[bot]'
