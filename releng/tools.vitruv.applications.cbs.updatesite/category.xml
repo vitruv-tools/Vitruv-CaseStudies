@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/tools.vitruv.applications.util.temporary.feature_0.3.0.qualifier.jar" id="tools.vitruv.applications.util.temporary.feature" version="0.3.0.qualifier">
+   <feature url="features/tools.vitruv.applications.util.temporary.feature_3.0.0.qualifier.jar" id="tools.vitruv.applications.util.temporary.feature" version="3.0.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
-   <feature id="tools.vitruv.applications.util.temporary.feature.source" version="0.3.0.qualifier">
+   <feature id="tools.vitruv.applications.util.temporary.feature.source" version="3.0.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
-   <feature url="features/tools.vitruv.applications.pcmjava.feature_0.3.0.qualifier.jar" id="tools.vitruv.applications.pcmjava.feature" version="0.3.0.qualifier">
+   <feature url="features/tools.vitruv.applications.pcmjava.feature_3.0.0.qualifier.jar" id="tools.vitruv.applications.pcmjava.feature" version="3.0.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
-   <feature id="tools.vitruv.applications.pcmjava.feature.source" version="0.3.0.qualifier">
+   <feature id="tools.vitruv.applications.pcmjava.feature.source" version="3.0.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
-   <feature url="features/tools.vitruv.applications.umljava.feature_0.3.0.qualifier.jar" id="tools.vitruv.applications.umljava.feature" version="0.3.0.qualifier">
+   <feature url="features/tools.vitruv.applications.umljava.feature_3.0.0.qualifier.jar" id="tools.vitruv.applications.umljava.feature" version="3.0.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
-   <feature id="tools.vitruv.applications.umljava.feature.source" version="0.3.0.qualifier">
+   <feature id="tools.vitruv.applications.umljava.feature.source" version="3.0.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
-   <feature url="features/tools.vitruv.applications.pcmumlclass.feature_0.3.0.qualifier.jar" id="tools.vitruv.applications.pcmumlclass.feature" version="0.3.0.qualifier">
+   <feature url="features/tools.vitruv.applications.pcmumlclass.feature_3.0.0.qualifier.jar" id="tools.vitruv.applications.pcmumlclass.feature" version="3.0.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
-   <feature id="tools.vitruv.applications.pcmumlclass.feature.source" version="0.3.0.qualifier">
+   <feature id="tools.vitruv.applications.pcmumlclass.feature.source" version="3.0.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
    <category-def name="Vitruv Applications for Component-based Systems" label="Vitruv Applications for Component-based Systems">

@@ -9,7 +9,7 @@
 		<version>2.0.0</version>
 	</parent>
 	<artifactId>case-studies-parent</artifactId>
-	<version>0.3.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -188,7 +188,7 @@
 							<dependency>
 								<groupId>tools.vitruv</groupId>
 								<artifactId>tools.vitruv.casestudies.dependencywrapper</artifactId>
-								<version>0.3.0-SNAPSHOT</version>
+								<version>3.0.0-SNAPSHOT</version>
 							</dependency>
 							<dependency>
 								<groupId>org.eclipse.xtend</groupId>

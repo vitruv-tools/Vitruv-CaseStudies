@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv Insurance-Families Demo Application Tests
 Bundle-SymbolicName: tools.vitruv.applications.demo.insurancefamilies.tests
-Bundle-Version: 0.3.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.demo.insurancefamilies.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools
