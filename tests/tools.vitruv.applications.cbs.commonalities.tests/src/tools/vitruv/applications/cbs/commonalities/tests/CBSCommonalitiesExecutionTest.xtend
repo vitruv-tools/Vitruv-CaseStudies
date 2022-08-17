@@ -14,7 +14,10 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import tools.vitruv.applications.cbs.commonalities.CbsCommonalitiesApplication
 import tools.vitruv.change.propagation.ChangePropagationMode
 import tools.vitruv.applications.util.temporary.java.JavaSetup
+import org.junit.jupiter.api.^extension.ExtendWith
+import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 
+@ExtendWith(RegisterMetamodelsInStandalone)
 abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest {	
 	def <T> T getModels(DomainModelsProvider<T> modelsProvider) {
 		return modelsProvider.getModels(vitruvApplicationTestAdapter)
@@ -28,6 +31,7 @@ abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest
 	@BeforeEach
 	def protected setupJaMoPP() {
 		JavaSetup.resetClasspathAndRegisterStandardLibrary()
+		JavaSetup.prepareFactories()
 	}
 	
 	override protected getChangePropagationSpecifications() {
