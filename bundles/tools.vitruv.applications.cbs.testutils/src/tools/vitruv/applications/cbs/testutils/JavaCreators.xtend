@@ -1,20 +1,22 @@
 package tools.vitruv.applications.cbs.testutils
 
-import tools.vitruv.testutils.activeannotations.ModelCreators
-import org.emftext.language.java.JavaFactory
-import org.emftext.language.java.types.TypesFactory
-import org.emftext.language.java.commons.CommonsFactory
 import java.nio.file.Path
-import org.emftext.language.java.containers.ContainersFactory
-import org.emftext.language.java.classifiers.ClassifiersFactory
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.emftext.language.java.JavaFactory
+import org.emftext.language.java.classifiers.ClassifiersFactory
+import org.emftext.language.java.commons.CommonsFactory
+import org.emftext.language.java.containers.ContainersFactory
+import org.emftext.language.java.members.MembersFactory
+import org.emftext.language.java.types.TypesFactory
+import tools.vitruv.testutils.activeannotations.ModelCreators
 
 @ModelCreators(factory=JavaFactory)
 class JavaCreators {
 	public static val java = new JavaCreators
 	public val types = new JavaTypesCreators
 	public val classifiers = new JavaClassifiersCreators
+	public val members = new JavaMembersCreators
 	public val commons = new JavaCommonsCreators
 	public val containers = new JavaContainersCreators
 	@Accessors
@@ -31,6 +33,11 @@ class JavaCreators {
 	@ModelCreators(factory=ClassifiersFactory)
 	static class JavaClassifiersCreators {
 	}
+	
+	@ModelCreators(factory=MembersFactory)
+	static class JavaMembersCreators {
+	}
+	
 	@ModelCreators(factory=TypesFactory)
 	static class JavaTypesCreators {
 	}

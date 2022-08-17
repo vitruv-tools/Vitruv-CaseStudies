@@ -221,8 +221,8 @@ routine changeNameOfSystemCorrespondences(pcm::System pcmSystem, String newName)
 	}
 	update {
 		umlSystemPackage.ifPresent[name = pcmSystem.correspondingPackageName]
-		umlSystemImplementation.ifPresent[name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
-		umlSystemConstructor.ifPresent[name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
+		umlSystemImplementation.ifPresent[name = newName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX]
+		umlSystemConstructor.ifPresent[name = newName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX]
 	}
 }
 

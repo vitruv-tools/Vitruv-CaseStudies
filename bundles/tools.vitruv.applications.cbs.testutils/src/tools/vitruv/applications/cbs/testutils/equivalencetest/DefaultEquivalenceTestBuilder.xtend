@@ -9,18 +9,18 @@ import java.util.TreeMap
 import java.util.function.Consumer
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.junit.jupiter.api.^extension.ExtensionContext
+import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
 import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBuilder.VariantOptions
+import tools.vitruv.change.propagation.ChangePropagationSpecification
 import tools.vitruv.testutils.TestUserInteraction
-import tools.vitruv.testutils.views.TestView
 import tools.vitruv.testutils.views.UriMode
 
 import static com.google.common.base.Preconditions.checkArgument
 import static com.google.common.base.Preconditions.checkState
 import static java.util.Comparator.comparing
 import static org.junit.jupiter.api.DynamicTest.dynamicTest
-import tools.vitruv.change.propagation.ChangePropagationSpecification
-import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
+import tools.vitruv.testutils.views.TestView
 
 abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
 	/* both maps always contain lists for all metamodels */
@@ -30,8 +30,8 @@ abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
 	protected val checks = new Checks(this)
 	
 	protected new(Set<MetamodelDescriptor> targetMetamodels) {
-		this.dependencySteps = tools.vitruv.applications.cbs.testutils.equivalencetest.DefaultBuilderCommon.mapForMetamodels(targetMetamodels)
-		this.steps = tools.vitruv.applications.cbs.testutils.equivalencetest.DefaultBuilderCommon.mapForMetamodels(targetMetamodels)
+		this.dependencySteps = DefaultBuilderCommon.mapForMetamodels(targetMetamodels)
+		this.steps = DefaultBuilderCommon.mapForMetamodels(targetMetamodels)
 	}
 	
 	def private static mapForMetamodels(Set<MetamodelDescriptor> metamodels) {

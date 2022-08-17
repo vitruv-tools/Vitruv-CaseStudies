@@ -1,14 +1,14 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest
 
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import java.util.Collection
+import java.util.Map
 import java.util.function.Consumer
 import org.eclipse.xtend.lib.annotations.Accessors
-import tools.vitruv.testutils.views.TestView
-import java.util.Map
-import java.util.Collection
 import org.eclipse.xtend.lib.annotations.Delegate
-import tools.vitruv.testutils.TestUserInteraction
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
+import tools.vitruv.testutils.TestUserInteraction
+import tools.vitruv.testutils.views.TestView
 
 package interface MetamodelStep {
 	def MetamodelDescriptor getTargetMetamodel()
