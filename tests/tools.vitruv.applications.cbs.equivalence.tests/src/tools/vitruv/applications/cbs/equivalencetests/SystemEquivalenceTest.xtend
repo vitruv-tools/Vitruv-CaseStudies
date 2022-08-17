@@ -50,6 +50,9 @@ class SystemEquivalenceTest {
 			]
 
 			resourceAt('src/test/TestImpl'.java) => [
+				/* In the test view, the implementation class may already be present due to transitive change propagation,
+				 * so do not create it again. For the reference view created without change propagation, it has to be created.
+				 */
 				if (contents.empty) {
 					propagate [
 						contents += java.containers.CompilationUnit => [
@@ -102,6 +105,11 @@ class SystemEquivalenceTest {
 			]
 
 			resourceAt('src/test/TestImpl'.java).propagate [
+				/* Inserting the compilation unit into the containing package is necessary to be consistent with
+				 * the underlying VirtualModel, in which the reference is set. The JaMoPP metamodel does not ensure
+				 * that this reference is consistently set. It depends on the order in which packages and compilation units
+				 * are created and/or loaded.
+				 */
 				val originalPackage = Package.from(resourceAt('src/test/package-info'.java))
 				originalPackage.compilationUnits += CompilationUnit.from(it)
 				moveTo('src/renamed/RenamedImpl'.java)
@@ -114,6 +122,10 @@ class SystemEquivalenceTest {
 				]
 			]
 
+			/* In the test view, the package may already be removed due to transitive change propagation,
+			 * so trying to remove it again would result in an empty change (which is invalid to propagate).
+			 * For the reference view created without change propagation, the package has to be removed manually.
+			 */
 			val originalPackage = resourceAt('src/test/package-info'.java)
 			if (!originalPackage.contents.empty) {
 				originalPackage.propagate [
