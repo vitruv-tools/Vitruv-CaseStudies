@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: tools.vitruv.casestudies.dependencywrapper
 Bundle-SymbolicName: tools.vitruv.casestudies.dependencywrapper
 Automatic-Module-Name: tools.vitruv.casestudies.dependencywrapper
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.0.0
 Require-Bundle: tools.vitruv.dsls.reactions,
  tools.vitruv.dsls.common,
  tools.vitruv.dsls.commonalities,

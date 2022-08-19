@@ -9,14 +9,14 @@
 		<version>2.0.2</version>
 	</parent>
 	<artifactId>case-studies-parent</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0</version>
 	<packaging>pom</packaging>
 
 	<properties>
 		<!-- For each project, a local updatesite can be specified by overwriting these properties. They default to the Vitruv updatesites. -->
-		<vitruv.change.url>https://vitruv-tools.github.io/updatesite/nightly/change</vitruv.change.url>
-		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework</vitruv.framework.url>
-		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/dsls</vitruv.dsls.url>
+		<vitruv.change.url>https://vitruv-tools.github.io/updatesite/release/change/latest</vitruv.change.url>
+		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/release/framework/latest</vitruv.framework.url>
+		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/release/dsls/latest</vitruv.dsls.url>
 	</properties>
 
 	<repositories>
