@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv PCM-UML Class Application
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Eclipse-ExtensibleAPI: true

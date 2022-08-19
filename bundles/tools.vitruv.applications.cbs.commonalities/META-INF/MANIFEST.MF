@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv CBS Commonalities Application
 Bundle-SymbolicName: tools.vitruv.applications.cbs.commonalities;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 3.0.1.qualifier
 Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.cbs.commonalities,
  tools.vitruv.applications.cbs.commonalities.cbs,
