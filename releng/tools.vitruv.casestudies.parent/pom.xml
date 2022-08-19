@@ -14,9 +14,9 @@
 
 	<properties>
 		<!-- For each project, a local updatesite can be specified by overwriting these properties. They default to the Vitruv updatesites. -->
-		<vitruv.change.url>https://vitruv-tools.github.io/updatesite/nightly/change/</vitruv.change.url>
-		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework/</vitruv.framework.url>
-		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/dsls/</vitruv.dsls.url>
+		<vitruv.change.url>https://vitruv-tools.github.io/updatesite/nightly/change</vitruv.change.url>
+		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework</vitruv.framework.url>
+		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/dsls</vitruv.dsls.url>
 	</properties>
 
 	<repositories>
