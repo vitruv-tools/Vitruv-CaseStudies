@@ -42,7 +42,10 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static com.google.common.base.Preconditions.checkNotNull
 import static extension tools.vitruv.change.atomic.id.ObjectResolutionUtil.getHierarchicUriFragment
 import org.eclipse.emf.ecore.EStructuralFeature
+import org.junit.jupiter.api.^extension.ExtendWith
+import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 
+@ExtendWith(RegisterMetamodelsInStandalone)
 abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
 		return #[
@@ -99,7 +102,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	protected def <O extends EObject> O clearResourcesAndReloadRoot(O modelElement) {
 		stopRecordingChanges(modelElement.eResource)
 		val resourceURI = modelElement.eResource.URI
-		renewResourceCache
+		disposeViewResources()
 
 		val rootElement = EObject.from(resourceURI) as O
 		if (rootElement !== null) {
@@ -113,7 +116,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	}
 
 	def protected corresponds(EObject a, EObject b, String tag) {
-		return EcoreUtil.equals(b, getCorrespondingEObjects(a, b.class, tag).head)
+		return getCorrespondingEObjects(a, b.class, tag).exists[EcoreUtil.equals(it, b)]
 	}
 
 	// DataType consistency constraints defined here because it is used in multiple tests

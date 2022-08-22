@@ -9,6 +9,8 @@ import tools.vitruv.testutils.LegacyVitruvApplicationTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.BeforeAll
 import tools.vitruv.applications.util.temporary.java.JavaSetup
+import org.junit.jupiter.api.^extension.ExtendWith
+import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 
 /**
  * Abstract class for umljava tests in both directions.
@@ -16,6 +18,7 @@ import tools.vitruv.applications.util.temporary.java.JavaSetup
  * 
  * @author Fei
  */
+@ExtendWith(RegisterMetamodelsInStandalone)
 abstract class AbstractUmlJavaTest extends LegacyVitruvApplicationTest {
 	static val logger = Logger.getLogger(typeof(LegacyVitruvApplicationTest).simpleName)
 

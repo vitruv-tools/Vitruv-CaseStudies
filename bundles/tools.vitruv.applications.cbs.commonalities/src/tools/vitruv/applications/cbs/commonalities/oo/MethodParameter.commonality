@@ -1,8 +1,8 @@
 import tools.vitruv.applications.cbs.commonalities.java.operators._
 import tools.vitruv.applications.cbs.commonalities.uml.operators._
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as UML
-import "http://www.emftext.org/java" as Java
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
 
 concept ObjectOrientedDesign
 
@@ -11,8 +11,8 @@ concept ObjectOrientedDesign
 // and ObjectOrientedDesign:Constructor.parameters
 referenced commonality MethodParameter {
 
-	// Externally contained by UML:Operation.ownedParameter
-	with UML:Parameter
+	// Externally contained by uml:Operation.ownedParameter
+	with uml:Parameter
 	whereat {
 		Parameter.direction isUmlParameterDirection "in",
 		// TODO require name !== null?
@@ -21,22 +21,22 @@ referenced commonality MethodParameter {
 		-> Parameter.upper = 1
 	}
 
-	// Externally contained by Java:InterfaceMethod.parameters
-	// and Java:ClassMethod.parameters
-	// and Java:Constructor.parameters
-	with Java:OrdinaryParameter
+	// Externally contained by java:InterfaceMethod.parameters
+	// and java:ClassMethod.parameters
+	// and java:Constructor.parameters
+	with java:OrdinaryParameter
 	whereat {
 	}
 
 	has name {
-		= UML:Parameter.name
+		= uml:Parameter.name
 
-		= Java:OrdinaryParameter.name
+		= java:OrdinaryParameter.name
 	}
 
 	has type {
-		= umlTypeReference(UML:Parameter.type, "ObjectOrientedDesign")
+		= umlTypeReference(uml:Parameter.type, "ObjectOrientedDesign")
 
-		= javaTypeReference(Java:OrdinaryParameter.typeReference, "ObjectOrientedDesign")
+		= javaTypeReference(java:OrdinaryParameter.typeReference, "ObjectOrientedDesign")
 	}
 }

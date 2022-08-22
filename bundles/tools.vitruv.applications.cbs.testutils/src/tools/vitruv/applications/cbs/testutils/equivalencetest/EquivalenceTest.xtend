@@ -1,7 +1,6 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest
 
-import tools.vitruv.testutils.UriMode
-import static tools.vitruv.testutils.UriMode.FILE_URIS
+import tools.vitruv.testutils.views.UriMode
 import java.lang.annotation.Retention
 import java.lang.annotation.Target
 import org.junit.jupiter.api.^extension.ExtendWith
@@ -17,5 +16,5 @@ import tools.vitruv.testutils.TestLogging
 annotation EquivalenceTest {
 	val Class<? extends VitruvApplication>[] applications
 	val Class<? extends ModelComparisonSettings>[] comparisonSettings = #[]
-	val UriMode uriMode = FILE_URIS
+	val UriMode uriMode = UriMode.FILE_URIS
 }

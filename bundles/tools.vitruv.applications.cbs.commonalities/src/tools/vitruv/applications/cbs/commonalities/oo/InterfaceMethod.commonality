@@ -2,22 +2,22 @@ import tools.vitruv.applications.cbs.commonalities.domaincommon.operators._
 import tools.vitruv.applications.cbs.commonalities.java.operators._
 import tools.vitruv.applications.cbs.commonalities.uml.operators._
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as UML
-import "http://www.emftext.org/java" as Java
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
 
 concept ObjectOrientedDesign
 
 // Externally contained by ObjectOrientedDesign:Interface.methods
 referenced commonality InterfaceMethod {
 
-	// Externally contained by UML:Interface.ownedOperation
-	with UML:Operation
+	// Externally contained by uml:Interface.ownedOperation
+	with uml:Operation
 	whereat {
 		-> Operation.visibility isUmlVisibility "PUBLIC"
 	}
 
-	// Externally contained by Java:Interface.members
-	with Java:InterfaceMethod
+	// Externally contained by java:Interface.members
+	with java:InterfaceMethod
 	whereat {
 		-> InterfaceMethod.annotationsAndModifiers hasJavaVisibility "PUBLIC"
 		// Note: We do not need to add an abstract modifier or a default Void return type here,
@@ -25,35 +25,35 @@ referenced commonality InterfaceMethod {
 	}
 
 	has name {
-		= UML:Operation.name
+		= uml:Operation.name
 
-		= Java:InterfaceMethod.name
+		= java:InterfaceMethod.name
 	}
 
-	// Note: No mapping for UML:Operation.visibility, because Java Interface methods are always public.
-	// Note: No mapping for UML:Operation.isLeaf, because Java Interface methods are never final.
-	// Note: No mapping for UML:Operation.isAbstract, because interface methods are expected to always be abstract
+	// Note: No mapping for uml:Operation.visibility, because Java Interface methods are always public.
+	// Note: No mapping for uml:Operation.isLeaf, because Java Interface methods are never final.
+	// Note: No mapping for uml:Operation.isAbstract, because interface methods are expected to always be abstract
 	// (unless they are static).
 
 	// Note: We automatically set and unset the method's 'abstract' attribute depending on whether it is static or not.
 	has ^static {
-		= UML:Operation.isStatic
-		-> inverse(UML:Operation.isAbstract)
+		= uml:Operation.isStatic
+		-> inverse(uml:Operation.isAbstract)
 
-		= javaStaticModifier(Java:InterfaceMethod.annotationsAndModifiers, Java:InterfaceMethod)
-		-> javaInverseAbstractModifier(Java:InterfaceMethod.annotationsAndModifiers, Java:InterfaceMethod)
+		= javaStaticModifier(java:InterfaceMethod.annotationsAndModifiers, java:InterfaceMethod)
+		-> javaInverseAbstractModifier(java:InterfaceMethod.annotationsAndModifiers, java:InterfaceMethod)
 	}
 
 	has returnType {
-		= umlReturnType(UML:Operation.ownedParameter, "ObjectOrientedDesign", UML:Operation)
+		= umlReturnType(uml:Operation.ownedParameter, "ObjectOrientedDesign", uml:Operation)
 
-		= javaTypeReference(Java:InterfaceMethod.typeReference, "ObjectOrientedDesign")
+		= javaTypeReference(java:InterfaceMethod.typeReference, "ObjectOrientedDesign")
 	}
 
 	has parameters referencing ObjectOrientedDesign:MethodParameter {
 		// Note: The referenced participation only accepts input parameters.
-		= UML:Operation.ownedParameter
+		= uml:Operation.ownedParameter
 
-		= Java:InterfaceMethod.parameters
+		= java:InterfaceMethod.parameters
 	}
 }

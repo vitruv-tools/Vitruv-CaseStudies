@@ -11,11 +11,10 @@ import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 
-import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
-import tools.vitruv.change.correspondence.CorrespondenceModel
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import tools.vitruv.change.correspondence.view.EditableCorrespondenceModelView
 
 /**
  * Mapping transformation for primitive data types
@@ -49,7 +48,7 @@ class DataTypeCorrespondenceHelper {
 	}
 
 	static def TypeReference claimUniqueCorrespondingJaMoPPDataTypeReference(DataType dataType,
-		CorrespondenceModel ci) {
+		EditableCorrespondenceModelView<?> ci) {
 		if (null === dataType) {
 			return TypesFactory.eINSTANCE.createVoid
 		}
@@ -64,15 +63,15 @@ class DataTypeCorrespondenceHelper {
 		return TypesFactory.eINSTANCE.createClassifierReference
 	}
 
-	private static def dispatch Type claimUniqueCorrespondingType(CollectionDataType cdt, CorrespondenceModel ci) {
-		return ci.getCorrespondingEObjects(cdt, ConcreteClassifier).claimOne
+	private static def dispatch Type claimUniqueCorrespondingType(CollectionDataType cdt, EditableCorrespondenceModelView<?> ci) {
+		return ci.getCorrespondingEObjects(cdt).filter(ConcreteClassifier).claimOne
 	}
 
-	private static def dispatch Type claimUniqueCorrespondingType(PrimitiveDataType pdt, CorrespondenceModel ci) {
+	private static def dispatch Type claimUniqueCorrespondingType(PrimitiveDataType pdt, EditableCorrespondenceModelView<?> ci) {
 		return claimJaMoPPTypeForPrimitiveDataType(pdt)
 	}
 
-	private static def dispatch Type claimUniqueCorrespondingType(CompositeDataType cdt, CorrespondenceModel ci) {
-		return ci.getCorrespondingEObjects(cdt, ConcreteClassifier).claimOne
+	private static def dispatch Type claimUniqueCorrespondingType(CompositeDataType cdt, EditableCorrespondenceModelView<?> ci) {
+		return ci.getCorrespondingEObjects(cdt).filter(ConcreteClassifier).claimOne
 	}
 }

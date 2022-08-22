@@ -1,27 +1,27 @@
 import tools.vitruv.applications.cbs.commonalities.oo.operators._
 import tools.vitruv.applications.cbs.commonalities.pcm.operators._
 
-import "http://palladiosimulator.org/PalladioComponentModel/5.2" as PCM
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 concept ComponentBasedSystems
 
 // Externally contained by ComponentBasedSystems:Operation.parameters
 referenced commonality OperationParameter {
 
-	// Externally contained by PCM:OperationSignature.parameters__OperationSignature
-	with PCM:Parameter
+	// Externally contained by pcm:OperationSignature.parameters__OperationSignature
+	with pcm:Parameter
 
 	// Externally contained by ObjectOrientedDesign:InterfaceMethod.parameters
 	with ObjectOrientedDesign:MethodParameter
 
 	has name {
-		= PCM:Parameter.parameterName
+		= pcm:Parameter.parameterName
 
 		= ObjectOrientedDesign:MethodParameter.name
 	}
 
 	has type {
-		= pcmDataTypeReference(PCM:Parameter.dataType__Parameter, "ComponentBasedSystems")
+		= pcmDataTypeReference(pcm:Parameter.dataType__Parameter, "ComponentBasedSystems")
 
 		= ooTypeReference(ObjectOrientedDesign:MethodParameter.type, "ComponentBasedSystems")
 	}

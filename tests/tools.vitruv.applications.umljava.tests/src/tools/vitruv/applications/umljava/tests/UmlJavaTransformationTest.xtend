@@ -15,7 +15,10 @@ import static tools.vitruv.applications.umljava.tests.util.TransformationDirecti
 import tools.vitruv.applications.umljava.tests.util.JavaUmlViewFactory
 import tools.vitruv.applications.util.temporary.java.JavaSetup
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.^extension.ExtendWith
+import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 
+@ExtendWith(RegisterMetamodelsInStandalone)
 abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected var extension JavaUmlViewFactory viewFactory
 

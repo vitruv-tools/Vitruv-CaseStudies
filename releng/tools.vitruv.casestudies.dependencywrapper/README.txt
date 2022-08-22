@@ -1,0 +1,3 @@
+The only purpose of this plugin is to wrap dependencies that are only available on a P2 updatesite into a Maven module packaged as an Eclipse plugin to be able to use all the dependencies as ordinary Maven dependencies.
+This is especially necessary for using the Xtext-based DSLs, which need pure Maven dependencies on the language projects, but resolving dependences on OSGi bundles deployed to a P2 updatesite does not seem to be possible with the xtext-maven-plugin.
+Thus, this plugin serves as a wrapper for these dependencies.

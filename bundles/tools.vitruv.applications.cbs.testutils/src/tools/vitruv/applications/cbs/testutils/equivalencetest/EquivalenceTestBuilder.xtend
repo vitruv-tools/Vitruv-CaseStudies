@@ -1,10 +1,10 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest
 
-import tools.vitruv.testutils.TestView
 import java.util.function.Consumer
 import org.junit.jupiter.api.DynamicNode
-import tools.vitruv.testutils.TestUserInteraction
 import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
+import tools.vitruv.testutils.TestUserInteraction
+import tools.vitruv.testutils.views.TestView
 
 /**
  * Constructs an equivalence test, i.e. a test that executes steps in different metamodels and checks that if propagated,

@@ -1,15 +1,15 @@
 import tools.vitruv.applications.cbs.commonalities.oo.operators._
 import tools.vitruv.applications.cbs.commonalities.pcm.operators._
 
-import "http://palladiosimulator.org/PalladioComponentModel/5.2" as PCM
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 concept ComponentBasedSystems
 
 // Externally contained by ComponentBasedSystems:CompositeDataType.elements
 referenced commonality CompositeDataTypeElement {
 
-	// Externally contained by PCM:CompositeDataType.innerDeclaration_CompositeDataType
-	with PCM:InnerDeclaration
+	// Externally contained by pcm:CompositeDataType.innerDeclaration_CompositeDataType
+	with pcm:InnerDeclaration
 
 	// Externally contained by ObjectOrientedDesign:Class.properties
 	// TODO: Getter and setter methods, externally contained by ObjectOrientedDesign:Class.methods
@@ -19,13 +19,13 @@ referenced commonality CompositeDataTypeElement {
 	}
 
 	has name {
-		= PCM:InnerDeclaration.entityName
+		= pcm:InnerDeclaration.entityName
 
 		= ObjectOrientedDesign:Property.name
 	}
 
 	has type {
-		= pcmDataTypeReference(PCM:InnerDeclaration.datatype_InnerDeclaration, "ComponentBasedSystems")
+		= pcmDataTypeReference(pcm:InnerDeclaration.datatype_InnerDeclaration, "ComponentBasedSystems")
 
 		= ooTypeReference(ObjectOrientedDesign:Property.type, "ComponentBasedSystems")
 	}

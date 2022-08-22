@@ -4,7 +4,7 @@ Bundle-Name: Vitruv Temporary Utils
 Comment: This project is only temporary, as the utils will be separated by domains
 Bundle-SymbolicName: tools.vitruv.applications.util.temporary
 Automatic-Module-Name: tools.vitruv.applications.util.temporary
-Bundle-Version: 0.3.0.qualifier
+Bundle-Version: 3.0.1.qualifier
 Require-Bundle: com.google.guava,
  org.apache.log4j,
  org.eclipse.uml2.uml,
