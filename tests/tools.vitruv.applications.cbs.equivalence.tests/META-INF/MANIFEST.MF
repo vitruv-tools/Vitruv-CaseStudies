@@ -11,8 +11,9 @@ Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib.macro,
  org.junit.jupiter.api,
- tools.vitruv.applications.cbs.equivalencetesttemplates,
  tools.vitruv.applications.pcmjava,
  tools.vitruv.applications.pcmumlclass,
- tools.vitruv.applications.umljava
+ tools.vitruv.applications.umljava,
+ tools.vitruv.applications.cbs.testutils,
+ tools.vitruv.testutils.vsum
 Export-Package: tools.vitruv.applications.cbs.equivalencetests

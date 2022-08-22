@@ -1,12 +1,12 @@
 import tools.vitruv.applications.cbs.commonalities.domaincommon.operators._
 
-import "http://palladiosimulator.org/PalladioComponentModel/5.2" as PCM
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 concept ComponentBasedSystems
 
 commonality Repository {
 
-	with PCM:(Repository in Resource)
+	with pcm:(Repository in Resource)
 	whereat {
 		-> Resource.path = "model/",
 		Resource.fileExtension = "repository"
@@ -26,14 +26,14 @@ commonality Repository {
 	}
 
 	has name {
-		= PCM:Repository.entityName
-		-> PCM:Resource.name
+		= pcm:Repository.entityName
+		-> pcm:Resource.name
 
 		= firstUpper(ObjectOrientedDesign:RepositoryPackage.name)
 	}
 
 	has components referencing ComponentBasedSystems:Component {
-		= PCM:Repository.components__Repository
+		= pcm:Repository.components__Repository
 
 		// Note: We assume that the contracts and datatypes packages do not contain classes which match the Component
 		// participation. Otherwise these packages would need to be ignored here.
@@ -41,13 +41,13 @@ commonality Repository {
 	}
 
 	has componentInterfaces referencing ComponentBasedSystems:ComponentInterface {
-		= PCM:Repository.interfaces__Repository
+		= pcm:Repository.interfaces__Repository
 
 		= ObjectOrientedDesign:ContractsPackage.interfaces
 	}
 
 	has compositeDataTypes referencing ComponentBasedSystems:CompositeDataType {
-		= PCM:Repository.dataTypes__Repository
+		= pcm:Repository.dataTypes__Repository
 
 		= ObjectOrientedDesign:DatatypesPackage.classes
 	}

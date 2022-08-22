@@ -20,19 +20,20 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.junit.jupiter.api.function.Executable
-import org.opentest4j.TestAbortedException
+import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
+import tools.vitruv.change.propagation.ChangePropagationSpecification
 import tools.vitruv.framework.vsum.VirtualModelBuilder
-import tools.vitruv.testutils.BasicTestView
-import tools.vitruv.testutils.ChangePublishingTestView
 import tools.vitruv.testutils.TestProjectManager
 import tools.vitruv.testutils.TestUserInteraction
-import tools.vitruv.testutils.TestView
-import tools.vitruv.testutils.UriMode
 import tools.vitruv.testutils.printing.DefaultPrintIdProvider
 import tools.vitruv.testutils.printing.ModelPrinting
 import tools.vitruv.testutils.printing.PrintIdProvider
 import tools.vitruv.testutils.printing.UriReplacingPrinter
+import tools.vitruv.testutils.views.BasicTestView
+import tools.vitruv.testutils.views.ChangePublishingTestView
+import tools.vitruv.testutils.views.TestView
+import tools.vitruv.testutils.views.UriMode
 
 import static com.google.common.base.Preconditions.checkNotNull
 import static java.nio.file.FileVisitResult.*
@@ -40,11 +41,9 @@ import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.containsModelOf
 import static tools.vitruv.testutils.printing.PrintMode.*
 
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension java.nio.file.Files.walkFileTree
 import static extension tools.vitruv.testutils.printing.ModelPrinting.*
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
-import tools.vitruv.change.propagation.ChangePropagationSpecification
-import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor
 
 @FinalFieldsConstructor
 package class EquivalenceTestExecutable implements Executable, AutoCloseable {
@@ -83,11 +82,9 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
 		val changePropagationSpecifications = this.changePropagationSpecifications
 		val userInteraction = new TestUserInteraction
-		val vsum = new VirtualModelBuilder()
-			.withStorageFolder(vsumDirectory)
-			.withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(userInteraction))
-			.withChangePropagationSpecifications(changePropagationSpecifications)
-			.buildAndInitialize()
+		val vsum = new VirtualModelBuilder().withStorageFolder(vsumDirectory).withUserInteractorForResultProvider(
+			new TestUserInteraction.ResultProvider(userInteraction)).
+			withChangePropagationSpecifications(changePropagationSpecifications).buildAndInitialize()
 		new DirectoryTestView(
 			new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum),
 			viewDirectory
@@ -102,29 +99,16 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		newBasicView(testProjectManager.getProject("", extensionContext))
 	}
 
-	def private executeDependencies(TestView testView, TestView referenceView) throws TestAbortedException {
-		try {
-			for (dependencyTestStep : dependencySteps.get(testStep.targetMetamodel)) {
-				dependencyTestStep.executeIn(testView)
-			}
-			for (referenceMetamodel : referenceMetamodels) {
-				for (dependencyReferenceStep : dependencySteps.get(referenceMetamodel)) {
-					dependencyReferenceStep.executeIn(referenceView)
-				}
-			}
-
-			verifyTestViewResults()
-		} catch (AssertionError failure) {
-			throw abortedException( 
-				'This run was aborted because its dependency steps produces an inconsistent result:', failure 
-			)
-		} catch (Throwable failure) {
-			throw abortedException('This run was aborted because executing its dependency steps failed:', failure)
+	def private executeDependencies(TestView testView, TestView referenceView) {
+		for (dependencyTestStep : dependencySteps.getOrDefault(testStep.targetMetamodel, emptyList)) {
+			dependencyTestStep.executeIn(testView)
 		}
-	}
-
-	def private static abortedException(String reason, Throwable cause) {
-		new TestAbortedException('''«reason»«System.lineSeparator»«cause.message»''', cause)
+		for (referenceMetamodel : referenceMetamodels) {
+			for (dependencyReferenceStep : this.dependencySteps.getOrDefault(referenceMetamodel, emptyList)) {
+				dependencyReferenceStep.executeIn(referenceView)
+			}
+		}
+		verifyTestViewResults()
 	}
 
 	def private void verifyTestViewResults() throws Throwable {
@@ -136,9 +120,9 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 			val referenceFiles = referenceView.directory.dataFiles [ file |
 				referenceMetamodels.exists[file.belongsTo(it)]
 			]
-	
+
 			assertThat(testView, containsExactlyResources(referenceView, referenceFiles))
-	
+
 			referenceFiles.forEach [ model |
 				val referenceResource = referenceView.resourceAt(model)
 				val referenceMetamodel = checkNotNull(
@@ -146,7 +130,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 					'''Cannot find metamodel of «referenceResource»!'''
 				)
 				val filters = comparisonSettings.getEqualityOptionsForMetamodel(referenceMetamodel)
-	
+
 				assertThat(testView.resourceAt(model), containsModelOf(referenceResource, filters))
 			]
 		}
@@ -188,7 +172,7 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 	}
 
 	def static private belongsTo(Path path, MetamodelDescriptor metamodel) {
-		metamodel.fileExtensions.exists [path.toString.endsWith('''.«it»''')]
+		metamodel.fileExtensions.exists[path.toString.endsWith('''.«it»''')]
 	}
 
 	def static private belongsTo(Resource resource, MetamodelDescriptor metamodel) {
@@ -225,27 +209,26 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		val PrintIdProvider idProvider = new DefaultPrintIdProvider()
 
 		override describeTo(Description description) {
-			description.appendText("exactly these resource paths to exist in the test view: ")
-				.appendPrintResult [
-					printSet(referenceFiles, MULTI_LINE_LIST) [ subTarget, path |
-						subTarget.print(path.toString)
-					]
+			description.appendText("exactly these resource paths to exist in the test view: ").appendPrintResult [
+				printSet(referenceFiles, MULTI_LINE_LIST) [ subTarget, path |
+					subTarget.print(path.toString)
 				]
+			]
 		}
 
 		override matchesSafely(DirectoryTestView testView) {
 			testFiles = testView.directory.dataFiles [ file |
-				referenceMetamodels.exists [file.belongsTo(it)]
+				referenceMetamodels.exists[file.belongsTo(it)]
 			]
 			return testFiles == referenceFiles
 		}
 
 		override describeMismatchSafely(DirectoryTestView testView, Description mismatchDescription) {
-			val missingResources = (new LinkedHashSet(referenceFiles) => [removeAll(testFiles)])
-				.mapFixedTo(new LinkedHashSet) [referenceView.resourceAt(it)]
-			val unexpectedResources = (new LinkedHashSet(testFiles) => [removeAll(referenceFiles)])
-				.mapFixedTo(new LinkedHashSet) [referenceView.resourceAt(it)]
-			
+			val missingResources = (new LinkedHashSet(referenceFiles) => [removeAll(testFiles)]).mapFixedTo(
+				new LinkedHashSet)[referenceView.resourceAt(it)]
+			val unexpectedResources = (new LinkedHashSet(testFiles) => [removeAll(referenceFiles)]).mapFixedTo(
+				new LinkedHashSet)[referenceView.resourceAt(it)]
+
 			if (!missingResources.isEmpty) {
 				mismatchDescription.appendText("the following resources are missing in the test view: ").
 					appendModelValueSet(missingResources, MULTI_LINE_LIST, idProvider)
@@ -259,4 +242,5 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 			}
 		}
 	}
+
 }

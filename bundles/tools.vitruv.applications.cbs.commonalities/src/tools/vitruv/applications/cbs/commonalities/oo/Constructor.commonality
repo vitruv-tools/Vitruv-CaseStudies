@@ -1,22 +1,22 @@
 import tools.vitruv.applications.cbs.commonalities.java.operators._
 import tools.vitruv.applications.cbs.commonalities.uml.operators._
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as UML
-import "http://www.emftext.org/java" as Java
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
 
 concept ObjectOrientedDesign
 
 // Externally contained by ObjectOrientedDesign:Class.constructors
 referenced commonality Constructor {
 
-	// Externally contained by UML:Class.ownedOperation
-	with UML:Operation
+	// Externally contained by uml:Class.ownedOperation
+	with uml:Operation
 	whereat {
 		<- Operation.name isUmlContainerName
 	}
 
-	// Externally contained by Java:Class.members
-	with Java:Constructor
+	// Externally contained by java:Class.members
+	with java:Constructor
 	whereat {
 		<- Constructor.name isJavaContainerName
 	}
@@ -24,21 +24,21 @@ referenced commonality Constructor {
 	// TODO: Enforcing the participation conditions does not work, because the objects will not have been inserted into
 	// their container at the time of enforcement. So we propagate the name via this attribute.
 	has name {
-		= UML:Operation.name
+		= uml:Operation.name
 
-		= Java:Constructor.name
+		= java:Constructor.name
 	}
 
 	has visibility {
-		= umlVisibility(UML:Operation.visibility)
+		= umlVisibility(uml:Operation.visibility)
 
-		= javaVisibility(Java:Constructor.annotationsAndModifiers, Java:Constructor)
+		= javaVisibility(java:Constructor.annotationsAndModifiers, java:Constructor)
 	}
 
 	has parameters referencing ObjectOrientedDesign:MethodParameter {
 		// Note: The referenced participation only accepts input parameters.
-		= UML:Operation.ownedParameter
+		= uml:Operation.ownedParameter
 
-		= Java:Constructor.parameters
+		= java:Constructor.parameters
 	}
 }

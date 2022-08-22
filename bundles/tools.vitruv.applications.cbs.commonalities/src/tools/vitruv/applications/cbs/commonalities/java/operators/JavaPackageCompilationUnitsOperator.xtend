@@ -17,7 +17,6 @@ import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 import static extension tools.vitruv.dsls.commonalities.runtime.helper.IntermediateModelHelper.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.containers.ContainersPackage
-import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 
 // TODO Some duplication with JavaSubPackagesOperator
 @ReferenceMappingOperator(
@@ -58,7 +57,7 @@ class JavaPackageCompilationUnitsOperator extends AbstractReferenceMappingOperat
 		logger.trace('''Searching container for Java CompilationUnit: «compilationUnit»''')
 		// TODO avoid brute force search
 		// TODO only finds CompilationUnits with a correspondence
-		val knownPackages = correspondenceModel.getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE, Package)
+		val knownPackages = correspondenceModel.getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE).filter(Package)
 		return knownPackages.findFirst [
 			logger.trace('''  Found candidate package: «it»''')
 			it.packageString == compilationUnitNamespacesString

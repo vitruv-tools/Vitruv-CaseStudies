@@ -24,7 +24,6 @@ import org.emftext.language.java.members.Member
 import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypeReference
-import tools.vitruv.change.correspondence.CorrespondenceModel
 
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
@@ -32,8 +31,8 @@ import java.util.Optional
 import org.emftext.language.java.commons.NamespaceAwareElement
 import static java.util.Collections.emptyList
 import org.emftext.language.java.containers.ContainersPackage
-import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.getCorrespondingEObjects
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
+import tools.vitruv.change.correspondence.view.EditableCorrespondenceModelView
 
 /**
  * Class for java classifier, package and compilation unit util functions
@@ -222,14 +221,14 @@ class JavaContainerAndClassifierUtil {
 	}
 
 	def static Package getContainingPackageFromCorrespondenceModel(Classifier classifier,
-		CorrespondenceModel correspondenceModel) {
+		EditableCorrespondenceModelView<?> correspondenceModel) {
 		var namespace = classifier.containingCompilationUnit.namespacesAsString
 		if (namespace.endsWith("$") || namespace.endsWith(".")) {
 			namespace = namespace.substring(0, namespace.length - 1)
 		}
 		val finalNamespace = namespace
 		var Iterable<Package> packagesWithCorrespondences = correspondenceModel.getCorrespondingEObjects(
-			ContainersPackage.Literals.PACKAGE, Package)
+			ContainersPackage.Literals.PACKAGE).filter(Package)
 		val packagesWithNamespace = packagesWithCorrespondences.filter [ pack |
 			finalNamespace.equals(pack.namespacesAsString + pack.name)
 		]

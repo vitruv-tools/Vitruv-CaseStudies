@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>tools.vitruv</groupId>
+		<artifactId>parent</artifactId>
+		<version>2.0.2</version>
+	</parent>
+	<artifactId>case-studies-parent</artifactId>
+	<version>3.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<!-- For each project, a local updatesite can be specified by overwriting these properties. They default to the Vitruv updatesites. -->
+		<vitruv.change.url>https://vitruv-tools.github.io/updatesite/nightly/change</vitruv.change.url>
+		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework</vitruv.framework.url>
+		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/dsls</vitruv.dsls.url>
+	</properties>
+
+	<repositories>
+		<!-- The Vitruv project updatesites to be potentially overwritten by local builds -->
+		<repository>
+			<id>Vitruv Change</id>
+			<layout>p2</layout>
+			<url>${vitruv.change.url}</url>
+		</repository>
+		<repository>
+			<id>Vitruv Framework</id>
+			<layout>p2</layout>
+			<url>${vitruv.framework.url}</url>
+		</repository>
+		<repository>
+			<id>Vitruv DSLs</id>
+			<layout>p2</layout>
+			<url>${vitruv.dsls.url}</url>
+		</repository>
+		<repository>
+			<id>Demo Metamodels</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/metamodels/demo/latest/</url>
+		</repository>
+		<repository>
+			<id>SDQ Commons</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/commons/latest/</url>
+		</repository>
+		<repository>
+			<id>XAnnotations</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/xannotations/latest/</url>
+		</repository>
+		<repository>
+			<id>EMFText and JaMoPP (P2 Wrapper)</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/p2-wrapper/latest/</url>
+		</repository>
+		<repository>
+			<id>Palladiosimulator</id>
+			<layout>p2</layout>
+			<url>https://updatesite.palladio-simulator.com/palladio-build-updatesite/releases/5.0.0/</url>
+		</repository>
+	</repositories>
+
+	<!-- Necessary to ensure usage of consistent versions of org.eclipse.jdt.core and the fragments org.eclipse.jdt.compiler.apt and org.eclipse.jdt.compiler.tool.
+	Woraround described here: https://github.com/eclipse/xtext-xtend/issues/116#issuecomment-271916734 and https://github.com/eclipse/xtext-maven/issues/146#issue-926261661 -->
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.jdt</groupId>
+			<artifactId>org.eclipse.jdt.core</artifactId>
+			<version>3.30.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jdt</groupId>
+			<artifactId>org.eclipse.jdt.compiler.apt</artifactId>
+			<version>1.4.100</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jdt</groupId>
+			<artifactId>org.eclipse.jdt.compiler.tool</artifactId>
+			<version>1.3.150</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>local-change</id>
+			<activation>
+				<property>
+					<name>vitruv.change.path</name>
+				</property>
+			</activation>
+			<properties>
+				<vitruv.change.url>file:///${vitruv.change.path}/releng/tools.vitruv.change.updatesite/target/repository</vitruv.change.url>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>local-framework</id>
+			<activation>
+				<property>
+					<name>vitruv.framework.path</name>
+				</property>
+			</activation>
+			<properties>
+				<vitruv.framework.url>file:///${vitruv.framework.path}/releng/tools.vitruv.updatesite/target/repository</vitruv.framework.url>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>local-dsls</id>
+			<activation>
+				<property>
+					<name>vitruv.dsls.path</name>
+				</property>
+			</activation>
+			<properties>
+				<vitruv.dsls.url>file:///${vitruv.dsls.path}/releng/tools.vitruv.dsls.updatesite/target/repository</vitruv.dsls.url>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>compile-dsls</id>
+			<activation>
+				<file>
+					<exists>.maven_enable_dsls-compiler</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>src-gen-clean</id>
+								<!-- Commonalities generate Reactions, but those Reactions must not be
+								 	 part of the Xtext build. Because of that, we always need to clean the generated
+								 	 directory for a correct build, regardless of whether clean was requested -->
+								<phase>initialize</phase>
+								<goals>
+									<goal>clean</goal>
+								</goals>
+								<configuration>
+									<excludeDefaultDirectories>true</excludeDefaultDirectories>
+									<filesets>
+										<fileset>
+											<directory>src-gen</directory>
+										</fileset>
+									</filesets>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.eclipse.xtend</groupId>
+						<artifactId>xtend-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>default</id>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.eclipse.xtext</groupId>
+						<artifactId>xtext-maven-plugin</artifactId>
+						<version>${xtext.version}</version>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<languages>
+								<language>
+									<setup>tools.vitruv.dsls.reactions.ReactionsLanguageStandaloneSetup</setup>
+									<outputConfigurations>
+										<outputConfiguration>
+											<outputDirectory>${project.basedir}/src-gen</outputDirectory>
+										</outputConfiguration>
+									</outputConfigurations>
+								</language>
+								<language>
+									<setup>tools.vitruv.dsls.commonalities.CommonalitiesLanguageStandaloneSetup</setup>
+									<outputConfigurations>
+										<outputConfiguration>
+											<outputDirectory>${project.basedir}/src-gen</outputDirectory>
+										</outputConfiguration>
+									</outputConfigurations>
+								</language>
+								<language>
+									<setup>org.eclipse.xtend.core.XtendStandaloneSetup</setup>
+									<outputConfigurations>
+										<outputConfiguration>
+											<outputDirectory>${project.basedir}/xtend-gen</outputDirectory>
+										</outputConfiguration>
+									</outputConfigurations>
+								</language>
+							</languages>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>tools.vitruv</groupId>
+								<artifactId>tools.vitruv.casestudies.dependencywrapper</artifactId>
+								<version>${project.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.eclipse.xtend</groupId>
+								<artifactId>org.eclipse.xtend.core</artifactId>
+								<version>${xtext.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

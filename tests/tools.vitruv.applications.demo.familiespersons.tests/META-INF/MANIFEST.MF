@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Vitruv Families-Persons Demo Application Tests
+Bundle-SymbolicName: tools.vitruv.applications.demo.familiespersons.tests
+Bundle-Version: 3.0.1.qualifier
+Automatic-Module-Name: tools.vitruv.applications.demo.familiespersons.tests
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: tools.vitruv.dsls.demo.familiespersons.tests,
+ tools.vitruv.testutils.vsum,
+ org.junit.jupiter.api
+Bundle-Vendor: vitruv.tools

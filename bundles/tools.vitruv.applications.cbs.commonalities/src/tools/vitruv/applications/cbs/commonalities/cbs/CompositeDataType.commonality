@@ -1,12 +1,12 @@
-import "http://palladiosimulator.org/PalladioComponentModel/5.2" as PCM
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 concept ComponentBasedSystems
 
 // Externally contained by ComponentBasedSystems:Repository.compositeDataTypes
 referenced commonality CompositeDataType {
 
-	// Externally contained by PCM:Repository.datatypes__Repository
-	with PCM:CompositeDataType
+	// Externally contained by pcm:Repository.datatypes__Repository
+	with pcm:CompositeDataType
 
 	// Externally contained by ObjectOrientedDesign:DatatypesPackage.classes
 	with ObjectOrientedDesign:Class
@@ -15,13 +15,13 @@ referenced commonality CompositeDataType {
 	}
 
 	has name {
-		= PCM:CompositeDataType.entityName
+		= pcm:CompositeDataType.entityName
 
 		= ObjectOrientedDesign:Class.name
 	}
 
 	has elements referencing ComponentBasedSystems:CompositeDataTypeElement {
-		= PCM:CompositeDataType.innerDeclaration_CompositeDataType
+		= pcm:CompositeDataType.innerDeclaration_CompositeDataType
 
 		= ObjectOrientedDesign:Class.properties
 	}

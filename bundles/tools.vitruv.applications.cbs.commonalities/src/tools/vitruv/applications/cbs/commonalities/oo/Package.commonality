@@ -1,15 +1,15 @@
 import tools.vitruv.applications.cbs.commonalities.java.operators._
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as UML
-import "http://www.emftext.org/java" as Java
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
 
 concept ObjectOrientedDesign
 
 // Optionally externally contained by ObjectOrientedDesign:Package.subPackages
 commonality Package {
 
-	// Optionally externally contained by UML:Package.packagedElement
-	with UML:(Package, single Model, Resource)
+	// Optionally externally contained by uml:Package.packagedElement
+	with uml:(Package, single Model, Resource)
 	whereat {
 		Package in Model,
 		Model in Resource,
@@ -20,8 +20,8 @@ commonality Package {
 		Resource.fileExtension = "uml"
 	}
 
-	// Optionally externally contained by Java:Package.javaSubPackages
-	with Java:(Package in Resource)
+	// Optionally externally contained by java:Package.javaSubPackages
+	with java:(Package in Resource)
 	whereat {
 		-> Resource.path = "src/",
 		Resource.name = "package-info",
@@ -29,39 +29,39 @@ commonality Package {
 	}
 
 	has name {
-		= UML:Package.name
+		= uml:Package.name
 
-		= Java:Package.name
-		-> javaPackageResourcePathFromName(Java:Resource.path, "src/", Java:Package)
+		= java:Package.name
+		-> javaPackageResourcePathFromName(java:Resource.path, "src/", java:Package)
 	}
 
 	// Note: Uml package hierarchy is mapped to containment hierarchy of OO:Package, which is then mapped to
-	// Java:Package.namespaces.
-	// Note: When the Java:Package.namespaces changes for an existing Java package, we assume that this change happens
+	// java:Package.namespaces.
+	// Note: When the java:Package.namespaces changes for an existing Java package, we assume that this change happens
 	// consistently with an update to the resource in which the Java package is contained. We therefore do not have to
 	// update the Resource.path in this situation.
 	has subPackages referencing ObjectOrientedDesign:Package {
-		// Note: Any elements that are not of type UML:Package are implicitly ignored.
-		= UML:Package.packagedElement
+		// Note: Any elements that are not of type uml:Package are implicitly ignored.
+		= uml:Package.packagedElement
 
 		// Note: When inserting a package, the operator also updates the path of the corresponding resource.
-		// TODO Explicitly pass the referenced Java:Resource? Currently the operator retrieves it from the correspondence model.
+		// TODO Explicitly pass the referenced java:Resource? Currently the operator retrieves it from the correspondence model.
 		// TODO Allow the operator to update the resource path after the name or namespaces have changed, but the attribute reference still holds?
 		// -> might better fit an attribute mapping
-		= Java:Package.javaSubPackages(ref Package.namespaces, Package.namespaces, Package.name) 
+		= java:Package.javaSubPackages(ref Package.namespaces, Package.namespaces, Package.name) 
 	}
 
 	has classes referencing ObjectOrientedDesign:Class {
-		// Note: Any elements that are not of type UML:Class are implicitly ignored.
-		= UML:Package.packagedElement
+		// Note: Any elements that are not of type uml:Class are implicitly ignored.
+		= uml:Package.packagedElement
 		// Note: Any compilation units that don't correspond to an ObjectOrientedDesign:Class are implicitly ignored.
-		= Java:Package.javaPackageCompilationUnits(ref CompilationUnit.namespaces, Package.namespaces, Package.name)
+		= java:Package.javaPackageCompilationUnits(ref CompilationUnit.namespaces, Package.namespaces, Package.name)
 	}
 
 	has interfaces referencing ObjectOrientedDesign:Interface {
-		// Note: Any elements that are not of type UML:Interface are implicitly ignored.
-		= UML:Package.packagedElement
+		// Note: Any elements that are not of type uml:Interface are implicitly ignored.
+		= uml:Package.packagedElement
 		// Note: Any compilation units that don't correspond to an ObjectOrientedDesign:Interface are implicitly ignored.
-		= Java:Package.javaPackageCompilationUnits(ref CompilationUnit.namespaces, Package.namespaces, Package.name) 
+		= java:Package.javaPackageCompilationUnits(ref CompilationUnit.namespaces, Package.namespaces, Package.name) 
 	}
 }

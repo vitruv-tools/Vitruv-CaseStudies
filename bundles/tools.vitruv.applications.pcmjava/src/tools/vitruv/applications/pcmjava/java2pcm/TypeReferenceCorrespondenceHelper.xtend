@@ -23,15 +23,13 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.change.correspondence.CorrespondenceModel
 
-import static extension tools.vitruv.change.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.change.interaction.UserInteractor
 import tools.vitruv.applications.util.temporary.pcm.PrimitiveTypesRepositoryLoader
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import static com.google.common.base.Preconditions.checkState
-import java.util.List
+import tools.vitruv.change.correspondence.view.EditableCorrespondenceModelView
 
 /**
  * Helper to map type References to PCM data types
@@ -58,7 +56,7 @@ class TypeReferenceCorrespondenceHelper {
 	}
 	
 	def static DataType getCorrespondingPCMDataTypeForTypeReference(TypeReference typeReference,
-		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo, long arrayDimension) {
+		EditableCorrespondenceModelView<?> correspondenceModel, UserInteractor userInteractor, Repository repo, long arrayDimension) {
 		var DataType pcmDataType = getDataTypeFromTypeReference(typeReference, correspondenceModel, userInteractor,
 			repo)
 
@@ -76,7 +74,7 @@ class TypeReferenceCorrespondenceHelper {
 				if (!(pcmDataType instanceof PrimitiveDataType)) {
 					// create a correspondence from the collection to the non collection DataType.
 					// reason: as long as the inner type exists the collection resectievly an array can be used easily
-					correspondenceModel.createAndAddCorrespondence(List.of(collectionDataType), List.of(pcmDataType))
+					correspondenceModel.addCorrespondenceBetween(collectionDataType, pcmDataType, null)
 				}
 			}
 			pcmDataType = collectionDataType
@@ -88,7 +86,7 @@ class TypeReferenceCorrespondenceHelper {
 	 * Returns a valid PCM type for the given type reference. Throws an exception if none was found
 	 */
 	def static DataType getDataTypeFromTypeReference(TypeReference typeReference,
-		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
+		EditableCorrespondenceModelView<?> correspondenceModel, UserInteractor userInteractor, Repository repo) {
 		if (typeReference instanceof PrimitiveType) {
 			return claimPCMDataTypeForJaMoPPPrimitiveType(typeReference)
 		}
@@ -103,7 +101,7 @@ class TypeReferenceCorrespondenceHelper {
 	}
 
 	def private static DataType getPCMDataTypeForNamespaceClassifierReference(NamespaceClassifierReference reference,
-		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
+		EditableCorrespondenceModelView<?> correspondenceModel, UserInteractor userInteractor, Repository repo) {
 		if (!reference.classifierReferences.nullOrEmpty) {
 
 			// just create the data type from the first classifier that is non null
@@ -120,7 +118,7 @@ class TypeReferenceCorrespondenceHelper {
 	}
 
 	def private static DataType getPCMDataTypeForClassifierReference(ClassifierReference classifierReference,
-		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
+		EditableCorrespondenceModelView<?> correspondenceModel, UserInteractor userInteractor, Repository repo) {
 		val Classifier classifier = classifierReference.target
 		if (null !== classifier) {
 
@@ -130,7 +128,7 @@ class TypeReferenceCorrespondenceHelper {
 			}
 			var Set<DataType> dataTypes = null
 			try {
-				dataTypes = correspondenceModel.getCorrespondingEObjects(classifier, DataType)
+				dataTypes = correspondenceModel.getCorrespondingEObjects(classifier).filter(DataType).toSet
 			} catch (Throwable t) {
 				logger.info("No correspondence found for classifier")
 				return null
@@ -155,12 +153,12 @@ class TypeReferenceCorrespondenceHelper {
 	}
 
 	def private static DataType createDataTypeForClassifier(Classifier classifier,
-		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
+		EditableCorrespondenceModelView<?> correspondenceModel, UserInteractor userInteractor, Repository repo) {
 		if (null === classifier) {
 			logger.warn("Classifier is null! Can not create a data type for the classifier")
 			return null
 		}
-		val correspondingPCMEObjects = correspondenceModel.getCorrespondingEObjects(classifier, NamedElement)
+		val correspondingPCMEObjects = correspondenceModel.getCorrespondingEObjects(classifier).filter(NamedElement)
 		var String correspondingWarning = ""
 		if (!correspondingPCMEObjects.nullOrEmpty) {
 			correspondingWarning = System.getProperty("line.seperator") + "Warning: the classifier " + classifier.name +
@@ -175,7 +173,7 @@ class TypeReferenceCorrespondenceHelper {
 		val CompositeDataType cdt = RepositoryFactory.eINSTANCE.createCompositeDataType
 		cdt.entityName = classifier.name
 		cdt.repository__DataType = repo
-		correspondenceModel.createAndAddCorrespondence(List.of(cdt), List.of(classifier))
+		correspondenceModel.addCorrespondenceBetween(cdt, classifier, null)
 
 		/*val String message = "Automatically created the corresponding composite data type " + cdt.entityName +
 		 * 	" for classifier " + classifier.name + correspondingWarning

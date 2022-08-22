@@ -40,11 +40,14 @@ import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualit
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.BeforeAll
 import tools.vitruv.applications.util.temporary.java.JavaSetup
+import org.junit.jupiter.api.^extension.ExtendWith
+import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
  * Provides additional checks for comparing the Java model to the correlating UML model.
  */
+@ExtendWith(RegisterMetamodelsInStandalone)
 abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	protected static final int ARRAY_LIST_SELECTION = 0
