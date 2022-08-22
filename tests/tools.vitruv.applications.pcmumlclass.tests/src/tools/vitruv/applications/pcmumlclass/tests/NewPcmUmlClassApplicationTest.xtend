@@ -20,7 +20,7 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
-import static extension tools.vitruv.applications.pcmumlclass.tests.UmlQueryUtil.*
+import static extension tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.*
 
 abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest {
 

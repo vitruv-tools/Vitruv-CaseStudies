@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclass.tests
+package tools.vitruv.applications.uml.testutility.uml
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
