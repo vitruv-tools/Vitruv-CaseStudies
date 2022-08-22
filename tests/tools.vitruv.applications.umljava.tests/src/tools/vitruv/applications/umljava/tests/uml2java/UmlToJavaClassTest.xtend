@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
-import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.eclipse.uml2.uml.UMLFactory
 import org.junit.jupiter.params.ParameterizedTest

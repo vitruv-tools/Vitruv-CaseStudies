@@ -5,7 +5,7 @@ import org.eclipse.uml2.uml.Model
 import org.junit.jupiter.api.BeforeEach
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
-import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.*
 import org.eclipse.uml2.uml.PackageableElement
 
 abstract class AbstractUmlToJavaTest extends UmlJavaTransformationTest {
