@@ -37,7 +37,7 @@ class RepositoryConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	@Test
 	def void testCreateRepositoryConcept_UML_Repository() {
-		init_UML
+		initUMLModel
 
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)

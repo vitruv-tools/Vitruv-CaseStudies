@@ -37,7 +37,7 @@ class InterfaceConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	@Test
 	def void testCreateInterfaceConcept_UML() {
-		init_UML()
+		initUMLModel()
 
 		changeUmlView [
 			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)
@@ -56,7 +56,7 @@ class InterfaceConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	@Test
 	def void testCreateInterfaceConcept_PCM() {
-		init_PCM()
+		initPCMRepository()
 
 		changePcmView [
 			var mPcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
@@ -77,7 +77,7 @@ class InterfaceConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	@Test
 	def void testRenameInterfaceConcept_UML() {
-		init_UML()
+		initUMLModel()
 
 		changeUmlView [
 			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)
@@ -102,7 +102,7 @@ class InterfaceConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	@Test
 	def void testRenameInterfaceConcept_PCM() {
-		init_PCM()
+		initPCMRepository()
 
 		changePcmView [
 			var pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
@@ -134,7 +134,7 @@ class InterfaceConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	@Test
 	def void testDeleteInterfaceConcept_UML() {
-		init_UML()
+		initUMLModel()
 
 		changeUmlView [
 			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)
@@ -158,7 +158,7 @@ class InterfaceConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	@Test
 	def void testDeleteInterfaceConcept_PCM() {
-		init_PCM()
+		initPCMRepository()
 
 		changePcmView [
 			var pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface

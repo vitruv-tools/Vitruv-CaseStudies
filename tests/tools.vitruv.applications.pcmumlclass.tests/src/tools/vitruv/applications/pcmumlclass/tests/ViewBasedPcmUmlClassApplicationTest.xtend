@@ -83,12 +83,12 @@ abstract class ViewBasedPcmUmlClassApplicationTest extends ViewBasedVitruvApplic
 		view.claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 	}
 
-	def void init_PCM() {
+	def void initPCMRepository() {
 		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 	}
 
-	def void init_UML() {
+	def void initUMLModel() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
 		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
