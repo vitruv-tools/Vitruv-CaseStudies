@@ -6,7 +6,7 @@ import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
 import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
 import org.eclipse.xtend.lib.annotations.Accessors
-import static extension tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityValidation
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.URI

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
-import static extension tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.emftext.language.java.members.MembersFactory
 import org.eclipse.uml2.uml.UMLFactory

@@ -17,7 +17,7 @@ Require-Bundle: org.junit.jupiter.api,
  edu.kit.ipd.sdq.activextendannotations,
  org.apache.log4j,
  org.eclipse.xtend.lib,
- tools.vitruv.applications.uml.testutility;bundle-version="0.3.0"
+ tools.vitruv.applications.testutility;bundle-version="0.3.0"
 Export-Package: tools.vitruv.applications.transitivechange.tests.circular.pcmumlclassjava,
  tools.vitruv.applications.transitivechange.tests.linear.pcmumlclassjava,
  tools.vitruv.applications.transitivechange.tests.linear.java2uml,

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
-import static extension tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Repository

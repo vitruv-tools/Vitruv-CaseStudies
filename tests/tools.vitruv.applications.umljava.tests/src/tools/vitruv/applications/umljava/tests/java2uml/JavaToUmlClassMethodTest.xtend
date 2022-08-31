@@ -19,7 +19,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import static extension tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 /**

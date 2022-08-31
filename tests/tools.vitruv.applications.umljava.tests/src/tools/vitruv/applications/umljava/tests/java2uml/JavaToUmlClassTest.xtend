@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
-import static extension tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*

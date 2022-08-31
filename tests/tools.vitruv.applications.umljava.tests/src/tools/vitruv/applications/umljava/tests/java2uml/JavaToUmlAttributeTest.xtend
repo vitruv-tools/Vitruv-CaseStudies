@@ -12,13 +12,13 @@ import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
-import static extension tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.types.TypeReference
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.*
-import static tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.loadUmlPrimitiveType
+import static tools.vitruv.applications.testutility.uml.UmlQueryUtil.loadUmlPrimitiveType
 import org.emftext.language.java.JavaClasspath
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
