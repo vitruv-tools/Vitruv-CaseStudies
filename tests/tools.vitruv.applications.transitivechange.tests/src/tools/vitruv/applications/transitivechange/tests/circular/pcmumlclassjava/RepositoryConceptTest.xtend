@@ -9,12 +9,12 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
 import org.emftext.language.java.containers.ContainersPackage
 import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
+import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTestHelper
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -86,19 +86,19 @@ class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		val umlModel = UMLFactory.eINSTANCE.createModel() => [
 			name = "umlModel"
 		]
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)).startRecordingChanges => [
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)).startRecordingChanges => [
 			contents += umlModel
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		var umlRepositoryPkg = umlModel.createNestedPackage("testCbsRepository")
 
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 
 		umlRepositoryPkg = umlModel.clearResourcesAndReloadRoot.nestedPackages.head
 		assertTrue(umlRepositoryPkg.name == "testCbsRepository")
@@ -110,13 +110,13 @@ class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 	def void testCreateRepositoryConcept_PCM() {
 		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		checkPcmRepository(pcmRepository.clearResourcesAndReloadRoot)
 	}
@@ -126,9 +126,9 @@ class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 		val initialRepository = pcmRepository
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += initialRepository
 		]
 		propagate
@@ -159,13 +159,13 @@ class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 			entityName = "testCbsRepository" // has to be capitalized via round-trip
 		]
 		val initialRepository = pcmRepository
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += initialRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		assertTrue(pcmRepository.entityName == "TestCbsRepository")
@@ -176,12 +176,12 @@ class RepositoryConceptTest extends PcmUmlJavaTransitiveChangeTest {
 		var umlModel = umlRepositoryPackage.nestingPackage
 
 		userInteraction.addNextConfirmationInput(true)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).propagate [
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).propagate [
 			delete(null)
 		]
 
-		assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelNotExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		// before the following reload, the mUmlModel instance will be out of synch with the vsum 
 		assertFalse(umlModel?.packagedElements.empty)
 		umlModel = umlModel.clearResourcesAndReloadRoot

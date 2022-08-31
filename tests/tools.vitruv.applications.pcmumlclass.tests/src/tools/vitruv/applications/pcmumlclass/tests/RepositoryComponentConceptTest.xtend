@@ -26,7 +26,7 @@ import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.
  * 		UmlIPREClassReactions.reactions,
  * 		UmlIPREConstructorOperation.reactions
  */
-class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
+class RepositoryComponentConceptTest extends LegacyPcmUmlClassApplicationTest {
 
 	val COMPONENT_NAME = "testComponent"
 
@@ -78,13 +78,13 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 	def private Repository createRepository() {
 		val pcmRepository = helper.createRepository()
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return pcmRepository.clearResourcesAndReloadRoot
 	}

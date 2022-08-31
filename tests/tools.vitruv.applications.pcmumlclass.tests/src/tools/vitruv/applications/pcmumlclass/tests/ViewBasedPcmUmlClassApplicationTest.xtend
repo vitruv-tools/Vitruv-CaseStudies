@@ -22,7 +22,7 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 
-abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest {
+abstract class ViewBasedPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest {
 
 	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FILE_EXTENSION = "uml"
@@ -36,7 +36,7 @@ abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationT
 	static val CONTRACTS_PACKAGE = "contracts"
 
 	protected var extension PcmUmlclassViewFactory viewFactory
-	protected var PcmUmlClassApplicationTestHelper helper
+	protected var LegacyPcmUmlClassApplicationTestHelper helper
 	protected var ResourceSet testResourceSet
 
 	override protected getChangePropagationSpecifications() {
@@ -84,13 +84,13 @@ abstract class NewPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationT
 	}
 
 	def void init_PCM() {
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 	}
 
 	def void init_UML() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 	}
 

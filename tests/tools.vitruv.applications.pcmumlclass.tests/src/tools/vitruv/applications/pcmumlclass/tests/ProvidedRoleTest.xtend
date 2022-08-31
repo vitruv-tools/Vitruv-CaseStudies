@@ -17,7 +17,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmProvidedRole.reactions, UmlProvidedRoleGeneralization.reactions
  */
-class ProvidedRoleTest extends PcmUmlClassApplicationTest {
+class ProvidedRoleTest extends LegacyPcmUmlClassApplicationTest {
 
 	static val PROVIDED_ROLE_NAME = "testProvidedRole"
 
@@ -56,13 +56,13 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 		helper.createComponent(pcmRepository)
 		helper.createOperationInterface(pcmRepository)
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return pcmRepository.clearResourcesAndReloadRoot
 	}

@@ -27,7 +27,6 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
-import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper
 
@@ -42,13 +41,14 @@ import org.junit.jupiter.api.BeforeAll
 import tools.vitruv.applications.util.temporary.java.JavaSetup
 import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
+import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTest
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
  * Provides additional checks for comparing the Java model to the correlating UML model.
  */
 @ExtendWith(RegisterMetamodelsInStandalone)
-abstract class PcmUmlJavaTransitiveChangeTest extends PcmUmlClassApplicationTest {
+abstract class PcmUmlJavaTransitiveChangeTest extends LegacyPcmUmlClassApplicationTest {
 
 	protected static final int ARRAY_LIST_SELECTION = 0
 	protected static boolean linearNetwork // set true (before class) to avoid the transformation between PCM and Java

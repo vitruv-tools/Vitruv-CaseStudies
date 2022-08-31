@@ -17,7 +17,7 @@ import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
  * <br><br>
  * Related files: PcmInterface.reactions, UmlInterface.reactions, UmlInterfaceGeneralization.reactions
  */
-class InterfaceConceptTest extends NewPcmUmlClassApplicationTest {
+class InterfaceConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	static val TEST_INTERFACE_NAME = "TestInterface"
 	static val NEW_TEST_INTERFACE_NAME = "NewTestInterface"

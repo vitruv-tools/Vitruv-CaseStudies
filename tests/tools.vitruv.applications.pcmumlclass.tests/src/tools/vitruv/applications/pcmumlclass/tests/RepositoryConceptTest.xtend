@@ -16,7 +16,7 @@ import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
  * <br><br>
  * Related files: PcmRepository.reactions, UmlRepositoryAndSystemPackage.reactions
  */
-class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
+class RepositoryConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	static val PACKAGE_NAME = "rootpackage"
 	static val PACKAGE_NAME_FIRST_UPPER = "Rootpackage"
@@ -25,7 +25,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 	@Test
 	def void testCreateRepositoryConcept_UML_System() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_SYSTEM_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_SYSTEM_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 
 		validateUmlAndPcmSystemView [
@@ -48,7 +48,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 
 	@Test
 	def void testCreateRepositoryConcept_PCM() {
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
@@ -62,7 +62,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 	@Test
 	def void testRenameRepositoryConcept_UML() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 
 		changeUmlView[
@@ -78,7 +78,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 
 	@Test
 	def void testRenameRepositoryConcept_PCM() {
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
@@ -95,7 +95,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 
 	@Test
 	def void testDeleteRepositoryConcept_PCM() {
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
@@ -115,8 +115,8 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 
 			assertNull(defaultPcmRepository)
 			assertTrue(defaultUmlModel.eContents.empty)
-			assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-			assertModelNotExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+			assertModelNotExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+			assertModelNotExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 			assertTrue(umlModel?.packagedElements.empty)
 		]
 	}
@@ -124,7 +124,7 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 	@Test
 	def void testDeleteRepositoryConcept_UMLModel() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 
 		validateUmlAndPcmPackagesView [
@@ -137,15 +137,15 @@ class RepositoryConceptTest extends NewPcmUmlClassApplicationTest {
 		]
 
 		validateUmlAndPcmPackagesView [
-			assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-			assertModelNotExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+			assertModelNotExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+			assertModelNotExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		]
 	}
 
 	@Test
 	def void testDeleteRepositoryConcept_UML() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 
 		validateUmlAndPcmPackagesView [

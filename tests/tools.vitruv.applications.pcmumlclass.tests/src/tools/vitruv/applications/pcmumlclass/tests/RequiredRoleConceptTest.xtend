@@ -21,7 +21,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmRequiredRole.reactions, UmlRequiredRoleParameter.reactions, UmlRequiredRoleProperty.reactions
  */
-class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
+class RequiredRoleConceptTest extends LegacyPcmUmlClassApplicationTest {
 
 	val REQUIRED_ROLE_NAME = "testRequiredRole"
 
@@ -75,9 +75,9 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		helper.createComponent(pcmRepository)
 		helper.createOperationInterface(pcmRepository)
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate

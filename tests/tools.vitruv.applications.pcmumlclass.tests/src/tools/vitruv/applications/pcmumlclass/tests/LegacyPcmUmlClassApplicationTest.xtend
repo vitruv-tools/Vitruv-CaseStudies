@@ -46,7 +46,7 @@ import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 
 @ExtendWith(RegisterMetamodelsInStandalone)
-abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
+abstract class LegacyPcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
 		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
@@ -54,7 +54,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		]
 	}
 
-	protected var PcmUmlClassApplicationTestHelper helper
+	protected var LegacyPcmUmlClassApplicationTestHelper helper
 	protected var ResourceSet testResourceSet
 
 	protected def getTestResource(URI uri) {
@@ -63,7 +63,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 
 	@BeforeEach
 	def protected void setup() {
-		helper = new PcmUmlClassApplicationTestHelper(this, [uri|startRecordingChanges(uri.resourceAt)])
+		helper = new LegacyPcmUmlClassApplicationTestHelper(this, [uri|startRecordingChanges(uri.resourceAt)])
 		testResourceSet = new ResourceSetImpl()
 	}
 

@@ -16,7 +16,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmAssemblyContext.reactions, UmlAssemblyContextProperty.reactions
  */
-class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
+class AssemblyContextConceptTest extends LegacyPcmUmlClassApplicationTest {
 
 	static val PROPERTY_NAME = "testAssemblyContextField"
 
@@ -58,13 +58,13 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		helper.createComponent(pcmRepository)
 		helper.createComponent_2(pcmRepository)
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return pcmRepository.clearResourcesAndReloadRoot
 	}

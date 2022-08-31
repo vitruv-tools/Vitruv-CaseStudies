@@ -24,7 +24,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmParameter.reactions, UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
  */
-class ParameterConceptTest extends PcmUmlClassApplicationTest {
+class ParameterConceptTest extends LegacyPcmUmlClassApplicationTest {
 
 	static val TEST_PARAMETER_NAME = "testParameter"
 
@@ -67,13 +67,13 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		val pcmInterface = helper.createOperationInterface(pcmRepository)
 		helper.createOperationSignature(pcmInterface)
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return pcmRepository.clearResourcesAndReloadRoot
 	}

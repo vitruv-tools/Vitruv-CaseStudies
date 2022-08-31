@@ -29,7 +29,7 @@ import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import tools.vitruv.testutils.LegacyCorrespondenceRetriever
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
-final class PcmUmlClassApplicationTestHelper {
+final class LegacyPcmUmlClassApplicationTestHelper {
 	new(LegacyCorrespondenceRetriever correspondenceRetriever, Function<URI, Resource> resourceRetriever) {
 		this.correspondenceRetriever = correspondenceRetriever
 		this.resourceRetriever = resourceRetriever
@@ -182,11 +182,11 @@ final class PcmUmlClassApplicationTestHelper {
 	}
 
 	def createCompositeDataType(Repository pcmRepository) {
-		return createCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
+		return createCompositeDataType(pcmRepository, LegacyPcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
 	}
 
 	def createCompositeDataType_2(Repository pcmRepository) {
-		return createCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
+		return createCompositeDataType(pcmRepository, LegacyPcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
 	}
 
 	private def getPcmCompositeDataType(Repository pcmRepository, String componentName) {
@@ -194,11 +194,11 @@ final class PcmUmlClassApplicationTestHelper {
 	}
 
 	def getPcmCompositeDataType(Repository pcmRepository) {
-		return getPcmCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
+		return getPcmCompositeDataType(pcmRepository, LegacyPcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
 	}
 
 	def getPcmCompositeDataType_2(Repository pcmRepository) {
-		return getPcmCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
+		return getPcmCompositeDataType(pcmRepository, LegacyPcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
 	}
 
 	def getUmlCompositeDataTypeClass(Repository pcmRepository) {
@@ -214,7 +214,7 @@ final class PcmUmlClassApplicationTestHelper {
 	// CollectionDataType
 	def createCollectionDataType(Repository pcmRepository, DataType innerType) {
 		val pcmCollectionType = RepositoryFactory.eINSTANCE.createCollectionDataType
-		pcmCollectionType.entityName = PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME
+		pcmCollectionType.entityName = LegacyPcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME
 		pcmCollectionType.innerType_CollectionDataType = innerType
 		pcmRepository.dataTypes__Repository += pcmCollectionType
 		return pcmCollectionType
@@ -222,7 +222,7 @@ final class PcmUmlClassApplicationTestHelper {
 
 	def getPcmCollectionDataType(Repository pcmRepository) {
 		return pcmRepository.dataTypes__Repository.filter(CollectionDataType).findFirst [
-			it.entityName == PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME
+			it.entityName == LegacyPcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME
 		]
 	}
 

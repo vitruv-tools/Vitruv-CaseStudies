@@ -26,7 +26,7 @@ import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.
  * 		UmlIPREClass.reactions,
  * 		UmlIPREConstructorOperation.reactions
  */
-class SystemConceptTest extends PcmUmlClassApplicationTest {
+class SystemConceptTest extends LegacyPcmUmlClassApplicationTest {
 
 	static val PCM_MODEL_FILE = "model/System.system"
 	static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
@@ -77,7 +77,7 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 		]
 
 		userInteraction.addNextTextInput(UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmSystem
 		]
 		propagate
