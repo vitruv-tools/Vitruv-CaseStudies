@@ -124,10 +124,6 @@ abstract class ViewBasedPcmUmlClassApplicationTest extends ViewBasedVitruvApplic
 		createUmlModel[name = MODEL_NAME]
 	}
 
-	@AfterEach
-	def protected void cleanup() {
-	}
-
 	def protected void assertModelExists(String modelPath) {
 		val modelUri = getUri(Path.of(modelPath))
 		assertThat(modelUri, isResource)
