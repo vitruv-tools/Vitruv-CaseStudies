@@ -2,7 +2,6 @@ package tools.vitruv.applications.pcmumlclass.tests
 
 import java.util.List
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import org.eclipse.emf.common.util.EList
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -45,7 +44,7 @@ class PcmUmlElementEqualityValidation {
 	}
 
 	def static dispatch void assertElementsEqual(List<org.eclipse.uml2.uml.Interface> umlContracts,
-		EList<org.palladiosimulator.pcm.repository.Interface> pcmInterfaces) {
+		List<org.palladiosimulator.pcm.repository.Interface> pcmInterfaces) {
 		assertEquals(umlContracts.size, pcmInterfaces.size)
 
 		for (org.eclipse.uml2.uml.Interface umlInterface : umlContracts) {
