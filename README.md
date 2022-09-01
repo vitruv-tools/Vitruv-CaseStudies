@@ -1,5 +1,5 @@
 # Vitruv Case Studies
-[![GitHub Action CI](https://github.com/vitruv-tools/Vitruv-CaseStudies/workflows/CI/badge.svg)](https://github.com/vitruv-tools/Vitruv-CaseStudies/actions?query=workflow%3ACI)
+[![GitHub Action CI](https://github.com/vitruv-tools/Vitruv-CaseStudies/actions/workflows/ci.yml/badge.svg)](https://github.com/vitruv-tools/Vitruv-CaseStudies/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/release/vitruv-tools/Vitruv-CaseStudies.svg)](https://github.com/vitruv-tools/Vitruv-CaseStudies/releases/latest)
 [![Issues](https://img.shields.io/github/issues/vitruv-tools/Vitruv-CaseStudies.svg)](https://github.com/vitruv-tools/Vitruv-CaseStudies/issues)
 [![License](https://img.shields.io/github/license/vitruv-tools/Vitruv-CaseStudies.svg)](https://raw.githubusercontent.com/vitruv-tools/Vitruv-CaseStudies/main/LICENSE)
