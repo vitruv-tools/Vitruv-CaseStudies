@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
@@ -31,11 +30,11 @@ abstract class ViewBasedPcmUmlClassApplicationTest extends ViewBasedVitruvApplic
 	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FOLDER_NAME = "model"
 
-	static val PACKAGE_NAME = "rootpackage"
-	static val PACKAGE_NAME_FIRST_UPPER = "Rootpackage"
+	static protected val PACKAGE_NAME = "rootpackage"
+	static protected val PACKAGE_NAME_FIRST_UPPER = "Rootpackage"
 	static val CONTRACTS_PACKAGE = "contracts"
 
-	protected var extension PcmUmlclassViewFactory viewFactory
+	protected var extension PcmUmlClassViewFactory viewFactory
 	protected var LegacyPcmUmlClassApplicationTestHelper helper
 	protected var ResourceSet testResourceSet
 
@@ -120,7 +119,7 @@ abstract class ViewBasedPcmUmlClassApplicationTest extends ViewBasedVitruvApplic
 
 	@BeforeEach
 	def void setup() {
-		viewFactory = new PcmUmlclassViewFactory(virtualModel)
+		viewFactory = new PcmUmlClassViewFactory(virtualModel)
 		createUmlModel[name = MODEL_NAME]
 	}
 

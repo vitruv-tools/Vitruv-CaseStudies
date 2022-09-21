@@ -9,7 +9,7 @@ import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.system.System
 
 @FinalFieldsConstructor
-class PcmUmlclassViewFactory extends TestViewFactory {
+class PcmUmlClassViewFactory extends TestViewFactory {
 	
 	private def View createUmlView() {
 		createViewOfElements("UML", #{Model})
