@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertEquals
-import static tools.vitruv.applications.uml.testutility.uml.UmlQueryUtil.loadUmlPrimitiveType
+import static tools.vitruv.applications.testutility.uml.UmlQueryUtil.loadUmlPrimitiveType
 import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
 
