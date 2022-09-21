@@ -16,19 +16,19 @@ class PcmUmlClassViewFactory extends TestViewFactory {
 	}
 
 	private def View createPcmView() {
-		createViewOfElements("Pcm packages and components", #{Repository, RepositoryComponent})
+		createViewOfElements("PCM packages and components", #{Repository, RepositoryComponent})
 	}
 
 	private def View createUmlAndPcmClassesView() {
-		createViewOfElements("UML and Pcm components", #{RepositoryComponent, Model})
+		createViewOfElements("UML and PCM components", #{RepositoryComponent, Model})
 	}
 
 	private def View createUmlAndPcmPackagesView() {
-		createViewOfElements("UML and Pcm packages", #{Repository, Model})
+		createViewOfElements("UML and PCM packages", #{Repository, Model})
 	}
 	
 	private def View createUmlAndPcmSystemView() {
-		createViewOfElements("UML and Pcm packages", #{System, Model})
+		createViewOfElements("UML and PCM packages", #{System, Model})
 	}
 
 	/**
@@ -41,7 +41,7 @@ class PcmUmlClassViewFactory extends TestViewFactory {
 	}
 
 	/**
-	 * Changes the Java view containing all Java packages and classes as root elements 
+	 * Changes the PCM view containing all PCM packages and classes as root elements 
 	 * according to the given modification function. 
 	 * Records the performed changes, commits the recorded changes, and closes the view afterwards.
 	 */
@@ -58,7 +58,7 @@ class PcmUmlClassViewFactory extends TestViewFactory {
 	}
 
 	/**
-	 * Validates the Java view containing all packages and classes by applying the validation function
+	 * Validates the PCM view containing all packages and classes by applying the validation function
 	 * and closes the view afterwards.
 	 */
 	def void validatePcmView((View)=>void viewValidation) {
@@ -66,7 +66,7 @@ class PcmUmlClassViewFactory extends TestViewFactory {
 	}
 
 	/**
-	 * Validates the Java and UML view containing all UML models and Java classes by applying the 
+	 * Validates the PCM and UML view containing all UML models and PCM classes by applying the 
 	 * validation function and closes the view afterwards.
 	 */
 	def void validateUmlAndPcmClassesView((View)=>void viewValidation) {
@@ -74,13 +74,17 @@ class PcmUmlClassViewFactory extends TestViewFactory {
 	}
 
 	/**
-	 * Validates the Java and UML view containing all UML models and Java packages by applying the 
+	 * Validates the PCM and UML view containing all UML models and PCM packages by applying the 
 	 * validation function and closes the view afterwards.
 	 */
 	def void validateUmlAndPcmPackagesView((View)=>void viewValidation) {
 		validateView(createUmlAndPcmPackagesView, viewValidation)
 	}
 	
+	/**
+	 * Validates the PCM and UML view containing all UML models and the PCM system by applying the 
+	 * validation function and closes the view afterwards.
+	 */
 	def void validateUmlAndPcmSystemView((View)=>void viewValidation) {
 		validateView(createUmlAndPcmSystemView, viewValidation)
 	}
