@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.eclipse.uml2.uml.Interface
 import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.RepositoryFactory
@@ -21,19 +20,6 @@ class InterfaceConceptTest extends ViewBasedPcmUmlClassApplicationTest {
 
 	static val TEST_INTERFACE_NAME = "TestInterface"
 	static val NEW_TEST_INTERFACE_NAME = "NewTestInterface"
-	static val PACKAGE_NAME = "rootpackage"
-	static val PACKAGE_NAME_FIRST_UPPER = PACKAGE_NAME.toFirstUpper
-
-	def checkInterfaceConcept(
-		OperationInterface pcmInterface,
-		Interface umlInterface
-	) {
-		assertNotNull(pcmInterface)
-		assertNotNull(umlInterface)
-		assertTrue(pcmInterface.entityName == umlInterface.name)
-	// should be contained in corresponding repository and contracts package respectively
-	// parent interfaces should correspond
-	}
 
 	@Test
 	def void testCreateInterfaceConcept_UML() {
