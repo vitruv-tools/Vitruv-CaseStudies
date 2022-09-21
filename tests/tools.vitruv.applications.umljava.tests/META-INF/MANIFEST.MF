@@ -19,6 +19,6 @@ Require-Bundle: org.junit.jupiter.api,
  org.apache.log4j,
  org.emftext.language.java.resource.java,
  org.emftext.language.java.resource,
- tools.vitruv.applications.testutility;bundle-version="0.3.0"
+ tools.vitruv.applications.testutility
 Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.umljava.tests.util
