@@ -65,9 +65,8 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 	def void testRenameInterfaceConcept_UML() {
 		initUMLModel()
 
-		changeUmlView [
-			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)]
-			
+		changeUmlView [umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)]
+
 		// Ensure preconditions for rename are fulfilled:
 		validateUmlAndPcmPackagesView[
 			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
@@ -103,7 +102,7 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 			pcmInterface.entityName = TEST_INTERFACE_NAME
 			defaultPcmRepository.interfaces__Repository += pcmInterface
 		]
-		
+
 		// Ensure preconditions for rename are fulfilled:
 		validateUmlAndPcmPackagesView[
 			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
@@ -136,9 +135,8 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 	def void testDeleteInterfaceConcept_UML() {
 		initUMLModel()
 
-		changeUmlView [
-			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)]
-			
+		changeUmlView [umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)]
+
 		// Ensure preconditions for deletion are fulfilled:
 		validateUmlAndPcmPackagesView[
 			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
@@ -173,7 +171,7 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 			pcmInterface.entityName = TEST_INTERFACE_NAME
 			defaultPcmRepository.interfaces__Repository += pcmInterface
 		]
-			
+
 		// Ensure preconditions for deletion are fulfilled:
 		validateUmlAndPcmPackagesView[
 			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
