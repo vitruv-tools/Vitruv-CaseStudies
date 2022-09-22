@@ -66,14 +66,22 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 		initUMLModel()
 
 		changeUmlView [
-			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)
+			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)]
+			
+		// Ensure preconditions for rename are fulfilled:
+		validateUmlAndPcmPackagesView[
 			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
+			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
+				"There should be exactly one element in list.")
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
 		]
 
 		changeUmlView[
 			umlContractsPackage.claimInterface(TEST_INTERFACE_NAME).name = NEW_TEST_INTERFACE_NAME
 		]
 
+		// Check consistency is restored
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
@@ -94,10 +102,15 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 			var pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
 			pcmInterface.entityName = TEST_INTERFACE_NAME
 			defaultPcmRepository.interfaces__Repository += pcmInterface
+		]
+		
+		// Ensure preconditions for rename are fulfilled:
+		validateUmlAndPcmPackagesView[
 			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
 				"There should be exactly one element in list.")
 			assertEquals(TEST_INTERFACE_NAME,
 				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
 		]
 
 		changePcmView [
@@ -105,6 +118,7 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 				get(0) as OperationInterface).entityName = NEW_TEST_INTERFACE_NAME
 		]
 
+		// Check consistency is restored
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
@@ -123,14 +137,22 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 		initUMLModel()
 
 		changeUmlView [
-			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)
+			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)]
+			
+		// Ensure preconditions for deletion are fulfilled:
+		validateUmlAndPcmPackagesView[
 			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
+			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
+				"There should be exactly one element in list.")
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
 		]
 
 		changeUmlView[
 			umlContractsPackage.claimInterface(TEST_INTERFACE_NAME).destroy
 		]
 
+		// Check consistency is restored
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
@@ -150,16 +172,22 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 			var pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
 			pcmInterface.entityName = TEST_INTERFACE_NAME
 			defaultPcmRepository.interfaces__Repository += pcmInterface
+		]
+			
+		// Ensure preconditions for deletion are fulfilled:
+		validateUmlAndPcmPackagesView[
 			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
 				"There should be exactly one element in list.")
 			assertEquals(TEST_INTERFACE_NAME,
 				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
 		]
 
 		changePcmView [
 			defaultPcmRepository.interfaces__Repository.remove(0)
 		]
 
+		// Check consistency is restored
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
 			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
