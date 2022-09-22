@@ -21,7 +21,7 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 
-abstract class ViewBasedPcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest {
+abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest {
 
 	@Accessors(PROTECTED_GETTER)
 	static val MODEL_FILE_EXTENSION = "uml"

@@ -16,7 +16,7 @@ import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
  * <br><br>
  * Related files: PcmRepository.reactions, UmlRepositoryAndSystemPackage.reactions
  */
-class RepositoryConceptTest extends ViewBasedPcmUmlClassApplicationTest {
+class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 
 	static val PACKAGE_NAME = "rootpackage"
 	static val PACKAGE_NAME_FIRST_UPPER = "Rootpackage"
