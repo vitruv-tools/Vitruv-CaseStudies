@@ -4,8 +4,7 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
 import tools.vitruv.framework.views.View
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.system.System
-
-import static org.junit.jupiter.api.Assertions.assertEquals
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 @Utility
 class PcmQueryUtil {
@@ -19,16 +18,10 @@ class PcmQueryUtil {
 	}
 
 	static def claimPcmRepository(View view, String packageName) {
-		// primitiveDataTypes repository is not desired as output
-		assertEquals(
-			getPcmRepository(view).iterator.findFirst[it.entityName.equals(packageName)],
-			getPcmRepository(view).iterator.findLast[it.entityName.equals(packageName)],
-			"More than one repository was created."
-		)
-		getPcmRepository(view).iterator.findFirst[it.entityName.equals(packageName)]
+		getPcmRepository(view).iterator.filter[it.entityName.equals(packageName)].toIterable.claimOne
 	}
 
 	static def claimPcmSystem(View view) {
-		getPcmSystem(view).iterator.next
+		getPcmSystem(view).claimOne
 	}
 }
