@@ -33,6 +33,11 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 	static protected val PACKAGE_NAME = "rootpackage"
 	static protected val PACKAGE_NAME_FIRST_UPPER = "Rootpackage"
 	static val CONTRACTS_PACKAGE = "contracts"
+	
+	public static val PCM_MODEL_FILE = "model/Repository.repository"
+	public static val PCM_MODEL_SYSTEM_FILE = "model/System.system"
+	public static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
+		DefaultLiterals.UML_EXTENSION
 
 	protected var extension PcmUmlClassViewFactory viewFactory
 	protected var LegacyPcmUmlClassApplicationTestHelper helper

@@ -4,7 +4,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
@@ -25,7 +24,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateRepositoryConcept_UML_System() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_SYSTEM_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.PCM_MODEL_SYSTEM_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 
 		validateUmlAndPcmSystemView [
@@ -48,7 +47,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 
 	@Test
 	def void testCreateRepositoryConcept_PCM() {
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.UML_MODEL_FILE)
 
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
@@ -62,7 +61,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testRenameRepositoryConcept_UML() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 
 		changeUmlView[
@@ -78,7 +77,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 
 	@Test
 	def void testRenameRepositoryConcept_PCM() {
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.UML_MODEL_FILE)
 
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
@@ -95,7 +94,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 
 	@Test
 	def void testDeleteRepositoryConcept_PCM() {
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.UML_MODEL_FILE)
 
 		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
@@ -113,10 +112,8 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		validateUmlAndPcmPackagesView [
 			val umlModel = defaultUmlModel
 
-			assertNull(defaultPcmRepository)
-			assertTrue(defaultUmlModel.eContents.empty)
-			assertModelNotExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-			assertModelNotExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+			assertModelNotExists(PcmUmlClassApplicationTest.PCM_MODEL_FILE)
+			assertModelNotExists(PcmUmlClassApplicationTest.UML_MODEL_FILE)
 			assertTrue(umlModel?.packagedElements.empty)
 		]
 	}
@@ -124,7 +121,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testDeleteRepositoryConcept_UMLModel() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 
 		validateUmlAndPcmPackagesView [
@@ -137,15 +134,15 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		]
 
 		validateUmlAndPcmPackagesView [
-			assertModelNotExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-			assertModelNotExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+			assertModelNotExists(PcmUmlClassApplicationTest.PCM_MODEL_FILE)
+			assertModelNotExists(PcmUmlClassApplicationTest.UML_MODEL_FILE)
 		]
 	}
 
 	@Test
 	def void testDeleteRepositoryConcept_UML() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 
 		validateUmlAndPcmPackagesView [
@@ -158,8 +155,8 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		]
 
 		validateUmlAndPcmPackagesView [
-			assertNull(defaultPcmRepository)
-			assertTrue(defaultUmlModel.getNestedPackages().empty)
+			assertModelNotExists(PcmUmlClassApplicationTest.PCM_MODEL_FILE)
+			assertModelNotExists(PcmUmlClassApplicationTest.UML_MODEL_FILE)
 		]
 	}
 }
