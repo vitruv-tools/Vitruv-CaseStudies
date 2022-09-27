@@ -14,7 +14,7 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.UmlQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.isInExistingLibrary
 
 /**

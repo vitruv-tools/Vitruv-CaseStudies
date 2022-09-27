@@ -1,17 +1,14 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.uml2.uml.Interface
-import org.palladiosimulator.pcm.repository.OperationInterface
-import org.palladiosimulator.pcm.repository.Repository
-import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.junit.jupiter.api.Test
-
+import org.palladiosimulator.pcm.repository.OperationInterface
+import org.palladiosimulator.pcm.repository.RepositoryFactory
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertFalse
-import java.nio.file.Path
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
+import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 
 /**
  *  This test class tests the reactions and routines are supposed to synchronize a pcm::OperationInterface
@@ -22,92 +19,181 @@ import java.nio.file.Path
 class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 
 	static val TEST_INTERFACE_NAME = "TestInterface"
-
-	def checkInterfaceConcept(
-		OperationInterface pcmInterface,
-		Interface umlInterface
-	) {
-		assertNotNull(pcmInterface)
-		assertNotNull(umlInterface)
-		assertTrue(corresponds(pcmInterface, umlInterface, TagLiterals.INTERFACE_TO_INTERFACE))
-		assertTrue(pcmInterface.entityName == umlInterface.name)
-		// should be contained in corresponding repository and contracts package respectively
-		assertTrue(
-			corresponds(pcmInterface.repository__Interface, umlInterface.package,
-				TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE))
-		// parent interfaces should correspond
-		val umlParentCorrespondences = pcmInterface.parentInterfaces__Interface.map [ pcmParent |
-			getCorrespondingEObjects(pcmParent, Interface).head
-		].toList
-		assertFalse(umlParentCorrespondences.contains(null))
-		assertFalse(
-			umlParentCorrespondences.map [ umlParent |
-				umlInterface.generalizations.exists[gen|EcoreUtil.equals(gen.general, umlParent)]
-			].exists[it == false]
-		)
-	}
-
-	def protected checkInterfaceConcept(OperationInterface pcmInterface) {
-		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
-		checkInterfaceConcept(pcmInterface, umlInterface)
-	}
-
-	def protected checkInterfaceConcept(Interface umlInterface) {
-		val pcmInterface = helper.getModifiableCorr(umlInterface, OperationInterface,
-			TagLiterals.INTERFACE_TO_INTERFACE)
-		checkInterfaceConcept(pcmInterface, umlInterface)
-	}
-
-	def private Repository createRepositoryConcept() {
-		val pcmRepository = helper.createRepository
-
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-			contents += pcmRepository
-		]
-		propagate
-
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-
-		return pcmRepository.clearResourcesAndReloadRoot
-	}
+	static val NEW_TEST_INTERFACE_NAME = "NewTestInterface"
 
 	@Test
 	def void testCreateInterfaceConcept_UML() {
-		var pcmRepository = createRepositoryConcept()
-		var umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
-		startRecordingChanges(umlContractsPkg)
+		initUMLModel()
 
-		var mUmlInterface = umlContractsPkg.createOwnedInterface(TEST_INTERFACE_NAME)
-		propagate
+		changeUmlView [
+			umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)
+		]
 
-		umlContractsPkg.clearResourcesAndReloadRoot
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
-		mUmlInterface = umlContractsPkg.packagedElements.head as Interface
-		assertNotNull(mUmlInterface)
-		checkInterfaceConcept(mUmlInterface)
+			assertNotNull(umlContractsPackage.ownedElements)
+			assertNotNull(pcmPackage.eContents)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
 	}
 
 	@Test
 	def void testCreateInterfaceConcept_PCM() {
-		var pcmRepository = createRepositoryConcept()
-		var umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
-		startRecordingChanges(umlContractsPkg)
+		initPCMRepository()
 
-		var mPcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
-		mPcmInterface.entityName = TEST_INTERFACE_NAME
-		pcmRepository.interfaces__Repository += mPcmInterface
-		propagate
+		changePcmView [
+			var mPcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
+			mPcmInterface.entityName = TEST_INTERFACE_NAME
+			defaultPcmRepository.interfaces__Repository += mPcmInterface
+		]
 
-		umlContractsPkg.clearResourcesAndReloadRoot
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
-		mPcmInterface = pcmRepository.interfaces__Repository.head as OperationInterface
-		assertNotNull(mPcmInterface)
-		checkInterfaceConcept(mPcmInterface)
+			assertNotNull(umlContractsPackage.ownedElements)
+			assertNotNull(pcmPackage.eContents)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testRenameInterfaceConcept_UML() {
+		initUMLModel()
+
+		changeUmlView [umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)]
+
+		// Ensure preconditions for rename are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
+			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
+				"There should be exactly one element in list.")
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+		]
+
+		changeUmlView[
+			umlContractsPackage.claimInterface(TEST_INTERFACE_NAME).name = NEW_TEST_INTERFACE_NAME
+		]
+
+		// Check consistency is restored
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertNotNull(umlContractsPackage.ownedElements)
+			assertNotNull(umlContractsPackage.claimInterface(NEW_TEST_INTERFACE_NAME))
+			assertNotNull(pcmPackage.eContents)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testRenameInterfaceConcept_PCM() {
+		initPCMRepository()
+
+		changePcmView [
+			var pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
+			pcmInterface.entityName = TEST_INTERFACE_NAME
+			defaultPcmRepository.interfaces__Repository += pcmInterface
+		]
+
+		// Ensure preconditions for rename are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
+				"There should be exactly one element in list.")
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
+		]
+
+		changePcmView [
+			(defaultPcmRepository.interfaces__Repository.
+				get(0) as OperationInterface).entityName = NEW_TEST_INTERFACE_NAME
+		]
+
+		// Check consistency is restored
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertNotNull(umlContractsPackage.ownedElements)
+			assertNotNull(pcmPackage.eContents)
+			assertEquals(NEW_TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testDeleteInterfaceConcept_UML() {
+		initUMLModel()
+
+		changeUmlView [umlContractsPackage.createOwnedInterface(TEST_INTERFACE_NAME)]
+
+		// Ensure preconditions for deletion are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
+			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
+				"There should be exactly one element in list.")
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+		]
+
+		changeUmlView[
+			umlContractsPackage.claimInterface(TEST_INTERFACE_NAME).destroy
+		]
+
+		// Check consistency is restored
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertTrue(umlContractsPackage.ownedElements.empty)
+			assertTrue(pcmPackage.eContents.empty)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testDeleteInterfaceConcept_PCM() {
+		initPCMRepository()
+
+		changePcmView [
+			var pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
+			pcmInterface.entityName = TEST_INTERFACE_NAME
+			defaultPcmRepository.interfaces__Repository += pcmInterface
+		]
+
+		// Ensure preconditions for deletion are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
+				"There should be exactly one element in list.")
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
+		]
+
+		changePcmView [
+			defaultPcmRepository.interfaces__Repository.remove(0)
+		]
+
+		// Check consistency is restored
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertTrue(umlContractsPackage.ownedElements.empty)
+			assertTrue(pcmPackage.eContents.empty)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
 	}
 }

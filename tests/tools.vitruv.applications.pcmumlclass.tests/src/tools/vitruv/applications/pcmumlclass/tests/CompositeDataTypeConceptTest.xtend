@@ -22,7 +22,7 @@ import java.nio.file.Path
  * 		UmlCompositeDataTypeClass.reactions, 
  * 		UmlCompositeDataTypeGeneralization.reactions
  */
-class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
+class CompositeDataTypeConceptTest extends LegacyPcmUmlClassApplicationTest {
 
 	static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
 	static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
@@ -66,13 +66,13 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 	def private Repository createRepositoryConcept() {
 		val pcmRepository = helper.createRepository
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return pcmRepository.clearResourcesAndReloadRoot
 	}

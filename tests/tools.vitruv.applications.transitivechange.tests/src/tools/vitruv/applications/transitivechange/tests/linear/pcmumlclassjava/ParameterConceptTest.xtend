@@ -12,10 +12,10 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
+import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTestHelper
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -82,14 +82,14 @@ class ParameterConceptTest extends PcmUmlJavaLinearTransitiveChangeTest {
 		val pcmInterface = helper.createOperationInterface(pcmRepository)
 		helper.createOperationSignature(pcmInterface)
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return pcmRepository.clearResourcesAndReloadRoot
 	}

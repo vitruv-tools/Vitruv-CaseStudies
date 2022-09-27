@@ -2,17 +2,17 @@ package tools.vitruv.applications.transitivechange.tests.circular.pcmumlclassjav
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
+import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTestHelper
 
 import static org.junit.jupiter.api.Assertions.*
-import java.nio.file.Path
-import org.eclipse.uml2.uml.VisibilityKind
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -57,8 +57,7 @@ class CompositeDataTypeConceptTest extends PcmUmlJavaTransitiveChangeTest {
 	}
 
 	def protected checkCompositeDataTypeConcept(Class umlClass) {
-		val pcmCompositeType = helper.getCorr(umlClass, CompositeDataType,
-			TagLiterals.COMPOSITE_DATATYPE__CLASS)
+		val pcmCompositeType = helper.getCorr(umlClass, CompositeDataType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(pcmCompositeType, umlClass)
 	}
 
@@ -79,13 +78,13 @@ class CompositeDataTypeConceptTest extends PcmUmlJavaTransitiveChangeTest {
 	def private Repository createRepositoryConcept() {
 		val pcmRepository = helper.createRepository
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return pcmRepository.clearResourcesAndReloadRoot
 	}

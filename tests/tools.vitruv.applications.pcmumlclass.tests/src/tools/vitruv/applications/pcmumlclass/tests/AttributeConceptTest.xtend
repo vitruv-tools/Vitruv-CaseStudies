@@ -21,7 +21,7 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmInnerDeclaration.reactions, UmlInnerDeclarationProperty.reactions 
  */
-class AttributeConceptTest extends PcmUmlClassApplicationTest {
+class AttributeConceptTest extends LegacyPcmUmlClassApplicationTest {
 
 	static val TEST_ATTRIBUTE = "testAttribute"
 
@@ -58,13 +58,13 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		val pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
 		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return pcmRepository.clearResourcesAndReloadRoot
 	}

@@ -13,6 +13,8 @@ Require-Bundle: tools.vitruv.testutils.vsum,
  tools.vitruv.applications.util.temporary,
  org.eclipse.xtend.lib,
  edu.kit.ipd.sdq.commons.util.java,
- org.palladiosimulator.pcm.resources
+ org.palladiosimulator.pcm.resources,
+ edu.kit.ipd.sdq.activextendannotations,
+ tools.vitruv.applications.testutility
 Export-Package: tools.vitruv.applications.pcmumlclass.tests
 Bundle-Vendor: vitruv.tools

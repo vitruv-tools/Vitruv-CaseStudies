@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals
  * Because of the necessary reloads, the model is loaded (while the out-of-synch elements remain) and registered with new IDs in the UUID resolver.
  * This might make it necessary to provide the VM that runs the tests with additional heap space.
  */
-class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
+class MediaStoreRepositoryCreationTest extends LegacyPcmUmlClassApplicationTest {
 
 //	private static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms.repository"
 	// all SEFFs removed because the TUID-generator failed for ResourceDemandParameters 
