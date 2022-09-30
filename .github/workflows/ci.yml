@@ -15,6 +15,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        exclude:
+          - os: windows-latest # TODO: Windows builds currently fail as documented in https://github.com/vitruv-tools/Vitruv-CaseStudies/issues/241
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
