@@ -472,8 +472,7 @@ routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType)
 		}
 
 		// Let user select the class to map the collection type to
-		var Set<Class<?>> collectionDataTypes = new HashSet;
-		collectionDataTypes += #[ArrayList, LinkedList, Vector, Stack, HashSet];
+		var List<Class<?>> collectionDataTypes = #[ArrayList, LinkedList, Vector, Stack, HashSet];
 		val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size);
 		for (collectionDataType : collectionDataTypes) {
 			collectionDataTypeNames += collectionDataType.name;
