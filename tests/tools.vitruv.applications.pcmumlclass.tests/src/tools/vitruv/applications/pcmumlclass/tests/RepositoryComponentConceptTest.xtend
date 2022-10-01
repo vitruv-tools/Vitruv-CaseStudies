@@ -6,6 +6,7 @@ import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
 import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
@@ -128,6 +129,70 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 
 			assertNotNull(umlPackage.claimPackage(NEW_COMPONENT_NAME))
 			assertNotNull(pcmPackage.eContents)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testDeleteRepositoryComponentConcept_PCM() {
+		initPCMRepository
+
+		changePcmView[
+			var pcmComponent = RepositoryFactory.eINSTANCE.createCompositeComponent
+			pcmComponent.entityName = COMPONENT_NAME
+			defaultPcmRepository.components__Repository += pcmComponent
+		]
+
+		// Ensure preconditions for delete are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertNotNull(umlRootPackage.claimPackage(COMPONENT_NAME))
+			assertEquals(COMPONENT_NAME.toFirstUpper,
+				(defaultPcmRepository.components__Repository.claimOne as CompositeComponent).entityName)
+		]
+
+		changePcmView[
+			defaultPcmRepository.components__Repository.remove(0)
+		]
+
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertTrue(umlPackage.nestedPackages.filter[it.name.equals(COMPONENT_NAME)].empty)
+			assertTrue(pcmPackage.eContents.empty)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testDeleteRepositoryComponentConcept_UML() {
+		initUMLModel
+
+		changeUmlView[
+			userInteraction.addNextSingleSelection(
+				DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
+			umlRootPackage.createNestedPackage(COMPONENT_NAME)
+		]
+
+		// Ensure preconditions for delete are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertNotNull(umlRootPackage.claimPackage(COMPONENT_NAME))
+			assertEquals(COMPONENT_NAME.toFirstUpper,
+				(defaultPcmRepository.components__Repository.claimOne as CompositeComponent).entityName)
+		]
+
+		changeUmlView[
+			umlRootPackage.claimPackage(COMPONENT_NAME).destroy
+		]
+
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertTrue(umlPackage.nestedPackages.filter[it.name.equals(COMPONENT_NAME)].empty)
+			assertTrue(pcmPackage.eContents.empty)
 
 			assertElementsEqual(umlPackage, pcmPackage)
 		]
