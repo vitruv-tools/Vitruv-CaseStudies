@@ -42,11 +42,13 @@ class PcmUmlElementEqualityValidation {
 				uPackage.packagedElements.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME].eContents,
 				repoPackage.interfaces__Repository)
 		}
-		
-		if (!repoPackage.components__Repository.isEmpty 
-			|| !uPackage.nestedPackages.filter[it.ownedMembers.exists[it.name.contains(DefaultLiterals.IMPLEMENTATION_SUFFIX)]].isEmpty) {
-			assertComponentsEqual(uPackage.nestedPackages.filter[it.allOwnedElements.exists[it.toString.contains(DefaultLiterals.IMPLEMENTATION_SUFFIX)]].toList, 
-				repoPackage.components__Repository)
+
+		if (!repoPackage.components__Repository.isEmpty || !uPackage.nestedPackages.filter [
+			it.ownedMembers.exists[it.name.contains(DefaultLiterals.IMPLEMENTATION_SUFFIX)]
+		].isEmpty) {
+			assertComponentsEqual(uPackage.nestedPackages.filter [
+				it.allOwnedElements.exists[it.toString.contains(DefaultLiterals.IMPLEMENTATION_SUFFIX)]
+			].toList, repoPackage.components__Repository)
 		}
 	}
 
@@ -61,21 +63,22 @@ class PcmUmlElementEqualityValidation {
 			assertTrue(umlContracts.exists[it.name.equals(pcmInterface.entityName)], "PCM interfaces incomplete")
 		}
 	}
-	
-	def static void assertComponentsEqual(List<org.eclipse.uml2.uml.Package> umlComponents, 
+
+	def static void assertComponentsEqual(List<org.eclipse.uml2.uml.Package> umlComponents,
 		List<org.palladiosimulator.pcm.repository.RepositoryComponent> pcmComponents) {
 		assertEquals(umlComponents.size, pcmComponents.size)
-		println("EQUALITY")
+
 		for (org.palladiosimulator.pcm.repository.RepositoryComponent pcmComponent : pcmComponents) {
-			umlComponents.forEach[println(it.allOwnedElements)]
 			assertTrue(umlComponents.exists[it.name.equals(pcmComponent.entityName.toFirstLower)])
-			
-			//contains a class with implementation
-			assertTrue(umlComponents.filter[it.name.equals(pcmComponent.entityName.toFirstLower)].claimOne.members
-				.exists[it.name.startsWith(pcmComponent.entityName)]
+
+			// contains a class with implementation
+			assertTrue(
+				umlComponents.filter[it.name.equals(pcmComponent.entityName.toFirstLower)].claimOne.members.exists [
+					it.name.startsWith(pcmComponent.entityName)
+				]
 			)
 		}
-		
+
 		for (org.eclipse.uml2.uml.Package umlComponent : umlComponents) {
 			assertTrue(pcmComponents.exists[it.entityName.equals(umlComponent.name.toFirstUpper)])
 		}
