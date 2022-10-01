@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import java.nio.file.Path
 import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
+import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
+import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 /**
  * This test class tests the reactions and routines that are supposed to synchronize synchronize a pcm::RepositoryComponent with 
  * its corresponding uml::Package, uml::Class (implementation), and uml::Operation (constructor).
@@ -26,101 +29,35 @@ import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.
  * 		UmlIPREClassReactions.reactions,
  * 		UmlIPREConstructorOperation.reactions
  */
-class RepositoryComponentConceptTest extends LegacyPcmUmlClassApplicationTest {
+class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 
 	val COMPONENT_NAME = "testComponent"
 
-	def void checkRepositoryComponentConcept(
-		RepositoryComponent pcmComponent,
-		Package umlComponentPkg,
-		Class umlComponentImpl,
-		Operation umlComponentConstructor
-	) {
-		assertNotNull(pcmComponent)
-		assertNotNull(umlComponentPkg)
-		assertNotNull(umlComponentImpl)
-		assertNotNull(umlComponentConstructor)
-		assertTrue(corresponds(pcmComponent, umlComponentPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE))
-		assertTrue(corresponds(pcmComponent, umlComponentImpl, TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(corresponds(pcmComponent, umlComponentConstructor, TagLiterals.IPRE__CONSTRUCTOR))
-		assertTrue(umlComponentPkg.isPackageFor(pcmComponent))
-		assertTrue(pcmComponent.entityName == umlComponentPkg.name.toFirstUpper)
-		assertTrue(pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlComponentImpl.name)
-		assertTrue(pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlComponentConstructor.name)
-		// decided against explicit constructor return type, because it's a common convention
-		assertTrue(umlComponentImpl.isFinalSpecialization)
-		assertTrue(umlComponentImpl.visibility === VisibilityKind.PUBLIC_LITERAL)
-		assertTrue(umlComponentImpl.package === umlComponentPkg)
-		// component repository should correspond to the parent package of the component package
-		assertTrue(
-			corresponds(pcmComponent.repository__RepositoryComponent, umlComponentPkg.nestingPackage,
-				TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE))
-	}
-
-	def protected checkRepositoryComponentConcept(RepositoryComponent pcmComponent) {
-		val umlComponentPkg = helper.getModifiableCorr(pcmComponent, Package, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
-		val umlComponentImpl = helper.getModifiableCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
-		val umlComponentConstructor = helper.getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
-		checkRepositoryComponentConcept(pcmComponent, umlComponentPkg, umlComponentImpl,
-			umlComponentConstructor)
-	}
-
-	def protected checkRepositoryComponentConcept(Package umlComponentPkg) {
-		val pcmComponent = helper.getModifiableCorr(umlComponentPkg, RepositoryComponent,
-			TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
-		assertNotNull(pcmComponent)
-		checkRepositoryComponentConcept(pcmComponent)
-	}
-
-	/**
-	 * Initialize a pcm::Repository and its corresponding uml-counterparts.
-	 */
-	def private Repository createRepository() {
-		val pcmRepository = helper.createRepository()
-
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-			contents += pcmRepository
-		]
-		propagate
-		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-
-		return pcmRepository.clearResourcesAndReloadRoot
-	}
-
 	@Test
 	def void testRepositoryComponentConcept_PCM() {
-		var pcmRepository = createRepository
+		initPCMRepository
+		
+		changePcmView[
+			var pcmComponent = RepositoryFactory.eINSTANCE.createCompositeComponent
+			pcmComponent.entityName = COMPONENT_NAME
+			defaultPcmRepository.components__Repository += pcmComponent
+		]
+		
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
-		var pcmComponent = RepositoryFactory.eINSTANCE.createCompositeComponent
-		pcmComponent.entityName = COMPONENT_NAME
-		pcmRepository.components__Repository += pcmComponent
+			println("uml " + umlPackage.allOwnedElements)
+			println("uml " + umlPackage.eContents)
+			//assertNotNull(umlContractsPackage.ownedElements)
+			assertNotNull(pcmPackage.eContents)
 
-		propagate
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		pcmComponent = pcmRepository.components__Repository.head as CompositeComponent
-
-		checkRepositoryComponentConcept(pcmComponent)
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
 	}
 
 	@Test
 	def void testRepositoryComponentConcept_UML() {
-		var pcmRepository = createRepository
-		var umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
-		startRecordingChanges(umlRepositoryPkg)
-
-		userInteraction.addNextSingleSelection(
-			DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
-		var umlComponentPkg = umlRepositoryPkg.createNestedPackage(COMPONENT_NAME)
-
-		propagate
-		umlComponentPkg.clearResourcesAndReloadRoot
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
-
-		umlComponentPkg = umlRepositoryPkg.nestedPackages.findFirst[it.name == COMPONENT_NAME]
-
-		checkRepositoryComponentConcept(umlComponentPkg)
+		
 	}
 }

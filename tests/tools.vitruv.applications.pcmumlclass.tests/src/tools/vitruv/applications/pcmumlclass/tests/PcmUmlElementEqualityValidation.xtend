@@ -41,6 +41,8 @@ class PcmUmlElementEqualityValidation {
 				uPackage.packagedElements.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME].eContents,
 				repoPackage.interfaces__Repository)
 		}
+		
+		//if (!repoPackage.components__Repository.isEmpty || uPackage.packagedElements.exists[it.])
 	}
 
 	def static dispatch void assertElementsEqual(List<org.eclipse.uml2.uml.Interface> umlContracts,
