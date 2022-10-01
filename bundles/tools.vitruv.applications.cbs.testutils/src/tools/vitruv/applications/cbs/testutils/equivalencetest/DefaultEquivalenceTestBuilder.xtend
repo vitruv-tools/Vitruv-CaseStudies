@@ -148,9 +148,9 @@ package class DefaultEquivalenceTestBuilder extends DefaultBuilderCommon impleme
 				val testStep = modifyIfNecessary(args.value)
 					
 				val referenceSteps = testStep.determineReferenceSteps(steps)
-				var testName = '''«testMetamodel.name» «'\u2192' /* right arrow */ » {«FOR rd : referenceSteps.keySet SEPARATOR ', '»«rd.name»«ENDFOR»}'''
+				var testName = '''FROM «testMetamodel.name» TO {«FOR rd : referenceSteps.keySet SEPARATOR ', '»«rd.name»«ENDFOR»}'''
 				if (testStep.name !== null) {
-					testName += ''' — «testStep.name»'''
+					testName += ''' - «testStep.name»'''
 				}
 				val testContext = new EquivalenceTestExtensionContext(testName, testIndex, parentContext,
 					testStep.targetMetamodel)
