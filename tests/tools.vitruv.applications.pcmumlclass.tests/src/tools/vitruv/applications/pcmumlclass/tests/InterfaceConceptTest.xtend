@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 /**
  *  This test class tests the reactions and routines are supposed to synchronize a pcm::OperationInterface
@@ -70,10 +71,8 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 		// Ensure preconditions for rename are fulfilled:
 		validateUmlAndPcmPackagesView[
 			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
-			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
-				"There should be exactly one element in list.")
 			assertEquals(TEST_INTERFACE_NAME,
-				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+				(defaultPcmRepository.interfaces__Repository.claimOne as OperationInterface).entityName)
 		]
 
 		changeUmlView[
@@ -105,16 +104,13 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 
 		// Ensure preconditions for rename are fulfilled:
 		validateUmlAndPcmPackagesView[
-			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
-				"There should be exactly one element in list.")
-			assertEquals(TEST_INTERFACE_NAME,
-				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
 			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.claimOne as OperationInterface).entityName)
 		]
 
 		changePcmView [
-			(defaultPcmRepository.interfaces__Repository.
-				get(0) as OperationInterface).entityName = NEW_TEST_INTERFACE_NAME
+			(defaultPcmRepository.interfaces__Repository.claimOne as OperationInterface).entityName = NEW_TEST_INTERFACE_NAME
 		]
 
 		// Check consistency is restored
@@ -140,10 +136,8 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 		// Ensure preconditions for deletion are fulfilled:
 		validateUmlAndPcmPackagesView[
 			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
-			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
-				"There should be exactly one element in list.")
 			assertEquals(TEST_INTERFACE_NAME,
-				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
+				(defaultPcmRepository.interfaces__Repository.claimOne as OperationInterface).entityName)
 		]
 
 		changeUmlView[
@@ -174,11 +168,9 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 
 		// Ensure preconditions for deletion are fulfilled:
 		validateUmlAndPcmPackagesView[
-			assertEquals(1, defaultPcmRepository.interfaces__Repository.size,
-				"There should be exactly one element in list.")
-			assertEquals(TEST_INTERFACE_NAME,
-				(defaultPcmRepository.interfaces__Repository.get(0) as OperationInterface).entityName)
 			assertNotNull(umlContractsPackage.claimInterface(TEST_INTERFACE_NAME))
+			assertEquals(TEST_INTERFACE_NAME,
+				(defaultPcmRepository.interfaces__Repository.claimOne as OperationInterface).entityName)
 		]
 
 		changePcmView [
