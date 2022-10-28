@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.pcm2java;
+package tools.vitruv.applications.pcmjava.tests.pcm2java;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

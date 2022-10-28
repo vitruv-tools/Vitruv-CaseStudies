@@ -14,7 +14,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
-class NewCompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
+class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddCompositeDataType() {

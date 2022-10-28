@@ -9,7 +9,7 @@ import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuil
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
 
-class NewRepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
+class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddRepository() {

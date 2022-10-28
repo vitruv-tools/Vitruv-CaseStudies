@@ -14,7 +14,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 
-class NewOperationSignatureMappingTransformationTest extends Pcm2JavaTransformationTest {
+class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddOperationSignature() {

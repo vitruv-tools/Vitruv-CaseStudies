@@ -10,7 +10,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 
 import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 
-class NewOperationInterfaceMappingTransformationTest extends Pcm2JavaTransformationTest {
+class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddInterface() {

@@ -9,7 +9,7 @@ import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuil
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 
-class NewSystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
+class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testCreateSystem() {

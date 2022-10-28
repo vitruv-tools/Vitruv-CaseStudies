@@ -10,7 +10,7 @@ import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuil
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 
-class NewBasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest {
+class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddBasicComponent() {

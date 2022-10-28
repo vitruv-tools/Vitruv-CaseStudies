@@ -16,7 +16,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
-class NewRequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTransformationTest {
+class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddRequireDelegationConnector() {

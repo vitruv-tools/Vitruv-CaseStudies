@@ -15,7 +15,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
 
-class NewCollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
+class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddCollectionDataTypeWithoutInnerType() {

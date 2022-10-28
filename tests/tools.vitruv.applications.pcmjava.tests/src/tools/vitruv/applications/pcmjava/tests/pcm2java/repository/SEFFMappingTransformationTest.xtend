@@ -15,7 +15,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
-class NewSEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
+class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testCreateSEFF() {

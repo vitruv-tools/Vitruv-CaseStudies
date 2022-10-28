@@ -17,7 +17,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 
-class NewPcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
+class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddParameter() {
