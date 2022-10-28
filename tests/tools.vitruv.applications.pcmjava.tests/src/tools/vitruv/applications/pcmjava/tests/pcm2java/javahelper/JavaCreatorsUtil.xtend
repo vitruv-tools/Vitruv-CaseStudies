@@ -6,20 +6,31 @@ import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.Interface
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.ContainersFactory
+import org.emftext.language.java.containers.Package
+import org.emftext.language.java.generics.GenericsFactory
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Field
+import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.MembersFactory
+import org.emftext.language.java.types.Boolean
+import org.emftext.language.java.types.Int
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.PrimitiveType
 import org.emftext.language.java.types.TypesFactory
+import org.emftext.language.java.types.Void
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
-import org.emftext.language.java.generics.GenericsFactory
 
 @Utility
 class JavaCreatorsUtil {
 	// === Java: Basic ===
+	
+	static def Package createPackage((Package)=> void initialization) {
+		var package = ContainersFactory.eINSTANCE.createPackage
+		initialization.apply(package)
+		return package
+	}
 	
 	static def CompilationUnit createCompilationUnit((CompilationUnit)=> void initialization) {
 		var compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit
@@ -49,6 +60,26 @@ class JavaCreatorsUtil {
 		var field = MembersFactory.eINSTANCE.createField
 		initialization.apply(field)
 		return field
+	}
+	
+	static def InterfaceMethod createInterfaceMethod((InterfaceMethod)=> void initialization) {
+		var interfaceMethod = MembersFactory.eINSTANCE.createInterfaceMethod
+		initialization.apply(interfaceMethod)
+		return interfaceMethod
+	}
+	
+	// === simple types ===
+	
+	static def Void createVoid() {
+		return TypesFactory.eINSTANCE.createVoid
+	}
+	
+	static def Int createInt() {
+		return TypesFactory.eINSTANCE.createInt
+	}
+	
+	static def Boolean createBoolean() {
+		return TypesFactory.eINSTANCE.createBoolean
 	}
 	
 	// === helper ===

@@ -1,22 +1,22 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.repository
 
-import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
-import org.junit.jupiter.api.Test
-import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
-
-import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 import java.util.List
-import org.palladiosimulator.pcm.repository.CompositeComponent
-
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.BasicComponent
-import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
-import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
+import org.palladiosimulator.pcm.repository.CompositeComponent
+import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
+import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.ConstructorArguments
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaTypeHelper
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaInterfaceBuilder
 
-class CompositeComponentMappingTransformationTestNew extends Pcm2JavaTransformationTest {
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
+
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
+
+class NewCompositeComponentMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testCreateCompositeComponent() {
@@ -29,7 +29,7 @@ class CompositeComponentMappingTransformationTestNew extends Pcm2JavaTransformat
 		]
 		
 		validateJavaView[
-			val expectedCompilationUnit = new JavaClassBuilder(new JavaTypeHelper(), 
+			val expectedCompilationUnit = new JavaClassBuilder( 
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
 			).build
@@ -57,7 +57,7 @@ class CompositeComponentMappingTransformationTestNew extends Pcm2JavaTransformat
 		
 		validateJavaView[
 			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX).build
-			val compositeComponentCompilationUnit = new JavaClassBuilder(new JavaTypeHelper(), 
+			val compositeComponentCompilationUnit = new JavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
 			)
@@ -87,7 +87,7 @@ class CompositeComponentMappingTransformationTestNew extends Pcm2JavaTransformat
 		
 		validateJavaView[
 			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX).build
-			val compositeComponentCompilationUnit = new JavaClassBuilder(new JavaTypeHelper(), 
+			val compositeComponentCompilationUnit = new JavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
 				)
@@ -114,24 +114,23 @@ class CompositeComponentMappingTransformationTestNew extends Pcm2JavaTransformat
 			modifySingleRepository[
 				var basicComponent = components__Repository.filter(BasicComponent).claimOne
 				var compositeComponent = components__Repository.filter(CompositeComponent).claimOne
-				compositeComponent.assemblyContexts__ComposedStructure += createAssemblyContext(basicComponent)
+				compositeComponent.assemblyContexts__ComposedStructure += createAssemblyContext(basicComponent, Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME)
 			]
 		]
 		
 		
 		validateJavaView [
-			val typeHelper = new JavaTypeHelper()
-			val basicComponentCompilationUnit = new JavaClassBuilder(typeHelper, 
+			val basicComponentCompilationUnit = new JavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 				).build
-			val compositeCompositeComponentCompilationUnit = new JavaClassBuilder(typeHelper,
+			val compositeCompositeComponentCompilationUnit = new JavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
 				)
 				.addImportWithNamespace(basicComponentCompilationUnit)
 				.addPrivateField("assemblyContext", getReference(basicComponentCompilationUnit))
-				.addConstructorConstructionForField("assemblyContext")
+				.addConstructorConstructionForField("assemblyContext", ConstructorArguments.WITHOUT_NULL_LITERAL)
 				.build
 			
 			assertCompilationUnits(List.of(basicComponentCompilationUnit, compositeCompositeComponentCompilationUnit))
@@ -150,7 +149,7 @@ class CompositeComponentMappingTransformationTestNew extends Pcm2JavaTransformat
 		
 		validateJavaView[
 			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX).build
-			val compositeComponentCompilationUnit = new JavaClassBuilder(new JavaTypeHelper(), 
+			val compositeComponentCompilationUnit = new JavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
 			)

@@ -1,20 +1,25 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import org.palladiosimulator.pcm.repository.CompositeDataType
+import org.palladiosimulator.pcm.repository.OperationInterface
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryComponent
+import org.palladiosimulator.pcm.system.System
 import tools.vitruv.framework.views.View
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.palladiosimulator.pcm.repository.CompositeDataType
-import org.palladiosimulator.pcm.repository.OperationInterface
 
 @Utility
 class PcmQueryUtil {
 	static def Repository claimSinglePcmRepository(View view) {
 		view.getRootObjects(Repository).claimOne
+	}
+	
+	static def System claimSinglePcmSystem(View view) {
+		view.getRootObjects(System).claimOne
 	}
 
 	static def Repository claimPcmRepository(View view, String repositoryName) {

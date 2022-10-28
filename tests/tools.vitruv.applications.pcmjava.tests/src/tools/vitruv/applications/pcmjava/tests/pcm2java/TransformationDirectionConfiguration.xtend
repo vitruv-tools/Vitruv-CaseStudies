@@ -1,9 +1,9 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java
 
-import org.apache.log4j.Logger
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import tools.vitruv.framework.vsum.VirtualModel
+import org.apache.log4j.Logger
 import tools.vitruv.change.propagation.ChangePropagationMode
+import tools.vitruv.framework.vsum.VirtualModel
 
 @Utility
 class TransformationDirectionConfiguration {

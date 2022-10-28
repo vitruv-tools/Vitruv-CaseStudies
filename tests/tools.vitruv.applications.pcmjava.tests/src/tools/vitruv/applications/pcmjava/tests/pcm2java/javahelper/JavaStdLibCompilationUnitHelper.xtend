@@ -1,10 +1,12 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 
-import tools.vitruv.framework.views.View
-import org.emftext.language.java.containers.CompilationUnit
-import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.*
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.containers.CompilationUnit
+import tools.vitruv.framework.views.View
+
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.*
+
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 /*
  * This class is a workaround to save the time-consuming programmatic creation

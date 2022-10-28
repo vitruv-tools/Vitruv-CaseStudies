@@ -10,15 +10,22 @@ import org.emftext.language.java.statements.Statement
 import org.emftext.language.java.statements.StatementsFactory
 import org.emftext.language.java.types.TypeReference
 
+enum ConstructorArguments {
+	WITH_NULL_LITERAL,
+	WITHOUT_NULL_LITERAL
+}
+
 class JavaCreationToFieldAssignmentHelper {
 	final TypeReference type
 	final Field field
+	final ConstructorArguments constructorArguments
 	
 	final Statement statement
 	
-	new(String parameterName, TypeReference type, Field field) {
+	new(String parameterName, TypeReference type, Field field, ConstructorArguments constructorArguments) {
 		this.type = type
 		this.field = field
+		this.constructorArguments = constructorArguments
 		
 		statement = buildStatement()
 	}
@@ -36,6 +43,7 @@ class JavaCreationToFieldAssignmentHelper {
 		child.next = childNext
 		
 		var value = InstantiationsFactory.eINSTANCE.createNewConstructorCall
+		if(constructorArguments === ConstructorArguments.WITH_NULL_LITERAL) value.arguments += LiteralsFactory.eINSTANCE.createNullLiteral
 		value.typeReference = type
 		
 		var assignmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression

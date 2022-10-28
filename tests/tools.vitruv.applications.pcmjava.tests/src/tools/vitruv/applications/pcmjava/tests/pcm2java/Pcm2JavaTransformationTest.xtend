@@ -1,44 +1,48 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java
 
 import java.nio.file.Path
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.junit.jupiter.api.BeforeEach
-import org.palladiosimulator.pcm.repository.Repository
-import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification
-import tools.vitruv.change.propagation.ChangePropagationMode
-import tools.vitruv.framework.views.View
-import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
-
-import static tools.vitruv.applications.pcmjava.tests.pcm2java.TransformationDirectionConfiguration.configureUnidirectionalExecution
 import java.util.Collection
-import org.emftext.language.java.containers.CompilationUnit
-import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.*
-
-import static tools.vitruv.testutils.matchers.ModelMatchers.*
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.junit.jupiter.api.Assertions.*
+import java.util.Comparator
 import java.util.HashSet
 import java.util.Set
 import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
-import java.util.Comparator
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.emftext.language.java.commons.NamedElement
+import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.containers.Package
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.Method
-import org.emftext.language.java.commons.NamedElement
+import org.junit.jupiter.api.BeforeEach
+import org.palladiosimulator.pcm.repository.Repository
+import org.palladiosimulator.pcm.repository.RepositoryFactory
+import org.palladiosimulator.pcm.system.System
+import org.palladiosimulator.pcm.system.SystemFactory
+import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification
 import tools.vitruv.applications.util.temporary.java.JavaSetup
+import tools.vitruv.change.propagation.ChangePropagationMode
+import tools.vitruv.framework.views.View
+import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
+
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.junit.jupiter.api.Assertions.*
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.*
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.TransformationDirectionConfiguration.configureUnidirectionalExecution
+import static tools.vitruv.testutils.matchers.ModelMatchers.*
 
 class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
-	protected var extension tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaViewFactory viewFactory
+	protected var extension Pcm2JavaViewFactory viewFactory
 	
 	// === setup ===
 	
 	@Accessors(PROTECTED_GETTER)
 	static val PCM_MODEL_FILE_EXTENSION = "pcm"
+	@Accessors(PROTECTED_GETTER)
+	static val PCM_SYSTEM_FILE_EXTENSION = "system"
 	@Accessors(PROTECTED_GETTER)
 	static val PCM_MODEL_NAME = "model"
 	@Accessors(PROTECTED_GETTER)
@@ -50,7 +54,7 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	
 	@BeforeEach
 	def final void setupViewFactory(){
-		viewFactory = new tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaViewFactory(virtualModel);
+		viewFactory = new Pcm2JavaViewFactory(virtualModel);
 	}
 	
 	@BeforeEach
@@ -100,6 +104,20 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		]
 	}
 	
+	private def void createSystem((System) => void systemInitialization){
+		changePcmView[
+			val system = SystemFactory.eINSTANCE.createSystem();
+			createAndRegisterRoot(system, getProjectModelPath(PCM_MODEL_NAME, PCM_SYSTEM_FILE_EXTENSION).uri)
+			systemInitialization.apply(system)
+		]
+	}
+	
+	protected def void createSystem(String systemyName){
+		createSystem [
+			entityName = systemyName;
+		]
+	}
+	
 	// === assertions ===
 	
 	protected def void assertCompilationUnits(View view, Collection<CompilationUnit> expectedCompilationUnits){
@@ -115,6 +133,18 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		expectedCompilationUnits.forEach[
 			var actualUnit = claimJavaCompilationUnit(view, it.name)
 			assertThat(actualUnit, equalsDeeply(it))
+		]
+	}
+	
+	protected def void assertPackages(View view, Collection<Package> expectedPackages) {
+		val allActualPackages = getJavaPackages(view)
+		assertEquals(expectedPackages.size, allActualPackages.size)
+		assertFalse(allActualPackages.map[name].hasDuplicate)
+		assertFalse(expectedPackages.map[name].hasDuplicate)
+		
+		expectedPackages.forEach[
+			var actualPackage = claimJavaPackage(view, it.name)
+			assertThat(actualPackage, equalsDeeply(it))
 		]
 	}
 	

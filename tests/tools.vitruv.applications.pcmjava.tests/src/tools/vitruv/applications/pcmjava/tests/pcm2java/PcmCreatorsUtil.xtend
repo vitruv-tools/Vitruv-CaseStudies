@@ -14,10 +14,15 @@ import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
+import org.palladiosimulator.pcm.repository.OperationSignature
+import org.palladiosimulator.pcm.repository.Parameter
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.repository.RepositoryFactory
+import org.palladiosimulator.pcm.repository.Signature
+import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF
+import org.palladiosimulator.pcm.seff.SeffFactory
 
 @Utility
 class PcmCreatorsUtil {
@@ -30,9 +35,9 @@ class PcmCreatorsUtil {
 		return assemblyContext
 	}
 	
-	static def createAssemblyContext(RepositoryComponent encapsulatedComponent) {
+	static def createAssemblyContext(RepositoryComponent encapsulatedComponent, String name) {
 		createAssemblyContext[
-			entityName = tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME
+			entityName = name
 			encapsulatedComponent__AssemblyContext = encapsulatedComponent
 		]
 	}
@@ -73,6 +78,24 @@ class PcmCreatorsUtil {
 		createOperationInterface[
 			entityName = name
 		]
+	}
+	
+	static def OperationSignature createOperationSignature((OperationSignature)=> void intialization) {
+		var operationSignature = RepositoryFactory.eINSTANCE.createOperationSignature
+		intialization.apply(operationSignature)
+		return operationSignature
+	}
+	
+	static def createOperationSignature(String name) {
+		createOperationSignature [
+			entityName = name
+		]
+	}
+	
+	static def Parameter createParameter((Parameter)=> void initalization) {
+		var parameter =  RepositoryFactory.eINSTANCE.createParameter
+		initalization.apply(parameter)
+		return parameter
 	}
 	
 	// === repository -> roles ===
@@ -154,6 +177,20 @@ class PcmCreatorsUtil {
 		createInnerDeclaration [
 			datatype_InnerDeclaration = innerType
 			entityName = name
+		]
+	}
+	
+	// === seff ===
+	
+	static def ResourceDemandingSEFF createResourceDemandingSEFF((ResourceDemandingSEFF)=> void initialization) {
+		val rdSEFF = SeffFactory.eINSTANCE.createResourceDemandingSEFF()
+		initialization.apply(rdSEFF)
+		return rdSEFF
+	}
+	
+	static def ResourceDemandingSEFF createResourceDemandingSEFF(Signature describedService){
+		createResourceDemandingSEFF [
+			describedService__SEFF = describedService
 		]
 	}
 }

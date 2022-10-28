@@ -37,3 +37,4 @@ public class DataTypeCorrespondenceHelperTest extends Pcm2JavaTransformationTest
 	}
 
 }
+}

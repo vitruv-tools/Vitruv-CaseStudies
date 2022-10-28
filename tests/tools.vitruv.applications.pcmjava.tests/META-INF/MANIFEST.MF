@@ -21,7 +21,5 @@ Require-Bundle: org.apache.log4j,
 Export-Package: tools.vitruv.applications.pcmjava.pcm2java,
  tools.vitruv.applications.pcmjava.pcm2java.repository,
  tools.vitruv.applications.pcmjava.pcm2java.system,
- tools.vitruv.applications.pcmjava.tests.pcm2java,
- tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper,
- tools.vitruv.applications.pcmjava.tests.pcm2java.repository
+ tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 Bundle-Vendor: vitruv.tools

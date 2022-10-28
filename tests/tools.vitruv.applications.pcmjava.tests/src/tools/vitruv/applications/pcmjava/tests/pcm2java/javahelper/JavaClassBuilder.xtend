@@ -1,5 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 
+import edu.kit.ipd.sdq.commons.util.java.Pair
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -12,6 +13,7 @@ import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.modifiers.ModifiersFactory
+import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.references.ReferencesFactory
 import org.emftext.language.java.statements.StatementsFactory
 import org.emftext.language.java.types.TypeReference
@@ -23,6 +25,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 class JavaClassBuilder {
 	
 	// === data ===
+	boolean addConstructor
 	final String className
 	final String namespace
 	final List<Import> classImports
@@ -31,13 +34,12 @@ class JavaClassBuilder {
 	final List<FieldInformation> fields
 	final List<String> gettersForField
 	final List<String> settersForField
+	final List<MethodDescription> classMethods
 	final List<String> constructorInitializations
-	final List<String> constructorConstructions
-	
-	final JavaTypeHelper typeHelper
-	
-	new(JavaTypeHelper typeHelper, String className, String namespace) {
-		this.typeHelper = typeHelper
+	final List<Pair<String, ConstructorArguments>> constructorConstructions
+		
+	new(String className, String namespace) {
+		this.addConstructor = false
 		
 		this.className = className
 		this.namespace = namespace
@@ -47,8 +49,9 @@ class JavaClassBuilder {
 		this.fields = new ArrayList<FieldInformation>()
 		this.gettersForField = new ArrayList<String>()
 		this.settersForField = new ArrayList<String>()
+		this.classMethods = new ArrayList<MethodDescription>()
 		this.constructorInitializations = new ArrayList<String>()
-		this.constructorConstructions = new ArrayList<String>()
+		this.constructorConstructions = new ArrayList<Pair<String, ConstructorArguments>>()
 	}
 	
 	// === builder-API ===
@@ -95,13 +98,23 @@ class JavaClassBuilder {
 		return this
 	}
 	
+	def JavaClassBuilder addMethod(MethodDescription description) {
+		this.classMethods += description
+		return this
+	}
+	
 	def JavaClassBuilder addConstructorInitalizationForField(String fieldName) {
 		this.constructorInitializations += fieldName
 		return this
 	}
 	
-	def JavaClassBuilder addConstructorConstructionForField(String fieldName) {
-		this.constructorConstructions += fieldName
+	def JavaClassBuilder addConstructorConstructionForField(String fieldName, ConstructorArguments constructorArguments) {
+		this.constructorConstructions += new Pair<String, ConstructorArguments>(fieldName, constructorArguments)
+		return this
+	}
+	
+	def JavaClassBuilder addConstructor() {
+		this.addConstructor = true
 		return this
 	}
 	
@@ -114,9 +127,24 @@ class JavaClassBuilder {
 		]
 		
 		class.members += fields.map[createPrivateField_]
-		if(!constructorInitializations.isEmpty || !constructorConstructions.isEmpty) class.members += createConstructor_(class)
+		if(addConstructor || !constructorInitializations.isEmpty || !constructorConstructions.isEmpty) class.members += createConstructor_(class)
 		class.members += gettersForField.map[createGetterForField_(it, class)]
 		class.members += settersForField.map[createSetterForField_(it, class)]
+		
+		class.members += classMethods.map[methodDescription | 
+			val methodParameters = methodDescription.parameters.map[ parameterDescription |
+				var parameter = ParametersFactory.eINSTANCE.createOrdinaryParameter
+				parameter.name = parameterDescription.name
+				parameter.typeReference = EcoreUtil.copy(parameterDescription.type)
+				return parameter
+			]
+			createClassMethod [
+				name = methodDescription.name
+				typeReference = methodDescription.returnType
+				parameters += methodParameters
+				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
+			]
+		]
 		
 		return createCompilationUnit[
 			name = namespace + "." + className + ".java"
@@ -158,7 +186,7 @@ class JavaClassBuilder {
 		
 		return createClassMethod[
 			name = "set" + captialize(fieldName)
-			typeReference = typeHelper.void
+			typeReference = createVoid()
 			annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 			parameters += assignementHelper.parameter
 			statements += assignementHelper.statement
@@ -171,18 +199,20 @@ class JavaClassBuilder {
 		constructor.name = classifier.name
 		constructor.makePublic
 		
+		constructorConstructions.forEach[constructorDescription |
+			val fieldName = constructorDescription.first
+			val withNullLiteral = constructorDescription.second
+			val field = classifier.fields.filter[name == constructorDescription.first].claimOne
+			val assignementHelper = new JavaCreationToFieldAssignmentHelper(fieldName, EcoreUtil.copy(field.typeReference), field, withNullLiteral)
+			
+			constructor.statements += assignementHelper.statement
+		]
+		
 		constructorInitializations.forEach[fieldName|
 			val field = classifier.fields.filter[name == fieldName].claimOne
 			val assignementHelper = new JavaParameterToFieldAssignmentHelper(fieldName, EcoreUtil.copy(field.typeReference), field)
 			
 			constructor.parameters += assignementHelper.parameter
-			constructor.statements += assignementHelper.statement
-		]
-		
-		constructorConstructions.forEach[fieldName|
-			val field = classifier.fields.filter[name == fieldName].claimOne
-			val assignementHelper = new JavaCreationToFieldAssignmentHelper(fieldName, EcoreUtil.copy(field.typeReference), field)
-			
 			constructor.statements += assignementHelper.statement
 		]
 		

@@ -1,16 +1,16 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 
-import org.emftext.language.java.statements.Statement
-import org.emftext.language.java.parameters.Parameter
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.parameters.ParametersFactory
-import org.emftext.language.java.expressions.ExpressionsFactory
-import org.emftext.language.java.references.ReferencesFactory
-import org.emftext.language.java.literals.LiteralsFactory
-import org.emftext.language.java.operators.OperatorsFactory
-import org.emftext.language.java.statements.StatementsFactory
-import org.emftext.language.java.members.Field
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.expressions.ExpressionsFactory
+import org.emftext.language.java.literals.LiteralsFactory
+import org.emftext.language.java.members.Field
+import org.emftext.language.java.operators.OperatorsFactory
+import org.emftext.language.java.parameters.Parameter
+import org.emftext.language.java.parameters.ParametersFactory
+import org.emftext.language.java.references.ReferencesFactory
+import org.emftext.language.java.statements.Statement
+import org.emftext.language.java.statements.StatementsFactory
+import org.emftext.language.java.types.TypeReference
 
 class JavaParameterToFieldAssignmentHelper {
 	final String parameterName

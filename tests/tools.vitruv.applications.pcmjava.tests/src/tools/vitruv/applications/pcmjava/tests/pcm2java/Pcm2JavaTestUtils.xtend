@@ -16,6 +16,7 @@ class Pcm2JavaTestUtils {
 	public static final String COMPOSITE_DATA_TYPE_NAME = "CompositeDataType";
 	public static final String INNER_DEC_NAME = "testInnerDec";
 	public static final String SYSTEM_NAME = "TestSystem";
+	public static final String SYSTEM_NAME_CAMELCASE = "testSystem";
 	public static final String ASSEMBLY_CONTEXT_NAME = "assemblyContext";
 	public static final String COMPOSITE_COMPONENT_NAME = "TestCompositeComponent";
 	public static final String COLLECTION_DATA_TYPE_NAME = "TestCollectionDatatype";

@@ -2,26 +2,29 @@ package tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 
 import java.util.ArrayList
 import java.util.List
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.imports.Import
 import org.emftext.language.java.imports.ImportsFactory
 import org.emftext.language.java.modifiers.ModifiersFactory
+import org.emftext.language.java.parameters.ParametersFactory
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
 class JavaInterfaceBuilder {
-	
 	// === data ===
 	final String interfaceName
 	final String namespace
 	final List<Import> interfaceImports
+	final List<MethodDescription> interfaceMethods
 	
 	new(String interfaceName, String namespace) {
 		this.interfaceName = interfaceName
 		this.namespace = namespace
 		this.interfaceImports = new ArrayList<Import>()
+		this.interfaceMethods = new ArrayList<MethodDescription>()
 	}
 	
 	// === builder-API ===
@@ -35,10 +38,29 @@ class JavaInterfaceBuilder {
 		return this
 	}
 	
+	def JavaInterfaceBuilder addMethod(MethodDescription description) {
+		this.interfaceMethods += description
+		return this
+	}
+	
 	def CompilationUnit build() {
 		val interface = createInterface [
 			annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 			name = interfaceName
+		]
+		
+		interface.members += interfaceMethods.map[methodDescription | 
+			val methodParameters = methodDescription.parameters.map[ parameterDescription |
+				var parameter = ParametersFactory.eINSTANCE.createOrdinaryParameter
+				parameter.name = parameterDescription.name
+				parameter.typeReference = EcoreUtil.copy(parameterDescription.type)
+				return parameter
+			]
+			createInterfaceMethod [
+				name = methodDescription.name
+				typeReference = methodDescription.returnType
+				parameters += methodParameters
+			]
 		]
 		
 		return createCompilationUnit[
