@@ -1,21 +1,17 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.Operation
-import org.eclipse.uml2.uml.Package
-import org.eclipse.uml2.uml.VisibilityKind
 import org.palladiosimulator.pcm.repository.CompositeComponent
-import org.palladiosimulator.pcm.repository.Repository
-import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.junit.jupiter.api.Test
-
 import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
-import java.nio.file.Path
-import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
+import static tools.vitruv.applications.pcmumlclass.tests.PcmUmlElementEqualityValidation.*
+import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
+
 /**
  * This test class tests the reactions and routines that are supposed to synchronize synchronize a pcm::RepositoryComponent with 
  * its corresponding uml::Package, uml::Class (implementation), and uml::Operation (constructor).
@@ -26,101 +22,179 @@ import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.
  * 		UmlIPREClassReactions.reactions,
  * 		UmlIPREConstructorOperation.reactions
  */
-class RepositoryComponentConceptTest extends LegacyPcmUmlClassApplicationTest {
+class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 
 	val COMPONENT_NAME = "testComponent"
+	val NEW_COMPONENT_NAME = "newTestComponent"
 
-	def void checkRepositoryComponentConcept(
-		RepositoryComponent pcmComponent,
-		Package umlComponentPkg,
-		Class umlComponentImpl,
-		Operation umlComponentConstructor
-	) {
-		assertNotNull(pcmComponent)
-		assertNotNull(umlComponentPkg)
-		assertNotNull(umlComponentImpl)
-		assertNotNull(umlComponentConstructor)
-		assertTrue(corresponds(pcmComponent, umlComponentPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE))
-		assertTrue(corresponds(pcmComponent, umlComponentImpl, TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(corresponds(pcmComponent, umlComponentConstructor, TagLiterals.IPRE__CONSTRUCTOR))
-		assertTrue(umlComponentPkg.isPackageFor(pcmComponent))
-		assertTrue(pcmComponent.entityName == umlComponentPkg.name.toFirstUpper)
-		assertTrue(pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlComponentImpl.name)
-		assertTrue(pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlComponentConstructor.name)
-		// decided against explicit constructor return type, because it's a common convention
-		assertTrue(umlComponentImpl.isFinalSpecialization)
-		assertTrue(umlComponentImpl.visibility === VisibilityKind.PUBLIC_LITERAL)
-		assertTrue(umlComponentImpl.package === umlComponentPkg)
-		// component repository should correspond to the parent package of the component package
-		assertTrue(
-			corresponds(pcmComponent.repository__RepositoryComponent, umlComponentPkg.nestingPackage,
-				TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE))
-	}
+	@Test
+	def void testCreateRepositoryComponentConcept_PCM() {
+		initPCMRepository
 
-	def protected checkRepositoryComponentConcept(RepositoryComponent pcmComponent) {
-		val umlComponentPkg = helper.getModifiableCorr(pcmComponent, Package, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
-		val umlComponentImpl = helper.getModifiableCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
-		val umlComponentConstructor = helper.getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
-		checkRepositoryComponentConcept(pcmComponent, umlComponentPkg, umlComponentImpl,
-			umlComponentConstructor)
-	}
-
-	def protected checkRepositoryComponentConcept(Package umlComponentPkg) {
-		val pcmComponent = helper.getModifiableCorr(umlComponentPkg, RepositoryComponent,
-			TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
-		assertNotNull(pcmComponent)
-		checkRepositoryComponentConcept(pcmComponent)
-	}
-
-	/**
-	 * Initialize a pcm::Repository and its corresponding uml-counterparts.
-	 */
-	def private Repository createRepository() {
-		val pcmRepository = helper.createRepository()
-
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-			contents += pcmRepository
+		changePcmView[
+			var pcmComponent = RepositoryFactory.eINSTANCE.createCompositeComponent
+			pcmComponent.entityName = COMPONENT_NAME
+			defaultPcmRepository.components__Repository += pcmComponent
 		]
-		propagate
-		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		return pcmRepository.clearResourcesAndReloadRoot
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertNotNull(umlPackage.claimPackage(COMPONENT_NAME))
+			assertNotNull(pcmPackage.eContents)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
 	}
 
 	@Test
-	def void testRepositoryComponentConcept_PCM() {
-		var pcmRepository = createRepository
+	def void testCreateRepositoryComponentConcept_UML() {
+		initUMLModel
 
-		var pcmComponent = RepositoryFactory.eINSTANCE.createCompositeComponent
-		pcmComponent.entityName = COMPONENT_NAME
-		pcmRepository.components__Repository += pcmComponent
+		changeUmlView[
+			userInteraction.addNextSingleSelection(
+				DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
+			umlRootPackage.createNestedPackage(COMPONENT_NAME)
+		]
 
-		propagate
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		pcmComponent = pcmRepository.components__Repository.head as CompositeComponent
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
 
-		checkRepositoryComponentConcept(pcmComponent)
+			assertNotNull(umlPackage.claimPackage(COMPONENT_NAME))
+			assertNotNull(pcmPackage.eContents)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
 	}
 
 	@Test
-	def void testRepositoryComponentConcept_UML() {
-		var pcmRepository = createRepository
-		var umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
-		startRecordingChanges(umlRepositoryPkg)
+	def void testRenameRepositoryComponentConcept_PCM() {
+		initPCMRepository
 
-		userInteraction.addNextSingleSelection(
-			DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
-		var umlComponentPkg = umlRepositoryPkg.createNestedPackage(COMPONENT_NAME)
+		changePcmView[
+			var pcmComponent = RepositoryFactory.eINSTANCE.createCompositeComponent
+			pcmComponent.entityName = COMPONENT_NAME
+			defaultPcmRepository.components__Repository += pcmComponent
+		]
 
-		propagate
-		umlComponentPkg.clearResourcesAndReloadRoot
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
+		// Ensure preconditions for rename are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertNotNull(umlRootPackage.claimPackage(COMPONENT_NAME))
+			assertEquals(COMPONENT_NAME.toFirstUpper,
+				(defaultPcmRepository.components__Repository.claimOne as CompositeComponent).entityName)
+		]
 
-		umlComponentPkg = umlRepositoryPkg.nestedPackages.findFirst[it.name == COMPONENT_NAME]
+		changePcmView[
+			(defaultPcmRepository.components__Repository.
+				claimOne as CompositeComponent).entityName = NEW_COMPONENT_NAME.toFirstUpper
+		]
 
-		checkRepositoryComponentConcept(umlComponentPkg)
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertNotNull(umlPackage.claimPackage(NEW_COMPONENT_NAME))
+			assertNotNull(pcmPackage.eContents)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testRenameRepositoryComponentConcept_UML() {
+		initUMLModel
+
+		changeUmlView[
+			userInteraction.addNextSingleSelection(
+				DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
+			umlRootPackage.createNestedPackage(COMPONENT_NAME)
+		]
+
+		// Ensure preconditions for rename are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertNotNull(umlRootPackage.claimPackage(COMPONENT_NAME))
+			assertEquals(COMPONENT_NAME.toFirstUpper,
+				(defaultPcmRepository.components__Repository.claimOne as CompositeComponent).entityName)
+		]
+
+		changeUmlView[
+			umlRootPackage.claimPackage(COMPONENT_NAME).name = NEW_COMPONENT_NAME
+		]
+
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertNotNull(umlPackage.claimPackage(NEW_COMPONENT_NAME))
+			assertNotNull(pcmPackage.eContents)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testDeleteRepositoryComponentConcept_PCM() {
+		initPCMRepository
+
+		changePcmView[
+			var pcmComponent = RepositoryFactory.eINSTANCE.createCompositeComponent
+			pcmComponent.entityName = COMPONENT_NAME
+			defaultPcmRepository.components__Repository += pcmComponent
+		]
+
+		// Ensure preconditions for delete are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertNotNull(umlRootPackage.claimPackage(COMPONENT_NAME))
+			assertEquals(COMPONENT_NAME.toFirstUpper,
+				(defaultPcmRepository.components__Repository.claimOne as CompositeComponent).entityName)
+		]
+
+		changePcmView[
+			defaultPcmRepository.components__Repository.remove(0)
+		]
+
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertTrue(umlPackage.nestedPackages.filter[it.name.equals(COMPONENT_NAME)].empty)
+			assertTrue(pcmPackage.eContents.empty)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
+	}
+
+	@Test
+	def void testDeleteRepositoryComponentConcept_UML() {
+		initUMLModel
+
+		changeUmlView[
+			userInteraction.addNextSingleSelection(
+				DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
+			umlRootPackage.createNestedPackage(COMPONENT_NAME)
+		]
+
+		// Ensure preconditions for delete are fulfilled:
+		validateUmlAndPcmPackagesView[
+			assertNotNull(umlRootPackage.claimPackage(COMPONENT_NAME))
+			assertEquals(COMPONENT_NAME.toFirstUpper,
+				(defaultPcmRepository.components__Repository.claimOne as CompositeComponent).entityName)
+		]
+
+		changeUmlView[
+			umlRootPackage.claimPackage(COMPONENT_NAME).destroy
+		]
+
+		validateUmlAndPcmPackagesView [
+			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
+			val pcmPackage = claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+
+			assertTrue(umlPackage.nestedPackages.filter[it.name.equals(COMPONENT_NAME)].empty)
+			assertTrue(pcmPackage.eContents.empty)
+
+			assertElementsEqual(umlPackage, pcmPackage)
+		]
 	}
 }
