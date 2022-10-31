@@ -4,11 +4,11 @@ import java.util.List
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaInterfaceBuilder
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 
 import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaInterfaceBuilder
 
 class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -23,7 +23,7 @@ class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformation
 		]
 		
 		validateJavaView [
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME,
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 			).build
 			assertCompilationUnits(List.of(interfaceCompilationUnit))
@@ -47,7 +47,7 @@ class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformation
 		]
 		
 		validateJavaView [
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME,
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 			).build
 			assertCompilationUnits(List.of(interfaceCompilationUnit))

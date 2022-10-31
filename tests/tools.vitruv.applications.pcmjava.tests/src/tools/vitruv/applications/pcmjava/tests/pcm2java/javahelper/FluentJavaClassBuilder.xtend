@@ -22,7 +22,13 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
-class JavaClassBuilder {
+/**
+ * Caution: the FluentJavaClassBuilder does not check for correctness of the builder API calls.
+ * This means that the caller has to ensure that references to fields (e.g. for getters, setters,
+ * initializations, ...) reference existing fields. Also the Builder doesn't prevent adding
+ * duplicated members (e.g. adding a getter for a field twice results in two identical getter methods).
+ */
+class FluentJavaClassBuilder{
 	
 	// === data ===
 	boolean addConstructor
@@ -56,7 +62,7 @@ class JavaClassBuilder {
 	
 	// === builder-API ===
 	
-	def JavaClassBuilder addImportWithNamespace(CompilationUnit importedCompilationUnit){
+	def FluentJavaClassBuilder addImportWithNamespace(CompilationUnit importedCompilationUnit){
 		var import = ImportsFactory.eINSTANCE.createClassifierImport
 		import.namespaces += importedCompilationUnit.namespaces
 		import.classifier = importedCompilationUnit.classifiers.claimOne
@@ -65,7 +71,7 @@ class JavaClassBuilder {
 		return this
 	}
 	
-	def JavaClassBuilder addImportWithoutNamespace(CompilationUnit importedCompilationUnit){
+	def FluentJavaClassBuilder addImportWithoutNamespace(CompilationUnit importedCompilationUnit){
 		var import = ImportsFactory.eINSTANCE.createClassifierImport
 		import.classifier = importedCompilationUnit.classifiers.claimOne
 		
@@ -73,47 +79,47 @@ class JavaClassBuilder {
 		return this
 	}
 	
-	def JavaClassBuilder addImplements(TypeReference type) {
+	def FluentJavaClassBuilder addImplements(TypeReference type) {
 		this.implementedTypes += type
 		return this
 	}
 	
-	def JavaClassBuilder addExtends(TypeReference type){
+	def FluentJavaClassBuilder setExtends(TypeReference type){
 		this.extendsType = type
 		return this
 	}
 	
-	def JavaClassBuilder addPrivateField(String fieldName, TypeReference type) {
+	def FluentJavaClassBuilder addPrivateField(String fieldName, TypeReference type) {
 		this.fields.add(new FieldInformation(fieldName, type))
 		return this
 	}
 	
-	def JavaClassBuilder addGetterForField(String fieldName) {
+	def FluentJavaClassBuilder addGetterForField(String fieldName) {
 		this.gettersForField += fieldName
 		return this
 	}
 	
-	def JavaClassBuilder addSetterForField(String fieldName) {
+	def FluentJavaClassBuilder addSetterForField(String fieldName) {
 		this.settersForField += fieldName
 		return this
 	}
 	
-	def JavaClassBuilder addMethod(MethodDescription description) {
+	def FluentJavaClassBuilder addMethod(MethodDescription description) {
 		this.classMethods += description
 		return this
 	}
 	
-	def JavaClassBuilder addConstructorInitalizationForField(String fieldName) {
+	def FluentJavaClassBuilder addConstructorInitalizationForField(String fieldName) {
 		this.constructorInitializations += fieldName
 		return this
 	}
 	
-	def JavaClassBuilder addConstructorConstructionForField(String fieldName, ConstructorArguments constructorArguments) {
+	def FluentJavaClassBuilder addConstructorConstructionForField(String fieldName, ConstructorArguments constructorArguments) {
 		this.constructorConstructions += new Pair<String, ConstructorArguments>(fieldName, constructorArguments)
 		return this
 	}
 	
-	def JavaClassBuilder addConstructor() {
+	def FluentJavaClassBuilder addConstructor() {
 		this.addConstructor = true
 		return this
 	}

@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
 
 class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -35,7 +35,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 		]
 		
 		validateJavaView[
-			val expectedCompilationUnit = new JavaClassBuilder( 
+			val expectedCompilationUnit = new FluentJavaClassBuilder( 
 					Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME, 
 					Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 				)
@@ -71,7 +71,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 		]
 		
 		validateJavaView[
-			val expectedCompilationUnit = new JavaClassBuilder( 
+			val expectedCompilationUnit = new FluentJavaClassBuilder( 
 					Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME, 
 					Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 				)
@@ -109,7 +109,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 		]
 		
 		validateJavaView[
-			val expectedCompilationUnit = new JavaClassBuilder( 
+			val expectedCompilationUnit = new FluentJavaClassBuilder( 
 					Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME, 
 					Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 				)

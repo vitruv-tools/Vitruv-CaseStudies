@@ -23,7 +23,7 @@ class Pcm2JavaTestUtils {
 	
 	public static final String IMPL_SUFIX = "Impl"
 	
-	// === namespaces ===
+	// === suffixes ===
 	public static final String DATATYPES_SUFIX = ".datatypes"
 	public static final String CONTRACTS_SUFIX = ".contracts"
 	

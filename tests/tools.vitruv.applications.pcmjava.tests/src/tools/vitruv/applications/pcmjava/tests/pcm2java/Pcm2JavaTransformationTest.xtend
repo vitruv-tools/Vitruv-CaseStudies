@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.TransformationDirectionConfiguration.configureUnidirectionalExecution
 import static tools.vitruv.testutils.matchers.ModelMatchers.*
+import org.emftext.language.java.members.Member
 
 class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected var extension Pcm2JavaViewFactory viewFactory
@@ -159,10 +160,17 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	    return false;
 	}
 	
-	def static sortMembers(EList<? extends EObject> members) {
-        ECollections.sort(members, new Comparator<EObject> {
+	/**
+	 * sorts class members in the following order: <p>
+	 * (1) Field <p>
+	 * (2) Constructor <p>
+	 * (3) Method <p>
+	 * Fields, Constructors and Methods them self are sorted by their name.
+	 */
+	def static sortMembers(EList<? extends Member> members) {
+        ECollections.sort(members, new Comparator<Member> {
 
-            override compare(EObject o1, EObject o2) {
+            override compare(Member o1, Member o2) {
                 // fields before constructors and methods
                 if (o1 instanceof Field && (o2 instanceof Method || o2 instanceof Constructor)) {
                     return 1

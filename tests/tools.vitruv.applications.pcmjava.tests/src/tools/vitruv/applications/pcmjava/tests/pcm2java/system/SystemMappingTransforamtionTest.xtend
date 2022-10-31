@@ -5,9 +5,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
 
 class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 	
@@ -16,7 +16,7 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		
 		validateJavaView [
-			val systemCompilationUnit = new JavaClassBuilder(
+			val systemCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.SYSTEM_NAME_CAMELCASE
 			)
@@ -37,7 +37,7 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 		]
 		
 		validateJavaView [
-			val systemCompilationUnit = new JavaClassBuilder(
+			val systemCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.SYSTEM_NAME_CAMELCASE + Pcm2JavaTestUtils.RENAME
 			)

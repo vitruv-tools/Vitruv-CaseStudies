@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaInterfaceBuilder
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.MethodDescription
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
@@ -15,6 +13,8 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaInterfaceBuilder
 
 class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -40,13 +40,13 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 		]
 		
 		validateJavaView [
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
 				.build
 				
-			val componentCompilationUnit = new JavaClassBuilder(
+			val componentCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			)
@@ -77,11 +77,11 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 		]
 		
 		validateJavaView [
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 			)
 			.build
-			val systemCompilationUnit = new JavaClassBuilder(
+			val systemCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.SYSTEM_NAME_CAMELCASE
 			)
@@ -116,13 +116,13 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 		]
 		
 		validateJavaView [
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
 				.build
 				
-			val componentCompilationUnit = new JavaClassBuilder(
+			val componentCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
 			)
@@ -164,23 +164,23 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 		]
 		
 		validateJavaView[
-			val interface1CompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interface1CompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
 				.build
-			val interface2CompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME, 
+			val interface2CompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.build
-			val component1CompilationUnit = new JavaClassBuilder(
+			val component1CompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 					Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 				)
 				// it is probably also intended to remove an empty constructor (-> bug in reaction)
 				.addConstructor
 				.build
-			val component2CompilationUnit = new JavaClassBuilder(
+			val component2CompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 					Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME
 				)
@@ -218,13 +218,13 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 		]
 		
 		validateJavaView [
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
 				.build
 				
-			val componentCompilationUnit = new JavaClassBuilder(
+			val componentCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			)
@@ -263,16 +263,16 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 		]
 		
 		validateJavaView [
-			val interface1CompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interface1CompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
 				.build
-			val interface2CompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME, 
+			val interface2CompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.build
-			val componentCompilationUnit = new JavaClassBuilder(
+			val componentCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			)

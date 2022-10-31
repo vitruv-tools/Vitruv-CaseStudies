@@ -8,12 +8,12 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaStdLibCompilationUnitHelper
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
 
 class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -33,12 +33,12 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 			val voidCompilationUnit = stdLibHelper.getCompilationUnitFor(Pcm2JavaTestUtils.VOID_COMPILATIONUNIT_NAME)
 			val arrayListCompilationUnit = stdLibHelper.getCompilationUnitFor(Pcm2JavaTestUtils.ARRAYLIST_COMPILATIONUNIT_NAME)
 			
-			val collectionDataTypeCompilationUnit = new JavaClassBuilder(
+			val collectionDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			)
 			.addImportWithoutNamespace(arrayListCompilationUnit)
-			.addExtends(getTypedReference(arrayListCompilationUnit, voidCompilationUnit))
+			.setExtends(getTypedReference(arrayListCompilationUnit, voidCompilationUnit))
 			.build
 			
 			assertCompilationUnits(List.of(collectionDataTypeCompilationUnit, voidCompilationUnit, arrayListCompilationUnit))
@@ -72,12 +72,12 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 			val listCompilationUnit = stdLibHelper.getCompilationUnitFor(Pcm2JavaTestUtils.ARRAYLIST_COMPILATIONUNIT_NAME)
 			val integerCompilationUnit = stdLibHelper.getCompilationUnitFor(Pcm2JavaTestUtils.INTEGER_COMPILATIONUNIT_NAME)
 		
-			val collectionDataTypeCompilationUnit = new JavaClassBuilder(
+			val collectionDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			)
 			.addImportWithoutNamespace(listCompilationUnit)
-			.addExtends(getTypedReference(listCompilationUnit, integerCompilationUnit))
+			.setExtends(getTypedReference(listCompilationUnit, integerCompilationUnit))
 			.build
 			
 			assertCompilationUnits(List.of(collectionDataTypeCompilationUnit, listCompilationUnit, integerCompilationUnit))
@@ -105,16 +105,16 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 			val stdLibHelper = new JavaStdLibCompilationUnitHelper(it)
 			val arrayListCompilationUnit = stdLibHelper.getCompilationUnitFor("java.util.ArrayList.java")
 			
-			val compositeDataTypeCompilationUnit = new JavaClassBuilder(
+			val compositeDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
-			val collectionDataTypeCompilationUnit = new JavaClassBuilder(
+			val collectionDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			)
 			.addImportWithoutNamespace(arrayListCompilationUnit)
-			.addExtends(getTypedReference(arrayListCompilationUnit, compositeDataTypeCompilationUnit))
+			.setExtends(getTypedReference(arrayListCompilationUnit, compositeDataTypeCompilationUnit))
 			.build
 			
 			assertCompilationUnits(List.of(arrayListCompilationUnit, compositeDataTypeCompilationUnit, collectionDataTypeCompilationUnit))

@@ -4,10 +4,10 @@ import java.util.List
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
 
 class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -73,7 +73,7 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 		]
 		
 		validateJavaView [
-			val expectedCompilationUnit = new JavaClassBuilder( 
+			val expectedCompilationUnit = new FluentJavaClassBuilder( 
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).build

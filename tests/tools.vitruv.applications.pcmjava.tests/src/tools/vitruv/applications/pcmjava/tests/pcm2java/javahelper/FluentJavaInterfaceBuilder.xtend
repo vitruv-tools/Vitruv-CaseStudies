@@ -13,7 +13,12 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
-class JavaInterfaceBuilder {
+/**
+ * Caution: the FluentJavaInterfaceBuilder does not check for correctness of the builder API calls.
+ * This means a duplicated import or methods call leads to duplicated imports or methods in the 
+ * resulting model.
+ */
+class FluentJavaInterfaceBuilder {
 	// === data ===
 	final String interfaceName
 	final String namespace
@@ -29,7 +34,7 @@ class JavaInterfaceBuilder {
 	
 	// === builder-API ===
 	
-	def JavaInterfaceBuilder addImport(CompilationUnit importedCompilationUnit){
+	def FluentJavaInterfaceBuilder addImport(CompilationUnit importedCompilationUnit){
 		var import = ImportsFactory.eINSTANCE.createClassifierImport
 		import.namespaces += importedCompilationUnit.namespaces
 		import.classifier = importedCompilationUnit.classifiers.claimOne
@@ -38,7 +43,7 @@ class JavaInterfaceBuilder {
 		return this
 	}
 	
-	def JavaInterfaceBuilder addMethod(MethodDescription description) {
+	def FluentJavaInterfaceBuilder addMethod(MethodDescription description) {
 		this.interfaceMethods += description
 		return this
 	}

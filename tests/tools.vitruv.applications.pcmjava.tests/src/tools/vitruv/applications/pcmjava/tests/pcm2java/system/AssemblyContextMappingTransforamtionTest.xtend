@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.ConstructorArguments
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
 
 class AssemblyContextMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 	
@@ -30,12 +30,12 @@ class AssemblyContextMappingTransforamtionTest extends Pcm2JavaTransformationTes
 		]
 		
 		validateJavaView [
-		 	val basicComponentCompilationUnit = new JavaClassBuilder(
+		 	val basicComponentCompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 					Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 				)
 				.build
-			val systemCompilationUnit = new JavaClassBuilder(
+			val systemCompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 					Pcm2JavaTestUtils.SYSTEM_NAME_CAMELCASE
 				)

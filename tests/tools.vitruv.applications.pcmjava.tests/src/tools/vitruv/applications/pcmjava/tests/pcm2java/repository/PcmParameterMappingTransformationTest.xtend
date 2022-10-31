@@ -6,8 +6,6 @@ import org.palladiosimulator.pcm.repository.ParameterModifier
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaInterfaceBuilder
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.MethodDescription
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.ParameterDescription
 
@@ -16,6 +14,8 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaInterfaceBuilder
 
 class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -45,7 +45,7 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 		
 		validateJavaView [
 			val parameters = List.of(new ParameterDescription(Pcm2JavaTestUtils.PARAMETER_NAME, createInt()))
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
@@ -83,7 +83,7 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 		
 		validateJavaView [
 			val parameters = List.of(new ParameterDescription(Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.PARAMETER_NAME, createInt()))
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
@@ -124,7 +124,7 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 		
 		validateJavaView [
 			val parameters = List.of(new ParameterDescription(Pcm2JavaTestUtils.PARAMETER_NAME, createBoolean()))
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
@@ -159,12 +159,12 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 		]
 		
 		validateJavaView [
-			val compositeDataTypeCompilationUnit = new JavaClassBuilder(
+			val compositeDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
 			val parameters = List.of(new ParameterDescription(Pcm2JavaTestUtils.PARAMETER_NAME, getReference(compositeDataTypeCompilationUnit)))
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
@@ -204,7 +204,7 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 		]
 		
 		validateJavaView [
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
@@ -254,11 +254,11 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 		]
 		
 		validateJavaView [
-			val dataType1CompilationUnit = new JavaClassBuilder(
+			val dataType1CompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
-			val dataType3CompilationUnit = new JavaClassBuilder(
+			val dataType3CompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + "_2",
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
@@ -267,7 +267,7 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 				new ParameterDescription(Pcm2JavaTestUtils.PARAMETER_NAME, createInt()),
 				new ParameterDescription("compositeParam2", getReference(dataType3CompilationUnit))
 			)
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
@@ -316,11 +316,11 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 		]
 		
 		validateJavaView [
-			val dataType1CompilationUnit = new JavaClassBuilder(
+			val dataType1CompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
-			val dataType3CompilationUnit = new JavaClassBuilder(
+			val dataType3CompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + "_2",
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
@@ -328,7 +328,7 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 				new ParameterDescription("compositeParam1", getReference(dataType1CompilationUnit)),
 				new ParameterDescription("compositeParam2", getReference(dataType3CompilationUnit))
 			)
-			val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))

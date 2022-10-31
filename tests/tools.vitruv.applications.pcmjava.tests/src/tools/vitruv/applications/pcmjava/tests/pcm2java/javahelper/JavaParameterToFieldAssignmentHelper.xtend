@@ -11,13 +11,17 @@ import org.emftext.language.java.references.ReferencesFactory
 import org.emftext.language.java.statements.Statement
 import org.emftext.language.java.statements.StatementsFactory
 import org.emftext.language.java.types.TypeReference
+import org.eclipse.xtend.lib.annotations.Accessors
 
 class JavaParameterToFieldAssignmentHelper {
 	final String parameterName
 	final TypeReference type
 	final Field field
 	
+	@Accessors(PUBLIC_GETTER)
 	final Parameter parameter
+	
+	@Accessors(PUBLIC_GETTER)
 	final Statement statement
 	
 	new(String parameterName, TypeReference type, Field field) {
@@ -27,14 +31,6 @@ class JavaParameterToFieldAssignmentHelper {
 		
 		parameter = buildParameter()
 		statement = buildStatement()
-	}
-	
-	def Parameter getParameter() {
-		return parameter
-	}
-	
-	def Statement getStatement() {
-		return statement
 	}
 	
 	def private Parameter buildParameter() {

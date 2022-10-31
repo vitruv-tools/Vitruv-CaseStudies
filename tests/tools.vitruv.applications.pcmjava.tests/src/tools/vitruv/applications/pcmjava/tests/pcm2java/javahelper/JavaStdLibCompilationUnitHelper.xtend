@@ -24,8 +24,6 @@ class JavaStdLibCompilationUnitHelper {
 	def CompilationUnit getCompilationUnitFor(String name){
 		val requestedCompilationUnit = 
 			getJavaCompilationUnits(view)
-			// make sure that only CompilationUnits of the standard library are used
-			.filter(cu | cu.name.startsWith("java."))
 			.filter(cu | cu.name == name)
 			.claimOne
 			

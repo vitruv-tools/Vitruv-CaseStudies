@@ -8,13 +8,13 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.ConstructorArguments
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaInterfaceBuilder
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaInterfaceBuilder
 
 class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 	
@@ -52,8 +52,8 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 		 ]
 		 
 		 validateJavaView [
-		 	val interfaceCompilationUnit = new JavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX).build
-		 	val basicComponentCompilationUnit = new JavaClassBuilder(
+		 	val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX).build
+		 	val basicComponentCompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 					Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 				)
@@ -61,7 +61,7 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 				.addPrivateField(getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME), getReference(interfaceCompilationUnit))
 				.addConstructorInitalizationForField(getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME))
 				.build
-			val systemCompilationUnit = new JavaClassBuilder(
+			val systemCompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 					Pcm2JavaTestUtils.SYSTEM_NAME_CAMELCASE
 				)

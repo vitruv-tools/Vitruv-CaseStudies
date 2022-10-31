@@ -7,12 +7,12 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTest
-import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaClassBuilder
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
 
 class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -27,7 +27,7 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 		]
 		
 		validateJavaView[
-			val expectedCompilationUnit = new JavaClassBuilder(
+			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
@@ -53,7 +53,7 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 		]
 		
 		validateJavaView[
-			val expectedCompilationUnit = new JavaClassBuilder(
+			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
@@ -81,7 +81,7 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 		]
 		
 		validateJavaView[
-			val expectedCompilationUnit = new JavaClassBuilder(
+			val expectedCompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME, 
 					Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 				)
@@ -113,13 +113,13 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 		]
 		
 		validateJavaView[
-			val innerDataTypeExpectedCompilationUnit = new JavaClassBuilder( 
+			val innerDataTypeExpectedCompilationUnit = new FluentJavaClassBuilder( 
 					"InnerCompositeDataTypeTest", 
 					Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 				)
 				.build
 			
-			val outerDataTypeExpectedCompilationUnit = new JavaClassBuilder( 
+			val outerDataTypeExpectedCompilationUnit = new FluentJavaClassBuilder( 
 					Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME, 
 					Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 				)
