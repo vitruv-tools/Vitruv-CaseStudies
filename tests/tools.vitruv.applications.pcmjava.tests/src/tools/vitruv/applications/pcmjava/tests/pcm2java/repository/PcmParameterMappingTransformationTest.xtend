@@ -21,7 +21,7 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddParameter() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -51,13 +51,13 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testChangeParameterName() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val dataType = createPrimitiveDataType(PrimitiveTypeEnum.INT)
@@ -89,13 +89,13 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testChangeParameterType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val dataType1 = createPrimitiveDataType(PrimitiveTypeEnum.INT)
@@ -130,13 +130,13 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testAddParameterWithCompositeDataType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -170,13 +170,13 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, compositeDataTypeCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, compositeDataTypeCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testRemoveParameter() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val dataType1 = createPrimitiveDataType(PrimitiveTypeEnum.INT)
@@ -210,13 +210,13 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testAddMultipleParameters() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -273,13 +273,13 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, dataType1CompilationUnit, dataType3CompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, dataType1CompilationUnit, dataType3CompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testAddMultipleParametersAndRemoveOne() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val dataType1 = createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
@@ -334,7 +334,7 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), parameters))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, dataType1CompilationUnit, dataType3CompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, dataType1CompilationUnit, dataType3CompilationUnit))
 		]
 	}
 }

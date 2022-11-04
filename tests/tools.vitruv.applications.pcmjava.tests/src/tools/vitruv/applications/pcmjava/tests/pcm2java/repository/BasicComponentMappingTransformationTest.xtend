@@ -14,7 +14,7 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 	
 	@Test
 	def void testAddBasicComponent() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView [
 			modifySingleRepository [
@@ -27,13 +27,13 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).build
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testDeleteBasicComponent() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
@@ -48,13 +48,13 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 		]
 		
 		validateJavaView [
-			assertCompilationUnits(List.of())
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of())
 		]
 	}
 	
 	@Test
 	def void testRenameBasicComponent() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
@@ -72,13 +72,13 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME
 			).build
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testAddTowBasicComponentAndDeleteOne() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository[
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
@@ -98,7 +98,7 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).build
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 }

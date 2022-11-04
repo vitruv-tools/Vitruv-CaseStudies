@@ -14,7 +14,7 @@ class AssemblyContextMappingTransforamtionTest extends Pcm2JavaTransformationTes
 	
 	@Test
 	def void testCreateAssemblyContext() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		val basicComponent = createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 		changePcmView [
@@ -43,7 +43,7 @@ class AssemblyContextMappingTransforamtionTest extends Pcm2JavaTransformationTes
 				.addPrivateField(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME, getReference(basicComponentCompilationUnit))
 				.addConstructorConstructionForField(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME, ConstructorArguments.WITHOUT_NULL_LITERAL)
 				.build
-		 	assertCompilationUnits(List.of(basicComponentCompilationUnit, systemCompilationUnit))
+		 	assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(basicComponentCompilationUnit, systemCompilationUnit))
 		 ]
 	}
 }

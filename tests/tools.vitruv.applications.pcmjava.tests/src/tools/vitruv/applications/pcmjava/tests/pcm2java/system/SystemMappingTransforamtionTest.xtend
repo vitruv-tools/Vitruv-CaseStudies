@@ -22,7 +22,7 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 			)
 			.build
 			
-			assertCompilationUnits(List.of(systemCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(systemCompilationUnit))
 		]
 	}
 	
@@ -43,7 +43,7 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 			)
 			.build
 			
-			assertCompilationUnits(List.of(systemCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(systemCompilationUnit))
 		]
 	}
 	
@@ -57,8 +57,8 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 		]
 		
 		validateJavaView [
-			assertCompilationUnits(List.of())
-			assertPackages(List.of())
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of())
+			assertExistenceOfPackagesDeeplyEqualTo(List.of())
 		]
 	}
 }

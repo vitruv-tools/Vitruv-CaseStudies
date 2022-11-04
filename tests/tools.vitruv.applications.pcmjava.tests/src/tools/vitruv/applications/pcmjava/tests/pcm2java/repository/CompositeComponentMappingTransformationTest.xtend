@@ -20,7 +20,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	
 	@Test
 	def void testCreateCompositeComponent() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView[
 			modifySingleRepository[
@@ -34,7 +34,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
 			).build
 			
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 	
@@ -64,7 +64,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 			.addImplements(getReference(interfaceCompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(compositeComponentCompilationUnit, interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(compositeComponentCompilationUnit, interfaceCompilationUnit))
 		]
 	}
 	
@@ -96,13 +96,13 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 				.addImportWithNamespace(interfaceCompilationUnit)
 				.build
 			
-			assertCompilationUnits(List.of(compositeComponentCompilationUnit, interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(compositeComponentCompilationUnit, interfaceCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testAddAssemblyContextToCompositeComponent() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView[
 			modifySingleRepository[
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
@@ -133,7 +133,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 				.addConstructorConstructionForField("assemblyContext", ConstructorArguments.WITHOUT_NULL_LITERAL)
 				.build
 			
-			assertCompilationUnits(List.of(basicComponentCompilationUnit, compositeCompositeComponentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(basicComponentCompilationUnit, compositeCompositeComponentCompilationUnit))
 		]
 	}
 	
@@ -155,12 +155,12 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 			)
 			.build
 			
-			assertCompilationUnits(List.of(compositeComponentCompilationUnit, interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(compositeComponentCompilationUnit, interfaceCompilationUnit))
 		]
 	}
 	
 	def void addRepositoryAndCompositeComponent(){
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView [
 			modifySingleRepository [

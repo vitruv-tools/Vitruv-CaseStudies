@@ -5,18 +5,14 @@ import java.util.Collection
 import java.util.Comparator
 import java.util.HashSet
 import java.util.Set
+import java.util.stream.IntStream
 import org.eclipse.emf.common.util.ECollections
-import org.eclipse.emf.common.util.EList
-import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
-import org.emftext.language.java.members.Constructor
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.Method
 import org.junit.jupiter.api.BeforeEach
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
@@ -27,13 +23,13 @@ import tools.vitruv.applications.util.temporary.java.JavaSetup
 import tools.vitruv.change.propagation.ChangePropagationMode
 import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
+import tools.vitruv.testutils.printing.DefaultModelPrinter
+import tools.vitruv.testutils.printing.DefaultPrintIdProvider
+import tools.vitruv.testutils.printing.DefaultPrintTarget
 
-import static org.hamcrest.MatcherAssert.assertThat
 import static org.junit.jupiter.api.Assertions.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.TransformationDirectionConfiguration.configureUnidirectionalExecution
-import static tools.vitruv.testutils.matchers.ModelMatchers.*
-import org.emftext.language.java.members.Member
 
 class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected var extension Pcm2JavaViewFactory viewFactory
@@ -80,26 +76,18 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
 		return #[new Pcm2JavaChangePropagationSpecification()]
 	}
-
-	protected def void createAndRegisterRoot(View view, EObject rootObject, URI persistenceUri) {
-		view.registerRoot(rootObject, persistenceUri)
-	}
-	
-	protected def void deleteAndUnregisterRoot(View view, EObject rootObject) {
-		EcoreUtil.delete(rootObject)
-	}
 	
 	// === creators ===
 	
 	private def void createRepository((Repository)=> void repositoryInitalization){
 		changePcmView[
 			var repository = RepositoryFactory.eINSTANCE.createRepository();
-			createAndRegisterRoot(repository, getProjectModelPath(PCM_MODEL_NAME, PCM_MODEL_FILE_EXTENSION).uri)
+			it.registerRoot(repository, getProjectModelPath(PCM_MODEL_NAME, PCM_MODEL_FILE_EXTENSION).uri)
 			repositoryInitalization.apply(repository)
 		]
 	}
 	
-	protected def void createRepostory(String repositoryName){
+	protected def void createRepository(String repositoryName){
 		createRepository[
 			entityName = repositoryName;
 		]
@@ -108,7 +96,7 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	private def void createSystem((System) => void systemInitialization){
 		changePcmView[
 			val system = SystemFactory.eINSTANCE.createSystem();
-			createAndRegisterRoot(system, getProjectModelPath(PCM_MODEL_NAME, PCM_SYSTEM_FILE_EXTENSION).uri)
+			it.registerRoot(system, getProjectModelPath(PCM_MODEL_NAME, PCM_SYSTEM_FILE_EXTENSION).uri)
 			systemInitialization.apply(system)
 		]
 	}
@@ -121,31 +109,73 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	
 	// === assertions ===
 	
-	protected def void assertCompilationUnits(View view, Collection<CompilationUnit> expectedCompilationUnits){
+	protected def void assertExistenceOfCompilationUnitsDeeplyEqualTo(View view, Collection<CompilationUnit> expectedCompilationUnits){
+		val equalityHelper = new EcoreUtil.EqualityHelper()
 		var allActualCompilationUnits = getJavaCompilationUnits(view)
+		
 		assertEquals(expectedCompilationUnits.size, allActualCompilationUnits.size)
 		assertFalse(allActualCompilationUnits.map[name].hasDuplicate)
 		assertFalse(expectedCompilationUnits.map[name].hasDuplicate)
 		
-		// we sort members on our own as the reactions don't create a traceable order in all cases
-		allActualCompilationUnits.forEach[it.classifiers.forEach[sortMembers(it.members)]]
-		expectedCompilationUnits.forEach[it.classifiers.forEach[sortMembers(it.members)]]
-		
 		expectedCompilationUnits.forEach[
-			var actualUnit = claimJavaCompilationUnit(view, it.name)
-			assertThat(actualUnit, equalsDeeply(it))
+			val actualUnit = claimJavaCompilationUnit(view, it.name)
+			adaptClassMemberOrderOfExpectedToActualOrder(it, actualUnit)
+			assertTrue(equalityHelper.equals(actualUnit, it), modelComparisonErrorMessage(it, actualUnit))
 		]
 	}
 	
-	protected def void assertPackages(View view, Collection<Package> expectedPackages) {
+	protected def void assertExistenceOfPackagesDeeplyEqualTo(View view, Collection<Package> expectedPackages) {
+		val equalityHelper = new EcoreUtil.EqualityHelper()
 		val allActualPackages = getJavaPackages(view)
+		
 		assertEquals(expectedPackages.size, allActualPackages.size)
 		assertFalse(allActualPackages.map[name].hasDuplicate)
 		assertFalse(expectedPackages.map[name].hasDuplicate)
 		
 		expectedPackages.forEach[
 			var actualPackage = claimJavaPackage(view, it.name)
-			assertThat(actualPackage, equalsDeeply(it))
+			assertTrue(equalityHelper.equals(actualPackage, it), modelComparisonErrorMessage(it, actualPackage))
+		]
+	}
+	
+	private def String modelComparisonErrorMessage(EObject expected, EObject actual) {
+		var printTarget = new DefaultPrintTarget()
+		var printIdProvider = new DefaultPrintIdProvider()
+		var modelPrinter = new DefaultModelPrinter()
+		
+		printTarget.print("Expected actual model to equal expected model.")
+		printTarget.newLine
+		printTarget.print("Actual:")
+		printTarget.newLine
+		modelPrinter.printObject(printTarget, printIdProvider, actual)
+		
+		printTarget.newLine
+		printTarget.print("Expected:")
+		printTarget.newLine
+		modelPrinter.printObject(printTarget, printIdProvider, expected)
+		
+		return printTarget.toString
+	}
+	
+	private def void adaptClassMemberOrderOfExpectedToActualOrder(CompilationUnit expected, CompilationUnit actual) {
+		expected.classifiers.forEach[expectedClassifier, classifierIdx|
+			val actualClassifier = actual.classifiers.get(classifierIdx)
+				
+			ECollections.sort(expectedClassifier.members, Comparator.comparing[ item | 
+				var maybeIndexInActualOfItem = IntStream.range(0, actualClassifier.members.size())
+					.filter([idx |
+						val actualMemberAtIdx = actualClassifier.members.get(idx)
+						
+						var namesEqualOrNotPresent = true
+						if(actualMemberAtIdx instanceof NamedElement && item instanceof NamedElement) {
+		                	namesEqualOrNotPresent = (actualMemberAtIdx as NamedElement).name.equals((item as NamedElement).name)
+		                }
+		                
+						return actualMemberAtIdx.class == item.class && namesEqualOrNotPresent
+					])
+					.findFirst
+				maybeIndexInActualOfItem.present ? maybeIndexInActualOfItem.asInt : actualClassifier.members.size
+			])
 		]
 	}
 	
@@ -159,44 +189,4 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	    for (T each: all) if (!set.add(each)) return true;
 	    return false;
 	}
-	
-	/**
-	 * sorts class members in the following order: <p>
-	 * (1) Field <p>
-	 * (2) Constructor <p>
-	 * (3) Method <p>
-	 * Fields, Constructors and Methods them self are sorted by their name.
-	 */
-	def static sortMembers(EList<? extends Member> members) {
-        ECollections.sort(members, new Comparator<Member> {
-
-            override compare(Member o1, Member o2) {
-                // fields before constructors and methods
-                if (o1 instanceof Field && (o2 instanceof Method || o2 instanceof Constructor)) {
-                    return 1
-                } else if ((o1 instanceof Method || o1 instanceof Constructor) && o2 instanceof Field) {
-                    return -1
-
-                // constructors before Methods  
-                } else if (o1 instanceof Constructor && o2 instanceof Method) {
-                    return 1
-                } else if (o1 instanceof Method && o2 instanceof Constructor) {
-                    return -1
-                }
-                
-                // sort by name
-                if(o1 instanceof NamedElement && o2 instanceof NamedElement) {
-                	return (o1 as NamedElement).name.compareTo((o2 as NamedElement).name)
-                }
-                
-                return 0
-            }
-
-            override equals(Object obj) {
-                return this == obj
-            }
-
-        })
-    }
-	
 }

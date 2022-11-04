@@ -13,7 +13,7 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testAddRepository() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		validateJavaView [
 			val repositoryPackage = createPackage [
@@ -27,13 +27,13 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 				name = "datatypes"
 				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME
 			]
-			assertPackages(List.of(repositoryPackage, contractsPackage, dataTypesPackage))
+			assertExistenceOfPackagesDeeplyEqualTo(List.of(repositoryPackage, contractsPackage, dataTypesPackage))
 		]
 	}
 	
 	@Test
 	def void testRepositoryNameChange() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView[
 			modifySingleRepository [
@@ -53,13 +53,13 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 				name = "datatypes"
 				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
 			]
-			assertPackages(List.of(repositoryPackage, contractsPackage, dataTypesPackage))
+			assertExistenceOfPackagesDeeplyEqualTo(List.of(repositoryPackage, contractsPackage, dataTypesPackage))
 		]
 	}
 	
 	@Test
 	def void testRepositoryNameChangeWithComponents() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
@@ -77,7 +77,7 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).build
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 			
 			val repositoryPackage = createPackage [
 				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
@@ -94,7 +94,7 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 				name = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
 			]
-			assertPackages(List.of(repositoryPackage, contractsPackage, dataTypesPackage, componentPackage))
+			assertExistenceOfPackagesDeeplyEqualTo(List.of(repositoryPackage, contractsPackage, dataTypesPackage, componentPackage))
 		]
 	}
 }

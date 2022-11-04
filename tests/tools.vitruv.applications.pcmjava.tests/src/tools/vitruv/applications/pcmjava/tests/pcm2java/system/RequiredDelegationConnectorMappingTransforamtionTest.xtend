@@ -20,7 +20,7 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 	
 	@Test
 	def void testAddRequireDelegationConnector() {
-		 createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		 createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		 createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		 val basicComponent = createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 		 val operationInterface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -72,7 +72,7 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 				.addConstructorConstructionForField(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME, ConstructorArguments.WITH_NULL_LITERAL)
 				.addConstructorInitalizationForField(getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.SYSTEM_NAME))
 				.build
-		 	assertCompilationUnits(List.of(interfaceCompilationUnit, basicComponentCompilationUnit, systemCompilationUnit))
+		 	assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, basicComponentCompilationUnit, systemCompilationUnit))
 		 ]
 	}
 }

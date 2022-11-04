@@ -18,7 +18,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 	
 	@Test
 	def void testAddOperationSignature() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -40,13 +40,13 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testRenameOperationSignature() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -69,13 +69,13 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME, createVoid(), List.of()))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testChangeOperationSignatureReturnType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -100,13 +100,13 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createInt(), List.of()))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testCreateOperationSignatureWithReturnType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -132,7 +132,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createInt(), List.of()))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
 	}
 }

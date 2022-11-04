@@ -18,7 +18,7 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 	
 	@Test
 	def void testAddCompositeDataType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView[
 			modifySingleRepository[
@@ -32,13 +32,13 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
 			
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 
 	@Test
 	def void testRenameCompositeDataType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView[
 			modifySingleRepository[
 				dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
@@ -58,13 +58,13 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
 			
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 
 	@Test
 	def void testAddPrimitiveTypeToCompositeDataType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView[
 			modifySingleRepository[
 				dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
@@ -90,13 +90,13 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 				.addSetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME)
 				.build
 			
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testAddCompositeDataTypeToCompositeDataType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView[
 			modifySingleRepository[
 				dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
@@ -128,7 +128,7 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 				.addSetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME)
 				.build
 			
-			assertCompilationUnits(List.of(innerDataTypeExpectedCompilationUnit, outerDataTypeExpectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(innerDataTypeExpectedCompilationUnit, outerDataTypeExpectedCompilationUnit))
 		]
 	}
 }

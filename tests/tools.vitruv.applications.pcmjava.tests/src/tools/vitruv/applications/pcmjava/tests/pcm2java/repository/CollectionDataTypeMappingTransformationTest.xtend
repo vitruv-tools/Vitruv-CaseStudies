@@ -19,7 +19,7 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 	
 	@Test
 	def void testAddCollectionDataTypeWithoutInnerType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		this.getUserInteraction().addNextSingleSelection(0);
 		changePcmView [
@@ -41,7 +41,7 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 			.setExtends(getTypedReference(arrayListCompilationUnit, voidCompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(collectionDataTypeCompilationUnit, voidCompilationUnit, arrayListCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(collectionDataTypeCompilationUnit, voidCompilationUnit, arrayListCompilationUnit))
 		]
 	}
 	
@@ -52,7 +52,7 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 	
 	@Test
 	def void testAddCollectionDataTypeWithPrimitiveTypeIntAsInnerType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository[
 				it.dataTypes__Repository += createPrimitiveDataType(PrimitiveTypeEnum.INT)
@@ -80,13 +80,13 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 			.setExtends(getTypedReference(listCompilationUnit, integerCompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(collectionDataTypeCompilationUnit, listCompilationUnit, integerCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(collectionDataTypeCompilationUnit, listCompilationUnit, integerCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testAddCollectionDataTypeWithComplexInnerType() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository[
 				it.dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
@@ -117,7 +117,7 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 			.setExtends(getTypedReference(arrayListCompilationUnit, compositeDataTypeCompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(arrayListCompilationUnit, compositeDataTypeCompilationUnit, collectionDataTypeCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(arrayListCompilationUnit, compositeDataTypeCompilationUnit, collectionDataTypeCompilationUnit))
 		]
 	}
 }

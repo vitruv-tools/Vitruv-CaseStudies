@@ -17,7 +17,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 	
 	@Test
 	def void testAddInnerDeclaration() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
@@ -44,13 +44,13 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 				.addSetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME)
 				.build
 			
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testRenameInnerDeclaration(){
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val compositeDataType = createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
@@ -80,13 +80,13 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 				.addSetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME)
 				.build
 			
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testChangeInnerDeclarationType(){
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val compositeDataType = createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
@@ -118,7 +118,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 				.addSetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME)
 				.build
 			
-			assertCompilationUnits(List.of(expectedCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
 	}
 }

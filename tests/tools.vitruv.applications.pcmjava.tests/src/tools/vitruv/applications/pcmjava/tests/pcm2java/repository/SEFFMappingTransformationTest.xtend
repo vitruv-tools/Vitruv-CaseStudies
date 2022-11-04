@@ -19,7 +19,7 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testCreateSEFF() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -54,13 +54,13 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, componentCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testRenameSEFF() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -95,7 +95,7 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 				.addImplements(getReference(interfaceCompilationUnit))
 				.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, componentCompilationUnit))
 		]
 	}
 }

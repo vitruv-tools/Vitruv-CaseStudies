@@ -19,7 +19,7 @@ class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTransformat
 	
 	@Test
 	def void testAddOperationProvidedRole() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -53,13 +53,13 @@ class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addImplements(getReference(interfaceCompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, componentCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testChangeInterfaceOfOperationProvidedRole() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -103,13 +103,13 @@ class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addImplements(getReference(interface2CompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(interface1CompilationUnit, interface2CompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interface1CompilationUnit, interface2CompilationUnit, componentCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testChangeComponentOfOperationProvidedRole() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -151,13 +151,13 @@ class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addImplements(getReference(interfaceCompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, component1CompilationUnit, component2CompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, component1CompilationUnit, component2CompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testTwoProvidedRolesInOneComponent() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -201,13 +201,13 @@ class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addImplements(getReference(interface2CompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(interface1CompilationUnit, interface2CompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interface1CompilationUnit, interface2CompilationUnit, componentCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testTwoProvidedRolesInOneComponentAndRemoveOne() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -254,13 +254,13 @@ class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addImplements(getReference(interface1CompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(interface1CompilationUnit, interface2CompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interface1CompilationUnit, interface2CompilationUnit, componentCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testOperationProvidedRoleToSystem() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 		changePcmView [
@@ -287,7 +287,7 @@ class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addImplements(getReference(interfaceCompilationUnit))
 			.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, systemCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, systemCompilationUnit))
 		]
 	}
 }

@@ -20,7 +20,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 	
 	@Test
 	def void testAddOperationRequiredRole() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -55,13 +55,13 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addConstructorInitalizationForField(getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME))
 			.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, componentCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testAddOperationRequiredToSystem() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 		changePcmView [
@@ -90,13 +90,13 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addConstructorInitalizationForField(getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.SYSTEM_NAME))
 			.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, systemCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, systemCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testAddOperationRequiredRoleToCompositeComponent() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -131,13 +131,13 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addConstructorInitalizationForField(getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME))
 			.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, componentCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testChangeOperationRequiredRole() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -189,7 +189,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 				.addConstructorInitalizationForField(getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME))
 				.build
 				
-			assertCompilationUnits(List.of(interface1CompilationUnit, interface2CompilationUnit, component1CompilationUnit, component2CompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interface1CompilationUnit, interface2CompilationUnit, component1CompilationUnit, component2CompilationUnit))
 		]
 	}
 	
@@ -197,7 +197,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 	@Disabled("reaction does not work as expected")
 	// the reaction fails to remove the old assignment in the constructor
 	def void testChangeNameOfOperationRequiredRole() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -233,13 +233,13 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addConstructorInitalizationForField("operationReqRoleNameChange")
 			.build
 			
-			assertCompilationUnits(List.of(interfaceCompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, componentCompilationUnit))
 		]
 	}
 	
 	@Test
 	def void testChangeTypeOfOperationRequiredRole() {
-		createRepostory(Pcm2JavaTestUtils.REPOSITORY_NAME)
+		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
 			modifySingleRepository [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
@@ -281,7 +281,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			.addConstructorInitalizationForField(getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME))
 			.build
 			
-			assertCompilationUnits(List.of(interface1CompilationUnit, interface2CompilationUnit, componentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interface1CompilationUnit, interface2CompilationUnit, componentCompilationUnit))
 		]
 	}
 }
