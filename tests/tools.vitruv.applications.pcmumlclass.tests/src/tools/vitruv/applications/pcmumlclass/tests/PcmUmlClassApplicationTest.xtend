@@ -11,9 +11,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
-import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+
 import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource

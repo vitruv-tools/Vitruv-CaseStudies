@@ -1,22 +1,22 @@
 package tools.vitruv.applications.umljava.tests
 
 import java.nio.file.Path
-import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
-import tools.vitruv.framework.views.View
-import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
-import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
-import org.eclipse.xtend.lib.annotations.Accessors
-import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
-import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityValidation
-import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureUnidirectionalExecution
+import org.junit.jupiter.api.^extension.ExtendWith
+import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
+import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
+import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityValidation
 import tools.vitruv.applications.umljava.tests.util.JavaUmlViewFactory
 import tools.vitruv.applications.util.temporary.java.JavaSetup
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.^extension.ExtendWith
+import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
+import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
+
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 
 @ExtendWith(RegisterMetamodelsInStandalone)
 abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest {
@@ -50,10 +50,9 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 	def final void setupViewFactory() {
 		viewFactory = new JavaUmlViewFactory(virtualModel)
 	}
-
-	@BeforeEach
-	def setupTransformationDirection() {
-		configureUnidirectionalExecution(virtualModel)
+	
+	override protected enableTransitiveCyclicChangePropagation() {
+		false
 	}
 
 	protected def getDefaultUmlModel(View view) {
