@@ -1,17 +1,17 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
+import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
-import tools.vitruv.applications.util.temporary.java.JavaVisibility
-
 import org.junit.jupiter.api.Test
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import tools.vitruv.change.propagation.ChangePropagationMode
 
-import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
-import org.eclipse.uml2.uml.UMLFactory
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
+
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 
 /**
  * A Test class for creating, renaming and deleting enumerations.
@@ -159,8 +159,8 @@ class UmlToJavaEnumTest extends AbstractUmlToJavaTest {
 	}
 
 	static class BidirectionalTest extends UmlToJavaEnumTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected getChangePropagationMode() {
+			ChangePropagationMode.TRANSITIVE_CYCLIC
 		}
 	}
 

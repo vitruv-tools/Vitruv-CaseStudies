@@ -1,8 +1,8 @@
 package tools.vitruv.applications.umljava.tests.java2uml
 
-import org.emftext.language.java.members.ClassMethod
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.types.TypesFactory
@@ -11,15 +11,15 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import tools.vitruv.change.propagation.ChangePropagationMode
 import tools.vitruv.framework.views.View
 
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
-import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 
-import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 /**
@@ -340,8 +340,8 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaToUmlClassMethodTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected getChangePropagationMode() {
+			ChangePropagationMode.TRANSITIVE_CYCLIC
 		}
 	}
 

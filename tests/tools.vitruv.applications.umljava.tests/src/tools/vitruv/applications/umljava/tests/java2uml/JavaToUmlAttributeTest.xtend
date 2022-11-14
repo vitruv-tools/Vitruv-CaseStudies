@@ -2,27 +2,26 @@ package tools.vitruv.applications.umljava.tests.java2uml
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.JavaClasspath
+import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.members.MembersFactory
+import org.emftext.language.java.types.TypeReference
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import tools.vitruv.change.propagation.ChangePropagationMode
 
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
+import static tools.vitruv.applications.testutility.uml.UmlQueryUtil.loadUmlPrimitiveType
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 
-import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
-
-import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.types.TypeReference
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.*
-import static tools.vitruv.applications.testutility.uml.UmlQueryUtil.loadUmlPrimitiveType
-import org.emftext.language.java.JavaClasspath
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
-import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 /**
  * Test class for testing the attribute reactions.
@@ -269,8 +268,8 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaToUmlAttributeTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected getChangePropagationMode() {
+			ChangePropagationMode.TRANSITIVE_CYCLIC
 		}
 	}
 

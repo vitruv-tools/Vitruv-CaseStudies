@@ -1,45 +1,47 @@
 package tools.vitruv.applications.umljava.tests.java2uml.constructionsimulationtest
 
-import org.junit.jupiter.api.Test
 import java.io.File
-import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
-import java.util.List
 import java.nio.file.Path
-import static org.eclipse.emf.common.util.URI.createFileURI
-import tools.vitruv.applications.umljava.tests.java2uml.AbstractJavaToUmlTest
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import java.util.List
 import java.util.Map
-import org.emftext.language.java.resource.java.IJavaOptions
-import org.emftext.language.java.containers.CompilationUnit
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
-import org.emftext.language.java.members.Member
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.buildJavaFilePath
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.types.TypeReference
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.mapFixed
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import static com.google.common.base.Preconditions.checkArgument
-import org.eclipse.emf.ecore.EObject
-import static org.junit.jupiter.api.Assertions.assertFalse
-import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.withGlobalFactories
-import org.emftext.language.java.statements.Statement
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.flatMapFixed
 import org.apache.log4j.Logger
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.instanceOf
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
-import org.emftext.language.java.statements.StatementListContainer
-import org.emftext.language.java.members.Field
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.classifiers.Interface
+import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.expressions.Expression
-import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
-import static tools.vitruv.applications.util.temporary.java.JamoppLibraryHelper.registerStdLibraryModule
-import static tools.vitruv.applications.util.temporary.java.JamoppLibraryHelper.registerLocalLibrary
+import org.emftext.language.java.members.Field
+import org.emftext.language.java.members.Member
+import org.emftext.language.java.resource.java.IJavaOptions
+import org.emftext.language.java.statements.Statement
+import org.emftext.language.java.statements.StatementListContainer
+import org.emftext.language.java.types.TypeReference
 import org.junit.jupiter.api.AfterEach
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
 import org.junit.jupiter.api.BeforeAll
-import tools.vitruv.applications.util.temporary.java.JavaSetup
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import tools.vitruv.applications.umljava.tests.java2uml.AbstractJavaToUmlTest
+import tools.vitruv.applications.util.temporary.java.JavaSetup
+import tools.vitruv.change.propagation.ChangePropagationMode
+
+import static com.google.common.base.Preconditions.checkArgument
+import static org.eclipse.emf.common.util.URI.createFileURI
+import static org.hamcrest.CoreMatchers.instanceOf
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static tools.vitruv.applications.util.temporary.java.JamoppLibraryHelper.registerLocalLibrary
+import static tools.vitruv.applications.util.temporary.java.JamoppLibraryHelper.registerStdLibraryModule
+import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.buildJavaFilePath
+
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.flatMapFixed
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.mapFixed
+import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
+import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.withGlobalFactories
 
 /**
  * Test class for the reconstruction of existing java models
@@ -326,8 +328,8 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaConstructionSimulationTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected getChangePropagationMode() {
+			ChangePropagationMode.TRANSITIVE_CYCLIC
 		}
 	}
 

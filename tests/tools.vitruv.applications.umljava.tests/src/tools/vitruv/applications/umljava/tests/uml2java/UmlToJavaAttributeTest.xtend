@@ -1,28 +1,29 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
-import org.eclipse.uml2.uml.Property
-import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.types.TypesFactory
-import org.junit.jupiter.api.Test
-import tools.vitruv.applications.util.temporary.java.JavaVisibility
-
-import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
-import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.uml2.uml.Type
-import org.emftext.language.java.members.Field
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.EnumSource
-import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.*
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.PrimitiveType
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import org.eclipse.uml2.uml.Property
+import org.eclipse.uml2.uml.Type
+import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.members.Field
+import org.emftext.language.java.types.TypesFactory
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import tools.vitruv.change.propagation.ChangePropagationMode
+
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.assertUmlClassDontHaveOperation
+import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
+
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 
 /**
  * This test class checks the creating, deleting and modifying of attributes in the UML to Java
@@ -229,59 +230,59 @@ class UmlToJavaAttributeTest extends AbstractUmlToJavaTest {
 	}
 
 	static class BidirectionalTest extends UmlToJavaAttributeTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected getChangePropagationMode() {
+			ChangePropagationMode.TRANSITIVE_CYCLIC
 		}
 
-	   @Test
-        override testCreatePrimitiveAttribute() {
-            super.testCreatePrimitiveAttribute()
-            validateUmlView [
-                val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-                assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_NAME))
-                assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_NAME))
-            ]
-        }
+		@Test
+		override testCreatePrimitiveAttribute() {
+			super.testCreatePrimitiveAttribute()
+			validateUmlView [
+				val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+				assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_NAME))
+				assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_NAME))
+			]
+		}
 
-	   @Test
-        override testCreateAttribute() {
-            super.testCreateAttribute()
-            validateUmlView [
-                val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-                assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_NAME))
-                assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_NAME))
-            ]
-        }
+		@Test
+		override testCreateAttribute() {
+			super.testCreateAttribute()
+			validateUmlView [
+				val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+				assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_NAME))
+				assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_NAME))
+			]
+		}
 
-        @Test
-        override testRenameAttribute() {
-            super.testRenameAttribute()
-            validateUmlView [
-                val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-                assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_RENAME))
-                assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_RENAME))
-            ]
-        }
+		@Test
+		override testRenameAttribute() {
+			super.testRenameAttribute()
+			validateUmlView [
+				val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+				assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_RENAME))
+				assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_RENAME))
+			]
+		}
 
-        @Test
-        override testChangeAttributeType() {
-            super.testChangeAttributeType()
-            validateUmlView [
-                val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
-                assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_NAME))
-                assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_NAME))
-            ]
-        }
+		@Test
+		override testChangeAttributeType() {
+			super.testChangeAttributeType()
+			validateUmlView [
+				val umlClass = defaultUmlModel.claimClass(CLASS_NAME)
+				assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_NAME))
+				assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_NAME))
+			]
+		}
 
-        @Test
-        override testMoveAttribute() {
-            super.testMoveAttribute()
-            validateUmlView [
-                val umlClass = defaultUmlModel.claimClass(CLASS_NAME_2)
-                assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_NAME))
-                assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_NAME))
-            ]
-        }
+		@Test
+		override testMoveAttribute() {
+			super.testMoveAttribute()
+			validateUmlView [
+				val umlClass = defaultUmlModel.claimClass(CLASS_NAME_2)
+				assertUmlClassDontHaveOperation(umlClass, buildGetterName(ATTRIBUTE_NAME))
+				assertUmlClassDontHaveOperation(umlClass, buildSetterName(ATTRIBUTE_NAME))
+			]
+		}
 	}
 
 }

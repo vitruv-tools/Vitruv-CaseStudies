@@ -2,14 +2,15 @@ package tools.vitruv.applications.umljava.tests.uml2java.constructionsimulationt
 
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import tools.vitruv.applications.umljava.tests.uml2java.AbstractUmlToJavaTest
-import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceUtil.getFirstRootEObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Model
-import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import tools.vitruv.applications.umljava.tests.uml2java.AbstractUmlToJavaTest
+import tools.vitruv.change.propagation.ChangePropagationMode
+
+import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceUtil.getFirstRootEObject
 
 class UmlConstructionSimulationTest extends AbstractUmlToJavaTest {
 	static val RESOURCES_FOLDER = "resources/"
@@ -51,8 +52,8 @@ class UmlConstructionSimulationTest extends AbstractUmlToJavaTest {
 	}
 
 	static class BidirectionalTest extends UmlConstructionSimulationTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected getChangePropagationMode() {
+			ChangePropagationMode.TRANSITIVE_CYCLIC
 		}
 	}
 

@@ -1,14 +1,15 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
 import org.junit.jupiter.api.Test
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.is
+import tools.vitruv.change.propagation.ChangePropagationMode
 
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import static org.hamcrest.CoreMatchers.is
+import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.assertElementsEqual
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 
 /**
  * This class contains tests that deal with changes with interfaces.
@@ -130,8 +131,8 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 	}
 
 	static class BidirectionalTest extends UmlToJavaInterfaceTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected getChangePropagationMode() {
+			ChangePropagationMode.TRANSITIVE_CYCLIC
 		}
 	}
 

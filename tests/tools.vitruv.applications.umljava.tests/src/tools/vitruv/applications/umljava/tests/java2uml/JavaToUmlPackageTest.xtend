@@ -1,15 +1,15 @@
 package tools.vitruv.applications.umljava.tests.java2uml
 
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.junit.jupiter.api.Test
+import tools.vitruv.change.propagation.ChangePropagationMode
 
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
+import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.assertElementsEqual
 
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.*
-import org.eclipse.emf.ecore.util.EcoreUtil
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
-import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.assertElementsEqual
 
 /**
  * This class contains basis tests for Java packages.
@@ -114,8 +114,8 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaToUmlPackageTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected getChangePropagationMode() {
+			ChangePropagationMode.TRANSITIVE_CYCLIC
 		}
 	}
 

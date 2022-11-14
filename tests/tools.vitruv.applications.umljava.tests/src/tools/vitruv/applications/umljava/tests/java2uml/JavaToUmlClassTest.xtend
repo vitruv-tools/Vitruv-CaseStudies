@@ -3,22 +3,21 @@ package tools.vitruv.applications.umljava.tests.java2uml
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
-
-
-import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
-
-import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
-import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
-import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
-import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getUmlVisibilityKindFromJavaVisibilityConstant
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import tools.vitruv.change.propagation.ChangePropagationMode
+
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getUmlVisibilityKindFromJavaVisibilityConstant
+
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
+import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 /**
  * A Test class to test classes and their traits.
@@ -304,8 +303,8 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaToUmlClassTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected getChangePropagationMode() {
+			ChangePropagationMode.TRANSITIVE_CYCLIC
 		}
 	}
 
