@@ -5,7 +5,6 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import tools.vitruv.change.propagation.ChangePropagationMode
 
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
@@ -124,8 +123,8 @@ class UmlToJavaPackageTest extends AbstractUmlToJavaTest {
 	}
 
 	static class BidirectionalTest extends UmlToJavaPackageTest {
-		override protected getChangePropagationMode() {
-			ChangePropagationMode.TRANSITIVE_CYCLIC
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 

@@ -2,7 +2,6 @@ package tools.vitruv.applications.umljava.tests.java2uml
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.junit.jupiter.api.Test
-import tools.vitruv.change.propagation.ChangePropagationMode
 
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
@@ -114,8 +113,8 @@ class JavaToUmlPackageTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaToUmlPackageTest {
-		override protected getChangePropagationMode() {
-			ChangePropagationMode.TRANSITIVE_CYCLIC
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 

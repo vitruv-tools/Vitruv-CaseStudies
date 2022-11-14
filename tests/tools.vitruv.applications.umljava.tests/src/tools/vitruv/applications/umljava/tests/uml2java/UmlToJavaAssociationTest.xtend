@@ -2,7 +2,6 @@ package tools.vitruv.applications.umljava.tests.uml2java
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import tools.vitruv.change.propagation.ChangePropagationMode
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -67,8 +66,8 @@ class UmlToJavaAssociationTest extends AbstractUmlToJavaTest {
 	}
 
 	static class BidirectionalTest extends UmlToJavaAssociationTest {
-		override protected getChangePropagationMode() {
-			ChangePropagationMode.TRANSITIVE_CYCLIC
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 

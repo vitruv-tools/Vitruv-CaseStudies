@@ -25,7 +25,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.umljava.tests.java2uml.AbstractJavaToUmlTest
 import tools.vitruv.applications.util.temporary.java.JavaSetup
-import tools.vitruv.change.propagation.ChangePropagationMode
 
 import static com.google.common.base.Preconditions.checkArgument
 import static org.eclipse.emf.common.util.URI.createFileURI
@@ -328,8 +327,8 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaConstructionSimulationTest {
-		override protected getChangePropagationMode() {
-			ChangePropagationMode.TRANSITIVE_CYCLIC
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 

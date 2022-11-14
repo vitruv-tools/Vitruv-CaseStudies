@@ -1,7 +1,6 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
 import org.junit.jupiter.api.Test
-import tools.vitruv.change.propagation.ChangePropagationMode
 
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.MatcherAssert.assertThat
@@ -131,8 +130,8 @@ class UmlToJavaInterfaceTest extends AbstractUmlToJavaTest {
 	}
 
 	static class BidirectionalTest extends UmlToJavaInterfaceTest {
-		override protected getChangePropagationMode() {
-			ChangePropagationMode.TRANSITIVE_CYCLIC
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 

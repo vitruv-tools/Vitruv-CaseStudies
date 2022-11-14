@@ -6,7 +6,6 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.types.TypesFactory
 import org.junit.jupiter.api.Test
-import tools.vitruv.change.propagation.ChangePropagationMode
 
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
@@ -221,8 +220,8 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaToUmlEnumTest {
-		override protected getChangePropagationMode() {
-			ChangePropagationMode.TRANSITIVE_CYCLIC
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 

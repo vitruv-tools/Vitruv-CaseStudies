@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import tools.vitruv.applications.umljava.tests.uml2java.AbstractUmlToJavaTest
-import tools.vitruv.change.propagation.ChangePropagationMode
 
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceUtil.getFirstRootEObject
 
@@ -52,8 +51,8 @@ class UmlConstructionSimulationTest extends AbstractUmlToJavaTest {
 	}
 
 	static class BidirectionalTest extends UmlConstructionSimulationTest {
-		override protected getChangePropagationMode() {
-			ChangePropagationMode.TRANSITIVE_CYCLIC
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 

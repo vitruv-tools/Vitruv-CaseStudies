@@ -12,7 +12,6 @@ import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
 import tools.vitruv.applications.umljava.tests.util.JavaUmlClassifierEqualityValidation
 import tools.vitruv.applications.umljava.tests.util.JavaUmlViewFactory
 import tools.vitruv.applications.util.temporary.java.JavaSetup
-import tools.vitruv.change.propagation.ChangePropagationMode
 import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
@@ -52,8 +51,8 @@ abstract class UmlJavaTransformationTest extends ViewBasedVitruvApplicationTest 
 		viewFactory = new JavaUmlViewFactory(virtualModel)
 	}
 	
-	override protected getChangePropagationMode() {
-		ChangePropagationMode.SINGLE_STEP
+	override protected enableTransitiveCyclicChangePropagation() {
+		false
 	}
 
 	protected def getDefaultUmlModel(View view) {

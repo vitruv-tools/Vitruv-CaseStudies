@@ -12,7 +12,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import tools.vitruv.change.propagation.ChangePropagationMode
 import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
 
@@ -50,10 +49,6 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
 		]
-	}
-	
-	override protected getChangePropagationMode() {
-		return ChangePropagationMode.TRANSITIVE_CYCLIC
 	}
 
 	protected def getTestResource(URI uri) {

@@ -11,7 +11,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
-import tools.vitruv.change.propagation.ChangePropagationMode
 import tools.vitruv.framework.views.View
 
 import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
@@ -340,8 +339,8 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaToUmlClassMethodTest {
-		override protected getChangePropagationMode() {
-			ChangePropagationMode.TRANSITIVE_CYCLIC
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 
