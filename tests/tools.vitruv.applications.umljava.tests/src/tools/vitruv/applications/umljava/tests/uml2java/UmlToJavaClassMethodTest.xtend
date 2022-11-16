@@ -1,24 +1,24 @@
 package tools.vitruv.applications.umljava.tests.uml2java
 
+import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.members.ClassMethod
+import org.emftext.language.java.statements.StatementsFactory
 import org.emftext.language.java.types.TypesFactory
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
+import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
+
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import org.eclipse.uml2.uml.Model
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.*
-import org.emftext.language.java.members.ClassMethod
-import org.junit.jupiter.params.provider.EnumSource
-import org.junit.jupiter.params.ParameterizedTest
-import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind
-import org.emftext.language.java.statements.StatementsFactory
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
-import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
 
 /**
  * A test class to test class methods and its traits.
@@ -360,8 +360,8 @@ class UmlToJavaClassMethodTest extends AbstractUmlToJavaTest {
 	}
 
 	static class BidirectionalTest extends UmlToJavaClassMethodTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 

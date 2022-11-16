@@ -1,19 +1,19 @@
 package tools.vitruv.applications.umljava.tests.java2uml
 
-import org.junit.jupiter.api.Test
-import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.members.MembersFactory
+import org.emftext.language.java.parameters.ParametersFactory
+import org.emftext.language.java.types.TypesFactory
+import org.junit.jupiter.api.Test
 
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
+import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
+
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.types.TypesFactory
-import org.emftext.language.java.parameters.ParametersFactory
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.CoreMatchers.*
-import static tools.vitruv.applications.umljava.tests.util.TransformationDirectionConfiguration.configureBidirectionalExecution
-import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 
 /**
  * This class contains test cases for the creation, renaming and deleting of interface methods.
@@ -130,8 +130,8 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 	}
 
 	static class BidirectionalTest extends JavaToUmlInterfaceMethodTest {
-		override setupTransformationDirection() {
-			configureBidirectionalExecution(virtualModel)
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
 		}
 	}
 
