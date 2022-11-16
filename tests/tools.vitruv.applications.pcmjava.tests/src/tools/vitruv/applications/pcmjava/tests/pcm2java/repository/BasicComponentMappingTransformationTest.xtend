@@ -9,6 +9,7 @@ import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTransformationTe
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
+import org.junit.jupiter.api.Disabled
 
 class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -17,7 +18,7 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 			]
 		]
@@ -35,13 +36,13 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 	def void testDeleteBasicComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 			]
 		]
 		
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				val component = claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 				EcoreUtil.delete(component)
 			]
@@ -56,21 +57,21 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 	def void testRenameBasicComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 			]
 		]
 		
 		changePcmView [
-			modifySingleRepository [
-				claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME).entityName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME
+			claimSinglePcmRepository(it) => [
+				claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME).entityName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 		]
 		
 		validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
-				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFIX + Pcm2JavaTestUtils.IMPL_SUFIX, 
+				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
@@ -80,14 +81,14 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 	def void testAddTowBasicComponentAndDeleteOne() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME_SEC)
 			]
 		]
 		
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				val secondComponent = claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME_SEC)
 				it.components__Repository -= secondComponent
 			]
@@ -100,5 +101,12 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
+	}
+	
+	@Disabled("TODO: adapt reactions")
+	static class BidirectionalTest extends BasicComponentMappingTransformationTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }

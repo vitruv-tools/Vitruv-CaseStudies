@@ -22,6 +22,7 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
+// TODO: merge this class with similar classes in Java <-> UML tests and testutils
 @Utility
 class JavaCreatorsUtil {
 	// === Java: Basic ===

@@ -26,6 +26,8 @@ import org.palladiosimulator.pcm.seff.SeffFactory
 
 @Utility
 class PcmCreatorsUtil {
+	static final String PROVIDES = "_provides_"
+	static final String REQUIRES = "_requires_"
 	
 	// === core.composition ===
 	
@@ -108,7 +110,7 @@ class PcmCreatorsUtil {
 	
 	static def createOperationProvidedRole(OperationInterface providedInterface, InterfaceProvidingEntity providingEntity) {
 		createOperationProvidedRole[
-			entityName = providingEntity.getEntityName() + "_provides_" + providedInterface.getEntityName()
+			entityName = providingEntity.getEntityName() + PROVIDES + providedInterface.getEntityName()
 			providedInterface__OperationProvidedRole = providedInterface
 		]
 	}
@@ -121,7 +123,7 @@ class PcmCreatorsUtil {
 	
 	static def createOperationRequiredRole(OperationInterface providedInterface, InterfaceRequiringEntity requiringEntity) {
 		createOperationRequiredRole[
-			entityName = requiringEntity.getEntityName() + "_requires_" + providedInterface.getEntityName()
+			entityName = requiringEntity.getEntityName() + REQUIRES + providedInterface.getEntityName()
 			requiredInterface__OperationRequiredRole = providedInterface
 		]
 	}

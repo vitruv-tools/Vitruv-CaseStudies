@@ -9,18 +9,19 @@ import java.util.stream.IntStream
 import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper
 import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import org.palladiosimulator.pcm.system.System
 import org.palladiosimulator.pcm.system.SystemFactory
+import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification
 import tools.vitruv.applications.util.temporary.java.JavaSetup
-import tools.vitruv.change.propagation.ChangePropagationMode
 import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
 import tools.vitruv.testutils.printing.DefaultModelPrinter
@@ -29,25 +30,26 @@ import tools.vitruv.testutils.printing.DefaultPrintTarget
 
 import static org.junit.jupiter.api.Assertions.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.*
-import static tools.vitruv.applications.pcmjava.tests.pcm2java.TransformationDirectionConfiguration.configureUnidirectionalExecution
+
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	protected var extension Pcm2JavaViewFactory viewFactory
 	
 	// === setup ===
 	
-	@Accessors(PROTECTED_GETTER)
-	static val PCM_MODEL_FILE_EXTENSION = "pcm"
-	@Accessors(PROTECTED_GETTER)
+	static val PCM_REPOSITORY_FILE_EXTENSION = "repository"
 	static val PCM_SYSTEM_FILE_EXTENSION = "system"
-	@Accessors(PROTECTED_GETTER)
-	static val PCM_MODEL_NAME = "model"
-	@Accessors(PROTECTED_GETTER)
-	static val JAVA_MODEL_FILE_EXTENSION = "java"
-	@Accessors(PROTECTED_GETTER)
-	static val JAVA_MODEL_NAME = "code"
-	@Accessors(PROTECTED_GETTER)
-	static val MODEL_FOLDER_NAME = "model"
+	static val PCM_MODEL_FOLDER_NAME = "pcm"
+	
+	override protected enableTransitiveCyclicChangePropagation() {
+		false
+	}
+	
+	@BeforeAll
+	def static void setupJavaFactories() {
+		JavaSetup.prepareFactories()
+	}
 	
 	@BeforeEach
 	def final void setupViewFactory(){
@@ -55,26 +57,16 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	@BeforeEach
-	def setupTransformatonDirection() {
-		configureUnidirectionalExecution(virtualModel)
-	}
-	
-	@BeforeEach
 	def setupJavaClasspath() {
 		JavaSetup.resetClasspathAndRegisterStandardLibrary();
 	}
-	
-	@BeforeEach
-	def disableTransitiveChangePropagation() {
-		virtualModel.changePropagationMode = ChangePropagationMode.SINGLE_STEP
-	}
 
 	protected def Path getProjectModelPath(String modelName, String modelFileExtension) {
-		Path.of(MODEL_FOLDER_NAME).resolve(modelName + "." + modelFileExtension)
+		Path.of(PCM_MODEL_FOLDER_NAME).resolve(modelName + "." + modelFileExtension)
 	}
 
 	override protected getChangePropagationSpecifications() {
-		return #[new Pcm2JavaChangePropagationSpecification()]
+		return #[new Pcm2JavaChangePropagationSpecification(), new Java2PcmChangePropagationSpecification()]
 	}
 	
 	// === creators ===
@@ -82,8 +74,8 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	private def void createRepository((Repository)=> void repositoryInitalization){
 		changePcmView[
 			var repository = RepositoryFactory.eINSTANCE.createRepository();
-			it.registerRoot(repository, getProjectModelPath(PCM_MODEL_NAME, PCM_MODEL_FILE_EXTENSION).uri)
 			repositoryInitalization.apply(repository)
+			registerRoot(repository, getProjectModelPath(repository.entityName, PCM_REPOSITORY_FILE_EXTENSION).uri)
 		]
 	}
 	
@@ -96,8 +88,8 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	private def void createSystem((System) => void systemInitialization){
 		changePcmView[
 			val system = SystemFactory.eINSTANCE.createSystem();
-			it.registerRoot(system, getProjectModelPath(PCM_MODEL_NAME, PCM_SYSTEM_FILE_EXTENSION).uri)
 			systemInitialization.apply(system)
+			registerRoot(system, getProjectModelPath(system.entityName, PCM_SYSTEM_FILE_EXTENSION).uri)
 		]
 	}
 	
@@ -117,6 +109,7 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		assertFalse(allActualCompilationUnits.map[name].hasDuplicate)
 		assertFalse(expectedCompilationUnits.map[name].hasDuplicate)
 		
+		ignoreComparisonOfJavaUtilClassifieres(equalityHelper, allActualCompilationUnits, expectedCompilationUnits)
 		expectedCompilationUnits.forEach[
 			val actualUnit = claimJavaCompilationUnit(view, it.name)
 			adaptClassMemberOrderOfExpectedToActualOrder(it, actualUnit)
@@ -155,6 +148,20 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		modelPrinter.printObject(printTarget, printIdProvider, expected)
 		
 		return printTarget.toString
+	}
+	
+	private def void ignoreComparisonOfJavaUtilClassifieres(EqualityHelper equalityHelper, Collection<CompilationUnit> actualCompilationUnits, Collection<CompilationUnit> expectedCompilationUnits) {
+		val expectedJavaUtilCompilationUnits = expectedCompilationUnits.filter[cu | cu.namespaces.equals(#["java", "util"])]
+		val actualJavaUtilCompilationUnits = actualCompilationUnits.filter[cu | cu.namespaces.equals(#["java", "util"])]
+		
+		expectedJavaUtilCompilationUnits.forEach[expectedCompilationUnit |
+			val actualCompilationUnit = actualJavaUtilCompilationUnits.filter[acu | acu.name.equals(expectedCompilationUnit.name)].claimOne
+			
+			val expectedClassifier = expectedCompilationUnit.classifiers.claimOne
+			val actualClassifier = actualCompilationUnit.classifiers.claimOne
+			equalityHelper.put(expectedClassifier, actualClassifier)
+			equalityHelper.put(actualClassifier, expectedClassifier)
+		]
 	}
 	
 	private def void adaptClassMemberOrderOfExpectedToActualOrder(CompilationUnit expected, CompilationUnit actual) {

@@ -1,5 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.system
 
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 import java.util.List
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
@@ -9,8 +10,9 @@ import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.ConstructorAr
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmCreatorsUtil.*
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
+import org.junit.jupiter.api.Disabled
 
-class AssemblyContextMappingTransforamtionTest extends Pcm2JavaTransformationTest {
+class AssemblyContextMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
 	@Test
 	def void testCreateAssemblyContext() {
@@ -18,13 +20,13 @@ class AssemblyContextMappingTransforamtionTest extends Pcm2JavaTransformationTes
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		val basicComponent = createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 		changePcmView [
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				components__Repository += basicComponent
 			]
 		]
 		
 		changePcmView [
-			modifySingleSystem [
+			claimSinglePcmSystem(it) => [
 				assemblyContexts__ComposedStructure += createAssemblyContext(basicComponent, Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME)
 			]
 		]
@@ -37,7 +39,7 @@ class AssemblyContextMappingTransforamtionTest extends Pcm2JavaTransformationTes
 				.build
 			val systemCompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
-					Pcm2JavaTestUtils.SYSTEM_NAME_CAMELCASE
+					Pcm2JavaTestUtils.SYSTEM_NAMESPACE
 				)
 				.addImportWithNamespace(basicComponentCompilationUnit)
 				.addPrivateField(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME, getReference(basicComponentCompilationUnit))
@@ -45,5 +47,12 @@ class AssemblyContextMappingTransforamtionTest extends Pcm2JavaTransformationTes
 				.build
 		 	assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(basicComponentCompilationUnit, systemCompilationUnit))
 		 ]
+	}
+	
+	@Disabled("TODO: adapt reactions")
+	static class BidirectionalTest extends AssemblyContextMappingTransformationTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }

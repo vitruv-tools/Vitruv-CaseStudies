@@ -1,5 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.system
 
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 import java.util.List
 import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.core.composition.CompositionFactory
@@ -15,6 +16,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaInterfaceBuilder
+import org.junit.jupiter.api.Disabled
 
 class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 	
@@ -25,19 +27,19 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 		 val basicComponent = createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 		 val operationInterface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 		 changePcmView [
-		 	modifySingleRepository [
+		 	claimSinglePcmRepository(it) => [
 		 		interfaces__Repository += operationInterface
 		 		components__Repository += basicComponent
 		 		basicComponent.requiredRoles_InterfaceRequiringEntity += createOperationRequiredRole(operationInterface, basicComponent)
 		 	]
-		 	modifySingleSystem [
+		 	claimSinglePcmSystem(it) => [
 		 		assemblyContexts__ComposedStructure += createAssemblyContext(basicComponent, Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME)
 		 		requiredRoles_InterfaceRequiringEntity += createOperationRequiredRole(operationInterface, it)
 		 	]
 		 ]
 		 
 		 changePcmView [
-		 	modifySingleSystem [
+		 	claimSinglePcmSystem(it) => [
 		 		val assemblyContext = it.assemblyContexts__ComposedStructure.claimOne
 		 		val systemRequiredRole = it.requiredRoles_InterfaceRequiringEntity.filter(OperationRequiredRole).claimOne
 		 		val basicComponentRequiredRole = basicComponent.requiredRoles_InterfaceRequiringEntity.filter(OperationRequiredRole).claimOne
@@ -63,7 +65,7 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 				.build
 			val systemCompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
-					Pcm2JavaTestUtils.SYSTEM_NAME_CAMELCASE
+					Pcm2JavaTestUtils.SYSTEM_NAMESPACE
 				)
 				.addImportWithNamespace(basicComponentCompilationUnit)
 				.addImportWithNamespace(interfaceCompilationUnit)
@@ -74,5 +76,12 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 				.build
 		 	assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, basicComponentCompilationUnit, systemCompilationUnit))
 		 ]
+	}
+	
+	@Disabled("TODO: adapt reactions")
+	static class BidirectionalTest extends RequiredDelegationConnectorMappingTransforamtionTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }

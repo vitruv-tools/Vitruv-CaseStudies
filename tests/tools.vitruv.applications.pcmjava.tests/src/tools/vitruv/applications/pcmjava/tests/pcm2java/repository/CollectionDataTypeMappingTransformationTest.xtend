@@ -23,15 +23,15 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 		
 		this.getUserInteraction().addNextSingleSelection(0);
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				it.dataTypes__Repository += createCollectionDataType(Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null)
 			]
 		]
 		
 		validateJavaView[
 			val stdLibHelper = new JavaStdLibCompilationUnitHelper(it)
-			val voidCompilationUnit = stdLibHelper.getCompilationUnitFor(Pcm2JavaTestUtils.VOID_COMPILATIONUNIT_NAME)
-			val arrayListCompilationUnit = stdLibHelper.getCompilationUnitFor(Pcm2JavaTestUtils.ARRAYLIST_COMPILATIONUNIT_NAME)
+			val voidCompilationUnit = stdLibHelper.voidCompilationUnit
+			val arrayListCompilationUnit = stdLibHelper.arrayListCompilationUnit
 			
 			val collectionDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME,
@@ -48,20 +48,21 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	@Disabled("this special case has not been implemented so far because it is difficult to implement (String is no primitive type)")
 	def void testAddCollectionDataTypeWithPrimitiveTypeStringAsInnerType() {
+		// same test as testAddCollectionDataTypeWithPrimitiveTypeIntAsInnerType except choose string as primitive datatype
 	}
 	
 	@Test
 	def void testAddCollectionDataTypeWithPrimitiveTypeIntAsInnerType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				it.dataTypes__Repository += createPrimitiveDataType(PrimitiveTypeEnum.INT)
 			]
 		]
 		
 		this.getUserInteraction().addNextSingleSelection(0);
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				val PrimitiveDataType innerType = claimPrimitiveDataType(it, PrimitiveTypeEnum.INT)
 				it.dataTypes__Repository += createCollectionDataType(Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, innerType)
 			]
@@ -69,8 +70,8 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 		
 		validateJavaView[
 			val stdLibHelper = new JavaStdLibCompilationUnitHelper(it)
-			val listCompilationUnit = stdLibHelper.getCompilationUnitFor(Pcm2JavaTestUtils.ARRAYLIST_COMPILATIONUNIT_NAME)
-			val integerCompilationUnit = stdLibHelper.getCompilationUnitFor(Pcm2JavaTestUtils.INTEGER_COMPILATIONUNIT_NAME)
+			val listCompilationUnit = stdLibHelper.arrayListCompilationUnit
+			val integerCompilationUnit = stdLibHelper.integerCompilationUnit
 		
 			val collectionDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME,
@@ -88,14 +89,14 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 	def void testAddCollectionDataTypeWithComplexInnerType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				it.dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 			]
 		]
 		
 		this.getUserInteraction().addNextSingleSelection(0);
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				val CompositeDataType innerType = claimCompositeDataType(it, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 				it.dataTypes__Repository += createCollectionDataType(Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, innerType)
 			]
@@ -103,7 +104,7 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 		
 		validateJavaView[
 			val stdLibHelper = new JavaStdLibCompilationUnitHelper(it)
-			val arrayListCompilationUnit = stdLibHelper.getCompilationUnitFor("java.util.ArrayList.java")
+			val arrayListCompilationUnit = stdLibHelper.getArrayListCompilationUnit()
 			
 			val compositeDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
@@ -119,5 +120,12 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 			
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(arrayListCompilationUnit, compositeDataTypeCompilationUnit, collectionDataTypeCompilationUnit))
 		]
+	}
+	
+	@Disabled("TODO: adapt reactions")
+	static class BidirectionalTest extends CollectionDataTypeMappingTransformationTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }

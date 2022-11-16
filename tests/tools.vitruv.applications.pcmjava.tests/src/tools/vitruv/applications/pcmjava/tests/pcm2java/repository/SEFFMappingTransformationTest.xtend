@@ -14,6 +14,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaInterfaceBuilder
+import org.junit.jupiter.api.Disabled
 
 class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -21,8 +22,8 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 	def void testCreateSEFF() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
-			modifySingleRepository [
-				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
+			claimSinglePcmRepository(it) => [
+				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME)
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				interface.signatures__OperationInterface += signature
 				interfaces__Repository += interface
@@ -33,7 +34,7 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 		]
 		
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				val signature = claimOperationInterface(it, Pcm2JavaTestUtils.INTERFACE_NAME).signatures__OperationInterface.claimOne
 				val component = claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME) as BasicComponent
 				component.serviceEffectSpecifications__BasicComponent += createResourceDemandingSEFF(signature)
@@ -44,14 +45,14 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
-				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
+				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME, createVoid(), List.of()))
 				.build
 			val componentCompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 					Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 				)
 				.addImplements(getReference(interfaceCompilationUnit))
-				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME, createVoid(), List.of()))
+				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME, createVoid(), List.of()))
 				.build
 			
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, componentCompilationUnit))
@@ -62,8 +63,8 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 	def void testRenameSEFF() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
-			modifySingleRepository [
-				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
+			claimSinglePcmRepository(it) => [
+				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME)
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				interface.signatures__OperationInterface += signature
 				interfaces__Repository += interface
@@ -75,9 +76,9 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 		]
 		
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				val signature = claimOperationInterface(it, Pcm2JavaTestUtils.INTERFACE_NAME).signatures__OperationInterface.claimOne
-				signature.entityName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME
+				signature.entityName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 		]
 		
@@ -85,17 +86,24 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME, 
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 				)
-				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME, createVoid(), List.of()))
+				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX, createVoid(), List.of()))
 				.build
 			val componentCompilationUnit = new FluentJavaClassBuilder(
 					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 					Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 				)
-				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME, createVoid(), List.of()))
+				.addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX, createVoid(), List.of()))
 				.addImplements(getReference(interfaceCompilationUnit))
 				.build
 			
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, componentCompilationUnit))
 		]
+	}
+	
+	@Disabled("TODO: adapt reactions")
+	static class BidirectionalTest extends SEFFMappingTransformationTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }

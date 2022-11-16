@@ -21,12 +21,24 @@ class JavaStdLibCompilationUnitHelper {
 		this.view = view
 	}
 	
-	def CompilationUnit getCompilationUnitFor(String name){
+	private def CompilationUnit getCompilationUnitByName(String name){
 		val requestedCompilationUnit = 
 			getJavaCompilationUnits(view)
 			.filter(cu | cu.name == name)
 			.claimOne
 			
 		return EcoreUtil.copy(requestedCompilationUnit)
+	}
+	
+	def CompilationUnit getArrayListCompilationUnit() {
+		return getCompilationUnitByName("java.util.ArrayList.java")
+	}
+	
+	def CompilationUnit getIntegerCompilationUnit() {
+		return getCompilationUnitByName("java.lang.Integer.java")
+	}
+	
+	def CompilationUnit getVoidCompilationUnit() {
+		return getCompilationUnitByName("java.lang.Void.java")
 	}
 }

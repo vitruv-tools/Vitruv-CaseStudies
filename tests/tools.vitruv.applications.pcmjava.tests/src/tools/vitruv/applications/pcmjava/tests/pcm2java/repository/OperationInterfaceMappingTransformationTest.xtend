@@ -17,7 +17,7 @@ class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformation
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
@@ -34,23 +34,29 @@ class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformation
 	def void testRenameInterface() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
 		
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				val interface = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
-				interface.entityName = Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME
+				interface.entityName = Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 		]
 		
 		validateJavaView [
-			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME,
+			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
+	}
+	
+	static class BidirectionalTest extends OperationInterfaceMappingTransformationTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }

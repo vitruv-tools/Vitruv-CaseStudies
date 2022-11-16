@@ -13,6 +13,8 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
+import org.junit.jupiter.api.Disabled
 
 class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -21,7 +23,7 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 			]
 		]
@@ -40,21 +42,21 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 	def void testRenameCompositeDataType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 			]
 		]
 		
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				var dataType = dataTypes__Repository.filter(CompositeDataType).claimOne
-				dataType.entityName = Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME
+				dataType.entityName = Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 		]
 		
 		validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME,
+				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 			).build
 			
@@ -66,14 +68,14 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 	def void testAddPrimitiveTypeToCompositeDataType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 				dataTypes__Repository += createPrimitiveDataType(PrimitiveTypeEnum.INT)
 			]
 		]
 		
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				val innerType = dataTypes__Repository.filter(PrimitiveDataType).claimOne
 				val dataType = dataTypes__Repository.filter(CompositeDataType).claimOne
 				dataType.innerDeclaration_CompositeDataType += createInnerDeclaration(innerType, Pcm2JavaTestUtils.INNER_DEC_NAME)
@@ -96,25 +98,26 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 	
 	@Test
 	def void testAddCompositeDataTypeToCompositeDataType() {
+		val INNER_COMPOSITE_DATATYPE_NAME = "InnerCompositeDataType"
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
-				dataTypes__Repository += createCompositeDataType("InnerCompositeDataTypeTest")
+				dataTypes__Repository += createCompositeDataType(INNER_COMPOSITE_DATATYPE_NAME)
 			]
 		]
 		
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				val outerCompositeDataType = dataTypes__Repository.filter(CompositeDataType).filter(ctd | ctd.entityName == Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME).claimOne
-				val innerCompositeDataType = dataTypes__Repository.filter(CompositeDataType).filter(ctd | ctd.entityName == "InnerCompositeDataTypeTest").claimOne
+				val innerCompositeDataType = dataTypes__Repository.filter(CompositeDataType).filter(ctd | ctd.entityName == INNER_COMPOSITE_DATATYPE_NAME).claimOne
 				outerCompositeDataType.innerDeclaration_CompositeDataType += createInnerDeclaration(innerCompositeDataType, Pcm2JavaTestUtils.INNER_DEC_NAME)
 			]
 		]
 		
 		validateJavaView[
 			val innerDataTypeExpectedCompilationUnit = new FluentJavaClassBuilder( 
-					"InnerCompositeDataTypeTest", 
+					INNER_COMPOSITE_DATATYPE_NAME, 
 					Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
 				)
 				.build
@@ -130,5 +133,12 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 			
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(innerDataTypeExpectedCompilationUnit, outerDataTypeExpectedCompilationUnit))
 		]
+	}
+	
+	@Disabled("TODO: adapt reactions")
+	static class BidirectionalTest extends CompositeDataTypeMappingTransformationTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }

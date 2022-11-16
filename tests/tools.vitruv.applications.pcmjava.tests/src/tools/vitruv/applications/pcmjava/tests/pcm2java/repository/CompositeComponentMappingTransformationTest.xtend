@@ -15,6 +15,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaClassBuilder
 import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaInterfaceBuilder
+import org.junit.jupiter.api.Disabled
 
 class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformationTest {
 	
@@ -23,7 +24,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				components__Repository += createCompositeComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)	
 			]
 		]
@@ -42,13 +43,13 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	def void testAddProvidedRoleToCompositeComponent() {
 		this.addRepositoryAndCompositeComponent()
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
 		
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				var operationInterface = it.claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				var compositeComponent = claimComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)
 				compositeComponent.providedRoles_InterfaceProvidingEntity += createOperationProvidedRole(operationInterface, compositeComponent)
@@ -72,13 +73,13 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	def void testAddRequiredRoleToCompositeComponent() {
 		this.addRepositoryAndCompositeComponent()
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
 		
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				var operationInterface = it.claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				var compositeComponent = claimComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)
 				compositeComponent.requiredRoles_InterfaceRequiringEntity += createOperationRequiredRole(operationInterface, compositeComponent)
@@ -104,14 +105,14 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	def void testAddAssemblyContextToCompositeComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 				components__Repository += createCompositeComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)	
 			]
 		]
 		
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				var basicComponent = components__Repository.filter(BasicComponent).claimOne
 				var compositeComponent = components__Repository.filter(CompositeComponent).claimOne
 				compositeComponent.assemblyContexts__ComposedStructure += createAssemblyContext(basicComponent, Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME)
@@ -124,16 +125,16 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 				).build
-			val compositeCompositeComponentCompilationUnit = new FluentJavaClassBuilder(
+			val compositeComponentCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
 				)
 				.addImportWithNamespace(basicComponentCompilationUnit)
-				.addPrivateField("assemblyContext", getReference(basicComponentCompilationUnit))
-				.addConstructorConstructionForField("assemblyContext", ConstructorArguments.WITHOUT_NULL_LITERAL)
+				.addPrivateField(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME, getReference(basicComponentCompilationUnit))
+				.addConstructorConstructionForField(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME, ConstructorArguments.WITHOUT_NULL_LITERAL)
 				.build
 			
-			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(basicComponentCompilationUnit, compositeCompositeComponentCompilationUnit))
+			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(basicComponentCompilationUnit, compositeComponentCompilationUnit))
 		]
 	}
 	
@@ -142,7 +143,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 		addRepositoryAndCompositeComponent()
 		
 		changePcmView[
-			modifySingleRepository[
+			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
@@ -163,9 +164,16 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				components__Repository += createCompositeComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)	
 			]
 		]
+	}
+	
+	@Disabled("TODO: adapt reactions")
+	static class BidirectionalTest extends CompositeComponentMappingTransformationTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }

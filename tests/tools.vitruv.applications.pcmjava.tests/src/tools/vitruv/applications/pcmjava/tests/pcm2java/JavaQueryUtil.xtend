@@ -7,6 +7,7 @@ import tools.vitruv.framework.views.View
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
+// TODO: merge this class with JavaQueryUtil of Java <-> UML tests and move code to testutils
 @Utility
 class JavaQueryUtil {
 	static def getJavaCompilationUnits(View view) {

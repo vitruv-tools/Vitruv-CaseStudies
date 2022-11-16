@@ -1,5 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.repository
 
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.*
 import java.util.List
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils
@@ -20,11 +21,11 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 				name = Pcm2JavaTestUtils.REPOSITORY_NAME
 			]
 			val contractsPackage = createPackage [
-				name = "contracts"
+				name = Pcm2JavaTestUtils.CONTRACTS_PACKAGE
 				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME
 			]
 			val dataTypesPackage = createPackage [
-				name = "datatypes"
+				name = Pcm2JavaTestUtils.DATATYPES_PACKAGE
 				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME
 			]
 			assertExistenceOfPackagesDeeplyEqualTo(List.of(repositoryPackage, contractsPackage, dataTypesPackage))
@@ -36,22 +37,22 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		
 		changePcmView[
-			modifySingleRepository [
-				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
+			claimSinglePcmRepository(it) => [
+				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 		]
 		
 		validateJavaView [
 			val repositoryPackage = createPackage [
-				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
+				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 			val contractsPackage = createPackage [
-				name = "contracts"
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
+				name = Pcm2JavaTestUtils.CONTRACTS_PACKAGE
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 			val dataTypesPackage = createPackage [
-				name = "datatypes"
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
+				name = Pcm2JavaTestUtils.DATATYPES_PACKAGE
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 			assertExistenceOfPackagesDeeplyEqualTo(List.of(repositoryPackage, contractsPackage, dataTypesPackage))
 		]
@@ -61,40 +62,46 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 	def void testRepositoryNameChangeWithComponents() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
-			modifySingleRepository [
+			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 			]
 		]
 		
 		changePcmView[
-			modifySingleRepository [
-				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
+			claimSinglePcmRepository(it) => [
+				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 		]
 		
 		validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder( 
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX, 
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 			
 			val repositoryPackage = createPackage [
-				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
+				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 			val contractsPackage = createPackage [
-				name = "contracts"
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
+				name = Pcm2JavaTestUtils.CONTRACTS_PACKAGE
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 			val dataTypesPackage = createPackage [
-				name = "datatypes"
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
+				name = Pcm2JavaTestUtils.DATATYPES_PACKAGE
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 			val componentPackage = createPackage [
 				name = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 			assertExistenceOfPackagesDeeplyEqualTo(List.of(repositoryPackage, contractsPackage, dataTypesPackage, componentPackage))
 		]
+	}
+	
+	static class BidirectionalTest extends RepositoryMappingTransformationTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }

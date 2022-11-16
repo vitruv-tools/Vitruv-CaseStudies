@@ -21,8 +21,17 @@ import org.emftext.language.java.types.TypeReference
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import org.emftext.language.java.statements.Statement
+import org.emftext.language.java.literals.LiteralsFactory
+import org.emftext.language.java.instantiations.InstantiationsFactory
+import org.emftext.language.java.expressions.ExpressionsFactory
+import org.emftext.language.java.operators.OperatorsFactory
+import org.emftext.language.java.parameters.Parameter
 
 /**
+ * Can be used to dynamically create Java Classes with provided add*() methods.
+ * Build returns a CompilationUnit according to the previous made add*() calls.
+ * 
  * Caution: the FluentJavaClassBuilder does not check for correctness of the builder API calls.
  * This means that the caller has to ensure that references to fields (e.g. for getters, setters,
  * initializations, ...) reference existing fields. Also the Builder doesn't prevent adding
@@ -188,14 +197,14 @@ class FluentJavaClassBuilder{
 	
 	private def ClassMethod createSetterForField_(String fieldName, Class classifier) {
 		val field = classifier.fields.filter[name == fieldName].claimOne
-		val assignementHelper = new JavaParameterToFieldAssignmentHelper("set" + captialize(fieldName), EcoreUtil.copy(field.typeReference), field)
 		
 		return createClassMethod[
 			name = "set" + captialize(fieldName)
 			typeReference = createVoid()
 			annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
-			parameters += assignementHelper.parameter
-			statements += assignementHelper.statement
+			val parameter = createParameter(field.typeReference, "set" + captialize(fieldName))
+			parameters += parameter
+			statements += createParameterToFieldAssignemntStatement(parameter, field)
 		]
 	}
 	
@@ -206,24 +215,79 @@ class FluentJavaClassBuilder{
 		constructor.makePublic
 		
 		constructorConstructions.forEach[constructorDescription |
-			val fieldName = constructorDescription.first
 			val withNullLiteral = constructorDescription.second
 			val field = classifier.fields.filter[name == constructorDescription.first].claimOne
-			val assignementHelper = new JavaCreationToFieldAssignmentHelper(fieldName, EcoreUtil.copy(field.typeReference), field, withNullLiteral)
 			
-			constructor.statements += assignementHelper.statement
+			constructor.statements += createConstructorCallAndAssignmentToFieldStatement(field.typeReference, field, withNullLiteral)
 		]
 		
 		constructorInitializations.forEach[fieldName|
 			val field = classifier.fields.filter[name == fieldName].claimOne
-			val assignementHelper = new JavaParameterToFieldAssignmentHelper(fieldName, EcoreUtil.copy(field.typeReference), field)
 			
-			constructor.parameters += assignementHelper.parameter
-			constructor.statements += assignementHelper.statement
+			val parameter = createParameter(field.typeReference, fieldName)
+			constructor.parameters += parameter
+			constructor.statements += createParameterToFieldAssignemntStatement(parameter, field)
 		]
 		
 		return constructor
 	}
+	
+	private def Parameter createParameter(TypeReference typeReference, String parameterName) {
+		var parameter = ParametersFactory.eINSTANCE.createOrdinaryParameter
+		parameter.name = parameterName
+		parameter.typeReference = EcoreUtil.copy(typeReference)
+		return parameter
+	}
+	
+	private def Statement createParameterToFieldAssignemntStatement(Parameter parameter, Field field) {
+		var childNext = ReferencesFactory.eINSTANCE.createIdentifierReference
+		childNext.target = field
+		
+		var child = ReferencesFactory.eINSTANCE.createSelfReference
+		child.self = LiteralsFactory.eINSTANCE.createThis
+		child.next = childNext
+		
+		var value = ReferencesFactory.eINSTANCE.createIdentifierReference
+		value.target = parameter
+		
+		var assignmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
+		assignmentExpression.child = child
+		assignmentExpression.assignmentOperator = OperatorsFactory.eINSTANCE.createAssignment
+		assignmentExpression.value = value
+		
+		var expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
+		expressionStatement.expression = assignmentExpression
+		
+		return expressionStatement
+	}
+	
+	private def Statement createConstructorCallAndAssignmentToFieldStatement(TypeReference typeReference, Field field, ConstructorArguments constructorArguments) {
+		var childNext = ReferencesFactory.eINSTANCE.createIdentifierReference
+		childNext.target = field
+		var child = ReferencesFactory.eINSTANCE.createSelfReference
+		child.self = LiteralsFactory.eINSTANCE.createThis
+		child.next = childNext
+		
+		var value = InstantiationsFactory.eINSTANCE.createNewConstructorCall
+		if(constructorArguments === ConstructorArguments.WITH_NULL_LITERAL) value.arguments += LiteralsFactory.eINSTANCE.createNullLiteral
+		value.typeReference = EcoreUtil.copy(typeReference)
+		
+		var assignmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
+		assignmentExpression.child = child
+		assignmentExpression.assignmentOperator = OperatorsFactory.eINSTANCE.createAssignment
+		assignmentExpression.value = value
+		
+		
+		var expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
+		expressionStatement.expression = assignmentExpression
+		
+		return expressionStatement
+	}
+}
+
+enum ConstructorArguments {
+	WITH_NULL_LITERAL,
+	WITHOUT_NULL_LITERAL
 }
 
 class FieldInformation {

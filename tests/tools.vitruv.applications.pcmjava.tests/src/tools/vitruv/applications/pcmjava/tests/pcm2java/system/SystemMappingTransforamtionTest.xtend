@@ -18,7 +18,7 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 		validateJavaView [
 			val systemCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
-				Pcm2JavaTestUtils.SYSTEM_NAME_CAMELCASE
+				Pcm2JavaTestUtils.SYSTEM_NAMESPACE
 			)
 			.build
 			
@@ -31,15 +31,15 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		
 		changePcmView [
-			modifySingleSystem [
-				entityName = Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME
+			claimSinglePcmSystem(it) => [
+				entityName = Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
 			]
 		]
 		
 		validateJavaView [
 			val systemCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME + Pcm2JavaTestUtils.IMPL_SUFIX,
-				Pcm2JavaTestUtils.SYSTEM_NAME_CAMELCASE + Pcm2JavaTestUtils.RENAME
+				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME_SUFIX + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.SYSTEM_NAMESPACE + Pcm2JavaTestUtils.RENAME_SUFIX
 			)
 			.build
 			
@@ -60,5 +60,11 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of())
 			assertExistenceOfPackagesDeeplyEqualTo(List.of())
 		]
+	}
+	
+	static class BidirectionalTest extends SystemMappingTransforamtionTest {
+		override protected enableTransitiveCyclicChangePropagation() {
+			true
+		}
 	}
 }
