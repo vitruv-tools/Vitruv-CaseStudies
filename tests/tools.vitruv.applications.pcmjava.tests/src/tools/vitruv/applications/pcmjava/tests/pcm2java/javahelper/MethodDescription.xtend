@@ -7,8 +7,8 @@ class MethodDescription {
 	public final String name
 	public final TypeReference returnType
 	public final List<ParameterDescription> parameters
-	
-	new(String name, TypeReference returnType, List<ParameterDescription> parameters){
+
+	new(String name, TypeReference returnType, List<ParameterDescription> parameters) {
 		this.name = name
 		this.returnType = returnType
 		this.parameters = parameters

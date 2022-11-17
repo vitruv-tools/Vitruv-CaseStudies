@@ -17,7 +17,7 @@ class PcmQueryUtil {
 	static def Repository claimSinglePcmRepository(View view) {
 		view.getRootObjects(Repository).claimOne
 	}
-	
+
 	static def System claimSinglePcmSystem(View view) {
 		view.getRootObjects(System).claimOne
 	}
@@ -25,19 +25,19 @@ class PcmQueryUtil {
 	static def Repository claimPcmRepository(View view, String repositoryName) {
 		view.getRootObjects(Repository).filter[it.entityName == repositoryName].claimOne
 	}
-	
+
 	static def RepositoryComponent claimComponent(Repository repository, String componentName) {
 		repository.components__Repository.filter[it.entityName == componentName].claimOne
 	}
-	
+
 	static def PrimitiveDataType claimPrimitiveDataType(Repository repository, PrimitiveTypeEnum primitiveType) {
 		repository.dataTypes__Repository.filter(PrimitiveDataType).filter[it.type == primitiveType].claimOne
 	}
-	
+
 	static def CompositeDataType claimCompositeDataType(Repository repository, String datatypeName) {
 		repository.dataTypes__Repository.filter(CompositeDataType).filter[it.entityName == datatypeName].claimOne
 	}
-	
+
 	static def OperationInterface claimOperationInterface(Repository repository, String interfaceName) {
 		repository.interfaces__Repository.filter(OperationInterface).filter[it.entityName == interfaceName].claimOne
 	}

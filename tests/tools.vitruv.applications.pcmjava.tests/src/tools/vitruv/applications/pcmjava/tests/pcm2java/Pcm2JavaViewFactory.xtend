@@ -10,28 +10,28 @@ import tools.vitruv.testutils.TestViewFactory
 
 @FinalFieldsConstructor
 class Pcm2JavaViewFactory extends TestViewFactory {
-	
-	private def View createJavaView(){
+
+	private def View createJavaView() {
 		createViewOfElements("Java", #{Package, CompilationUnit})
 	}
-	
-	private def View createPcmView(){
+
+	private def View createPcmView() {
 		createViewOfElements("PCM", #{Repository, System})
 	}
-	
-	def void changeJavaView((View)=> void modelModification){
+
+	def void changeJavaView((View)=>void modelModification) {
 		changeViewRecordingChanges(createJavaView, modelModification)
 	}
-	
-	def void changePcmView((View)=> void modelModification){
+
+	def void changePcmView((View)=>void modelModification) {
 		changeViewRecordingChanges(createPcmView, modelModification)
 	}
-	
-	def void validateJavaView((View)=> void viewValidation){
+
+	def void validateJavaView((View)=>void viewValidation) {
 		validateView(createJavaView, viewValidation)
 	}
-	
-	def void validatePcmView((View)=> void viewValidation){
+
+	def void validatePcmView((View)=>void viewValidation) {
 		validateView(createPcmView, viewValidation)
 	}
 }

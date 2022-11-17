@@ -4,7 +4,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.framework.views.View
 
-import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.*
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.getJavaCompilationUnits
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
@@ -16,28 +16,25 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.clai
  */
 class JavaStdLibCompilationUnitHelper {
 	final View view
-	
-	new(View view){
+
+	new(View view) {
 		this.view = view
 	}
-	
-	private def CompilationUnit getCompilationUnitByName(String name){
-		val requestedCompilationUnit = 
-			getJavaCompilationUnits(view)
-			.filter(cu | cu.name == name)
-			.claimOne
-			
+
+	private def CompilationUnit getCompilationUnitByName(String name) {
+		val requestedCompilationUnit = getJavaCompilationUnits(view).filter(cu|cu.name == name).claimOne
+
 		return EcoreUtil.copy(requestedCompilationUnit)
 	}
-	
+
 	def CompilationUnit getArrayListCompilationUnit() {
 		return getCompilationUnitByName("java.util.ArrayList.java")
 	}
-	
+
 	def CompilationUnit getIntegerCompilationUnit() {
 		return getCompilationUnitByName("java.lang.Integer.java")
 	}
-	
+
 	def CompilationUnit getVoidCompilationUnit() {
 		return getCompilationUnitByName("java.lang.Void.java")
 	}

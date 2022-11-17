@@ -17,11 +17,11 @@ class JavaQueryUtil {
 	static def getJavaPackages(View view) {
 		view.getRootObjects(Package)
 	}
-	
+
 	static def claimJavaCompilationUnit(View view, String compilationUnitName) {
 		view.javaCompilationUnits.filter[it.name == compilationUnitName].claimOne
 	}
-	
+
 	static def claimJavaPackage(View view, String name) {
 		view.javaPackages.filter[it.name == name].claimOne
 	}

@@ -6,27 +6,32 @@ import java.util.List
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.expressions.ExpressionsFactory
 import org.emftext.language.java.imports.Import
 import org.emftext.language.java.imports.ImportsFactory
+import org.emftext.language.java.instantiations.InstantiationsFactory
+import org.emftext.language.java.literals.LiteralsFactory
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.modifiers.ModifiersFactory
+import org.emftext.language.java.operators.OperatorsFactory
+import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.references.ReferencesFactory
+import org.emftext.language.java.statements.Statement
 import org.emftext.language.java.statements.StatementsFactory
 import org.emftext.language.java.types.TypeReference
 
-import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.*
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.captialize
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.createClass
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.createClassMethod
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.createCompilationUnit
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.createField
+import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.createVoid
 
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
-import org.emftext.language.java.statements.Statement
-import org.emftext.language.java.literals.LiteralsFactory
-import org.emftext.language.java.instantiations.InstantiationsFactory
-import org.emftext.language.java.expressions.ExpressionsFactory
-import org.emftext.language.java.operators.OperatorsFactory
-import org.emftext.language.java.parameters.Parameter
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 /**
  * Can be used to dynamically create Java Classes with provided add*() methods.
@@ -37,8 +42,8 @@ import org.emftext.language.java.parameters.Parameter
  * initializations, ...) reference existing fields. Also the Builder doesn't prevent adding
  * duplicated members (e.g. adding a getter for a field twice results in two identical getter methods).
  */
-class FluentJavaClassBuilder{
-	
+class FluentJavaClassBuilder {
+
 	// === data ===
 	boolean addConstructor
 	final String className
@@ -52,10 +57,10 @@ class FluentJavaClassBuilder{
 	final List<MethodDescription> classMethods
 	final List<String> constructorInitializations
 	final List<Pair<String, ConstructorArguments>> constructorConstructions
-		
+
 	new(String className, String namespace) {
 		this.addConstructor = false
-		
+
 		this.className = className
 		this.namespace = namespace
 		this.classImports = new ArrayList<Import>()
@@ -68,71 +73,71 @@ class FluentJavaClassBuilder{
 		this.constructorInitializations = new ArrayList<String>()
 		this.constructorConstructions = new ArrayList<Pair<String, ConstructorArguments>>()
 	}
-	
+
 	// === builder-API ===
-	
-	def FluentJavaClassBuilder addImportWithNamespace(CompilationUnit importedCompilationUnit){
+	def FluentJavaClassBuilder addImportWithNamespace(CompilationUnit importedCompilationUnit) {
 		var import = ImportsFactory.eINSTANCE.createClassifierImport
 		import.namespaces += importedCompilationUnit.namespaces
 		import.classifier = importedCompilationUnit.classifiers.claimOne
-		
+
 		this.classImports += import
 		return this
 	}
-	
-	def FluentJavaClassBuilder addImportWithoutNamespace(CompilationUnit importedCompilationUnit){
+
+	def FluentJavaClassBuilder addImportWithoutNamespace(CompilationUnit importedCompilationUnit) {
 		var import = ImportsFactory.eINSTANCE.createClassifierImport
 		import.classifier = importedCompilationUnit.classifiers.claimOne
-		
+
 		this.classImports += import
 		return this
 	}
-	
+
 	def FluentJavaClassBuilder addImplements(TypeReference type) {
 		this.implementedTypes += type
 		return this
 	}
-	
-	def FluentJavaClassBuilder setExtends(TypeReference type){
+
+	def FluentJavaClassBuilder setExtends(TypeReference type) {
 		this.extendsType = type
 		return this
 	}
-	
+
 	def FluentJavaClassBuilder addPrivateField(String fieldName, TypeReference type) {
 		this.fields.add(new FieldInformation(fieldName, type))
 		return this
 	}
-	
+
 	def FluentJavaClassBuilder addGetterForField(String fieldName) {
 		this.gettersForField += fieldName
 		return this
 	}
-	
+
 	def FluentJavaClassBuilder addSetterForField(String fieldName) {
 		this.settersForField += fieldName
 		return this
 	}
-	
+
 	def FluentJavaClassBuilder addMethod(MethodDescription description) {
 		this.classMethods += description
 		return this
 	}
-	
+
 	def FluentJavaClassBuilder addConstructorInitalizationForField(String fieldName) {
 		this.constructorInitializations += fieldName
 		return this
 	}
-	
-	def FluentJavaClassBuilder addConstructorConstructionForField(String fieldName, ConstructorArguments constructorArguments) {
+
+	def FluentJavaClassBuilder addConstructorConstructionForField(String fieldName,
+		ConstructorArguments constructorArguments) {
 		this.constructorConstructions += new Pair<String, ConstructorArguments>(fieldName, constructorArguments)
 		return this
 	}
-	
+
 	def FluentJavaClassBuilder addConstructor() {
 		this.addConstructor = true
 		return this
 	}
-	
+
 	def CompilationUnit build() {
 		val class = createClass [
 			annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
@@ -140,14 +145,15 @@ class FluentJavaClassBuilder{
 			implements += implementedTypes
 			if(extendsType !== null) extends = extendsType
 		]
-		
+
 		class.members += fields.map[createPrivateField_]
-		if(addConstructor || !constructorInitializations.isEmpty || !constructorConstructions.isEmpty) class.members += createConstructor_(class)
+		if (addConstructor || !constructorInitializations.isEmpty || !constructorConstructions.isEmpty)
+			class.members += createConstructor_(class)
 		class.members += gettersForField.map[createGetterForField_(it, class)]
 		class.members += settersForField.map[createSetterForField_(it, class)]
-		
-		class.members += classMethods.map[methodDescription | 
-			val methodParameters = methodDescription.parameters.map[ parameterDescription |
+
+		class.members += classMethods.map [ methodDescription |
+			val methodParameters = methodDescription.parameters.map [ parameterDescription |
 				var parameter = ParametersFactory.eINSTANCE.createOrdinaryParameter
 				parameter.name = parameterDescription.name
 				parameter.typeReference = EcoreUtil.copy(parameterDescription.type)
@@ -160,7 +166,7 @@ class FluentJavaClassBuilder{
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 			]
 		]
-		
+
 		return createCompilationUnit[
 			name = namespace + "." + className + ".java"
 			namespaces += namespace.split("\\.")
@@ -168,9 +174,8 @@ class FluentJavaClassBuilder{
 			imports += classImports
 		]
 	}
-	
+
 	// === internal builder ===
-	
 	private def Field createPrivateField_(FieldInformation fieldInformation) {
 		createField[
 			name = fieldInformation.name
@@ -178,15 +183,15 @@ class FluentJavaClassBuilder{
 			annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPrivate
 		]
 	}
-	
+
 	private def ClassMethod createGetterForField_(String fieldName, Class classifier) {
 		val field = classifier.fields.filter[name == fieldName].claimOne
-		
+
 		val identifiereReference = ReferencesFactory.eINSTANCE.createIdentifierReference
 		identifiereReference.target = field
 		val returnStatement = StatementsFactory.eINSTANCE.createReturn
 		returnStatement.returnValue = identifiereReference
-		
+
 		return createClassMethod[
 			name = "get" + captialize(fieldName)
 			typeReference = EcoreUtil.copy(field.typeReference)
@@ -194,10 +199,10 @@ class FluentJavaClassBuilder{
 			statements += returnStatement
 		]
 	}
-	
+
 	private def ClassMethod createSetterForField_(String fieldName, Class classifier) {
 		val field = classifier.fields.filter[name == fieldName].claimOne
-		
+
 		return createClassMethod[
 			name = "set" + captialize(fieldName)
 			typeReference = createVoid()
@@ -207,80 +212,82 @@ class FluentJavaClassBuilder{
 			statements += createParameterToFieldAssignemntStatement(parameter, field)
 		]
 	}
-	
+
 	private def Constructor createConstructor_(Class classifier) {
 		val constructor = MembersFactory.eINSTANCE.createConstructor
-		
+
 		constructor.name = classifier.name
 		constructor.makePublic
-		
-		constructorConstructions.forEach[constructorDescription |
+
+		constructorConstructions.forEach [ constructorDescription |
 			val withNullLiteral = constructorDescription.second
 			val field = classifier.fields.filter[name == constructorDescription.first].claimOne
-			
-			constructor.statements += createConstructorCallAndAssignmentToFieldStatement(field.typeReference, field, withNullLiteral)
+
+			constructor.statements +=
+				createConstructorCallAndAssignmentToFieldStatement(field.typeReference, field, withNullLiteral)
 		]
-		
-		constructorInitializations.forEach[fieldName|
+
+		constructorInitializations.forEach [ fieldName |
 			val field = classifier.fields.filter[name == fieldName].claimOne
-			
+
 			val parameter = createParameter(field.typeReference, fieldName)
 			constructor.parameters += parameter
 			constructor.statements += createParameterToFieldAssignemntStatement(parameter, field)
 		]
-		
+
 		return constructor
 	}
-	
+
 	private def Parameter createParameter(TypeReference typeReference, String parameterName) {
 		var parameter = ParametersFactory.eINSTANCE.createOrdinaryParameter
 		parameter.name = parameterName
 		parameter.typeReference = EcoreUtil.copy(typeReference)
 		return parameter
 	}
-	
+
 	private def Statement createParameterToFieldAssignemntStatement(Parameter parameter, Field field) {
 		var childNext = ReferencesFactory.eINSTANCE.createIdentifierReference
 		childNext.target = field
-		
+
 		var child = ReferencesFactory.eINSTANCE.createSelfReference
 		child.self = LiteralsFactory.eINSTANCE.createThis
 		child.next = childNext
-		
+
 		var value = ReferencesFactory.eINSTANCE.createIdentifierReference
 		value.target = parameter
-		
+
 		var assignmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
 		assignmentExpression.child = child
 		assignmentExpression.assignmentOperator = OperatorsFactory.eINSTANCE.createAssignment
 		assignmentExpression.value = value
-		
+
 		var expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
 		expressionStatement.expression = assignmentExpression
-		
+
 		return expressionStatement
 	}
-	
-	private def Statement createConstructorCallAndAssignmentToFieldStatement(TypeReference typeReference, Field field, ConstructorArguments constructorArguments) {
+
+	private def Statement createConstructorCallAndAssignmentToFieldStatement(TypeReference typeReference, Field field,
+		ConstructorArguments constructorArguments) {
 		var childNext = ReferencesFactory.eINSTANCE.createIdentifierReference
 		childNext.target = field
 		var child = ReferencesFactory.eINSTANCE.createSelfReference
 		child.self = LiteralsFactory.eINSTANCE.createThis
 		child.next = childNext
-		
+
 		var value = InstantiationsFactory.eINSTANCE.createNewConstructorCall
-		if(constructorArguments === ConstructorArguments.WITH_NULL_LITERAL) value.arguments += LiteralsFactory.eINSTANCE.createNullLiteral
+		if (constructorArguments === ConstructorArguments.WITH_NULL_LITERAL)
+			value.arguments += LiteralsFactory.eINSTANCE.createNullLiteral
 		value.typeReference = EcoreUtil.copy(typeReference)
-		
+
 		var assignmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
 		assignmentExpression.child = child
 		assignmentExpression.assignmentOperator = OperatorsFactory.eINSTANCE.createAssignment
 		assignmentExpression.value = value
-		
-		
+
 		var expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
 		expressionStatement.expression = assignmentExpression
-		
+
 		return expressionStatement
 	}
 }
@@ -293,8 +300,8 @@ enum ConstructorArguments {
 class FieldInformation {
 	public final String name
 	public final TypeReference type
-	
-	new(String name, TypeReference type){
+
+	new(String name, TypeReference type) {
 		this.name = name
 		this.type = type
 	}

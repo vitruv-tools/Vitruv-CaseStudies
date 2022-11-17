@@ -20,96 +20,94 @@ import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.types.Void
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 // TODO: merge this class with similar classes in Java <-> UML tests and testutils
 @Utility
 class JavaCreatorsUtil {
 	// === Java: Basic ===
-	
-	static def Package createPackage((Package)=> void initialization) {
+	static def Package createPackage((Package)=>void initialization) {
 		var package = ContainersFactory.eINSTANCE.createPackage
 		initialization.apply(package)
 		return package
 	}
-	
-	static def CompilationUnit createCompilationUnit((CompilationUnit)=> void initialization) {
+
+	static def CompilationUnit createCompilationUnit((CompilationUnit)=>void initialization) {
 		var compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit
 		initialization.apply(compilationUnit)
 		return compilationUnit
 	}
-	
-	static def Class createClass((Class)=> void initialization) {
+
+	static def Class createClass((Class)=>void initialization) {
 		var class = ClassifiersFactory.eINSTANCE.createClass
 		initialization.apply(class)
 		return class
 	}
-	
-	static def Interface createInterface((Interface)=> void initialization) {
+
+	static def Interface createInterface((Interface)=>void initialization) {
 		var interface = ClassifiersFactory.eINSTANCE.createInterface
 		initialization.apply(interface)
 		return interface
 	}
-	
-	static def ClassMethod createClassMethod((ClassMethod)=> void initialization) {
+
+	static def ClassMethod createClassMethod((ClassMethod)=>void initialization) {
 		var classMethod = MembersFactory.eINSTANCE.createClassMethod
 		initialization.apply(classMethod)
 		return classMethod
 	}
-	
-	static def Field createField((Field)=> void initialization) {
+
+	static def Field createField((Field)=>void initialization) {
 		var field = MembersFactory.eINSTANCE.createField
 		initialization.apply(field)
 		return field
 	}
-	
-	static def InterfaceMethod createInterfaceMethod((InterfaceMethod)=> void initialization) {
+
+	static def InterfaceMethod createInterfaceMethod((InterfaceMethod)=>void initialization) {
 		var interfaceMethod = MembersFactory.eINSTANCE.createInterfaceMethod
 		initialization.apply(interfaceMethod)
 		return interfaceMethod
 	}
-	
+
 	// === simple types ===
-	
 	static def Void createVoid() {
 		return TypesFactory.eINSTANCE.createVoid
 	}
-	
+
 	static def Int createInt() {
 		return TypesFactory.eINSTANCE.createInt
 	}
-	
+
 	static def Boolean createBoolean() {
 		return TypesFactory.eINSTANCE.createBoolean
 	}
-	
+
 	// === helper ===
-	
 	static def NamespaceClassifierReference getReference(CompilationUnit compilationUnit) {
 		var referencedClassifier = compilationUnit.classifiers.claimOne()
-		
+
 		var classifierReference = TypesFactory.eINSTANCE.createClassifierReference
 		classifierReference.target = referencedClassifier
-		
+
 		var reference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
 		reference.classifierReferences += classifierReference
 		reference.namespaces += compilationUnit.namespaces
-		
+
 		return reference
 	}
-	
-	static def NamespaceClassifierReference getTypedReference(CompilationUnit outerCompilationUnit, CompilationUnit innerCompilationUnit) {
+
+	static def NamespaceClassifierReference getTypedReference(CompilationUnit outerCompilationUnit,
+		CompilationUnit innerCompilationUnit) {
 		val outerReference = getReference(outerCompilationUnit)
 		val innerReference = getReference(innerCompilationUnit)
-		
+
 		val typeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument
 		typeArgument.typeReference = innerReference
-		
+
 		outerReference.classifierReferences.claimOne.typeArguments += typeArgument
-		
+
 		return outerReference
 	}
-	
+
 	static def PrimitiveType getReference(PrimitiveTypeEnum type) {
 		switch (type) {
 			case BOOL: {
@@ -138,12 +136,12 @@ class JavaCreatorsUtil {
 			}
 		}
 	}
-	
+
 	static def String getRequiredInterfacFieldOrVariableName(String interfaceName, String componentName) {
-		 componentName + "_requires_" + interfaceName
+		componentName + "_requires_" + interfaceName
 	}
-	
+
 	static def String captialize(String input) {
-		return input.substring(0,1).toUpperCase() + input.substring(1)
+		return input.substring(0, 1).toUpperCase() + input.substring(1)
 	}
 }
