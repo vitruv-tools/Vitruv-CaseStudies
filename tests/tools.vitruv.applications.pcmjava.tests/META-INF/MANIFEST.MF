@@ -18,5 +18,6 @@ Require-Bundle: org.apache.log4j,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  edu.kit.ipd.sdq.activextendannotations
-Export-Package: tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
+Export-Package: tools.vitruv.applications.pcmjava.tests.pcm2java,
+ tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 Bundle-Vendor: vitruv.tools

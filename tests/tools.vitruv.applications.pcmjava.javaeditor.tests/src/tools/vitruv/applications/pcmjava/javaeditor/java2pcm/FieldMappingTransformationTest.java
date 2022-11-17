@@ -18,7 +18,7 @@ import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
@@ -48,7 +48,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 		final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
 		this.addFieldToClassWithName(cdt.getEntityName(), fieldTypeName, fieldName, InnerDeclaration.class);
 
-		final String newFieldName = fieldName + Pcm2JavaTestUtils.RENAME;
+		final String newFieldName = fieldName + Pcm2JavaTestUtils.RENAME_SUFIX;
 		final InnerDeclaration newInnerDeclaration = this.renameFieldInClass(cdt.getEntityName(), fieldName,
 				newFieldName);
 

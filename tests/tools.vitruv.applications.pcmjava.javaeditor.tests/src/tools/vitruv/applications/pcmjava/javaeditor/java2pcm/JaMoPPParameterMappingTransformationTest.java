@@ -14,7 +14,7 @@ import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
@@ -44,10 +44,10 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
 
 		final Parameter newParameter = this.renameParameterInSignature(opInterface.getEntityName(),
 				opSig.getEntityName(), parameter.getParameterName(),
-				Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
+				Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME_SUFIX);
 
 		this.assertParameter(opSig, newParameter, "String",
-				Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
+				Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME_SUFIX);
 	}
 
 	@Test

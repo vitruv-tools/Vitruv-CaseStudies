@@ -12,7 +12,7 @@ import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 
 public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
@@ -108,7 +108,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
 		this.getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
 		final System pcmSystem = super.addClassInSecondPackage(System.class);
 
-		this.assertPCMNamedElement(pcmSystem, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);
+		this.assertPCMNamedElement(pcmSystem, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX);
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
 
 		final CompositeDataType cdt = this.addClassThatCorrespondsToCompositeDatatype();
 
-		this.assertRepositoryAndPCMNameForDatatype(repo, cdt, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);
+		this.assertRepositoryAndPCMNameForDatatype(repo, cdt, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX);
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
 		final CollectionDataType collection = super.addClassInPackage(this.getDatatypesPackage(),
 				CollectionDataType.class);
 
-		this.assertRepositoryAndPCMNameForDatatype(repo, collection, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);
+		this.assertRepositoryAndPCMNameForDatatype(repo, collection, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX);
 	}
 
 	@Test
@@ -154,10 +154,10 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
 		final BasicComponent basicComponent = this.addClassInSecondPackage(BasicComponent.class);
 
 		final BasicComponent newBasicComponent = super.renameClassifierWithName(basicComponent.getEntityName() + "Impl",
-				Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME + Pcm2JavaTestUtils.RENAME, BasicComponent.class);
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX + Pcm2JavaTestUtils.RENAME_SUFIX, BasicComponent.class);
 
 		this.assertRepositoryAndPCMName(repo, newBasicComponent,
-				Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME + Pcm2JavaTestUtils.RENAME);
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX + Pcm2JavaTestUtils.RENAME_SUFIX);
 		this.assertFilesOnlyForEObjects(newBasicComponent);
 	}
 

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
@@ -24,7 +24,7 @@ public class MethodMappingTransformationTest extends Java2PcmPackageMappingTrans
 
 		final OperationSignature opSig = super.addMethodToInterfaceWithCorrespondence(opInterface.getEntityName());
 
-		this.assertOperationSignature(opSig, opInterface, Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
+		this.assertOperationSignature(opSig, opInterface, Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME);
 	}
 
 	@Test
@@ -37,7 +37,7 @@ public class MethodMappingTransformationTest extends Java2PcmPackageMappingTrans
 				opSig.getEntityName());
 
 		this.assertOperationSignature(newOpSig, opInterface,
-				Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME);
+				Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX);
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class MethodMappingTransformationTest extends Java2PcmPackageMappingTrans
 
 		final OperationSignature newOpSig = this.changeReturnType(opSig);
 
-		this.assertOperationSignature(newOpSig, opInterface, Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
+		this.assertOperationSignature(newOpSig, opInterface, Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME);
 	}
 
 	private OperationSignature changeReturnType(final OperationSignature opSig) throws Throwable {

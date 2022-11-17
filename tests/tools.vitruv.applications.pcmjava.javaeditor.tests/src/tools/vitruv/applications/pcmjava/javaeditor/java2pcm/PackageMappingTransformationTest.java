@@ -7,7 +7,7 @@ import org.palladiosimulator.pcm.repository.CompositeComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
@@ -25,7 +25,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
 	@Test
 	public void testAddFirstPackage() throws Throwable {
 		final Repository repo = super.addRepoContractsAndDatatypesPackage();
-		assertEquals(Pcm2JavaTestUtils.REPOSITORY_NAME_EXPECTED, repo.getEntityName(),
+		assertEquals(Pcm2JavaTestUtils.REPOSITORY_NAME_FIRST_LETTER_UPPERCASE, repo.getEntityName(),
 				"Name of the repository is not the same as the name of the package");
 		this.assertResourceAndFileForEObjects(repo);
 		this.assertFilesOnlyForEObjects(repo);
@@ -80,7 +80,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
 		final Repository repo = super.addRepoContractsAndDatatypesPackage();
 		super.addSecondPackageCorrespondsToBasicComponent();
 
-		final String packageName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME;
+		final String packageName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFIX;
 
 		final Package renamedPackage = super.renamePackage(this.secondPackage, packageName);
 
