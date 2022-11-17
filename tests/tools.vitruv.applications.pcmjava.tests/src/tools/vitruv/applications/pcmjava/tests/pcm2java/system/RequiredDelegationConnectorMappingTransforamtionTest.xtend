@@ -26,6 +26,13 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.clai
 class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 
 	@Test
+	/*
+	 * Arrange:
+	 * - create Repository with with BasicComponent and a Interface as RequiredRole
+	 * - create System with Assembly Context of this Basic Component and Interface as RequiredRole
+	 * Act:
+	 * - add RequiredDelegationConnector between RequiredRoles of AssemblyContext and BasicComponent
+	 */
 	def void testAddRequireDelegationConnector() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)

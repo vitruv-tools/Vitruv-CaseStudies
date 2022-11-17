@@ -115,6 +115,12 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 	}
 
 	@Test
+	/*
+	 * Arrange:
+	 * - add Repository with two DataTypes and Interface with with Parameter of datatype1
+	 * Act:
+	 * - change Signature of Interface to have Parameter of datatype2
+	 */
 	def void testChangeParameterType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
@@ -243,6 +249,12 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 	}
 
 	@Test
+	/*
+	 * Arrange:
+	 * - create Repository with three DataTypes and Interface with Signature
+	 * Act:
+	 * - add three Parameters of datatype1, datatype2 and datatype3 to Interface Signature
+	 */
 	def void testAddMultipleParameters() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
@@ -309,6 +321,13 @@ class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 	}
 
 	@Test
+	/*
+	 * Arrange:
+	 * - create Repository with three DataTypes and Interface with Signature
+	 * - add three Parameters of datatype1, datatype2 and datatype3 to Interface Signature
+	 * Act:
+	 * - remove Parameter with datatype2 from Interface Signature
+	 */
 	def void testAddMultipleParametersAndRemoveOne() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [

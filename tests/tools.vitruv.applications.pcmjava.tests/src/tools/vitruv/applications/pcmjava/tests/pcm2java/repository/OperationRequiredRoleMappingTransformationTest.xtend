@@ -147,6 +147,14 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 	}
 
 	@Test
+	/*
+	 * Arrange:
+	 * - add Repository with two Interfaces and two BasicCompoinents
+	 * - add RequiredRole for interface1 to component1
+	 * Act:
+	 * - change Interface of RequiredRole to interface2
+	 * - move RequiredRole from component1 to component2
+	 */
 	def void testChangeOperationRequiredRole() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
@@ -255,6 +263,13 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 	}
 
 	@Test
+	/*
+	 * Arrange:
+	 * - add Repository with BasicComponent and two Interfaces
+	 * - add RequiredRole for interface1 to BasicComponent
+	 * Act:
+	 * - change Interface of RequiredRole to interface2
+	 */
 	def void testChangeTypeOfOperationRequiredRole() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		changePcmView [
