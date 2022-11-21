@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
+package tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;

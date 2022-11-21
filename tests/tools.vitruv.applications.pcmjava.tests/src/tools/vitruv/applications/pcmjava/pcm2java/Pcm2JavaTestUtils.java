@@ -25,6 +25,8 @@ public final class Pcm2JavaTestUtils {
 	public static final String ASSEMBLY_CONTEXT_NAME = "assemblyContext";
 	public static final String COMPOSITE_COMPONENT_NAME = "TestCompositeComponent";
 	public static final String COLLECTION_DATA_TYPE_NAME = "TestCollectionDatatype";
+	
+	public static final String IMPLEMENTING_CLASS_SUFFIX = "Impl";
 
 	// private ctor for util class
 	private Pcm2JavaTestUtils() {

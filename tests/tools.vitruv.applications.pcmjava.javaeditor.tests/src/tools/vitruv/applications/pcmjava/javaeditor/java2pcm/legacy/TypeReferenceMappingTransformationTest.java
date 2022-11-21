@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
+package tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy;
 
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;

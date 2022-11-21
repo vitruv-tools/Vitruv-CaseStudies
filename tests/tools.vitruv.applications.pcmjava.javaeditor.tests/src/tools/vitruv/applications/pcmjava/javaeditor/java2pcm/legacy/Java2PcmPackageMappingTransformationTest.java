@@ -1,5 +1,5 @@
 
-package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
+package tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy;
 import java.util.Collections;
 import java.util.List;
 
