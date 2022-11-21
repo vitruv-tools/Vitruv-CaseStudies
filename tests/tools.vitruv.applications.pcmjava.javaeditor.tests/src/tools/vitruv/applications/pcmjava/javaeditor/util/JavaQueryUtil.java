@@ -9,6 +9,9 @@ import org.emftext.language.java.containers.Package;
 import tools.vitruv.framework.views.View;
 
 public class JavaQueryUtil {
+	public static final String DATATYPES_PACKAGE = "datatypes";
+	public static final String CONTRACTS_PACKAGE = "contracts";
+	
 	private JavaQueryUtil() {
 	}
 	

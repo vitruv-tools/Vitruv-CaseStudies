@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmjava.javaeditor.util;
 
-import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createPlatformResourceURI;
 import static org.eclipse.emf.common.util.URI.createPlatformResourceURI;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.BlockingProgressMonitor.acceptSynchronousThrowing;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.BlockingProgressMonitor.applySynchronousThrowing;
@@ -10,13 +9,11 @@ import java.nio.file.Path;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -32,7 +29,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringContribution;
 import org.eclipse.ltk.core.refactoring.RefactoringCore;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.InsertEdit;
-import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
@@ -42,7 +38,6 @@ import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.function.ThrowingConsumer;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
-import tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy.CompilationUnitManipulatorHelper;
 
 public class JavaEditorManipulationUtil {
 	private static final Logger logger = Logger.getLogger(JavaEditorManipulationUtil.class);
@@ -58,8 +53,16 @@ public class JavaEditorManipulationUtil {
 	}
 	
 	public void createClass(String name, Package containingPackage, ThrowingConsumer<ICompilationUnit> initialization) throws CoreException {
+		createCompilationUnit(name, "class", containingPackage, initialization);
+	}
+	
+	public void createInterface(String name, Package containingPackage, ThrowingConsumer<ICompilationUnit> initialization) throws CoreException {
+		createCompilationUnit(name, "interface", containingPackage, initialization);
+	}
+	
+	private void createCompilationUnit(String name, String type, Package containingPackage, ThrowingConsumer<ICompilationUnit> initialization) throws CoreException {
 		IPackageFragment packageFragment = getPackageFragment(containingPackage);
-		ICompilationUnit compilationUnit = createEmptyCompilationUnit(packageFragment, "class", name);
+		ICompilationUnit compilationUnit = createEmptyCompilationUnit(packageFragment, type, name);
 		if (initialization != null) {
 			try {
 				initialization.accept(compilationUnit);
@@ -82,6 +85,19 @@ public class JavaEditorManipulationUtil {
 	}
 	
 	public void editCompilationUnit(final ICompilationUnit compilationUnit, final TextEdit... edits) throws JavaModelException {
+		URI originalUri = getFileUri(compilationUnit);
+		editCompilationUnitInternal(compilationUnit, edits);
+		URI changedUri = getFileUri(compilationUnit);
+		if (originalUri != changedUri) {
+			javaEditorView.moveResource(originalUri, changedUri);
+		}
+		javaEditorView.reloadResource(changedUri);
+	}
+	
+	/**
+	 * Modifies the compilation unit without notifying the java editor view about resource changes.
+	 */
+	private void editCompilationUnitInternal(final ICompilationUnit compilationUnit, final TextEdit... edits) throws JavaModelException {
 		acceptSynchronousThrowing(monitor -> compilationUnit.becomeWorkingCopy(monitor));
 		for (final TextEdit edit : edits) {
 			acceptSynchronousThrowing(monitor -> compilationUnit.applyTextEdit(edit, monitor));
@@ -90,7 +106,6 @@ public class JavaEditorManipulationUtil {
 		acceptSynchronousThrowing(monitor -> compilationUnit.commitWorkingCopy(true, monitor));
 		compilationUnit.discardWorkingCopy();
 		acceptSynchronousThrowing(monitor -> compilationUnit.save(monitor, true));
-		javaEditorView.reloadResource(getFileUri(compilationUnit));
 	}
 	
 	public void renamePackage(final Package packageToRename, final String newName) throws CoreException {
@@ -106,19 +121,6 @@ public class JavaEditorManipulationUtil {
 		packageFile = packageFile + "/" + newName + "/package-info.java";
 		refactorRenameJavaElement(newQualifiedName, javaPackage, IJavaRefactorings.RENAME_PACKAGE);
 		javaEditorView.moveResource(oldLocation, URIUtil.createFileURI(projectPath.resolve(SRC_FOLDER).resolve(packageFile).toFile()));
-	}
-	
-	public void renameClassifierWithName(IProject eclipseProject, final String entityName, final String newName) throws Throwable {
-		final ICompilationUnit cu = CompilationUnitManipulatorHelper
-				.findICompilationUnitWithClassName(entityName + ".java", eclipseProject);
-		final int offset = cu.getBuffer().getContents().indexOf(entityName);
-		if (cu.getBuffer() instanceof IBuffer.ITextEditCapability) {
-			logger.info(cu.getBuffer());
-		}
-		final ReplaceEdit edit = new ReplaceEdit(offset, entityName.length(), newName);
-		editCompilationUnit(cu, edit);
-		final URI uri = createPlatformResourceURI(cu.getResource());
-		final Classifier jaMoPPClass = this.getJaMoPPClassifierForURI(uri);
 	}
 	
 	private void refactorRenameJavaElement(final String newName, final IJavaElement iJavaElement,
@@ -156,7 +158,7 @@ public class JavaEditorManipulationUtil {
 		ICompilationUnit compilationUnit = applySynchronousThrowing(monitor -> packageFragment.createCompilationUnit(name + ".java", "", false, null));
 		InsertEdit edit = new InsertEdit(0, "package " + packageFragment.getElementName() + ";" + lineDelimiter
 						+ lineDelimiter + "public " + typeName + " " + name + " { }");
-		editCompilationUnit(compilationUnit, edit);
+		editCompilationUnitInternal(compilationUnit, edit);
 		return compilationUnit;
 	}
 	

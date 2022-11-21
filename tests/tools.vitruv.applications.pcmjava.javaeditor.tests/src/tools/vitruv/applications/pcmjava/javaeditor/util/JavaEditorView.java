@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
 import tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy.Java2PcmTransformationTest;

@@ -244,15 +244,14 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		}
 		refreshProject();
 		StateBasedChangeResolutionStrategy changeResolutionStrategy = new DefaultStateBasedChangeResolutionStrategy();
-//		for (Entry<URI, URI> modifiedResourceURI : oldToNewURIsOfModifiedResources.entrySet()) {
-//			Resource currentResource = loadResourceIndependentFromView(modifiedResourceURI.getValue());
-//			Resource virtualModelResource = resourceAt(modifiedResourceURI.getKey());
-//			VitruviusChange change = changeResolutionStrategy.getChangeSequenceBetween(currentResource,
-//					virtualModelResource);
-//			VitruviusChange unresolvedChange = change.unresolve();
-//			record(resourceAt(modifiedResourceURI.getKey()).getResourceSet(),
-//					resourceSet -> unresolvedChange.resolveAndApply(localUuidResolver));
-//		}
+		for (Entry<URI, URI> modifiedResourceURI : oldToNewURIsOfModifiedResources.entrySet()) {
+			Resource currentResource = loadResourceIndependentFromView(modifiedResourceURI.getValue());
+			VitruviusChange change = changeResolutionStrategy.getChangeSequenceBetween(currentResource,
+					resourceAt(modifiedResourceURI.getKey()));
+			VitruviusChange unresolvedChange = change.unresolve();
+			record(resourceAt(modifiedResourceURI.getKey()).getResourceSet(),
+					resourceSet -> unresolvedChange.resolveAndApply(resourceSet));
+		}
 		oldToNewURIsOfModifiedResources.clear();
 		propagate();
 		disposeViewResources();
