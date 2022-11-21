@@ -6,7 +6,6 @@ import static tools.vitruv.applications.pcmjava.javaeditor.util.BlockingProgress
 
 import java.nio.file.Path;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
@@ -40,7 +39,6 @@ import org.junit.jupiter.api.function.ThrowingConsumer;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 
 public class JavaEditorManipulationUtil {
-	private static final Logger logger = Logger.getLogger(JavaEditorManipulationUtil.class);
 	private static final String SRC_FOLDER = "src";
 	
 	private final JavaEditorView javaEditorView;
