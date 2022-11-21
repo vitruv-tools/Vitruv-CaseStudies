@@ -4,29 +4,37 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil.claimPackage;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimComponent;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimDataType;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleRepository;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleSystem;
 
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.text.edits.ReplaceEdit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CompositeComponent;
+import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
 
-public class ClassMappingTransformationTest extends Java2PcmTransformationTest {
+class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 	/**
 	 * Class that in mapped package and same name as component + impl--> should be
 	 * the new implementing class for the component
 	 */
-	@Test
-	void testAddClassInSecondPackageAsBasicComponent() throws Exception {
+	@ParameterizedTest()
+	@EnumSource(value = Java2PcmUserSelection.class, names = {"SELECT_BASIC_COMPONENT", "SELECT_NOTHING_DECIDE_LATER" })
+	void testAddClassInSecondPackageAsBasicComponent(Java2PcmUserSelection packageSelection) throws Exception {
 		createRepositoryPackage();
 		
-		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		getUserInteraction().addNextSingleSelection(packageSelection.getSelection());
 		changeJavaView(view -> {
 			createPackageWithPackageInfo(view, Pcm2JavaTestUtils.REPOSITORY_NAME, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 		});
@@ -43,11 +51,12 @@ public class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 		});
 	}
 	
-	@Test
-	void testAddClassInSecondPackageAsCompositeComponent() throws Exception {
+	@ParameterizedTest()
+	@EnumSource(value = Java2PcmUserSelection.class, names = {"SELECT_COMPOSITE_COMPONENT", "SELECT_NOTHING_DECIDE_LATER" })
+	void testAddClassInSecondPackageAsCompositeComponent(Java2PcmUserSelection packageSelection) throws Exception {
 		createRepositoryPackage();
 		
-		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
+		getUserInteraction().addNextSingleSelection(packageSelection.getSelection());
 		changeJavaView(view -> {
 			createPackageWithPackageInfo(view, Pcm2JavaTestUtils.REPOSITORY_NAME, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
 		});
@@ -64,11 +73,12 @@ public class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 		});
 	}
 	
-	@Test
-	void testAddClassInSecondPackageAsSystem() throws Exception {
+	@ParameterizedTest()
+	@EnumSource(value = Java2PcmUserSelection.class, names = {"SELECT_SYSTEM", "SELECT_NOTHING_DECIDE_LATER" })
+	void testAddClassInSecondPackageAsSystem(Java2PcmUserSelection packageSelection) throws Exception {
 		createRepositoryPackage();
 		
-		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
+		getUserInteraction().addNextSingleSelection(packageSelection.getSelection());
 		changeJavaView(view -> {
 			createPackageWithPackageInfo(view, Pcm2JavaTestUtils.REPOSITORY_NAME, Pcm2JavaTestUtils.SYSTEM_NAME);
 		});
@@ -111,5 +121,60 @@ public class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 		});
 	}
 	
-	//TODO: add more
+	@Test
+	void testAddClassInDataTypesPackageAsCompositeDataType() throws Exception {
+		createRepositoryPackage();
+		
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.getSelection());
+		changeJavaEditorView(view -> {
+			Package dataTypesPackage = claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
+			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, dataTypesPackage, null);
+		});
+		
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			claimDataType(repository, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, CompositeDataType.class);
+		});
+	}
+	
+	@Test
+	void testAddClassInDataTypesPackageAsNone() throws Exception {
+		createRepositoryPackage();
+		
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
+		changeJavaEditorView(view -> {
+			Package dataTypesPackage = claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
+			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, dataTypesPackage, null);
+		});
+		
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			assertEquals(0, repository.getDataTypes__Repository().size(), "repository must not have any data type");
+		});
+	}
+	
+	@ParameterizedTest()
+	@EnumSource(value = Java2PcmUserSelection.class, names = {"SELECT_BASIC_COMPONENT", "SELECT_NOTHING_DECIDE_LATER" })
+	void testRenameClassCorrespondingToBasicComponent(Java2PcmUserSelection packageSelection) throws Exception {
+		testAddClassInSecondPackageAsBasicComponent(packageSelection);
+		
+		String changedName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME;
+		
+		changeJavaEditorView(view -> {
+			String componentClassName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX;
+			Package componentPackage = claimPackage(view, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
+			ICompilationUnit componentClass = view.getManipulationUtil().claimCompilationUnit(componentClassName, componentPackage);
+			
+			int offset = componentClass.getBuffer().getContents().indexOf(componentClassName);
+			ReplaceEdit renameEdit = new ReplaceEdit(offset, componentClassName.length(), changedName + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX);
+			view.getManipulationUtil().editCompilationUnit(componentClass, renameEdit);
+			//TODO: resource URI is not adjusted to new name
+		});
+		
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			claimComponent(repository, changedName, BasicComponent.class);
+			assertEquals(1, repository.getComponents__Repository().size(), "too many components in repository");
+		});
+	}
 }
