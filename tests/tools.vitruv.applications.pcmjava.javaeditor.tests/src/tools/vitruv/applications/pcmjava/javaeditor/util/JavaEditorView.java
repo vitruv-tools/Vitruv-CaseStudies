@@ -78,9 +78,11 @@ public class JavaEditorView implements CommittableView {
 	
 	private void createJavaProject() {
 		String projectName = projectFolder.getFileName().toString();
-		eclipseProject = IProjectUtil.createProjectAt(projectName, projectFolder);
-		IProjectUtil.configureAsJavaProject(eclipseProject);
-		javaProject = JavaCore.create(eclipseProject);
+		eclipseProject = IProjectUtil.getWorkspaceProject(projectName);
+		if (!eclipseProject.exists()) {
+			eclipseProject = IProjectUtil.createProjectAt(projectName, projectFolder);
+		}
+		javaProject = IProjectUtil.configureAsJavaProject(eclipseProject);
 	}
 
 	@Override

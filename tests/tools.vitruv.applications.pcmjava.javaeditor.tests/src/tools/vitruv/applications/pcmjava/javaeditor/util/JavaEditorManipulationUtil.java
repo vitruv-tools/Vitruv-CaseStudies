@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmjava.javaeditor.util;
 
-import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createFileURI;
 import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createPlatformResourceURI;
 import static org.eclipse.emf.common.util.URI.createPlatformResourceURI;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.BlockingProgressMonitor.acceptSynchronousThrowing;
@@ -20,7 +19,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
@@ -73,15 +71,26 @@ public class JavaEditorManipulationUtil {
 		javaEditorView.reloadResource(getFileUri(compilationUnit));
 	}
 	
-	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits) throws JavaModelException {
-		acceptSynchronousThrowing(monitor -> cu.becomeWorkingCopy(monitor));
-		for (final TextEdit edit : edits) {
-			acceptSynchronousThrowing(monitor -> cu.applyTextEdit(edit, monitor));
+	public ICompilationUnit claimCompilationUnit(String name, Package containingPackage) throws CoreException {
+		IPackageFragment packageFragment = getPackageFragment(containingPackage);
+		for (IJavaElement javaElement : packageFragment.getChildren()) {
+			if (javaElement instanceof ICompilationUnit && javaElement.getElementName().equals(name + ".java")) {
+				return (ICompilationUnit)javaElement;
+			}
 		}
-		acceptSynchronousThrowing(monitor -> cu.reconcile(ICompilationUnit.NO_AST, false, null, monitor));
-		acceptSynchronousThrowing(monitor -> cu.commitWorkingCopy(false, monitor));
-		cu.discardWorkingCopy();
-		acceptSynchronousThrowing(monitor -> cu.save(monitor, true));
+		throw new IllegalStateException("Could not find class " + name + " in package " + containingPackage);
+	}
+	
+	public void editCompilationUnit(final ICompilationUnit compilationUnit, final TextEdit... edits) throws JavaModelException {
+		acceptSynchronousThrowing(monitor -> compilationUnit.becomeWorkingCopy(monitor));
+		for (final TextEdit edit : edits) {
+			acceptSynchronousThrowing(monitor -> compilationUnit.applyTextEdit(edit, monitor));
+		}
+		acceptSynchronousThrowing(monitor -> compilationUnit.reconcile(ICompilationUnit.NO_AST, false, null, monitor));
+		acceptSynchronousThrowing(monitor -> compilationUnit.commitWorkingCopy(true, monitor));
+		compilationUnit.discardWorkingCopy();
+		acceptSynchronousThrowing(monitor -> compilationUnit.save(monitor, true));
+		javaEditorView.reloadResource(getFileUri(compilationUnit));
 	}
 	
 	public void renamePackage(final Package packageToRename, final String newName) throws CoreException {
@@ -96,7 +105,7 @@ public class JavaEditorManipulationUtil {
 		String packageFile = String.join("/", packageToRename.getNamespaces());
 		packageFile = packageFile + "/" + newName + "/package-info.java";
 		refactorRenameJavaElement(newQualifiedName, javaPackage, IJavaRefactorings.RENAME_PACKAGE);
-		javaEditorView.moveResource(oldLocation, createFileURI(projectPath.resolve("src").resolve(packageFile).toFile()));
+		javaEditorView.moveResource(oldLocation, URIUtil.createFileURI(projectPath.resolve(SRC_FOLDER).resolve(packageFile).toFile()));
 	}
 	
 	public void renameClassifierWithName(IProject eclipseProject, final String entityName, final String newName) throws Throwable {
@@ -155,7 +164,7 @@ public class JavaEditorManipulationUtil {
 		if (uri.isPlatform()) {
 			return URIUtil.getIFileForEMFUri(uri);
 		}
-		URI base = createFileURI(projectPath.toFile());
+		URI base = URIUtil.createFileURI(projectPath.toFile());
 		String path = uri.deresolve(base).path();
 		path = path.substring(path.indexOf("/") + 1);
 		URI platformUri = createPlatformResourceURI(projectPath.getFileName().resolve(path).normalize() + "/",
@@ -168,8 +177,13 @@ public class JavaEditorManipulationUtil {
 		return URI.createPlatformResourceURI(uriString, true);
 	}
 	
-	private URI getFileUri(ICompilationUnit compilationUnit) {
-		return URI.createFileURI(compilationUnit.getResource().getFullPath().toString());
+	private URI getFileUri(ICompilationUnit compilationUnit) throws JavaModelException {
+		String[] namespace = compilationUnit.getPackageDeclarations()[0].getElementName().split("\\.");
+		Path path = projectPath.resolve(SRC_FOLDER);
+		for (String partialNamespace : namespace) {
+			path = path.resolve(partialNamespace);
+		}
+		return URIUtil.createFileURI(path.resolve(compilationUnit.getElementName()).toFile());
 	}
 	
 	private IPackageFragmentRoot getRootPackage() throws CoreException {
@@ -177,12 +191,12 @@ public class JavaEditorManipulationUtil {
 			return rootPackageFragment;
 		}
 		
-		IJavaProject javaProject = javaEditorView.getJavaProject();
 		IFolder sourceFolder = javaEditorView.getEclipseProject().getFolder(SRC_FOLDER);
 		if (!sourceFolder.exists()) {
 			acceptSynchronousThrowing(monitor -> sourceFolder.create(true, true, monitor));
 		}
-		return javaProject.getPackageFragmentRoot(sourceFolder);
+		rootPackageFragment = javaEditorView.getJavaProject().getPackageFragmentRoot(sourceFolder);
+		return rootPackageFragment;
 	}
 	
 	private IPackageFragment getPackageFragment(Package somePackage) throws CoreException {

@@ -4,6 +4,8 @@ import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
 
 import java.util.stream.Collectors;
 
+import org.palladiosimulator.pcm.core.entity.NamedElement;
+import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.system.System;
@@ -31,6 +33,13 @@ public class PcmQueryUtil {
 			Class<T> componentType) {
 		return claimOne(repository.getComponents__Repository().stream().filter(componentType::isInstance)
 				.map(componentType::cast).filter(it -> componentName.equals(it.getEntityName()))
+				.collect(Collectors.toList()));
+	}
+	
+	public static <T extends DataType & NamedElement> T claimDataType(Repository repository, String dataTypeName,
+			Class<T> dataTypeType) {
+		return claimOne(repository.getDataTypes__Repository().stream().filter(dataTypeType::isInstance)
+				.map(dataTypeType::cast).filter(it -> dataTypeName.equals(it.getEntityName()))
 				.collect(Collectors.toList()));
 	}
 }

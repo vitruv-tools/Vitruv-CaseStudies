@@ -1,14 +1,11 @@
 package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 
-import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil.claimPackage;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimComponent;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleRepository;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleSystem;
-
-import java.util.stream.Collectors;
 
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
@@ -93,7 +90,7 @@ public class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 	 * Basic Component
 	 */
 	@Test
-	void addClassInSecondPackageAsNone() throws Exception {
+	void testAddClassInSecondPackageAsNone() throws Exception {
 		createRepositoryPackage();
 		
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());

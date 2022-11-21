@@ -11,6 +11,9 @@ import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.function.ThrowingConsumer;
+import org.palladiosimulator.pcm.core.entity.NamedElement;
+import org.palladiosimulator.pcm.repository.DataType;
+import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.javaeditor.util.JavaEditorView;
@@ -76,6 +79,39 @@ public class Java2PcmTransformationTest extends ViewBasedVitruvApplicationTest {
 		URI createPackageURI = getUri(Path.of(JavaPersistenceHelper.buildJavaFilePath(jaMoPPPackage)));
 		view.registerRoot(jaMoPPPackage, createPackageURI);
 		return jaMoPPPackage;
+	}
+	
+	protected String getTypeNameOfPcmDataType(DataType dataType) {
+		if (dataType == null) {
+			return "void";
+		}
+		else if (dataType instanceof PrimitiveDataType) {
+			return getTypeNameFromPrimitveDataType((PrimitiveDataType)dataType);
+		}
+		else if (dataType instanceof NamedElement) {
+			return ((NamedElement)dataType).getEntityName();
+		}
+		throw new RuntimeException("Unknown data type " + dataType);
+	}
+	
+	private String getTypeNameFromPrimitveDataType(final PrimitiveDataType dataType) {
+		switch (dataType.getType()) {
+		case BOOL:
+			return "boolean";
+		case CHAR:
+			return "char";
+		case BYTE:
+			return "byte";
+		case DOUBLE:
+			return "double";
+		case INT:
+			return "int";
+		case LONG:
+			return "long";
+		case STRING:
+			return "String";
+		}
+		throw new RuntimeException("Unknown primitive data type " + dataType);
 	}
 	
 	// === Shortcuts ===
