@@ -45,6 +45,10 @@ public class PcmQueryUtil {
 			Class<T> dataTypeType) {
 		return claimNamedElement(repository.getDataTypes__Repository(), dataTypeName, dataTypeType);
 	}
+	
+	public static <T extends NamedElement> T claimNamedElement(Collection<T> elements, String name) {
+		return claimOne(elements.stream().filter(it -> name.equals(it.getEntityName())).collect(Collectors.toList()));
+	}
 
 	private static <T extends NamedElement> T claimNamedElement(Collection<?> elements, String name, Class<T> type) {
 		return claimOne(elements.stream().filter(type::isInstance).map(type::cast)

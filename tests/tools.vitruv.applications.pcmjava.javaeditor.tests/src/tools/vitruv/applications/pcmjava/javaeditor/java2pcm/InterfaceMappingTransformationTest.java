@@ -5,7 +5,6 @@ import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil.cl
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimInterface;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleRepository;
 
-import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.emftext.language.java.containers.Package;
