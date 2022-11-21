@@ -102,6 +102,10 @@ public class JavaEditorManipulationUtil {
 		for (final TextEdit edit : edits) {
 			acceptSynchronousThrowing(monitor -> compilationUnit.applyTextEdit(edit, monitor));
 		}
+		saveCompilationUnit(compilationUnit);
+	}
+	
+	private void saveCompilationUnit(ICompilationUnit compilationUnit) throws JavaModelException {
 		acceptSynchronousThrowing(monitor -> compilationUnit.reconcile(ICompilationUnit.NO_AST, false, null, monitor));
 		acceptSynchronousThrowing(monitor -> compilationUnit.commitWorkingCopy(true, monitor));
 		compilationUnit.discardWorkingCopy();
@@ -121,6 +125,13 @@ public class JavaEditorManipulationUtil {
 		packageFile = packageFile + "/" + newName + "/package-info.java";
 		refactorRenameJavaElement(newQualifiedName, javaPackage, IJavaRefactorings.RENAME_PACKAGE);
 		javaEditorView.moveResource(oldLocation, URIUtil.createFileURI(projectPath.resolve(SRC_FOLDER).resolve(packageFile).toFile()));
+	}
+	
+	public void addImportToCompilationUnit(ICompilationUnit compilationUnit, ICompilationUnit compilationUnitToImport, String classifierToImport) throws JavaModelException {
+		acceptSynchronousThrowing(monitor -> compilationUnit.becomeWorkingCopy(monitor));
+		final String namespace = compilationUnitToImport.getType(classifierToImport).getFullyQualifiedName();
+		acceptSynchronousThrowing(monitor -> compilationUnit.createImport(namespace, null, monitor));
+		saveCompilationUnit(compilationUnit);
 	}
 	
 	private void refactorRenameJavaElement(final String newName, final IJavaElement iJavaElement,

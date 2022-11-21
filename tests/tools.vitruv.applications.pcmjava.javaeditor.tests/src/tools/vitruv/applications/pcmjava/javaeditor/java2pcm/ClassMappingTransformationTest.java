@@ -33,8 +33,8 @@ public class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 		
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		changeJavaEditorView(view -> {
-			Package innerPackage = claimPackage(view, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
-			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, innerPackage, null);
+			Package componentPackage = claimPackage(view, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
+			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, componentPackage, null);
 		});
 		
 		validatePcmView(view -> {
@@ -54,8 +54,8 @@ public class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 		
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
 		changeJavaEditorView(view -> {
-			Package innerPackage = claimPackage(view, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
-			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, innerPackage, null);
+			Package componentPackage = claimPackage(view, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
+			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, componentPackage, null);
 		});
 		
 		validatePcmView(view -> {
@@ -75,8 +75,8 @@ public class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 		
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
 		changeJavaEditorView(view -> {
-			Package innerPackage = claimPackage(view, Pcm2JavaTestUtils.SYSTEM_NAME);
-			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, innerPackage, null);
+			Package systemPackage = claimPackage(view, Pcm2JavaTestUtils.SYSTEM_NAME);
+			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, systemPackage, null);
 		});
 		
 		validatePcmView(view -> {
@@ -100,8 +100,8 @@ public class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 		
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
 		changeJavaEditorView(view -> {
-			Package innerPackage = claimPackage(view, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
-			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, innerPackage, null);
+			Package componentPackage = claimPackage(view, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
+			view.getManipulationUtil().createClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, componentPackage, null);
 		});
 		
 		validatePcmView(view -> {

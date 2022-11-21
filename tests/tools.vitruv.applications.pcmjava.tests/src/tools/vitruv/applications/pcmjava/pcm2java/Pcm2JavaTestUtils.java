@@ -27,6 +27,8 @@ public final class Pcm2JavaTestUtils {
 	public static final String COLLECTION_DATA_TYPE_NAME = "TestCollectionDatatype";
 	
 	public static final String IMPLEMENTING_CLASS_SUFFIX = "Impl";
+	
+	private static final String PROVIDES_INTERFACE = "_provides_";
 
 	// private ctor for util class
 	private Pcm2JavaTestUtils() {
@@ -56,5 +58,9 @@ public final class Pcm2JavaTestUtils {
 		final System system = SystemFactory.eINSTANCE.createSystem();
 		system.setEntityName(systemName);
 		return system;
+	}
+	
+	public static String providesInterfaceName(String componentName, String interfaceName) {
+		return componentName + PROVIDES_INTERFACE + interfaceName;
 	}
 }
