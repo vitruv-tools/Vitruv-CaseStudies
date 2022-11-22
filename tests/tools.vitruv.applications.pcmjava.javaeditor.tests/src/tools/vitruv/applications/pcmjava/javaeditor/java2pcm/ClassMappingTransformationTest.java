@@ -15,7 +15,7 @@ import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOS
 import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.SYSTEM_NAME;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.text.edits.ReplaceEdit;
+import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,6 +28,7 @@ import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory;
 
 class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 	/**
@@ -179,12 +180,9 @@ class ClassMappingTransformationTest extends Java2PcmTransformationTest {
 			Package componentPackage = claimPackage(view, BASIC_COMPONENT_NAME);
 			ICompilationUnit componentClass = view.getManipulationUtil().claimCompilationUnit(componentClassName,
 					componentPackage);
-
-			int offset = componentClass.getBuffer().getContents().indexOf(componentClassName);
-			ReplaceEdit renameEdit = new ReplaceEdit(offset, componentClassName.length(),
+			TextEdit renameEdit = JavaTextEditFactory.renameCompilationUnit(componentClass, componentClassName,
 					changedName + IMPLEMENTING_CLASS_SUFFIX);
 			view.getManipulationUtil().editCompilationUnit(componentClass, renameEdit);
-			// TODO: resource URI is not adjusted to new name
 		});
 
 		validatePcmView(view -> {

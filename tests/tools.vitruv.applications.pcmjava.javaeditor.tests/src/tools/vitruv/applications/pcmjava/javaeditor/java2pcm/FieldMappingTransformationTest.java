@@ -3,6 +3,7 @@ package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil.claimPackage;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory.Visibility.PRIVATE;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimComponent;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimDataType;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimInterface;
@@ -16,11 +17,8 @@ import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.RENAM
 import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOSITORY_NAME;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.text.edits.DeleteEdit;
-import org.eclipse.text.edits.InsertEdit;
+import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -32,8 +30,8 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import org.palladiosimulator.pcm.repository.Repository;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
-import tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory;
 
 class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 	private static final String FIELD_TYPE = "String";
@@ -58,9 +56,10 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 			Package datatypesPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
 			ICompilationUnit compilationUnit = view.getManipulationUtil().claimCompilationUnit(compilationUnitName,
 					datatypesPackage);
+			IType compilationUnitType = compilationUnit.getType(compilationUnitName);
 
-			InsertEdit insertEdit = editForAddingField(FIELD_NAME, FIELD_TYPE, compilationUnit, compilationUnitName);
-			view.getManipulationUtil().editCompilationUnit(compilationUnit, insertEdit);
+			TextEdit addFieldEdit = JavaTextEditFactory.addField(compilationUnitType, PRIVATE, FIELD_NAME, FIELD_TYPE);
+			view.getManipulationUtil().editCompilationUnit(compilationUnit, addFieldEdit);
 		});
 
 		validatePcmView(view -> {
@@ -83,18 +82,10 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 			Package datatypesPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
 			ICompilationUnit compilationUnit = view.getManipulationUtil().claimCompilationUnit(compilationUnitName,
 					datatypesPackage);
-
 			IType type = compilationUnit.getType(compilationUnitName);
-			IField fieldToRename = type.getField(FIELD_NAME);
-			String fieldToRenameStr = fieldToRename.getSource();
-			String fieldToRenameType = fieldToRenameStr.split(" ")[1];
-			String fieldToRenameName = fieldToRenameStr.split(" ")[2];
-			int offset = fieldToRename.getSourceRange().getOffset() + fieldToRenameStr.indexOf(fieldToRenameType)
-					+ fieldToRenameType.length() + 1;
-			int lengthToDelete = fieldToRenameName.length();
-			DeleteEdit deleteEdit = new DeleteEdit(offset, lengthToDelete);
-			InsertEdit insertEdit = new InsertEdit(offset, changedFieldName + ";");
-			view.getManipulationUtil().editCompilationUnit(compilationUnit, deleteEdit, insertEdit);
+			
+			TextEdit renameFieldEdit = JavaTextEditFactory.renameField(type, FIELD_NAME, changedFieldName);
+			view.getManipulationUtil().editCompilationUnit(compilationUnit, renameFieldEdit);
 		});
 
 		validatePcmView(view -> {
@@ -117,16 +108,10 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 			Package datatypesPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
 			ICompilationUnit compilationUnit = view.getManipulationUtil().claimCompilationUnit(compilationUnitName,
 					datatypesPackage);
-
 			IType type = compilationUnit.getType(compilationUnitName);
-			IField fieldToRename = type.getField(FIELD_NAME);
-			String fieldSrc = fieldToRename.getSource();
-			String fieldType = fieldSrc.split(" ")[1];
-			int offset = fieldToRename.getSourceRange().getOffset() + fieldSrc.indexOf(fieldType);
-			int lengthToDelete = fieldType.length();
-			DeleteEdit deleteEdit = new DeleteEdit(offset, lengthToDelete);
-			InsertEdit insertEdit = new InsertEdit(offset, changedFieldTypeName);
-			view.getManipulationUtil().editCompilationUnit(compilationUnit, deleteEdit, insertEdit);
+			
+			TextEdit changeTypeEdit = JavaTextEditFactory.changeTypeOfField(type, FIELD_NAME, changedFieldTypeName);
+			view.getManipulationUtil().editCompilationUnit(compilationUnit, changeTypeEdit);
 		});
 
 		validatePcmView(view -> {
@@ -166,16 +151,16 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 			Package providingPackage = JavaQueryUtil.claimPackage(view, PROVIDING_COMPONENT_NAME);
 			ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
 					.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
+			IType providingCompilationUnitType = providingCompilationUnit.getType(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
 
 			Package contractsPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
+			
 			view.getManipulationUtil().addImportToCompilationUnit(providingCompilationUnit, anInterface,
 					INTERFACE_NAME);
-
-			InsertEdit insertEdit = editForAddingField(fieldName, fieldType, providingCompilationUnit,
-					PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
-			view.getManipulationUtil().editCompilationUnit(providingCompilationUnit, insertEdit);
+			TextEdit addFieldEdit = JavaTextEditFactory.addField(providingCompilationUnitType, PRIVATE, fieldName, fieldType);
+			view.getManipulationUtil().editCompilationUnit(providingCompilationUnit, addFieldEdit);
 		});
 
 		validatePcmView(view -> {
@@ -205,16 +190,16 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 			Package requiringPackage = JavaQueryUtil.claimPackage(view, REQUIRING_COMPONENT_NAME);
 			ICompilationUnit requiringCompilationUnit = view.getManipulationUtil()
 					.claimCompilationUnit(REQUIRING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, requiringPackage);
+			IType requiringCompilationUnitType = requiringCompilationUnit.getType(REQUIRING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
 
 			Package providingPackage = JavaQueryUtil.claimPackage(view, PROVIDING_COMPONENT_NAME);
 			ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
 					.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
+			
 			view.getManipulationUtil().addImportToCompilationUnit(requiringCompilationUnit, providingCompilationUnit,
 					PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
-
-			InsertEdit insertEdit = editForAddingField(fieldName, fieldType, requiringCompilationUnit,
-					REQUIRING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
-			view.getManipulationUtil().editCompilationUnit(requiringCompilationUnit, insertEdit);
+			TextEdit addFieldEdit = JavaTextEditFactory.addField(requiringCompilationUnitType, PRIVATE, fieldName, fieldType);
+			view.getManipulationUtil().editCompilationUnit(requiringCompilationUnit, addFieldEdit);
 		});
 
 		validatePcmView(view -> {
@@ -259,45 +244,19 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 			Package providingPackage = JavaQueryUtil.claimPackage(view, PROVIDING_COMPONENT_NAME);
 			view.getManipulationUtil().createClass(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX,
 					providingPackage, null);
+			ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
+					.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
 
 			Package contractsPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			view.getManipulationUtil().createInterface(INTERFACE_NAME, contractsPackage, null);
+			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
+					contractsPackage);
 
-			{
-				ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
-						.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
-				ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
-						contractsPackage);
-				view.getManipulationUtil().addImportToCompilationUnit(providingCompilationUnit, anInterface,
-						INTERFACE_NAME);
-
-				IType classType = providingCompilationUnit
-						.getType(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
-				String newSource = " implements " + INTERFACE_NAME;
-				int offset = classType.getSourceRange().getOffset();
-				int firstBracket = classType.getSource().indexOf("{");
-				offset = offset + firstBracket - 1;
-				final InsertEdit insertEdit = new InsertEdit(offset, newSource);
-				view.getManipulationUtil().editCompilationUnit(providingCompilationUnit, insertEdit);
-			}
+			view.getManipulationUtil().addImportToCompilationUnit(providingCompilationUnit, anInterface,
+					INTERFACE_NAME);
+			IType classType = providingCompilationUnit.getType(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
+			TextEdit implementsEdit = JavaTextEditFactory.addImplementsRelation(classType, INTERFACE_NAME);
+			view.getManipulationUtil().editCompilationUnit(providingCompilationUnit, implementsEdit);
 		});
-	}
-
-	/**
-	 * Creates an edit action that inserts a private field into the class
-	 * 
-	 * @param fieldName       is the field name
-	 * @param fieldType       is the field type
-	 * @param compilationUnit is the compilation unit to edit
-	 * @param typeName        is the type within the compilation unit to edit
-	 * @return an edit action that can be applied to the compilation unit to add a
-	 *         field
-	 */
-	private InsertEdit editForAddingField(String fieldName, String fieldType, ICompilationUnit compilationUnit,
-			String typeName) throws JavaModelException {
-		IType iClass = compilationUnit.getType(typeName);
-		int offset = CompilationUnitManipulatorHelper.getOffsetForClassifierManipulation(iClass);
-		String fieldStr = "private " + fieldType + " " + fieldName + ";";
-		return new InsertEdit(offset, fieldStr);
 	}
 }

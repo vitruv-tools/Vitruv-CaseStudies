@@ -10,7 +10,7 @@ import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.RENAM
 import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOSITORY_NAME;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.text.edits.ReplaceEdit;
+import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
@@ -18,6 +18,7 @@ import org.palladiosimulator.pcm.repository.Repository;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory;
 
 class InterfaceMappingTransformationTest extends Java2PcmTransformationTest {
 	/**
@@ -104,11 +105,9 @@ class InterfaceMappingTransformationTest extends Java2PcmTransformationTest {
 			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
-
-			int offset = anInterface.getBuffer().getContents().indexOf(INTERFACE_NAME);
-			ReplaceEdit renameEdit = new ReplaceEdit(offset, INTERFACE_NAME.length(), INTERFACE_NAME + RENAME);
+			TextEdit renameEdit = JavaTextEditFactory.renameCompilationUnit(anInterface, INTERFACE_NAME,
+					INTERFACE_NAME + RENAME);
 			view.getManipulationUtil().editCompilationUnit(anInterface, renameEdit);
-			// TODO: resource URI is not adjusted to new name
 		});
 
 		validatePcmView(view -> {

@@ -12,12 +12,8 @@ import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.PARAM
 import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.RENAME;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.ILocalVariable;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.text.edits.InsertEdit;
-import org.eclipse.text.edits.ReplaceEdit;
+import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
@@ -25,8 +21,8 @@ import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory;
 
 class ParameterMappingTransformationTest extends Java2PcmTransformationTest {
 	private static final String PARAMETER_TYPE = "String";
@@ -40,26 +36,22 @@ class ParameterMappingTransformationTest extends Java2PcmTransformationTest {
 			view.getManipulationUtil().createInterface(INTERFACE_NAME, contractsPackage, null);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
 
-			String methodName = OPERATION_SIGNATURE_1_NAME;
-			String returnType = "void";
-			String methodSignature = "\n" + returnType + " " + methodName + "();\n";
-
-			IType firstType = anInterface.getAllTypes()[0];
-			int offset = CompilationUnitManipulatorHelper.getOffsetForClassifierManipulation(firstType);
-			InsertEdit insertEdit = new InsertEdit(offset, methodSignature);
-			view.getManipulationUtil().editCompilationUnit(anInterface, insertEdit);
+			TextEdit addMethodEdit = JavaTextEditFactory.addMethodSignature(interfaceType, "void",
+					OPERATION_SIGNATURE_1_NAME);
+			view.getManipulationUtil().editCompilationUnit(anInterface, addMethodEdit);
 		});
 
 		changeJavaEditorView(view -> {
 			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
-			IMethod iMethod = anInterface.getType(INTERFACE_NAME).getMethod(OPERATION_SIGNATURE_1_NAME, null);
-			String parameterString = PARAMETER_TYPE + " " + PARAMETER_NAME;
-			int offset = iMethod.getSourceRange().getOffset() + iMethod.getSourceRange().getLength() - 2;
-			InsertEdit insertEdit = new InsertEdit(offset, parameterString);
-			view.getManipulationUtil().editCompilationUnit(anInterface, insertEdit);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
+
+			TextEdit addParameterEdit = JavaTextEditFactory.addMethodParameter(interfaceType,
+					OPERATION_SIGNATURE_1_NAME, PARAMETER_NAME, PARAMETER_TYPE);
+			view.getManipulationUtil().editCompilationUnit(anInterface, addParameterEdit);
 		});
 
 		validatePcmView(view -> {
@@ -84,14 +76,11 @@ class ParameterMappingTransformationTest extends Java2PcmTransformationTest {
 			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
-			IMethod iMethod = findIMethodByName(OPERATION_SIGNATURE_1_NAME, anInterface.getType(INTERFACE_NAME));
-			ILocalVariable parameter = this.findParameterInIMethod(iMethod, PARAMETER_NAME);
-			String typeName = parameter.getSource().split(" ")[0];
-			String paramName = parameter.getSource().split(" ")[1];
-			int offset = parameter.getSourceRange().getOffset() + typeName.length() + 1;
-			int length = paramName.length();
-			ReplaceEdit replaceEdit = new ReplaceEdit(offset, length, changedParameterName);
-			view.getManipulationUtil().editCompilationUnit(anInterface, replaceEdit);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
+
+			TextEdit renameParameterEdit = JavaTextEditFactory.renameMethodParameter(interfaceType,
+					OPERATION_SIGNATURE_1_NAME, PARAMETER_NAME, changedParameterName);
+			view.getManipulationUtil().editCompilationUnit(anInterface, renameParameterEdit);
 		});
 
 		validatePcmView(view -> {
@@ -116,12 +105,11 @@ class ParameterMappingTransformationTest extends Java2PcmTransformationTest {
 			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
-			IMethod iMethod = findIMethodByName(OPERATION_SIGNATURE_1_NAME, anInterface.getType(INTERFACE_NAME));
-			ILocalVariable parameter = this.findParameterInIMethod(iMethod, PARAMETER_NAME);
-			int offset = parameter.getSourceRange().getOffset();
-			int length = parameter.getSource().split(" ")[0].length();
-			ReplaceEdit replaceEdit = new ReplaceEdit(offset, length, changedParameterType);
-			view.getManipulationUtil().editCompilationUnit(anInterface, replaceEdit);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
+
+			TextEdit changeParameterTypeEdit = JavaTextEditFactory.changeParameterType(interfaceType,
+					OPERATION_SIGNATURE_1_NAME, PARAMETER_NAME, changedParameterType);
+			view.getManipulationUtil().editCompilationUnit(anInterface, changeParameterTypeEdit);
 		});
 
 		validatePcmView(view -> {
@@ -134,24 +122,5 @@ class ParameterMappingTransformationTest extends Java2PcmTransformationTest {
 			assertEquals(changedParameterType, getTypeNameOfPcmDataType(parameter.getDataType__Parameter()),
 					"invalid parameter type");
 		});
-	}
-
-	protected IMethod findIMethodByName(final String methodName, final IType type) throws JavaModelException {
-		for (final IMethod method : type.getMethods()) {
-			if (method.getElementName().equals(methodName)) {
-				return method;
-			}
-		}
-		throw new RuntimeException("Method " + methodName + " not found in type " + type);
-	}
-
-	private ILocalVariable findParameterInIMethod(final IMethod iMethod, final String parameterName)
-			throws JavaModelException {
-		for (final ILocalVariable localVariable : iMethod.getParameters()) {
-			if (localVariable.getElementName().equals(parameterName)) {
-				return localVariable;
-			}
-		}
-		throw new RuntimeException("Old parameter with name " + parameterName + " not found");
 	}
 }

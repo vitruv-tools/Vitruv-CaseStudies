@@ -3,6 +3,7 @@ package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil.claimPackage;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory.Visibility.PUBLIC;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimComponent;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimInterface;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimNamedElement;
@@ -15,7 +16,7 @@ import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOS
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.text.edits.InsertEdit;
+import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -26,8 +27,8 @@ import org.palladiosimulator.pcm.repository.Signature;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
-import tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
 
 class ClassMethodMappingTransformationTest extends Java2PcmTransformationTest {
@@ -49,32 +50,20 @@ class ClassMethodMappingTransformationTest extends Java2PcmTransformationTest {
 					null);
 			ICompilationUnit componentClass = view.getManipulationUtil()
 					.claimCompilationUnit(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, componentPackage);
+			IType basicComponentType = componentClass.getType(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
 
 			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			view.getManipulationUtil().createInterface(INTERFACE_NAME, contractsPackage, null);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
+			
+			TextEdit addMethodEdit = JavaTextEditFactory.addMethodSignature(interfaceType, "void", OPERATION_SIGNATURE_1_NAME);
+			view.getManipulationUtil().editCompilationUnit(anInterface, addMethodEdit);
 
-			{
-				String methodName = OPERATION_SIGNATURE_1_NAME;
-				String methodSignature = "\nvoid " + methodName + "();\n";
-				IType firstType = anInterface.getAllTypes()[0];
-				int offset = CompilationUnitManipulatorHelper.getOffsetForClassifierManipulation(firstType);
-				InsertEdit insertEdit = new InsertEdit(offset, methodSignature);
-				view.getManipulationUtil().editCompilationUnit(anInterface, insertEdit);
-			}
-
-			{
-				view.getManipulationUtil().addImportToCompilationUnit(componentClass, anInterface, INTERFACE_NAME);
-
-				IType classType = componentClass.getType(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
-				String newSource = " implements " + INTERFACE_NAME;
-				int offset = classType.getSourceRange().getOffset();
-				int firstBracket = classType.getSource().indexOf("{");
-				offset = offset + firstBracket - 1;
-				final InsertEdit insertEdit = new InsertEdit(offset, newSource);
-				view.getManipulationUtil().editCompilationUnit(componentClass, insertEdit);
-			}
+			view.getManipulationUtil().addImportToCompilationUnit(componentClass, anInterface, INTERFACE_NAME);
+			TextEdit implementsEdit = JavaTextEditFactory.addImplementsRelation(basicComponentType, INTERFACE_NAME);
+			view.getManipulationUtil().editCompilationUnit(componentClass, implementsEdit);
 		});
 
 		// add implementation of interface method to class
@@ -82,12 +71,10 @@ class ClassMethodMappingTransformationTest extends Java2PcmTransformationTest {
 			Package componentPackage = claimPackage(view, BASIC_COMPONENT_NAME);
 			ICompilationUnit componentClass = view.getManipulationUtil()
 					.claimCompilationUnit(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, componentPackage);
-
-			final String methodBlock = "\n\tpublic void " + OPERATION_SIGNATURE_1_NAME + " () {\n\t}\n";
-			IType firstType = componentClass.getAllTypes()[0];
-			int offset = CompilationUnitManipulatorHelper.getOffsetForClassifierManipulation(firstType);
-			InsertEdit insertEdit = new InsertEdit(offset, methodBlock);
-			view.getManipulationUtil().editCompilationUnit(componentClass, insertEdit);
+			IType componentClassType = componentClass.getType(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
+			
+			TextEdit addMethodEdit = JavaTextEditFactory.addMethodWithEmptyBody(componentClassType, PUBLIC, "void", OPERATION_SIGNATURE_1_NAME);
+			view.getManipulationUtil().editCompilationUnit(componentClass, addMethodEdit);
 		});
 
 		validatePcmView(view -> {

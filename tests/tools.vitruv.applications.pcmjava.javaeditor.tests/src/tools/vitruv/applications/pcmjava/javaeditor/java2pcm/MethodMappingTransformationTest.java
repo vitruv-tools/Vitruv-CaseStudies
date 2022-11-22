@@ -10,19 +10,16 @@ import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.OPERA
 import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.RENAME;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.text.edits.DeleteEdit;
-import org.eclipse.text.edits.InsertEdit;
-import org.eclipse.text.edits.ReplaceEdit;
+import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory;
 
 class MethodMappingTransformationTest extends Java2PcmTransformationTest {
 	@Test
@@ -40,14 +37,11 @@ class MethodMappingTransformationTest extends Java2PcmTransformationTest {
 			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
 
-			String methodName = OPERATION_SIGNATURE_1_NAME;
-			String methodSignature = "\n" + returnType + " " + methodName + "();\n";
-
-			IType firstType = anInterface.getAllTypes()[0];
-			int offset = CompilationUnitManipulatorHelper.getOffsetForClassifierManipulation(firstType);
-			InsertEdit insertEdit = new InsertEdit(offset, methodSignature);
-			view.getManipulationUtil().editCompilationUnit(anInterface, insertEdit);
+			TextEdit addMethodEdit = JavaTextEditFactory.addMethodSignature(interfaceType, returnType,
+					OPERATION_SIGNATURE_1_NAME);
+			view.getManipulationUtil().editCompilationUnit(anInterface, addMethodEdit);
 		});
 
 		validatePcmView(view -> {
@@ -56,8 +50,10 @@ class MethodMappingTransformationTest extends Java2PcmTransformationTest {
 					OperationInterface.class);
 			OperationSignature operationSignature = claimNamedElement(
 					operationInterface.getSignatures__OperationInterface(), OPERATION_SIGNATURE_1_NAME);
-			assertEquals(0, operationSignature.getParameters__OperationSignature().size());
-			assertEquals(returnType, getTypeNameOfPcmDataType(operationSignature.getReturnType__OperationSignature()));
+			assertEquals(0, operationSignature.getParameters__OperationSignature().size(),
+					"signature must not have any parameters");
+			assertEquals(returnType, getTypeNameOfPcmDataType(operationSignature.getReturnType__OperationSignature()),
+					"signature has wrong return type");
 		});
 	}
 
@@ -69,13 +65,11 @@ class MethodMappingTransformationTest extends Java2PcmTransformationTest {
 			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
 
-			IMethod iMethod = anInterface.getType(INTERFACE_NAME).getMethod(OPERATION_SIGNATURE_1_NAME, null);
-			int offset = iMethod.getNameRange().getOffset();
-			int length = iMethod.getNameRange().getLength();
-			String newMethodName = OPERATION_SIGNATURE_1_NAME + RENAME;
-			ReplaceEdit renameEdit = new ReplaceEdit(offset, length, newMethodName);
-			view.getManipulationUtil().editCompilationUnit(anInterface, renameEdit);
+			TextEdit renameMethodEdit = JavaTextEditFactory.renameMethod(interfaceType, OPERATION_SIGNATURE_1_NAME,
+					OPERATION_SIGNATURE_1_NAME + RENAME);
+			view.getManipulationUtil().editCompilationUnit(anInterface, renameMethodEdit);
 		});
 
 		validatePcmView(view -> {
@@ -99,14 +93,10 @@ class MethodMappingTransformationTest extends Java2PcmTransformationTest {
 			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
 			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
 					contractsPackage);
-
-			IMethod iMethod = anInterface.getType(INTERFACE_NAME).getMethod(OPERATION_SIGNATURE_1_NAME, null);
-			int returnTypeOffset = iMethod.getSourceRange().getOffset();
-			String retTypeName = iMethod.getSource().split(" ")[0];
-			int returnTypeLength = retTypeName.length();
-			DeleteEdit deleteEdit = new DeleteEdit(returnTypeOffset, returnTypeLength);
-			InsertEdit insertEdit = new InsertEdit(returnTypeOffset, changedReturnType);
-			view.getManipulationUtil().editCompilationUnit(anInterface, deleteEdit, insertEdit);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
+			
+			TextEdit changeReturnTypeEdit = JavaTextEditFactory.changeReturnTypeOfMethod(interfaceType, OPERATION_SIGNATURE_1_NAME, changedReturnType);
+			view.getManipulationUtil().editCompilationUnit(anInterface, changeReturnTypeEdit);
 		});
 
 		validatePcmView(view -> {
@@ -115,9 +105,9 @@ class MethodMappingTransformationTest extends Java2PcmTransformationTest {
 					OperationInterface.class);
 			OperationSignature operationSignature = claimNamedElement(
 					operationInterface.getSignatures__OperationInterface(), OPERATION_SIGNATURE_1_NAME);
-			assertEquals(0, operationSignature.getParameters__OperationSignature().size());
+			assertEquals(0, operationSignature.getParameters__OperationSignature().size(), "signature must not have any parameters");
 			assertEquals(changedReturnType,
-					getTypeNameOfPcmDataType(operationSignature.getReturnType__OperationSignature()));
+					getTypeNameOfPcmDataType(operationSignature.getReturnType__OperationSignature()), "signature has wrong return type");
 		});
 	}
 }

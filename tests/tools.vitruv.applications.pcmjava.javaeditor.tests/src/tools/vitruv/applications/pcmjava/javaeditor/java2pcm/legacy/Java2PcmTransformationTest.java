@@ -98,7 +98,6 @@ import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.framework.views.changederivation.DefaultStateBasedChangeResolutionStrategy;
 import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
-import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 import tools.vitruv.testutils.views.UriMode;

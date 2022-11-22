@@ -13,7 +13,7 @@ import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOS
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.text.edits.InsertEdit;
+import org.eclipse.text.edits.TextEdit;
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -23,6 +23,7 @@ import org.palladiosimulator.pcm.repository.Repository;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
 
 class TypeReferenceMappingTransformationTest extends Java2PcmTransformationTest {
@@ -56,12 +57,8 @@ class TypeReferenceMappingTransformationTest extends Java2PcmTransformationTest 
 			view.getManipulationUtil().addImportToCompilationUnit(componentClass, anInterface, INTERFACE_NAME);
 
 			IType classType = componentClass.getType(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
-			String newSource = " implements " + INTERFACE_NAME;
-			int offset = classType.getSourceRange().getOffset();
-			int firstBracket = classType.getSource().indexOf("{");
-			offset = offset + firstBracket - 1;
-			final InsertEdit insertEdit = new InsertEdit(offset, newSource);
-			view.getManipulationUtil().editCompilationUnit(componentClass, insertEdit);
+			TextEdit implementsEdit = JavaTextEditFactory.addImplementsRelation(classType, INTERFACE_NAME);
+			view.getManipulationUtil().editCompilationUnit(componentClass, implementsEdit);
 		});
 
 		validatePcmView(view -> {
