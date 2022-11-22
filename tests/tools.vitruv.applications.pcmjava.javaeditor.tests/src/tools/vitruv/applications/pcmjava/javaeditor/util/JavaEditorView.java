@@ -2,15 +2,19 @@ package tools.vitruv.applications.pcmjava.javaeditor.util;
 
 import static tools.vitruv.applications.pcmjava.javaeditor.util.BlockingProgressMonitor.acceptSynchronousThrowing;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jdt.core.IJavaProject;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
@@ -25,26 +29,26 @@ import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionS
 
 public class JavaEditorView implements CommittableView {
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class);
-	
+
 	private final Path projectFolder;
 	private CommittableView view;
 	private IProject eclipseProject;
 	private IJavaProject javaProject;
-	
+
 	public JavaEditorView(Path projectFolder, View view) {
 		this.projectFolder = projectFolder;
 		this.view = view.withChangeDerivingTrait();
 		createJavaProject();
 	}
-	
+
 	public IProject getEclipseProject() {
 		return eclipseProject;
 	}
-	
+
 	public IJavaProject getJavaProject() {
 		return javaProject;
 	}
-	
+
 	public JavaEditorManipulationUtil getManipulationUtil() {
 		return new JavaEditorManipulationUtil(this, projectFolder);
 	}
@@ -74,7 +78,7 @@ public class JavaEditorView implements CommittableView {
 		view.update();
 		createJavaProject();
 	}
-	
+
 	private void createJavaProject() {
 		String projectName = projectFolder.getFileName().toString();
 		eclipseProject = IProjectUtil.getWorkspaceProject(projectName);
@@ -98,15 +102,51 @@ public class JavaEditorView implements CommittableView {
 	public void moveRoot(EObject object, URI newLocation) {
 		view.moveRoot(object, newLocation);
 	}
-	
-	@Override
+
+	/**
+	 * Reloads a resource at the given location.
+	 * 
+	 * @param location is the location of the resource.
+	 */
 	public void reloadResource(URI location) {
-		view.reloadResource(location);
+		// TODO: this is just a hack to circumvent missing support from the View
+		// interface. The resources of the element should not be accessed directly, so
+		// for the long-term we need to evaluate whether we want to add the here
+		// implemented functionality to the View interface.
+		Resource oldResource = getRootObjects().stream().map(it -> it.eResource())
+				.filter(r -> r.getURI().equals(location)).findAny().orElse(null);
+		if (oldResource == null) {
+			Resource resource = new ResourceSetImpl().getResource(location, true);
+			for (EObject root : resource.getContents()) {
+				view.registerRoot(root, location);
+			}
+		} else {
+			oldResource.unload();
+			try {
+				oldResource.load(null);
+			} catch (IOException e) {
+				logger.error("Failed to load resource at " + location, e);
+			}
+		}
 	}
-	
-	@Override
+
+	/**
+	 * Moves a resource from the old to the new location and reloads its content.
+	 * 
+	 * @param oldLocation is the old location.
+	 * @param newLocation is the new location.
+	 */
 	public void moveResource(URI oldLocation, URI newLocation) {
-		view.moveResource(oldLocation, newLocation);
+		// TODO: this is just a hack to circumvent missing support from the View
+		// interface. The resources of the element should not be accessed directly, so
+		// for the long-term we need to evaluate whether we want to add the here
+		// implemented functionality to the View interface.
+		Optional<Resource> existingResource = getRootObjects().stream().map(it -> it.eResource())
+				.filter(r -> r.getURI().equals(oldLocation)).findAny();
+		existingResource.ifPresent(resource -> {
+			resource.setURI(newLocation);
+			reloadResource(newLocation);
+		});
 	}
 
 	@Override
@@ -134,7 +174,7 @@ public class JavaEditorView implements CommittableView {
 		closeJavaProject();
 		view.close();
 	}
-	
+
 	private void closeJavaProject() throws CoreException {
 		if (eclipseProject == null) {
 			return;
