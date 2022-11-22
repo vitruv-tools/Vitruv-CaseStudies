@@ -8,6 +8,12 @@ import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.cla
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimInterface;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimNamedElement;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleRepository;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.BASIC_COMPONENT_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.INTERFACE_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.RENAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOSITORY_NAME;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
@@ -28,21 +34,19 @@ import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.javaeditor.java2pcm.legacy.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
 
 class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 	private static final String FIELD_TYPE = "String";
 	private static final String FIELD_NAME = "stringField";
 
-	private static final String PROVIDING_COMPONENT_NAME = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing";
-	private static final String REQUIRING_COMPONENT_NAME = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring";
+	private static final String PROVIDING_COMPONENT_NAME = BASIC_COMPONENT_NAME + "Providing";
+	private static final String REQUIRING_COMPONENT_NAME = BASIC_COMPONENT_NAME + "Requiring";
 
 	@Test
 	void testAddFieldToClassCorrespondingToCompositeDataType() throws Exception {
 		createRepositoryPackage();
 
-		String compilationUnitName = Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
-				+ Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX;
+		String compilationUnitName = COMPOSITE_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX;
 
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.getSelection());
 		changeJavaEditorView(view -> {
@@ -72,9 +76,8 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 	void testRenameFieldInClassCorrespondingToCompositeDataType() throws Exception {
 		testAddFieldToClassCorrespondingToCompositeDataType();
 
-		String compilationUnitName = Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
-				+ Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX;
-		String changedFieldName = FIELD_NAME + Pcm2JavaTestUtils.RENAME;
+		String compilationUnitName = COMPOSITE_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX;
+		String changedFieldName = FIELD_NAME + RENAME;
 
 		changeJavaEditorView(view -> {
 			Package datatypesPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
@@ -107,8 +110,7 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 	void testChangeTypeOfFieldInClassCorrespondingToCompositeDataType() throws Exception {
 		testAddFieldToClassCorrespondingToCompositeDataType();
 
-		String compilationUnitName = Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
-				+ Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX;
+		String compilationUnitName = COMPOSITE_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX;
 		String changedFieldTypeName = "int";
 
 		changeJavaEditorView(view -> {
@@ -157,22 +159,22 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 	void testAddFieldWithTypeOfInterface() throws Exception {
 		setupExampleWithProvidingAndRequiringComponent();
 
-		String fieldType = Pcm2JavaTestUtils.INTERFACE_NAME;
-		String fieldName = "i" + Pcm2JavaTestUtils.INTERFACE_NAME;
+		String fieldType = INTERFACE_NAME;
+		String fieldName = "i" + INTERFACE_NAME;
 
 		changeJavaEditorView(view -> {
 			Package providingPackage = JavaQueryUtil.claimPackage(view, PROVIDING_COMPONENT_NAME);
-			ICompilationUnit providingCompilationUnit = view.getManipulationUtil().claimCompilationUnit(
-					PROVIDING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, providingPackage);
+			ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
+					.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
 
 			Package contractsPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
-			ICompilationUnit anInterface = view.getManipulationUtil()
-					.claimCompilationUnit(Pcm2JavaTestUtils.INTERFACE_NAME, contractsPackage);
+			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
+					contractsPackage);
 			view.getManipulationUtil().addImportToCompilationUnit(providingCompilationUnit, anInterface,
-					Pcm2JavaTestUtils.INTERFACE_NAME);
+					INTERFACE_NAME);
 
 			InsertEdit insertEdit = editForAddingField(fieldName, fieldType, providingCompilationUnit,
-					PROVIDING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX);
+					PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
 			view.getManipulationUtil().editCompilationUnit(providingCompilationUnit, insertEdit);
 		});
 
@@ -180,8 +182,7 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 			Repository repository = claimSingleRepository(view);
 			BasicComponent providingComponent = claimComponent(repository, PROVIDING_COMPONENT_NAME,
 					BasicComponent.class);
-			OperationInterface anInterface = claimInterface(repository, Pcm2JavaTestUtils.INTERFACE_NAME,
-					OperationInterface.class);
+			OperationInterface anInterface = claimInterface(repository, INTERFACE_NAME, OperationInterface.class);
 			OperationRequiredRole requiredRole = claimNamedElement(
 					providingComponent.getRequiredRoles_InterfaceRequiringEntity(), fieldName,
 					OperationRequiredRole.class);
@@ -197,22 +198,22 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 
 		String fieldName = PROVIDING_COMPONENT_NAME.substring(0, 1).toLowerCase()
 				+ PROVIDING_COMPONENT_NAME.substring(1);
-		String fieldType = PROVIDING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX;
+		String fieldType = PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX;
 
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		changeJavaEditorView(view -> {
 			Package requiringPackage = JavaQueryUtil.claimPackage(view, REQUIRING_COMPONENT_NAME);
-			ICompilationUnit requiringCompilationUnit = view.getManipulationUtil().claimCompilationUnit(
-					REQUIRING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, requiringPackage);
+			ICompilationUnit requiringCompilationUnit = view.getManipulationUtil()
+					.claimCompilationUnit(REQUIRING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, requiringPackage);
 
 			Package providingPackage = JavaQueryUtil.claimPackage(view, PROVIDING_COMPONENT_NAME);
-			ICompilationUnit providingCompilationUnit = view.getManipulationUtil().claimCompilationUnit(
-					PROVIDING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, providingPackage);
+			ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
+					.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
 			view.getManipulationUtil().addImportToCompilationUnit(requiringCompilationUnit, providingCompilationUnit,
-					PROVIDING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX);
+					PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
 
 			InsertEdit insertEdit = editForAddingField(fieldName, fieldType, requiringCompilationUnit,
-					REQUIRING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX);
+					REQUIRING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
 			view.getManipulationUtil().editCompilationUnit(requiringCompilationUnit, insertEdit);
 		});
 
@@ -220,8 +221,7 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 			Repository repository = claimSingleRepository(view);
 			BasicComponent requiringComponent = claimComponent(repository, REQUIRING_COMPONENT_NAME,
 					BasicComponent.class);
-			OperationInterface anInterface = claimInterface(repository, Pcm2JavaTestUtils.INTERFACE_NAME,
-					OperationInterface.class);
+			OperationInterface anInterface = claimInterface(repository, INTERFACE_NAME, OperationInterface.class);
 			OperationRequiredRole requiredRole = claimNamedElement(
 					requiringComponent.getRequiredRoles_InterfaceRequiringEntity(), fieldName,
 					OperationRequiredRole.class);
@@ -234,11 +234,10 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 	/**
 	 * Sets up an example scenario with the root Repository and two packages named
 	 * {@link REQUIRING_COMPONENT_NAME} and {@link PROVIDING_COMPONENT_NAME} with
-	 * each one class with suffix {@Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX} as
-	 * basic components. Sets up an interface named
-	 * {@link Pcm2JavaTestUtils.INTERFACE_NAME} in the contracts package. Sets up an
-	 * {@code implements} relation between the providing component class and the
-	 * interface.
+	 * each one class with suffix {IMPLEMENTING_CLASS_SUFFIX} as basic components.
+	 * Sets up an interface named {@link INTERFACE_NAME} in the contracts package.
+	 * Sets up an {@code implements} relation between the providing component class
+	 * and the interface.
 	 */
 	private void setupExampleWithProvidingAndRequiringComponent() throws Exception {
 		createRepositoryPackage();
@@ -246,35 +245,35 @@ class FieldMappingTransformationTest extends Java2PcmTransformationTest {
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		changeJavaView(view -> {
-			createPackageWithPackageInfo(view, Pcm2JavaTestUtils.REPOSITORY_NAME, REQUIRING_COMPONENT_NAME);
-			createPackageWithPackageInfo(view, Pcm2JavaTestUtils.REPOSITORY_NAME, PROVIDING_COMPONENT_NAME);
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, REQUIRING_COMPONENT_NAME);
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, PROVIDING_COMPONENT_NAME);
 		});
 
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		changeJavaEditorView(view -> {
 			Package requiringPackage = JavaQueryUtil.claimPackage(view, REQUIRING_COMPONENT_NAME);
-			view.getManipulationUtil().createClass(
-					REQUIRING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, requiringPackage, null);
+			view.getManipulationUtil().createClass(REQUIRING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX,
+					requiringPackage, null);
 
 			Package providingPackage = JavaQueryUtil.claimPackage(view, PROVIDING_COMPONENT_NAME);
-			view.getManipulationUtil().createClass(
-					PROVIDING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, providingPackage, null);
+			view.getManipulationUtil().createClass(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX,
+					providingPackage, null);
 
 			Package contractsPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
-			view.getManipulationUtil().createInterface(Pcm2JavaTestUtils.INTERFACE_NAME, contractsPackage, null);
+			view.getManipulationUtil().createInterface(INTERFACE_NAME, contractsPackage, null);
 
 			{
-				ICompilationUnit providingCompilationUnit = view.getManipulationUtil().claimCompilationUnit(
-						PROVIDING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX, providingPackage);
-				ICompilationUnit anInterface = view.getManipulationUtil()
-						.claimCompilationUnit(Pcm2JavaTestUtils.INTERFACE_NAME, contractsPackage);
+				ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
+						.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
+				ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
+						contractsPackage);
 				view.getManipulationUtil().addImportToCompilationUnit(providingCompilationUnit, anInterface,
-						Pcm2JavaTestUtils.INTERFACE_NAME);
+						INTERFACE_NAME);
 
 				IType classType = providingCompilationUnit
-						.getType(PROVIDING_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX);
-				String newSource = " implements " + Pcm2JavaTestUtils.INTERFACE_NAME;
+						.getType(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
+				String newSource = " implements " + INTERFACE_NAME;
 				int offset = classType.getSourceRange().getOffset();
 				int firstBracket = classType.getSource().indexOf("{");
 				offset = offset + firstBracket - 1;

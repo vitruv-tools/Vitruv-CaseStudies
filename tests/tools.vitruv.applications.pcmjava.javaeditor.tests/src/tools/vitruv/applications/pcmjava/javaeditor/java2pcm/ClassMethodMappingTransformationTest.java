@@ -7,6 +7,11 @@ import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.cla
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimInterface;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimNamedElement;
 import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleRepository;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.BASIC_COMPONENT_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.INTERFACE_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOSITORY_NAME;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
@@ -32,29 +37,26 @@ class ClassMethodMappingTransformationTest extends Java2PcmTransformationTest {
 
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		changeJavaView(view -> {
-			createPackageWithPackageInfo(view, Pcm2JavaTestUtils.REPOSITORY_NAME,
-					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, BASIC_COMPONENT_NAME);
 		});
 
 		// setup interface with one method
 		// setup class corresponding to basic component, implementing interface
 		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		changeJavaEditorView(view -> {
-			Package componentPackage = claimPackage(view, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
-			view.getManipulationUtil().createClass(
-					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX,
-					componentPackage, null);
-			ICompilationUnit componentClass = view.getManipulationUtil().claimCompilationUnit(
-					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX,
-					componentPackage);
+			Package componentPackage = claimPackage(view, BASIC_COMPONENT_NAME);
+			view.getManipulationUtil().createClass(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, componentPackage,
+					null);
+			ICompilationUnit componentClass = view.getManipulationUtil()
+					.claimCompilationUnit(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, componentPackage);
 
 			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
-			view.getManipulationUtil().createInterface(Pcm2JavaTestUtils.INTERFACE_NAME, contractsPackage, null);
-			ICompilationUnit anInterface = view.getManipulationUtil()
-					.claimCompilationUnit(Pcm2JavaTestUtils.INTERFACE_NAME, contractsPackage);
+			view.getManipulationUtil().createInterface(INTERFACE_NAME, contractsPackage, null);
+			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
+					contractsPackage);
 
 			{
-				String methodName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME;
+				String methodName = OPERATION_SIGNATURE_1_NAME;
 				String methodSignature = "\nvoid " + methodName + "();\n";
 				IType firstType = anInterface.getAllTypes()[0];
 				int offset = CompilationUnitManipulatorHelper.getOffsetForClassifierManipulation(firstType);
@@ -63,12 +65,10 @@ class ClassMethodMappingTransformationTest extends Java2PcmTransformationTest {
 			}
 
 			{
-				view.getManipulationUtil().addImportToCompilationUnit(componentClass, anInterface,
-						Pcm2JavaTestUtils.INTERFACE_NAME);
+				view.getManipulationUtil().addImportToCompilationUnit(componentClass, anInterface, INTERFACE_NAME);
 
-				IType classType = componentClass
-						.getType(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX);
-				String newSource = " implements " + Pcm2JavaTestUtils.INTERFACE_NAME;
+				IType classType = componentClass.getType(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
+				String newSource = " implements " + INTERFACE_NAME;
 				int offset = classType.getSourceRange().getOffset();
 				int firstBracket = classType.getSource().indexOf("{");
 				offset = offset + firstBracket - 1;
@@ -79,13 +79,11 @@ class ClassMethodMappingTransformationTest extends Java2PcmTransformationTest {
 
 		// add implementation of interface method to class
 		changeJavaEditorView(view -> {
-			Package componentPackage = claimPackage(view, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
-			ICompilationUnit componentClass = view.getManipulationUtil().claimCompilationUnit(
-					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX,
-					componentPackage);
+			Package componentPackage = claimPackage(view, BASIC_COMPONENT_NAME);
+			ICompilationUnit componentClass = view.getManipulationUtil()
+					.claimCompilationUnit(BASIC_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, componentPackage);
 
-			final String methodBlock = "\n\tpublic void " + Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME
-					+ " () {\n\t}\n";
+			final String methodBlock = "\n\tpublic void " + OPERATION_SIGNATURE_1_NAME + " () {\n\t}\n";
 			IType firstType = componentClass.getAllTypes()[0];
 			int offset = CompilationUnitManipulatorHelper.getOffsetForClassifierManipulation(firstType);
 			InsertEdit insertEdit = new InsertEdit(offset, methodBlock);
@@ -94,13 +92,11 @@ class ClassMethodMappingTransformationTest extends Java2PcmTransformationTest {
 
 		validatePcmView(view -> {
 			Repository repository = claimSingleRepository(view);
-			BasicComponent component = claimComponent(repository, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME,
-					BasicComponent.class);
-			OperationInterface anInterface = claimInterface(repository, Pcm2JavaTestUtils.INTERFACE_NAME,
-					OperationInterface.class);
+			BasicComponent component = claimComponent(repository, BASIC_COMPONENT_NAME, BasicComponent.class);
+			OperationInterface anInterface = claimInterface(repository, INTERFACE_NAME, OperationInterface.class);
 			Signature signature = claimOne(anInterface.getSignatures__OperationInterface());
-			claimNamedElement(component.getProvidedRoles_InterfaceProvidingEntity(), Pcm2JavaTestUtils
-					.providesInterfaceName(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME, Pcm2JavaTestUtils.INTERFACE_NAME),
+			claimNamedElement(component.getProvidedRoles_InterfaceProvidingEntity(),
+					Pcm2JavaTestUtils.providesInterfaceName(BASIC_COMPONENT_NAME, INTERFACE_NAME),
 					OperationProvidedRole.class);
 			ServiceEffectSpecification seff = claimOne(component.getServiceEffectSpecifications__BasicComponent());
 			assertEquals(signature, seff.getDescribedService__SEFF(), "SEFF is describing wrong service");
