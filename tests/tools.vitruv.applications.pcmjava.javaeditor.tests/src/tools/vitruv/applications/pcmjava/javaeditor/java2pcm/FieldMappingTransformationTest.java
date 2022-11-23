@@ -1,186 +1,262 @@
 package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil.claimPackage;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory.Visibility.PRIVATE;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimComponent;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimDataType;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimInterface;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimNamedElement;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleRepository;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.BASIC_COMPONENT_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.IMPLEMENTING_CLASS_SUFFIX;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.INTERFACE_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.RENAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOSITORY_NAME;
 
-import java.io.IOException;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.text.edits.DeleteEdit;
-import org.eclipse.text.edits.InsertEdit;
-import org.emftext.language.java.members.Field;
+import org.eclipse.text.edits.TextEdit;
+import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
+import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
+import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory;
 
-import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
+class FieldMappingTransformationTest extends Java2PcmTransformationTest {
+	private static final String FIELD_TYPE = "String";
+	private static final String FIELD_NAME = "stringField";
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
+	private static final String PROVIDING_COMPONENT_NAME = BASIC_COMPONENT_NAME + "Providing";
+	private static final String REQUIRING_COMPONENT_NAME = BASIC_COMPONENT_NAME + "Requiring";
 
 	@Test
-	public void testAddFieldToClassThatCorrespondsToCompositeDatatype() throws Throwable {
-		super.addRepoContractsAndDatatypesPackage();
-		final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
-		final String fieldType = "String";
-		final String fieldName = "stringField";
+	void testAddFieldToClassCorrespondingToCompositeDataType() throws Exception {
+		createRepositoryPackage();
 
-		final InnerDeclaration innerDeclaration = this.addFieldToClassWithName(cdt.getEntityName(), fieldType,
-				fieldName, InnerDeclaration.class);
+		String compilationUnitName = COMPOSITE_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX;
 
-		this.assertInnerDeclaration(innerDeclaration, fieldType, fieldName);
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.getSelection());
+		changeJavaEditorView(view -> {
+			Package dataTypesPackage = claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
+			view.getManipulationUtil().createClass(compilationUnitName, dataTypesPackage, null);
+		});
+
+		changeJavaEditorView(view -> {
+			Package datatypesPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
+			ICompilationUnit compilationUnit = view.getManipulationUtil().claimCompilationUnit(compilationUnitName,
+					datatypesPackage);
+			IType compilationUnitType = compilationUnit.getType(compilationUnitName);
+
+			TextEdit addFieldEdit = JavaTextEditFactory.addField(compilationUnitType, PRIVATE, FIELD_NAME, FIELD_TYPE);
+			view.getManipulationUtil().editCompilationUnit(compilationUnit, addFieldEdit);
+		});
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			CompositeDataType dataType = claimDataType(repository, compilationUnitName, CompositeDataType.class);
+			InnerDeclaration innerDeclaration = claimOne(dataType.getInnerDeclaration_CompositeDataType());
+			assertEquals(FIELD_NAME, innerDeclaration.getEntityName(), "incorrect name for InnerDeclaration");
+			assertEquals(FIELD_TYPE, getTypeNameOfPcmDataType(innerDeclaration.getDatatype_InnerDeclaration()));
+		});
 	}
 
 	@Test
-	public void testRenameFieldInClassThatCorrespondsToCompositeDatatype() throws Throwable {
-		final String fieldTypeName = "String";
-		final String fieldName = "stringField";
-		super.addRepoContractsAndDatatypesPackage();
-		final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
-		this.addFieldToClassWithName(cdt.getEntityName(), fieldTypeName, fieldName, InnerDeclaration.class);
+	void testRenameFieldInClassCorrespondingToCompositeDataType() throws Exception {
+		testAddFieldToClassCorrespondingToCompositeDataType();
 
-		final String newFieldName = fieldName + Pcm2JavaTestUtils.RENAME;
-		final InnerDeclaration newInnerDeclaration = this.renameFieldInClass(cdt.getEntityName(), fieldName,
-				newFieldName);
+		String compilationUnitName = COMPOSITE_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX;
+		String changedFieldName = FIELD_NAME + RENAME;
 
-		this.assertInnerDeclaration(newInnerDeclaration, fieldTypeName, newFieldName);
+		changeJavaEditorView(view -> {
+			Package datatypesPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
+			ICompilationUnit compilationUnit = view.getManipulationUtil().claimCompilationUnit(compilationUnitName,
+					datatypesPackage);
+			IType type = compilationUnit.getType(compilationUnitName);
+			
+			TextEdit renameFieldEdit = JavaTextEditFactory.renameField(type, FIELD_NAME, changedFieldName);
+			view.getManipulationUtil().editCompilationUnit(compilationUnit, renameFieldEdit);
+		});
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			CompositeDataType dataType = claimDataType(repository, compilationUnitName, CompositeDataType.class);
+			InnerDeclaration innerDeclaration = claimOne(dataType.getInnerDeclaration_CompositeDataType());
+			assertEquals(changedFieldName, innerDeclaration.getEntityName(), "incorrect name for InnerDeclaration");
+			assertEquals(FIELD_TYPE, getTypeNameOfPcmDataType(innerDeclaration.getDatatype_InnerDeclaration()));
+		});
 	}
 
 	@Test
-	public void testChangeTypeOfFieldInClassThatCorrespondsToCompositeDatatype() throws Throwable {
-		final String fieldTypeName = "String";
-		final String fieldName = "stringField";
-		super.addRepoContractsAndDatatypesPackage();
-		final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
-		this.addFieldToClassWithName(cdt.getEntityName(), fieldTypeName, fieldName, InnerDeclaration.class);
+	void testChangeTypeOfFieldInClassCorrespondingToCompositeDataType() throws Exception {
+		testAddFieldToClassCorrespondingToCompositeDataType();
 
-		final String newFieldTypeName = "int";
-		final InnerDeclaration newInnerDeclaration = this.changeFieldTypeInClass(cdt.getEntityName(), fieldName,
-				newFieldTypeName);
+		String compilationUnitName = COMPOSITE_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX;
+		String changedFieldTypeName = "int";
 
-		this.assertInnerDeclaration(newInnerDeclaration, newFieldTypeName, fieldName);
+		changeJavaEditorView(view -> {
+			Package datatypesPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.DATATYPES_PACKAGE);
+			ICompilationUnit compilationUnit = view.getManipulationUtil().claimCompilationUnit(compilationUnitName,
+					datatypesPackage);
+			IType type = compilationUnit.getType(compilationUnitName);
+			
+			TextEdit changeTypeEdit = JavaTextEditFactory.changeTypeOfField(type, FIELD_NAME, changedFieldTypeName);
+			view.getManipulationUtil().editCompilationUnit(compilationUnit, changeTypeEdit);
+		});
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			CompositeDataType dataType = claimDataType(repository, compilationUnitName, CompositeDataType.class);
+			InnerDeclaration innerDeclaration = claimOne(dataType.getInnerDeclaration_CompositeDataType());
+			assertEquals(FIELD_NAME, innerDeclaration.getEntityName(), "incorrect name for InnerDeclaration");
+			assertEquals(changedFieldTypeName,
+					getTypeNameOfPcmDataType(innerDeclaration.getDatatype_InnerDeclaration()),
+					"incorrect type for InnerDeclaration");
+		});
 	}
 
 	@Disabled("Not yet implemented")
 	@Test
-	public void testRemoveFieldInClassThatCorrespondsToBasicComponent() {
+	void testRemoveFieldInClassCorrespondingToBasicComponent() throws Exception {
 	}
 
 	@Disabled("Not yet implemented")
 	@Test
-	public void testAddFieldToClassThatCorrespondsToBasicComponent() {
+	void testAddFieldToClassCorrespondingToBasicComponent() throws Exception {
 	}
 
 	@Disabled("Not yet implemented")
 	@Test
-	public void testAddFieldInClassWithoutCorrespondence() {
+	void testAddFieldInClassWithoutCorrespondence() throws Exception {
 	}
 
 	@Test
-	public void testAddFieldWithTypeOfInterface() throws Throwable {
-		this.createRepoBasicComponentAndInterface();
+	void testAddFieldWithTypeOfInterface() throws Exception {
+		setupExampleWithProvidingAndRequiringComponent();
 
-		// create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" to Interface
-		final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME,
-				"i" + Pcm2JavaTestUtils.INTERFACE_NAME, OperationRequiredRole.class);
+		String fieldType = INTERFACE_NAME;
+		String fieldName = "i" + INTERFACE_NAME;
 
-		this.assertOperationRequiredRole(orrToInterface);
+		changeJavaEditorView(view -> {
+			Package providingPackage = JavaQueryUtil.claimPackage(view, PROVIDING_COMPONENT_NAME);
+			ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
+					.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
+			IType providingCompilationUnitType = providingCompilationUnit.getType(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
+
+			Package contractsPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
+			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
+					contractsPackage);
+			
+			view.getManipulationUtil().addImportToCompilationUnit(providingCompilationUnit, anInterface,
+					INTERFACE_NAME);
+			TextEdit addFieldEdit = JavaTextEditFactory.addField(providingCompilationUnitType, PRIVATE, fieldName, fieldType);
+			view.getManipulationUtil().editCompilationUnit(providingCompilationUnit, addFieldEdit);
+		});
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			BasicComponent providingComponent = claimComponent(repository, PROVIDING_COMPONENT_NAME,
+					BasicComponent.class);
+			OperationInterface anInterface = claimInterface(repository, INTERFACE_NAME, OperationInterface.class);
+			OperationRequiredRole requiredRole = claimNamedElement(
+					providingComponent.getRequiredRoles_InterfaceRequiringEntity(), fieldName,
+					OperationRequiredRole.class);
+			assertEquals(fieldName, requiredRole.getEntityName(), "incorrect name for RequiredRole");
+			assertEquals(anInterface, requiredRole.getRequiredInterface__OperationRequiredRole(),
+					"incorrect interface for RequiredRole");
+		});
 	}
 
 	@Test
-	public void testAddFieldWithTypeOfBasicComponentToClass() throws Throwable {
-		this.createRepoBasicComponentAndInterface();
+	void testAddFieldWithTypeOfBasicComponent() throws Exception {
+		setupExampleWithProvidingAndRequiringComponent();
 
-		// create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" to
-		// Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing"
-		final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl",
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl",
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME.toLowerCase() + "Providing", OperationRequiredRole.class);
+		String fieldName = PROVIDING_COMPONENT_NAME.substring(0, 1).toLowerCase()
+				+ PROVIDING_COMPONENT_NAME.substring(1);
+		String fieldType = PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX;
 
-		this.assertOperationRequiredRole(orrToInterface);
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		changeJavaEditorView(view -> {
+			Package requiringPackage = JavaQueryUtil.claimPackage(view, REQUIRING_COMPONENT_NAME);
+			ICompilationUnit requiringCompilationUnit = view.getManipulationUtil()
+					.claimCompilationUnit(REQUIRING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, requiringPackage);
+			IType requiringCompilationUnitType = requiringCompilationUnit.getType(REQUIRING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
+
+			Package providingPackage = JavaQueryUtil.claimPackage(view, PROVIDING_COMPONENT_NAME);
+			ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
+					.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
+			
+			view.getManipulationUtil().addImportToCompilationUnit(requiringCompilationUnit, providingCompilationUnit,
+					PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
+			TextEdit addFieldEdit = JavaTextEditFactory.addField(requiringCompilationUnitType, PRIVATE, fieldName, fieldType);
+			view.getManipulationUtil().editCompilationUnit(requiringCompilationUnit, addFieldEdit);
+		});
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			BasicComponent requiringComponent = claimComponent(repository, REQUIRING_COMPONENT_NAME,
+					BasicComponent.class);
+			OperationInterface anInterface = claimInterface(repository, INTERFACE_NAME, OperationInterface.class);
+			OperationRequiredRole requiredRole = claimNamedElement(
+					requiringComponent.getRequiredRoles_InterfaceRequiringEntity(), fieldName,
+					OperationRequiredRole.class);
+			assertEquals(fieldName, requiredRole.getEntityName(), "incorrect name for RequiredRole");
+			assertEquals(anInterface, requiredRole.getRequiredInterface__OperationRequiredRole(),
+					"incorrect interface for RequiredRole");
+		});
 	}
 
-	private void createRepoBasicComponentAndInterface() throws CoreException, IOException, InterruptedException {
-		// create main package
-		super.addRepoContractsAndDatatypesPackage();
-		// create package and classes
-		this.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing");
-		this.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring");
-		// create interface
-		super.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts",
-				Pcm2JavaTestUtils.INTERFACE_NAME);
-		// create provided role from providing component to interface
-		super.addImplementsCorrespondingToOperationProvidedRoleToClass(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME);
+	/**
+	 * Sets up an example scenario with the root Repository and two packages named
+	 * {@link REQUIRING_COMPONENT_NAME} and {@link PROVIDING_COMPONENT_NAME} with
+	 * each one class with suffix {IMPLEMENTING_CLASS_SUFFIX} as basic components.
+	 * Sets up an interface named {@link INTERFACE_NAME} in the contracts package.
+	 * Sets up an {@code implements} relation between the providing component class
+	 * and the interface.
+	 */
+	private void setupExampleWithProvidingAndRequiringComponent() throws Exception {
+		createRepositoryPackage();
+
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		changeJavaView(view -> {
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, REQUIRING_COMPONENT_NAME);
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, PROVIDING_COMPONENT_NAME);
+		});
+
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		changeJavaEditorView(view -> {
+			Package requiringPackage = JavaQueryUtil.claimPackage(view, REQUIRING_COMPONENT_NAME);
+			view.getManipulationUtil().createClass(REQUIRING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX,
+					requiringPackage, null);
+
+			Package providingPackage = JavaQueryUtil.claimPackage(view, PROVIDING_COMPONENT_NAME);
+			view.getManipulationUtil().createClass(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX,
+					providingPackage, null);
+			ICompilationUnit providingCompilationUnit = view.getManipulationUtil()
+					.claimCompilationUnit(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX, providingPackage);
+
+			Package contractsPackage = JavaQueryUtil.claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
+			view.getManipulationUtil().createInterface(INTERFACE_NAME, contractsPackage, null);
+			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
+					contractsPackage);
+
+			view.getManipulationUtil().addImportToCompilationUnit(providingCompilationUnit, anInterface,
+					INTERFACE_NAME);
+			IType classType = providingCompilationUnit.getType(PROVIDING_COMPONENT_NAME + IMPLEMENTING_CLASS_SUFFIX);
+			TextEdit implementsEdit = JavaTextEditFactory.addImplementsRelation(classType, INTERFACE_NAME);
+			view.getManipulationUtil().editCompilationUnit(providingCompilationUnit, implementsEdit);
+		});
 	}
-
-	private void assertOperationRequiredRole(final OperationRequiredRole operationRequiredRole) throws Throwable {
-		Iterable<EObject> correspondingEObjects = getCorrespondingEObjects(operationRequiredRole, EObject.class);
-
-		boolean fieldFound = false;
-		for (final EObject correspondingEObject : correspondingEObjects) {
-			if (correspondingEObject instanceof Field) {
-				fieldFound = true;
-			} else {
-				fail("OperationRequiredRole should correspond to field only, but corresonds also to: "
-						+ correspondingEObject);
-			}
-		}
-		assertTrue(fieldFound, "OperationRequiredRole does not correspond to a field");
-	}
-
-	private InnerDeclaration renameFieldInClass(final String className, final String fieldName,
-			final String newFieldName) throws Throwable {
-		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-				this.getCurrentTestProject());
-		final IType type = icu.getType(className);
-		final IField fieldToRename = type.getField(fieldName);
-		final String fieldToRenameStr = fieldToRename.getSource();
-		final String fieldToRenameType = fieldToRenameStr.split(" ")[1];
-		final String fieldToRenameName = fieldToRenameStr.split(" ")[2];
-		final int offset = fieldToRename.getSourceRange().getOffset() + fieldToRenameStr.indexOf(fieldToRenameType)
-				+ fieldToRenameType.length() + 1;
-		final int lengthToDelete = fieldToRenameName.length();
-		final DeleteEdit deleteEdit = new DeleteEdit(offset, lengthToDelete);
-		final InsertEdit insertEdit = new InsertEdit(offset, newFieldName + ";");
-		editCompilationUnit(icu, deleteEdit, insertEdit);
-		final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, newFieldName);
-		return claimOne(getCorrespondingEObjects(newJaMoPPField, InnerDeclaration.class));
-	}
-
-	private InnerDeclaration changeFieldTypeInClass(final String className, final String fieldName,
-			final String newFieldTypeName) throws Throwable {
-		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-				this.getCurrentTestProject());
-		final IType type = icu.getType(className);
-		final IField fieldToRename = type.getField(fieldName);
-		final String fieldSrc = fieldToRename.getSource();
-		final String fieldType = fieldSrc.split(" ")[1];
-		final int offset = fieldToRename.getSourceRange().getOffset() + fieldSrc.indexOf(fieldType);
-		final int lengthToDelete = fieldType.length();
-		final DeleteEdit deleteEdit = new DeleteEdit(offset, lengthToDelete);
-		final InsertEdit insertEdit = new InsertEdit(offset, newFieldTypeName);
-		editCompilationUnit(icu, deleteEdit, insertEdit);
-		final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, fieldName);
-		return claimOne(getCorrespondingEObjects(newJaMoPPField, InnerDeclaration.class));
-	}
-
-	private void assertInnerDeclaration(final InnerDeclaration innerDeclaration, final String fieldType,
-			final String fieldName) throws Throwable {
-		super.assertPCMNamedElement(innerDeclaration, fieldName);
-		final String pcmDataTypeName = super.getNameFromPCMDataType(innerDeclaration.getDatatype_InnerDeclaration());
-		assertEquals(pcmDataTypeName, fieldType, "The name of the PCM datatype does not equal the JaMoPP type name");
-	}
-
 }

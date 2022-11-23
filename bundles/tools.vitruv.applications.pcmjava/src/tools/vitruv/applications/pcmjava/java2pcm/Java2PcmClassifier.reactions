@@ -16,6 +16,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimNotMany
 import static extension tools.vitruv.applications.pcmjava.PcmJavaTransformationUtil.isPackageFor
+import tools.vitruv.dsls.reactions.runtime.helper.PersistenceHelper
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -153,10 +154,11 @@ routine createRepository(java::Package javaPackage, String packageName, String n
 	update {
 		// If the package-info.java is not persisted, do it
 		val packageUri = javaPackage.eResource.URI;
-		if (!URIUtil.existsResourceAtUri(packageUri)) {
-			val projectRelativeResourcePath = packageUri.segmentsList.tail.fold("", [a, b|a + "/" + b])
-			persistProjectRelative(javaPackage, javaPackage, projectRelativeResourcePath)
-		}
+//		if (!URIUtil.existsResourceAtUri(packageUri)) {
+//			val projectRelativeResourcePath = PersistenceHelper.getRelativeUriPathFromElement(javaPackage)
+////			val projectRelativeResourcePath = packageUri.segmentsList.tail.fold("", [a, b|a + "/" + b])
+//			persistProjectRelative(javaPackage, javaPackage, projectRelativeResourcePath)
+//		}
 		pcmRepository.entityName = packageName.toFirstUpper
 		persistProjectRelative(javaPackage, pcmRepository, "model/" + pcmRepository.entityName + ".repository")
 

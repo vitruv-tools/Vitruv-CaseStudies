@@ -1,81 +1,113 @@
 package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil.claimPackage;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimInterface;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimNamedElement;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleRepository;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.INTERFACE_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.RENAME;
+
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.text.edits.DeleteEdit;
-import org.eclipse.text.edits.InsertEdit;
-import org.emftext.language.java.members.Method;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.text.edits.TextEdit;
+import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
+import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil;
+import tools.vitruv.applications.pcmjava.javaeditor.util.JavaTextEditFactory;
 
-import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
+class MethodMappingTransformationTest extends Java2PcmTransformationTest {
+	@Test
+	void testAddMethod() throws Exception {
+		createRepositoryPackage();
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+		changeJavaEditorView(view -> {
+			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
+			view.getManipulationUtil().createInterface(INTERFACE_NAME, contractsPackage, null);
+		});
 
-public class MethodMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
+		String returnType = "void";
+
+		changeJavaEditorView(view -> {
+			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
+			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
+					contractsPackage);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
+
+			TextEdit addMethodEdit = JavaTextEditFactory.addMethodSignature(interfaceType, returnType,
+					OPERATION_SIGNATURE_1_NAME);
+			view.getManipulationUtil().editCompilationUnit(anInterface, addMethodEdit);
+		});
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			OperationInterface operationInterface = claimInterface(repository, INTERFACE_NAME,
+					OperationInterface.class);
+			OperationSignature operationSignature = claimNamedElement(
+					operationInterface.getSignatures__OperationInterface(), OPERATION_SIGNATURE_1_NAME);
+			assertEquals(0, operationSignature.getParameters__OperationSignature().size(),
+					"signature must not have any parameters");
+			assertEquals(returnType, getTypeNameOfPcmDataType(operationSignature.getReturnType__OperationSignature()),
+					"signature has wrong return type");
+		});
+	}
 
 	@Test
-	public void testAddMethod() throws Throwable {
-		super.addRepoContractsAndDatatypesPackage();
-		final OperationInterface opInterface = super.addInterfaceInContractsPackage();
+	void testRenameMethod() throws Exception {
+		testAddMethod();
 
-		final OperationSignature opSig = super.addMethodToInterfaceWithCorrespondence(opInterface.getEntityName());
+		changeJavaEditorView(view -> {
+			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
+			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
+					contractsPackage);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
 
-		this.assertOperationSignature(opSig, opInterface, Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
+			TextEdit renameMethodEdit = JavaTextEditFactory.renameMethod(interfaceType, OPERATION_SIGNATURE_1_NAME,
+					OPERATION_SIGNATURE_1_NAME + RENAME);
+			view.getManipulationUtil().editCompilationUnit(anInterface, renameMethodEdit);
+		});
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			OperationInterface operationInterface = claimInterface(repository, INTERFACE_NAME,
+					OperationInterface.class);
+			claimNamedElement(operationInterface.getSignatures__OperationInterface(),
+					OPERATION_SIGNATURE_1_NAME + RENAME);
+			assertEquals(1, operationInterface.getSignatures__OperationInterface().size(),
+					"too many operation signatures");
+		});
 	}
 
 	@Test
-	public void testRenameMethod() throws Throwable {
-		this.addRepoContractsAndDatatypesPackage();
-		final OperationInterface opInterface = super.addInterfaceInContractsPackage();
-		final OperationSignature opSig = super.addMethodToInterfaceWithCorrespondence(opInterface.getEntityName());
+	void testAddReturnType() throws Exception {
+		testAddMethod();
 
-		final OperationSignature newOpSig = super.renameMethodInClassWithName(opInterface.getEntityName(),
-				opSig.getEntityName());
+		String changedReturnType = "String";
 
-		this.assertOperationSignature(newOpSig, opInterface,
-				Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME);
-	}
+		changeJavaEditorView(view -> {
+			Package contractsPackage = claimPackage(view, JavaQueryUtil.CONTRACTS_PACKAGE);
+			ICompilationUnit anInterface = view.getManipulationUtil().claimCompilationUnit(INTERFACE_NAME,
+					contractsPackage);
+			IType interfaceType = anInterface.getType(INTERFACE_NAME);
+			
+			TextEdit changeReturnTypeEdit = JavaTextEditFactory.changeReturnTypeOfMethod(interfaceType, OPERATION_SIGNATURE_1_NAME, changedReturnType);
+			view.getManipulationUtil().editCompilationUnit(anInterface, changeReturnTypeEdit);
+		});
 
-	@Test
-	public void testAddReturnType() throws Throwable {
-		this.addRepoContractsAndDatatypesPackage();
-
-		final OperationInterface opInterface = super.addInterfaceInContractsPackage();
-		final OperationSignature opSig = super.addMethodToInterfaceWithCorrespondence(opInterface.getEntityName());
-
-		final OperationSignature newOpSig = this.changeReturnType(opSig);
-
-		this.assertOperationSignature(newOpSig, opInterface, Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
-	}
-
-	private OperationSignature changeReturnType(final OperationSignature opSig) throws Throwable {
-		final String className = opSig.getInterface__OperationSignature().getEntityName();
-		final String methodName = opSig.getEntityName();
-		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-				this.getCurrentTestProject());
-		final IMethod iMethod = cu.getType(className).getMethod(methodName, null);
-		final int returnTypeOffset = iMethod.getSourceRange().getOffset();
-		final String retTypeName = iMethod.getSource().split(" ")[0];
-		final int returnTypeLength = retTypeName.length();
-		final String newReturnTypeName = "String ";
-		final DeleteEdit deleteEdit = new DeleteEdit(returnTypeOffset, returnTypeLength);
-		final InsertEdit insertEdit = new InsertEdit(returnTypeOffset, newReturnTypeName);
-		editCompilationUnit(cu, deleteEdit, insertEdit);
-		return super.findOperationSignatureForJaMoPPMethodInCompilationUnit(methodName, className, cu);
-	}
-
-	private void assertOperationSignature(final OperationSignature opSig, final OperationInterface opInterface,
-			final String expectedName) throws Throwable {
-		assertEquals(opSig.getInterface__OperationSignature().getId(), opInterface.getId(),
-				"OperationSignature " + opSig + " is not in OperationInterface " + opInterface);
-		this.assertPCMNamedElement(opSig, expectedName);
-
-		Method jaMoPPMethod = claimOne(getCorrespondingEObjects(opSig, Method.class));
-		MethodMappingTransformationTest.this.assertDataTypeName(jaMoPPMethod.getTypeReference(),
-				opSig.getReturnType__OperationSignature());
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			OperationInterface operationInterface = claimInterface(repository, INTERFACE_NAME,
+					OperationInterface.class);
+			OperationSignature operationSignature = claimNamedElement(
+					operationInterface.getSignatures__OperationInterface(), OPERATION_SIGNATURE_1_NAME);
+			assertEquals(0, operationSignature.getParameters__OperationSignature().size(), "signature must not have any parameters");
+			assertEquals(changedReturnType,
+					getTypeNameOfPcmDataType(operationSignature.getReturnType__OperationSignature()), "signature has wrong return type");
+		});
 	}
 }

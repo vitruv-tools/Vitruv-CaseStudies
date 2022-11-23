@@ -1,5 +1,18 @@
 package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.JavaQueryUtil.claimPackage;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimComponent;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleRepository;
+import static tools.vitruv.applications.pcmjava.javaeditor.util.PcmQueryUtil.claimSingleSystem;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.BASIC_COMPONENT_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.RENAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOSITORY_NAME;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.REPOSITORY_NAME_EXPECTED;
+import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils.SYSTEM_NAME;
+
 import org.emftext.language.java.containers.Package;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -7,92 +20,116 @@ import org.palladiosimulator.pcm.repository.CompositeComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 
-import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-public class PackageMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
-
+class PackageMappingTransformationTest extends Java2PcmTransformationTest {
 	/**
 	 * first package is created --> should be mapped to a repository
-	 *
-	 * @throws Throwable
 	 */
 	@Test
-	public void testAddFirstPackage() throws Throwable {
-		final Repository repo = super.addRepoContractsAndDatatypesPackage();
-		assertEquals(Pcm2JavaTestUtils.REPOSITORY_NAME_EXPECTED, repo.getEntityName(),
-				"Name of the repository is not the same as the name of the package");
-		this.assertResourceAndFileForEObjects(repo);
-		this.assertFilesOnlyForEObjects(repo);
+	void testAddFirstPackage() throws Exception {
+		createRepositoryPackage();
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			assertEquals(REPOSITORY_NAME_EXPECTED, repository.getEntityName(), "repository has wrong name");
+		});
 	}
 
 	/**
-	 * second packages is added --> should be mapped to a basic component
-	 *
-	 * @throws Throwable
+	 * second package is added --> should be mapped to a basic component
 	 */
 	@Test
-	public void testAddSecondPackage() throws Throwable {
-		final Repository repo = super.addRepoContractsAndDatatypesPackage();
+	void testAddSecondPackageAsBasicComponent() throws Exception {
+		createRepositoryPackage();
 
-		final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		changeJavaView(view -> {
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, BASIC_COMPONENT_NAME);
+		});
 
-		this.assertRepositoryAndPCMName(repo, bc, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
-		this.assertFilesOnlyForEObjects(bc);
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			claimComponent(repository, BASIC_COMPONENT_NAME, BasicComponent.class);
+		});
+	}
+
+	/**
+	 * second package is added --> should be mapped to a composite component
+	 */
+	@Test
+	void testAddSecondPackageAsCompositeComponent() throws Exception {
+		createRepositoryPackage();
+
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
+		changeJavaView(view -> {
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, COMPOSITE_COMPONENT_NAME);
+		});
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			claimComponent(repository, COMPOSITE_COMPONENT_NAME, CompositeComponent.class);
+		});
+	}
+
+	/**
+	 * second package is added --> should be mapped to a system
+	 */
+	@Test
+	void testAddSecondPackageAsSystem() throws Exception {
+		createRepositoryPackage();
+
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
+		changeJavaView(view -> {
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, SYSTEM_NAME);
+		});
+
+		validatePcmView(view -> {
+			System system = claimSingleSystem(view);
+			assertEquals(SYSTEM_NAME, system.getEntityName(), "system has wrong name");
+		});
+	}
+
+	/**
+	 * second package is added --> should be mapped to nothing
+	 */
+	@Test
+	void testAddSecondPackageAsNone() throws Exception {
+		createRepositoryPackage();
+
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
+		changeJavaView(view -> {
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, BASIC_COMPONENT_NAME);
+		});
+
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			assertTrue(repository.getComponents__Repository().isEmpty(),
+					"there must not exist any contained Component");
+			assertTrue(view.getRootObjects(System.class).isEmpty(), "there must not exist any System");
+		});
 	}
 
 	@Test
-	public void testCreateCompositeComponent() throws Throwable {
-		final Repository repo = super.addRepoContractsAndDatatypesPackage();
+	void testRenameRepository() throws Exception {
+		createRepositoryPackage();
 
-		final CompositeComponent cc = super.addSecondPackageCorrespondsToCompositeComponent();
+		getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		changeJavaView(view -> {
+			createPackageWithPackageInfo(view, REPOSITORY_NAME, BASIC_COMPONENT_NAME);
+		});
 
-		this.assertRepositoryAndPCMName(repo, cc, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
-		this.assertFilesOnlyForEObjects(cc);
-	}
+		String changedPackageName = BASIC_COMPONENT_NAME + RENAME;
 
-	@Test
-	public void testCreateSystem() throws Throwable {
-		final Repository repository = super.addRepoContractsAndDatatypesPackage();
+		changeJavaEditorView(view -> {
+			Package innerPackage = claimPackage(view, BASIC_COMPONENT_NAME);
+			view.getManipulationUtil().renamePackage(innerPackage, changedPackageName);
+		});
 
-		final System system = super.addSecondPackageCorrespondsToSystem();
-
-		this.assertPCMNamedElement(system, Pcm2JavaTestUtils.SYSTEM_NAME);
-		this.assertFilesOnlyForEObjects(repository, system);
-	}
-
-	@Test
-	public void testCreateNoCorrespondingObject() throws Throwable {
-		final Repository repo = super.addRepoContractsAndDatatypesPackage();
-
-		super.addSecondPackageCorrespondsWithoutCorrespondences();
-		assertNotNull(repo);
-		// TODO:what to check?
-	}
-
-	@Test
-	public void testRenamePackage() throws Throwable {
-		final Repository repo = super.addRepoContractsAndDatatypesPackage();
-		super.addSecondPackageCorrespondsToBasicComponent();
-
-		final String packageName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME;
-
-		final Package renamedPackage = super.renamePackage(this.secondPackage, packageName);
-
-		final BasicComponent bc = claimOne(getCorrespondingEObjects(renamedPackage, BasicComponent.class));
-		// repository of basic component has to be the repository
-		assertEquals(repo.getId(), bc.getRepository__RepositoryComponent().getId(),
-				"Repository of basic compoennt is not the repository: " + repo);
-		// name should be changed since there is no implementing class (yet) for the
-		// component
-		assertTrue(packageName.toLowerCase().contains(bc.getEntityName().toLowerCase()),
-				"The name of the basic component, which is '" + bc.getEntityName()
-						+ "', is not contained in the name of the package: " + packageName + " ");
-		this.assertResourceAndFileForEObjects(bc);
+		validatePcmView(view -> {
+			Repository repository = claimSingleRepository(view);
+			assertEquals(1, repository.getComponents__Repository().size(), "wrong number of components in repository");
+			claimComponent(repository, changedPackageName, BasicComponent.class);
+		});
 	}
 }
