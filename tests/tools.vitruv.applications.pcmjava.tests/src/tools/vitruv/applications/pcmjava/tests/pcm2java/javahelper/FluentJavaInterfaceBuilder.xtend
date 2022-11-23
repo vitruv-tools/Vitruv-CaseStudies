@@ -17,7 +17,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.clai
 
 /**
  * Can be used to dynamically create Java Interfaces with methods addImport() and addMethod().
- * Build returns a CompilationUnit according to the previous made add*() calls.
+ * Build returns a {@link CompilationUnit} according to the previous made add*() calls.
  * 
  * Caution: the FluentJavaInterfaceBuilder does not check for correctness of the builder API calls.
  * This means a duplicated import or methods call leads to duplicated imports or methods in the 

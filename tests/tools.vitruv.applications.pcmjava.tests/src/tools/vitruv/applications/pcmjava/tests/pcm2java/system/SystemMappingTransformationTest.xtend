@@ -9,7 +9,7 @@ import tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.FluentJavaCla
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.PcmQueryUtil.claimSinglePcmSystem
 
-class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
+class SystemMappingTransformationTest extends Pcm2JavaTransformationTest {
 
 	@Test
 	def void testCreateSystem() {
@@ -17,7 +17,7 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 
 		validateJavaView [
 			val systemCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.SYSTEM_NAMESPACE
 			).build
 
@@ -31,14 +31,14 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 
 		changePcmView [
 			claimSinglePcmSystem(it) => [
-				entityName = Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				entityName = Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
 		validateJavaView [
 			val systemCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME_SUFIX + Pcm2JavaTestUtils.IMPL_SUFIX,
-				Pcm2JavaTestUtils.SYSTEM_NAMESPACE + Pcm2JavaTestUtils.RENAME_SUFIX
+				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX + Pcm2JavaTestUtils.IMPL_SUFFIX,
+				Pcm2JavaTestUtils.SYSTEM_NAMESPACE + Pcm2JavaTestUtils.RENAME_SUFFIX
 			).build
 
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(systemCompilationUnit))
@@ -60,7 +60,7 @@ class SystemMappingTransforamtionTest extends Pcm2JavaTransformationTest {
 		]
 	}
 
-	static class BidirectionalTest extends SystemMappingTransforamtionTest {
+	static class BidirectionalTest extends SystemMappingTransformationTest {
 		override protected enableTransitiveCyclicChangePropagation() {
 			true
 		}

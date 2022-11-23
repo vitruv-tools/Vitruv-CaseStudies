@@ -42,7 +42,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 		validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
 			).addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME, createVoid(), List.of())).
 				build
 
@@ -67,16 +67,16 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 				val operationSignature = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME).
 					signatures__OperationInterface.claimOne
 				operationSignature.entityName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME +
-					Pcm2JavaTestUtils.RENAME_SUFIX
+					Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
 		validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
 			).addMethod(
-				new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX,
+				new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX,
 					createVoid(), List.of())).build
 
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
@@ -108,7 +108,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 		validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
 			).addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME, createInt(), List.of())).build
 
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
@@ -139,7 +139,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 		validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
 			).addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME, createInt(), List.of())).build
 
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))

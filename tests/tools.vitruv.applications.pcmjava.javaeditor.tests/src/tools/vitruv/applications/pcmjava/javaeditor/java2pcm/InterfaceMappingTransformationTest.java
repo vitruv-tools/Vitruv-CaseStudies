@@ -66,9 +66,9 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
 		final OperationInterface opInterface = super.addInterfaceInContractsPackage();
 
 		final OperationInterface newOpInterface = this.renameClassifierWithName(opInterface.getEntityName(),
-				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX, OperationInterface.class);
+				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX, OperationInterface.class);
 
 		this.assertOperationInterface(repo, newOpInterface,
-				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX);
+				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX);
 	}
 }

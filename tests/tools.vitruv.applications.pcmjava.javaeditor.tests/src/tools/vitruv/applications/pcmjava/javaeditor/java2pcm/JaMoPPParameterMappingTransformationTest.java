@@ -44,10 +44,10 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
 
 		final Parameter newParameter = this.renameParameterInSignature(opInterface.getEntityName(),
 				opSig.getEntityName(), parameter.getParameterName(),
-				Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME_SUFIX);
+				Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX);
 
 		this.assertParameter(opSig, newParameter, "String",
-				Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME_SUFIX);
+				Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX);
 	}
 
 	@Test

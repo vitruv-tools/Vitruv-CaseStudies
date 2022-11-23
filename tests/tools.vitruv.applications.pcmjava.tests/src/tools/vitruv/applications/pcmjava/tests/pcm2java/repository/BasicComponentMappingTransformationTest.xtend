@@ -26,7 +26,7 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 
 		validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
@@ -66,15 +66,15 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 		changePcmView [
 			claimSinglePcmRepository(it) => [
 				claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME).entityName = Pcm2JavaTestUtils.
-					BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+					BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
 		validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFIX + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME +
-					Pcm2JavaTestUtils.RENAME_SUFIX
+					Pcm2JavaTestUtils.RENAME_SUFFIX
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
@@ -99,7 +99,7 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 
 		validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))

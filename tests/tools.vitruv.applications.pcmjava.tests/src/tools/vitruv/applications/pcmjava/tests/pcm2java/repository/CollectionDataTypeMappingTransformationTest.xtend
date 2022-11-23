@@ -39,7 +39,7 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 
 			val collectionDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).addImportWithoutNamespace(arrayListCompilationUnit).setExtends(
 				getTypedReference(arrayListCompilationUnit, voidCompilationUnit)).build
 
@@ -79,7 +79,7 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 
 			val collectionDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).addImportWithoutNamespace(listCompilationUnit).setExtends(
 				getTypedReference(listCompilationUnit, integerCompilationUnit)).build
 
@@ -112,11 +112,11 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 
 			val compositeDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).build
 			val collectionDataTypeCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).addImportWithoutNamespace(arrayListCompilationUnit).setExtends(
 				getTypedReference(arrayListCompilationUnit, compositeDataTypeCompilationUnit)).build
 

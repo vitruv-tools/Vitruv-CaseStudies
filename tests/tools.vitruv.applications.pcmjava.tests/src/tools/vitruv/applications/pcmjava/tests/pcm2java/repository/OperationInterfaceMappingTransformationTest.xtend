@@ -26,7 +26,7 @@ class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformation
 		validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]
@@ -44,14 +44,14 @@ class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformation
 		changePcmView [
 			claimSinglePcmRepository(it) => [
 				val interface = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
-				interface.entityName = Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				interface.entityName = Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
 		validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
-				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
+				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX,
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit))
 		]

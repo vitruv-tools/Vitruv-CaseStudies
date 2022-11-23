@@ -38,21 +38,21 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 
 		changePcmView[
 			claimSinglePcmRepository(it) => [
-				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
 		validateJavaView [
 			val repositoryPackage = createPackage [
-				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 			val contractsPackage = createPackage [
 				name = Pcm2JavaTestUtils.CONTRACTS_PACKAGE
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 			val dataTypesPackage = createPackage [
 				name = Pcm2JavaTestUtils.DATATYPES_PACKAGE
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 			assertExistenceOfPackagesDeeplyEqualTo(List.of(repositoryPackage, contractsPackage, dataTypesPackage))
 		]
@@ -69,32 +69,32 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 
 		changePcmView[
 			claimSinglePcmRepository(it) => [
-				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
 		validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX + "." +
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX + "." +
 					Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).build
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 
 			val repositoryPackage = createPackage [
-				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 			val contractsPackage = createPackage [
 				name = Pcm2JavaTestUtils.CONTRACTS_PACKAGE
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 			val dataTypesPackage = createPackage [
 				name = Pcm2JavaTestUtils.DATATYPES_PACKAGE
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 			val componentPackage = createPackage [
 				name = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
-				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				namespaces += Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 			assertExistenceOfPackagesDeeplyEqualTo(
 				List.of(repositoryPackage, contractsPackage, dataTypesPackage, componentPackage))

@@ -48,7 +48,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
 		final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
 		this.addFieldToClassWithName(cdt.getEntityName(), fieldTypeName, fieldName, InnerDeclaration.class);
 
-		final String newFieldName = fieldName + Pcm2JavaTestUtils.RENAME_SUFIX;
+		final String newFieldName = fieldName + Pcm2JavaTestUtils.RENAME_SUFFIX;
 		final InnerDeclaration newInnerDeclaration = this.renameFieldInClass(cdt.getEntityName(), fieldName,
 				newFieldName);
 

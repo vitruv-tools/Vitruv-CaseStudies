@@ -35,7 +35,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.clai
 
 /**
  * Can be used to dynamically create Java Classes with provided add*() methods.
- * Build returns a CompilationUnit according to the previous made add*() calls.
+ * Build returns a {@link CompilationUnit} according to the previous made add*() calls.
  * 
  * Caution: the FluentJavaClassBuilder does not check for correctness of the builder API calls.
  * This means that the caller has to ensure that references to fields (e.g. for getters, setters,

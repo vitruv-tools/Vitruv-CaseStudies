@@ -80,7 +80,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
 		final Repository repo = super.addRepoContractsAndDatatypesPackage();
 		super.addSecondPackageCorrespondsToBasicComponent();
 
-		final String packageName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFIX;
+		final String packageName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX;
 
 		final Package renamedPackage = super.renamePackage(this.secondPackage, packageName);
 

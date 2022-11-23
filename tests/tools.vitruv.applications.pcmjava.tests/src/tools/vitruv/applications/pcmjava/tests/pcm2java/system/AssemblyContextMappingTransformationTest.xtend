@@ -36,11 +36,11 @@ class AssemblyContextMappingTransformationTest extends Pcm2JavaTransformationTes
 
 		validateJavaView [
 			val basicComponentCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).build
 			val systemCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.SYSTEM_NAMESPACE
 			).addImportWithNamespace(basicComponentCompilationUnit).addPrivateField(
 				Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME, getReference(basicComponentCompilationUnit)).

@@ -377,7 +377,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	protected <T extends EObject> T addClassInPackage(final Package packageForClass,
 			final Class<T> classOfCorrespondingObject) throws Throwable {
-		final String implementingClassName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX;
+		final String implementingClassName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX;
 		return this.addClassInPackage(packageForClass, classOfCorrespondingObject, implementingClassName);
 	}
 
@@ -655,7 +655,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final IMethod iMethod = cu.getType(className).getMethod(methodName, null);
 		final int offset = iMethod.getNameRange().getOffset();
 		final int length = iMethod.getNameRange().getLength();
-		final String newMethodName = methodName + Pcm2JavaTestUtils.RENAME_SUFIX;
+		final String newMethodName = methodName + Pcm2JavaTestUtils.RENAME_SUFFIX;
 		final ReplaceEdit replaceEdit = new ReplaceEdit(offset, length, newMethodName);
 		editCompilationUnit(cu, replaceEdit);
 		return this.findOperationSignatureForJaMoPPMethodInCompilationUnit(newMethodName, className, cu);

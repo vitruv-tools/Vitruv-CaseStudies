@@ -109,8 +109,8 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		var allActualCompilationUnits = getJavaCompilationUnits(view)
 
 		assertEquals(expectedCompilationUnits.size, allActualCompilationUnits.size)
-		assertFalse(allActualCompilationUnits.map[name].hasDuplicate)
-		assertFalse(expectedCompilationUnits.map[name].hasDuplicate)
+		assertFalse(allActualCompilationUnits.map[name].toList.hasDuplicate)
+		assertFalse(expectedCompilationUnits.map[name].toList.hasDuplicate)
 
 		ignoreComparisonOfJavaUtilClassifieres(equalityHelper, allActualCompilationUnits, expectedCompilationUnits)
 		expectedCompilationUnits.forEach [
@@ -125,8 +125,8 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		val allActualPackages = getJavaPackages(view)
 
 		assertEquals(expectedPackages.size, allActualPackages.size)
-		assertFalse(allActualPackages.map[name].hasDuplicate)
-		assertFalse(expectedPackages.map[name].hasDuplicate)
+		assertFalse(allActualPackages.map[name].toList.hasDuplicate)
+		assertFalse(expectedPackages.map[name].toList.hasDuplicate)
 
 		expectedPackages.forEach [
 			var actualPackage = claimJavaPackage(view, it.name)
@@ -153,6 +153,15 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 		return printTarget.toString
 	}
 
+	/*
+	 * Within CollectionDataTypeMappingTransformationTest some classes of java.util are used.
+	 * We don't wan't our tests to compare their internals as their are not part of the test scope,
+	 * their comparison is potentially time consuming and could lead to unwanted errors.
+	 * 
+	 * The method puts all corresponding pairs of compilation units within namespace java.util
+	 * into the EqualityHelper. Calling put on the EqualityHelper has the effect that the
+	 * EqualityHelper treats them as equal and doesn'f check their equality further.
+	 */
 	private def void ignoreComparisonOfJavaUtilClassifieres(EqualityHelper equalityHelper,
 		Collection<CompilationUnit> actualCompilationUnits, Collection<CompilationUnit> expectedCompilationUnits) {
 		val expectedJavaUtilCompilationUnits = expectedCompilationUnits.filter [ cu |
@@ -194,12 +203,8 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 	}
 
 	// === Misc ===
-	private def <T> boolean hasDuplicate(Iterable<T> all) {
-		val Set<T> set = new HashSet<T>();
-		// Set#add returns false if the set does not change, which
-		// indicates that a duplicate element has been added.
-		for (T each : all)
-			if(!set.add(each)) return true;
-		return false;
+	private def <T> boolean hasDuplicate(Collection<T> all) {
+		val Set<T> set = new HashSet<T>(all);
+		return set.size() != all.size();
 	}
 }

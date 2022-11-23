@@ -52,11 +52,11 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 		validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
 			).addMethod(new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME, createVoid(), List.of())).
 				build
 			val componentCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).addImplements(getReference(interfaceCompilationUnit)).addMethod(
 				new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME, createVoid(), List.of())).build
@@ -85,22 +85,22 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 			claimSinglePcmRepository(it) => [
 				val signature = claimOperationInterface(it, Pcm2JavaTestUtils.INTERFACE_NAME).
 					signatures__OperationInterface.claimOne
-				signature.entityName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				signature.entityName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
 		validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
 			).addMethod(
-				new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX,
+				new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX,
 					createVoid(), List.of())).build
 			val componentCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).addMethod(
-				new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX,
+				new MethodDescription(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX,
 					createVoid(), List.of())).addImplements(getReference(interfaceCompilationUnit)).build
 
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(interfaceCompilationUnit, componentCompilationUnit))

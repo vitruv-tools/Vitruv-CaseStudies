@@ -23,7 +23,7 @@ import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCr
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
-class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTransformationTest {
+class RequiredDelegationConnectorMappingTransformationTest extends Pcm2JavaTransformationTest {
 
 	@Test
 	/*
@@ -73,9 +73,9 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 
 		validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFIX).build
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX).build
 			val basicComponentCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
 			).addImportWithNamespace(interfaceCompilationUnit).addPrivateField(
 				getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME,
@@ -84,7 +84,7 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 					getRequiredInterfacFieldOrVariableName(Pcm2JavaTestUtils.INTERFACE_NAME,
 						Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)).build
 			val systemCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFIX,
+				Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.SYSTEM_NAMESPACE
 			).addImportWithNamespace(basicComponentCompilationUnit).addImportWithNamespace(interfaceCompilationUnit).
 				addPrivateField(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME, getReference(basicComponentCompilationUnit)).
@@ -101,7 +101,7 @@ class RequiredDelegationConnectorMappingTransforamtionTest extends Pcm2JavaTrans
 	}
 
 	@Disabled("TODO: adapt reactions")
-	static class BidirectionalTest extends RequiredDelegationConnectorMappingTransforamtionTest {
+	static class BidirectionalTest extends RequiredDelegationConnectorMappingTransformationTest {
 		override protected enableTransitiveCyclicChangePropagation() {
 			true
 		}

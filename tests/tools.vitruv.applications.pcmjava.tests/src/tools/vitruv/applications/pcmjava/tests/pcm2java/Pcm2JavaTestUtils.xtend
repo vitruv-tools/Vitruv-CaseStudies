@@ -21,11 +21,11 @@ class Pcm2JavaTestUtils {
 	public static final String COLLECTION_DATA_TYPE_NAME = "TestCollectionDatatype";
 	public static final String INNER_DEC_NAME = "testInnerDec";
 
-	public static final String RENAME_SUFIX = "Rename";
-	public static final String IMPL_SUFIX = "Impl"
+	public static final String RENAME_SUFFIX = "Rename";
+	public static final String IMPL_SUFFIX = "Impl"
 
 	public static final String DATATYPES_PACKAGE = "datatypes"
 	public static final String CONTRACTS_PACKAGE = "contracts"
-	public static final String DATATYPES_SUFIX = ".datatypes"
-	public static final String CONTRACTS_SUFIX = ".contracts"
+	public static final String DATATYPES_SUFFIX = ".datatypes"
+	public static final String CONTRACTS_SUFFIX = ".contracts"
 }

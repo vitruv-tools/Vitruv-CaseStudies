@@ -108,7 +108,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
 		this.getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
 		final System pcmSystem = super.addClassInSecondPackage(System.class);
 
-		this.assertPCMNamedElement(pcmSystem, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX);
+		this.assertPCMNamedElement(pcmSystem, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX);
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
 
 		final CompositeDataType cdt = this.addClassThatCorrespondsToCompositeDatatype();
 
-		this.assertRepositoryAndPCMNameForDatatype(repo, cdt, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX);
+		this.assertRepositoryAndPCMNameForDatatype(repo, cdt, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX);
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
 		final CollectionDataType collection = super.addClassInPackage(this.getDatatypesPackage(),
 				CollectionDataType.class);
 
-		this.assertRepositoryAndPCMNameForDatatype(repo, collection, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX);
+		this.assertRepositoryAndPCMNameForDatatype(repo, collection, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX);
 	}
 
 	@Test
@@ -154,10 +154,10 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
 		final BasicComponent basicComponent = this.addClassInSecondPackage(BasicComponent.class);
 
 		final BasicComponent newBasicComponent = super.renameClassifierWithName(basicComponent.getEntityName() + "Impl",
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX + Pcm2JavaTestUtils.RENAME_SUFIX, BasicComponent.class);
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX + Pcm2JavaTestUtils.RENAME_SUFFIX, BasicComponent.class);
 
 		this.assertRepositoryAndPCMName(repo, newBasicComponent,
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFIX + Pcm2JavaTestUtils.RENAME_SUFIX);
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX + Pcm2JavaTestUtils.RENAME_SUFFIX);
 		this.assertFilesOnlyForEObjects(newBasicComponent);
 	}
 

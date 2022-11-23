@@ -34,7 +34,7 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 		validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).build
 
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
@@ -53,14 +53,14 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 		changePcmView[
 			claimSinglePcmRepository(it) => [
 				var dataType = dataTypes__Repository.filter(CompositeDataType).claimOne
-				dataType.entityName = Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				dataType.entityName = Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
 		validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
-				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX,
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).build
 
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
@@ -89,7 +89,7 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 		validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).addPrivateField(Pcm2JavaTestUtils.INNER_DEC_NAME, createInt()).addGetterForField(
 				Pcm2JavaTestUtils.INNER_DEC_NAME).addSetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME).build
 
@@ -126,12 +126,12 @@ class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationT
 		validateJavaView[
 			val innerDataTypeExpectedCompilationUnit = new FluentJavaClassBuilder(
 				INNER_COMPOSITE_DATATYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).build
 
 			val outerDataTypeExpectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).addPrivateField(Pcm2JavaTestUtils.INNER_DEC_NAME, getReference(innerDataTypeExpectedCompilationUnit)).
 				addGetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME).addSetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME).
 				build

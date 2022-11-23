@@ -37,7 +37,7 @@ public class MethodMappingTransformationTest extends Java2PcmPackageMappingTrans
 				opSig.getEntityName());
 
 		this.assertOperationSignature(newOpSig, opInterface,
-				Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFIX);
+				Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX);
 	}
 
 	@Test

@@ -43,7 +43,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 		validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).addPrivateField(Pcm2JavaTestUtils.INNER_DEC_NAME, createInt()).addGetterForField(
 				Pcm2JavaTestUtils.INNER_DEC_NAME).addSetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME).build
 
@@ -70,17 +70,17 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 			claimSinglePcmRepository(it) => [
 				val innerDeclaration = claimCompositeDataType(it, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME).
 					innerDeclaration_CompositeDataType.claimOne
-				innerDeclaration.entityName = Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME_SUFIX
+				innerDeclaration.entityName = Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
 		validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
-			).addPrivateField(Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME_SUFIX, createInt()).
-				addGetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME_SUFIX).addSetterForField(
-					Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME_SUFIX).build
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
+			).addPrivateField(Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX, createInt()).
+				addGetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX).addSetterForField(
+					Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX).build
 
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of(expectedCompilationUnit))
 		]
@@ -114,7 +114,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 		validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
-				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFIX
+				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
 			).addPrivateField(Pcm2JavaTestUtils.INNER_DEC_NAME, createBoolean()).addGetterForField(
 				Pcm2JavaTestUtils.INNER_DEC_NAME).addSetterForField(Pcm2JavaTestUtils.INNER_DEC_NAME).build
 
