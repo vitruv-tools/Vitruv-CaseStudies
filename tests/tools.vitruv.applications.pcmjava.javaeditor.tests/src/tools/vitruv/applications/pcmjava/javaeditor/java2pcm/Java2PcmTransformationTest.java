@@ -68,6 +68,7 @@ import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
+import org.emftext.language.java.resource.java.IJavaOptions;
 import org.emftext.language.java.types.TypeReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -182,6 +183,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	private Resource loadResourceIndependentFromView(final URI resourceURI) {
 		ResourceSet resourceSet = new ResourceSetImpl();
+		resourceSet.getLoadOptions().put(IJavaOptions.DISABLE_LAYOUT_INFORMATION_RECORDING, true);
 		Resource resource = loadOrCreateResource(resourceSet, resourceURI);
 		return resource;
 	}
