@@ -2,6 +2,7 @@ package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
 import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createPlatformResourceURI;
+import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.loadOrCreateResource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -94,14 +95,15 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
+import tools.vitruv.change.atomic.EChangeIdManager;
 import tools.vitruv.change.composite.description.VitruviusChange;
+import tools.vitruv.change.composite.description.VitruviusChangeFactory;
 import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.framework.views.changederivation.DefaultStateBasedChangeResolutionStrategy;
 import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 import tools.vitruv.testutils.views.UriMode;
-import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.loadOrCreateResource;
 
 /**
  * Test class that contains utility methods that can be used by JaMoPP2PCM
@@ -245,16 +247,16 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		}
 		refreshProject();
 		StateBasedChangeResolutionStrategy changeResolutionStrategy = new DefaultStateBasedChangeResolutionStrategy();
+		List<VitruviusChange> unresolvedChanges = new ArrayList<>();
 		for (Entry<URI, URI> modifiedResourceURI : oldToNewURIsOfModifiedResources.entrySet()) {
 			Resource currentResource = loadResourceIndependentFromView(modifiedResourceURI.getValue());
 			VitruviusChange change = changeResolutionStrategy.getChangeSequenceBetween(currentResource,
 					resourceAt(modifiedResourceURI.getKey()));
-			VitruviusChange unresolvedChange = change.unresolve();
-			record(resourceAt(modifiedResourceURI.getKey()).getResourceSet(),
-					resourceSet -> unresolvedChange.resolveAndApply(resourceSet));
+			EChangeIdManager.setOrGenerateIds(change.getEChanges(), getUuidResolver(), false);
+			unresolvedChanges.add(change.unresolve());
 		}
 		oldToNewURIsOfModifiedResources.clear();
-		propagate();
+		getVirtualModel().propagateChange(VitruviusChangeFactory.getInstance().createCompositeChange(unresolvedChanges));
 		disposeViewResources();
 	}
 
@@ -329,7 +331,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			final URI uri = createPlatformResourceURI(cu.getResource());
 			final Classifier jaMoPPClass = this.getJaMoPPClassifierForURI(uri);
 			return claimOne(getCorrespondingEObjects(jaMoPPClass, type));
-		} catch (final Throwable e) {
+		} catch (final CoreException e) {
 			logger.warn(e.getMessage());
 		}
 		return null;
