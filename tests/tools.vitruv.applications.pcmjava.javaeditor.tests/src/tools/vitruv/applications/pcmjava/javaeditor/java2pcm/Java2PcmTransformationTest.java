@@ -91,7 +91,7 @@ import org.palladiosimulator.pcm.system.System;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
 import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.propagation.ChangePropagationMode;
@@ -377,7 +377,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	protected <T extends EObject> T addClassInPackage(final Package packageForClass,
 			final Class<T> classOfCorrespondingObject) throws Throwable {
-		final String implementingClassName = Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME;
+		final String implementingClassName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX;
 		return this.addClassInPackage(packageForClass, classOfCorrespondingObject, implementingClassName);
 	}
 
@@ -613,7 +613,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	protected OperationSignature addMethodToInterfaceWithCorrespondence(final String interfaceName) throws Throwable {
-		final String methodName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME;
+		final String methodName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME;
 		return this.addMethodToInterfaceWithCorrespondence(interfaceName, methodName);
 	}
 
@@ -655,7 +655,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final IMethod iMethod = cu.getType(className).getMethod(methodName, null);
 		final int offset = iMethod.getNameRange().getOffset();
 		final int length = iMethod.getNameRange().getLength();
-		final String newMethodName = methodName + Pcm2JavaTestUtils.RENAME;
+		final String newMethodName = methodName + Pcm2JavaTestUtils.RENAME_SUFFIX;
 		final ReplaceEdit replaceEdit = new ReplaceEdit(offset, length, newMethodName);
 		editCompilationUnit(cu, replaceEdit);
 		return this.findOperationSignatureForJaMoPPMethodInCompilationUnit(newMethodName, className, cu);

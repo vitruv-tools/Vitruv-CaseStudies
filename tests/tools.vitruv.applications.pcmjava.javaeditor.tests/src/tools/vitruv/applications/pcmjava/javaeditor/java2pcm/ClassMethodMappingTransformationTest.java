@@ -3,7 +3,7 @@ package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import  tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 
 public class ClassMethodMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
@@ -19,7 +19,7 @@ public class ClassMethodMappingTransformationTest extends Java2PcmPackageMapping
 				Pcm2JavaTestUtils.INTERFACE_NAME);
 		// create interface method
 		super.addMethodToInterfaceWithCorrespondence(Pcm2JavaTestUtils.INTERFACE_NAME,
-				Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
+				Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME);
 		// add implements/provided role
 		super.addImplementsCorrespondingToOperationProvidedRoleToClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Impl",
 				Pcm2JavaTestUtils.INTERFACE_NAME);
@@ -27,10 +27,10 @@ public class ClassMethodMappingTransformationTest extends Java2PcmPackageMapping
 		// actual test: add class method to implementing class that overrides the
 		// interface
 		final ResourceDemandingSEFF correspondingSeff = super.addClassMethodToClassThatOverridesInterfaceMethod(
-				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Impl", Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Impl", Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME);
 
 		// assert the correspondingSEFF
-		assertCorrespondingSEFF(correspondingSeff, Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
+		assertCorrespondingSEFF(correspondingSeff, Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME);
 	}
 
 }

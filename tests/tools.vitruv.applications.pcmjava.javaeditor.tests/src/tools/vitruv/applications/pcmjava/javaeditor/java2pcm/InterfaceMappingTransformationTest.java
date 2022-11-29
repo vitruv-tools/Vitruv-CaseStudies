@@ -6,7 +6,7 @@ import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -66,9 +66,9 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
 		final OperationInterface opInterface = super.addInterfaceInContractsPackage();
 
 		final OperationInterface newOpInterface = this.renameClassifierWithName(opInterface.getEntityName(),
-				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME, OperationInterface.class);
+				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX, OperationInterface.class);
 
 		this.assertOperationInterface(repo, newOpInterface,
-				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
+				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX);
 	}
 }

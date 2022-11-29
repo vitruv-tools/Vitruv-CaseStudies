@@ -13,8 +13,11 @@ Require-Bundle: org.apache.log4j,
  edu.kit.ipd.sdq.commons.util.java,
  tools.vitruv.testutils.vsum,
  tools.vitruv.applications.util.temporary,
- tools.vitruv.applications.pcmjava
-Export-Package: tools.vitruv.applications.pcmjava.pcm2java,
- tools.vitruv.applications.pcmjava.pcm2java.repository,
- tools.vitruv.applications.pcmjava.pcm2java.system
+ tools.vitruv.applications.pcmjava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ edu.kit.ipd.sdq.activextendannotations
+Export-Package: tools.vitruv.applications.pcmjava.tests.pcm2java,
+ tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 Bundle-Vendor: vitruv.tools

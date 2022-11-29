@@ -3,7 +3,6 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.LinkedList
 import java.util.List
-import java.util.Set
 import java.util.Stack
 import java.util.Vector
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -29,13 +28,15 @@ import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.system.SystemPackage
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
+
+import static com.google.common.base.Preconditions.checkState
 import static tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
-import static com.google.common.base.Preconditions.checkState
+
+import static extension tools.vitruv.applications.pcmjava.PcmJavaTransformationUtil.getCorrespondingPackageName
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
-import static extension tools.vitruv.applications.pcmjava.PcmJavaTransformationUtil.getCorrespondingPackageName
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -472,15 +473,10 @@ routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType)
 		}
 
 		// Let user select the class to map the collection type to
-		var Set<Class<?>> collectionDataTypes = new HashSet;
-		collectionDataTypes += #[ArrayList, LinkedList, Vector, Stack, HashSet];
-		val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size);
-		for (collectionDataType : collectionDataTypes) {
-			collectionDataTypeNames += collectionDataType.name;
-		}
+		var List<Class<?>> collectionDataTypes = #[ArrayList, LinkedList, Vector, Stack, HashSet];
 		val String selectTypeMsg = "Please select type (or interface) that should be used for the type";
 		val int selectedType = userInteractor.singleSelectionDialogBuilder.message(selectTypeMsg).choices(
-			collectionDataTypeNames).windowModality(WindowModality.MODAL).startInteraction();
+			collectionDataTypes.map[it.name]).windowModality(WindowModality.MODAL).startInteraction();
 		val Class<?> selectedClass = collectionDataTypes.get(selectedType);
 
 		createOrFindDataTypeClass(dataType, datatypesPackage)
@@ -584,6 +580,7 @@ routine renameInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclarat
 	update {
 		compositeTypeField.name = innerDeclaration.entityName;
 		compositeTypeGetterMethod.name = "get" + innerDeclaration.entityName.toFirstUpper;
+		compositeTypeSetterMethod.name = "set" + innerDeclaration.entityName.toFirstUpper;
 		if (!compositeTypeSetterMethod.parameters.nullOrEmpty) {
 			val parameter = compositeTypeSetterMethod.parameters.get(0);
 			parameter.name = "set" + innerDeclaration.entityName.toFirstUpper;
@@ -981,6 +978,7 @@ routine removeRequiredRole(pcm::RequiredRole requiredRole) {
 	}
 }
 
+// TODO: the matching via fieldName does not work in case of an rename, as the old name is already overwritten
 routine removeParameterToFieldAssignmentFromConstructor(java::Constructor ctor, String fieldName) {
 	update {
 		for (statement : ctor.statements) {
