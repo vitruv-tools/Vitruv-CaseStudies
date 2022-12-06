@@ -5,7 +5,7 @@ Bundle-SymbolicName: tools.vitruv.applications.cbs.testutils
 Automatic-Module-Name: tools.vitruv.applications.cbs.testutils
 Bundle-Vendor: vitruv.tools
 Bundle-Version: 0.1.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: tools.vitruv.testutils.vsum,
  org.eclipse.uml2.uml,
  org.palladiosimulator.pcm,

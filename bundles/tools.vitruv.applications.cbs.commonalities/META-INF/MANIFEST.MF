@@ -18,5 +18,5 @@ Require-Bundle: tools.vitruv.framework.applications,
  edu.kit.ipd.sdq.activextendannotations,
  tools.vitruv.applications.util.temporary,
  edu.kit.ipd.sdq.commons.util.emf
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities

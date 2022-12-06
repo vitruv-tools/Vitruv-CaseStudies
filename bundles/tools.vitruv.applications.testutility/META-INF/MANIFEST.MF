@@ -11,6 +11,6 @@ Require-Bundle: tools.vitruv.testutils.vsum,
  org.eclipse.xtend.lib,
  edu.kit.ipd.sdq.commons.util.java,
  edu.kit.ipd.sdq.activextendannotations;bundle-version="1.5.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: tools.vitruv.applications.testutility.uml
 Bundle-Vendor: vitruv.tools

@@ -4,7 +4,7 @@ Bundle-Name: Vitruv Insurance-Persons Demo Application Tests
 Bundle-SymbolicName: tools.vitruv.applications.demo.insurancepersons.tests
 Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.demo.insurancepersons.tests
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: tools.vitruv.dsls.demo.insurancepersons.tests,
  tools.vitruv.testutils.vsum,
  org.junit.jupiter.api

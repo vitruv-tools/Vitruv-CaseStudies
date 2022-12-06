@@ -4,7 +4,7 @@ Bundle-Name: Vitruv PCM-Java Application
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmjava
 Bundle-Version: 3.0.1.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.pcmjava,
  tools.vitruv.applications.pcmjava.java2pcm,
