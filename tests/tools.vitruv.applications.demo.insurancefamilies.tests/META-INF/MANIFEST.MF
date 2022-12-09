@@ -4,7 +4,7 @@ Bundle-Name: Vitruv Insurance-Families Demo Application Tests
 Bundle-SymbolicName: tools.vitruv.applications.demo.insurancefamilies.tests
 Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.demo.insurancefamilies.tests
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: vitruv.tools
 Require-Bundle: tools.vitruv.dsls.demo.insurancefamilies.tests,
  tools.vitruv.testutils.vsum,

@@ -4,14 +4,13 @@ Bundle-Name: Vitruv UML-Java Tests
 Bundle-SymbolicName: tools.vitruv.applications.umljava.tests
 Automatic-Module-Name: tools.vitruv.applications.umljava.tests
 Bundle-Version: 3.0.1.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.junit.jupiter.api,
  org.junit.jupiter.params,
  tools.vitruv.applications.umljava,
  tools.vitruv.framework.applications,
  tools.vitruv.testutils.vsum,
  org.hamcrest.core,
- org.apache.commons.io,
  edu.kit.ipd.sdq.activextendannotations,
  edu.kit.ipd.sdq.commons.util.emf,
  edu.kit.ipd.sdq.commons.util.java,

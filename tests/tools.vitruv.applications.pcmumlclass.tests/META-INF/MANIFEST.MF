@@ -4,7 +4,7 @@ Bundle-Name: Vitruv PCM-UML Class Application Tests
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.tests
 Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.tests
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: tools.vitruv.testutils.vsum,
  org.junit.jupiter.api,
  org.eclipse.emf.compare,

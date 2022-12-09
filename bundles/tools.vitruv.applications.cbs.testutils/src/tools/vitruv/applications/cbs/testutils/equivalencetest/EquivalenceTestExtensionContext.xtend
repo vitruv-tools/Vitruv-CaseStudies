@@ -85,6 +85,10 @@ package class EquivalenceTestExtensionContext implements ExtensionContext {
 		parentContext.testMethod
 	}
 
+	override getExecutableInvoker() {
+		parentContext.executableInvoker
+	}
+
 	override getUniqueId() {
 		'''«parentContext.uniqueId»-«executionIndex»'''
 	}

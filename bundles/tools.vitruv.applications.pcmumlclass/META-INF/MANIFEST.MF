@@ -4,7 +4,7 @@ Bundle-Name: Vitruv PCM-UML Class Application
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass;singleton:=true
 Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Eclipse-ExtensibleAPI: true
 Export-Package: mir.reactions.combinedPcmToUmlClassReactions;x-internal:=true,
  mir.reactions.combinedUmlClassToPcmReactions;x-internal:=true,

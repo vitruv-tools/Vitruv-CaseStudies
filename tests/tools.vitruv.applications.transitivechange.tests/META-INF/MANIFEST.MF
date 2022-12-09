@@ -4,7 +4,7 @@ Bundle-Name: Transitive Transformation Tests between PCM, Java, and UML Class
 Bundle-SymbolicName: tools.vitruv.applications.transitivechange.tests
 Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.transitivechange.tests
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.junit.jupiter.api,
  tools.vitruv.testutils.vsum,
  tools.vitruv.applications.umljava,
