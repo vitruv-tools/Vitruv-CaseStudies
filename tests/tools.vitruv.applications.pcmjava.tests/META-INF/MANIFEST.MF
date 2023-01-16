@@ -5,9 +5,9 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmjava.tests
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.tests
 Bundle-Version: 3.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-17
+Import-Package: org.junit.jupiter.api
 Require-Bundle: org.apache.log4j,
  com.google.guava,
- org.junit.jupiter.api,
  org.hamcrest.core,
  org.emftext.language.java.resource.java,
  edu.kit.ipd.sdq.commons.util.java,
