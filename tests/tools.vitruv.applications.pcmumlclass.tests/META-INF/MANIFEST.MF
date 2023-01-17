@@ -5,8 +5,9 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.tests
 Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-17
+Import-Package: org.junit.jupiter.api,
+ org.junit.jupiter.api.extension
 Require-Bundle: tools.vitruv.testutils.vsum,
- org.junit.jupiter.api,
  org.eclipse.emf.compare,
  org.hamcrest.core,
  tools.vitruv.applications.pcmumlclass,

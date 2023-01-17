@@ -5,7 +5,6 @@ Bundle-SymbolicName: tools.vitruv.applications.testutility
 Automatic-Module-Name: tools.vitruv.applications.testutility
 Bundle-Version: 0.3.0.qualifier
 Require-Bundle: tools.vitruv.testutils.vsum,
- org.junit.jupiter.api,
  tools.vitruv.applications.pcmumlclass,
  tools.vitruv.applications.util.temporary,
  org.eclipse.xtend.lib,
