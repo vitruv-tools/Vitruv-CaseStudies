@@ -8,11 +8,13 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.^extension.ExtendWith
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.framework.views.View
+import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
 
 import static org.hamcrest.MatcherAssert.assertThat
@@ -22,6 +24,7 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 
+@ExtendWith(RegisterMetamodelsInStandalone)
 abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest {
 
 	@Accessors(PROTECTED_GETTER)
