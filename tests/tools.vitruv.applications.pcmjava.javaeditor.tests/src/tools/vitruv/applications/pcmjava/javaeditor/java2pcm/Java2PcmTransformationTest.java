@@ -147,6 +147,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	public static void setupJavaFactories() {
 		JavaSetup.prepareFactories();
 	}
+	
+	/** Hotfix to ignore layout information on reload, see https://github.com/vitruv-tools/Vitruv-Change/issues/49 */
+	@BeforeEach
+	void patchResourceSet() {
+		ResourceSet resourceSet = resourceAt(URI.createFileURI("dummy.temp")).getResourceSet();
+		resourceSet.getLoadOptions().put(IJavaOptions.DISABLE_LAYOUT_INFORMATION_RECORDING, true);
+		resourceSet.getResources().forEach(Resource::unload);
+		resourceSet.getResources().clear();
+	}
 
 	@BeforeEach
 	public void setupJavaProject(@TestProject Path testProjectFolder) {
