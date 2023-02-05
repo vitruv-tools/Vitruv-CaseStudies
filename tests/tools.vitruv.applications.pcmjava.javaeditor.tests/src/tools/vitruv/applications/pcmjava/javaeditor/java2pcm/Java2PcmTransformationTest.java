@@ -95,9 +95,8 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
-import tools.vitruv.change.atomic.EChangeIdManager;
+import tools.vitruv.change.atomic.id.IdResolver;
 import tools.vitruv.change.composite.description.VitruviusChange;
-import tools.vitruv.change.composite.description.VitruviusChangeFactory;
 import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.framework.views.changederivation.DefaultStateBasedChangeResolutionStrategy;
 import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
@@ -247,16 +246,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		}
 		refreshProject();
 		StateBasedChangeResolutionStrategy changeResolutionStrategy = new DefaultStateBasedChangeResolutionStrategy();
-		List<VitruviusChange> unresolvedChanges = new ArrayList<>();
 		for (Entry<URI, URI> modifiedResourceURI : oldToNewURIsOfModifiedResources.entrySet()) {
 			Resource currentResource = loadResourceIndependentFromView(modifiedResourceURI.getValue());
 			VitruviusChange change = changeResolutionStrategy.getChangeSequenceBetween(currentResource,
 					resourceAt(modifiedResourceURI.getKey()));
-			EChangeIdManager.setOrGenerateIds(change.getEChanges(), getUuidResolver(), false);
-			unresolvedChanges.add(change.unresolve());
+ 			record(resourceAt(modifiedResourceURI.getKey()).getResourceSet(),
+ 					resourceSet -> change.resolveAndApply(IdResolver.create(resourceSet)));
 		}
 		oldToNewURIsOfModifiedResources.clear();
-		getVirtualModel().propagateChange(VitruviusChangeFactory.getInstance().createCompositeChange(unresolvedChanges));
+		propagate();
 		disposeViewResources();
 	}
 
