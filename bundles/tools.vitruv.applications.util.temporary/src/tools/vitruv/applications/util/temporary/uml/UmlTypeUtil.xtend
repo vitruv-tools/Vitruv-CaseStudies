@@ -4,8 +4,9 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
 import java.util.function.Function
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
+import org.eclipse.uml2.uml.PrimitiveType
 
 @Utility
 class UmlTypeUtil {
@@ -17,6 +18,10 @@ class UmlTypeUtil {
 	}
 
     def static getUmlPrimitiveTypes(Function<URI, Resource> resourceRetriever) {
+//    	val reg = Resource.Factory.Registry.INSTANCE;
+//		val m = reg.getExtensionToFactoryMap();
+//		m.put("library\\.uml", new XMIResourceFactoryImpl());
+		
         val resources = #[
         	resourceRetriever.apply(UML_JAVA_PRIMITIVE_TYPES_URI),
         	resourceRetriever.apply(UML_PRIMITIVE_TYPES_URI)
