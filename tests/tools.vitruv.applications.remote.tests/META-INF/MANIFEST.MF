@@ -1,11 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv Framwork Remote Tests
-Bundle-SymbolicName: tools.vitruv.applications.remote.tests;singleton:=true
+Bundle-SymbolicName: tools.vitruv.applications.remote.tests
 Automatic-Module-Name: tools.vitruv.applications.remote.tests
 Bundle-Version: 3.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Fragment-Host: tools.vitruv.framework.remote
 Require-Bundle: org.eclipse.emf.ecore,
  org.eclipse.equinox.app,
  edu.kit.ipd.sdq.metamodels.families,
@@ -24,6 +23,7 @@ Require-Bundle: org.eclipse.emf.ecore,
  org.eclipse.jetty.http,
  org.eclipse.jetty.io,
  tools.vitruv.dsls.reactions.runtime,
- org.eclipse.emf.compare
+ org.eclipse.emf.compare,
+ org.eclipse.emf.ecore.xmi
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: vitruv.tools
