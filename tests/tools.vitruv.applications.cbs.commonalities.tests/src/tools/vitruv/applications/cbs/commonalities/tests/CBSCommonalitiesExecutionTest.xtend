@@ -1,20 +1,21 @@
 package tools.vitruv.applications.cbs.commonalities.tests
 
-import org.junit.jupiter.api.BeforeEach
-import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
-import tools.vitruv.testutils.LegacyVitruvApplicationTest
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.emf.ecore.resource.ResourceSet
-import org.junit.jupiter.api.AfterEach
-import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
-import org.eclipse.emf.common.util.URI
 import java.nio.file.Path
+import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import tools.vitruv.applications.cbs.commonalities.CbsCommonalitiesApplication
-import tools.vitruv.change.propagation.ChangePropagationMode
-import tools.vitruv.applications.util.temporary.java.JavaSetup
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.^extension.ExtendWith
+import tools.vitruv.applications.cbs.commonalities.CbsCommonalitiesApplication
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
+import tools.vitruv.applications.util.temporary.java.JavaSetup
+import tools.vitruv.change.propagation.ChangePropagationMode
+import tools.vitruv.testutils.LegacyVitruvApplicationTest
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 
 @ExtendWith(RegisterMetamodelsInStandalone)
@@ -28,10 +29,14 @@ abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest
 		virtualModel.changePropagationMode = ChangePropagationMode.TRANSITIVE_EXCEPT_LEAVES
 	}
 	
+	@BeforeAll
+	def static void setupJavaFactories() {
+		JavaSetup.prepareFactories()
+	}
+	
 	@BeforeEach
 	def protected setupJaMoPP() {
 		JavaSetup.resetClasspathAndRegisterStandardLibrary()
-		JavaSetup.prepareFactories()
 	}
 	
 	override protected getChangePropagationSpecifications() {
