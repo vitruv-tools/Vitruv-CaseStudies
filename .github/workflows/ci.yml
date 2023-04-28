@@ -37,7 +37,7 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Build and Verify
-        uses: GabrielBB/xvfb-action@v1
+        uses: coactions/setup-xvfb@v1
         with:
           run: >
             ./mvnw -B clean verify
