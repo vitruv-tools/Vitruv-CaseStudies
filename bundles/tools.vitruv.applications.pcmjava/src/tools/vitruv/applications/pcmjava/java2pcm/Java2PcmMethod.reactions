@@ -39,6 +39,7 @@ reaction ParameterCreated {
 
 routine createParameter(java::OrdinaryParameter javaParameter, java::Parametrizable javaMethod) {
 	match {
+		require absence of pcm::Parameter corresponding to javaParameter
 		val operationSignature = retrieve pcm::OperationSignature corresponding to javaMethod
 	}
 	create {
@@ -293,6 +294,7 @@ reaction InterfaceMethodCreated {
 
 routine createPCMSignature(java::InterfaceMethod interfaceMethod) {
 	match {
+		require absence of pcm::OperationInterface corresponding to javaInterface
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to interfaceMethod.
 			containingConcreteClassifier
 	}
