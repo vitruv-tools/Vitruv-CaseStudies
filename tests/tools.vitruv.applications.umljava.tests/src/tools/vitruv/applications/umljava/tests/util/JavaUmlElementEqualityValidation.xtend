@@ -3,23 +3,23 @@ package tools.vitruv.applications.umljava.tests.util
 import org.eclipse.uml2.uml.Feature
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Property
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.Method
-import org.emftext.language.java.modifiers.AnnotableAndModifiable
-import org.emftext.language.java.modifiers.Final
-import org.emftext.language.java.modifiers.Static
-import org.emftext.language.java.modifiers.Abstract
-import org.emftext.language.java.types.Void
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.types.NamespaceClassifierReference
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.members.Method
+import tools.mdsd.jamopp.model.java.modifiers.AnnotableAndModifiable
+import tools.mdsd.jamopp.model.java.modifiers.Final
+import tools.mdsd.jamopp.model.java.modifiers.Static
+import tools.mdsd.jamopp.model.java.modifiers.Abstract
+import tools.mdsd.jamopp.model.java.types.Void
+import tools.mdsd.jamopp.model.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.types.NamespaceClassifierReference
 import java.util.List
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.EnumerationLiteral
-import org.emftext.language.java.members.EnumConstant
+import tools.mdsd.jamopp.model.java.members.EnumConstant
 import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.Model
-import org.emftext.language.java.members.InterfaceMethod
-import org.emftext.language.java.members.ClassMethod
+import tools.mdsd.jamopp.model.java.members.InterfaceMethod
+import tools.mdsd.jamopp.model.java.members.ClassMethod
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
 
@@ -35,13 +35,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.fail
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import org.emftext.language.java.members.Constructor
+import tools.mdsd.jamopp.model.java.members.Constructor
 import org.eclipse.uml2.uml.Classifier
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.parameters.Parametrizable
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.parameters.Parametrizable
 import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.DataType
-import org.emftext.language.java.parameters.VariableLengthParameter
+import tools.mdsd.jamopp.model.java.parameters.VariableLengthParameter
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
 import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
@@ -61,7 +61,7 @@ class JavaUmlElementEqualityValidation {
 	 * Does not compare the package contents
 	 */
 	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.Package uPackage,
-		org.emftext.language.java.containers.Package jPackage) {
+		tools.mdsd.jamopp.model.java.containers.Package jPackage) {
 		assertEquals(uPackage.name, jPackage.name, "Package names must be equal")
 		assertEquals(getUmlParentNamespaceAsStringList(uPackage), jPackage.namespaces,
 			"Package namespaces names must be equal")
@@ -86,24 +86,24 @@ class JavaUmlElementEqualityValidation {
 	// CLASSIFIERS
 	// **************
 	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.Class uClass,
-		org.emftext.language.java.classifiers.Class jClass) {
+		tools.mdsd.jamopp.model.java.classifiers.Class jClass) {
 		assertClassifiersCommonDataEquals(uClass, jClass)
 		assertAbstractClassEquals(uClass, jClass)
 		assertFinalClassEquals(uClass, jClass)
 	}
 
 	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.DataType uDataType,
-		org.emftext.language.java.classifiers.Class jClass) {
+		tools.mdsd.jamopp.model.java.classifiers.Class jClass) {
 		assertClassifiersCommonDataEquals(uDataType, jClass)
 	}
 
 	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.Interface uInterface,
-		org.emftext.language.java.classifiers.Interface jInterface) {
+		tools.mdsd.jamopp.model.java.classifiers.Interface jInterface) {
 		assertClassifiersCommonDataEquals(uInterface, jInterface)
 	}
 
 	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.Enumeration uEnum,
-		org.emftext.language.java.classifiers.Enumeration jEnum) {
+		tools.mdsd.jamopp.model.java.classifiers.Enumeration jEnum) {
 		assertClassifiersCommonDataEquals(uEnum, jEnum)
 		assertEnumConstantListEquals(uEnum.ownedLiterals, jEnum.constants)
 	}
@@ -236,7 +236,7 @@ class JavaUmlElementEqualityValidation {
 	}
 
 	def static dispatch void assertElementsEqual(org.eclipse.uml2.uml.Parameter uParameter,
-		org.emftext.language.java.parameters.Parameter jParameter) {
+		tools.mdsd.jamopp.model.java.parameters.Parameter jParameter) {
 		assertEquals(uParameter.name, jParameter.name, "Parameter names must be equal")
 		if (jParameter instanceof VariableLengthParameter) {
 			assertEquals(LiteralUnlimitedNatural.UNLIMITED, uParameter.upper, "UML parameter for Java variable length parameter must have multiplicity *")
@@ -277,7 +277,7 @@ class JavaUmlElementEqualityValidation {
 	}
 
 	private def static void assertFinalClassEquals(org.eclipse.uml2.uml.Class uClass,
-		org.emftext.language.java.classifiers.Class jClass) {
+		tools.mdsd.jamopp.model.java.classifiers.Class jClass) {
 		if (uClass.finalSpecialization) {
 			assertTrue(
 				jClass.hasModifier(Final), [String.format("Class %s is expected to be final but is not", jClass)])
@@ -300,7 +300,7 @@ class JavaUmlElementEqualityValidation {
 	}
 
 	private def static void assertAbstractClassEquals(org.eclipse.uml2.uml.Class uClass,
-		org.emftext.language.java.classifiers.Class jClass) {
+		tools.mdsd.jamopp.model.java.classifiers.Class jClass) {
 		if (uClass.abstract) {
 			assertTrue(jClass.hasModifier(Abstract), [
 				String.format("Class %s is expected to be abstract but is not", jClass)
@@ -390,7 +390,7 @@ class JavaUmlElementEqualityValidation {
 	}
 
 	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType,
-		org.emftext.language.java.types.PrimitiveType jPrimType) {
+		tools.mdsd.jamopp.model.java.types.PrimitiveType jPrimType) {
 		assertNotNull(uPrimType, "Primitive type to check must not be null")
 		val jTypeMapped = UmlJavaTypePropagationHelper.getJavaTypeReferenceForUmlPrimitiveType(uPrimType)
 		assertFalse(jTypeMapped instanceof Void, [

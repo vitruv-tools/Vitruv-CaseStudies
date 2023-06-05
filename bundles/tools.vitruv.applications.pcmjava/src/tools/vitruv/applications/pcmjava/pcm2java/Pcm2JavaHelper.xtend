@@ -2,10 +2,10 @@ package tools.vitruv.applications.pcmjava.pcm2java
 
 import java.util.Optional
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import edu.kit.ipd.sdq.activextendannotations.Utility

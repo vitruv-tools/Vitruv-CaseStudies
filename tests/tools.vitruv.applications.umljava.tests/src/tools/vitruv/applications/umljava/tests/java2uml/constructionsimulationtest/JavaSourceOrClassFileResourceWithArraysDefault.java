@@ -5,12 +5,12 @@ import java.io.InputStream;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
-import org.emftext.language.java.containers.CompilationUnit;
-import org.emftext.language.java.members.Field;
-import org.emftext.language.java.members.MembersFactory;
-import org.emftext.language.java.resource.JavaSourceOrClassFileResource;
-import org.emftext.language.java.types.ClassifierReference;
-import org.emftext.language.java.types.TypesFactory;
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
+import tools.mdsd.jamopp.model.java.members.Field;
+import tools.mdsd.jamopp.model.java.members.MembersFactory;
+import tools.mdsd.jamopp.model.java.resource.JavaSourceOrClassFileResource;
+import tools.mdsd.jamopp.model.java.types.ClassifierReference;
+import tools.mdsd.jamopp.model.java.types.TypesFactory;
 
 public class JavaSourceOrClassFileResourceWithArraysDefault extends JavaSourceOrClassFileResource {
 

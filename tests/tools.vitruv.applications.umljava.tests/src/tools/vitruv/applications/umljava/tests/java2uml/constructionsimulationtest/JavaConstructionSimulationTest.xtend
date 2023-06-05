@@ -9,16 +9,16 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.expressions.Expression
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.Member
-import org.emftext.language.java.resource.java.IJavaOptions
-import org.emftext.language.java.statements.Statement
-import org.emftext.language.java.statements.StatementListContainer
-import org.emftext.language.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.expressions.Expression
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.members.Member
+import tools.mdsd.jamopp.model.java.resource.java.IJavaOptions
+import tools.mdsd.jamopp.model.java.statements.Statement
+import tools.mdsd.jamopp.model.java.statements.StatementListContainer
+import tools.mdsd.jamopp.model.java.types.TypeReference
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -118,7 +118,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 
 	private def void transformJavaFilesAndValidateUmlModel(Iterable<File> javaFiles) {
 		val javaRoots = javaFiles.toList.loadRootObjects
-		val packages = javaRoots.filter(org.emftext.language.java.containers.Package)
+		val packages = javaRoots.filter(tools.mdsd.jamopp.model.java.containers.Package)
 		val compilationUnits = javaRoots.filter(CompilationUnit)
 
 		val compilationUnitExtractors = packages.mapFixed[new CompilationUnitExtractor(it)]
@@ -163,11 +163,11 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 		for (classifier : classifiers) {
 			val namespaces = classifier.containingCompilationUnit.namespaces
 			switch (classifier) {
-				org.emftext.language.java.classifiers.Class:
+				tools.mdsd.jamopp.model.java.classifiers.Class:
 					assertClassWithNameInPackage(namespaces, classifier.name)
-				org.emftext.language.java.classifiers.Interface:
+				tools.mdsd.jamopp.model.java.classifiers.Interface:
 					assertInterfaceWithNameInPackage(namespaces, classifier.name)
-				org.emftext.language.java.classifiers.Enumeration:
+				tools.mdsd.jamopp.model.java.classifiers.Enumeration:
 					assertEnumWithNameInPackage(namespaces, classifier.name)
 			}
 		}
@@ -181,7 +181,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 			if (!file.isPackageInfoFile) {
 				assertThat(contents.head, instanceOf(CompilationUnit))
 			} else if (file.isPackageInfoFile) {
-				assertThat(contents.head, instanceOf(org.emftext.language.java.containers.Package))
+				assertThat(contents.head, instanceOf(tools.mdsd.jamopp.model.java.containers.Package))
 			}
 			contents
 		]
@@ -217,7 +217,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 
 	@FinalFieldsConstructor
 	private static class CompilationUnitExtractor {
-		val org.emftext.language.java.containers.Package javaPackage
+		val tools.mdsd.jamopp.model.java.containers.Package javaPackage
 		val List<CompilationUnit> compilationUnits = newArrayList
 
 		def void removeAndStoreCompilationUnits() {
@@ -300,7 +300,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 					extensions += classifier.extends
 					classifier.extends.clear()
 				}
-				org.emftext.language.java.classifiers.Class: {
+				tools.mdsd.jamopp.model.java.classifiers.Class: {
 					extensions += classifier.extends
 					classifier.extends = null
 					implementations += classifier.implements
@@ -316,7 +316,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 					classifier.extends += extensions
 					extensions.clear()
 				}
-				org.emftext.language.java.classifiers.Class: {
+				tools.mdsd.jamopp.model.java.classifiers.Class: {
 					classifier.extends = extensions.claimOne
 					extensions.clear()
 					classifier.implements += implementations

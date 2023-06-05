@@ -3,12 +3,12 @@ import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelpe
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.UMLPackage
-import org.emftext.language.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.classifiers.Interface
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
-import org.emftext.language.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
-import "http://www.emftext.org/java" as java
+import "https://mdsd.tools/jamopp/java" as java
 
 reactions: javaToUmlTypePropagation
 in reaction to changes in java
@@ -76,7 +76,7 @@ routine createExistingUmlClassifier(java::ConcreteClassifier existingJavaClassif
 		createExistingUmlPackage(existingJavaClassifier.containingCompilationUnit.namespacesAsString)
 		switch (existingJavaClassifier) {
 			Interface: createExistingUmlInterface(existingJavaClassifier)
-			org.emftext.language.java.classifiers.Class: createExistingUmlClass(existingJavaClassifier)
+			tools.mdsd.jamopp.model.java.classifiers.Class: createExistingUmlClass(existingJavaClassifier)
 		}
 	}
 }

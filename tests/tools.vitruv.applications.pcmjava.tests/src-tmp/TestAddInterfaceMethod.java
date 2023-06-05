@@ -1,0 +1,2 @@
+interface TestAddInterfaceMethod {
+ void testMethod() 

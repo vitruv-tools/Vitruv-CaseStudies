@@ -5,7 +5,7 @@ import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.UMLPackage
-import org.emftext.language.java.containers.ContainersPackage
+import tools.mdsd.jamopp.model.java.containers.ContainersPackage
 import tools.vitruv.change.interaction.UserInteractionOptions.NotificationType
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 import static extension tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
@@ -19,7 +19,7 @@ import static java.util.List.copyOf
 import java.util.ArrayList
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
-import "http://www.emftext.org/java" as java
+import "https://mdsd.tools/jamopp/java" as java
 
 reactions: umlToJavaClassifier
 in reaction to changes in uml
@@ -52,7 +52,7 @@ routine createOrFindJavaClass(uml::Classifier umlClassifier) {
 
 routine createOrFindJavaClassInPackage(uml::Classifier umlClassifier, java::Package javaPackage) {
 	update {
-		val foundClass = findClassifier(umlClassifier.name, javaPackage, org.emftext.language.java.classifiers.Class)
+		val foundClass = findClassifier(umlClassifier.name, javaPackage, tools.mdsd.jamopp.model.java.classifiers.Class)
 		if (foundClass === null) {
 			createJavaClass(umlClassifier)
 		} else {
@@ -329,7 +329,7 @@ routine createOrFindJavaInterface(uml::Interface umlInterface) {
 routine createOrFindJavaInterfaceInPackage(uml::Interface umlInterface, java::Package javaPackage) {
 	update {
 		val foundInterface = findClassifier(umlInterface.name, javaPackage,
-			org.emftext.language.java.classifiers.Interface)
+			tools.mdsd.jamopp.model.java.classifiers.Interface)
 		if (foundInterface === null) {
 			createJavaInterface(umlInterface)
 		} else {

@@ -3,8 +3,8 @@ package tools.vitruv.applications.umljava.tests.java2uml
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.members.MembersFactory
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 
 import static org.hamcrest.CoreMatchers.*

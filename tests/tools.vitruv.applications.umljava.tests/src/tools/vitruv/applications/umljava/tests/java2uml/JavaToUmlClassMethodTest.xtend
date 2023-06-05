@@ -2,10 +2,10 @@ package tools.vitruv.applications.umljava.tests.java2uml
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.members.ClassMethod
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.parameters.ParametersFactory
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.members.ClassMethod
+import tools.mdsd.jamopp.model.java.members.MembersFactory
+import tools.mdsd.jamopp.model.java.parameters.ParametersFactory
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -119,7 +119,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	}
 
 	private def void changeAndCheckPropertyOfMethod(String className, String methodName,
-		(org.emftext.language.java.members.ClassMethod)=>void changeJavaMethod,
+		(tools.mdsd.jamopp.model.java.members.ClassMethod)=>void changeJavaMethod,
 		(org.eclipse.uml2.uml.Operation)=>void validateUmlMethod) {
 		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
 			changeJavaMethod.apply(it)

@@ -36,7 +36,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertClassWithNameInPackage(Iterable<String> packageNamespaces, String className) {
-		assertClassifierWithName(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+		assertClassifierWithName(tools.mdsd.jamopp.model.java.classifiers.Class, org.eclipse.uml2.uml.Class,
 			packageNamespaces, className)
 	}
 
@@ -49,7 +49,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertSingleClassWithNameInPackage(Iterable<String> packageNamespaces, String className) {
-		assertSingleClassifierWithName(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.Class,
+		assertSingleClassifierWithName(tools.mdsd.jamopp.model.java.classifiers.Class, org.eclipse.uml2.uml.Class,
 			packageNamespaces, className)
 	}
 
@@ -62,7 +62,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertDataTypeWithNameInPackage(Iterable<String> packageNamespaces, String dataTypeName) {
-		assertClassifierWithName(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.DataType,
+		assertClassifierWithName(tools.mdsd.jamopp.model.java.classifiers.Class, org.eclipse.uml2.uml.DataType,
 			packageNamespaces, dataTypeName)
 	}
 
@@ -75,7 +75,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertSingleDataTypeWithNameInPackage(Iterable<String> packageNamespaces, String dataTypeName) {
-		assertSingleClassifierWithName(org.emftext.language.java.classifiers.Class, org.eclipse.uml2.uml.DataType,
+		assertSingleClassifierWithName(tools.mdsd.jamopp.model.java.classifiers.Class, org.eclipse.uml2.uml.DataType,
 			packageNamespaces, dataTypeName)
 	}
 
@@ -88,7 +88,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertEnumWithNameInPackage(Iterable<String> packageNamespaces, String enumName) {
-		assertClassifierWithName(org.emftext.language.java.classifiers.Enumeration, org.eclipse.uml2.uml.Enumeration,
+		assertClassifierWithName(tools.mdsd.jamopp.model.java.classifiers.Enumeration, org.eclipse.uml2.uml.Enumeration,
 			packageNamespaces, enumName)
 	}
 
@@ -101,7 +101,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertSingleEnumWithNameInPackage(Iterable<String> packageNamespaces, String enumName) {
-		assertSingleClassifierWithName(org.emftext.language.java.classifiers.Enumeration,
+		assertSingleClassifierWithName(tools.mdsd.jamopp.model.java.classifiers.Enumeration,
 			org.eclipse.uml2.uml.Enumeration, packageNamespaces, enumName)
 	}
 
@@ -114,7 +114,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertInterfaceWithNameInPackage(Iterable<String> packageNamespaces, String interfaceName) {
-		assertClassifierWithName(org.emftext.language.java.classifiers.Interface, org.eclipse.uml2.uml.Interface,
+		assertClassifierWithName(tools.mdsd.jamopp.model.java.classifiers.Interface, org.eclipse.uml2.uml.Interface,
 			packageNamespaces, interfaceName)
 	}
 
@@ -127,7 +127,7 @@ class JavaUmlClassifierEqualityValidation {
 	}
 
 	def assertSingleInterfaceWithNameInPackage(Iterable<String> packageNamespaces, String interfaceName) {
-		assertSingleClassifierWithName(org.emftext.language.java.classifiers.Interface, org.eclipse.uml2.uml.Interface,
+		assertSingleClassifierWithName(tools.mdsd.jamopp.model.java.classifiers.Interface, org.eclipse.uml2.uml.Interface,
 			packageNamespaces, interfaceName)
 	}
 
@@ -195,7 +195,7 @@ class JavaUmlClassifierEqualityValidation {
 	 * with equal properties both in the UML and in the Java model.
 	 */
 	private def void assertClassifierWithName(
-		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
+		Class<? extends tools.mdsd.jamopp.model.java.classifiers.Classifier> javaClassifierType,
 		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, Iterable<String> namespaces,
 		String classifierName) {
 		viewExecutor.apply [
@@ -216,7 +216,7 @@ class JavaUmlClassifierEqualityValidation {
 	 * This will fail if the package contains any further elements.
 	 */
 	private def void assertSingleClassifierWithName(
-		Class<? extends org.emftext.language.java.classifiers.Classifier> javaClassifierType,
+		Class<? extends tools.mdsd.jamopp.model.java.classifiers.Classifier> javaClassifierType,
 		Class<? extends org.eclipse.uml2.uml.Classifier> umlClassifierType, Iterable<String> namespaces,
 		String classifierName) {
 		viewExecutor.apply [

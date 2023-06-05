@@ -4,25 +4,25 @@ import edu.kit.ipd.sdq.commons.util.java.Pair
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.expressions.ExpressionsFactory
-import org.emftext.language.java.imports.Import
-import org.emftext.language.java.imports.ImportsFactory
-import org.emftext.language.java.instantiations.InstantiationsFactory
-import org.emftext.language.java.literals.LiteralsFactory
-import org.emftext.language.java.members.ClassMethod
-import org.emftext.language.java.members.Constructor
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.emftext.language.java.operators.OperatorsFactory
-import org.emftext.language.java.parameters.Parameter
-import org.emftext.language.java.parameters.ParametersFactory
-import org.emftext.language.java.references.ReferencesFactory
-import org.emftext.language.java.statements.Statement
-import org.emftext.language.java.statements.StatementsFactory
-import org.emftext.language.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.expressions.ExpressionsFactory
+import tools.mdsd.jamopp.model.java.imports.Import
+import tools.mdsd.jamopp.model.java.imports.ImportsFactory
+import tools.mdsd.jamopp.model.java.instantiations.InstantiationsFactory
+import tools.mdsd.jamopp.model.java.literals.LiteralsFactory
+import tools.mdsd.jamopp.model.java.members.ClassMethod
+import tools.mdsd.jamopp.model.java.members.Constructor
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.members.MembersFactory
+import tools.mdsd.jamopp.model.java.modifiers.ModifiersFactory
+import tools.mdsd.jamopp.model.java.operators.OperatorsFactory
+import tools.mdsd.jamopp.model.java.parameters.Parameter
+import tools.mdsd.jamopp.model.java.parameters.ParametersFactory
+import tools.mdsd.jamopp.model.java.references.ReferencesFactory
+import tools.mdsd.jamopp.model.java.statements.Statement
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
+import tools.mdsd.jamopp.model.java.types.TypeReference
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.captialize
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.createClass

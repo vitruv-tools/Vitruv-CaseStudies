@@ -2,12 +2,12 @@ package tools.vitruv.applications.umljava.tests.java2uml
 
 import java.nio.file.Path
 import java.util.List
-import org.emftext.language.java.classifiers.ClassifiersFactory
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.ContainersFactory
-import org.emftext.language.java.containers.JavaRoot
-import org.emftext.language.java.containers.Package
+import tools.mdsd.jamopp.model.java.classifiers.ClassifiersFactory
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.ContainersFactory
+import tools.mdsd.jamopp.model.java.containers.JavaRoot
+import tools.mdsd.jamopp.model.java.containers.Package
 import org.junit.jupiter.api.BeforeEach
 import tools.vitruv.applications.umljava.tests.UmlJavaTransformationTest
 import tools.vitruv.framework.views.View

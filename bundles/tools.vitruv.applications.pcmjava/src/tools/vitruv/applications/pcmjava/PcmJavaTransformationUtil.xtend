@@ -4,7 +4,7 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.palladiosimulator.pcm.core.entity.Entity
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.system.System
-import org.emftext.language.java.containers.Package
+import tools.mdsd.jamopp.model.java.containers.Package
 
 @Utility
 class PcmJavaTransformationUtil {

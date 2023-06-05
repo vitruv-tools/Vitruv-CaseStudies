@@ -1,23 +1,23 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.classifiers.ClassifiersFactory
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.ContainersFactory
-import org.emftext.language.java.containers.Package
-import org.emftext.language.java.generics.GenericsFactory
-import org.emftext.language.java.members.ClassMethod
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.InterfaceMethod
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.types.Boolean
-import org.emftext.language.java.types.Int
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.types.TypesFactory
-import org.emftext.language.java.types.Void
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.classifiers.ClassifiersFactory
+import tools.mdsd.jamopp.model.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.ContainersFactory
+import tools.mdsd.jamopp.model.java.containers.Package
+import tools.mdsd.jamopp.model.java.generics.GenericsFactory
+import tools.mdsd.jamopp.model.java.members.ClassMethod
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.members.InterfaceMethod
+import tools.mdsd.jamopp.model.java.members.MembersFactory
+import tools.mdsd.jamopp.model.java.types.Boolean
+import tools.mdsd.jamopp.model.java.types.Int
+import tools.mdsd.jamopp.model.java.types.NamespaceClassifierReference
+import tools.mdsd.jamopp.model.java.types.PrimitiveType
+import tools.mdsd.jamopp.model.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.types.Void
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne

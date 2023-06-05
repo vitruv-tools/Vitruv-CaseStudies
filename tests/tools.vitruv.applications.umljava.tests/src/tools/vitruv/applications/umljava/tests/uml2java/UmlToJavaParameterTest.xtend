@@ -3,7 +3,7 @@ package tools.vitruv.applications.umljava.tests.uml2java
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 
 import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
