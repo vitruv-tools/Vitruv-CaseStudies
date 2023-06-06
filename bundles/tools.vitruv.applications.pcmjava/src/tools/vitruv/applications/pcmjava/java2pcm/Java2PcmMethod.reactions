@@ -294,7 +294,7 @@ reaction InterfaceMethodCreated {
 
 routine createPCMSignature(java::InterfaceMethod interfaceMethod) {
 	match {
-		require absence of pcm::OperationSignature corresponding to interfaceMethod
+		require absence of pcm::OperationInterface corresponding to javaInterface
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to interfaceMethod.
 			containingConcreteClassifier
 	}
