@@ -192,7 +192,7 @@ class JavaModificationUtil {
 	def static ConcreteClassifier getClassifier(String qualifiedName) {
 		// To resolve classifiers from the Java standard library, this requires the Java standard library to be
 		// registered (JavaClasspath.get().registerStdLib). Should be done by the domain by default.
-		JavaClasspath.get().getClassifier(qualifiedName) as ConcreteClassifier
+		JavaClasspath.get().getConcreteClassifier(qualifiedName) as ConcreteClassifier
 	}
 
 	def static addAnnotationToAnnotableAndModifiable(AnnotableAndModifiable annotableAndModifiable,

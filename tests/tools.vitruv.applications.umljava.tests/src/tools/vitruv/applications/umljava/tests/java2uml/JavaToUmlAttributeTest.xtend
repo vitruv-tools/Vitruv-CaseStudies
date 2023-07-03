@@ -92,7 +92,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	def void testCreateAttributeOfStandardLibraryClass() {
 		createJavaClassInRootPackage(CLASS_NAME)
 		changeJavaView [
-			val standardLibraryClass = JavaClasspath.get().getClassifier("java.lang.Iterable") as ConcreteClassifier
+			val standardLibraryClass = JavaClasspath.get().getConcreteClassifier("java.lang.Iterable") as ConcreteClassifier
 			claimJavaClass(CLASS_NAME) => [
 				members += MembersFactory.eINSTANCE.createField => [
 					name = ATTRIBUTE_NAME
