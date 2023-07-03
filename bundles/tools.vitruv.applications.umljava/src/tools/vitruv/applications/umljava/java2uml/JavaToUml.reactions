@@ -1,5 +1,5 @@
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
-import "https://mdsd.tools/jamopp/java" as java
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
 
 reactions: javaToUml
 in reaction to changes in java

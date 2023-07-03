@@ -38,7 +38,7 @@ import static extension tools.vitruv.applications.pcmjava.PcmJavaTransformationU
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 
-import "https://mdsd.tools/jamopp/java" as java
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: pcm2java

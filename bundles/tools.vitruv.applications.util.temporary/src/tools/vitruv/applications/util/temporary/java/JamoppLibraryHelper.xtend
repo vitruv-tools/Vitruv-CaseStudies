@@ -1,7 +1,7 @@
 package tools.vitruv.applications.util.temporary.java
 
-import org.emftext.language.java.JavaClasspath
-import org.emftext.language.java.JavaClasspath.Initializer
+import tools.mdsd.jamopp.model.java.JavaClasspath
+import tools.mdsd.jamopp.model.java.JavaClasspath.Initializer
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.common.util.URI
 import static com.google.common.base.Preconditions.checkState

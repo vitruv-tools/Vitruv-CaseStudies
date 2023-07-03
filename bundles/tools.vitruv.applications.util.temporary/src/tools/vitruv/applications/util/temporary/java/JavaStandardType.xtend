@@ -1,17 +1,17 @@
 package tools.vitruv.applications.util.temporary.java
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import org.emftext.language.java.types.Boolean
-import org.emftext.language.java.types.Byte
-import org.emftext.language.java.types.Char
-import org.emftext.language.java.types.Double
-import org.emftext.language.java.types.Float
-import org.emftext.language.java.types.Int
-import org.emftext.language.java.types.Long
-import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.types.Short
-import org.emftext.language.java.types.TypesFactory
-import org.emftext.language.java.types.Void
+import tools.mdsd.jamopp.model.java.types.Boolean
+import tools.mdsd.jamopp.model.java.types.Byte
+import tools.mdsd.jamopp.model.java.types.Char
+import tools.mdsd.jamopp.model.java.types.Double
+import tools.mdsd.jamopp.model.java.types.Float
+import tools.mdsd.jamopp.model.java.types.Int
+import tools.mdsd.jamopp.model.java.types.Long
+import tools.mdsd.jamopp.model.java.types.PrimitiveType
+import tools.mdsd.jamopp.model.java.types.Short
+import tools.mdsd.jamopp.model.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.types.Void
 
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*

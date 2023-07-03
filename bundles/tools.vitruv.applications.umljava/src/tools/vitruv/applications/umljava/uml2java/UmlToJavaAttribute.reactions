@@ -8,7 +8,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.clai
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
-import "https://mdsd.tools/jamopp/java" as java
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
 
 reactions: umlToJavaAttribute
 in reaction to changes in uml

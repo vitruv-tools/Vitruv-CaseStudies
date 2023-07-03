@@ -9,21 +9,21 @@ import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.classifiers.Classifier
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.generics.GenericsFactory
-import org.emftext.language.java.generics.QualifiedTypeArgument
-import org.emftext.language.java.imports.ClassifierImport
-import org.emftext.language.java.imports.ImportsFactory
-import org.emftext.language.java.types.ClassifierReference
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.types.Type
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.types.TypedElement
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.classifiers.Classifier
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.generics.GenericsFactory
+import tools.mdsd.jamopp.model.java.generics.QualifiedTypeArgument
+import tools.mdsd.jamopp.model.java.imports.ClassifierImport
+import tools.mdsd.jamopp.model.java.imports.ImportsFactory
+import tools.mdsd.jamopp.model.java.types.ClassifierReference
+import tools.mdsd.jamopp.model.java.types.NamespaceClassifierReference
+import tools.mdsd.jamopp.model.java.types.PrimitiveType
+import tools.mdsd.jamopp.model.java.types.Type
+import tools.mdsd.jamopp.model.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.types.TypedElement
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 
 import static tools.vitruv.applications.util.temporary.other.UriUtil.normalizeURI
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
