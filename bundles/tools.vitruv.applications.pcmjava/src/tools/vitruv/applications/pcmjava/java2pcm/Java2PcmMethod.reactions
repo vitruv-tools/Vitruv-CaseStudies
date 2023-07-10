@@ -320,7 +320,7 @@ routine changeReturnType(java::Method javaMethod, java::TypeReference typeRefere
 		val repository = operationSignature.interface__OperationSignature.repository__Interface
 		operationSignature.returnType__OperationSignature = if (typeReference !== null) {
 			typeReference.getCorrespondingPCMDataTypeForTypeReference(correspondenceModel, userInteractor, repository,
-				javaMethod.arrayDimension)
+				javaMethod.typeReference.arrayDimension)
 		} else {
 			null
 		}

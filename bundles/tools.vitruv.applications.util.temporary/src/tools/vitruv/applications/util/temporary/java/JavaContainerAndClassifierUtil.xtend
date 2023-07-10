@@ -183,13 +183,8 @@ class JavaContainerAndClassifierUtil {
 		}
 	}
 
-	def static removeJavaClassifierFromPackage(Package jPackage, ConcreteClassifier jClassifier) {
-		val iter = jPackage.compilationUnits.iterator
-		while (iter.hasNext) {
-			if (iter.next.name.equals(jClassifier.name)) {
-				iter.remove
-			}
-		}
+	def static removeJavaClassifierFromPackage(ConcreteClassifier jClassifier) {
+		jClassifier.package = null;
 	}
 
 	def static File createPackageInfo(String directory, String packageName) {
@@ -212,7 +207,7 @@ class JavaContainerAndClassifierUtil {
 	 */
 	static def <T extends ConcreteClassifier> T findClassifier(String name, Package javaPackage,
 		java.lang.Class<T> classifierType) {
-		val matchingClassifiers = javaPackage.compilationUnits.map[it.classifiers].flatten.filter(classifierType).filter [
+		val matchingClassifiers = javaPackage.classifiers.filter(classifierType).filter [
 			it.name.toFirstUpper == name.toFirstUpper
 		]
 		if (matchingClassifiers.size > 1)
