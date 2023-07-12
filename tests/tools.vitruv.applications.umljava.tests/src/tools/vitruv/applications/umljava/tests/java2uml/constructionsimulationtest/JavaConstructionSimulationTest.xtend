@@ -93,7 +93,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 	@Test
 	def void testOrhanobutLoggerProject() {
 		registerStdLibraryModule("java.xml")
-		registerLocalLibrary(Path.of(new File("lib/json-20211205.jar").absolutePath))
+		registerLocalLibrary(Path.of(new File("target/dependency/json.jar").absolutePath))
 		transformJavaProjectAndValidateUmlModel("resources/orhanobut/java/")
 	}
 
