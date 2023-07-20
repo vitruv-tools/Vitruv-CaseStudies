@@ -1,17 +1,16 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.eclipse.uml2.uml.Parameter
-import org.eclipse.uml2.uml.Property
-import org.palladiosimulator.pcm.repository.OperationRequiredRole
-import org.palladiosimulator.pcm.repository.Repository
-import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.junit.jupiter.api.Test
+import org.palladiosimulator.pcm.repository.RepositoryFactory
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMCompositeComponentBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMOperationInterfaceBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMRepositoryBuilder
+import tools.vitruv.applications.testutility.uml.UmlQueryUtil
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLInterfaceBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLPackageBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLClassBuilder
 
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.junit.jupiter.api.Assertions.assertEquals
-import java.nio.file.Path
+import edu.kit.ipd.sdq.commons.util.java.Pair;
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationRequiredRole 
@@ -21,130 +20,102 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmRequiredRole.reactions, UmlRequiredRoleParameter.reactions, UmlRequiredRoleProperty.reactions
  */
-class RequiredRoleConceptTest extends LegacyPcmUmlClassApplicationTest {
-
+class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 	val REQUIRED_ROLE_NAME = "testRequiredRole"
 
-	def void checkRequiredRoleConcept(
-		OperationRequiredRole pcmRequired,
-		Property umlRequiredInstance,
-		Parameter umlRequiredParameter
-	) {
-		assertNotNull(pcmRequired)
-		assertNotNull(umlRequiredInstance)
-		assertNotNull(umlRequiredParameter)
-		assertTrue(corresponds(pcmRequired, umlRequiredInstance, TagLiterals.REQUIRED_ROLE__PROPERTY))
-		assertTrue(corresponds(pcmRequired, umlRequiredParameter, TagLiterals.REQUIRED_ROLE__PARAMETER))
-		// the respective type references have to correspond
-		assertTrue(corresponds(pcmRequired.requiredInterface__OperationRequiredRole, umlRequiredInstance.type))
-		assertTrue(corresponds(pcmRequired.requiredInterface__OperationRequiredRole, umlRequiredParameter.type))
-		// the owning component and component implementation have to correspond
-		assertTrue(
-			corresponds(pcmRequired.requiringEntity_RequiredRole, umlRequiredInstance.class_,
-				TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(
-			corresponds(pcmRequired.requiringEntity_RequiredRole, umlRequiredParameter.operation?.class_,
-				TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(pcmRequired.entityName == umlRequiredInstance.name)
-		assertTrue(pcmRequired.entityName == umlRequiredParameter.name)
-	}
+	def private void createRepository_Component_Interface() {
+		initPCMRepository
 
-	def protected checkRequiredRoleConcept(OperationRequiredRole pcmRequired) {
-		val umlRequiredInstance = helper.getModifiableCorr(pcmRequired, Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
-		val umlRequiredParameter = helper.getModifiableCorr(pcmRequired, Parameter,
-			TagLiterals.REQUIRED_ROLE__PARAMETER)
-		checkRequiredRoleConcept(pcmRequired, umlRequiredInstance, umlRequiredParameter)
-	}
-
-	def protected checkRequiredRoleConcept(Property umlRequiredInstance) {
-		val pcmRequired = helper.getModifiableCorr(umlRequiredInstance, OperationRequiredRole,
-			TagLiterals.REQUIRED_ROLE__PROPERTY)
-		assertNotNull(pcmRequired)
-		checkRequiredRoleConcept(pcmRequired)
-	}
-
-	def protected checkRequiredRoleConcept(Parameter umlRequiredParameter) {
-		val pcmRequired = helper.getModifiableCorr(umlRequiredParameter, OperationRequiredRole,
-			TagLiterals.REQUIRED_ROLE__PARAMETER)
-		assertNotNull(pcmRequired)
-		checkRequiredRoleConcept(pcmRequired)
-	}
-
-	def private Repository createRepository_Component_Interface() {
-		val pcmRepository = helper.createRepository
-		helper.createComponent(pcmRepository)
-		helper.createOperationInterface(pcmRepository)
-
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-
-		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-			contents += pcmRepository
+		changePcmView[
+			PcmUmlClassApplicationTestHelper.createComponent(defaultPcmRepository)
+			PcmUmlClassApplicationTestHelper.createOperationInterface(defaultPcmRepository)
 		]
-		propagate
-
-		return pcmRepository.clearResourcesAndReloadRoot
 	}
 
 	@Test
 	def void testRequiredRoleConcept_PCM() {
-		var pcmRepository = createRepository_Component_Interface
+		createRepository_Component_Interface()
 
-		var pcmRequired = RepositoryFactory.eINSTANCE.createOperationRequiredRole
-		pcmRequired.requiredInterface__OperationRequiredRole = helper.getPcmOperationInterface(pcmRepository)
-		helper.getPcmComponent(pcmRepository).requiredRoles_InterfaceRequiringEntity += pcmRequired
+		changePcmView[
+			var pcmRequiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole
+			pcmRequiredRole.requiredInterface__OperationRequiredRole = PcmUmlClassApplicationTestHelper.
+				getPcmOperationInterface(defaultPcmRepository)
+			PcmUmlClassApplicationTestHelper.getPcmComponent(defaultPcmRepository).
+				requiredRoles_InterfaceRequiringEntity += pcmRequiredRole
+		]
 
-		propagate
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
+		validateUmlView[
+			val expectedInterface = new FluentUMLInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).build
+			val expectedContractsPackage = new FluentUMLPackageBuilder(CONTRACTS_PACKAGE).
+				addPackagedElement(expectedInterface).build
 
-		val pcmComponent = helper.getPcmComponent(pcmRepository)
-		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.size,
-			"There should be exactly one RequiredRole since only one was created by the test case.")
-		pcmRequired = pcmComponent.requiredRoles_InterfaceRequiringEntity.head as OperationRequiredRole
-		assertNotNull(pcmRequired)
-		checkRequiredRoleConcept(pcmRequired)
+			val expectedComponentClass = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC +
+				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addParameterizedConstructor(
+				#[new Pair("aName", expectedInterface)]).addAttribute("aName", expectedInterface).build
+			val expectedComponentsPackage = new FluentUMLPackageBuilder(
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC).addPackagedElement(expectedComponentClass).build
+
+			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel, String.join(".", PACKAGE_NAME, CONTRACTS_PACKAGE),
+				expectedContractsPackage)
+			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel,
+				String.join(".", PACKAGE_NAME, PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC),
+				expectedComponentsPackage)
+		]
 	}
 
 	@Test
 	def void testRequiredRoleConcept_UML_RequiredConstructorParameter() {
-		var pcmRepository = createRepository_Component_Interface
-		var umlConstructor = helper.getUmlComponentConstructor(pcmRepository)
-		startRecordingChanges(umlConstructor)
+		createRepository_Component_Interface()
 
-		var umlConstructorParameter = umlConstructor.createOwnedParameter(REQUIRED_ROLE_NAME,
-			helper.getUmlInterface(pcmRepository))
+		changeUmlView[
+			val umlInterface = UmlQueryUtil.claimInterface(umlContractsPackage,
+				PcmUmlClassApplicationTestHelper.INTERFACE_NAME)
+			val umlConstructor = PcmUmlClassApplicationTestHelper.claimClass(defaultUmlModel,
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX).
+				ownedOperations.findFirst [
+					it.name == PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC +
+						PcmUmlClassApplicationTestHelper.IMPL_SUFFIX
+				]
 
-		propagate
-		umlConstructorParameter.clearResourcesAndReloadRoot
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
+			umlConstructor.createOwnedParameter(REQUIRED_ROLE_NAME, umlInterface)
+		]
 
-		umlConstructor = helper.getUmlComponentConstructor(pcmRepository)
-		assertEquals(1, umlConstructor.ownedParameters.size,
-			"There should be exactly one Parameter for one RequiredRole created by the test case.")
-		umlConstructorParameter = umlConstructor.ownedParameters.findFirst[it.name == REQUIRED_ROLE_NAME]
-		assertNotNull(umlConstructorParameter)
-		checkRequiredRoleConcept(umlConstructorParameter)
+		validatePcmView[
+			val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
+				build
+			val pcmComponent = new FluentPCMCompositeComponentBuilder(
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC).addRequiredRole(REQUIRED_ROLE_NAME, pcmInterface).
+				build
+			val expectedPcmRepository = new FluentPCMRepositoryBuilder(PACKAGE_NAME_FIRST_UPPER).addComponent(
+				pcmComponent).addInterface(pcmInterface).build
+
+			assertEqualityOfPcmRepository(defaultPcmRepository, expectedPcmRepository)
+		]
 	}
 
 	@Test
 	def void testRequiredRoleConcept_UML_RequiredInstanceField() {
-		var pcmRepository = createRepository_Component_Interface
-		var umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
-		var umlInterface = helper.getUmlInterface(pcmRepository)
-		startRecordingChanges(umlComponentImpl)
+		createRepository_Component_Interface()
 
-		var umlRequiredInstanceField = umlComponentImpl.createOwnedAttribute(REQUIRED_ROLE_NAME, umlInterface)
+		changeUmlView[
+			val umlInterface = UmlQueryUtil.claimInterface(umlContractsPackage,
+				PcmUmlClassApplicationTestHelper.INTERFACE_NAME)
+			val umlComponentImpl = PcmUmlClassApplicationTestHelper.claimClass(defaultUmlModel,
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
 
-		propagate
-		umlRequiredInstanceField.clearResourcesAndReloadRoot
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-
-		umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
-		assertEquals(1, umlComponentImpl.ownedAttributes.size,
-			"There should be exactly one Property for one RequiredRole created by the test case.")
-		umlRequiredInstanceField = helper.getUmlComponentImpl(pcmRepository).ownedAttributes.findFirst [
-			it.name == REQUIRED_ROLE_NAME
+			umlComponentImpl.createOwnedAttribute(REQUIRED_ROLE_NAME, umlInterface)
 		]
-		assertNotNull(umlRequiredInstanceField)
-		checkRequiredRoleConcept(umlRequiredInstanceField)
+
+		validatePcmView[
+			val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
+				build
+			val pcmComponent = new FluentPCMCompositeComponentBuilder(
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC).addRequiredRole(REQUIRED_ROLE_NAME, pcmInterface).
+				build
+			val expectedPcmRepository = new FluentPCMRepositoryBuilder(PACKAGE_NAME_FIRST_UPPER).addComponent(
+				pcmComponent).addInterface(pcmInterface).build
+
+			assertEqualityOfPcmRepository(defaultPcmRepository, expectedPcmRepository)
+		]
 	}
 }

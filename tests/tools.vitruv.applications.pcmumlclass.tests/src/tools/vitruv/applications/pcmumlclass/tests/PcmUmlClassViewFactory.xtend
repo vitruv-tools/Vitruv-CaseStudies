@@ -10,7 +10,7 @@ import org.palladiosimulator.pcm.system.System
 
 @FinalFieldsConstructor
 class PcmUmlClassViewFactory extends TestViewFactory {
-	
+
 	private def View createUmlView() {
 		createViewOfElements("UML", #{Model})
 	}
@@ -26,7 +26,7 @@ class PcmUmlClassViewFactory extends TestViewFactory {
 	private def View createUmlAndPcmPackagesView() {
 		createViewOfElements("UML and PCM packages", #{Repository, Model})
 	}
-	
+
 	private def View createUmlAndPcmSystemView() {
 		createViewOfElements("UML and PCM packages", #{System, Model})
 	}
@@ -80,7 +80,7 @@ class PcmUmlClassViewFactory extends TestViewFactory {
 	def void validateUmlAndPcmPackagesView((View)=>void viewValidation) {
 		validateView(createUmlAndPcmPackagesView, viewValidation)
 	}
-	
+
 	/**
 	 * Validates the PCM and UML view containing all UML models and the PCM system by applying the 
 	 * validation function and closes the view afterwards.
@@ -88,5 +88,5 @@ class PcmUmlClassViewFactory extends TestViewFactory {
 	def void validateUmlAndPcmSystemView((View)=>void viewValidation) {
 		validateView(createUmlAndPcmSystemView, viewValidation)
 	}
-	
+
 }

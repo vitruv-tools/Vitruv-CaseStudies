@@ -1,14 +1,11 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.eclipse.uml2.uml.Property
-import org.palladiosimulator.pcm.core.composition.AssemblyContext
-import org.palladiosimulator.pcm.core.composition.CompositionFactory
-import org.palladiosimulator.pcm.repository.Repository
-import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.junit.jupiter.api.Test
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertTrue
-import java.nio.file.Path
+import org.palladiosimulator.pcm.core.composition.CompositionFactory
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMCompositeComponentBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMRepositoryBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLClassBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLPackageBuilder
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::AssemblyContext 
@@ -16,96 +13,69 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmAssemblyContext.reactions, UmlAssemblyContextProperty.reactions
  */
-class AssemblyContextConceptTest extends LegacyPcmUmlClassApplicationTest {
-
+class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 	static val PROPERTY_NAME = "testAssemblyContextField"
 
-	def void checkAssemblyContextConcept(
-		AssemblyContext pcmAssemblyContext,
-		Property umlAssemblyContextProperty
-	) {
-		assertNotNull(pcmAssemblyContext)
-		assertNotNull(umlAssemblyContextProperty)
-		assertTrue(
-			corresponds(pcmAssemblyContext, umlAssemblyContextProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY))
-		assertTrue(
-			corresponds(pcmAssemblyContext.parentStructure__AssemblyContext, umlAssemblyContextProperty.owner,
-				TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(
-			corresponds( pcmAssemblyContext.encapsulatedComponent__AssemblyContext, umlAssemblyContextProperty.type,
-				TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(pcmAssemblyContext.entityName == umlAssemblyContextProperty.name)
-	}
+	private def void createRepositoryWithTwoComponents() {
+		initPCMRepository()
 
-	def protected checkAssemblyContextConcept(AssemblyContext pcmAssemblyContext) {
-		val umlAssemblyContextProperty = helper.getModifiableCorr(pcmAssemblyContext, Property,
-			TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
-		checkAssemblyContextConcept(pcmAssemblyContext, umlAssemblyContextProperty)
-	}
-
-	def protected checkAssemblyContextConcept(Property umlAssemblyContextProperty) {
-		val pcmAssemblyContext = helper.getModifiableCorr(umlAssemblyContextProperty, AssemblyContext,
-			TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
-		checkAssemblyContextConcept(pcmAssemblyContext, umlAssemblyContextProperty)
-	}
-
-	/**
-	 * Initialize a pcm::Repository with two CompositeComponents and synchronize them with their uml-counterparts.
-	 */
-	def private Repository createRepository_2Components() {
-
-		val pcmRepository = helper.createRepository
-		helper.createComponent(pcmRepository)
-		helper.createComponent_2(pcmRepository)
-
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-			contents += pcmRepository
+		changePcmView[
+			PcmUmlClassApplicationTestHelper.createComponent(defaultPcmRepository)
+			PcmUmlClassApplicationTestHelper.createComponent_2(defaultPcmRepository)
 		]
-		propagate
-		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-
-		return pcmRepository.clearResourcesAndReloadRoot
 	}
 
 	@Test
 	def void testCreateAssemblyContextConcept_PCM() {
-		var pcmRepository = createRepository_2Components()
-		var pcmComponent = helper.getPcmComponent(pcmRepository)
+		createRepositoryWithTwoComponents()
 
-		var pcmAssemblyContext = CompositionFactory.eINSTANCE.createAssemblyContext
-		pcmAssemblyContext.entityName = PROPERTY_NAME
-		// TODO setting the same component as container and encapsulated doesn't seem to trigger change event
-		pcmAssemblyContext.encapsulatedComponent__AssemblyContext = helper.getPcmComponent_2(pcmRepository)
-		pcmComponent.assemblyContexts__ComposedStructure += pcmAssemblyContext
+		changePcmView[
+			val pcmComponent1 = PcmUmlClassApplicationTestHelper.getPcmComponent(defaultPcmRepository)
+			val pcmComponent2 = PcmUmlClassApplicationTestHelper.getPcmComponent_2(defaultPcmRepository)
 
-		propagate
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
+			var pcmAssemblyContext = CompositionFactory.eINSTANCE.createAssemblyContext
+			pcmAssemblyContext.entityName = PROPERTY_NAME
+			// TODO setting the same component as container and encapsulated doesn't seem to trigger change event
+			pcmAssemblyContext.encapsulatedComponent__AssemblyContext = pcmComponent2
+			pcmComponent1.assemblyContexts__ComposedStructure += pcmAssemblyContext
+		]
 
-		pcmAssemblyContext = helper.getPcmComponent(pcmRepository).assemblyContexts__ComposedStructure.head
-		assertNotNull(pcmAssemblyContext)
-		checkAssemblyContextConcept(pcmAssemblyContext)
+		validateUmlView[
+			val component2Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_UC +
+				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.build
+			val component1Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC +
+				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.addAttribute(PROPERTY_NAME,
+				component2Class).build
+			val component1Package = new FluentUMLPackageBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC).
+				addPackagedElement(component1Class).build
+			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel,
+				String.join(".", PACKAGE_NAME, PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC), component1Package)
+		]
 	}
 
 	@Test
 	def void testCreateAssemblyContextConcept_UML() {
-		var pcmRepository = createRepository_2Components()
-		var umlComponent = helper.getUmlComponentImpl(pcmRepository)
-		startRecordingChanges(umlComponent)
+		createRepositoryWithTwoComponents()
 
-		var umlAssemblyContextProperty = umlComponent.createOwnedAttribute(PROPERTY_NAME,
-			helper.getUmlComponentImpl_2(pcmRepository))
+		changeUmlView[
+			val umlComponent1Class = PcmUmlClassApplicationTestHelper.claimClass(defaultUmlModel,
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
+			val umlComponent2Class = PcmUmlClassApplicationTestHelper.claimClass(defaultUmlModel,
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_UC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
 
-		propagate
-		umlAssemblyContextProperty.clearResourcesAndReloadRoot
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-
-		umlAssemblyContextProperty = helper.getUmlComponentImpl(pcmRepository).ownedAttributes.findFirst [
-			it.name == PROPERTY_NAME
+			umlComponent1Class.createOwnedAttribute(PROPERTY_NAME, umlComponent2Class)
 		]
-		assertNotNull(umlAssemblyContextProperty)
-		checkAssemblyContextConcept(umlAssemblyContextProperty)
-	}
 
+		validatePcmView[
+			val pcmComponent2 = new FluentPCMCompositeComponentBuilder(
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_UC).build
+			val pcmComponent1 = new FluentPCMCompositeComponentBuilder(
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC).addAssemblyContext(PROPERTY_NAME, pcmComponent2).
+				build
+			val expectedRepository = new FluentPCMRepositoryBuilder(PACKAGE_NAME_FIRST_UPPER).addComponent(
+				pcmComponent1).addComponent(pcmComponent2).build
+
+			assertEqualityOfPcmRepository(defaultPcmRepository, expectedRepository)
+		]
+	}
 }

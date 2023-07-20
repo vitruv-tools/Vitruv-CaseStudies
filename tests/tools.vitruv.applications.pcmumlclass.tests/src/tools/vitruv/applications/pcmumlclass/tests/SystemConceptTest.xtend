@@ -1,20 +1,10 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.Operation
-import org.eclipse.uml2.uml.Package
-import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.uml2.uml.VisibilityKind
-import org.palladiosimulator.pcm.system.System
+import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.system.SystemFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import tools.vitruv.applications.pcmumlclass.TagLiterals
-import org.junit.jupiter.api.Test
-
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertTrue
-import java.nio.file.Path
-import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.isPackageFor
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLClassBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLPackageBuilder
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::System
@@ -26,89 +16,39 @@ import static extension tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.
  * 		UmlIPREClass.reactions,
  * 		UmlIPREConstructorOperation.reactions
  */
-class SystemConceptTest extends LegacyPcmUmlClassApplicationTest {
-
+class SystemConceptTest extends PcmUmlClassApplicationTest {
 	static val PCM_MODEL_FILE = "model/System.system"
-	static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
-		DefaultLiterals.UML_EXTENSION
-
-	val MODEL_NAME = "testRootModel"
-	val SYSTEM_NAME = "TestSystem"
-
-	def protected checkSystemConcept(
-		System pcmSystem,
-		Package umlSystemPkg,
-		Class umlSystemImpl,
-		Operation umlSystemConstructor
-	) {
-		assertNotNull(pcmSystem)
-		assertNotNull(umlSystemPkg)
-		assertNotNull(umlSystemImpl)
-		assertNotNull(umlSystemConstructor)
-		assertTrue(corresponds(pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE))
-		assertTrue(corresponds(pcmSystem, umlSystemImpl, TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(umlSystemPkg.isPackageFor(pcmSystem))
-		assertTrue(pcmSystem.entityName == umlSystemPkg.name.toFirstUpper)
-		assertTrue(pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlSystemImpl.name)
-		assertTrue(umlSystemImpl.isFinalSpecialization)
-		assertTrue(umlSystemImpl.visibility === VisibilityKind.PUBLIC_LITERAL)
-		assertTrue(umlSystemImpl.package === umlSystemPkg)
-	}
-
-	def protected checkSystemConcept(Package umlSystemPkg) {
-		assertNotNull(umlSystemPkg)
-		val pcmSystem = helper.getModifiableCorr(umlSystemPkg, System, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
-		assertNotNull(pcmSystem)
-		checkSystemConcept(pcmSystem)
-	}
-
-	def protected checkSystemConcept(System pcmSystem) {
-		assertNotNull(pcmSystem)
-		val umlSystemPkg = helper.getModifiableCorr(pcmSystem, Package, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
-		val umlSystemImpl = helper.getModifiableCorr(pcmSystem, Class, TagLiterals.IPRE__IMPLEMENTATION)
-		val umlSystemConstructor = helper.getModifiableCorr(pcmSystem, Operation, TagLiterals.IPRE__CONSTRUCTOR)
-		checkSystemConcept(pcmSystem, umlSystemPkg, umlSystemImpl, umlSystemConstructor)
-	}
+	val SYSTEM_NAME_UC = "TestSystem"
+	val SYSTEM_NAME_LC = "testSystem"
 
 	@Test
 	def void testCreateSystemConcept_PCM() {
-		val pcmSystem = SystemFactory.eINSTANCE.createSystem => [
-			entityName = SYSTEM_NAME
-		]
+		createSystem(SYSTEM_NAME_UC)
 
-		userInteraction.addNextTextInput(UML_MODEL_FILE)
-		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-			contents += pcmSystem
+		validateUmlView[
+			val expectedSystemClass = new FluentUMLClassBuilder(SYSTEM_NAME_UC +
+				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.build
+			val expectedPackage = new FluentUMLPackageBuilder(SYSTEM_NAME_LC).addPackagedElement(expectedSystemClass).
+				build
+			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel, SYSTEM_NAME_LC, expectedPackage)
 		]
-		propagate
-
-		val reloadedPcmSystem = pcmSystem.clearResourcesAndReloadRoot
-		checkSystemConcept(reloadedPcmSystem)
-		assertTrue(reloadedPcmSystem.entityName == SYSTEM_NAME)
 	}
 
 	@Test
 	def void testCreateSystemConcept_UML() {
-		val umlModel = UMLFactory.eINSTANCE.createModel => [
-			name = MODEL_NAME
+		changeUmlView[
+			userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
+			userInteraction.addNextTextInput(PCM_MODEL_FILE)
+			defaultUmlModel.createNestedPackage(SYSTEM_NAME_UC)
 		]
 
-		userInteraction.addNextTextInput(PCM_MODEL_FILE)
-		resourceAt(Path.of(UML_MODEL_FILE)).startRecordingChanges => [
-			contents += umlModel
+		validateUmlAndPcmSystemView[
+			val actualSystem = PcmQueryUtil.claimPcmSystem(it)
+			val expectedSystem = SystemFactory.eINSTANCE.createSystem
+			expectedSystem.entityName = SYSTEM_NAME_UC
+
+			assertEqualityOfPcmSystem(actualSystem, expectedSystem)
 		]
-		propagate
-
-		var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME)
-
-		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
-		propagate
-
-		umlSystemPkg = umlModel.clearResourcesAndReloadRoot.nestedPackages.findFirst [
-			it.name == SYSTEM_NAME.toFirstLower
-		]
-		assertNotNull(umlSystemPkg)
-		checkSystemConcept(umlSystemPkg)
 	}
 
 }
