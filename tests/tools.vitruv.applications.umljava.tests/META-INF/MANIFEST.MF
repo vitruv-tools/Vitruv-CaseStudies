@@ -21,5 +21,7 @@ Require-Bundle: tools.vitruv.applications.umljava,
  org.emftext.language.java.resource.java,
  org.emftext.language.java.resource,
  tools.vitruv.applications.testutility
+Bundle-ClassPath: .,
+ target/dependency/json.jar
 Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.umljava.tests.util
