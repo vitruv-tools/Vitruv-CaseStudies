@@ -37,6 +37,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelpe
 import static extension tools.vitruv.applications.pcmjava.PcmJavaTransformationUtil.getCorrespondingPackageName
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
+import tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil
 
 import "https://mdsd.tools/jamopp/6.0.0/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -766,7 +767,7 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 			classifier.name.toFirstUpper + ".java"
 		compilationUnit.classifiers += classifier;
 		persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
-		containingPackage.compilationUnits += compilationUnit
+		JavaContainerAndClassifierUtil.updateNamespaces(compilationUnit, containingPackage);
 	}
 }
 

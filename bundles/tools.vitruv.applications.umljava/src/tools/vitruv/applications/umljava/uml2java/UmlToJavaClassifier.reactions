@@ -17,6 +17,7 @@ import static extension tools.vitruv.applications.util.temporary.java.JavaContai
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static java.util.List.copyOf
 import java.util.ArrayList
+import tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "https://mdsd.tools/jamopp/6.0.0/java" as java
@@ -102,8 +103,8 @@ routine insertJavaClassifier(uml::Classifier umlClassifier, uml::Package umlPack
 			persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit))
 		}
 		javaPackage.ifPresent [
-			if (!compilationUnits.contains(javaCompilationUnit)) {
-				compilationUnits += javaCompilationUnit
+			if (!javaCompilationUnit.containingPackageName.equals(JavaContainerAndClassifierUtil.getJavaPackageAsStringList(javaPackage.get))) {
+				JavaContainerAndClassifierUtil.updateNamespaces(javaCompilationUnit, javaPackage.get);
 			}
 		]
 	}
@@ -559,7 +560,8 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
 		modified = jPackage.updateName(uPackage.name) || modified
 		if (modified) {
 			persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
-			for (compUnit : copyOf(jPackage.compilationUnits)) {
+			for (compUnit : copyOf(jPackage.classifiers.map[it.containingCompilationUnit]
+			)) {
 				changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
 			}
 			// TODO TS This should be dealt with by the java domain, as this regards model specific persistence issues:

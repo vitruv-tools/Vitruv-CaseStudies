@@ -24,10 +24,10 @@ import tools.mdsd.jamopp.model.java.members.Member;
 import tools.mdsd.jamopp.model.java.members.MembersFactory;
 import tools.mdsd.jamopp.model.java.types.TypesFactory;
 import tools.mdsd.jamopp.resource.JavaResource2Factory;
+import tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tools.mdsd.jamopp.*;
 
 public class JaMoPPTest {
 	private static Logger LOGGER = Logger.getLogger(JaMoPPTest.class);
@@ -50,7 +50,7 @@ public class JaMoPPTest {
 		final CompilationUnit jaMoPPCompilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit();
 		jaMoPPCompilationUnit.setName("TestJava.java");
 		jaMoPPCompilationUnit.getClassifiers().add(jaMoPPInterface);
-		jaMoPPPackage.getCompilationUnits().add(jaMoPPCompilationUnit);
+		JavaContainerAndClassifierUtil.updateNamespaces(jaMoPPCompilationUnit, jaMoPPPackage);
 		jaMoPPPackage.setName("testJaMoPPPackage");
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		String uriStr = "src/testpackage/" + jaMoPPCompilationUnit.getName();

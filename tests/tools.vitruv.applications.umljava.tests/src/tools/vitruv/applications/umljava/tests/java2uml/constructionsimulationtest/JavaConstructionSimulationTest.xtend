@@ -42,6 +42,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.flat
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.mapFixed
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.withGlobalFactories
+import tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil
 
 /**
  * Test class for the reconstruction of existing java models
@@ -224,13 +225,15 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 
 		def void removeAndStoreCompilationUnits() {
 			LOGGER.trace("Removing compilation units from " + javaPackage)
-			compilationUnits += javaPackage.compilationUnits
-			javaPackage.compilationUnits.clear()
+			compilationUnits += javaPackage.classifiers.map[it.containingCompilationUnit]
+			javaPackage.classifiers.clear()
 		}
 
 		def void reapplyStoredCompilationUnits() {
 			LOGGER.trace("Adding compilation units to " + javaPackage)
-			javaPackage.compilationUnits += compilationUnits
+			for (CompilationUnit compUnit : compilationUnits) {
+				JavaContainerAndClassifierUtil.updateNamespaces(compUnit, javaPackage);
+			}
 			compilationUnits.clear()
 		}
 	}
