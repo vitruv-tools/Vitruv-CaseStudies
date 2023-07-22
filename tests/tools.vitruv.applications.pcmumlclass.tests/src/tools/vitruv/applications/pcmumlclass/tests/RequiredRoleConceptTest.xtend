@@ -49,16 +49,16 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 			val expectedContractsPackage = new FluentUMLPackageBuilder(CONTRACTS_PACKAGE).
 				addPackagedElement(expectedInterface).build
 
-			val expectedComponentClass = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC +
+			val expectedComponentClass = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC +
 				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addParameterizedConstructor(
 				#[new Pair("aName", expectedInterface)]).addAttribute("aName", expectedInterface).build
 			val expectedComponentsPackage = new FluentUMLPackageBuilder(
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC).addPackagedElement(expectedComponentClass).build
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LSC).addPackagedElement(expectedComponentClass).build
 
 			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel, String.join(".", PACKAGE_NAME, CONTRACTS_PACKAGE),
 				expectedContractsPackage)
 			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel,
-				String.join(".", PACKAGE_NAME, PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC),
+				String.join(".", PACKAGE_NAME, PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LSC),
 				expectedComponentsPackage)
 		]
 	}
@@ -71,9 +71,9 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 			val umlInterface = UmlQueryUtil.claimInterface(umlContractsPackage,
 				PcmUmlClassApplicationTestHelper.INTERFACE_NAME)
 			val umlConstructor = PcmUmlClassApplicationTestHelper.claimClass(defaultUmlModel,
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX).
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX).
 				ownedOperations.findFirst [
-					it.name == PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC +
+					it.name == PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC +
 						PcmUmlClassApplicationTestHelper.IMPL_SUFFIX
 				]
 
@@ -84,7 +84,7 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 			val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
 				build
 			val pcmComponent = new FluentPCMCompositeComponentBuilder(
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC).addRequiredRole(REQUIRED_ROLE_NAME, pcmInterface).
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC).addRequiredRole(REQUIRED_ROLE_NAME, pcmInterface).
 				build
 			val expectedPcmRepository = new FluentPCMRepositoryBuilder(PACKAGE_NAME_FIRST_UPPER).addComponent(
 				pcmComponent).addInterface(pcmInterface).build
@@ -101,7 +101,7 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 			val umlInterface = UmlQueryUtil.claimInterface(umlContractsPackage,
 				PcmUmlClassApplicationTestHelper.INTERFACE_NAME)
 			val umlComponentImpl = PcmUmlClassApplicationTestHelper.claimClass(defaultUmlModel,
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
 
 			umlComponentImpl.createOwnedAttribute(REQUIRED_ROLE_NAME, umlInterface)
 		]
@@ -110,7 +110,7 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 			val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
 				build
 			val pcmComponent = new FluentPCMCompositeComponentBuilder(
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC).addRequiredRole(REQUIRED_ROLE_NAME, pcmInterface).
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC).addRequiredRole(REQUIRED_ROLE_NAME, pcmInterface).
 				build
 			val expectedPcmRepository = new FluentPCMRepositoryBuilder(PACKAGE_NAME_FIRST_UPPER).addComponent(
 				pcmComponent).addInterface(pcmInterface).build

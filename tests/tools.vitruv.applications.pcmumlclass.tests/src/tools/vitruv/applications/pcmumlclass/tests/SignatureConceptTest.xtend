@@ -22,6 +22,8 @@ import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLInterfaceBuil
 import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLPackageBuilder
 import tools.vitruv.applications.testutility.uml.UmlQueryUtil
 import org.junit.jupiter.api.Disabled
+import org.eclipse.uml2.uml.PrimitiveType
+import java.util.ArrayList
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationSignature with its
@@ -68,12 +70,14 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		]
 	}
 
-	private def _testReturnTypePropagation_UML(Function1<? super Type, Boolean> umlTypeSelector, int lower, int upper,
-		Function1<? super DataType, Boolean> pcmTypeSelector) {
+	private def _testReturnTypePropagation_UML(Function1<? super Type, Boolean> umlInterfaceReturnTypeSelector,
+		int lower, int upper, Function1<? super DataType, Boolean> pcmInterfaceReturnTypeSelector) {
 		changeUmlView[
-			val umlType = it.getRootObjects(Model).flatMap[it.eAllContents.toList].filter[it instanceof Type].map [
+			val umlInterfaceReturnType = it.getRootObjects(Model).flatMap[it.eAllContents.toList].filter [
+				it instanceof Type
+			].map [
 				it as Type
-			].findFirst(umlTypeSelector) as Type
+			].findFirst(umlInterfaceReturnTypeSelector) as Type
 
 			val umlInterface = UmlQueryUtil.claimInterface(umlContractsPackage,
 				PcmUmlClassApplicationTestHelper.INTERFACE_NAME);
@@ -82,21 +86,26 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 				param.direction === ParameterDirectionKind.RETURN_LITERAL
 			]
 
-			umlReturnParameter.type = umlType
+			umlReturnParameter.type = umlInterfaceReturnType
 			umlReturnParameter.lower = lower
 			umlReturnParameter.upper = upper
 		]
 
 		validatePcmView[
-			val pcmIntegerDataType = PcmUmlClassApplicationTestHelper.createPrimitiveDataType(PrimitiveTypeEnum.INT)
+			val pcmPrimitiveDataTypes = PrimitiveTypeEnum.VALUES.map [
+				PcmUmlClassApplicationTestHelper.createPrimitiveDataType(it) as DataType
+			].toList
 			val pcmCompositeDataType1 = new FluentPCMCompositeDataTypeBuilder(
 				PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME).build
 			val pcmCompositeDataType2 = new FluentPCMCompositeDataTypeBuilder(
 				PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2).build
 			val pcmCollectionDataType = new FluentPCMCollectionDataTypeBuilder(
 				PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME, pcmCompositeDataType2).build
-			val interfaceReturnType = #[pcmCompositeDataType1, pcmCompositeDataType2, pcmCollectionDataType,
-				pcmIntegerDataType].findFirst(pcmTypeSelector)
+			val allPcmTypes = new ArrayList(pcmPrimitiveDataTypes)
+			allPcmTypes.add(pcmCompositeDataType1)
+			allPcmTypes.add(pcmCompositeDataType2)
+			allPcmTypes.add(pcmCollectionDataType)
+			val interfaceReturnType = allPcmTypes.findFirst(pcmInterfaceReturnTypeSelector)
 			val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
 				addSignatureWithReturnType(TEST_SIGNATURE_NAME, interfaceReturnType, #[]).build
 			val expectedPcmRepository = new FluentPCMRepositoryBuilder(PACKAGE_NAME_FIRST_UPPER).addInterface(
@@ -114,9 +123,12 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		createRepositoryWithInterface()
 
 		_testCreateSignatureConceptUML()
-		_testReturnTypePropagation_UML([it.name == "int"], 0, LiteralUnlimitedNatural.UNLIMITED, [
-			it instanceof PrimitiveDataType && (it as PrimitiveDataType).type == PrimitiveTypeEnum.INT
-		])
+		_testReturnTypePropagation_UML(
+			[it instanceof PrimitiveType && (it as PrimitiveType).name == "int"],
+			0,
+			LiteralUnlimitedNatural.UNLIMITED,
+			[it instanceof PrimitiveDataType && (it as PrimitiveDataType).type == PrimitiveTypeEnum.INT]
+		)
 	}
 
 	@Test
@@ -140,6 +152,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		createRepositoryWithInterface()
 
 		_testCreateSignatureConceptUML()
+		// note: a uml type with multiplicities 0 to unlimited is mapped to a collection type with the corresponding pcm type as inner type
 		_testReturnTypePropagation_UML([it.name == PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2], 0,
 			LiteralUnlimitedNatural.UNLIMITED, [
 				it instanceof CollectionDataType &&
@@ -194,6 +207,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateSignatureConcept_PCM_collectionReturnType() {
 		createRepositoryWithInterface()
+		// note: a pcm collectionType is mapped to it's inner type with multiplicities from 0 to UNLIMITED
 		_testCreateSignatureConcept_PCM_withReturnType([
 			it instanceof CollectionDataType &&
 				(it as CollectionDataType).entityName == PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME

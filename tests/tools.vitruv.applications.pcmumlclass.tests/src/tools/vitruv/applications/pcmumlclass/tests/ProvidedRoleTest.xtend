@@ -47,16 +47,16 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 			val expectedContractsPackage = new FluentUMLPackageBuilder(CONTRACTS_PACKAGE).
 				addPackagedElement(expectedInterface).build
 
-			val expectedComponentClass = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC +
+			val expectedComponentClass = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC +
 				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.
 				addInterfaceRealization(PROVIDED_ROLE_NAME, expectedInterface).build
 			val expectedComponentsPackage = new FluentUMLPackageBuilder(
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC).addPackagedElement(expectedComponentClass).build
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LSC).addPackagedElement(expectedComponentClass).build
 
 			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel, String.join(".", PACKAGE_NAME, CONTRACTS_PACKAGE),
 				expectedContractsPackage)
 			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel,
-				String.join(".", PACKAGE_NAME, PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC),
+				String.join(".", PACKAGE_NAME, PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LSC),
 				expectedComponentsPackage)
 		]
 	}
@@ -67,7 +67,7 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 
 		changeUmlView[
 			val testComponent = PcmUmlClassApplicationTestHelper.claimClass(defaultUmlModel,
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
 			val testInterface = UmlQueryUtil.claimInterface(umlContractsPackage,
 				PcmUmlClassApplicationTestHelper.INTERFACE_NAME)
 			testComponent.createInterfaceRealization(PROVIDED_ROLE_NAME, testInterface)
@@ -77,7 +77,7 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 			val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
 				build
 			val pcmComponent = new FluentPCMCompositeComponentBuilder(
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC).addProvidedRole(PROVIDED_ROLE_NAME, pcmInterface).
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC).addProvidedRole(PROVIDED_ROLE_NAME, pcmInterface).
 				build
 			val expectedRepository = new FluentPCMRepositoryBuilder(PACKAGE_NAME_FIRST_UPPER).addComponent(
 				pcmComponent).addInterface(pcmInterface).build

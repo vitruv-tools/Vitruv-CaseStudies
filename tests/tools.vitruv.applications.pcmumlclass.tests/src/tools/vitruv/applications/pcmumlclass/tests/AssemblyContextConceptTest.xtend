@@ -41,15 +41,15 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		]
 
 		validateUmlView[
-			val component2Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_UC +
+			val component2Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_USC +
 				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.build
-			val component1Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC +
+			val component1Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC +
 				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.addAttribute(PROPERTY_NAME,
 				component2Class).build
-			val component1Package = new FluentUMLPackageBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC).
+			val component1Package = new FluentUMLPackageBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LSC).
 				addPackagedElement(component1Class).build
 			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel,
-				String.join(".", PACKAGE_NAME, PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LC), component1Package)
+				String.join(".", PACKAGE_NAME, PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LSC), component1Package)
 		]
 	}
 
@@ -59,18 +59,18 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 
 		changeUmlView[
 			val umlComponent1Class = PcmUmlClassApplicationTestHelper.claimClass(defaultUmlModel,
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
 			val umlComponent2Class = PcmUmlClassApplicationTestHelper.claimClass(defaultUmlModel,
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_UC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_USC + PcmUmlClassApplicationTestHelper.IMPL_SUFFIX)
 
 			umlComponent1Class.createOwnedAttribute(PROPERTY_NAME, umlComponent2Class)
 		]
 
 		validatePcmView[
 			val pcmComponent2 = new FluentPCMCompositeComponentBuilder(
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_UC).build
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_USC).build
 			val pcmComponent1 = new FluentPCMCompositeComponentBuilder(
-				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_UC).addAssemblyContext(PROPERTY_NAME, pcmComponent2).
+				PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC).addAssemblyContext(PROPERTY_NAME, pcmComponent2).
 				build
 			val expectedRepository = new FluentPCMRepositoryBuilder(PACKAGE_NAME_FIRST_UPPER).addComponent(
 				pcmComponent1).addComponent(pcmComponent2).build

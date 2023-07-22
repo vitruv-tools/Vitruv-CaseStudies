@@ -21,10 +21,10 @@ final class PcmUmlClassApplicationTestHelper {
 
 	public static val IMPL_SUFFIX = "Impl"
 
-	public static val COMPONENT_NAME_UC = "TestComponent"
-	public static val COMPONENT_NAME_LC = "testComponent"
-	public static val COMPONENT_NAME_2_UC = "TestComponent_2"
-	public static val COMPONENT_NAME_2_LC = "testComponent_2"
+	public static val COMPONENT_NAME_USC = "TestComponent"
+	public static val COMPONENT_NAME_LSC = "testComponent"
+	public static val COMPONENT_NAME_2_USC = "TestComponent_2"
+	public static val COMPONENT_NAME_2_LSC = "testComponent_2"
 
 	public static val COMPOSITE_DATATYPE_NAME = "TestCompositeType"
 	public static val COMPOSITE_DATATYPE_NAME_2 = "TestCompositeType_2"
@@ -39,11 +39,11 @@ final class PcmUmlClassApplicationTestHelper {
 
 	// --- PCM model creators ---
 	def static createComponent(Repository pcmRepository) {
-		return createComponent(pcmRepository, COMPONENT_NAME_UC)
+		return createComponent(pcmRepository, tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC)
 	}
 
 	def static createComponent_2(Repository pcmRepository) {
-		return createComponent(pcmRepository, COMPONENT_NAME_2_UC)
+		return createComponent(pcmRepository, tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_USC)
 	}
 
 	def static createCompositeDataType(Repository pcmRepository) {
@@ -84,11 +84,11 @@ final class PcmUmlClassApplicationTestHelper {
 
 	// --- PCM model queries ---
 	def static getPcmComponent(Repository pcmRepository) {
-		return getPcmComponent(pcmRepository, COMPONENT_NAME_UC)
+		return getPcmComponent(pcmRepository, tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC)
 	}
 
 	def static getPcmComponent_2(Repository pcmRepository) {
-		return getPcmComponent(pcmRepository, COMPONENT_NAME_2_UC)
+		return getPcmComponent(pcmRepository, tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_USC)
 	}
 
 	def static getPcmCompositeDataType(Repository pcmRepository) {

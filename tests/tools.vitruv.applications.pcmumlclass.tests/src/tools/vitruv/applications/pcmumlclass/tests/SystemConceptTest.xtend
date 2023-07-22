@@ -18,19 +18,19 @@ import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLPackageBuilde
  */
 class SystemConceptTest extends PcmUmlClassApplicationTest {
 	static val PCM_MODEL_FILE = "model/System.system"
-	val SYSTEM_NAME_UC = "TestSystem"
-	val SYSTEM_NAME_LC = "testSystem"
+	val SYSTEM_NAME_USC = "TestSystem"
+	val SYSTEM_NAME_LSC = "testSystem"
 
 	@Test
 	def void testCreateSystemConcept_PCM() {
-		createSystem(SYSTEM_NAME_UC)
+		createSystem(SYSTEM_NAME_USC)
 
 		validateUmlView[
-			val expectedSystemClass = new FluentUMLClassBuilder(SYSTEM_NAME_UC +
+			val expectedSystemClass = new FluentUMLClassBuilder(SYSTEM_NAME_USC +
 				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.build
-			val expectedPackage = new FluentUMLPackageBuilder(SYSTEM_NAME_LC).addPackagedElement(expectedSystemClass).
+			val expectedPackage = new FluentUMLPackageBuilder(SYSTEM_NAME_LSC).addPackagedElement(expectedSystemClass).
 				build
-			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel, SYSTEM_NAME_LC, expectedPackage)
+			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel, SYSTEM_NAME_LSC, expectedPackage)
 		]
 	}
 
@@ -39,13 +39,13 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 		changeUmlView[
 			userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
 			userInteraction.addNextTextInput(PCM_MODEL_FILE)
-			defaultUmlModel.createNestedPackage(SYSTEM_NAME_UC)
+			defaultUmlModel.createNestedPackage(SYSTEM_NAME_USC)
 		]
 
 		validateUmlAndPcmSystemView[
 			val actualSystem = PcmQueryUtil.claimPcmSystem(it)
 			val expectedSystem = SystemFactory.eINSTANCE.createSystem
-			expectedSystem.entityName = SYSTEM_NAME_UC
+			expectedSystem.entityName = SYSTEM_NAME_USC
 
 			assertEqualityOfPcmSystem(actualSystem, expectedSystem)
 		]
