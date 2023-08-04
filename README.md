@@ -17,13 +17,8 @@ In addition, it provides test cases for demo applications based on the simple [f
 
 Vitruvius can be installed in Eclipse via the [nightly update site](https://vitruv.tools/updatesite/nightly). A wiki page provides [detailed instructions for using or extending Vitruvius or parts of it](https://github.com/vitruv-tools/.github/wiki/Getting-Started).
 
-## Project Development
+## Framework-internal Dependencies
 
-Vitruvius, as well as the case studies, is realized as Eclipse plug-ins and depends on the following Eclipse tools:
-- Eclipse Modeling Framework (EMF) _as the modelling environment_
-- Xtext _for using the consistency specification languages_
-- Xtend _for code_
-
-This project depends on the following other Vitruvius projects:
+This project depends on the following other projects from the Vitruvius framework:
 - [Vitruv](https://github.com/vitruv-tools/Vitruv)
 - [Vitruv-DSLs](https://github.com/vitruv-tools/Vitruv-DSLs)
