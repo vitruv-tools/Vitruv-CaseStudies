@@ -423,6 +423,9 @@ class JavaMemberAndParameterUtil {
     def static initializeClassMethod(ClassMethod classMethod, String name, TypeReference typeReference, Modifier[] modifiers,
         Parameter[] parameters, boolean ensurePublic) {
         classMethod.name = name
+        if (null === classMethod.statement) {
+        	classMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
+        } 
         if (null !== typeReference) {
             classMethod.typeReference = EcoreUtil.copy(typeReference)
         }
