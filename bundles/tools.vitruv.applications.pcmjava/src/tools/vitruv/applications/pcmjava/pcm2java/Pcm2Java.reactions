@@ -1054,6 +1054,7 @@ routine createMethodForOperationSignature(pcm::OperationSignature operationSigna
 	update {
 		addCorrespondenceBetween(interfaceMethod, operationSignature)
 		interfaceMethod.name = operationSignature.entityName;
+		interfaceMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
 		changeInterfaceMethodReturnType(interfaceMethod, operationSignature.returnType__OperationSignature);
 		javaInterface.members += interfaceMethod;
 	}
