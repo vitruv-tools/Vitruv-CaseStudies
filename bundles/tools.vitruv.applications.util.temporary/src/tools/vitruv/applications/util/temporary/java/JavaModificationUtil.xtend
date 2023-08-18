@@ -221,6 +221,7 @@ class JavaModificationUtil {
 	
 	def static addConstructorToClass(Class javaClass) {
 		val Constructor constructor = MembersFactory.eINSTANCE.createConstructor
+		constructor.block = StatementsFactory.eINSTANCE.createBlock
 		addConstructorToClass(constructor, javaClass)
 	}
 

@@ -215,7 +215,7 @@ class FluentJavaClassBuilder {
 
 	private def Constructor createConstructor_(Class classifier) {
 		val constructor = MembersFactory.eINSTANCE.createConstructor
-
+		constructor.block = StatementsFactory.eINSTANCE.createBlock
 		constructor.name = classifier.name
 		constructor.makePublic
 

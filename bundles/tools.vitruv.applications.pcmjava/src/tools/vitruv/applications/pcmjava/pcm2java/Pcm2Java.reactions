@@ -38,6 +38,7 @@ import static extension tools.vitruv.applications.pcmjava.PcmJavaTransformationU
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
 
 import "https://mdsd.tools/jamopp/6.0.0/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -261,6 +262,7 @@ routine createAssemblyContextConstructor(pcm::AssemblyContext assemblyContext, j
 		val constructor = new java::Constructor
 	}
 	update {
+		constructor.block = StatementsFactory.eINSTANCE.createBlock
 		createAssemblyContextStatement(assemblyContext, constructor, compositeComponentJavaClass)
 		addConstructorToClass(constructor, compositeComponentJavaClass)
 	}

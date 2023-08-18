@@ -160,6 +160,7 @@ class JavaMemberAndParameterUtil {
      */
     def static Constructor addJavaConstructorToClass(Class jClass, JavaVisibility visibility, List<Parameter> params) {
         val constructor = MembersFactory.eINSTANCE.createConstructor
+        constructor.block = StatementsFactory.eINSTANCE.createBlock
         setName(constructor, jClass.name)
         addParametersIfNotNull(constructor, params)
         setJavaVisibilityModifier(constructor, visibility)
@@ -177,6 +178,7 @@ class JavaMemberAndParameterUtil {
      */
     def static createJavaConstructorAndAddToClass(Class jClass, JavaVisibility visibility) {
         val constructor = MembersFactory.eINSTANCE.createConstructor
+        constructor.block = StatementsFactory.eINSTANCE.createBlock
         constructor.name = jClass.name
         setJavaVisibilityModifier(constructor, visibility)
         jClass.members += constructor
@@ -187,6 +189,7 @@ class JavaMemberAndParameterUtil {
         val constructors = javaClass.members.filter[it instanceof Constructor].map[it as Constructor]
         if (constructors.nullOrEmpty) {
             val Constructor constructor = MembersFactory.eINSTANCE.createConstructor
+            constructor.block = StatementsFactory.eINSTANCE.createBlock
             return addConstructorToClass(constructor, javaClass)
         }
         return constructors.iterator.next
