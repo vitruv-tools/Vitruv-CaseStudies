@@ -108,7 +108,7 @@ reaction JavaCompilationUnitInsertedAsRoot {
 	call {
 		newValue.classifiers.forEach[insertUmlClassifier(it, newValue)]
 		rootElementPreSetup(newValue)
-		newValue.classifiers.forEach[insertUmlClassifierIntoPackage(it, newValue.containingConcreteClassifier.package)]
+		newValue.classifiers.forEach[insertUmlClassifierIntoPackage(it, it.package)]
 	}
 }
 
