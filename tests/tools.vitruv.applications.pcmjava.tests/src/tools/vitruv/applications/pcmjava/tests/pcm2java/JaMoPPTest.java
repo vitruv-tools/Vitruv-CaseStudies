@@ -22,6 +22,7 @@ import tools.mdsd.jamopp.model.java.containers.Package;
 import tools.mdsd.jamopp.model.java.members.InterfaceMethod;
 import tools.mdsd.jamopp.model.java.members.Member;
 import tools.mdsd.jamopp.model.java.members.MembersFactory;
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory;
 import tools.mdsd.jamopp.model.java.types.TypesFactory;
 import tools.mdsd.jamopp.resource.JavaResource2Factory;
 import tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil;
@@ -99,6 +100,7 @@ public class JaMoPPTest {
 		final InterfaceMethod ifMethod = MembersFactory.eINSTANCE.createInterfaceMethod();
 		ifMethod.setName("testMethod");
 		ifMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
+		ifMethod.setStatement(StatementsFactory.eINSTANCE.createEmptyStatement());
 		resource.getContents().add(cu);
 		resource.save(null);
 		jaIf.getMembers().add(ifMethod);

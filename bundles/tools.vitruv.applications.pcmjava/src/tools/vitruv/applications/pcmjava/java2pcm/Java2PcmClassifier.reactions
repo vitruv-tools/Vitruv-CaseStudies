@@ -25,7 +25,7 @@ in reaction to changes in java
 execute actions in pcm
 
 ///Repository
-reaction PackageCreated {
+reaction JavaPackageCreated {
 	after element java::Package inserted as root
 		// This condition prevents another execution after automatically creating contracts and datatypes package.
 		// The reaction is called because every package insert is a root insert. 
@@ -311,7 +311,7 @@ routine renameComponent(java::Package javaPackage) {
 }
 
 //Interface
-reaction InterfaceCreated {
+reaction JavaInterfaceCreated {
 	after element java::Interface inserted in java::CompilationUnit[classifiers]
 	call createOrFindPCMInterface(newValue, affectedEObject)
 }
@@ -438,7 +438,7 @@ routine renameDataTypeFromClass(java::Class javaClass) {
 	}
 }
 
-reaction ClassCreated {
+reaction JavaClassCreated {
 	after element java::Class inserted in java::CompilationUnit[classifiers]
 	call {
 		val javaPackage = getContainingPackageFromCorrespondenceModel(newValue, correspondenceModel)
