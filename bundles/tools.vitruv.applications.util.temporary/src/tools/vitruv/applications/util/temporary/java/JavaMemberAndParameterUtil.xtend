@@ -70,6 +70,7 @@ class JavaMemberAndParameterUtil {
      */
     def static createJavaClassMethod(String name, TypeReference returnType, JavaVisibility visibility, boolean abstr, boolean stat, List<Parameter> params) {
         val jMethod = MembersFactory.eINSTANCE.createClassMethod
+    	jMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
         setName(jMethod, name)
         setTypeReference(jMethod, returnType)
         setJavaVisibilityModifier(jMethod, visibility)
@@ -91,6 +92,7 @@ class JavaMemberAndParameterUtil {
      */
     def static createJavaInterfaceMethod(String name, TypeReference returnType, List<Parameter> params) {
         val jMethod = MembersFactory.eINSTANCE.createInterfaceMethod
+        jMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
         setName(jMethod, name)
         setTypeReference(jMethod, returnType)
         jMethod.makePublic
@@ -247,11 +249,16 @@ class JavaMemberAndParameterUtil {
         assigmentExpression.value = identifierReference
         expressionStatement.expression = assigmentExpression
         method.statements.add(expressionStatement)
+        
+        if (method.statement === null) {
+    		method.statement = StatementsFactory.eINSTANCE.createEmptyStatement
+    	}
+        
         return method
     }
 
-    def static createGetter(Field field, ClassMethod method) {
-        method.name = "get" + field.name.toFirstUpper
+    def static createGetter(Field field, ClassMethod method) {    	
+    	method.name = "get" + field.name.toFirstUpper
         method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
         method.typeReference = EcoreUtil.copy(field.typeReference)
 
@@ -263,6 +270,11 @@ class JavaMemberAndParameterUtil {
         val ret = StatementsFactory.eINSTANCE.createReturn
         ret.returnValue = identifierRef
         method.statements.add(ret)
+        
+        if (method.statement === null) {
+    		method.statement = StatementsFactory.eINSTANCE.createEmptyStatement
+    	}
+        
         return method
     }
 

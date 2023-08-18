@@ -21,6 +21,7 @@ import tools.mdsd.jamopp.model.java.types.Void
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
 
 // TODO: merge this class with similar classes in Java <-> UML tests and testutils
 @Utility
@@ -52,6 +53,9 @@ class JavaCreatorsUtil {
 
 	static def ClassMethod createClassMethod((ClassMethod)=>void initialization) {
 		var classMethod = MembersFactory.eINSTANCE.createClassMethod
+		if (classMethod.statement === null) {
+    		classMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
+    	}
 		initialization.apply(classMethod)
 		return classMethod
 	}
@@ -64,6 +68,9 @@ class JavaCreatorsUtil {
 
 	static def InterfaceMethod createInterfaceMethod((InterfaceMethod)=>void initialization) {
 		var interfaceMethod = MembersFactory.eINSTANCE.createInterfaceMethod
+		if (interfaceMethod.statement === null) {
+    		interfaceMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
+    	}
 		initialization.apply(interfaceMethod)
 		return interfaceMethod
 	}

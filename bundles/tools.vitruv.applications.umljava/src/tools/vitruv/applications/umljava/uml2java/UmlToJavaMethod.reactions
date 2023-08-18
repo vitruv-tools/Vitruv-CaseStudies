@@ -95,6 +95,9 @@ routine createOrFindJavaClassMethod(uml::Operation umlOperation, uml::Classifier
 		if (foundMethod === null) {
 			createJavaClassMethod(umlOperation)
 		} else {
+			if (foundMethod.statement === null) {
+    			foundMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
+    		}
 			addMethodCorrespondence(foundMethod, umlOperation)
 		}
 	}
@@ -106,6 +109,7 @@ routine createJavaClassMethod(uml::Operation umlOperation) {
 	}
 	update {
 		javaMethod.name = umlOperation.name
+    	javaMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
 		setJavaVisibility(javaMethod, umlOperation.visibility)
 		addCorrespondenceBetween(umlOperation, javaMethod)
 		setJavaMethodReturnType(umlOperation, umlOperation.getReturnResult)
@@ -133,6 +137,7 @@ routine createJavaInterfaceMethod(uml::Operation umlOperation) {
 	}
 	update {
 		javaMethod.name = umlOperation.name
+		javaMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
 		javaMethod.makePublic
 		addCorrespondenceBetween(umlOperation, javaMethod)
 		setJavaMethodReturnType(umlOperation, umlOperation.getReturnResult)
