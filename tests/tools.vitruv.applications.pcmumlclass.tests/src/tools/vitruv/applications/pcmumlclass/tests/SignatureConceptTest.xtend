@@ -21,7 +21,6 @@ import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMRepositoryBui
 import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLInterfaceBuilder
 import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLPackageBuilder
 import tools.vitruv.applications.testutility.uml.UmlQueryUtil
-import org.junit.jupiter.api.Disabled
 import org.eclipse.uml2.uml.PrimitiveType
 import java.util.ArrayList
 
@@ -92,9 +91,9 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		]
 
 		validatePcmView[
-			val pcmPrimitiveDataTypes = PrimitiveTypeEnum.VALUES.map [
-				PcmUmlClassApplicationTestHelper.createPrimitiveDataType(it) as DataType
-			].toList
+			val pcmPrimitiveDataTypes = it.getRootObjects().flatMap[it.eAllContents.toList].filter [
+				it instanceof PrimitiveDataType
+			].map[it as DataType].toList
 			val pcmCompositeDataType1 = new FluentPCMCompositeDataTypeBuilder(
 				PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME).build
 			val pcmCompositeDataType2 = new FluentPCMCompositeDataTypeBuilder(
@@ -116,17 +115,15 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		]
 	}
 
-	@Disabled("fix handling of primitive types")
 	@Test
-	// TODO: fix handling of primitive types
 	def void testCreateSignatureConcept_UML_primitiveReturnType() {
 		createRepositoryWithInterface()
 
 		_testCreateSignatureConceptUML()
 		_testReturnTypePropagation_UML(
 			[it instanceof PrimitiveType && (it as PrimitiveType).name == "int"],
-			0,
-			LiteralUnlimitedNatural.UNLIMITED,
+			1,
+			1,
 			[it instanceof PrimitiveDataType && (it as PrimitiveDataType).type == PrimitiveTypeEnum.INT]
 		)
 	}

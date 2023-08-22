@@ -1,12 +1,12 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
+import java.util.List
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
 import org.eclipse.xtext.xbase.lib.Functions.Function1
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
@@ -20,7 +20,6 @@ import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMCompositeData
 import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMRepositoryBuilder
 import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLClassBuilder
 import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLPackageBuilder
-import java.util.List
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::InnerDeclaration with 
@@ -158,12 +157,9 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		]
 	}
 
-	@Disabled("TODO: fix handling of primitive types")
 	@Test
 	def void testCreateAttributeConcept_UML_primitiveType() {
-		// TODO: fix handling of primitive types
-		// This statement only serves as placeholder. If handling of primitive types is fixed insert actual corresponding PCM int PrimitiveTypeHere
-		val pcmIntPrimitiveType = null
+		val pcmIntPrimitiveType = PcmUmlClassApplicationTestHelper.createPrimitiveDataType(PrimitiveTypeEnum.INT)
 
 		val pcmCompositeDataType2 = new FluentPCMCompositeDataTypeBuilder(
 			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2).build

@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
 import java.nio.file.Path
-import java.util.Set
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -13,10 +12,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.^extension.ExtendWith
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
+import org.palladiosimulator.pcm.system.System
+import org.palladiosimulator.pcm.system.SystemFactory
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import tools.vitruv.applications.pcmumlclass.tests.helper.IgnoreFeaturesEqualityHelper
+import tools.vitruv.applications.pcmumlclass.tests.helper.PcmModelEqualityHelper
 import tools.vitruv.applications.testutility.uml.UmlQueryUtil
 import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
@@ -32,9 +33,6 @@ import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 
 import static extension tools.vitruv.applications.pcmumlclass.tests.PcmQueryUtil.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
-import org.palladiosimulator.pcm.system.SystemFactory
-
-import org.palladiosimulator.pcm.system.System
 
 @ExtendWith(RegisterMetamodelsInStandalone)
 abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest {
@@ -77,11 +75,11 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 		viewFactory = new PcmUmlClassViewFactory(virtualModel)
 		createUmlModel[name = UML_MODEL_NAME]
 	}
-	
+
 	protected def void createAndRegisterRoot(View view, EObject rootObject, URI persistenceUri) {
 		view.registerRoot(rootObject, persistenceUri)
 	}
-	
+
 	protected def Path getPcmProjectModelPath(String modelName, String modelFileExtension) {
 		Path.of(PCM_MODEL_FOLDER_NAME).resolve(modelName + "." + modelFileExtension)
 	}
@@ -89,18 +87,18 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 	protected def Path getUmlProjectModelPath(String modelName) {
 		Path.of(UML_MODEL_FOLDER_NAME).resolve(modelName + "." + UML_MODEL_FILE_EXTENSION)
 	}
-	
+
 	def void initUMLModel() {
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		createUmlRootPackage(PACKAGE_NAME)
 	}
-	
+
 	def void initPCMRepository() {
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createRepository(PACKAGE_NAME_FIRST_UPPER)
 	}
-	
+
 	// --- UML creators ---
 	protected def void createUmlModel((Model)=>void modelInitialization) {
 		changeUmlView [
@@ -109,7 +107,7 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 			createAndRegisterRoot(umlModel, UML_MODEL_NAME.umlProjectModelPath.uri)
 		]
 	}
-	
+
 	protected def void createUmlRootPackage(String packageName) {
 		changeUmlView [
 			defaultUmlModel.packagedElements += UMLFactory.eINSTANCE.createPackage => [
@@ -117,14 +115,14 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 			]
 		]
 	}
-	
+
 	// --- PCM creators ---
 	protected def void createRepository(String repositoryName) {
 		createRepository[
 			entityName = repositoryName;
 		]
 	}
-	
+
 	private def void createRepository((Repository)=>void repositoryInitalization) {
 		changePcmView[
 			var repository = RepositoryFactory.eINSTANCE.createRepository();
@@ -132,13 +130,13 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 			registerRoot(repository, getPcmProjectModelPath(repository.entityName, PCM_REPOSITORY_FILE_EXTENSION).uri)
 		]
 	}
-	
+
 	protected def void createSystem(String systemyName) {
 		createSystem [
 			entityName = systemyName;
 		]
 	}
-	
+
 	private def void createSystem((System)=>void systemInitialization) {
 		changePcmView[
 			val system = SystemFactory.eINSTANCE.createSystem();
@@ -151,7 +149,7 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 	protected def getDefaultUmlModel(View view) {
 		view.claimUmlModel(UML_MODEL_NAME)
 	}
-	
+
 	protected def getUmlRootPackage(View view) {
 		view.defaultUmlModel.claimPackage(PACKAGE_NAME)
 	}
@@ -167,7 +165,7 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 			it.name.equals(DATATYPES_PACKAGE)
 		]
 	}
-	
+
 	// --- PCM model queries
 	protected def getDefaultPcmRepository(View view) {
 		view.claimPcmRepository(PACKAGE_NAME_FIRST_UPPER)
@@ -194,15 +192,14 @@ abstract class PcmUmlClassApplicationTest extends ViewBasedVitruvApplicationTest
 	}
 
 	protected def assertEqualityOfPcmRepository(Repository repository, Repository expectedRepository) {
-		val equalityHelper = new IgnoreFeaturesEqualityHelper(Set.of("id"));
+		val equalityHelper = new PcmModelEqualityHelper();
 		assertTrue(equalityHelper.equals(repository, expectedRepository),
 			modelComparisonErrorMessage(expectedRepository, repository))
 	}
-	
+
 	protected def assertEqualityOfPcmSystem(System system, System expectedSystem) {
-		val equalityHelper = new IgnoreFeaturesEqualityHelper(Set.of("id"));
-		assertTrue(equalityHelper.equals(system, expectedSystem),
-			modelComparisonErrorMessage(expectedSystem, system))
+		val equalityHelper = new PcmModelEqualityHelper();
+		assertTrue(equalityHelper.equals(system, expectedSystem), modelComparisonErrorMessage(expectedSystem, system))
 	}
 
 	protected def String modelComparisonErrorMessage(EObject expected, EObject actual) {

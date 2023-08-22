@@ -2,17 +2,19 @@ package tools.vitruv.applications.pcmumlclass.tests
 
 import edu.kit.ipd.sdq.commons.util.java.Pair
 import edu.kit.ipd.sdq.commons.util.java.Quadruple
+import java.util.ArrayList
 import java.util.List
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
 import org.eclipse.xtext.xbase.lib.Functions.Function1
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.core.entity.NamedElement
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.Interface
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
@@ -77,7 +79,6 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		]
 	}
 
-	@Disabled("fix handling of primitive types")
 	@Test
 	def void testCreateParameterConcept_UML_primitiveType() {
 		val pcmCompositeDataType2 = new FluentPCMCompositeDataTypeBuilder(
@@ -86,9 +87,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME).build
 		val pcmCollectionDataType = new FluentPCMCollectionDataTypeBuilder(
 			PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME, pcmCompositeDataType2).build
-		// TODO: fix handling of primitive types
-		// this line is a placeholder and should be fixed if handling of PrimitiveTypes is fixed
-		val pcmIntDataType = null
+		val pcmIntDataType = PcmUmlClassApplicationTestHelper.createPrimitiveDataType(PrimitiveTypeEnum.INT)
 		val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
 			addSignature(PcmUmlClassApplicationTestHelper.SIGNATURE_NAME,
 				#[new Pair(TEST_PARAMETER_NAME, pcmIntDataType)]).build
@@ -145,6 +144,9 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		]
 
 		validateUmlView[
+			val allUmlPrimitiveTypes = it.getRootObjects().flatMap[it.eAllContents.toList].filter [
+				it instanceof PrimitiveType
+			].map[it as Type].toList
 			val umlTestCompositeType2 = new FluentUMLClassBuilder(
 				PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2, false).build
 			val umlTestCompositeType1 = new FluentUMLClassBuilder(
@@ -152,7 +154,10 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 			val expectedDataTypesPackage = new FluentUMLPackageBuilder(DATATYPES_PACKAGE).addPackagedElement(
 				umlTestCompositeType1).addPackagedElement(umlTestCompositeType2).build
 
-			val expectedParameterType = #[umlTestCompositeType1, umlTestCompositeType2].findFirst [
+			var allPossibleParameterTypes = new ArrayList(allUmlPrimitiveTypes)
+			allPossibleParameterTypes.add(umlTestCompositeType1)
+			allPossibleParameterTypes.add(umlTestCompositeType2)
+			val expectedParameterType = allPossibleParameterTypes.findFirst [
 				it.name == expectedParameterTypeName
 			]
 			val umlInterface = new FluentUMLInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
@@ -169,13 +174,14 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 				expectedContractsPackage)
 		]
 	}
-
-	@Disabled("fix handling of primitive types")
+	
 	@Test
 	def void testCreateParameterConcept_PCM_primitiveType() {
-		// TODO: fix handling of primitive types
-		testCreateParameterConcept_PCM([PcmUmlClassApplicationTestHelper.createPrimitiveDataType(PrimitiveTypeEnum.INT)],
-			"TODO", 1, 1)
+		testCreateParameterConcept_PCM([
+			it.filter[it instanceof PrimitiveDataType].findFirst [
+				(it as PrimitiveDataType).type == PrimitiveTypeEnum.INT
+			]
+		], "int", 1, 1)
 	}
 
 	@Test
