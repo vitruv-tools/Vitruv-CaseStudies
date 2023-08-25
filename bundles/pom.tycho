@@ -1,0 +1,8 @@
+## tycho automatic module detection 22cdec11-f0ad-4609-ba70-7ea614381dbd
+tools.vitruv.applications.cbs.commonalities
+tools.vitruv.applications.cbs.testutils
+tools.vitruv.applications.pcmjava
+tools.vitruv.applications.pcmumlclass
+tools.vitruv.applications.testutility
+tools.vitruv.applications.umljava
+tools.vitruv.applications.util.temporary

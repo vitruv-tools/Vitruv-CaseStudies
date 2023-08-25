@@ -1,0 +1,11 @@
+import "http://www.example.org/autoSAR" as AutoSAR
+import "http://hu.bme.mit.massif/simulink/1.0" as SimuLink
+
+reactions: simuLinkTOAutoSAR
+in reaction to changes in SimuLink
+execute actions in AutoSAR
+
+
+import simuLinkTOAutoSARTypePropagation using qualified names
+import simuLinkToAutoSARBlocksToComponents using qualified names
+import simuLinkTOAutoSARPorts using qualified names
