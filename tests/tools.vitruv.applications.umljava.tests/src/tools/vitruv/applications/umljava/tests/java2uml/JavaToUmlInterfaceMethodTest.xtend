@@ -14,6 +14,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil
 
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
 
 /**
  * This class contains test cases for the creation, renaming and deleting of interface methods.
@@ -122,6 +123,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaToUmlTest {
 		changeJavaView [
 			claimJavaInterface(INTERFACE_NAME) => [
 				members += MembersFactory.eINSTANCE.createInterfaceMethod => [
+					statement = StatementsFactory.eINSTANCE.createEmptyStatement
 					name = methodName
 					typeReference = TypesFactory.eINSTANCE.createVoid
 				]

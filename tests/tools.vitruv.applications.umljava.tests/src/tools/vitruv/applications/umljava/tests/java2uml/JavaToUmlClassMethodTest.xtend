@@ -20,6 +20,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
 
 /**
  * A test class to test the class method reactions.
@@ -304,6 +305,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 		changeJavaView [
 			claimJavaClass(className) => [
 				members += MembersFactory.eINSTANCE.createClassMethod => [
+					statement = StatementsFactory.eINSTANCE.createEmptyStatement
 					name = methodName
 					typeReference = TypesFactory.eINSTANCE.createVoid
 					makePublic
