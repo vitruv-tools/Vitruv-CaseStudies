@@ -318,10 +318,10 @@ reaction JavaInterfaceCreated {
 
 routine createOrFindPCMInterface(java::Interface javaInterface, java::CompilationUnit compilationUnit) {
 	match {
+		require absence of pcm::OperationInterface corresponding to javaInterface
 		val containingPackage = retrieve java::Package corresponding to ContainersPackage.Literals.PACKAGE with 
 			namespacesAsString + name + "." == compilationUnit.namespacesAsString
 		val pcmRepository = retrieve optional pcm::Repository corresponding to containingPackage tagged "contracts"
-		require absence of pcm::OperationInterface corresponding to javaInterface
 	}
 	update {
 		if (pcmRepository.isPresent) {

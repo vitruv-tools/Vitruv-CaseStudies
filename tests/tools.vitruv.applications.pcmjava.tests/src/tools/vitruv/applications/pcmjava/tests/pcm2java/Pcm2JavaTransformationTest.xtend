@@ -190,9 +190,8 @@ class Pcm2JavaTransformationTest extends ViewBasedVitruvApplicationTest {
 					val actualMemberAtIdx = actualClassifier.members.get(idx)
 
 					var namesEqualOrNotPresent = true
-					if (actualMemberAtIdx instanceof NamedElement && item instanceof NamedElement) {
-						namesEqualOrNotPresent = (actualMemberAtIdx as NamedElement).name.equals(
-							(item as NamedElement).name)
+					if (item instanceof NamedElement) {
+						namesEqualOrNotPresent = actualMemberAtIdx.name.equals(item.name)
 					}
 
 					return actualMemberAtIdx.class == item.class && namesEqualOrNotPresent
