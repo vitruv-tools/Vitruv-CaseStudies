@@ -22,3 +22,5 @@ target/
 # Custom
 EvaluationData
 *.DS_Store
+*.polyglot
+*.pom.tycho
