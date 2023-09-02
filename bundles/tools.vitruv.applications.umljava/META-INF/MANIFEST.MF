@@ -13,15 +13,6 @@ Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
  tools.vitruv.framework.applications,
  tools.vitruv.dsls.reactions.runtime,
  tools.vitruv.applications.util.temporary;visibility:=reexport,
- tools.mdsd.jamopp.model;bundle-version="6.0.0",
- tools.mdsd.jamopp.model.edit;bundle-version="6.0.0",
- tools.mdsd.jamopp.parser;bundle-version="6.0.0",
- tools.mdsd.jamopp.parser.bcel;bundle-version="6.0.0",
- tools.mdsd.jamopp.parser.jdt;bundle-version="6.0.0",
- tools.mdsd.jamopp.parser.jdt.singlefile;bundle-version="6.0.0",
- tools.mdsd.jamopp.printer;bundle-version="6.0.0",
- tools.mdsd.jamopp.resolution;bundle-version="6.0.0",
- tools.mdsd.jamopp.resource;bundle-version="6.0.0",
- tools.mdsd.jamopp.standalone;bundle-version="6.0.0"
+ tools.mdsd.jamopp.model;bundle-version="6.0.0"
 Export-Package: tools.vitruv.applications.umljava,
  tools.vitruv.applications.umljava.util
