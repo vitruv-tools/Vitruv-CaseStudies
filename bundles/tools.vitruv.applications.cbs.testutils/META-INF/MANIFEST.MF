@@ -26,7 +26,14 @@ Require-Bundle: tools.vitruv.testutils.vsum,
  org.hamcrest.core,
  org.opentest4j,
  tools.vitruv.framework.applications;visibility:=reexport,
- tools.vitruv.applications.util.temporary
+ tools.vitruv.applications.util.temporary,
+ edu.kit.ipd.sdq.activextendannotations,
+ org.emftext.language.java.resource,
+ org.emftext.language.java,
+ org.apache.log4j,
+ edu.kit.ipd.sdq.commons.util.java,
+ edu.kit.ipd.sdq.commons.util.emf
 Export-Package: tools.vitruv.applications.cbs.testutils,
  tools.vitruv.applications.cbs.testutils.equivalencetest,
- tools.vitruv.applications.cbs.testutils.junit
+ tools.vitruv.applications.cbs.testutils.junit,
+ tools.vitruv.applications.cbs.testutils.oldmetamodelutils

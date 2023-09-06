@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.*
 import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 
 import static extension tools.vitruv.applications.cbs.commonalities.java.JavaVisibilityHelper.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import static extension tools.vitruv.applications.cbs.testutils.oldmetamodelutils.JavaModifierUtil.*
 
 @AttributeMappingOperator(
 	name='javaVisibility',

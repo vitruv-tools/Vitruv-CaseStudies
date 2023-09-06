@@ -16,7 +16,7 @@ Require-Bundle: tools.vitruv.framework.applications,
  org.eclipse.uml2.uml;visibility:=reexport,
  org.emftext.language.java;visibility:=reexport,
  edu.kit.ipd.sdq.activextendannotations,
- tools.vitruv.applications.util.temporary,
- edu.kit.ipd.sdq.commons.util.emf
+ edu.kit.ipd.sdq.commons.util.emf,
+ tools.vitruv.applications.cbs.testutils
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities

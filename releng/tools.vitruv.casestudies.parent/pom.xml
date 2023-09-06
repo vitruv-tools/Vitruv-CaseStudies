@@ -52,6 +52,11 @@
 			<url>https://kit-sdq.github.io/updatesite/release/xannotations/${sdq.xannotations.version}</url>
 		</repository>
 		<repository>
+			<id>EMFText and JaMoPP (P2 Wrapper)</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/release/p2-wrapper/latest/</url>
+		</repository>
+		<repository>
 			<id>JaMoPP Extended</id>
 			<layout>p2</layout>
 			<url>https://updatesite.mdsd.tools/extended-java-model-parser-and-printer/nightly/</url>
