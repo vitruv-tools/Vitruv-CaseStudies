@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="tools.vitruv.applications.simulinkautosar.feature"
+      label="%featureName"
+      version="3.0.1.qualifier"
+      provider-name="%providerName"
+      license-feature="tools.vitruv.license.feature"
+      license-feature-version="1.0.0">
+
+   <description>
+      %description
+   </description>
+
+   <copyright url="%copyrightURL">
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <requires>
+      <import plugin="edu.kit.ipd.sdq.activextendannotations"/>
+      <import plugin="tools.vitruv.framework.applications"/>
+      <import plugin="tools.vitruv.dsls.reactions.runtime"/>
+      <import plugin="tools.vitruv.applications.util.temporary"/>
+      <import feature="tools.vitruv.applications.util.temporary.feature"/>
+      <import plugin="org.eclipse.uml2.uml"/>
+      <import plugin="org.emftext.language.java"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.emf"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.java"/>
+   </requires>
+
+   <plugin
+         id="tools.vitruv.applications.SimuLinkAutoSAR"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
