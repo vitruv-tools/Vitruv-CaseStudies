@@ -15,8 +15,8 @@ import tools.vitruv.framework.views.View
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 
-import static extension tools.vitruv.applications.SimuLinkAutoSAR.tests.util.AutoSARQueryUtil.*
-import static extension tools.vitruv.applications.SimuLinkAutoSAR.tests.util.SimuLinkQueryUtil.*
+import static extension tools.vitruv.applications.simulinkautosar.tests.util.AutoSARQueryUtil.*
+import static extension tools.vitruv.applications.simulinkautosar.tests.util.SimuLinkQueryUtil.*
 import edu.kit.ipd.sdq.metamodels.autosar.CompositeSwComponent
 import edu.kit.ipd.sdq.metamodels.simulink.SubSystem
 import static org.hamcrest.CoreMatchers.*

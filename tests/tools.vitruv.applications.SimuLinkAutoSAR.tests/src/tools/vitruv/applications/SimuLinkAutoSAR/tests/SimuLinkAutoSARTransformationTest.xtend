@@ -14,12 +14,12 @@ import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
 
-import static extension tools.vitruv.applications.SimuLinkAutoSAR.tests.util.SimuLinkQueryUtil.*
-import static extension tools.vitruv.applications.SimuLinkAutoSAR.tests.util.AutoSARQueryUtil.*
+import static extension tools.vitruv.applications.simulinkautosar.tests.util.SimuLinkQueryUtil.*
+import static extension tools.vitruv.applications.simulinkautosar.tests.util.AutoSARQueryUtil.*
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
-import tools.vitruv.applications.SimuLinkAutoSAR.tests.util.SimuLinkAutoSARViewFactory
-import tools.vitruv.applications.SimuLinkAutoSAR.tests.util.SimuLinkAutoSARClassifierEqualityValidation
+import tools.vitruv.applications.simulinkautosar.tests.util.SimuLinkAutoSARViewFactory
+import tools.vitruv.applications.simulinkautosar.tests.util.SimuLinkAutoSARClassifierEqualityValidation
 
 @ExtendWith(RegisterMetamodelsInStandalone)
 abstract class SimuLinkAutoSARTransformationTest extends ViewBasedVitruvApplicationTest {
