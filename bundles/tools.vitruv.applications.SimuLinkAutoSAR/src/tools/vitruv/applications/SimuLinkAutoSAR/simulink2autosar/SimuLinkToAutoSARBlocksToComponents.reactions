@@ -1,0 +1,130 @@
+import "edu.kit.ipd.sdq.metamodels.autosar" as AutoSAR
+import "edu.kit.ipd.sdq.metamodels.simulink" as SimuLink
+
+reactions: simuLinkToAutoSARBlocksToComponents
+in reaction to changes in SimuLink
+execute actions in AutoSAR
+
+
+reaction SimulinkElementNameChanged{
+	after attribute replaced at SimuLink::SimulinkElement[name]
+	call changeAutoSARElementName(affectedEObject)
+}
+
+
+routine changeAutoSARElementName(SimuLink::SimulinkElement simulinkElement){
+	match {
+		val AutoSARElement = retrieve AutoSAR::AutoSARElement corresponding to simulinkElement
+	}
+	update{
+		AutoSARElement.name = simulinkElement.name
+	}
+}
+
+
+reaction SimuLinkSubsystemInserted {
+	after element SimuLink::SubSystem inserted in SimuLink::SimulinkModel[contains]
+	call createAutoSARCompositeSwComponent(newValue,affectedEObject)
+}
+
+routine createAutoSARCompositeSwComponent(SimuLink::SubSystem subsystem, SimuLink::SimulinkModel model){
+	match {
+		val AutoSARModel = retrieve AutoSAR::AutoSARModel corresponding to model
+		require absence of AutoSAR::CompositeSwComponent corresponding to subsystem
+	}
+	create {
+		val AutoSARCompositeSwComponent = new AutoSAR::CompositeSwComponent		
+	}
+	update {
+		AutoSARCompositeSwComponent.name = subsystem.name
+		AutoSARModel.swcomponent += AutoSARCompositeSwComponent
+		addCorrespondenceBetween(subsystem, AutoSARCompositeSwComponent)
+	}
+	
+	
+	
+}
+
+reaction SimuLinkSubSystemDeleted {
+	after element SimuLink::SubSystem deleted
+	call deleteAutoSARCompositeSwComponent(affectedEObject)
+	
+}
+
+routine deleteAutoSARCompositeSwComponent(SimuLink::SubSystem subSystem){
+	match{
+		val compositeComponent = retrieve AutoSAR::CompositeSwComponent corresponding to subSystem
+	}
+	update{
+		removeObject(compositeComponent)
+		removeCorrespondenceBetween(compositeComponent, subSystem)
+	}
+	
+}
+
+reaction SimuLinkBlockAddedToSubsystem{
+	after element SimuLink::Block inserted in SimuLink::SubSystem[subBlocks]
+	call addAtomicComponentToCompositeComponent(newValue,affectedEObject)
+}
+
+routine addAtomicComponentToCompositeComponent(SimuLink::Block block, SimuLink::SubSystem subSystem){
+	match{
+		val CompositeComponent = retrieve AutoSAR::CompositeSwComponent corresponding to subSystem
+		val atomicComponent = retrieve AutoSAR::AtomicSwComponent corresponding to block
+	}
+	update{
+		CompositeComponent.atomicswcomponent += atomicComponent
+		atomicComponent.compositeswcomponent = CompositeComponent
+	}
+}
+
+reaction SimuLinkBlockInserted {
+	
+	after element SimuLink::Block inserted in SimuLink::SimulinkModel[contains]
+	call {
+		
+		//detectOrCreateAutoSARModel(affectedEObject)
+		createAutoSARComponent(newValue, affectedEObject)
+		}
+}
+
+
+reaction SimuLinkBlockDeleted{
+	after element SimuLink::Block deleted
+	call {
+		deleteAutoSARAtomicSwComponent(affectedEObject)
+	}
+}
+
+routine deleteAutoSARAtomicSwComponent(SimuLink::Block block){
+	match{
+		val atomicComponent = retrieve AutoSAR::AtomicSwComponent corresponding to block
+	}
+	update{
+		removeObject(atomicComponent)
+		removeCorrespondenceBetween(atomicComponent, block)
+	}
+	
+}
+
+
+
+
+routine createAutoSARComponent(SimuLink::Block SimuLinkBlock, SimuLink::SimulinkModel model){
+	
+	match {
+		val AutoSARModel = retrieve AutoSAR::AutoSARModel corresponding to model
+		require absence of AutoSAR::SwComponent corresponding to SimuLinkBlock
+		 
+	}
+	create {
+		val AutoSARSWComponent = new AutoSAR::AtomicSwComponent
+	}
+	update {
+		AutoSARSWComponent.name = SimuLinkBlock.name
+		AutoSARModel.swcomponent += AutoSARSWComponent
+		addCorrespondenceBetween(SimuLinkBlock, AutoSARSWComponent)
+	}
+	
+}
+

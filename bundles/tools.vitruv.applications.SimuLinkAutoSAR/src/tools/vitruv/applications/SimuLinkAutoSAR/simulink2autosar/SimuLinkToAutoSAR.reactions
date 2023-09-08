@@ -1,0 +1,11 @@
+import "edu.kit.ipd.sdq.metamodels.autosar" as AutoSAR
+import "edu.kit.ipd.sdq.metamodels.simulink" as SimuLink
+
+reactions: simuLinkTOAutoSAR
+in reaction to changes in SimuLink
+execute actions in AutoSAR
+
+
+import simuLinkTOAutoSARTypePropagation using qualified names
+import simuLinkToAutoSARBlocksToComponents using qualified names
+import simuLinkTOAutoSARPorts using qualified names

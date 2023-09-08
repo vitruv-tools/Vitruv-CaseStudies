@@ -1,0 +1,4 @@
+package tools.vitruv.applications.simulinkautosar
+
+class AutoSARToSimuLinkChangePropagationSpecification extends  mir.reactions.autoSARToSimulink.AutoSARToSimulinkChangePropagationSpecification{
+}

@@ -2,6 +2,7 @@ package tools.vitruv.applications.pcmjava.javaeditor.java2pcm;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne;
 import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.createPlatformResourceURI;
+import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.loadOrCreateResource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -61,13 +62,13 @@ import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.ContainersFactory;
 import org.emftext.language.java.containers.ContainersPackage;
-import org.emftext.language.java.containers.JavaRoot;
 import org.emftext.language.java.containers.Package;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
+import org.emftext.language.java.resource.java.IJavaOptions;
 import org.emftext.language.java.types.TypeReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -93,14 +94,15 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.pcm2java.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
+import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.composite.description.VitruviusChange;
+import tools.vitruv.change.composite.description.VitruviusChangeResolver;
 import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.framework.views.changederivation.DefaultStateBasedChangeResolutionStrategy;
 import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
 import tools.vitruv.testutils.LegacyVitruvApplicationTest;
 import tools.vitruv.testutils.TestProject;
 import tools.vitruv.testutils.views.UriMode;
-import static edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.loadOrCreateResource;
 
 /**
  * Test class that contains utility methods that can be used by JaMoPP2PCM
@@ -145,6 +147,15 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	public static void setupJavaFactories() {
 		JavaSetup.prepareFactories();
 	}
+	
+	/** Hotfix to ignore layout information on reload, see https://github.com/vitruv-tools/Vitruv-Change/issues/49 */
+	@BeforeEach
+	void patchResourceSet() {
+		ResourceSet resourceSet = resourceAt(URI.createFileURI("dummy.temp")).getResourceSet();
+		resourceSet.getLoadOptions().put(IJavaOptions.DISABLE_LAYOUT_INFORMATION_RECORDING, true);
+		resourceSet.getResources().forEach(Resource::unload);
+		resourceSet.getResources().clear();
+	}
 
 	@BeforeEach
 	public void setupJavaProject(@TestProject Path testProjectFolder) {
@@ -182,6 +193,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	private Resource loadResourceIndependentFromView(final URI resourceURI) {
 		ResourceSet resourceSet = new ResourceSetImpl();
+		resourceSet.getLoadOptions().put(IJavaOptions.DISABLE_LAYOUT_INFORMATION_RECORDING, true);
 		Resource resource = loadOrCreateResource(resourceSet, resourceURI);
 		return resource;
 	}
@@ -245,11 +257,10 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		StateBasedChangeResolutionStrategy changeResolutionStrategy = new DefaultStateBasedChangeResolutionStrategy();
 		for (Entry<URI, URI> modifiedResourceURI : oldToNewURIsOfModifiedResources.entrySet()) {
 			Resource currentResource = loadResourceIndependentFromView(modifiedResourceURI.getValue());
-			VitruviusChange change = changeResolutionStrategy.getChangeSequenceBetween(currentResource,
+			VitruviusChange<HierarchicalId> change = changeResolutionStrategy.getChangeSequenceBetween(currentResource,
 					resourceAt(modifiedResourceURI.getKey()));
-			VitruviusChange unresolvedChange = change.unresolve();
 			record(resourceAt(modifiedResourceURI.getKey()).getResourceSet(),
-					resourceSet -> unresolvedChange.resolveAndApply(resourceSet));
+					resourceSet -> VitruviusChangeResolver.forHierarchicalIds(resourceSet).resolveAndApply(change));
 		}
 		oldToNewURIsOfModifiedResources.clear();
 		propagate();
@@ -327,7 +338,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 			final URI uri = createPlatformResourceURI(cu.getResource());
 			final Classifier jaMoPPClass = this.getJaMoPPClassifierForURI(uri);
 			return claimOne(getCorrespondingEObjects(jaMoPPClass, type));
-		} catch (final Throwable e) {
+		} catch (final CoreException e) {
 			logger.warn(e.getMessage());
 		}
 		return null;
@@ -343,7 +354,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 					final IPackageFragment fragment = (IPackageFragment) iJavaElement;
 					if (fragment.getElementName().equals(newName)) {
 						final URI uri = this.getURIForElementInPackage(fragment, "package-info");
-						final Package jaMoPPPackage = this.getJaMoPPRootForURI(uri);
+						final Package jaMoPPPackage = this.getJavaPackageForURI(uri);
 						return jaMoPPPackage;
 					}
 				}
@@ -421,17 +432,19 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	protected ConcreteClassifier getJaMoPPClassifierForURI(final URI uri) {
-		final CompilationUnit cu = this.getJaMoPPRootForURI(uri);
-		final Classifier jaMoPPClassifier = cu.getClassifiers().get(0);
-		return (ConcreteClassifier) jaMoPPClassifier;
+		final CompilationUnit cu = this.getCompilationUnitForURI(uri);
+		final ConcreteClassifier jaMoPPClassifier = cu.getClassifiers().get(0);
+		return jaMoPPClassifier;
 	}
-
-	private <T extends JavaRoot> T getJaMoPPRootForURI(final URI uri) {
+	
+	private Package getJavaPackageForURI(final URI uri) {
 		final Resource resource = new ResourceSetImpl().getResource(uri, true);
-		// unchecked is OK for the test.
-		@SuppressWarnings("unchecked")
-		final T javaRoot = (T) resource.getContents().get(0);
-		return javaRoot;
+		return (Package)resource.getContents().stream().filter(it -> it instanceof Package).findFirst().get();
+	}
+	
+	private CompilationUnit getCompilationUnitForURI(final URI uri) {
+		final Resource resource = new ResourceSetImpl().getResource(uri, true);
+		return (CompilationUnit)resource.getContents().stream().filter(it -> it instanceof CompilationUnit).findFirst().get();
 	}
 
 	protected CompositeComponent addSecondPackageCorrespondsToCompositeComponent() throws Throwable {
