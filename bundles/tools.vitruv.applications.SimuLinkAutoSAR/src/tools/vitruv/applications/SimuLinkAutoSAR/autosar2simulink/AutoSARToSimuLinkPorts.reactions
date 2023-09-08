@@ -1,0 +1,183 @@
+import edu.kit.ipd.sdq.metamodels.simulink.SimuLinkPackage
+
+import "edu.kit.ipd.sdq.metamodels.autosar" as AutoSAR
+import "edu.kit.ipd.sdq.metamodels.simulink" as SimuLink
+
+reactions: autoSARToSimulinkPorts
+in reaction to changes in AutoSAR
+execute actions in SimuLink
+
+
+reaction AutoSARRequiredPortInsertedInSwComponent{
+	after element AutoSAR::RequiredPort inserted in AutoSAR::SwComponent[port]
+	call createExistingSimuLinkInPort(newValue, affectedEObject)
+}
+
+
+routine createExistingSimuLinkInPort(AutoSAR::RequiredPort existingRequiredPort, AutoSAR::SwComponent component) {
+	match {
+		val SimuLinkElement = retrieve SimuLink::Block corresponding to component
+		require absence of SimuLink::InPort corresponding to existingRequiredPort
+	}
+	create {
+		val SimuLinkPort = new  SimuLink::InPort
+	}
+	update {
+		
+		SimuLinkPort.name = existingRequiredPort.name
+		SimuLinkElement.ports += SimuLinkPort
+		addCorrespondenceBetween(existingRequiredPort, SimuLinkPort)
+	}
+}
+
+
+reaction AutoSARProvidedPortInsertedInSwComponent{
+	after element AutoSAR::ProvidedPort inserted in AutoSAR::SwComponent[port]
+	call createExistingSimuLinkOutPort(newValue, affectedEObject)
+}
+
+
+
+
+
+routine createExistingSimuLinkOutPort(AutoSAR::ProvidedPort existingProvidedPort, AutoSAR::SwComponent component) {
+	match {
+		val SimuLinkElement = retrieve SimuLink::Block corresponding to component
+		require absence of SimuLink::OutPort corresponding to existingProvidedPort
+	}
+	create {
+		val SimuLinkPort = new  SimuLink::OutPort
+	}
+	update {
+		SimuLinkPort.name = existingProvidedPort.name
+		SimuLinkElement.ports += SimuLinkPort
+		addCorrespondenceBetween(existingProvidedPort, SimuLinkPort)
+	}
+}
+
+
+
+reaction AutoSARProvidedPortDeletedInSwComponent{
+	after element AutoSAR::ProvidedPort deleted 
+	call deleteCorrespondingSimuLinkOutPort(affectedEObject)
+}
+
+
+routine deleteCorrespondingSimuLinkOutPort(AutoSAR::ProvidedPort existingProvidedPort){
+	match{
+		val outPort = retrieve SimuLink::OutPort corresponding to existingProvidedPort
+	}
+	update{
+		removeObject(outPort)
+		removeCorrespondenceBetween(existingProvidedPort, outPort)
+	}
+
+}
+
+
+reaction AutoSARPRequiredPortPortDeletedInSwComponent{
+	after element AutoSAR::RequiredPort deleted 
+	call deleteCorrespondingSimuLinkInPort(affectedEObject)
+}
+
+
+routine deleteCorrespondingSimuLinkInPort(AutoSAR::RequiredPort existingRequiredPort){
+	match{
+		val inPort = retrieve SimuLink::InPort corresponding to existingRequiredPort
+	}
+	update{
+		removeObject(inPort)
+		removeCorrespondenceBetween(existingRequiredPort, inPort)
+	}
+
+}
+
+
+reaction AutoSARDelegationSwConnectorAdded{
+	after element AutoSAR::DelegationSwConnector inserted in AutoSAR::CompositeSwComponent[swconnector]
+	call createSingleConnection(newValue, affectedEObject)
+}
+
+
+routine createSingleConnection(AutoSAR::DelegationSwConnector swConnector, AutoSAR::CompositeSwComponent compositeComponent){
+	match{
+		val subSystem = retrieve SimuLink::SubSystem corresponding to compositeComponent
+		val SimuLinkModel = retrieve SimuLink::SimulinkModel corresponding to SimuLinkPackage.Literals.SIMULINK_MODEL
+	}
+	create{
+		
+		val simuLinkSingleConnection = new SimuLink::SingleConnection
+		
+	}
+	update{
+		simuLinkSingleConnection.name = swConnector.name
+		SimuLinkModel.connection += simuLinkSingleConnection
+		addCorrespondenceBetween(simuLinkSingleConnection, swConnector)
+		
+	}
+	
+}
+
+reaction AutoSARDelegationSwConnectorInnerPortAdded{
+	after element AutoSAR::Port replaced at AutoSAR::DelegationSwConnector[InnerPort]
+	call addInnerPortToSingleConnection(newValue, affectedEObject)
+} 
+
+
+routine addInnerPortToSingleConnection(AutoSAR::Port innerPort, AutoSAR::DelegationSwConnector swConnector){
+	match{
+		val SingleConnection = retrieve SimuLink::SingleConnection corresponding to swConnector
+		val outPort = retrieve  SimuLink::OutPort corresponding to innerPort
+	}
+	update{
+		
+		SingleConnection.outport = outPort
+		outPort.connection = SingleConnection
+		
+	}
+	
+}
+
+reaction AutoSARDelegationSwConnectorOuterPortAdded{
+	after element AutoSAR::Port replaced at AutoSAR::DelegationSwConnector[OuterPort]
+	call addOutPortToSingleConnection(newValue, affectedEObject)
+}
+
+
+
+routine addOutPortToSingleConnection(AutoSAR::Port outerPort, AutoSAR::DelegationSwConnector swConnector){
+	match{
+		val SingleConnection = retrieve SimuLink::SingleConnection corresponding to swConnector
+		val outPort = retrieve SimuLink::OutPort corresponding to outerPort
+		val SimuLinkModel = retrieve SimuLink::SimulinkModel corresponding to SimuLinkPackage.Literals.SIMULINK_MODEL
+		val SimuLinkSubsystem = retrieve SimuLink::SubSystem corresponding to swConnector.eContainer
+	}
+	create{
+		
+		// an OutPort Block is needed here to match the semantics of the singleConnection which needs an In and OutPort
+		// as in the AutoSAR DelegationSwConnector two OutPorts are connected
+		// therefore the outport block is added inbetween
+		// so the single connection in the simulink model can be from the outport of the inner block to the inport of the outport block
+		// and the outport block has the outport like the autosarSwConnectors outterPort
+		val simuLinkPortBlock = new SimuLink::OutPortBlock
+		val simuLinkPortBlockInPort = new SimuLink::InPort
+		
+	}
+	update{
+		
+		simuLinkPortBlock.name = "OutPortBlock"
+		simuLinkPortBlock.ports += simuLinkPortBlockInPort
+		simuLinkPortBlock.ports += outPort
+		
+		SimuLinkModel.contains += simuLinkPortBlock
+		SimuLinkSubsystem.subBlocks += simuLinkPortBlock
+		
+		SingleConnection.inport = simuLinkPortBlockInPort
+		simuLinkPortBlockInPort.connection = SingleConnection
+	}
+	
+	
+}
+
+
+
