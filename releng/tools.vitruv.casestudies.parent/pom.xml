@@ -39,7 +39,7 @@
 		<repository>
 			<id>Demo Metamodels</id>
 			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/release/metamodels/demo/${sdq.demometamodels.version}</url>
+			<url>https://kit-sdq.github.io/updatesite/release/metamodels/demo/1.8.2</url>
 		</repository>
 		<repository>
 			<id>SDQ Commons</id>
