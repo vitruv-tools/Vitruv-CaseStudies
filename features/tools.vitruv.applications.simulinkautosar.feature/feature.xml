@@ -29,7 +29,6 @@
       <import plugin="org.emftext.language.java"/>
       <import plugin="edu.kit.ipd.sdq.commons.util.emf"/>
       <import plugin="edu.kit.ipd.sdq.commons.util.java"/>
-      <import plugin="edu.kit.ipd.sdq.commons.util.java"/>
       <import plugin="edu.kit.ipd.sdq.metamodels.autosar"/>
       <import plugin="edu.kit.ipd.sdq.metamodels.simulink"/>
    </requires>
