@@ -10,7 +10,7 @@
          name="SimuLink-AutoSAR Application"
          point="tools.vitruv.framework.applications.application">
       <application
-            class="tools.vitruv.applications.SimuLinkAutoSAR.SimuLinkAutoSARApplication"></application>
+            class="tools.vitruv.applications.simulinkautosar.SimuLinkAutoSARApplication"></application>
    </extension>
 
 </plugin>
