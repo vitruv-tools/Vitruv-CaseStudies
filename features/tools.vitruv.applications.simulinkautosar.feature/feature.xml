@@ -32,7 +32,7 @@
    </requires>
 
    <plugin
-         id="tools.vitruv.applications.simulinkautosar"
+         id="tools.vitruv.applications.SimuLinkAutoSAR"
          download-size="0"
          install-size="0"
          version="0.0.0"
