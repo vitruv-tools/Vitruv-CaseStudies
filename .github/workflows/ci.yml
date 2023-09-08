@@ -24,7 +24,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: git config --system core.longpaths true
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache
         uses: actions/cache@v3
         with:
