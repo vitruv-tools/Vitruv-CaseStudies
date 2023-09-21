@@ -23,7 +23,7 @@ Require-Bundle: tools.vitruv.dsls.reactions,
  tools.vitruv.dsls.demo.insurancefamilies.tests,
  tools.vitruv.dsls.demo.insurancepersons,
  tools.vitruv.dsls.demo.insurancepersons.tests,
- tools.mdsd.jamopp.model;bundle-version="6.0.0"
+ tools.mdsd.jamopp.model;bundle-version="6.0.0",
  edu.kit.ipd.sdq.metamodels.autosar,
  edu.kit.ipd.sdq.metamodels.simulink
 Bundle-Vendor: tools.vitruv
