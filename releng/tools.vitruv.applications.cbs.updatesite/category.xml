@@ -24,6 +24,9 @@
    <feature id="tools.vitruv.applications.pcmumlclass.feature.source" version="3.0.1.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
+    <feature url="features/tools.vitruv.applications.simulinkautosar.feature_3.0.1.qualifier.jar" id="tools.vitruv.applications.simulinkautosar.feature" version="3.0.1.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
    <category-def name="Vitruv Applications for Component-based Systems" label="Vitruv Applications for Component-based Systems">
       <description>
          Applications for Vitruv and Component-based Systems
