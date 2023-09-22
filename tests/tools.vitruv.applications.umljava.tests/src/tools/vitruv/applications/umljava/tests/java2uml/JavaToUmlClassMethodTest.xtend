@@ -292,6 +292,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				members += MembersFactory.eINSTANCE.createConstructor => [
+					block = StatementsFactory.eINSTANCE.createBlock
 					name = CLASS_NAME
 					javaVisibilityModifier = JavaVisibility.PUBLIC
 				]
