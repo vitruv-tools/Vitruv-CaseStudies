@@ -20,9 +20,9 @@ public class PcmModelEqualityHelper extends IgnoreFeaturesEqualityHelper {
 
 	@Override
 	protected boolean haveEqualFeature(EObject eObject1, EObject eObject2, EStructuralFeature feature) {
-		if (eObject1.eGet(feature) instanceof PrimitiveDataType dataType1
-				&& eObject2.eGet(feature) instanceof PrimitiveDataType dataType2) {
-			return dataType1.getType() == dataType2.getType();
+		if (eObject1.eGet(feature) instanceof PrimitiveDataType
+				&& eObject2.eGet(feature) instanceof PrimitiveDataType) {
+			return ((PrimitiveDataType)eObject1.eGet(feature)).getType() == ((PrimitiveDataType)eObject2.eGet(feature)).getType();
 		}
 
 		return super.haveEqualFeature(eObject1, eObject2, feature);
