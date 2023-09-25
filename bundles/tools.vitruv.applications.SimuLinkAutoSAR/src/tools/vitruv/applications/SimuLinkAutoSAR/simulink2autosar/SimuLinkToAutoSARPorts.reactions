@@ -1,0 +1,182 @@
+import edu.kit.ipd.sdq.metamodels.simulink.OutPortBlock
+
+import "edu.kit.ipd.sdq.metamodels.autosar" as AutoSAR
+import "edu.kit.ipd.sdq.metamodels.simulink" as SimuLink
+
+reactions: simuLinkTOAutoSARPorts
+in reaction to changes in SimuLink
+execute actions in AutoSAR
+
+
+reaction SimuLinkInPortInsertedtoBLock {
+	after element SimuLink::InPort inserted in SimuLink::Block[ports]
+	call createExistingAutoSARRequiredPort(newValue, affectedEObject)
+}
+
+routine createExistingAutoSARRequiredPort(SimuLink::InPort existingInPort, SimuLink::Block correspondingBlock) {
+	match {
+		val AutoSarSWComponent = retrieve AutoSAR::SwComponent corresponding to correspondingBlock   
+		require absence of AutoSAR::RequiredPort corresponding to existingInPort
+	}
+	create {
+		val AutoSARPort = new  AutoSAR::RequiredPort
+	}
+	update {
+		
+		AutoSARPort.name = existingInPort.name
+		AutoSarSWComponent.port += AutoSARPort
+		 
+		addCorrespondenceBetween(existingInPort, AutoSARPort)
+	}
+}
+
+
+reaction SimuLinkOutPortInsertedtoBLock {
+	after element SimuLink::OutPort inserted in SimuLink::Block[ports]
+	call createExistingAutoSARProvidedPort(newValue, affectedEObject)
+}
+
+
+
+routine createExistingAutoSARProvidedPort(SimuLink::OutPort existingOutPort, SimuLink::Block correspondingBlock) {
+	match {
+		val AutoSarSWComponent = retrieve AutoSAR::SwComponent corresponding to correspondingBlock
+		require absence of AutoSAR::ProvidedPort corresponding to existingOutPort
+	}
+	create {
+		val AutoSARPort = new  AutoSAR::ProvidedPort
+	}
+	update {
+		
+		AutoSARPort.name = existingOutPort.name
+		AutoSarSWComponent.port += AutoSARPort
+		
+		addCorrespondenceBetween(existingOutPort, AutoSARPort)
+	}
+}
+
+reaction SimuLinkInPortDeleted{
+	after element SimuLink::InPort deleted 
+	call deleteCorrespondingAutoSARRequiredtPort(affectedEObject)
+}
+
+
+routine deleteCorrespondingAutoSARRequiredtPort(SimuLink::InPort existingInPort){
+	match{
+		val requiredPort = retrieve AutoSAR::RequiredPort corresponding to existingInPort
+	}
+	update{
+		removeObject(requiredPort)
+		removeCorrespondenceBetween(requiredPort, existingInPort)
+	}
+
+}
+
+
+reaction SimuLinkOutPortDeleted{
+	after element SimuLink::OutPort deleted 
+	call deleteCorrespondingAutoSARProvidedPort(affectedEObject)
+}
+
+
+routine deleteCorrespondingAutoSARProvidedPort(SimuLink::OutPort existingOutPort){
+	match{
+		val providedPort = retrieve AutoSAR::ProvidedPort corresponding to existingOutPort
+	}
+	update{
+		removeObject(providedPort)
+		removeCorrespondenceBetween(existingOutPort, providedPort)
+	}
+
+}
+
+
+
+reaction InPortAddedToSingleConnection{
+	after element SimuLink::InPort replaced at SimuLink::SingleConnection[inport]
+	with !(newValue.container instanceof OutPortBlock)
+	call addOutPortToAssemblySwConnector(newValue,affectedEObject)
+}
+
+routine addOutPortToAssemblySwConnector(SimuLink::InPort inport, SimuLink::SingleConnection singleConnection){
+	match{
+		val AutoSARSwConnectorOpt = retrieve optional AutoSAR::AssemblySwConnector corresponding to singleConnection
+		val InPort = retrieve AutoSAR::RequiredPort corresponding to inport 
+		val CompositeComponent = retrieve AutoSAR::CompositeSwComponent corresponding to inport.container.parent	
+	}
+	create{
+		val AutoSARSwConnector = new AutoSAR::AssemblySwConnector
+	}
+	update{
+		if(AutoSARSwConnectorOpt.isPresent()){
+			AutoSARSwConnector.requiredport += InPort
+		}else{
+			AutoSARSwConnector.requiredport += InPort
+			
+			AutoSARSwConnector.name = singleConnection.name
+			CompositeComponent.swconnector += AutoSARSwConnector
+			addCorrespondenceBetween(singleConnection,AutoSARSwConnector)
+		}
+	}
+}
+
+/*
+	 * 
+	}*/
+// There is no reaction for the creation of a Single Connection because it needs to be decided whether it is a DelegationSwConnector or AssemblySwConnector 
+// For this decision the Type of the container from the inport is important
+// When the type is an OutPortBlock the SingleConnection needs to be mapped to a DelegationSwConnector
+reaction InPortOfOutPortBlockAddedToSingleConnection{
+	after element SimuLink::InPort replaced at SimuLink::SingleConnection[inport]
+	with (newValue.container instanceof OutPortBlock)
+	call addOutPortToDelegationSwConnector(newValue,affectedEObject)
+}
+
+routine addOutPortToDelegationSwConnector(SimuLink::InPort inport, SimuLink::SingleConnection singleConnection){
+	
+	match{
+		val AutoSARSwConnectorOpt = retrieve optional AutoSAR::DelegationSwConnector corresponding to singleConnection
+		val CompositeComponent = retrieve AutoSAR::CompositeSwComponent corresponding to inport.container.parent
+		// to be implemented -> get the right outport this implementation just works for the actual unit test
+		val providedPortofCompositeSwComponent = retrieve AutoSAR::ProvidedPort corresponding to inport.container.ports.head
+	}
+	create{
+		val AutoSARSwConnector = new AutoSAR::DelegationSwConnector
+	}
+	update{
+		if(AutoSARSwConnectorOpt.isPresent()){
+			AutoSARSwConnector.outerPort = providedPortofCompositeSwComponent
+		}else{
+			AutoSARSwConnector.outerPort = providedPortofCompositeSwComponent
+		
+			AutoSARSwConnector.name = singleConnection.name
+			CompositeComponent.swconnector += AutoSARSwConnector
+			addCorrespondenceBetween(singleConnection,AutoSARSwConnector)
+		}
+		
+	}
+}
+
+
+reaction OutPortAddedToSingleConnection{
+	after element SimuLink::OutPort replaced at SimuLink::SingleConnection[outport]
+	call addInnerPortToSwConnection(newValue,affectedEObject)
+}
+
+routine addInnerPortToSwConnection(SimuLink::OutPort outport, SimuLink::SingleConnection singleConnection){
+	match{
+		val OutPort = retrieve AutoSAR::ProvidedPort corresponding to outport 
+		val DelegationSwConnector = retrieve optional AutoSAR::DelegationSwConnector corresponding to singleConnection
+		val AssemblySwConnector = retrieve optional AutoSAR::AssemblySwConnector corresponding to singleConnection
+	}
+	update{
+		if(DelegationSwConnector.isPresent){
+			DelegationSwConnector.get.innerPort = OutPort
+		}else if (AssemblySwConnector.isPresent){
+			AssemblySwConnector.get.providedport += OutPort
+		}
+		
+	}
+}
+
+

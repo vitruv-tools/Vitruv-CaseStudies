@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SimuLink Autosar Tests
+Bundle-SymbolicName: tools.vitruv.applications.simulinkautosar.tests
+Automatic-Module-Name: tools.vitruv.applications.simulinkautosar.tests
+Bundle-Version: 3.0.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Import-Package: org.junit.jupiter.api,
+ org.junit.jupiter.api.extension,
+ org.junit.jupiter.params,
+ org.junit.jupiter.params.provider,
+ tools.vitruv.applications.simulinkautosar
+Require-Bundle: tools.vitruv.framework.applications,
+ tools.vitruv.testutils.vsum,
+ org.hamcrest.core,
+ edu.kit.ipd.sdq.activextendannotations,
+ edu.kit.ipd.sdq.commons.util.java,
+ org.eclipse.xtend.lib,
+ org.apache.log4j,
+ edu.kit.ipd.sdq.metamodels.simulink,
+ edu.kit.ipd.sdq.metamodels.autosar,
+ edu.kit.ipd.sdq.commons.util.emf
+Bundle-Vendor: vitruv.tools
