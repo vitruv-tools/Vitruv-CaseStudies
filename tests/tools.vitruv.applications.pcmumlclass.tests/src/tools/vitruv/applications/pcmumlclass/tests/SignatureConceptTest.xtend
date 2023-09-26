@@ -121,7 +121,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 
 		_testCreateSignatureConceptUML()
 		_testReturnTypePropagation_UML(
-			[it instanceof PrimitiveType && (it as PrimitiveType).name == "int"],
+			[it instanceof PrimitiveType && (it as PrimitiveType).name == "Integer"],
 			1,
 			1,
 			[it instanceof PrimitiveDataType && (it as PrimitiveDataType).type == PrimitiveTypeEnum.INT]
@@ -188,7 +188,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		createRepositoryWithInterface()
 		_testCreateSignatureConcept_PCM_withReturnType([
 			it instanceof PrimitiveDataType && (it as PrimitiveDataType).type == PrimitiveTypeEnum.INT
-		], 1, 1, [it.name == "int"])
+		], 1, 1, [it.name == "Integer"])
 	}
 
 	@Test

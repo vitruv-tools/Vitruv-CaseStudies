@@ -75,6 +75,7 @@ Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
  org.palladiosimulator.pcm;visibility:=reexport,
  edu.kit.ipd.sdq.activextendannotations,
  edu.kit.ipd.sdq.commons.util.emf,
+ edu.kit.ipd.sdq.commons.util.java,
  tools.vitruv.framework.applications,
  tools.vitruv.dsls.reactions.runtime,
  tools.vitruv.applications.util.temporary

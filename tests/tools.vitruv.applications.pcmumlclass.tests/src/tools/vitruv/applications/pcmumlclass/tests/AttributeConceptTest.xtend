@@ -169,7 +169,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		val pcmCollectionDataType = new FluentPCMCollectionDataTypeBuilder(
 			PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME, pcmCompositeDataType2).build
 
-		testCreateAttributeConcept_UML([it.name == "int"], 1, 1,
+		testCreateAttributeConcept_UML([it.name == "Integer"], 1, 1,
 			#[pcmCompositeDataType1, pcmCompositeDataType2, pcmCollectionDataType])
 	}
 

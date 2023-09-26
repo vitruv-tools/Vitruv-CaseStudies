@@ -20,18 +20,21 @@ import org.palladiosimulator.pcm.system.System
 import org.palladiosimulator.pcm.core.entity.Entity
 import tools.vitruv.applications.util.temporary.other.CorrespondenceRetriever
 
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
+
 @Utility
 class PcmUmlClassHelper {
 
-	def static Iterable<PrimitiveType> mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
+	def static PrimitiveType mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
 		Iterable<PrimitiveType> umlPredefinedPrimitiveTypes) {
+		// Prefer UML Types over JAVA Types
 		return switch (pcmPredefinedPrimitiveType.type) {
-			case PrimitiveTypeEnum.BOOL: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "bool" || it.name.toLowerCase == "boolean"]
-			case PrimitiveTypeEnum.BYTE: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "byte"]
-			case PrimitiveTypeEnum.CHAR: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "char"]
-			case PrimitiveTypeEnum.INT: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "int" || it.name.toLowerCase == "integer"]
-			case PrimitiveTypeEnum.DOUBLE: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "double" || it.name.toLowerCase == "real"]
-			case PrimitiveTypeEnum.STRING: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "string"]
+			case PrimitiveTypeEnum.BOOL: umlPredefinedPrimitiveTypes.filter[it.name == "Boolean"].claimOne
+			case PrimitiveTypeEnum.BYTE: umlPredefinedPrimitiveTypes.filter[it.name == "byte"].claimOne
+			case PrimitiveTypeEnum.CHAR: umlPredefinedPrimitiveTypes.filter[it.name == "char"].claimOne
+			case PrimitiveTypeEnum.INT: umlPredefinedPrimitiveTypes.filter[it.name == "Integer"].claimOne
+			case PrimitiveTypeEnum.DOUBLE: umlPredefinedPrimitiveTypes.filter[it.name == "Real"].claimOne
+			case PrimitiveTypeEnum.STRING: umlPredefinedPrimitiveTypes.filter[it.name == "String"].claimOne
 			default: null
 		// uml::UnlimitedNatural are not mapped and the user is notified if one of these types is set
 		}

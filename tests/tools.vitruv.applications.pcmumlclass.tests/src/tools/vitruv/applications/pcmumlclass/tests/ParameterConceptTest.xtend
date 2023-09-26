@@ -91,7 +91,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
 			addSignature(PcmUmlClassApplicationTestHelper.SIGNATURE_NAME,
 				#[new Pair(TEST_PARAMETER_NAME, pcmIntDataType)]).build
-		testCreateParameterConcept_UML([it.name == "int"], 1, 1,
+		testCreateParameterConcept_UML([it.name == "Integer"], 1, 1,
 			#[pcmCompositeDataType1, pcmCompositeDataType2, pcmCollectionDataType], pcmInterface)
 	}
 
@@ -181,7 +181,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 			it.filter[it instanceof PrimitiveDataType].findFirst [
 				(it as PrimitiveDataType).type == PrimitiveTypeEnum.INT
 			]
-		], "int", 1, 1)
+		], "Integer", 1, 1)
 	}
 
 	@Test

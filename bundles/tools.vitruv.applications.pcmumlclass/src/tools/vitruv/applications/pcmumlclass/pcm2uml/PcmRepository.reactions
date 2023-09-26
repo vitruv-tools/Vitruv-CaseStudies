@@ -176,10 +176,8 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 		val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(pcmRepo)
 		val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(pcmRepo.eResource.resourceSet)
 		for (pcmType : pcmPrimitiveTypes) {
-			val umlTypes = PcmUmlClassHelper.mapPrimitiveTypes(pcmType, umlPrimitiveTypes)
-			for (umlType : umlTypes) {
-				addPrimitiveDatatypeCorrespondence(pcmType, umlType)
-			}
+			val umlType = PcmUmlClassHelper.mapPrimitiveTypes(pcmType, umlPrimitiveTypes)
+			addPrimitiveDatatypeCorrespondence(pcmType, umlType)
 		}
 	}
 }
