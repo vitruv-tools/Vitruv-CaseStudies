@@ -16,6 +16,13 @@ public final class TagLiterals {
 	 * correspondences
 	 */
 	public static final String DATATYPE__TYPE = "datatype";
+	/**
+	 * There is a 1:n relation between PCM and UML PrimitiveDataTypes.
+	 * The correspondences of the prefered mapping from PCM to UML is stored with tag DATATYPE__TYPE.
+	 * In case a not prefered UML Datatype is used anyway in the UML model, the tag DATATYPE__TYPE__ALTERNATIVE
+	 * stores also correspondences between not prefered UML datatypes and corresponding PCM datatypes.
+	 */
+	public static final String DATATYPE__TYPE__ALTERNATIVE = "datatype-alternative";
 
 	public static final String INNER_DECLARATION__PROPERTY = "composite-inner-property";
 

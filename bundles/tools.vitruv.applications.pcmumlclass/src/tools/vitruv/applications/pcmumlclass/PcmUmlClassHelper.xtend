@@ -20,23 +20,46 @@ import org.palladiosimulator.pcm.system.System
 import org.palladiosimulator.pcm.core.entity.Entity
 import tools.vitruv.applications.util.temporary.other.CorrespondenceRetriever
 
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
+
 @Utility
 class PcmUmlClassHelper {
 
-	def static Iterable<PrimitiveType> mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
+	def static PrimitiveType mapPcmToUmlPrimitiveType(PrimitiveDataType pcmPredefinedPrimitiveType,
 		Iterable<PrimitiveType> umlPredefinedPrimitiveTypes) {
+		// Prefer UML Types over JAVA Types
 		return switch (pcmPredefinedPrimitiveType.type) {
-			case PrimitiveTypeEnum.BOOL: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "bool" || it.name.toLowerCase == "boolean"]
-			case PrimitiveTypeEnum.BYTE: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "byte"]
-			case PrimitiveTypeEnum.CHAR: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "char"]
-			case PrimitiveTypeEnum.INT: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "int" || it.name.toLowerCase == "integer"]
-			case PrimitiveTypeEnum.DOUBLE: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "double" || it.name.toLowerCase == "real"]
-			case PrimitiveTypeEnum.STRING: umlPredefinedPrimitiveTypes.filter[it.name.toLowerCase == "string"]
+			case PrimitiveTypeEnum.BOOL: umlPredefinedPrimitiveTypes.filter[it.name == "Boolean"].claimOne
+			case PrimitiveTypeEnum.INT: umlPredefinedPrimitiveTypes.filter[it.name == "Integer"].claimOne
+			case PrimitiveTypeEnum.DOUBLE: umlPredefinedPrimitiveTypes.filter[it.name == "Real"].claimOne
+			case PrimitiveTypeEnum.STRING: umlPredefinedPrimitiveTypes.filter[it.name == "String"].claimOne
+			case PrimitiveTypeEnum.BYTE: umlPredefinedPrimitiveTypes.filter[it.name == "byte"].claimOne
+			case PrimitiveTypeEnum.CHAR: umlPredefinedPrimitiveTypes.filter[it.name == "char"].claimOne
+			case PrimitiveTypeEnum.LONG: umlPredefinedPrimitiveTypes.filter[it.name == "Real"].claimOne
 			default: null
-		// uml::UnlimitedNatural are not mapped and the user is notified if one of these types is set
+			// uml::UnlimitedNatural are not mapped and the user is notified if one of these types is set
 		}
 	}
-
+	
+	def static PrimitiveDataType mapUmlToPcmPrimitiveType(PrimitiveType umlPrimitiveDataType, Iterable<PrimitiveDataType> pcmPrimitiveDataTypes) {
+		return switch (umlPrimitiveDataType.name.toLowerCase) {
+			case "bool",
+			case "boolean": pcmPrimitiveDataTypes.filter[it.type == PrimitiveTypeEnum.BOOL].head
+			case "short",
+			case "integer",
+			case "int": pcmPrimitiveDataTypes.filter[it.type == PrimitiveTypeEnum.INT].head
+			case "string": pcmPrimitiveDataTypes.filter[it.type == PrimitiveTypeEnum.STRING].head
+			case "real",
+			case "float",
+			case "double": pcmPrimitiveDataTypes.filter[it.type == PrimitiveTypeEnum.DOUBLE].head
+			case "char": pcmPrimitiveDataTypes.filter[it.type == PrimitiveTypeEnum.CHAR].head
+			case "byte": pcmPrimitiveDataTypes.filter[it.type == PrimitiveTypeEnum.BYTE].head
+			case "long": pcmPrimitiveDataTypes.filter[it.type == PrimitiveTypeEnum.LONG].head
+			default: null
+			// uml::UnlimitedNatural are not mapped and the user is notified if one of these types is set
+		}
+	}
+	
 	def static getMatchingParameterDirection(ParameterModifier pcmModifier) {
 		return switch (pcmModifier) {
 			case IN: ParameterDirectionKind.IN_LITERAL
@@ -76,8 +99,12 @@ class PcmUmlClassHelper {
 		Repository pcmRepository, UserInteractor userInteractor, CorrespondenceRetriever correspondenceRetriever) {
 		if(umlType === null) return null
 
-		val pcmPrimitiveType = correspondenceRetriever.retrieveCorrespondingElement(umlType,
-			PrimitiveDataType, TagLiterals.DATATYPE__TYPE) as PrimitiveDataType 
+		var pcmPrimitiveType = correspondenceRetriever.retrieveCorrespondingElement(umlType,
+			PrimitiveDataType, TagLiterals.DATATYPE__TYPE) as PrimitiveDataType
+		if(pcmPrimitiveType === null) {
+			pcmPrimitiveType = correspondenceRetriever.retrieveCorrespondingElement(umlType,
+			PrimitiveDataType, TagLiterals.DATATYPE__TYPE__ALTERNATIVE) as PrimitiveDataType
+		}
 		val pcmCompositeType = correspondenceRetriever.retrieveCorrespondingElement(umlType,
 			CompositeDataType, TagLiterals.COMPOSITE_DATATYPE__CLASS) as CompositeDataType
 		val pcmSimpleType = #[pcmPrimitiveType, pcmCompositeType].findFirst[it !== null]

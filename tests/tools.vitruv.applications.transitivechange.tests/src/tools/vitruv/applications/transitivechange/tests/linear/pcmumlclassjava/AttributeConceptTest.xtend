@@ -13,6 +13,9 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
 import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTestHelper
+import org.eclipse.uml2.uml.PrimitiveType
+import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -137,7 +140,16 @@ class AttributeConceptTest extends PcmUmlJavaLinearTransitiveChangeTest {
 
 		val reloadedUmlType = helper.getModifiableInstance(umlType)
 		assertNotNull(reloadedUmlType, "The DataType should not be null after reload")
-		assertTrue(EcoreUtil.equals(umlAttribute.type, reloadedUmlType))
+		
+		assertUmlTypeEquality(umlAttribute.type, reloadedUmlType)
+		/* 
+		if(umlType instanceof PrimitiveType) {
+			val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(pcmRepository)
+			assertTrue(EcoreUtil.equals(PcmUmlClassHelper.mapUmlToPcmPrimitiveType(umlAttribute.type as PrimitiveType, pcmPrimitiveTypes), PcmUmlClassHelper.mapUmlToPcmPrimitiveType(reloadedUmlType as PrimitiveType, pcmPrimitiveTypes)))
+		} else {
+			assertTrue(EcoreUtil.equals(umlAttribute.type, reloadedUmlType))
+		}
+		*/
 		assertTrue(umlAttribute.lower == lower)
 		assertTrue(umlAttribute.upper == upper)
 	}

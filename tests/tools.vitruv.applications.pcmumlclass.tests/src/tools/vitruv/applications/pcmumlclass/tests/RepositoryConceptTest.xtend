@@ -49,7 +49,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	def void testCreateRepositoryConcept_PCM() {
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.UML_MODEL_FILE)
 
-		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+		createRepository(PACKAGE_NAME_FIRST_UPPER)
 
 		validateUmlAndPcmPackagesView [
 			val umlPackage = defaultUmlModel.claimPackage(PACKAGE_NAME)
@@ -79,7 +79,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	def void testRenameRepositoryConcept_PCM() {
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.UML_MODEL_FILE)
 
-		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+		createRepository(PACKAGE_NAME_FIRST_UPPER)
 
 		changePcmView[
 			defaultPcmRepository.setEntityName(PACKAGE_RENAMED.toFirstUpper)
@@ -96,13 +96,13 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	def void testDeleteRepositoryConcept_PCM() {
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTest.UML_MODEL_FILE)
 
-		createPcmRepository(PACKAGE_NAME_FIRST_UPPER)
+		createRepository(PACKAGE_NAME_FIRST_UPPER)
 
 		validateUmlAndPcmPackagesView [
 			assertNotNull(defaultPcmRepository)
 			assertNotNull(defaultUmlModel)
 		]
-		assertModelExists(MODEL_NAME)
+		assertModelExists(UML_MODEL_NAME)
 
 		userInteraction.addNextConfirmationInput(true)
 		changePcmView[
