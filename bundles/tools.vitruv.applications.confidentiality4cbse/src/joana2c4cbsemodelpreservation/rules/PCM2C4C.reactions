@@ -1,0 +1,148 @@
+import edu.kit.kastel.scbs.confidentiality.ConfidentialitySpecification
+import edu.kit.kastel.scbs.confidentiality.information.ParameterInformation
+import edu.kit.kastel.scbs.confidentiality.repository.SignatureInformationFlow
+import org.emftext.language.java.containers.ContainersPackage
+import org.eclipse.emf.ecore.util.EcoreUtil
+
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+import "http://edu.kit.kastel.scbs.confidentiality" as c4c
+
+reactions: pcm2c4c
+in reaction to changes in pcm
+execute actions in c4c
+
+/*
+ * Creates a ConfidentialitySpecification, the root object of the Confidentiality4CBSE metamodel, if a Repository, the root object of the PCM, is created
+ */
+reaction PCMRootCreated{
+	after element pcm::Repository created
+	call {
+		searchForC4CRoot(affectedEObject)
+	}
+}
+
+routine searchForC4CRoot(pcm::Repository pcmRoot){
+	match{
+		require absence of c4c::ConfidentialitySpecification corresponding to pcmRoot
+		val c4cRoot = retrieve optional c4c::ConfidentialitySpecification corresponding to ContainersPackage.Literals.PACKAGE
+	}
+	update{
+		if(c4cRoot.present){
+			addCorrespondenceBetween(c4cRoot.get, pcmRoot)
+		} else {
+			val c4cRoots = pcmRoot.eResource.allContents.toList.filter(ConfidentialitySpecification).toList
+			if(c4cRoots.empty){
+				createC4CRoot(pcmRoot)
+			} else {
+				addCorrespondenceBetween(pcmRoot, c4cRoots.get(0))
+			}
+		
+		}
+	}
+}
+
+routine createC4CRoot(pcm::Repository pcmRoot){
+	create{
+		val c4cRoot = new c4c::ConfidentialitySpecification
+	}
+	update{
+		c4cRoot.entityName = "C4CRoot"
+		persistProjectRelative(pcmRoot, c4cRoot, "model/" + c4cRoot.entityName + ".c4cRoot")
+		addCorrespondenceBetween(pcmRoot, c4cRoot)
+		addCorrespondenceBetween(c4cRoot, ContainersPackage.Literals.PACKAGE)
+	}
+}
+
+/*
+ * Deletes the Annotations for the Operation Signature. 
+ * Checks whether connected DataSets are used anywhere else. If not, it deletes them.
+ */
+reaction OperationSignatureDeleted{
+	after element pcm::OperationSignature deleted
+	call {
+		removeAnnoFromOpSig(affectedEObject)
+	}
+}
+
+routine removeAnnoFromOpSig(pcm::OperationSignature deletedSig){
+	match{
+		val c4cRoot = retrieve c4c::ConfidentialitySpecification corresponding to deletedSig.eContainer
+	}
+	update {
+		val sifList = c4cRoot.informationFlows.filter(SignatureInformationFlow).toList()
+	 	for(sif : sifList){
+			if(sif.appliedTo.entityName.matches(deletedSig.entityName)){
+		  		val information =sif.information
+		  		for(info : information){
+		  			val dataSets = info.dataTargets
+		  			for(set : dataSets){
+		  				var setFoundInOtherSIF = false
+		  				for(searchedSIF : sifList){
+		  					for(searchedInfo : searchedSIF.information){
+		  						for(searchedSet : searchedInfo.dataTargets){
+		  							if(searchedSet.entityName.matches(set.entityName)){
+			  							setFoundInOtherSIF = true
+			  						}
+			  					}
+			  				}
+			  			}
+			  			if(!setFoundInOtherSIF){
+			  				EcoreUtil.delete(set)
+			  			}
+			  		}
+			  	}
+			  	EcoreUtil.delete(sif)
+			}
+		}
+	}
+}
+
+/*
+ * Deletes ParameterInformation objects annotated to the deleted Parameter.
+ * Checks whether connected DataSets are used anywhere else. If not, it deletes them.
+ * Checks whether the InformationFlow Object still has information. If not, deletes it.
+ */
+reaction ParameterRemoved{
+	after element pcm::Parameter removed from pcm::OperationSignature[parameters__OperationSignature]
+	call{
+		removeAnnoFromParameter(affectedEObject, oldValue)
+	}
+}
+
+routine removeAnnoFromParameter(pcm::OperationSignature deletedSig, pcm::Parameter para){
+	match{
+		val c4cRoot = retrieve c4c::ConfidentialitySpecification corresponding to deletedSig.eContainer
+	}
+	update {
+		val sifList = c4cRoot.informationFlows.filter(SignatureInformationFlow).toList()
+	 	for(sif : sifList){
+			if(sif.appliedTo.entityName.matches(deletedSig.entityName)){
+		  		val information = sif.information.filter(ParameterInformation).toList()
+		  		for(info : information){
+		  			if(info.appliedTo !== null && info.appliedTo.identityEquals(para)){
+		  				val dataSets = info.dataTargets
+			  			for(set : dataSets){
+			  				var setFoundInOtherSIF = false
+			  				for(searchedSIF : sifList){
+			  					for(searchedInfo : searchedSIF.information){
+			  						for(searchedSet : searchedInfo.dataTargets){
+			  							if(searchedSet.entityName.matches(set.entityName)){
+				  							setFoundInOtherSIF = true
+				  						}
+				  					}
+				  				}
+				  			}
+				  			if(!setFoundInOtherSIF){
+				  				EcoreUtil.delete(set)
+				  			}
+				  		}
+				  		EcoreUtil.delete(info)
+		  			}
+			  	}
+			  	if(sif.information.size == 0){
+			  		EcoreUtil.delete(sif)
+			  	}
+			}
+		}
+	}
+}

@@ -1,0 +1,152 @@
+import edu.kit.kastel.scbs.pcm2java4joana.joana.EntryPoint
+import edu.kit.kastel.scbs.pcm2java4joana.joana.Sink
+import edu.kit.kastel.scbs.pcm2java4joana.joana.Source
+import edu.kit.kastel.scbs.pcm2java4joana.joana.JOANARoot
+import org.emftext.language.java.containers.ContainersPackage
+import org.eclipse.emf.ecore.util.EcoreUtil
+
+import "http://www.example.org/joana" as joana
+import "http://www.emftext.org/java" as java
+
+reactions: jamopp2joana
+in reaction to changes in java
+execute actions in joana
+
+/*
+ * Creates a JOANARoot, if a Package is created without a matching JOANARoot.
+ */
+reaction JavaRootCreated{
+	after element java::Package inserted as root
+	with newValue.name === null || (!newValue.name.contains("contracts") && !newValue.name.contains("datatypes"))
+	call {
+		searchForJoanaRoot(newValue)
+	}
+}
+
+routine searchForJoanaRoot(java::Package javaRoot){
+	match{
+		require absence of joana::JOANARoot corresponding to javaRoot
+		val joanaRoot = retrieve optional joana::JOANARoot corresponding to ContainersPackage.Literals.PACKAGE
+	}
+	update{
+		if(joanaRoot.present){
+			addCorrespondenceBetween(joanaRoot.get, javaRoot)
+		} else {
+			val joanaRoots = javaRoot.eResource.allContents.toList.filter(JOANARoot).toList
+			if(joanaRoots.empty){
+				createJoanaRoot(javaRoot)
+			} else {
+				addCorrespondenceBetween(javaRoot, joanaRoots.get(0))
+			}
+		}
+		
+	}
+}
+
+routine createJoanaRoot(java::Package javaRoot){
+	match{
+		require absence of joana::JOANARoot corresponding to javaRoot
+	}
+	create{
+		val joanaRoot = new joana::JOANARoot
+		val lattice = new joana::Lattice
+	}
+	update{
+		joanaRoot.name = "JoanaRoot"
+		joanaRoot.lattice = lattice
+		persistProjectRelative(javaRoot, joanaRoot, "model/" + joanaRoot.name + ".joanaRoot")
+		addCorrespondenceBetween(javaRoot, joanaRoot)
+		addCorrespondenceBetween(joanaRoot, ContainersPackage.Literals.PACKAGE)
+	}
+}
+
+/*
+ * Removes all Joana Annotations which are annotated on this method.
+ */
+reaction MethodDeleted{
+	after element java::InterfaceMethod removed from java::Interface[members]
+	call {
+		deleteConnectedCommentsForMethods(oldValue, affectedEObject)
+	}
+}
+
+/*
+ * Removes all Joana annotations which are annotated to this parameter.
+ */
+reaction ParameterDeleted{
+	after element java::Parameter removed from java::Method[parameters]
+	call {
+		deleteConnectedCommentsForParameters(oldValue, affectedEObject)
+	}
+}
+
+routine deleteConnectedCommentsForMethods(java::NamedElement deletedObject, java::NamedElement container){
+	match {
+		val joanaRoot = retrieve optional joana::JOANARoot corresponding to container.eContainer.eContainer
+	}
+	update {
+		if(!joanaRoot.empty){
+			val allSinks = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof Sink].toList()
+			val allSources = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof Source].toList()
+			val allPoints = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof EntryPoint].toList()
+			for(sink : allSinks){
+				if((sink as Sink).annotatedMethod.name.matches(deletedObject.name)){
+					EcoreUtil.delete(sink)
+					removeCorrespondenceBetween(sink, deletedObject)
+				}
+			}
+			for(source : allSources){
+				if((source as Source).annotatedMethod.name.matches(deletedObject.name)){
+					EcoreUtil.delete(source)
+					removeCorrespondenceBetween(source, deletedObject)
+				}
+			}
+			for(point : allPoints){
+				if((point as EntryPoint).annotatedMethod.name.matches(deletedObject.name)){
+					EcoreUtil.delete(point)
+					removeCorrespondenceBetween(point, deletedObject)
+				}
+			}
+		}
+	}
+}
+
+routine deleteConnectedCommentsForParameters(java::NamedElement deletedObject, java::NamedElement container){
+	match {
+		val joanaRoot = retrieve optional joana::JOANARoot corresponding to container.eContainer.eContainer.eContainer
+	}
+	update {
+		if(joanaRoot.present){
+			val allSinks = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof Sink].toList()
+			val allSources = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof Source].toList()
+			val allPoints = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof EntryPoint].toList()
+			for(sink : allSinks){
+				if((sink as Sink).annotatedParameter.name.matches(deletedObject.name)){
+					EcoreUtil.delete(sink)
+					removeCorrespondenceBetween(sink, deletedObject)
+				}
+			}
+			for(source : allSources){
+				if((source as Source).annotatedParameter.name.matches(deletedObject.name)){
+					EcoreUtil.delete(source)
+					removeCorrespondenceBetween(source, deletedObject)
+				}
+			}
+			for(point : allPoints){
+				if((point as EntryPoint).annotatedMethod.name.matches(container.name)){
+					var anotherSinkFound = false
+					for(sink : joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof Sink].toList()){
+						if((sink as Sink).annotatedMethod.name.matches(container.name)){
+							anotherSinkFound = true
+						}
+					}
+					if(!anotherSinkFound){
+						EcoreUtil.delete(point)
+						removeCorrespondenceBetween(point, deletedObject)
+					}
+					
+				}
+			}
+		}
+	}
+}
