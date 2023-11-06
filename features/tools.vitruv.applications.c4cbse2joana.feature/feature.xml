@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="tools.vitruv.applications.c4cbse2joana.feature"
+      label="%featureName"
+      version="3.0.1.qualifier"
+      provider-name="%providerName"
+      license-feature="tools.vitruv.license.feature"
+      license-feature-version="1.0.0">
+
+   <description>
+      %description
+   </description>
+
+   <copyright url="%copyrightURL">
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <requires>
+      <import plugin="edu.kit.kastel.scbs.pcm2java4joana.joana"/>
+      <import plugin="edu.kit.kastel.scbs.confidentialitymm"/>
+      <import plugin="org.emftext.language.java"/>
+      <import plugin="org.palladiosimulator.mdsdprofiles.api"/>
+      <import plugin="tools.vitruv.dsls.reactions.runtime"/>
+      <import plugin="tools.vitruv.dsls.reactions.runtime.source"/>
+      <import plugin="edu.kit.ipd.sdq.commons.util.emf"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.palladiosimulator.pcm"/>
+   </requires>
+
+   <plugin
+         id="tools.vitruv.applications.c4cbse2joana"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

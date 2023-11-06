@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ASCII"?>
+<repository:Repository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:repository="http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" id="_Ls3VgHv_Edub45jJKtm_Dg" entityName="PrimitiveDataTypes" repositoryDescription="">
+  <dataTypes__Repository xsi:type="repository:PrimitiveDataType"/>
+  <dataTypes__Repository xsi:type="repository:PrimitiveDataType" type="STRING"/>
+  <dataTypes__Repository xsi:type="repository:PrimitiveDataType" type="BOOL"/>
+  <dataTypes__Repository xsi:type="repository:PrimitiveDataType" type="DOUBLE"/>
+  <dataTypes__Repository xsi:type="repository:PrimitiveDataType" type="CHAR"/>
+  <dataTypes__Repository xsi:type="repository:PrimitiveDataType" type="BYTE"/>
+  <dataTypes__Repository xsi:type="repository:PrimitiveDataType" type="LONG"/>
+</repository:Repository>

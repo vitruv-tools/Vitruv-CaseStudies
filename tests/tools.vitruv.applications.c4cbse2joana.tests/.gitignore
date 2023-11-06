@@ -1,0 +1,4 @@
+/bin/
+/resources/src
+/resources/src/*/package-info.java
+.settings/org.eclipse.jdt.core.prefs

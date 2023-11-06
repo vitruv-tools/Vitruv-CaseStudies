@@ -1,3 +1,0 @@
-package joana2c4cbsemodelpreservation.changepropagationspecification;
-
-public class C4C2joanaChangePropagationSpecification  extends mir.reactions.c4c2joana.C4c2joanaChangePropagationSpecification {}
