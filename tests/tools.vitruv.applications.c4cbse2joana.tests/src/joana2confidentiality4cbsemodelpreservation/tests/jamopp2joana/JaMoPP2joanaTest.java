@@ -6,17 +6,17 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
-import org.emftext.language.java.containers.CompilationUnit;
-import org.emftext.language.java.containers.ContainersFactory;
-import org.emftext.language.java.resource.java.mopp.JavaResourceFactory;
-import org.emftext.language.java.JavaPackage;
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
+import tools.mdsd.jamopp.model.java.containers.ContainersFactory;
+import tools.mdsd.jamopp.resource.JavaResource2Factory;
+import tools.mdsd.jamopp.model.java.JavaPackage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JOANARoot;
-import joana2c4cbsemodelpreservation.changepropagationspecification.C4C2joanaChangePropagationSpecification;
-import joana2c4cbsemodelpreservation.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
-import joana2c4cbsemodelpreservation.changepropagationspecification.Joana2c4cChangePropagationSpecification;
-import joana2c4cbsemodelpreservation.changepropagationspecification.PCM2c4cChangePropagationSpecification;
+import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.C4C2joanaChangePropagationSpecification;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.Joana2c4cChangePropagationSpecification;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.PCM2c4cChangePropagationSpecification;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
@@ -27,7 +27,7 @@ import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpeci
 import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
 
-import org.emftext.language.java.containers.Package;
+import tools.mdsd.jamopp.model.java.containers.Package;
 
 public class JaMoPP2joanaTest extends ViewBasedVitruvApplicationTest {
 	
@@ -60,7 +60,7 @@ public class JaMoPP2joanaTest extends ViewBasedVitruvApplicationTest {
 	@BeforeAll
 	public static void registerMetamodels() {
 		EPackage.Registry.INSTANCE.put(JavaPackage.eNS_URI, JavaPackage.eINSTANCE);
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(MODEL_FILE_EXTENSION, new JavaResourceFactory());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(MODEL_FILE_EXTENSION, new JavaResource2Factory());
 	}
 	
 	@BeforeEach

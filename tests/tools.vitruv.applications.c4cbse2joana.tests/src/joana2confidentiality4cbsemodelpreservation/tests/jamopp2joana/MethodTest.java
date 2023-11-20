@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.emftext.language.java.classifiers.Interface;
-import org.emftext.language.java.parameters.Parameter;
+import tools.mdsd.jamopp.model.java.classifiers.Interface;
+import tools.mdsd.jamopp.model.java.parameters.Parameter;
 import org.junit.jupiter.api.Test;
 
 import tools.vitruv.framework.views.CommittableView;

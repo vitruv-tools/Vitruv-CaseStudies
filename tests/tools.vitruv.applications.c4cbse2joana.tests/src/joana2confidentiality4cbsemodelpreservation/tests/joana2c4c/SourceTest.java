@@ -3,16 +3,16 @@ package joana2confidentiality4cbsemodelpreservation.tests.joana2c4c;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.emftext.language.java.members.InterfaceMethod;
-import org.emftext.language.java.members.MembersFactory;
-import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.parameters.ParametersFactory;
+import tools.mdsd.jamopp.model.java.members.InterfaceMethod;
+import tools.mdsd.jamopp.model.java.members.MembersFactory;
+import tools.mdsd.jamopp.model.java.parameters.OrdinaryParameter;
+import tools.mdsd.jamopp.model.java.parameters.ParametersFactory;
 import org.junit.jupiter.api.Test;
 
-import edu.kit.kastel.scbs.pcm2java4joana.joana.Annotation;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JoanaFactory;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.SecurityLevel;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.Source;
+import edu.kit.ipd.sdq.metamodels.joana.Annotation;
+import edu.kit.ipd.sdq.metamodels.joana.JoanaFactory;
+import edu.kit.ipd.sdq.metamodels.joana.SecurityLevel;
+import edu.kit.ipd.sdq.metamodels.joana.Source;
 import tools.vitruv.framework.views.CommittableView;
 
 public class SourceTest extends Joana2c4cTestSetup{

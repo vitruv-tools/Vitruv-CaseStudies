@@ -10,11 +10,11 @@ import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import edu.kit.kastel.scbs.confidentiality.data.DataFactory;
-import edu.kit.kastel.scbs.confidentiality.data.DataSet;
-import edu.kit.kastel.scbs.confidentiality.information.InformationFactory;
-import edu.kit.kastel.scbs.confidentiality.information.ParameterInformation;
-import edu.kit.kastel.scbs.confidentiality.repository.SignatureInformationFlow;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.data.DataFactory;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.data.DataSet;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.information.InformationFactory;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.information.ParameterInformation;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.repository.SignatureInformationFlow;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
 import tools.vitruv.framework.views.CommittableView;
 
@@ -71,7 +71,7 @@ public class C4C2joanaTestSetup extends C4C2joanaTest {
 
 	void setupC4C() {
 		CommittableView view = getCombinedPCMC4CView();
-		SignatureInformationFlow flow = edu.kit.kastel.scbs.confidentiality.repository.RepositoryFactory.eINSTANCE
+		SignatureInformationFlow flow = edu.kit.ipd.sdq.metamodels.confidentiality4cbse.repository.RepositoryFactory.eINSTANCE
 				.createSignatureInformationFlow();
 		getC4CRoot(view).getInformationFlows().add(flow);
 		view.commitChanges();
@@ -129,7 +129,7 @@ public class C4C2joanaTestSetup extends C4C2joanaTest {
 	void addSecondSignatureFlow() {
 		addSecondOperationSignature();
 		CommittableView view = getCombinedPCMC4CView();
-		SignatureInformationFlow flow = edu.kit.kastel.scbs.confidentiality.repository.RepositoryFactory.eINSTANCE
+		SignatureInformationFlow flow = edu.kit.ipd.sdq.metamodels.confidentiality4cbse.repository.RepositoryFactory.eINSTANCE
 				.createSignatureInformationFlow();
 		OperationSignature opSig = ((OperationInterface) getPCMRoot(view).getInterfaces__Repository().get(0))
 				.getSignatures__OperationInterface().get(1);

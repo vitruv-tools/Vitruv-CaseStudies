@@ -6,18 +6,18 @@ import java.util.List;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
-import org.emftext.language.java.containers.Package;
+import tools.mdsd.jamopp.model.java.containers.Package;
 import org.junit.jupiter.api.BeforeEach;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import edu.kit.kastel.scbs.confidentiality.ConfidentialityFactory;
-import edu.kit.kastel.scbs.confidentiality.ConfidentialitySpecification;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JOANARoot;
-import joana2c4cbsemodelpreservation.changepropagationspecification.C4C2joanaChangePropagationSpecification;
-import joana2c4cbsemodelpreservation.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
-import joana2c4cbsemodelpreservation.changepropagationspecification.Joana2c4cChangePropagationSpecification;
-import joana2c4cbsemodelpreservation.changepropagationspecification.PCM2c4cChangePropagationSpecification;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.Confidentiality4cbseFactory;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.ConfidentialitySpecification;
+import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.C4C2joanaChangePropagationSpecification;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.Joana2c4cChangePropagationSpecification;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.PCM2c4cChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
@@ -75,7 +75,7 @@ public class C4C2joanaTest extends ViewBasedVitruvApplicationTest {
 	}
 
 	private CommittableView createAndCommitC4CRoot(CommittableView view) {
-		var root = ConfidentialityFactory.eINSTANCE.createConfidentialitySpecification();
+		var root = Confidentiality4cbseFactory.eINSTANCE.createConfidentialitySpecification();
 		root.setEntityName("MyRoot");
 		view.registerRoot(root, getUri(getProjectModelPath(MODEL_FILE_NAME, MODEL_FILE_EXTENSION, MODEL_FOLDER_NAME)));
 		view.commitChanges();

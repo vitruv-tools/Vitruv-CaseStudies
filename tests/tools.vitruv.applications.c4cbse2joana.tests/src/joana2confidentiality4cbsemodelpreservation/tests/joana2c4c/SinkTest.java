@@ -3,17 +3,17 @@ package joana2confidentiality4cbsemodelpreservation.tests.joana2c4c;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.emftext.language.java.members.MembersFactory;
-import org.emftext.language.java.members.Method;
-import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.parameters.ParametersFactory;
-import org.emftext.language.java.members.InterfaceMethod;
+import tools.mdsd.jamopp.model.java.members.MembersFactory;
+import tools.mdsd.jamopp.model.java.members.Method;
+import tools.mdsd.jamopp.model.java.parameters.OrdinaryParameter;
+import tools.mdsd.jamopp.model.java.parameters.ParametersFactory;
+import tools.mdsd.jamopp.model.java.members.InterfaceMethod;
 import org.junit.jupiter.api.Test;
 
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JoanaFactory;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.SecurityLevel;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.Sink;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.Annotation;
+import edu.kit.ipd.sdq.metamodels.joana.JoanaFactory;
+import edu.kit.ipd.sdq.metamodels.joana.SecurityLevel;
+import edu.kit.ipd.sdq.metamodels.joana.Sink;
+import edu.kit.ipd.sdq.metamodels.joana.Annotation;
 import tools.vitruv.framework.views.CommittableView;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 

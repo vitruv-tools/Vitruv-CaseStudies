@@ -6,9 +6,9 @@ import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import edu.kit.kastel.scbs.confidentiality.information.InformationFactory;
-import edu.kit.kastel.scbs.confidentiality.information.ParameterInformation;
-import edu.kit.kastel.scbs.confidentiality.repository.SignatureInformationFlow;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.information.InformationFactory;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.information.ParameterInformation;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.repository.SignatureInformationFlow;
 import tools.vitruv.framework.views.CommittableView;
 
 public class PCM2c4cTestSetup extends PCM2c4cTest {
@@ -40,7 +40,7 @@ public class PCM2c4cTestSetup extends PCM2c4cTest {
 
 	void setupC4C() {
 		CommittableView view = getCombinedPCMC4CView();
-		SignatureInformationFlow flow = edu.kit.kastel.scbs.confidentiality.repository.RepositoryFactory.eINSTANCE
+		SignatureInformationFlow flow = edu.kit.ipd.sdq.metamodels.confidentiality4cbse.repository.RepositoryFactory.eINSTANCE
 				.createSignatureInformationFlow();
 		ParameterInformation info = InformationFactory.eINSTANCE.createParameterInformation();
 		flow.getInformation().add(info);

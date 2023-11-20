@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.jupiter.api.Test;
-import edu.kit.kastel.scbs.confidentiality.data.DataFactory;
-import edu.kit.kastel.scbs.confidentiality.data.DataSet;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JOANARoot;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.data.DataFactory;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.data.DataSet;
+import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
 import tools.vitruv.framework.views.CommittableView;
 
 public class DataSetTest extends C4C2joanaTestSetup {

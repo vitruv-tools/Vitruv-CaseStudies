@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 
-import edu.kit.kastel.scbs.confidentiality.repository.SignatureInformationFlow;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.repository.SignatureInformationFlow;
 import tools.vitruv.framework.views.CommittableView;
 
 public class SignatureInformationFlowTest extends C4C2joanaTestSetup {

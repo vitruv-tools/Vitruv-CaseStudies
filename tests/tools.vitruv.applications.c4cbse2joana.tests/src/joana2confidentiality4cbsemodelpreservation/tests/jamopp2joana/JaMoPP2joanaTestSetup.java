@@ -2,26 +2,26 @@ package joana2confidentiality4cbsemodelpreservation.tests.jamopp2joana;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.emftext.language.java.JavaClasspath;
-import org.emftext.language.java.classifiers.ClassifiersFactory;
-import org.emftext.language.java.classifiers.Interface;
-import org.emftext.language.java.containers.CompilationUnit;
-import org.emftext.language.java.containers.ContainersFactory;
-import org.emftext.language.java.containers.Package;
-import org.emftext.language.java.members.InterfaceMethod;
-import org.emftext.language.java.members.MembersFactory;
-import org.emftext.language.java.members.Method;
-import org.emftext.language.java.parameters.Parameter;
-import org.emftext.language.java.parameters.ParametersFactory;
+import tools.mdsd.jamopp.model.java.JavaClasspath;
+import tools.mdsd.jamopp.model.java.classifiers.ClassifiersFactory;
+import tools.mdsd.jamopp.model.java.classifiers.Interface;
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
+import tools.mdsd.jamopp.model.java.containers.ContainersFactory;
+import tools.mdsd.jamopp.model.java.containers.Package;
+import tools.mdsd.jamopp.model.java.members.InterfaceMethod;
+import tools.mdsd.jamopp.model.java.members.MembersFactory;
+import tools.mdsd.jamopp.model.java.members.Method;
+import tools.mdsd.jamopp.model.java.parameters.Parameter;
+import tools.mdsd.jamopp.model.java.parameters.ParametersFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.kit.kastel.scbs.pcm2java4joana.joana.EntryPoint;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.FlowSpecification;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JOANARoot;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JoanaFactory;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.Sink;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.Source;
+import edu.kit.ipd.sdq.metamodels.joana.EntryPoint;
+import edu.kit.ipd.sdq.metamodels.joana.FlowSpecification;
+import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
+import edu.kit.ipd.sdq.metamodels.joana.JoanaFactory;
+import edu.kit.ipd.sdq.metamodels.joana.Sink;
+import edu.kit.ipd.sdq.metamodels.joana.Source;
 import tools.vitruv.framework.views.CommittableView;
 
 public class JaMoPP2joanaTestSetup extends JaMoPP2joanaTest {

@@ -13,15 +13,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.util.RepositoryResourceFactoryImpl;
 
-import edu.kit.kastel.scbs.confidentiality.ConfidentialityPackage;
-import edu.kit.kastel.scbs.confidentiality.ConfidentialitySpecification;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JOANARoot;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JoanaFactory;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JoanaPackage;
-import joana2c4cbsemodelpreservation.changepropagationspecification.C4C2joanaChangePropagationSpecification;
-import joana2c4cbsemodelpreservation.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
-import joana2c4cbsemodelpreservation.changepropagationspecification.Joana2c4cChangePropagationSpecification;
-import joana2c4cbsemodelpreservation.changepropagationspecification.PCM2c4cChangePropagationSpecification;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.Confidentiality4cbsePackage;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.ConfidentialitySpecification;
+import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
+import edu.kit.ipd.sdq.metamodels.joana.JoanaFactory;
+import edu.kit.ipd.sdq.metamodels.joana.JoanaPackage;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.C4C2joanaChangePropagationSpecification;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.Joana2c4cChangePropagationSpecification;
+import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.PCM2c4cChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
@@ -31,9 +31,9 @@ import tools.vitruv.framework.views.View;
 import tools.vitruv.testutils.TestViewFactory;
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
 
-import org.emftext.language.java.JavaPackage;
-import org.emftext.language.java.containers.Package;
-import org.emftext.language.java.resource.java.mopp.JavaResourceFactory;
+import tools.mdsd.jamopp.model.java.JavaPackage;
+import tools.mdsd.jamopp.model.java.containers.Package;
+import tools.mdsd.jamopp.resource.JavaResource2Factory;
 
 public class Joana2c4cTest extends ViewBasedVitruvApplicationTest {
 
@@ -71,10 +71,10 @@ public class Joana2c4cTest extends ViewBasedVitruvApplicationTest {
 	@BeforeAll
 	public static void registerMetamodels() {
 		EPackage.Registry.INSTANCE.put(JavaPackage.eNS_URI, JavaPackage.eINSTANCE);
-		EPackage.Registry.INSTANCE.put(ConfidentialityPackage.eNS_URI, ConfidentialityPackage.eINSTANCE);
+		EPackage.Registry.INSTANCE.put(Confidentiality4cbsePackage.eNS_URI, Confidentiality4cbsePackage.eINSTANCE);
 		EPackage.Registry.INSTANCE.put(JoanaPackage.eNS_URI, JoanaPackage.eINSTANCE);
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("java", new JavaResourceFactory());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("java", new JavaResource2Factory());
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("repository", new RepositoryResourceFactoryImpl());
 
 	}

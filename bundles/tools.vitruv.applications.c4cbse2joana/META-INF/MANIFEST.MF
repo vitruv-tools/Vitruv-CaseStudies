@@ -3,14 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: tools.vitruv.applications.c4cbse2joana
 Bundle-SymbolicName: tools.vitruv.applications.c4cbse2joana;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Export-Package: tools.vitruv.applications.c4cbse2joana
-Require-Bundle: edu.kit.kastel.scbs.pcm2java4joana.joana,
- edu.kit.kastel.scbs.confidentialitymm,
- org.emftext.language.java,
- org.palladiosimulator.mdsdprofiles.api;bundle-version="5.1.0",
+Export-Package: tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification
+Require-Bundle: edu.kit.ipd.sdq.metamodels.joana,
+ edu.kit.ipd.sdq.metamodels.confidentiality4cbse,
+ tools.mdsd.jamopp.model,
  tools.vitruv.dsls.reactions.runtime,
- tools.vitruv.dsls.reactions.runtime.source;bundle-version="3.0.1",
- edu.kit.ipd.sdq.commons.util.emf;bundle-version="2.0.0",
+ edu.kit.ipd.sdq.commons.util.emf,
  org.eclipse.emf.common,
  org.palladiosimulator.pcm
 Automatic-Module-Name: C4CBSE2JOANA

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Parameter;
-import edu.kit.kastel.scbs.confidentiality.information.ParameterInformation;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.information.ParameterInformation;
 import tools.vitruv.framework.views.CommittableView;
 
 public class ParameterInformationTest extends C4C2joanaTestSetup{

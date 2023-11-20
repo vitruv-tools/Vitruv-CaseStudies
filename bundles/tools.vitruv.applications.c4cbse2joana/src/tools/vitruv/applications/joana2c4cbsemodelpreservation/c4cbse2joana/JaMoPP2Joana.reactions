@@ -1,12 +1,12 @@
-import edu.kit.kastel.scbs.pcm2java4joana.joana.EntryPoint
-import edu.kit.kastel.scbs.pcm2java4joana.joana.Sink
-import edu.kit.kastel.scbs.pcm2java4joana.joana.Source
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JOANARoot
-import org.emftext.language.java.containers.ContainersPackage
+import edu.kit.ipd.sdq.metamodels.joana.EntryPoint
+import edu.kit.ipd.sdq.metamodels.joana.Sink
+import edu.kit.ipd.sdq.metamodels.joana.Source
+import edu.kit.ipd.sdq.metamodels.joana.JOANARoot
+import tools.mdsd.jamopp.model.java.containers.ContainersPackage
 import org.eclipse.emf.ecore.util.EcoreUtil
 
-import "http://www.example.org/joana" as joana
-import "http://www.emftext.org/java" as java
+import "edu.kit.ipd.sdq.metamodels.joana" as joana
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
 
 reactions: jamopp2joana
 in reaction to changes in java

@@ -1,10 +1,10 @@
 package joana2confidentiality4cbsemodelpreservation.tests.joana2c4c;
 
-import edu.kit.kastel.scbs.confidentiality.ConfidentialitySpecification;
-import edu.kit.kastel.scbs.confidentiality.data.DataSet;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JOANARoot;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.JoanaFactory;
-import edu.kit.kastel.scbs.pcm2java4joana.joana.SecurityLevel;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.ConfidentialitySpecification;
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.data.DataSet;
+import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
+import edu.kit.ipd.sdq.metamodels.joana.JoanaFactory;
+import edu.kit.ipd.sdq.metamodels.joana.SecurityLevel;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
