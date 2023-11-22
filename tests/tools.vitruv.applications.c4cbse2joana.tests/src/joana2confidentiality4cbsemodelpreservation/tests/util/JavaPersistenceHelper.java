@@ -79,18 +79,18 @@ class JavaPersistenceHelper {
 
 	// Uses 'src/' as source path.
 	static String buildJavaFilePath(Package javaPackage) {
-		return buildJavaPackageFilePath(javaProjectSrc, javaPackage.namespaces, javaPackage.name);
+		return buildJavaPackageFilePath(getJavaProjectSrc(), javaPackage.getNamespaces(), javaPackage.getName());
 	}
 
 	static String buildJavaPackageFilePath(String sourcePath, Iterable<String> namespaces,
 		String packageName) {
-		val fullNamespaces = getFullPackageNamespaces(namespaces, packageName);
-		return buildJavaFilePath(sourcePath, fullNamespaces, packageInfoClassName, JAVA_FILE_EXTENSION);
+		String fullNamespaces = getFullPackageNamespaces(namespaces, packageName);
+		return buildJavaFilePath(sourcePath, fullNamespaces, getPackageInfoClassName(), JAVA_FILE_EXTENSION);
 	}
 
 	static String buildJavaPackagePath(String sourcePath, Iterable<String> namespaces,
 		String packageName) {
-		val fullNamespaces = getFullPackageNamespaces(namespaces, packageName);
+		String fullNamespaces = getFullPackageNamespaces(namespaces, packageName);
 		return buildJavaPath(sourcePath, fullNamespaces);
 	}
 

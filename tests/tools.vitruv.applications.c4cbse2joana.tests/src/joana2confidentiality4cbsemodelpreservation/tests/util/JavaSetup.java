@@ -3,8 +3,8 @@ package joana2confidentiality4cbsemodelpreservation.tests.util;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.resource.Resource;
-import org.emftext.language.java.JavaClasspath;
-import org.emftext.language.java.resource.JavaSourceOrClassFileResourceFactoryImpl;
+import tools.mdsd.jamopp.model.java.JavaClasspath;
+import tools.mdsd.jamopp.resource.JavaSourceOrClassFileResourceFactoryImpl;
 
 public final class JavaSetup {
 	private JavaSetup() {
