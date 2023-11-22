@@ -58,19 +58,19 @@ public class Joana2c4cTestSetup extends Joana2c4cTest {
 		CompilationUnit compUnit = ContainersFactory.eINSTANCE.createCompilationUnit();
 		compUnit.setName("TestJava.java");
 		compUnit.getNamespaces().add(MY_ROOT);
-		getJavaRoot(javaView).getCompilationUnits().add(compUnit);
+		getCompilationUnits(getJavaRoot(javaView)).add(compUnit);
 		getUserInteraction().addNextSingleSelection(0);
 		javaView.commitChanges();
 		
 		javaView = getCombinedJavaJoanaView();
-		compUnit = getJavaRoot(javaView).getCompilationUnits().get(0);
+		compUnit = getCompilationUnits(getJavaRoot(javaView)).get(0);
 		Interface javaInterface = ClassifiersFactory.eINSTANCE.createInterface();
 		javaInterface.setName(MY_INTERFACE);
 		compUnit.getClassifiers().add(javaInterface);
 		javaView.commitChanges();
 		
 		javaView = getCombinedJavaJoanaView();
-		compUnit = getJavaRoot(javaView).getCompilationUnits().get(0);
+		compUnit = getCompilationUnits(getJavaRoot(javaView)).get(0);
 		javaInterface = (Interface) compUnit.getClassifiers().get(0);
 		InterfaceMethod method = MembersFactory.eINSTANCE.createInterfaceMethod();
 		method.setName(MY_METHOD);
@@ -78,7 +78,7 @@ public class Joana2c4cTestSetup extends Joana2c4cTest {
 		javaView.commitChanges();
 		
 		javaView = getCombinedJavaJoanaView();
-		compUnit = getJavaRoot(javaView).getCompilationUnits().get(0);
+		compUnit = getCompilationUnits(getJavaRoot(javaView)).get(0);
 		javaInterface = (Interface) compUnit.getClassifiers().get(0);
 		method = (InterfaceMethod) javaInterface.getMembers().get(0);
 		Parameter para = ParametersFactory.eINSTANCE.createOrdinaryParameter();

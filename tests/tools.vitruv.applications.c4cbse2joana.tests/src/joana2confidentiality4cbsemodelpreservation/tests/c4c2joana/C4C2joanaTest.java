@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
+
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
 import tools.mdsd.jamopp.model.java.containers.Package;
 import org.junit.jupiter.api.BeforeEach;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -108,6 +110,10 @@ public class C4C2joanaTest extends ViewBasedVitruvApplicationTest {
 			}
 		}
 		return null;
+	}
+	
+	protected List<CompilationUnit> getCompilationUnits(Package package1) {
+		return package1.getClassifiers().stream().map(it -> it.getContainingCompilationUnit()).toList();
 	}
 	
 	protected Package getJavaContracts(View view) {

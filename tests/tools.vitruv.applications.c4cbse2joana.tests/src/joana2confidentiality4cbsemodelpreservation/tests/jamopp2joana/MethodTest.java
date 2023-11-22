@@ -20,7 +20,7 @@ public class MethodTest extends JaMoPP2joanaTestSetup {
 		assertNotNull(getJoanaRoot(getJoanaView()).getFlowspecification().get(0).getEntrypoint());
 		
 		CommittableView view = getCombinedJavaJoanaView();
-		getJavaRoot(view).getCompilationUnits().iterator().next().getClassifiers().iterator().next().getMembers().remove(0);
+		getCompilationUnits(getJavaRoot(view)).iterator().next().getClassifiers().iterator().next().getMembers().remove(0);
 		view.commitChanges();
 		
 		assertEquals(0, getJoanaRoot(getJoanaView()).getAnnotation().size());

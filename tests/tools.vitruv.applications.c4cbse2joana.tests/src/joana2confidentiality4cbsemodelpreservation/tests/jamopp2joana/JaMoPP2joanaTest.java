@@ -129,5 +129,9 @@ public class JaMoPP2joanaTest extends ViewBasedVitruvApplicationTest {
 	protected CommittableView getCombinedJavaJoanaView() {
 		return getView("combined", List.of(JOANARoot.class, Package.class));
 	}
+	
+	protected List<CompilationUnit> getCompilationUnits(Package package1) {
+		return package1.getClassifiers().stream().map(it -> it.getContainingCompilationUnit()).toList();
+	}
 
 }

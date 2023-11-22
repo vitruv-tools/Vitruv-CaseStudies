@@ -42,7 +42,7 @@ public class JaMoPP2joanaTestSetup extends JaMoPP2joanaTest {
 		CompilationUnit compUnit = ContainersFactory.eINSTANCE.createCompilationUnit();
 		compUnit.setName("TestJava.java");
 		compUnit.getNamespaces().add("MyRoot");
-		getJavaRoot(javaView).getCompilationUnits().add(compUnit);
+		getCompilationUnits(getJavaRoot(javaView)).add(compUnit);
 		getUserInteraction().addNextSingleSelection(0);
 		InterfaceMethod method = MembersFactory.eINSTANCE.createInterfaceMethod();
 		method.setName("testJava");
@@ -52,7 +52,7 @@ public class JaMoPP2joanaTestSetup extends JaMoPP2joanaTest {
 		javaInterface.getMembers().add(method);
 		Parameter para = ParametersFactory.eINSTANCE.createOrdinaryParameter();
 		para.setName("TestParameter");
-		getJavaRoot(javaView).getCompilationUnits().iterator().next().getClassifiers().iterator().next().getMethods().iterator().next().getParameters().add(para);
+		getCompilationUnits(getJavaRoot(javaView)).iterator().next().getClassifiers().iterator().next().getMethods().iterator().next().getParameters().add(para);
 		javaView.commitChanges();
 		setupJoana();
 	}
@@ -64,7 +64,7 @@ public class JaMoPP2joanaTestSetup extends JaMoPP2joanaTest {
 		EntryPoint point = JoanaFactory.eINSTANCE.createEntryPoint();
 		FlowSpecification flow = JoanaFactory.eINSTANCE.createFlowSpecification();
 		flow.setEntrypoint(point);
-		Method method = getJavaRoot(getJavaView()).getCompilationUnits().iterator().next().getClassifiers().iterator().next().getMethods().iterator().next();
+		Method method = getCompilationUnits(getJavaRoot(getJavaView())).iterator().next().getClassifiers().iterator().next().getMethods().iterator().next();
 		sink.setAnnotatedMethod(method);
 		source.setAnnotatedMethod(method);
 		point.setAnnotatedMethod(method);
