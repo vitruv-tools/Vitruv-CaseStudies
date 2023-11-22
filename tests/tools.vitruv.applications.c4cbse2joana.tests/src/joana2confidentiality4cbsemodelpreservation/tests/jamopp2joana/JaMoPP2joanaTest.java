@@ -24,8 +24,6 @@ import tools.vitruv.testutils.TestViewFactory;
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification;
-import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper;
-import tools.vitruv.applications.util.temporary.java.JavaSetup;
 
 import tools.mdsd.jamopp.model.java.containers.Package;
 

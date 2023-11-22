@@ -32,6 +32,7 @@ import tools.vitruv.testutils.TestViewFactory;
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
 
 import tools.mdsd.jamopp.model.java.JavaPackage;
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
 import tools.mdsd.jamopp.model.java.containers.Package;
 import tools.mdsd.jamopp.resource.JavaResource2Factory;
 
@@ -166,6 +167,10 @@ public class Joana2c4cTest extends ViewBasedVitruvApplicationTest {
 			}
 		}
 		return null;
+	}
+	
+	protected List<CompilationUnit> getCompilationUnits(Package package1) {
+		return package1.getClassifiers().stream().map(it -> it.getContainingCompilationUnit()).toList();
 	}
 	
 	protected Package getJavaContracts(View view) {

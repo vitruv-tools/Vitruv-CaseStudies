@@ -31,7 +31,7 @@ public class MethodTest extends JaMoPP2joanaTestSetup {
 	void ParameterDeletionTest() {
 		
 		CommittableView view = getCombinedJavaJoanaView();
-		Parameter para = ((Interface) getJavaRoot(view).getCompilationUnits().get(0).getClassifiers().get(0)).getMethods().get(0).getParameters().get(0);
+		Parameter para = ((Interface) getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0)).getMethods().get(0).getParameters().get(0);
 		getJoanaRoot(view).getAnnotation().get(0).setAnnotatedParameter(para);
 		getJoanaRoot(view).getAnnotation().get(1).setAnnotatedParameter(para);
 		view.commitChanges();
@@ -40,7 +40,7 @@ public class MethodTest extends JaMoPP2joanaTestSetup {
 		assertNotNull(getJoanaRoot(getJoanaView()).getFlowspecification().get(0).getEntrypoint());
 		
 		view = getJavaView();
-		getJavaRoot(view).getCompilationUnits().iterator().next().getClassifiers().iterator().next().getMethods().iterator().next().getParameters().remove(0);
+		getCompilationUnits(getJavaRoot(view)).iterator().next().getClassifiers().iterator().next().getMethods().iterator().next().getParameters().remove(0);
 		view.commitChanges();
 		
 		assertEquals(0, getJoanaRoot(getJoanaView()).getAnnotation().size());

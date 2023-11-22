@@ -59,9 +59,9 @@ public class SourceTest extends Joana2c4cTestSetup{
 		CommittableView view = getCombinedJavaJoanaView();
 		InterfaceMethod method = MembersFactory.eINSTANCE.createInterfaceMethod();
 		method.setName(MY_METHOD);
-		getJavaRoot(view).getCompilationUnits().get(0).getClassifiers().get(0).getMembers().add(method);
+		getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMembers().add(method);
 		view.commitChanges();
-		method = (InterfaceMethod) getJavaRoot(view).getCompilationUnits().get(0).getClassifiers().get(0).getMethods().get(1);
+		method = (InterfaceMethod) getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMethods().get(1);
 		assertTrue(method.getName().matches(MY_METHOD));
 		assertEquals(2, getJoanaRoot(view).getAnnotation().size());
 		for(Annotation anno : getJoanaRoot(view).getAnnotation()) {
@@ -83,10 +83,10 @@ public class SourceTest extends Joana2c4cTestSetup{
 		CommittableView view = getCombinedJavaJoanaView();
 		OrdinaryParameter secondPara = ParametersFactory.eINSTANCE.createOrdinaryParameter();
 		secondPara.setName(MY_PARAMETER);
-		((InterfaceMethod) getJavaRoot(view).getCompilationUnits().get(0).getClassifiers().get(0).getMembers().get(0)).getParameters().add(secondPara);
+		((InterfaceMethod) getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMembers().get(0)).getParameters().add(secondPara);
 		view.commitChanges();
 		view = getCombinedJavaJoanaView();
-		secondPara = (OrdinaryParameter) ((InterfaceMethod) getJavaRoot(view).getCompilationUnits().get(0).getClassifiers().get(0).getMethods().get(0)).getParameters().get(1);
+		secondPara = (OrdinaryParameter) ((InterfaceMethod) getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMethods().get(0)).getParameters().get(1);
 		for(Annotation anno : getJoanaRoot(view).getAnnotation()) {
 			if(anno instanceof Source) {
 				

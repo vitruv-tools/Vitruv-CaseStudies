@@ -25,7 +25,7 @@ public class SignatureInformationFlowTest extends C4C2joanaTestSetup {
 	
 	@Test
 	void flowCreationTest() {
-		assertNotNull(getJavaContracts(getCombinedJavaJoanaView()).getCompilationUnits().get(0).getClassifiers().get(0).getMembers());
+		assertNotNull(getCompilationUnits(getJavaContracts(getCombinedJavaJoanaView())).get(0).getClassifiers().get(0).getMembers());
 		assertNotNull(getJoanaRoot(getCombinedJavaJoanaView()).getFlowspecification().get(0).getEntrypoint());
 	}
 	

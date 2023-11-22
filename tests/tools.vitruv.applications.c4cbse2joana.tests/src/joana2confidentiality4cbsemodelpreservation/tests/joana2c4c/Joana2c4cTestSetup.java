@@ -93,7 +93,7 @@ public class Joana2c4cTestSetup extends Joana2c4cTest {
 	void setupJoana() {
 		CommittableView view = getCombinedJavaJoanaView();
 		
-		Interface javaInterface = (Interface) getJavaRoot(view).getCompilationUnits().iterator().next().getClassifiers().iterator().next();
+		Interface javaInterface = (Interface) getCompilationUnits(getJavaRoot(view)).iterator().next().getClassifiers().iterator().next();
 		Method method = (InterfaceMethod) javaInterface.getMethods().iterator().next();
 		OrdinaryParameter para = (OrdinaryParameter) method.getParameters().iterator().next();
 		SecurityLevel level = JoanaFactory.eINSTANCE.createSecurityLevel();
@@ -113,29 +113,29 @@ public class Joana2c4cTestSetup extends Joana2c4cTest {
 		CommittableView view = getCombinedJavaJoanaView();
 		InterfaceMethod method = MembersFactory.eINSTANCE.createInterfaceMethod();
 		method.setName("secondMethod");
-		getJavaRoot(view).getCompilationUnits().get(0).getClassifiers().get(0).getMembers().add(method);
+		getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMembers().add(method);
 		view.commitChanges();
 		view = getCombinedJavaJoanaView();
-		method = (InterfaceMethod) getJavaRoot(view).getCompilationUnits().get(0).getClassifiers().get(0).getMembers().get(1);
+		method = (InterfaceMethod) getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMembers().get(1);
 		EntryPoint point = JoanaFactory.eINSTANCE.createEntryPoint();
 		FlowSpecification flow = JoanaFactory.eINSTANCE.createFlowSpecification();
 		flow.setEntrypoint(point);
 		getJoanaRoot(view).getFlowspecification().add(flow);
 		point.setAnnotatedMethod(method);
 		view.commitChanges();
-		assertEquals(2, getJavaRoot(getJavaView()).getCompilationUnits().get(0).getClassifiers().get(0).getMembers().size());
+		assertEquals(2, getCompilationUnits(getJavaRoot(getJavaView())).get(0).getClassifiers().get(0).getMembers().size());
 	}
 	
 	void addNewSource() {
 		CommittableView view = getCombinedJavaJoanaView();
-		Interface javaInterface = (Interface) getJavaRoot(view).getCompilationUnits().iterator().next().getClassifiers().iterator().next();
+		Interface javaInterface = (Interface) getCompilationUnits(getJavaRoot(view)).iterator().next().getClassifiers().iterator().next();
 		Method method = (InterfaceMethod) javaInterface.getMethods().iterator().next();
 		Parameter para = ParametersFactory.eINSTANCE.createOrdinaryParameter();
 		para.setName(MY_PARAMETER);
 		method.getParameters().add(para);
 		view.commitChanges();
 		view = getCombinedJavaJoanaView();
-		javaInterface = (Interface) getJavaRoot(view).getCompilationUnits().iterator().next().getClassifiers().iterator().next();
+		javaInterface = (Interface) getCompilationUnits(getJavaRoot(view)).iterator().next().getClassifiers().iterator().next();
 		method = javaInterface.getMethods().get(0);
 		para = method.getParameters().get(1);
 		Source source = JoanaFactory.eINSTANCE.createSource();

@@ -29,7 +29,7 @@ public class EntryPointTest extends Joana2c4cTestSetup {
 	void entryPointCreationTest() {
 		addEntryPoint();
 		CommittableView view = getCombinedJavaJoanaView();
-		assertEquals(2, getJavaRoot(getJavaView()).getCompilationUnits().get(0).getClassifiers().get(0).getMembers().size());
+		assertEquals(2, getCompilationUnits(getJavaRoot(getJavaView())).get(0).getClassifiers().get(0).getMembers().size());
 		assertEquals(2, getJoanaRoot(getJoanaView()).getAnnotation().size());
 		assertEquals(2, getJoanaRoot(view).getFlowspecification().size());
 		assertEquals(2, getC4CRoot(getC4CView()).getInformationFlows().size());
