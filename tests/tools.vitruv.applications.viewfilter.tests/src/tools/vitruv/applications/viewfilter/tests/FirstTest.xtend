@@ -1,17 +1,23 @@
 package tools.vitruv.applications.viewfilter.tests
 
-import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
+import java.nio.file.Path
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
-import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.emf.common.util.URI
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.BeforeEach
-import org.eclipse.uml2.uml.Model
-import org.eclipse.xtend.lib.annotations.Accessors
 import tools.vitruv.framework.views.View
-import org.eclipse.emf.ecore.EObject
-import java.nio.file.Path
+import tools.vitruv.testutils.ViewBasedVitruvApplicationTest
+//import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLInterfaceBuilder
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.Type
+import tools.vitruv.applications.viewfilter.utils.FluentUMLClassBuilder
+import tools.vitruv.applications.viewfilter.utils.PcmUmlClassApplicationTestHelper
+import java.util.ArrayList
 
 class FirstTest extends ViewBasedVitruvApplicationTest {
 	
@@ -55,8 +61,16 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 	
 	@Test
 	def void testCreateFilteredUmlView() {
-		createFilteredUmlView();
+		var view = createFilteredUmlView();
+		view.selection
+		view.viewType
 	}
+	
+	@Test
+	def void testFilterForName() {
+		
+	}
+	
 	
 	 
 	
@@ -100,9 +114,31 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 		
 	protected def void createUmlModel((Model)=>void modelInitialization) {
 	changeUmlView [
-		val umlModel = UMLFactory.eINSTANCE.createModel
-		modelInitialization.apply(umlModel)
-		createAndRegisterRoot(umlModel, UML_MODEL_NAME.umlProjectModelPath.uri)
+		val allUmlPrimitiveTypes = it.getRootObjects().flatMap[it.eAllContents.toList].filter [
+				it instanceof PrimitiveType
+		].map[it as Type].toList
+		val umlTestCompositeType2 = new FluentUMLClassBuilder(
+			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2, false).build
+		val umlTestCompositeType1 = new FluentUMLClassBuilder(
+			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME, false).build
+		//val expectedDataTypesPackage = new FluentUMLPackageBuilder(DATATYPES_PACKAGE).addPackagedElement(
+		//	umlTestCompositeType1).addPackagedElement(umlTestCompositeType2).build
+
+		var allPossibleParameterTypes = new ArrayList(allUmlPrimitiveTypes)
+		allPossibleParameterTypes.add(umlTestCompositeType1)
+		allPossibleParameterTypes.add(umlTestCompositeType2)
+		//val expectedParameterType = allPossibleParameterTypes.head
+		
+//		val umlInterface = new FluentUMLInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
+//			addOperation(PcmUmlClassApplicationTestHelper.SIGNATURE_NAME,
+//				#[
+//					new Quadruple(TEST_PARAMETER_NAME, expectedParameterType, expectedParameterLowerValue,
+//						expectedParameterUpperValue)]).build
+//		val expectedContractsPackage = new FluentUMLPackageBuilder(CONTRACTS_PACKAGE).
+//			addPackagedElement(umlInterface).build
+		
+		//modelInitialization.apply(umlTestCompositeType1)
+		createAndRegisterRoot(umlTestCompositeType1, UML_MODEL_NAME.umlProjectModelPath.uri)
 	]
 }
 	

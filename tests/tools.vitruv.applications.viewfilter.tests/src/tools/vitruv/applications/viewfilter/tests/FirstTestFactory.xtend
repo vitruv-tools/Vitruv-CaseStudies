@@ -43,9 +43,8 @@ class FirstTestFactory extends TestViewFactory {
 	
 	
 	
-//-------- Boilerplate code -----------//Kakao
+//-------- Boilerplate code -----------//
 
-	
 			/**
 	 * Changes the UML view containing all UML models as root elements 
 	 * according to the given modification function. 
@@ -59,6 +58,17 @@ class FirstTestFactory extends TestViewFactory {
 		val ViewSelector selector = viewProvider.createSelector(ViewTypeFactory.createIdentityMappingViewType(viewName));
 		var filteredElements = selector.selectableElements.filter[ element | rootTypes.exists[it.isInstance(element)]]
 		filteredElements.forEach[element | selector.setSelected(element, true)]
+//		selector.selectableElements.forEach[element | selector.setSelected(element, true)]
+		var View view = selector.createView();
+		assertThat("view must not be null", view, not(equalTo(null)));
+		return view;
+	}
+	
+		def View createNameFilteredViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
+		val ViewSelector selector = viewProvider.createSelector(ViewTypeFactory.createIdentityMappingViewType(viewName));
+//		var filteredElements = selector.selectableElements.filter[ element | rootTypes.exists[it.isInstance(element)]]
+//		filteredElements.forEach[element | selector.setSelected(element, true)]
+		selector.selectableElements.forEach[element | selector.setSelected(element, true)]
 		var View view = selector.createView();
 		assertThat("view must not be null", view, not(equalTo(null)));
 		return view;
