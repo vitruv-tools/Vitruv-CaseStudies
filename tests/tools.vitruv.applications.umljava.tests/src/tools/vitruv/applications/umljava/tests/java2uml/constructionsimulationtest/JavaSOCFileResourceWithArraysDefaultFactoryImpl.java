@@ -4,7 +4,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.emftext.language.java.resource.JavaSourceOrClassFileResourceFactoryImpl;
 
-public class JavaSourceOrClassFileResourceWithArraysDefaultFactoryImpl
+public class JavaSOCFileResourceWithArraysDefaultFactoryImpl
 		extends JavaSourceOrClassFileResourceFactoryImpl {
 
 	@Override

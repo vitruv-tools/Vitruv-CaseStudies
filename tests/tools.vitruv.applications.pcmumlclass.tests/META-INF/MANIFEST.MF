@@ -19,6 +19,7 @@ Require-Bundle: tools.vitruv.testutils.vsum,
  tools.vitruv.applications.testutility,
  org.palladiosimulator.pcm,
  edu.kit.ipd.sdq.commons.util.emf,
- slf4j.api;bundle-version="2.0.9"
+ slf4j.api;bundle-version="2.0.9",
+ org.emftext.language.java;bundle-version="1.4.1"
 Export-Package: tools.vitruv.applications.pcmumlclass.tests
 Bundle-Vendor: vitruv.tools

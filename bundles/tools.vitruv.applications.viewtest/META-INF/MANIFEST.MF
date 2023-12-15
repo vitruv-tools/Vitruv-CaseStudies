@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Vitruv Viewfilter Application
+Bundle-SymbolicName: tools.vitruv.applications.viewfilter;singleton:=true
+Bundle-Version: 3.0.1.qualifier
+Automatic-Module-Name: tools.vitruv.applications.viewfilter
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Eclipse-ExtensibleAPI: true
+Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
+ org.palladiosimulator.pcm;visibility:=reexport,
+ edu.kit.ipd.sdq.activextendannotations,
+ edu.kit.ipd.sdq.commons.util.emf,
+ edu.kit.ipd.sdq.commons.util.java,
+ tools.vitruv.framework.applications,
+ tools.vitruv.dsls.reactions.runtime,
+ tools.vitruv.applications.util.temporary
+Bundle-Vendor: vitruv.tools

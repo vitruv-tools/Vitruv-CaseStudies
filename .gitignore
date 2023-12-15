@@ -24,3 +24,4 @@ EvaluationData
 *.DS_Store
 *.polyglot
 *.pom.tycho
+tests/tools.vitruv.applications.umljava.tests/src/tools/vitruv/applications/umljava/tests/java2uml/constructionsimulationtest/JavaSourceOrClassFileResourceWithArraysDefaultFactoryImpl.java

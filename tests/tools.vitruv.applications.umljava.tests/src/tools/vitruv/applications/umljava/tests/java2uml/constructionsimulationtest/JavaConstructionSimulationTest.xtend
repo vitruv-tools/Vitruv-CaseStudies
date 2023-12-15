@@ -58,7 +58,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 
 	@BeforeAll
 	def static setupJavaFactories() {
-		JavaSetup.prepareFactories([new JavaSourceOrClassFileResourceWithArraysDefaultFactoryImpl()])
+		JavaSetup.prepareFactories([new JavaSOCFileResourceWithArraysDefaultFactoryImpl()])
 	}
 
 	@AfterEach

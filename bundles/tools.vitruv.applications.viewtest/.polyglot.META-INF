@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>tools.vitruv</groupId>
-    <artifactId>tests</artifactId>
+    <artifactId>bundles</artifactId>
     <version>3.0.1-SNAPSHOT</version>
     <relativePath>..\.polyglot.pom.tycho</relativePath>
   </parent>
-  <artifactId>tools.vitruv.applications.pcmumlclass.tests</artifactId>
+  <artifactId>tools.vitruv.applications.viewfilter</artifactId>
   <version>3.0.1-SNAPSHOT</version>
-  <packaging>eclipse-test-plugin</packaging>
-  <name>[test-bundle] Vitruv PCM-UML Class Application Tests</name>
+  <packaging>eclipse-plugin</packaging>
+  <name>[bundle] Vitruv Viewfilter Application</name>
   <organization>
     <name>vitruv.tools</name>
   </organization>
