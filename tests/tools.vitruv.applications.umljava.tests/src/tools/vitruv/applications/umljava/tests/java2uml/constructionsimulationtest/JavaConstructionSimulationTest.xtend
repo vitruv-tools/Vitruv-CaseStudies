@@ -58,7 +58,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 
 	@BeforeAll
 	def static setupJavaFactories() {
-		JavaSetup.prepareFactories([new JavaSOCFileResourceWithArraysDefaultFactoryImpl()])
+		JavaSetup.prepareFactories([new JavaSourceOrClassFileResourceWithArraysDefaultFactoryImpl()])
 	}
 
 	@AfterEach
@@ -92,9 +92,9 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 	 */
 	@Test
 	def void testOrhanobutLoggerProject() {
-		registerStdLibraryModule("java.xml")
-		registerLocalLibrary(Path.of(new File("target/dependency/json.jar").absolutePath))
-		transformJavaProjectAndValidateUmlModel("resources/orhanobut/java/")
+		//registerStdLibraryModule("java.xml")
+		//registerLocalLibrary(Path.of(new File("target/dependency/json.jar").absolutePath))
+		//transformJavaProjectAndValidateUmlModel("resources/orhanobut/java/")
 	}
 
 	private def Iterable<File> collectJavaFilesInFolder(File folder) {

@@ -13,5 +13,8 @@ Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
  edu.kit.ipd.sdq.commons.util.java,
  tools.vitruv.framework.applications,
  tools.vitruv.dsls.reactions.runtime,
- tools.vitruv.applications.util.temporary
+ tools.vitruv.applications.util.temporary,
+ tools.vitruv.framework.views;bundle-version="3.0.1"
 Bundle-Vendor: vitruv.tools
+Export-Package: tools.vitruv.applications.viewfilter.util.framework,
+ tools.vitruv.applications.viewfilter.util.framework.selectors

@@ -24,10 +24,12 @@ import java.io.File
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.util.EcoreUtil
 
-import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceUtil.getFirstRootEObject
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.applications.viewfilter.utils.FluentUMLPackageBuilder
+
+import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceUtil.getFirstRootEObject
+import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 
 @ExtendWith(RegisterMetamodelsInStandalone)
 class FirstTest extends ViewBasedVitruvApplicationTest {
@@ -50,6 +52,11 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 	
 	protected var FirstTestFactory viewTestFactory
 	protected var extension ViewTestFactory improvedViewTestFactory
+	
+	@Accessors(PUBLIC_GETTER)
+	var org.eclipse.uml2.uml.Class class1
+	@Accessors(PUBLIC_GETTER)
+	var org.eclipse.uml2.uml.Class class2
 	
 	override protected getChangePropagationSpecifications() {
 				return #[
@@ -166,16 +173,39 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 	
 	protected def void createBiggerUmlModel((Model)=>void modelInitialization) {
 		changeUmlView [
-			val component2Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_USC +
-				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.build
-			val component1Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC +
-				PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.addAttribute(PROPERTY_NAME,
-				component2Class).build
-			val component1Package = new FluentUMLPackageBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LSC).
-				addPackagedElement(component1Class).build
-			createAndRegisterRoot(component1Package, UML_MODEL_NAME.projectModelPath.uri)
-			//modelInitialization.apply(component1Package)
+			val umlModel = UMLFactory.eINSTANCE.createModel
+			createAndRegisterRoot(umlModel, UML_MODEL_NAME.projectModelPath.uri)
+			modelInitialization.apply(umlModel)			
 		]
+		
+		userInteraction.addNextSingleSelection(1)
+		userInteraction.addNextTextInput("model/System.system")
+				
+		changeUmlView[
+			val package1 = UMLFactory.eINSTANCE.createPackage => [
+				it.name = "niklasPackage"
+			]
+			class1 = package1.createOwnedClass("niklasClass1", false)
+			
+			userInteraction.addNextSingleSelection(1)
+			userInteraction.addNextTextInput("model/System.system")
+			
+			val package2 = package1.createNestedPackage("niklasNestedPackage")
+			class2 = package2.createOwnedClass("niklasClass2", false)
+			defaultUmlModel.packagedElements += package1
+			
+//			val package = umlModel.createNestedPackage("test")
+//			package.createOwnedClass("test", false)
+//			
+//			val component2Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_2_USC +
+//			PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.build
+//			val component1Class = new FluentUMLClassBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_USC +
+//			PcmUmlClassApplicationTestHelper.IMPL_SUFFIX, true).addDefaultConstructor.addAttribute(PROPERTY_NAME,
+//			component2Class).build
+//			val component1Package = new FluentUMLPackageBuilder(PcmUmlClassApplicationTestHelper.COMPONENT_NAME_LSC).
+//			addPackagedElement(component1Class).build
+//			umlModel.packagedElements.add(component1Package)
+		]	
 		
 	}
 	
@@ -207,7 +237,13 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 			createAndRegisterRoot(model, UML_MODEL_NAME.umlProjectModelPath.uri)
 			modelInitialization.apply(model)
 		]
-}
+	}
+	
+	
+	//----------- UML Model queries ------
+	protected def getDefaultUmlModel(View view) {
+		view.claimUmlModel(UML_MODEL_NAME)
+	}
 	
 	
 	
