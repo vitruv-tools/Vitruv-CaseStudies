@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.DynamicTest.stream;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import tools.vitruv.framework.views.View;
 import tools.vitruv.applications.viewfilter.util.framework.FilterSupportingViewTypeFactory;
@@ -23,6 +24,7 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.NamedElement;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 
 public class ViewTestFactory extends TestViewFactory {
@@ -87,8 +89,9 @@ public class ViewTestFactory extends TestViewFactory {
 	public View createFilteredForNoAttributesViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName));
 		//selector.selectElementsOfRootType(rootTypes);
-		selector.filterForTypeClass();
-		selector.filterForName("niklasClass2");
+		//selector.filterForTypeClass();
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(selector, object, "niklasClass2");
+		selector.filterByLambda(function);
 //		selector.getSelectableElements().stream()
 //				.filter(element -> rootTypes.stream().anyMatch(it -> it.isInstance(element)))
 //				.forEach(element -> selector.setSelected((EObject) element, true));
@@ -96,6 +99,13 @@ public class ViewTestFactory extends TestViewFactory {
 
 		View view = selector.createView();
 		ViewSelection selection = view.getSelection();
+		for (Object element : selector.getSelectableElements()) {
+			if (element instanceof Class) {
+				System.out.println(((Class) element).getName() + ": " + selection.isViewObjectSelected((EObject) element));
+			} else {
+				System.out.println(element.getClass() + ": " + selection.isViewObjectSelected((EObject) element));
+			}
+		}
 		
 
 		assertThat("view must not be null", view, not(equalTo(null)));
@@ -103,10 +113,17 @@ public class ViewTestFactory extends TestViewFactory {
 	}
 	
 	
-	private void hasNoAttribute(ViewSelector selector, EObject object) {
-		if (object instanceof Classifier) {
-			selector.setSelected(object, true);
+	private boolean hasNoAttribute(ViewSelector selector, EObject object, String name) {
+		if (object instanceof org.eclipse.uml2.uml.Class) {
+//			if (object instanceof NamedElement) {
+//				if (name.equals(((NamedElement) object).getName())) {
+//					return true;
+//				}
+//			}
+			return true;
+			
 		}
+		return false;
 //		TreeIterator<EObject> eAllContents = object.eAllContents();
 //		while(eAllContents.hasNext()) {
 //			EObject currentObject = eAllContents.next();

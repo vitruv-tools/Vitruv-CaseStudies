@@ -30,6 +30,7 @@ import tools.vitruv.applications.viewfilter.utils.FluentUMLPackageBuilder
 
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceUtil.getFirstRootEObject
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
+import org.eclipse.uml2.uml.internal.impl.PrimitiveTypeImpl
 
 @ExtendWith(RegisterMetamodelsInStandalone)
 class FirstTest extends ViewBasedVitruvApplicationTest {
@@ -193,6 +194,9 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 			val package2 = package1.createNestedPackage("niklasNestedPackage")
 			class2 = package2.createOwnedClass("niklasClass2", false)
 			defaultUmlModel.packagedElements += package1
+			
+			val stringPrimitiveType = package1.createOwnedPrimitiveType("niklasPrimitiveType1");
+			class2.createOwnedAttribute("niklasClass2Attribute", stringPrimitiveType, 0, 1) 
 			
 //			val package = umlModel.createNestedPackage("test")
 //			package.createOwnedClass("test", false)

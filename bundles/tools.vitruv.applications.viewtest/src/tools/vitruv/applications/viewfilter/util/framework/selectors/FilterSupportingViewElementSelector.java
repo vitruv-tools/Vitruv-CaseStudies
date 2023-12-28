@@ -1,8 +1,14 @@
 package tools.vitruv.applications.viewfilter.util.framework.selectors;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Function;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.NamedElement;
@@ -25,6 +31,8 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	private ChangeableViewSource viewSource;
 	
 	private final ViewCreatingViewType<FilterSupportingViewElementSelector<Id>, Id> viewType;
+	
+	private List<EObject> testListObjectsToDisplay = new LinkedList();
 
 
 	public FilterSupportingViewElementSelector(ViewCreatingViewType<FilterSupportingViewElementSelector<Id>, Id> viewType, ChangeableViewSource viewSource, Collection<EObject> selectableElements) {
@@ -55,11 +63,20 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	}
 	
 	public void filterForTypeClass() {
-		getSelectableElements().stream()
-			.filter(element -> !(element instanceof org.eclipse.uml2.uml.Class))
-			.forEach(element -> setSelected(element, false));
+		for (EObject root : getSelectableElements()) {
+			if (isSelected(root)) {
+				TreeIterator<EObject> contentIterator = root.eAllContents();
+				while(contentIterator.hasNext()) {
+					EObject contentElement = contentIterator.next();
+					if (contentElement instanceof org.eclipse.uml2.uml.Class) {
+						testListObjectsToDisplay.add(contentElement);
+					}
+				}
+			}
+		}
 		
-		for(EObject element : getSelectableElements()) {
+		
+		for(EObject element : testListObjectsToDisplay) {
 			if (element instanceof NamedElement) {
 				System.out.println(((NamedElement) element).getName() + ": " + isSelected(element));
 			} else {
@@ -67,18 +84,51 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 			}
 		}
 		
-		//getSelectableElements().stream().forEach(element -> deselect(element));
+
+		
+		
+	}
+	
+	public void filterByLambda(Function<EObject, Boolean> filter) {
+		for (EObject root : getSelectableElements()) {
+			if (isSelected(root)) {
+				TreeIterator<EObject> contentIterator = root.eAllContents();
+				while(contentIterator.hasNext()) {
+					EObject contentElement = contentIterator.next();
+					if (filter.apply(contentElement)) {
+						testListObjectsToDisplay.add(contentElement);
+					}
+				}
+			}
+		}
+		
+		for (EObject object : testListObjectsToDisplay) {
+			if (object instanceof org.eclipse.uml2.uml.Class) {
+				org.eclipse.uml2.uml.Class classifierObject = (org.eclipse.uml2.uml.Class) object;
+				classifierObject.getOwnedAttributes().toArray();
+				classifierObject.getOwnedAttributes().removeAll(classifierObject.getOwnedAttributes());
+//				try {
+//					classifierObject.eResource().save(null);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+			}
+			
+		}
+		
+		viewSelection = new ElementViewSelection(testListObjectsToDisplay);
 	}
 	
 	public void filterForName(String name) {
 		getSelectableElements().stream()
 			.filter(element -> !(element instanceof NamedElement))
-			.forEach(element -> setSelected(element, false));
+			.forEach(element -> testListObjectsToDisplay.remove(element));
 		
 		getSelectableElements().stream()
 			.filter(element -> (element instanceof NamedElement))
 			.filter(element -> !name.equals(((NamedElement) element).getName()))
-			.forEach(element -> setSelected(element, false));
+			.forEach(element -> testListObjectsToDisplay.remove(element));
 	}
 	
 	public void removeAttributes() {
