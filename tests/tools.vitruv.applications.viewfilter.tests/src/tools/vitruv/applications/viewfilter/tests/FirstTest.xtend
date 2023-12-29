@@ -31,6 +31,9 @@ import tools.vitruv.applications.viewfilter.utils.FluentUMLPackageBuilder
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceUtil.getFirstRootEObject
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import org.eclipse.uml2.uml.internal.impl.PrimitiveTypeImpl
+import tools.vitruv.applications.viewfilter.util.framework.impl.FilterSupportingIdentityMappingViewType
+import tools.vitruv.framework.views.ViewSelector
+import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView
 
 @ExtendWith(RegisterMetamodelsInStandalone)
 class FirstTest extends ViewBasedVitruvApplicationTest {
@@ -92,6 +95,8 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 	@Test
 	def void testCreateFilteredUmlView() {
 		var view = createFilteredUmlView();
+		(viewType as FilterSupportingIdentityMappingViewType).updateView(view as ModifiableView);
+		
 		view.selection
 		view.viewType
 	}

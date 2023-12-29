@@ -8,6 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.api.extension,
  tools.vitruv.applications.viewfilter.util.framework,
+ tools.vitruv.applications.viewfilter.util.framework.impl,
  tools.vitruv.applications.viewfilter.util.framework.selectors
 Require-Bundle: tools.vitruv.testutils.vsum,
  org.eclipse.emf.compare,

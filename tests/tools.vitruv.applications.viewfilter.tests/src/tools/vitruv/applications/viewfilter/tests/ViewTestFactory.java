@@ -12,11 +12,14 @@ import java.util.function.Function;
 
 import tools.vitruv.framework.views.View;
 import tools.vitruv.applications.viewfilter.util.framework.FilterSupportingViewTypeFactory;
+import tools.vitruv.applications.viewfilter.util.framework.impl.FilterSupportingIdentityMappingViewType;
+import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelector;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.ViewProvider;
 import tools.vitruv.framework.views.ViewSelection;
 import tools.vitruv.framework.views.ViewSelector;
+import tools.vitruv.framework.views.ViewType;
 import tools.vitruv.framework.views.ViewTypeFactory;
 import tools.vitruv.testutils.TestViewFactory;
 
@@ -30,6 +33,7 @@ import org.palladiosimulator.pcm.repository.RepositoryComponent;
 public class ViewTestFactory extends TestViewFactory {
 	
 	private ViewProvider viewProvider;
+	ViewType<? extends ViewSelector> viewType;
 
 	public ViewTestFactory(ViewProvider viewProvider) {
 		super(viewProvider);
@@ -87,11 +91,13 @@ public class ViewTestFactory extends TestViewFactory {
 	
 	
 	public View createFilteredForNoAttributesViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
-		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName));
+		viewType = FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName);
+		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
 		//selector.selectElementsOfRootType(rootTypes);
 		//selector.filterForTypeClass();
 		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(selector, object, "niklasClass2");
-		selector.filterByLambda(function);
+		selector.addElementsToSelectionByLambda(function);
+		selector.removeOwnedAttributesFromClasses();
 //		selector.getSelectableElements().stream()
 //				.filter(element -> rootTypes.stream().anyMatch(it -> it.isInstance(element)))
 //				.forEach(element -> selector.setSelected((EObject) element, true));
@@ -115,12 +121,11 @@ public class ViewTestFactory extends TestViewFactory {
 	
 	private boolean hasNoAttribute(ViewSelector selector, EObject object, String name) {
 		if (object instanceof org.eclipse.uml2.uml.Class) {
-//			if (object instanceof NamedElement) {
-//				if (name.equals(((NamedElement) object).getName())) {
-//					return true;
-//				}
-//			}
-			return true;
+			if (object instanceof NamedElement) {
+				if (name.equals(((NamedElement) object).getName())) {
+					return true;
+				}
+			}
 			
 		}
 		return false;

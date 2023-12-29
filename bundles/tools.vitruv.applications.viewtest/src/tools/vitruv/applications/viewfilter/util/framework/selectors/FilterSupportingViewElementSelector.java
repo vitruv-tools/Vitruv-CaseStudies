@@ -1,23 +1,26 @@
 package tools.vitruv.applications.viewfilter.util.framework.selectors;
 
-import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.net4j.util.ImplementationError;
+import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.Type;
+import org.eclipse.uml2.uml.UMLFactory;
 
 import com.google.common.base.Preconditions;
 
 import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
-import tools.vitruv.applications.viewfilter.viewbuild.UmlViewBuilder;
 import tools.vitruv.framework.views.ChangeableViewSource;
 import tools.vitruv.framework.views.ModifiableViewSelection;
 import tools.vitruv.framework.views.View;
@@ -34,6 +37,8 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	
 	private List<EObject> testListObjectsToDisplay = new LinkedList();
 
+	private Set<EObject> rootList;
+
 
 	public FilterSupportingViewElementSelector(ViewCreatingViewType<FilterSupportingViewElementSelector<Id>, Id> viewType, ChangeableViewSource viewSource, Collection<EObject> selectableElements) {
 	    Preconditions.checkArgument((selectableElements != null), "selectable elements must not be null");
@@ -45,12 +50,13 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 		Collection<EObject> selectableElementsCopy = EcoreUtil.copyAll(selectableElements);
 	    ElementViewSelection _elementViewSelection = new ElementViewSelection(selectableElementsCopy);
 	    this.viewSelection = _elementViewSelection;
-		selectAllElements();
+		rootList = new HashSet<EObject>();
 	}
 	
 
 	@Override
 	public View createView() {
+		viewSelection = new ElementViewSelection(rootList);
 		//TODO nbruening ggf noch anpassen
 	    Preconditions.checkState(this.isValid(), "the current selection is invalid, thus a view cannot be created");
 	    return this.viewType.createView(this);
@@ -62,100 +68,86 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 			.forEach(element -> setSelected(element, false));
 	}
 	
-	public void filterForTypeClass() {
+	
+	public void addElementsToSelectionByLambda(Function<EObject, Boolean> filter) {
 		for (EObject root : getSelectableElements()) {
 			if (isSelected(root)) {
-				TreeIterator<EObject> contentIterator = root.eAllContents();
-				while(contentIterator.hasNext()) {
-					EObject contentElement = contentIterator.next();
-					if (contentElement instanceof org.eclipse.uml2.uml.Class) {
-						testListObjectsToDisplay.add(contentElement);
-					}
-				}
+				filterAllContents(root, filter, rootList);
 			}
 		}
+	}
+	
+	
+	private void filterAllContents(EObject root, Function<EObject, Boolean> filter, Set<EObject> rootList) {
+		Model filteredModelRoot = null;
+		Iterator<EObject> contentIterator = root.eAllContents();
+		while(contentIterator.hasNext()) {
+			EObject contentElement = contentIterator.next();
+			if (filter.apply(contentElement)) {
+				//testListObjectsToDisplay.add(contentElement);
+				
+				filteredModelRoot = createFilteredModelRootIfNotExistent(filteredModelRoot, root);
+				attachElementToRoot(filteredModelRoot, contentElement);
+				
+				rootList.add(filteredModelRoot);
+			}
+		}
+	}
+	
+	
+	private void attachElementToRoot(Model root, EObject object) {
+		if (object instanceof Type) {
+			EObject objectCopy = EcoreUtil.copy(object);
+			root.getOwnedTypes().add((Type) objectCopy);
+		} else {
+			System.out.println("Warning: Undefined type: " + object.eClass());
+		}
 		
-		
-		for(EObject element : testListObjectsToDisplay) {
-			if (element instanceof NamedElement) {
-				System.out.println(((NamedElement) element).getName() + ": " + isSelected(element));
+	}
+	
+	
+	private Model createFilteredModelRootIfNotExistent(Model filteredRoot, EObject root) {
+		if (filteredRoot == null) {
+			if (root instanceof Model) {
+				return UMLFactory.eINSTANCE.createModel();	
 			} else {
-				System.out.println(element.getClass() + ": " + isSelected(element));
+				throw new ImplementationError("nbruening: Not implemented yet");
 			}
 		}
-		
-
-		
+		return filteredRoot;
 		
 	}
 	
-	public void filterByLambda(Function<EObject, Boolean> filter) {
-		for (EObject root : getSelectableElements()) {
-			if (isSelected(root)) {
-				TreeIterator<EObject> contentIterator = root.eAllContents();
-				while(contentIterator.hasNext()) {
-					EObject contentElement = contentIterator.next();
-					if (filter.apply(contentElement)) {
-						testListObjectsToDisplay.add(contentElement);
-					}
+	
+	public void removeOwnedAttributesFromClasses() {
+//		for (EObject object : testListObjectsToDisplay) {
+//			if (object instanceof org.eclipse.uml2.uml.Class) {
+//				org.eclipse.uml2.uml.Class classifierObject = (org.eclipse.uml2.uml.Class) object;
+//				classifierObject.getOwnedAttributes().removeAll(classifierObject.getOwnedAttributes());
+//			}
+//		}
+		
+		for (EObject root : rootList) {
+			TreeIterator<EObject> content = root.eAllContents();
+			List<EObject> contentList = convertTreeIterator2List(content);
+			for (EObject object : contentList) {
+				if (object instanceof org.eclipse.uml2.uml.Class) {
+					org.eclipse.uml2.uml.Class classifierObject = (org.eclipse.uml2.uml.Class) object;
+					classifierObject.getOwnedAttributes().removeAll(classifierObject.getOwnedAttributes());
 				}
-			}
+			}	
 		}
-		
-		for (EObject object : testListObjectsToDisplay) {
-			if (object instanceof org.eclipse.uml2.uml.Class) {
-				org.eclipse.uml2.uml.Class classifierObject = (org.eclipse.uml2.uml.Class) object;
-				classifierObject.getOwnedAttributes().toArray();
-				classifierObject.getOwnedAttributes().removeAll(classifierObject.getOwnedAttributes());
-//				try {
-//					classifierObject.eResource().save(null);
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-			}
-			
+	}
+	
+	
+	private List<EObject> convertTreeIterator2List(TreeIterator<EObject> content) {
+		List<EObject> list = new LinkedList<EObject>();
+		while(content.hasNext()) {
+			list.add(content.next());
 		}
-		
-		viewSelection = new ElementViewSelection(testListObjectsToDisplay);
+		return list;
 	}
 	
-	public void filterForName(String name) {
-		getSelectableElements().stream()
-			.filter(element -> !(element instanceof NamedElement))
-			.forEach(element -> testListObjectsToDisplay.remove(element));
-		
-		getSelectableElements().stream()
-			.filter(element -> (element instanceof NamedElement))
-			.filter(element -> !name.equals(((NamedElement) element).getName()))
-			.forEach(element -> testListObjectsToDisplay.remove(element));
-	}
-	
-	public void removeAttributes() {
-		for(EObject object : getSelectableElements()) {
-			if (isSelected(object) && (object instanceof Classifier)) {	
-				Classifier currentClassifier = (Classifier) object;
-				EcoreUtil.removeAll(currentClassifier.getAllAttributes());
-			}
-		}	
-	}
-	
-	
-	
-	private void deselect(EObject element) {
-		setSelected(element, false);
-	}
-	
-	
-	
-	
-	
-	private void selectAllElements() {
-		for (EObject element : getSelectableElements()) {
-			setSelected(element, true);
-		}
-		//getSelectableElements().stream().forEach(element -> setSelected(element, true));
-	}
 	
 
 	@Override
