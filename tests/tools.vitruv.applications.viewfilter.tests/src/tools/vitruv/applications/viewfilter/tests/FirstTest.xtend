@@ -71,7 +71,7 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 	
 	@BeforeEach
 	def void setup() {
-		viewTestFactory = new FirstTestFactory(virtualModel)
+		//viewTestFactory = new FirstTestFactory(virtualModel)
 		improvedViewTestFactory = new ViewTestFactory(virtualModel)
 		createBiggerUmlModel[name = UML_MODEL_NAME]
 	}
@@ -95,6 +95,8 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 	@Test
 	def void testCreateFilteredUmlView() {
 		var view = createFilteredUmlView();
+		//modifyModel()
+		
 		(viewType as FilterSupportingIdentityMappingViewType).updateView(view as ModifiableView);
 		
 		view.selection
@@ -216,6 +218,22 @@ class FirstTest extends ViewBasedVitruvApplicationTest {
 //			umlModel.packagedElements.add(component1Package)
 		]	
 		
+	}
+	
+	
+	private def void modifyModel() {
+		userInteraction.addNextSingleSelection(1)
+		userInteraction.addNextTextInput("model/System.system")
+		changeUmlView[
+			val package3 = UMLFactory.eINSTANCE.createPackage => [
+				it.name = "niklasPackage3"
+			]
+			val class3 = package3.createOwnedClass("niklasClass3", false)
+			class2.addKeyword("subsequentlyAddedKeyword")
+			val comment = class2.createOwnedComment
+			comment.addKeyword("bla")
+			defaultUmlModel.packagedElements += package3
+		]
 	}
 	
 		

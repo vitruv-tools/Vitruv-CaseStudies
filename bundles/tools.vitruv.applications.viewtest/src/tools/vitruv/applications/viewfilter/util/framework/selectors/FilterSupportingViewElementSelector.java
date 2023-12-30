@@ -1,10 +1,12 @@
 package tools.vitruv.applications.viewfilter.util.framework.selectors;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -21,6 +23,7 @@ import com.google.common.base.Preconditions;
 
 import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
+import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter.ViewFilterBuilder;
 import tools.vitruv.framework.views.ChangeableViewSource;
 import tools.vitruv.framework.views.ModifiableViewSelection;
 import tools.vitruv.framework.views.View;
@@ -37,7 +40,12 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	
 	private List<EObject> testListObjectsToDisplay = new LinkedList();
 
-	private Set<EObject> rootList;
+	private Set<EObject> rootListForView;
+	
+	//TODO nbruening: Javadoc
+	private Map<EObject, EObject> mapOriginalRoot2RootStub;
+	
+	private ViewFilterBuilder viewFilterBuilder;
 
 
 	public FilterSupportingViewElementSelector(ViewCreatingViewType<FilterSupportingViewElementSelector<Id>, Id> viewType, ChangeableViewSource viewSource, Collection<EObject> selectableElements) {
@@ -47,16 +55,19 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 		this.viewType = viewType;
 		this.viewSource = viewSource;
 		//Copy underlying model
-		Collection<EObject> selectableElementsCopy = EcoreUtil.copyAll(selectableElements);
-	    ElementViewSelection _elementViewSelection = new ElementViewSelection(selectableElementsCopy);
-	    this.viewSelection = _elementViewSelection;
-		rootList = new HashSet<EObject>();
+		//Collection<EObject> selectableElementsCopy = EcoreUtil.copyAll(selectableElements);
+	    this.viewSelection = new ElementViewSelection(selectableElements);
+		rootListForView = new HashSet<EObject>();
+		mapOriginalRoot2RootStub = new HashMap();
+		viewFilterBuilder = new ViewFilterBuilder();
+		
 	}
 	
 
 	@Override
 	public View createView() {
-		viewSelection = new ElementViewSelection(rootList);
+		viewSelection = new ElementViewSelection(rootListForView);
+		rootListForView.forEach(element -> setSelected(element, true));
 		//TODO nbruening ggf noch anpassen
 	    Preconditions.checkState(this.isValid(), "the current selection is invalid, thus a view cannot be created");
 	    return this.viewType.createView(this);
@@ -71,25 +82,39 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	
 	public void addElementsToSelectionByLambda(Function<EObject, Boolean> filter) {
 		for (EObject root : getSelectableElements()) {
-			if (isSelected(root)) {
-				filterAllContents(root, filter, rootList);
-			}
+			filterAllContents(root, filter, rootListForView);
 		}
 	}
 	
 	
-	private void filterAllContents(EObject root, Function<EObject, Boolean> filter, Set<EObject> rootList) {
-		Model filteredModelRoot = null;
+	public void removeOwnedAttributesFromClasses() {		
+		for (EObject root : rootListForView) {
+			TreeIterator<EObject> content = root.eAllContents();
+			List<EObject> contentList = convertTreeIterator2List(content);
+			for (EObject object : contentList) {
+				if (object instanceof org.eclipse.uml2.uml.Class) {
+					org.eclipse.uml2.uml.Class classifierObject = (org.eclipse.uml2.uml.Class) object;
+					classifierObject.getOwnedAttributes().removeAll(classifierObject.getOwnedAttributes());
+				}
+			}	
+		}
+	}
+	
+	
+	private void filterAllContents(EObject root, Function<EObject, Boolean> filter, Set<EObject> rootListForView) {
+		Model filteredModelRootStub = null;
 		Iterator<EObject> contentIterator = root.eAllContents();
 		while(contentIterator.hasNext()) {
 			EObject contentElement = contentIterator.next();
 			if (filter.apply(contentElement)) {
 				//testListObjectsToDisplay.add(contentElement);
 				
-				filteredModelRoot = createFilteredModelRootIfNotExistent(filteredModelRoot, root);
-				attachElementToRoot(filteredModelRoot, contentElement);
+				filteredModelRootStub = createFilteredModelRootIfNotExistent(filteredModelRootStub, root);
+				EObject copyOfContentElement = EcoreUtil.copy(contentElement);
+				attachElementToRoot(filteredModelRootStub, copyOfContentElement);
 				
-				rootList.add(filteredModelRoot);
+				rootListForView.add(filteredModelRootStub);
+				mapOriginalRoot2RootStub.put(root, filteredModelRootStub);
 			}
 		}
 	}
@@ -119,27 +144,6 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	}
 	
 	
-	public void removeOwnedAttributesFromClasses() {
-//		for (EObject object : testListObjectsToDisplay) {
-//			if (object instanceof org.eclipse.uml2.uml.Class) {
-//				org.eclipse.uml2.uml.Class classifierObject = (org.eclipse.uml2.uml.Class) object;
-//				classifierObject.getOwnedAttributes().removeAll(classifierObject.getOwnedAttributes());
-//			}
-//		}
-		
-		for (EObject root : rootList) {
-			TreeIterator<EObject> content = root.eAllContents();
-			List<EObject> contentList = convertTreeIterator2List(content);
-			for (EObject object : contentList) {
-				if (object instanceof org.eclipse.uml2.uml.Class) {
-					org.eclipse.uml2.uml.Class classifierObject = (org.eclipse.uml2.uml.Class) object;
-					classifierObject.getOwnedAttributes().removeAll(classifierObject.getOwnedAttributes());
-				}
-			}	
-		}
-	}
-	
-	
 	private List<EObject> convertTreeIterator2List(TreeIterator<EObject> content) {
 		List<EObject> list = new LinkedList<EObject>();
 		while(content.hasNext()) {
@@ -147,8 +151,6 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 		}
 		return list;
 	}
-	
-	
 
 	@Override
 	public boolean isValid() {
@@ -186,6 +188,10 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	  
 	  public ViewCreatingViewType<FilterSupportingViewElementSelector<Id>, Id> getViewType() {
 		 return this.viewType;
+	  }
+	  
+	  public Map<EObject, EObject> getMapOriginalRoot2RootStub() {
+		  return mapOriginalRoot2RootStub;
 	  }
 
 }

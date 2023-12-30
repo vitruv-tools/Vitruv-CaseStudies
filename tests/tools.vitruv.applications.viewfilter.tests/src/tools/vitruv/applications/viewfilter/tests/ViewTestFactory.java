@@ -60,6 +60,14 @@ public class ViewTestFactory extends TestViewFactory {
 		return view;
 	}
 	
+	public View createFilteredUmlView(BasicViewFilterTest test) {
+		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
+		View view = createFilteredForNoAttributesViewOfElements("UML", rootTypes);
+		view.getSelection().isViewObjectSelected(test.getClass1());
+		view.getSelection().isViewObjectSelected(test.getClass2());
+		return view;
+	}
+	
 	
 	//--------------Boilerplate code -----------------//
 	//
@@ -69,7 +77,6 @@ public class ViewTestFactory extends TestViewFactory {
 		selector.getSelectableElements().stream()
 				.filter(element -> rootTypes.stream().anyMatch(it -> it.isInstance(element)))
 				.forEach(element -> selector.setSelected(element, true));
-		//selector.getSelectableElements().stream().forEach(element -> selector.setSelected(element, true));
 		View view = selector.createView();
 		assertThat("view must not be null", view, not(equalTo(null)));
 		return view;
@@ -93,15 +100,9 @@ public class ViewTestFactory extends TestViewFactory {
 	public View createFilteredForNoAttributesViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
 		viewType = FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName);
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
-		//selector.selectElementsOfRootType(rootTypes);
-		//selector.filterForTypeClass();
 		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(selector, object, "niklasClass2");
 		selector.addElementsToSelectionByLambda(function);
-		selector.removeOwnedAttributesFromClasses();
-//		selector.getSelectableElements().stream()
-//				.filter(element -> rootTypes.stream().anyMatch(it -> it.isInstance(element)))
-//				.forEach(element -> selector.setSelected((EObject) element, true));
-		
+		selector.removeOwnedAttributesFromClasses();		
 
 		View view = selector.createView();
 		ViewSelection selection = view.getSelection();
@@ -113,7 +114,6 @@ public class ViewTestFactory extends TestViewFactory {
 			}
 		}
 		
-
 		assertThat("view must not be null", view, not(equalTo(null)));
 		return view;
 	}
@@ -129,11 +129,6 @@ public class ViewTestFactory extends TestViewFactory {
 			
 		}
 		return false;
-//		TreeIterator<EObject> eAllContents = object.eAllContents();
-//		while(eAllContents.hasNext()) {
-//			EObject currentObject = eAllContents.next();
-//			
-//		}
 	}
 	
 	

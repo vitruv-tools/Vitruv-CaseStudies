@@ -38,6 +38,10 @@ import tools.vitruv.framework.views.ViewSource;
  * within the {@link ViewSource} to a created {@link View}.
  */
 public class FilterSupportingIdentityMappingViewType extends AbstractViewType<FilterSupportingViewElementSelector<HierarchicalId>, HierarchicalId> {
+	
+	private Map<EObject, EObject> mapOriginalRoot2RootStub;
+	
+	
 	public FilterSupportingIdentityMappingViewType(String name) {
 		super(name);
 	}
@@ -78,6 +82,7 @@ public class FilterSupportingIdentityMappingViewType extends AbstractViewType<Fi
 	@Override
 	public ModifiableView createView(FilterSupportingViewElementSelector<HierarchicalId> selector) {
 		checkArgument(selector.getViewType() == this, "cannot create view with selector for different view type");
+		mapOriginalRoot2RootStub = selector.getMapOriginalRoot2RootStub();
 		return new BasicView(selector.getViewType(), selector.getViewSource(), selector.getSelection());
 	}
 
@@ -87,6 +92,7 @@ public class FilterSupportingIdentityMappingViewType extends AbstractViewType<Fi
 			viewResourceSet.getResources().forEach(Resource::unload);
 			viewResourceSet.getResources().clear();
 			createViewResources(view, viewResourceSet);
+			
 		});
 	}
 
@@ -108,9 +114,11 @@ public class FilterSupportingIdentityMappingViewType extends AbstractViewType<Fi
 		Collection<Resource> viewSources = view.getViewSource().getViewSourceModels();
 		ViewSelection selection = view.getSelection();
 		List<Resource> resourcesWithSelectedElements = viewSources.stream()
-				.filter(resource -> resource.getContents().stream().anyMatch(selection::isViewObjectSelected)).toList();
+				.filter(resource -> resource.getContents().stream()
+				.anyMatch(element -> mapOriginalRoot2RootStub.get(element) != null ? selection.isViewObjectSelected(mapOriginalRoot2RootStub.get(element)) : false))
+				.toList();
 		return ResourceCopier.copyViewSourceResources(resourcesWithSelectedElements, viewResourceSet,
-				selection::isViewObjectSelected);
+				element -> mapOriginalRoot2RootStub.get(element) != null ? selection.isViewObjectSelected(mapOriginalRoot2RootStub.get(element)) : false);
 	}
 	
 	
