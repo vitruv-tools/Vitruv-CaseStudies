@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
@@ -172,7 +174,21 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 				class2.addKeyword("subsequentlyAddedKeyword");
 				
 				final Comment comment = this.class2.createOwnedComment();
+				comment.setBody("niklasCommentClass2");
+				String name = "niklasClass2";
 				comment.addKeyword("bla");
+				
+				TreeIterator<EObject> umlIterator = getDefaultUmlModel(it).eAllContents();
+				org.eclipse.uml2.uml.Class searchedClass = null;
+				while ((searchedClass == null) && (umlIterator.hasNext())) {
+					EObject next = umlIterator.next();
+					if (next instanceof org.eclipse.uml2.uml.Class) {
+						if (name.equals(((Classifier) next).getName())) {
+							searchedClass = (org.eclipse.uml2.uml.Class) next;
+						}
+					}
+				}
+				searchedClass.getOwnedComments().add(comment);
 				
 				getDefaultUmlModel(it).getPackagedElements().add(package3);
 			};
