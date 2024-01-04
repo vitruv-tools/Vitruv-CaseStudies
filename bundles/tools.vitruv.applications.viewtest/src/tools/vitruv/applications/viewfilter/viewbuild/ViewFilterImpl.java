@@ -1,6 +1,8 @@
 package tools.vitruv.applications.viewfilter.viewbuild;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +18,7 @@ import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class ViewFilter {
+public class ViewFilterImpl implements ViewFilter {
 	
 	private Set<EObject> rootListForView;
 	
@@ -25,13 +27,17 @@ public class ViewFilter {
 	
 	private final ViewFilterBuilder builder;
 	
-	private ViewFilter(ViewFilterBuilder viewFilterBuilder) {
+	private ViewFilterImpl(ViewFilterBuilder viewFilterBuilder) {
 		builder = viewFilterBuilder;
+		rootListForView = new HashSet<EObject>();
+		mapOriginalRoot2RootStub = new HashMap();
 	}
 	
 	
-	public void filterElements(Collection<EObject> roots) {
+	public Set<EObject> filterElements(Collection<EObject> roots) {
 		addElementsToSelectionByLambda(roots);
+		removeOwnedAttributesFromClasses();
+		return rootListForView;
 	}
 	
 	
@@ -44,7 +50,8 @@ public class ViewFilter {
 		}
 	}
 	
-	public void removeOwnedAttributesFromClasses() {
+	
+	private void removeOwnedAttributesFromClasses() {
 		if (!builder.removeAttributesActive) {
 			return;
 		}
@@ -74,7 +81,7 @@ public class ViewFilter {
 				attachElementToRoot(filteredModelRootStub, copyOfContentElement);
 				
 				rootListForView.add(filteredModelRootStub);
-				mapOriginalRoot2RootStub.put(root, filteredModelRootStub);
+				getMapOriginalRoot2RootStub().put(root, filteredModelRootStub);
 			}
 		}
 	}
@@ -111,9 +118,14 @@ public class ViewFilter {
 	}
 	
 
-//---------------------------------
+	public Map<EObject, EObject> getMapOriginalRoot2RootStub() {
+		return mapOriginalRoot2RootStub;
+	}
+
+
+	//---------------------------------
 	/**
-	 * Builder for ViewFilter
+	 * Builder for ViewFilterImpl
 	 */
 	public static class ViewFilterBuilder {
 		
@@ -125,8 +137,7 @@ public class ViewFilter {
 		private Function<EObject, Boolean> filter;
 		
 		
-		public ViewFilterBuilder() {
-			
+		public ViewFilterBuilder() {	
 		}
 		
 		public ViewFilterBuilder filterByLambda(Function<EObject, Boolean> filter) {
@@ -140,8 +151,8 @@ public class ViewFilter {
 			return this;
 		}
 		
-		public ViewFilter build() {
-			return new ViewFilter(this);
+		public ViewFilterImpl build() {
+			return new ViewFilterImpl(this);
 		}
 		
 		

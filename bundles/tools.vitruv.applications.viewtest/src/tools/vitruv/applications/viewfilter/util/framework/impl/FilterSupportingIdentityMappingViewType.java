@@ -37,7 +37,7 @@ import tools.vitruv.framework.views.ViewSource;
  * selection mechanism and providing a one-to-one (identity) mapping of elements
  * within the {@link ViewSource} to a created {@link View}.
  */
-public class FilterSupportingIdentityMappingViewType extends AbstractViewType<FilterSupportingViewElementSelector<HierarchicalId>, HierarchicalId> {
+public class FilterSupportingIdentityMappingViewType extends AbstractFilterSupportingViewType<FilterSupportingViewElementSelector<HierarchicalId>, HierarchicalId> {
 	
 	private Map<EObject, EObject> mapOriginalRoot2RootStub;
 	
@@ -83,7 +83,7 @@ public class FilterSupportingIdentityMappingViewType extends AbstractViewType<Fi
 	public ModifiableView createView(FilterSupportingViewElementSelector<HierarchicalId> selector) {
 		checkArgument(selector.getViewType() == this, "cannot create view with selector for different view type");
 		mapOriginalRoot2RootStub = selector.getMapOriginalRoot2RootStub();
-		return new BasicView(selector.getViewType(), selector.getViewSource(), selector.getSelection());
+		return new BasicFilterView(selector.getViewType(), selector.getViewSource(), selector.getSelection(), selector.getViewFilter());
 	}
 
 	@Override
@@ -92,7 +92,6 @@ public class FilterSupportingIdentityMappingViewType extends AbstractViewType<Fi
 			viewResourceSet.getResources().forEach(Resource::unload);
 			viewResourceSet.getResources().clear();
 			createViewResources(view, viewResourceSet);
-			
 		});
 	}
 
