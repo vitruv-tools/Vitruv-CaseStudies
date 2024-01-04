@@ -175,7 +175,7 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 				
 				final Comment comment = this.class2.createOwnedComment();
 				comment.setBody("niklasCommentClass2");
-				String name = "niklasClass2";
+				String searchedName = "niklasClass2";
 				comment.addKeyword("bla");
 				
 				TreeIterator<EObject> umlIterator = getDefaultUmlModel(it).eAllContents();
@@ -183,7 +183,7 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 				while ((searchedClass == null) && (umlIterator.hasNext())) {
 					EObject next = umlIterator.next();
 					if (next instanceof org.eclipse.uml2.uml.Class) {
-						if (name.equals(((Classifier) next).getName())) {
+						if (searchedName.equals(((Classifier) next).getName())) {
 							searchedClass = (org.eclipse.uml2.uml.Class) next;
 						}
 					}

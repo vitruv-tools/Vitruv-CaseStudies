@@ -29,12 +29,12 @@ public class ViewFilterImpl implements ViewFilter {
 	
 	private ViewFilterImpl(ViewFilterBuilder viewFilterBuilder) {
 		builder = viewFilterBuilder;
-		rootListForView = new HashSet<EObject>();
 		mapOriginalRoot2RootStub = new HashMap();
 	}
 	
 	
 	public Set<EObject> filterElements(Collection<EObject> roots) {
+		rootListForView = new HashSet<EObject>();
 		addElementsToSelectionByLambda(roots);
 		removeOwnedAttributesFromClasses();
 		return rootListForView;

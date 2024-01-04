@@ -15,7 +15,7 @@ import tools.vitruv.framework.views.ViewSelector;
 
 public class BasicFilterView extends BasicView {
 	
-	private ViewFilter viewFilter;
+	private final ViewFilter viewFilter;
 
 	protected BasicFilterView(FilteredViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
 			ChangeableViewSource viewSource, ViewSelection selection, ViewFilter viewFilter) {
@@ -31,8 +31,11 @@ public class BasicFilterView extends BasicView {
 	
 	
 	private void filterSelectedElements() {
-		Set<EObject> filteredElements = viewFilter.filterElements(getRootObjects());
-		setSelection(new ElementViewSelection(filteredElements));
+		if (viewFilter != null) {
+			//If the viewFilter has already been set, use it..
+			Set<EObject> filteredElements = viewFilter.filterElements(getRootObjects());
+			setSelection(new ElementViewSelection(filteredElements));
+		}
 	}
 
 }
