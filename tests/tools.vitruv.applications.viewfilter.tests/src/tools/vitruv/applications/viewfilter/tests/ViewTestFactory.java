@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
+import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 
 public class ViewTestFactory extends TestViewFactory {
@@ -44,6 +45,12 @@ public class ViewTestFactory extends TestViewFactory {
 	public View createUmlView() {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
 		return createViewOfElements("UML", rootTypes);
+	}
+	
+	private View createPcmView() {
+		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Repository.class);
+		rootTypes.add(RepositoryComponent.class);
+		return createViewOfElements("PCM packages and components", rootTypes);
 	}
 
 	public View createUmlAndPcmClassesView() {
@@ -68,28 +75,43 @@ public class ViewTestFactory extends TestViewFactory {
 		return view;
 	}
 	
+	public View createFilteredPcmView() {
+		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Repository.class);
+		return createFilteredForNoAttributesViewOfElements("PCM", rootTypes);
+	}
+	
 	
 	//--------------Boilerplate code -----------------//
 	//
 	
-	public View createFilteredViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
+	public View createViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
 		ViewSelector selector = viewProvider.createSelector(ViewTypeFactory.createIdentityMappingViewType(viewName));
 		selector.getSelectableElements().stream()
 				.filter(element -> rootTypes.stream().anyMatch(it -> it.isInstance(element)))
 				.forEach(element -> selector.setSelected(element, true));
+//		if (!selector.getSelectableElements().isEmpty()) {
+//			Object obj = (selector.getSelectableElements().toArray())[0];
+//			boolean bla = obj instanceof Repository;
+//		}
+		
 		View view = selector.createView();
 		assertThat("view must not be null", view, not(equalTo(null)));
 		return view;
-	}	
+	}
 	
 	
-		/**
-	* Changes the UML view containing all UML models as root elements 
-	* according to the given modification function. 
-	* Records the performed changes, commits the recorded changes, and closes the view afterwards.
-	*/
 	public void changeUmlView(Consumer<CommittableView> modelModification) throws Exception {
 		changeViewRecordingChanges(createUmlView(), modelModification);
+	}
+	
+	/**
+	 * Changes the PCM view containing all PCM packages and classes as root elements 
+	 * according to the given modification function. 
+	 * Records the performed changes, commits the recorded changes, and closes the view afterwards.
+	 * @throws Exception 
+	 */
+	public void changePcmView(Consumer<CommittableView> modelModification) throws Exception {
+		changeViewRecordingChanges(createPcmView(), modelModification);
 	}
 		
 	
@@ -100,7 +122,7 @@ public class ViewTestFactory extends TestViewFactory {
 	public View createFilteredForNoAttributesViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
 		viewType = FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName);
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
-		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(selector, object, "niklasClass2");
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass3");
 		selector.addElementsToSelectionByLambda(function);
 		selector.removeOwnedAttributesFromClasses();		
 
@@ -119,7 +141,18 @@ public class ViewTestFactory extends TestViewFactory {
 	}
 	
 	
-	private boolean hasNoAttribute(ViewSelector selector, EObject object, String name) {
+	private boolean hasInstanceName(EObject object, String name) {
+		if (object instanceof org.palladiosimulator.pcm.core.entity.NamedElement) {
+			if (name.equals(((org.palladiosimulator.pcm.core.entity.NamedElement) object).getEntityName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	
+	
+	private boolean hasNoAttribute(EObject object, String name) {
 		if (object instanceof org.eclipse.uml2.uml.Class) {
 			if (object instanceof NamedElement) {
 				if (name.equals(((NamedElement) object).getName())) {

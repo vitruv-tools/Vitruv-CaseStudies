@@ -17,6 +17,11 @@ import org.eclipse.net4j.util.ImplementationError;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLFactory;
+import org.palladiosimulator.pcm.PcmFactory;
+import org.palladiosimulator.pcm.repository.DataType;
+import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.repository.RepositoryComponent;
+import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 public class ViewFilterImpl implements ViewFilter {
 	
@@ -69,7 +74,7 @@ public class ViewFilterImpl implements ViewFilter {
 	
 	
 	private void filterAllContents(EObject root, Function<EObject, Boolean> filter, Set<EObject> rootListForView) {
-		Model filteredModelRootStub = null;
+		EObject filteredModelRootStub = null;
 		Iterator<EObject> contentIterator = root.eAllContents();
 		while(contentIterator.hasNext()) {
 			EObject contentElement = contentIterator.next();
@@ -96,21 +101,46 @@ public class ViewFilterImpl implements ViewFilter {
 	}
 	
 	
-	private void attachElementToRoot(Model root, EObject object) {
+	private void attachElementToRoot(EObject root, EObject object) {
+		if (root instanceof Model) {
+			attachElementToRootUml((Model) root, object);
+		} else if (root instanceof Repository) {
+			attachElementToRootPcm((Repository) root, object);
+		} else {
+			throw new ImplementationError("Not implemented yet! Undefined type: " + object.eClass());
+		}
+	}
+	
+	
+	private void attachElementToRootUml(Model root, EObject object) {
 		if (object instanceof Type) {
 			EObject objectCopy = EcoreUtil.copy(object);
 			root.getOwnedTypes().add((Type) objectCopy);
 		} else {
 			System.out.println("Warning: Undefined type: " + object.eClass());
 		}
+	} 
+	
+	
+	private void attachElementToRootPcm(Repository root, EObject object) {
+		if (object instanceof RepositoryComponent) {
+			root.getComponents__Repository().add((RepositoryComponent) object);
+		} else if (object instanceof DataType) {
+			root.getDataTypes__Repository().add((DataType) object);
+		} else {
+			System.out.println("Warning: Undefined type: " + object.eClass());
+		}
 	}
 	
 	
-	private Model createFilteredModelRootIfNotExistent(Model filteredRoot, EObject root) {
+	private EObject createFilteredModelRootIfNotExistent(EObject filteredRoot, EObject root) {
 		if (filteredRoot == null) {
 			if (root instanceof Model) {
 				return UMLFactory.eINSTANCE.createModel();	
-			} else {
+			}  else if (root instanceof Repository) {
+				return RepositoryFactory.eINSTANCE.createRepository();
+			}
+			else {
 				throw new ImplementationError("nbruening: Not implemented yet");
 			}
 		}

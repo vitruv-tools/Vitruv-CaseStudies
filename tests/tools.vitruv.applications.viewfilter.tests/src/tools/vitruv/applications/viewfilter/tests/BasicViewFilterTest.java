@@ -25,12 +25,19 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.palladiosimulator.pcm.repository.BasicComponent;
+import org.palladiosimulator.pcm.repository.CompositeDataType;
+import org.palladiosimulator.pcm.repository.DataType;
+import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification;
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification;
 import tools.vitruv.applications.testutility.uml.UmlQueryUtil;
 import tools.vitruv.applications.viewfilter.util.framework.impl.FilterSupportingIdentityMappingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView;
+import tools.vitruv.applications.viewfilter.utils.PcmQueryUtil;
+import tools.vitruv.applications.viewfilter.utils.PcmUmlClassApplicationTestHelper;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
@@ -43,6 +50,12 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 
 	@Accessors(AccessorType.PROTECTED_GETTER)
 	private static final String UML_MODEL_NAME = "model";
+	
+	@Accessors(AccessorType.PROTECTED_GETTER)
+	private static final String PCM_MODEL_NAME = "Repository";
+	
+
+	private static final String PCM_REPOSITORY_FILE_EXTENSION = "repository";
 
 	@Accessors(AccessorType.PROTECTED_GETTER)
 	private static final String MODEL_FOLDER_NAME = "model";
@@ -76,6 +89,7 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 	@Test
 	public void testCreateFilteredUmlView() {
 		View view = improvedViewTestFactory.createFilteredUmlView(this);
+	//	View view = improvedViewTestFactory.createFilteredPcmView();
 //		((FilterSupportingIdentityMappingViewType) improvedViewTestFactory.viewType)
 //				.updateView(((ModifiableView) view));
 		
@@ -107,6 +121,7 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 						_combinedPcmToUmlClassReactionsChangePropagationSpecification,
 						_combinedUmlClassToPcmReactionsChangePropagationSpecification));
 	}
+	
 
 	@BeforeEach
 	public void setup() {
@@ -115,7 +130,23 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 			it.setName(UML_MODEL_NAME);
 		};
 		createBiggerUmlModel(setNameFunction);
+		createPcmModel();
 	}
+	
+	protected void createUmlModel(final Procedure1<? super Model> modelInitialization) {
+		try {
+			final Consumer<CommittableView> firstChangeUmlFunction = (CommittableView it) -> {
+				final Model umlModel = UMLFactory.eINSTANCE.createModel();
+				createAndRegisterRoot(it, umlModel, this.getUri(getProjectModelPath(UML_MODEL_NAME)));
+				modelInitialization.apply(umlModel);
+			};
+			improvedViewTestFactory.changeUmlView(firstChangeUmlFunction);
+			
+		} catch (Throwable _e) {
+			throw Exceptions.sneakyThrow(_e);
+		}
+	}
+	
 
 	protected void createBiggerUmlModel(final Procedure1<? super Model> modelInitialization) {
 		try {
@@ -198,8 +229,48 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 			throw Exceptions.sneakyThrow(_e);
 		}
 	}
+	
+	
+	protected void createPcmModel() {
+		
+		getUserInteraction().addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE);
+		Consumer<CommittableView> createPcmRepoFunction = (CommittableView it) -> {
+			Repository repository = RepositoryFactory.eINSTANCE.createRepository();
+			repository.setEntityName(PCM_MODEL_NAME);
+			it.registerRoot(repository, getUri(getPcmProjectModelPath(repository.getEntityName(), PCM_REPOSITORY_FILE_EXTENSION)));
+			//createAndRegisterRoot(it, repository, this.getUri(getProjectModelPath(PCM_MODEL_NAME)));		
+		};
+		
+		try {
+			improvedViewTestFactory.changePcmView(createPcmRepoFunction);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		Consumer<CommittableView> changePcmFunction = (CommittableView it) -> {
+			Repository repository = getDefaultPcmRepository(it);
+			BasicComponent createBasicComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
+			createBasicComponent.setEntityName("Niklas Basic PCM component 1");
+			repository.getComponents__Repository().add(createBasicComponent);
+			
+			CompositeDataType compositeDataType1 = RepositoryFactory.eINSTANCE.createCompositeDataType();
+			compositeDataType1.setEntityName("niklasPcmCompositeDataType1");
+			repository.getDataTypes__Repository().add(compositeDataType1);
+
+		};
+		
+		try {
+			improvedViewTestFactory.changePcmView(changePcmFunction);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	
+	private Path getPcmProjectModelPath(String modelName, String modelFileExtension) {
+		return Path.of("pcm").resolve(modelName + "." + modelFileExtension);
+	}
 	
 	protected void createAndRegisterRoot(final View view, final EObject rootObject, final URI persistenceUri) {
 		view.registerRoot(rootObject, persistenceUri);
@@ -211,6 +282,10 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 
 	protected Model getDefaultUmlModel(final View view) {
 		return UmlQueryUtil.claimUmlModel(view, UML_MODEL_NAME);
+	}
+	
+	private Repository getDefaultPcmRepository(View view) {
+		return PcmQueryUtil.claimPcmRepository(view, PCM_MODEL_NAME);
 	}
 
 	@Pure
