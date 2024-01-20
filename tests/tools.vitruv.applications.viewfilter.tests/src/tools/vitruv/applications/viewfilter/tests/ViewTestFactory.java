@@ -81,6 +81,13 @@ public class ViewTestFactory extends TestViewFactory {
 	}
 	
 	
+	public View createCountUmlElementsView(Function<EObject, Boolean> filterFunction) {
+		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
+		return createAbstractedFilteredView("Information Page", rootTypes, filterFunction);
+		
+	}
+	
+	
 	//--------------Boilerplate code -----------------//
 	//
 	
@@ -119,10 +126,22 @@ public class ViewTestFactory extends TestViewFactory {
 //-------------End of Boilerplate code----------------//	
 	
 	
+	public View createAbstractedFilteredView(String viewName, Collection<Class<?>> rootTypes, Function<EObject, Boolean> filterFunction) {
+		viewType = FilterSupportingViewTypeFactory.createAbstractedFilterViewViewType(viewName);
+		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
+		selector.addElementsToSelectionByLambda(filterFunction);
+		selector.removeOwnedAttributesFromClasses();		
+
+		View view = selector.createView();
+		assertThat("view must not be null", view, not(equalTo(null)));
+		return view;
+	}
+	
+	
 	public View createFilteredForNoAttributesViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
 		viewType = FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName);
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
-		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass3");
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
 		selector.addElementsToSelectionByLambda(function);
 		selector.removeOwnedAttributesFromClasses();		
 

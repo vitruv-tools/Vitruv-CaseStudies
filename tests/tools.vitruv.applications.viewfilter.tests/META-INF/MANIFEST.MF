@@ -5,7 +5,8 @@ Bundle-SymbolicName: tools.vitruv.applications.viewfilter.tests
 Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.viewfilter.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Import-Package: org.junit.jupiter.api,
+Import-Package: com.niklas.niklasproject.niklasdomain,
+ org.junit.jupiter.api,
  org.junit.jupiter.api.extension,
  tools.vitruv.applications.viewfilter.util.framework,
  tools.vitruv.applications.viewfilter.util.framework.impl,
@@ -23,6 +24,7 @@ Require-Bundle: tools.vitruv.testutils.vsum,
  org.palladiosimulator.pcm,
  edu.kit.ipd.sdq.commons.util.emf,
  slf4j.api;bundle-version="2.0.9",
- org.emftext.language.java;bundle-version="1.4.1"
+ org.emftext.language.java;bundle-version="1.4.1",
+ org.eclipse.emf.ecore
 Export-Package: tools.vitruv.applications.viewfilter.tests
 Bundle-Vendor: vitruv.tools

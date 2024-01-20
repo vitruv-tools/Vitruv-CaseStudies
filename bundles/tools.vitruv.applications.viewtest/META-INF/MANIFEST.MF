@@ -19,3 +19,4 @@ Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.viewfilter.util.framework,
  tools.vitruv.applications.viewfilter.util.framework.impl,
  tools.vitruv.applications.viewfilter.util.framework.selectors
+Import-Package: com.niklas.niklasproject.niklasdomain

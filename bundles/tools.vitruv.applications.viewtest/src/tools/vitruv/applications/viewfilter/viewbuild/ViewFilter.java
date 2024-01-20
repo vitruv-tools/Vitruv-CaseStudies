@@ -5,10 +5,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 
 public interface ViewFilter {
 
-	Set<EObject> filterElements(Collection<EObject> roots);
+	Set<EObject> filterElements(Collection<EObject> roots, Collection<Resource> viewSources);
 	
 	Map<EObject, EObject> getMapOriginalRoot2RootStub();
 }

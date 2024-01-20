@@ -1,8 +1,12 @@
 package tools.vitruv.applications.viewfilter.tests;
 
+import com.niklas.niklasproject.niklasdomain.InformationStructure;
+import com.niklas.niklasproject.niklasdomain.NiklasdomainFactory;
+
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -11,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.UMLFactory;
@@ -92,6 +97,9 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 	//	View view = improvedViewTestFactory.createFilteredPcmView();
 //		((FilterSupportingIdentityMappingViewType) improvedViewTestFactory.viewType)
 //				.updateView(((ModifiableView) view));
+		view.update();
+		view.update();
+		view.getRootObjects();
 		
 		modifyModel();
 		
@@ -103,6 +111,22 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 		view.getRootObjects();
 		view.getViewType();
 	}
+	
+	@Test
+	public void testCreateCountingView() {
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		View view = improvedViewTestFactory.createCountUmlElementsView(function);
+		view.getSelection();
+		view.getRootObjects();
+		
+		modifyModel();
+		
+		view.update();
+		
+		view.getSelection();
+	}
+	
+	
 
 //	  @Test
 //	  public void testFilterForName() {
@@ -130,7 +154,7 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 			it.setName(UML_MODEL_NAME);
 		};
 		createBiggerUmlModel(setNameFunction);
-		createPcmModel();
+		//createPcmModel();
 	}
 	
 	protected void createUmlModel(final Procedure1<? super Model> modelInitialization) {
@@ -296,6 +320,18 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 	@Pure
 	public org.eclipse.uml2.uml.Class getClass2() {
 		return this.class2;
+	}
+	
+	private boolean hasNoAttribute(EObject object, String name) {
+		if (object instanceof org.eclipse.uml2.uml.Class) {
+			if (object instanceof NamedElement) {
+				if (name.equals(((NamedElement) object).getName())) {
+					return true;
+				}
+			}
+			
+		}
+		return false;
 	}
 
 }

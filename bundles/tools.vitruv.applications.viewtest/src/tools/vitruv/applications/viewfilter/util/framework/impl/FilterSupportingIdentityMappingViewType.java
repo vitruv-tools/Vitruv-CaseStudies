@@ -21,6 +21,7 @@ import org.eclipse.uml2.uml.internal.resource.UMLResourceImpl;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopier;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.DirectViewElementSelector;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelector;
+import tools.vitruv.applications.viewfilter.views.BasicFilterView;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.atomic.uuid.Uuid;
 import tools.vitruv.change.atomic.uuid.UuidResolver;
@@ -38,9 +39,6 @@ import tools.vitruv.framework.views.ViewSource;
  * within the {@link ViewSource} to a created {@link View}.
  */
 public class FilterSupportingIdentityMappingViewType extends AbstractFilterSupportingViewType<FilterSupportingViewElementSelector<HierarchicalId>, HierarchicalId> {
-	
-	private Map<EObject, EObject> mapOriginalRoot2RootStub;
-	
 	
 	public FilterSupportingIdentityMappingViewType(String name) {
 		super(name);
@@ -82,7 +80,6 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 	@Override
 	public ModifiableView createView(FilterSupportingViewElementSelector<HierarchicalId> selector) {
 		checkArgument(selector.getViewType() == this, "cannot create view with selector for different view type");
-		mapOriginalRoot2RootStub = selector.getMapOriginalRoot2RootStub();
 		return new BasicFilterView(selector.getViewType(), selector.getViewSource(), selector.getSelection(), selector.getViewFilter());
 	}
 
@@ -112,6 +109,18 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 	private Map<Resource, Resource> createViewResources(ModifiableView view, ResourceSet viewResourceSet) {
 		Collection<Resource> viewSources = view.getViewSource().getViewSourceModels();
 		ViewSelection selection = view.getSelection();
+		Map<EObject, EObject> mapOriginalRoot2RootStub = ((BasicFilterView) view).getMapOriginalRoot2RootStub();
+		for (Resource resource : viewSources) {
+			EList<EObject> contents = resource.getContents();
+			for (EObject root : contents) {
+				EObject rootStub = mapOriginalRoot2RootStub.get(root);
+				if (rootStub != null) {
+					Boolean selected = selection.isViewObjectSelected(rootStub);
+					System.out.println("Bla");
+				}
+			}
+			
+		}
 		List<Resource> resourcesWithSelectedElements = viewSources.stream()
 				.filter(resource -> resource.getContents().stream()
 				.anyMatch(element -> mapOriginalRoot2RootStub.get(element) != null ? selection.isViewObjectSelected(mapOriginalRoot2RootStub.get(element)) : false))

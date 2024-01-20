@@ -24,7 +24,7 @@ import static com.google.common.base.Preconditions.checkState
 
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.withGlobalFactories
 
-package class BasicView implements ModifiableView, ChangePropagationListener {
+public class BasicView implements ModifiableView, ChangePropagationListener {
     @Accessors(PUBLIC_GETTER, PROTECTED_SETTER)
     var ViewSelection selection
     @Accessors(PUBLIC_GETTER, PROTECTED_SETTER)

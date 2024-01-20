@@ -1,5 +1,6 @@
 package tools.vitruv.applications.viewfilter.viewbuild;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.function.Function;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.net4j.util.ImplementationError;
 import org.eclipse.uml2.uml.Model;
@@ -22,6 +24,8 @@ import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
+
+import tools.vitruv.applications.viewfilter.helpers.ViewFilterHelper;
 
 public class ViewFilterImpl implements ViewFilter {
 	
@@ -38,20 +42,26 @@ public class ViewFilterImpl implements ViewFilter {
 	}
 	
 	
-	public Set<EObject> filterElements(Collection<EObject> roots) {
+	
+	public Set<EObject> filterElements(Collection<EObject> roots, Collection<Resource> viewSources) {
+		Map<EObject, EObject> newMapOriginalRoot2RootStub = new HashMap();
 		rootListForView = new HashSet<EObject>();
-		addElementsToSelectionByLambda(roots);
+		List<EObject> rootsInViewSource = extractRootsInViewSource(viewSources, roots);
+		addElementsToSelectionByLambda(rootsInViewSource, newMapOriginalRoot2RootStub);
 		removeOwnedAttributesFromClasses();
+		mapOriginalRoot2RootStub = newMapOriginalRoot2RootStub;
 		return rootListForView;
 	}
 	
 	
-	private void addElementsToSelectionByLambda(Collection<EObject> roots) {
+	
+	
+	private void addElementsToSelectionByLambda(List<EObject> roots, Map<EObject, EObject> newMapOriginalRoot2RootStub) {
 		if (!builder.filterByLambdaActive) {
 			return;
 		}
 		for (EObject root : roots) {
-			filterAllContents(root, builder.filter, rootListForView);
+			filterAllContents(root, builder.filter, rootListForView, newMapOriginalRoot2RootStub);
 		}
 	}
 	
@@ -62,7 +72,7 @@ public class ViewFilterImpl implements ViewFilter {
 		}
 		for (EObject root : rootListForView) {
 			TreeIterator<EObject> content = root.eAllContents();
-			List<EObject> contentList = convertTreeIterator2List(content);
+			List<EObject> contentList = ViewFilterHelper.convertTreeIterator2List(content);
 			for (EObject object : contentList) {
 				if (object instanceof org.eclipse.uml2.uml.Class) {
 					org.eclipse.uml2.uml.Class classifierObject = (org.eclipse.uml2.uml.Class) object;
@@ -73,31 +83,28 @@ public class ViewFilterImpl implements ViewFilter {
 	}
 	
 	
-	private void filterAllContents(EObject root, Function<EObject, Boolean> filter, Set<EObject> rootListForView) {
+	private void filterAllContents(EObject root, Function<EObject, Boolean> filter, Set<EObject> rootListForView, Map<EObject, EObject> newMapOriginalRoot2RootStub) {
 		EObject filteredModelRootStub = null;
 		Iterator<EObject> contentIterator = root.eAllContents();
 		while(contentIterator.hasNext()) {
 			EObject contentElement = contentIterator.next();
 			if (filter.apply(contentElement)) {
-				//testListObjectsToDisplay.add(contentElement);
 				
-				filteredModelRootStub = createFilteredModelRootIfNotExistent(filteredModelRootStub, root);
+				filteredModelRootStub = createAndRegisterModelRootIfNotExistent(filteredModelRootStub, root, newMapOriginalRoot2RootStub);
 				EObject copyOfContentElement = EcoreUtil.copy(contentElement);
 				attachElementToRoot(filteredModelRootStub, copyOfContentElement);
-				
-				rootListForView.add(filteredModelRootStub);
-				getMapOriginalRoot2RootStub().put(root, filteredModelRootStub);
 			}
 		}
 	}
 	
-	
-	private List<EObject> convertTreeIterator2List(TreeIterator<EObject> content) {
-		List<EObject> list = new LinkedList<EObject>();
-		while(content.hasNext()) {
-			list.add(content.next());
-		}
-		return list;
+	private List<EObject> extractRootsInViewSource(Collection<Resource> viewSources, Collection<EObject> roots) {
+		List<Resource> resourcesWithSelectedElements = viewSources.stream()
+				.filter(resource -> resource.getContents().stream()
+				.anyMatch(element -> mapOriginalRoot2RootStub.get(element) != null ? roots.contains(mapOriginalRoot2RootStub.get(element)) : false))
+				.toList();
+		List<EObject> extractedRoots = new ArrayList();
+		resourcesWithSelectedElements.forEach(it -> extractedRoots.addAll(it.getContents()));
+		return extractedRoots;
 	}
 	
 	
@@ -132,20 +139,47 @@ public class ViewFilterImpl implements ViewFilter {
 		}
 	}
 	
+	private EObject createAndRegisterModelRootIfNotExistent(EObject filteredRoot, EObject root, Map<EObject, EObject> newMapOriginalRoot2RootStub) {
+		if (filteredRoot == null) {
+			EObject modelRoot = createFilteredModelRootIfNotExistent(filteredRoot, root);
+			rootListForView.add(modelRoot);
+			newMapOriginalRoot2RootStub.put(root, modelRoot);
+			return modelRoot;
+		} else {
+			return filteredRoot;
+		}
+		
+	}
+	
+	
+	private EObject findOriginalRoot(EObject root) {
+		
+		
+		if ((!mapOriginalRoot2RootStub.isEmpty()) && mapOriginalRoot2RootStub.containsValue(root)) {
+			Set<EObject> keySet = mapOriginalRoot2RootStub.keySet();
+			for (EObject key : keySet) {
+				if (mapOriginalRoot2RootStub.get(key).equals(root)) {
+					return key;
+				}
+			}
+			throw new IllegalStateException("Value should be in map, but could not be found");
+		} 
+		return root;
+	}
+	
 	
 	private EObject createFilteredModelRootIfNotExistent(EObject filteredRoot, EObject root) {
-		if (filteredRoot == null) {
-			if (root instanceof Model) {
-				return UMLFactory.eINSTANCE.createModel();	
-			}  else if (root instanceof Repository) {
-				return RepositoryFactory.eINSTANCE.createRepository();
-			}
-			else {
-				throw new ImplementationError("nbruening: Not implemented yet");
-			}
+		if (root instanceof Model) {
+			return UMLFactory.eINSTANCE.createModel();	
+		}  else if (root instanceof Repository) {
+			return RepositoryFactory.eINSTANCE.createRepository();
 		}
-		return filteredRoot;
+		else {
+			throw new ImplementationError("nbruening: Not implemented yet");
+		}
 	}
+	
+	
 	
 
 	public Map<EObject, EObject> getMapOriginalRoot2RootStub() {

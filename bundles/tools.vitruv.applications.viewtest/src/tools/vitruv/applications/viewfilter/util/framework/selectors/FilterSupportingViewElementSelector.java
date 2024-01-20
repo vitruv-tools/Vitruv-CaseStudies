@@ -28,6 +28,7 @@ import tools.vitruv.applications.viewfilter.util.framework.selection.ElementView
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilterImpl;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilterImpl.ViewFilterBuilder;
+import tools.vitruv.applications.viewfilter.views.BasicFilterView;
 import tools.vitruv.framework.views.ChangeableViewSource;
 import tools.vitruv.framework.views.ModifiableViewSelection;
 import tools.vitruv.framework.views.View;
@@ -45,6 +46,9 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	private ViewFilterBuilder viewFilterBuilder;
 
 	private ViewFilterImpl viewFilter;
+	
+	//TODO nbruening: Replace by Interface
+	private BasicFilterView createdView;
 
 	public FilterSupportingViewElementSelector(
 			FilteredViewCreatingViewType<FilterSupportingViewElementSelector<Id>, Id> viewType,
@@ -65,13 +69,14 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	@Override
 	public View createView() {
 		viewFilter = viewFilterBuilder.build();
-		Set<EObject> rootListForView = getViewFilter().filterElements(getSelectableElements());
+		Set<EObject> rootListForView = getViewFilter().filterElements(getSelectableElements(), viewSource.getViewSourceModels());
 
 		viewSelection = new ElementViewSelection(rootListForView);
 		rootListForView.forEach(element -> setSelected(element, true));
 		// TODO nbruening ggf noch anpassen
 		Preconditions.checkState(this.isValid(), "the current selection is invalid, thus a view cannot be created");
-		return this.viewType.createView(this);
+		createdView = (BasicFilterView) this.viewType.createView(this);
+		return createdView;
 	}
 
 	public void selectElementsOfRootType(Collection<Class<?>> rootTypes) {
@@ -126,7 +131,7 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	}
 
 	public Map<EObject, EObject> getMapOriginalRoot2RootStub() {
-		return getViewFilter() != null ? getViewFilter().getMapOriginalRoot2RootStub() : Collections.emptyMap();
+		return createdView != null ? createdView.getMapOriginalRoot2RootStub() : Collections.emptyMap();
 	}
 
 	public ViewFilter getViewFilter() {
