@@ -1,8 +1,8 @@
 package tools.vitruv.applications.util.temporary.java
 
 import java.util.Arrays
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.Package
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.Package
 import static com.google.common.base.Preconditions.checkState
 
 class JavaPersistenceHelper {

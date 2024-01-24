@@ -11,20 +11,22 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.emftext.commons.layout.LayoutInformation;
-import org.emftext.language.java.JavaPackage;
-import org.emftext.language.java.classifiers.ClassifiersFactory;
-import org.emftext.language.java.classifiers.ConcreteClassifier;
-import org.emftext.language.java.classifiers.Interface;
-import org.emftext.language.java.commons.NamedElement;
-import org.emftext.language.java.containers.CompilationUnit;
-import org.emftext.language.java.containers.ContainersFactory;
-import org.emftext.language.java.containers.Package;
-import org.emftext.language.java.members.InterfaceMethod;
-import org.emftext.language.java.members.Member;
-import org.emftext.language.java.members.MembersFactory;
-import org.emftext.language.java.resource.java.mopp.JavaResourceFactory;
-import org.emftext.language.java.types.TypesFactory;
+import tools.mdsd.jamopp.model.java.JavaPackage;
+import tools.mdsd.jamopp.model.java.classifiers.ClassifiersFactory;
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier;
+import tools.mdsd.jamopp.model.java.classifiers.Interface;
+import tools.mdsd.jamopp.model.java.commons.NamedElement;
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
+import tools.mdsd.jamopp.model.java.containers.ContainersFactory;
+import tools.mdsd.jamopp.model.java.containers.Package;
+import tools.mdsd.jamopp.model.java.members.InterfaceMethod;
+import tools.mdsd.jamopp.model.java.members.Member;
+import tools.mdsd.jamopp.model.java.members.MembersFactory;
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory;
+import tools.mdsd.jamopp.model.java.types.TypesFactory;
+import tools.mdsd.jamopp.resource.JavaResource2Factory;
+import tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,8 +39,8 @@ public class JaMoPPTest {
 		EPackage.Registry.INSTANCE.put(JavaPackage.eNS_URI, JavaPackage.eINSTANCE);
 		final Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		final Map<String, Object> m = reg.getExtensionToFactoryMap();
-		m.put("java", new JavaResourceFactory());
-		m.put("", new JavaResourceFactory());
+		m.put("java", new JavaResource2Factory());
+		m.put("", new JavaResource2Factory());
 	}
 
 	@Test
@@ -49,7 +51,7 @@ public class JaMoPPTest {
 		final CompilationUnit jaMoPPCompilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit();
 		jaMoPPCompilationUnit.setName("TestJava.java");
 		jaMoPPCompilationUnit.getClassifiers().add(jaMoPPInterface);
-		jaMoPPPackage.getCompilationUnits().add(jaMoPPCompilationUnit);
+		JavaContainerAndClassifierUtil.updateNamespaces(jaMoPPCompilationUnit, jaMoPPPackage);
 		jaMoPPPackage.setName("testJaMoPPPackage");
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		String uriStr = "src/testpackage/" + jaMoPPCompilationUnit.getName();
@@ -98,6 +100,7 @@ public class JaMoPPTest {
 		final InterfaceMethod ifMethod = MembersFactory.eINSTANCE.createInterfaceMethod();
 		ifMethod.setName("testMethod");
 		ifMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
+		ifMethod.setStatement(StatementsFactory.eINSTANCE.createEmptyStatement());
 		resource.getContents().add(cu);
 		resource.save(null);
 		jaIf.getMembers().add(ifMethod);
@@ -132,7 +135,7 @@ public class JaMoPPTest {
 
 	private void printLayoutInformation(final NamedElement namedElement) {
 		LOGGER.trace("commenatable.getLayoutInformations(): " + namedElement.getLayoutInformations());
-		for (final LayoutInformation layoutInformation : namedElement.getLayoutInformations()) {
+		for (final tools.mdsd.jamopp.model.commons.layout.LayoutInformation layoutInformation : namedElement.getLayoutInformations()) {
 			final int startOffset = layoutInformation.getStartOffset();
 			LOGGER.trace("Start offset for " + namedElement.getName() + ": " + startOffset);
 		}

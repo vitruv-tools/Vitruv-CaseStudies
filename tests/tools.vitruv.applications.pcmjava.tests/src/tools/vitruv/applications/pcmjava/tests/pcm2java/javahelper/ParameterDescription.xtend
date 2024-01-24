@@ -1,6 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 
-import org.emftext.language.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.types.TypeReference
 
 class ParameterDescription {
 	public final String name

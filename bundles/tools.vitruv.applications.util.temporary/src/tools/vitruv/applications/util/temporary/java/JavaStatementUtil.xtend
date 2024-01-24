@@ -2,26 +2,26 @@ package tools.vitruv.applications.util.temporary.java
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.expressions.AssignmentExpression
-import org.emftext.language.java.expressions.AssignmentExpressionChild
-import org.emftext.language.java.expressions.EqualityExpression
-import org.emftext.language.java.expressions.EqualityExpressionChild
-import org.emftext.language.java.expressions.Expression
-import org.emftext.language.java.expressions.ExpressionsFactory
-import org.emftext.language.java.literals.LiteralsFactory
-import org.emftext.language.java.literals.This
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.operators.AssignmentOperator
-import org.emftext.language.java.operators.EqualityOperator
-import org.emftext.language.java.references.IdentifierReference
-import org.emftext.language.java.references.ReferenceableElement
-import org.emftext.language.java.references.ReferencesFactory
-import org.emftext.language.java.references.SelfReference
-import org.emftext.language.java.statements.Condition
-import org.emftext.language.java.statements.ExpressionStatement
-import org.emftext.language.java.statements.Return
-import org.emftext.language.java.statements.Statement
-import org.emftext.language.java.statements.StatementsFactory
+import tools.mdsd.jamopp.model.java.expressions.AssignmentExpression
+import tools.mdsd.jamopp.model.java.expressions.AssignmentExpressionChild
+import tools.mdsd.jamopp.model.java.expressions.EqualityExpression
+import tools.mdsd.jamopp.model.java.expressions.EqualityExpressionChild
+import tools.mdsd.jamopp.model.java.expressions.Expression
+import tools.mdsd.jamopp.model.java.expressions.ExpressionsFactory
+import tools.mdsd.jamopp.model.java.literals.LiteralsFactory
+import tools.mdsd.jamopp.model.java.literals.This
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.operators.AssignmentOperator
+import tools.mdsd.jamopp.model.java.operators.EqualityOperator
+import tools.mdsd.jamopp.model.java.references.IdentifierReference
+import tools.mdsd.jamopp.model.java.references.ReferenceableElement
+import tools.mdsd.jamopp.model.java.references.ReferencesFactory
+import tools.mdsd.jamopp.model.java.references.SelfReference
+import tools.mdsd.jamopp.model.java.statements.Condition
+import tools.mdsd.jamopp.model.java.statements.ExpressionStatement
+import tools.mdsd.jamopp.model.java.statements.Return
+import tools.mdsd.jamopp.model.java.statements.Statement
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
 
 /**
  * Util class for the creation and retrieving of statements.

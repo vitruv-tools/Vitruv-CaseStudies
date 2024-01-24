@@ -1,8 +1,8 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java
 
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.Package
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.Package
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.system.System
 import tools.vitruv.framework.views.View

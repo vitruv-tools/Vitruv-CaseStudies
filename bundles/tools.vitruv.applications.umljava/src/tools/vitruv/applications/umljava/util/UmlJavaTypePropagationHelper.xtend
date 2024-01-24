@@ -9,11 +9,11 @@ import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLPackage
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.types.ClassifierReference
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.types.ClassifierReference
+import tools.mdsd.jamopp.model.java.types.NamespaceClassifierReference
+import tools.mdsd.jamopp.model.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import tools.vitruv.applications.util.temporary.java.JavaModificationUtil
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 import tools.vitruv.change.interaction.UserInteractor
@@ -58,7 +58,7 @@ class UmlJavaTypePropagationHelper {
 	}
 
 	def static dispatch Type getUmlTypeFromReference(
-		org.emftext.language.java.types.PrimitiveType jRef,
+		tools.mdsd.jamopp.model.java.types.PrimitiveType jRef,
 		CorrespondenceRetriever correspondenceRetriever
 	) {
 		return PrimitiveTypesPropagation.mapJavaPrimitiveTypeToUmlPrimitiveType(jRef, correspondenceRetriever)
@@ -201,19 +201,19 @@ class UmlJavaTypePropagationHelper {
 		 * Returns <code>null</code> if there is no unified type for the given type.
 		 */
 		private def static UnifiedPrimitiveType getUnifiedNameForJavaPrimitiveTypeName(
-			org.emftext.language.java.types.PrimitiveType javaPrimitiveType) {
+			tools.mdsd.jamopp.model.java.types.PrimitiveType javaPrimitiveType) {
 			switch (javaPrimitiveType) {
-				org.emftext.language.java.types.Boolean: UnifiedPrimitiveType.BOOLEAN
-				org.emftext.language.java.types.Char: UnifiedPrimitiveType.CHAR
-				org.emftext.language.java.types.Float: UnifiedPrimitiveType.FLOAT
-				org.emftext.language.java.types.Double: UnifiedPrimitiveType.DOUBLE
-				org.emftext.language.java.types.Int: UnifiedPrimitiveType.INT
-				org.emftext.language.java.types.Long: UnifiedPrimitiveType.LONG
-				org.emftext.language.java.types.Short: UnifiedPrimitiveType.SHORT
+				tools.mdsd.jamopp.model.java.types.Boolean: UnifiedPrimitiveType.BOOLEAN
+				tools.mdsd.jamopp.model.java.types.Char: UnifiedPrimitiveType.CHAR
+				tools.mdsd.jamopp.model.java.types.Float: UnifiedPrimitiveType.FLOAT
+				tools.mdsd.jamopp.model.java.types.Double: UnifiedPrimitiveType.DOUBLE
+				tools.mdsd.jamopp.model.java.types.Int: UnifiedPrimitiveType.INT
+				tools.mdsd.jamopp.model.java.types.Long: UnifiedPrimitiveType.LONG
+				tools.mdsd.jamopp.model.java.types.Short: UnifiedPrimitiveType.SHORT
 			}
 		}
 
-		private def static org.emftext.language.java.types.PrimitiveType unwrapWrappedPrimitiveType(
+		private def static tools.mdsd.jamopp.model.java.types.PrimitiveType unwrapWrappedPrimitiveType(
 			TypeReference javaTypeReference) {
 			val classifier = getNormalizedClassifierFromTypeReference(javaTypeReference)
 			if(classifier === null) return null
@@ -329,7 +329,7 @@ class UmlJavaTypePropagationHelper {
 		}
 
 		def static dispatch PrimitiveType mapJavaPrimitiveTypeToUmlPrimitiveType(
-			org.emftext.language.java.types.PrimitiveType javaTypeReference,
+			tools.mdsd.jamopp.model.java.types.PrimitiveType javaTypeReference,
 			CorrespondenceRetriever correspondenceRetriever) {
 			val unifiedPrimitiveType = javaTypeReference.unifiedNameForJavaPrimitiveTypeName
 			if (unifiedPrimitiveType !== null) {

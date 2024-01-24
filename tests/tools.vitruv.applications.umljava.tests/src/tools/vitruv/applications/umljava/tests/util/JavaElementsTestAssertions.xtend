@@ -1,28 +1,28 @@
 package tools.vitruv.applications.umljava.tests.util
 
-import org.emftext.language.java.modifiers.AnnotableAndModifiable
+import tools.mdsd.jamopp.model.java.modifiers.AnnotableAndModifiable
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
-import org.emftext.language.java.modifiers.Public
-import org.emftext.language.java.modifiers.Private
-import org.emftext.language.java.modifiers.Protected
-import org.emftext.language.java.modifiers.Modifier
-import org.emftext.language.java.members.MemberContainer
-import org.emftext.language.java.classifiers.Enumeration
-import org.emftext.language.java.members.EnumConstant
-import org.emftext.language.java.parameters.Parameter
-import org.emftext.language.java.members.Method
-import org.emftext.language.java.types.TypedElement
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.modifiers.Final
-import org.emftext.language.java.modifiers.Static
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.modifiers.Public
+import tools.mdsd.jamopp.model.java.modifiers.Private
+import tools.mdsd.jamopp.model.java.modifiers.Protected
+import tools.mdsd.jamopp.model.java.modifiers.Modifier
+import tools.mdsd.jamopp.model.java.members.MemberContainer
+import tools.mdsd.jamopp.model.java.classifiers.Enumeration
+import tools.mdsd.jamopp.model.java.members.EnumConstant
+import tools.mdsd.jamopp.model.java.parameters.Parameter
+import tools.mdsd.jamopp.model.java.members.Method
+import tools.mdsd.jamopp.model.java.types.TypedElement
+import tools.mdsd.jamopp.model.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.modifiers.Final
+import tools.mdsd.jamopp.model.java.modifiers.Static
+import tools.mdsd.jamopp.model.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
 import java.util.List
-import org.emftext.language.java.modifiers.Abstract
-import org.emftext.language.java.members.InterfaceMethod
-import org.emftext.language.java.members.ClassMethod
+import tools.mdsd.jamopp.model.java.modifiers.Abstract
+import tools.mdsd.jamopp.model.java.members.InterfaceMethod
+import tools.mdsd.jamopp.model.java.members.ClassMethod
 
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static org.junit.jupiter.api.Assertions.assertEquals

@@ -1,18 +1,18 @@
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.OperationOwner
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.classifiers.Enumeration
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.modifiers.Private
-import org.emftext.language.java.modifiers.Protected
-import org.emftext.language.java.modifiers.Public
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.classifiers.Enumeration
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.modifiers.Private
+import tools.mdsd.jamopp.model.java.modifiers.Protected
+import tools.mdsd.jamopp.model.java.modifiers.Public
 import tools.vitruv.applications.umljava.util.UmlJavaCorrespondenceTag
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
-import "http://www.emftext.org/java" as java
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
 
 reactions: javaToUmlMethod
 in reaction to changes in java

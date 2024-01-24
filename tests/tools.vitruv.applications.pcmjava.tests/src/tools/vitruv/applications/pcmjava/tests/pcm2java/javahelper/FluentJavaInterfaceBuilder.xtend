@@ -3,11 +3,11 @@ package tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.imports.Import
-import org.emftext.language.java.imports.ImportsFactory
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.emftext.language.java.parameters.ParametersFactory
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.imports.Import
+import tools.mdsd.jamopp.model.java.imports.ImportsFactory
+import tools.mdsd.jamopp.model.java.modifiers.ModifiersFactory
+import tools.mdsd.jamopp.model.java.parameters.ParametersFactory
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.createCompilationUnit
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper.JavaCreatorsUtil.createInterface

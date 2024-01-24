@@ -2,7 +2,7 @@ package tools.vitruv.applications.umljava.tests.uml2java
 
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 

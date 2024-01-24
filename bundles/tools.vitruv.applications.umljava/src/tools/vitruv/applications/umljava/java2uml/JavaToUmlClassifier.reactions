@@ -2,8 +2,8 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.UMLPackage
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.classifiers.Interface
 import tools.vitruv.dsls.reactions.runtime.helper.PersistenceHelper
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlClass
@@ -17,7 +17,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import java.util.ArrayList
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
-import "http://www.emftext.org/java" as java
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
 
 reactions: javaToUmlClassifier
 in reaction to changes in java
@@ -105,14 +105,10 @@ routine registerPredefinedUmlPrimitiveTypes(EObject alreadyPersistedEObject) {
 //===========================================
 reaction JavaCompilationUnitInsertedAsRoot {
 	after element java::CompilationUnit inserted as root
-	call newValue.classifiers.forEach[insertUmlClassifier(it, newValue)]
-}
-
-reaction JavaCompilationUnitInsertedInPackage {
-	after element java::CompilationUnit inserted in java::Package[compilationUnits]
 	call {
+		newValue.classifiers.forEach[insertUmlClassifier(it, newValue)]
 		rootElementPreSetup(newValue)
-		newValue.classifiers.forEach[insertUmlClassifierIntoPackage(it, affectedEObject)]
+		newValue.classifiers.forEach[insertUmlClassifierIntoPackage(it, it.package)]
 	}
 }
 

@@ -3,26 +3,27 @@ package tools.vitruv.applications.umljava.tests.java2uml.constructionsimulationt
 import java.io.File
 import java.nio.file.Path
 import java.util.List
-import java.util.Map
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.expressions.Expression
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.Member
-import org.emftext.language.java.resource.java.IJavaOptions
-import org.emftext.language.java.statements.Statement
-import org.emftext.language.java.statements.StatementListContainer
-import org.emftext.language.java.types.TypeReference
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.classifiers.Enumeration
+import tools.mdsd.jamopp.model.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.Package
+import tools.mdsd.jamopp.model.java.expressions.Expression
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.members.Member
+import tools.mdsd.jamopp.model.java.statements.Statement
+import tools.mdsd.jamopp.model.java.statements.StatementListContainer
+import tools.mdsd.jamopp.model.java.types.TypeReference
 import tools.vitruv.applications.umljava.tests.java2uml.AbstractJavaToUmlTest
 import tools.vitruv.applications.util.temporary.java.JavaSetup
 
@@ -41,6 +42,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.flat
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.mapFixed
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.withGlobalFactories
+import tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil
 
 /**
  * Test class for the reconstruction of existing java models
@@ -53,7 +55,8 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 	@BeforeEach
 	def void prepareResourceSet() {
 		resourceSetForLoading = new ResourceSetImpl().withGlobalFactories
-		resourceSetForLoading.loadOptions += Map.of(IJavaOptions.DISABLE_LAYOUT_INFORMATION_RECORDING, true)
+		//resourceSetForLoading.loadOptions += Map.of(IJavaOptions.DISABLE_LAYOUT_INFORMATION_RECORDING, true)
+		// IJavaOptions does no longer exist 
 	}
 
 	@BeforeAll
@@ -118,7 +121,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 
 	private def void transformJavaFilesAndValidateUmlModel(Iterable<File> javaFiles) {
 		val javaRoots = javaFiles.toList.loadRootObjects
-		val packages = javaRoots.filter(org.emftext.language.java.containers.Package)
+		val packages = javaRoots.filter(Package)
 		val compilationUnits = javaRoots.filter(CompilationUnit)
 
 		val compilationUnitExtractors = packages.mapFixed[new CompilationUnitExtractor(it)]
@@ -163,11 +166,11 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 		for (classifier : classifiers) {
 			val namespaces = classifier.containingCompilationUnit.namespaces
 			switch (classifier) {
-				org.emftext.language.java.classifiers.Class:
+				Class:
 					assertClassWithNameInPackage(namespaces, classifier.name)
-				org.emftext.language.java.classifiers.Interface:
+				Interface:
 					assertInterfaceWithNameInPackage(namespaces, classifier.name)
-				org.emftext.language.java.classifiers.Enumeration:
+				Enumeration:
 					assertEnumWithNameInPackage(namespaces, classifier.name)
 			}
 		}
@@ -181,7 +184,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 			if (!file.isPackageInfoFile) {
 				assertThat(contents.head, instanceOf(CompilationUnit))
 			} else if (file.isPackageInfoFile) {
-				assertThat(contents.head, instanceOf(org.emftext.language.java.containers.Package))
+				assertThat(contents.head, instanceOf(Package))
 			}
 			contents
 		]
@@ -217,18 +220,20 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 
 	@FinalFieldsConstructor
 	private static class CompilationUnitExtractor {
-		val org.emftext.language.java.containers.Package javaPackage
+		val Package javaPackage
 		val List<CompilationUnit> compilationUnits = newArrayList
 
 		def void removeAndStoreCompilationUnits() {
 			LOGGER.trace("Removing compilation units from " + javaPackage)
-			compilationUnits += javaPackage.compilationUnits
-			javaPackage.compilationUnits.clear()
+			compilationUnits += javaPackage.classifiers.map[it.containingCompilationUnit]
+			javaPackage.classifiers.clear()
 		}
 
 		def void reapplyStoredCompilationUnits() {
 			LOGGER.trace("Adding compilation units to " + javaPackage)
-			javaPackage.compilationUnits += compilationUnits
+			for (CompilationUnit compUnit : compilationUnits) {
+				JavaContainerAndClassifierUtil.updateNamespaces(compUnit, javaPackage);
+			}
 			compilationUnits.clear()
 		}
 	}
@@ -300,7 +305,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 					extensions += classifier.extends
 					classifier.extends.clear()
 				}
-				org.emftext.language.java.classifiers.Class: {
+				Class: {
 					extensions += classifier.extends
 					classifier.extends = null
 					implementations += classifier.implements
@@ -316,7 +321,7 @@ class JavaConstructionSimulationTest extends AbstractJavaToUmlTest {
 					classifier.extends += extensions
 					extensions.clear()
 				}
-				org.emftext.language.java.classifiers.Class: {
+				Class: {
 					classifier.extends = extensions.claimOne
 					extensions.clear()
 					classifier.implements += implementations

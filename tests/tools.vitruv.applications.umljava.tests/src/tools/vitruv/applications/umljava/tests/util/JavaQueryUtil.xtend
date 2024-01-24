@@ -1,19 +1,19 @@
 package tools.vitruv.applications.umljava.tests.util
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.classifiers.Classifier
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.classifiers.Enumeration
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.Package
-import org.emftext.language.java.members.ClassMethod
-import org.emftext.language.java.members.Constructor
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.InterfaceMethod
-import org.emftext.language.java.members.Method
-import org.emftext.language.java.parameters.Parameter
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.classifiers.Classifier
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.classifiers.Enumeration
+import tools.mdsd.jamopp.model.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.Package
+import tools.mdsd.jamopp.model.java.members.ClassMethod
+import tools.mdsd.jamopp.model.java.members.Constructor
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.members.InterfaceMethod
+import tools.mdsd.jamopp.model.java.members.Method
+import tools.mdsd.jamopp.model.java.parameters.Parameter
 import tools.vitruv.framework.views.View
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne

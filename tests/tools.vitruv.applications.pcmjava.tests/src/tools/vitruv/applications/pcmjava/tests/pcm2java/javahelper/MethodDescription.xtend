@@ -1,7 +1,7 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 
 import java.util.List
-import org.emftext.language.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.types.TypeReference
 
 class MethodDescription {
 	public final String name

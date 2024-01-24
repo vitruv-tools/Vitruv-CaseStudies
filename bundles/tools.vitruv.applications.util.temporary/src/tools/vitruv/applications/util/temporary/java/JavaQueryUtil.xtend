@@ -1,9 +1,9 @@
 package tools.vitruv.applications.util.temporary.java
 
-import org.emftext.language.java.types.Char
-import org.emftext.language.java.types.Int
-import org.emftext.language.java.types.ClassifierReference
-import org.emftext.language.java.types.NamespaceClassifierReference
+import tools.mdsd.jamopp.model.java.types.Char
+import tools.mdsd.jamopp.model.java.types.Int
+import tools.mdsd.jamopp.model.java.types.ClassifierReference
+import tools.mdsd.jamopp.model.java.types.NamespaceClassifierReference
 
 class JavaQueryUtil {
 		
@@ -19,11 +19,11 @@ class JavaQueryUtil {
 	// return getNameFromJaMoPPType(classRef)
 	}
 	
-	def dispatch static getNameFromJaMoPPType(org.emftext.language.java.types.Boolean reference) {
+	def dispatch static getNameFromJaMoPPType(tools.mdsd.jamopp.model.java.types.Boolean reference) {
 		return "boolean"
 	}
 
-	def dispatch static getNameFromJaMoPPType(org.emftext.language.java.types.Byte reference) {
+	def dispatch static getNameFromJaMoPPType(tools.mdsd.jamopp.model.java.types.Byte reference) {
 		return "byte"
 	}
 
@@ -31,11 +31,11 @@ class JavaQueryUtil {
 		return "char"
 	}
 
-	def dispatch static getNameFromJaMoPPType(org.emftext.language.java.types.Double reference) {
+	def dispatch static getNameFromJaMoPPType(tools.mdsd.jamopp.model.java.types.Double reference) {
 		return "double"
 	}
 
-	def dispatch static getNameFromJaMoPPType(org.emftext.language.java.types.Float reference) {
+	def dispatch static getNameFromJaMoPPType(tools.mdsd.jamopp.model.java.types.Float reference) {
 		return "float"
 	}
 
@@ -43,15 +43,15 @@ class JavaQueryUtil {
 		return "int"
 	}
 
-	def dispatch static getNameFromJaMoPPType(org.emftext.language.java.types.Long reference) {
+	def dispatch static getNameFromJaMoPPType(tools.mdsd.jamopp.model.java.types.Long reference) {
 		return "long"
 	}
 
-	def dispatch static getNameFromJaMoPPType(org.emftext.language.java.types.Short reference) {
+	def dispatch static getNameFromJaMoPPType(tools.mdsd.jamopp.model.java.types.Short reference) {
 		return "short"
 	}
 
-	def dispatch static getNameFromJaMoPPType(org.emftext.language.java.types.Void reference) {
+	def dispatch static getNameFromJaMoPPType(tools.mdsd.jamopp.model.java.types.Void reference) {
 		return "void"
 	}
 }

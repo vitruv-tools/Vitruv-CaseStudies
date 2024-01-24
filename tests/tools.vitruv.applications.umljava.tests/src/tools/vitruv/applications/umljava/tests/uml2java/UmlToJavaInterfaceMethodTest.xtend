@@ -2,7 +2,7 @@ package tools.vitruv.applications.umljava.tests.uml2java
 
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Operation
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 
 import static org.hamcrest.CoreMatchers.*

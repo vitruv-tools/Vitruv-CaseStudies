@@ -1,6 +1,6 @@
 import org.eclipse.uml2.uml.Property
-import org.emftext.language.java.members.ClassMethod
-import org.emftext.language.java.members.Field
+import tools.mdsd.jamopp.model.java.members.ClassMethod
+import tools.mdsd.jamopp.model.java.members.Field
 import tools.vitruv.applications.umljava.util.UmlJavaCorrespondenceTag
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
@@ -8,7 +8,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.clai
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
-import "http://www.emftext.org/java" as java
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
 
 reactions: umlToJavaAttribute
 in reaction to changes in uml

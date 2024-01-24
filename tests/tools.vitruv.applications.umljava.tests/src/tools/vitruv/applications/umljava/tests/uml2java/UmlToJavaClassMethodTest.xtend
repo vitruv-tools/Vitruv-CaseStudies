@@ -3,9 +3,9 @@ package tools.vitruv.applications.umljava.tests.uml2java
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.members.ClassMethod
-import org.emftext.language.java.statements.StatementsFactory
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.members.ClassMethod
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource

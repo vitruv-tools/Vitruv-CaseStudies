@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.emftext.language.java.JavaUniquePathConstructor
 import org.emftext.language.java.containers.Package
-import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper
+import tools.vitruv.applications.cbs.testutils.oldmetamodelutils.JavaPersistenceHelper
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.reference.AbstractReferenceMappingOperator
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.reference.ReferenceMappingOperator
 import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState
@@ -20,7 +20,7 @@ import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
 import static extension java.nio.file.Files.*
 import static extension tools.vitruv.dsls.commonalities.runtime.helper.IntermediateModelHelper.*
 
-import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import static extension tools.vitruv.applications.cbs.testutils.oldmetamodelutils.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.containers.ContainersPackage
 
 @ReferenceMappingOperator(

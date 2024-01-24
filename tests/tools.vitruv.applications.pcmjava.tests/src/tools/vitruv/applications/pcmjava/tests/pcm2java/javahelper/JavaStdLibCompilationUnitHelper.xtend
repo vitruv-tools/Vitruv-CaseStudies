@@ -1,7 +1,7 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java.javahelper
 
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
 import tools.vitruv.framework.views.View
 
 import static tools.vitruv.applications.pcmjava.tests.pcm2java.JavaQueryUtil.getJavaCompilationUnits

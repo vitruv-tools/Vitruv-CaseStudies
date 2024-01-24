@@ -6,8 +6,8 @@ import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource

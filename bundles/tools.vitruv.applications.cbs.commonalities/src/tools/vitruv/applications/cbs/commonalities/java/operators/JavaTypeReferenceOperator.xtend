@@ -13,7 +13,7 @@ import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.types.Void
 import tools.vitruv.applications.cbs.commonalities.domaincommon.CommonPrimitiveType
 import tools.vitruv.applications.cbs.commonalities.domaincommon.operators.AbstractTypeReferenceOperator
-import tools.vitruv.applications.util.temporary.java.JavaModificationUtil
+import tools.vitruv.applications.cbs.testutils.oldmetamodelutils.JavaModificationUtil
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType
 import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState

@@ -2,8 +2,8 @@ package tools.vitruv.applications.umljava.tests.util
 
 import org.eclipse.uml2.uml.Model
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.Package
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.Package
 import tools.vitruv.framework.views.View
 import tools.vitruv.testutils.TestViewFactory
 

@@ -1,7 +1,6 @@
 package tools.vitruv.applications.cbs.commonalities.java.operators
 
 import org.apache.log4j.Logger
-import org.emftext.language.java.JavaUniquePathConstructor
 import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AbstractAttributeMappingOperator
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator
@@ -9,6 +8,7 @@ import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.Attri
 import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
+import org.emftext.language.java.JavaUniquePathConstructor
 
 // CompilationUnit name schema: '<dot-separated-namespaces>.<fileName/classifierName>.java'
 @AttributeMappingOperator(

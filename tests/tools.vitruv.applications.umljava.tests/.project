@@ -26,7 +26,7 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.emftext.language.java.resource.java.builder</name>
+			<name>tools.mdsd.jamopp.model.java.resource.java.builder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -34,7 +34,6 @@
 	<natures>
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.emftext.language.java.resource.java.nature</nature>
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 	</natures>
 </projectDescription>

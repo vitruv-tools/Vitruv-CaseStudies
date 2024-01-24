@@ -3,15 +3,15 @@ package tools.vitruv.applications.util.temporary.java
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.commons.NamedElement
-import org.emftext.language.java.modifiers.AnnotableAndModifiable
-import org.emftext.language.java.modifiers.Modifier
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.emftext.language.java.modifiers.Private
-import org.emftext.language.java.modifiers.Protected
-import org.emftext.language.java.modifiers.Public
+import tools.mdsd.jamopp.model.java.commons.NamedElement
+import tools.mdsd.jamopp.model.java.modifiers.AnnotableAndModifiable
+import tools.mdsd.jamopp.model.java.modifiers.Modifier
+import tools.mdsd.jamopp.model.java.modifiers.ModifiersFactory
+import tools.mdsd.jamopp.model.java.modifiers.Private
+import tools.mdsd.jamopp.model.java.modifiers.Protected
+import tools.mdsd.jamopp.model.java.modifiers.Public
 import java.util.List
-import org.emftext.language.java.modifiers.AnnotationInstanceOrModifier
+import tools.mdsd.jamopp.model.java.modifiers.AnnotationInstanceOrModifier
 import java.util.Objects
 
 /**
