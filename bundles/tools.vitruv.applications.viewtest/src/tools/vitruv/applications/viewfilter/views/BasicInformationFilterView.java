@@ -34,10 +34,11 @@ public class BasicInformationFilterView extends BasicFilterView {
 	
 
 	public BasicInformationFilterView(FilteredViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
-			ChangeableViewSource viewSource, ViewSelection selection, ViewFilter viewFilter, Map<EObject, EObject> mapOriginalRoot2RootStub) {
+			ChangeableViewSource viewSource, ViewSelection selection, ViewFilter viewFilter) {
 		super(viewType, viewSource, selection, viewFilter);
 		mapOriginalRoot2InformationRoot = new HashMap<EObject, EObject>();
-		this.mapOriginalRoot2FilteredRootStub = reverseMap(mapOriginalRoot2RootStub); 
+		//TODO nbruening remove
+		//this.mapOriginalRoot2FilteredRootStub = reverseMap(mapOriginalRoot2RootStub); 
 	}
 	
 	

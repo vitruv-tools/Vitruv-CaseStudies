@@ -31,42 +31,33 @@ import tools.vitruv.framework.views.ViewSelection;
 public class ViewFilterImpl implements ViewFilter {
 	
 	private Set<EObject> rootListForView;
-	
-	//TODO nbruening: Javadoc
-	private Map<EObject, EObject> mapOriginalRoot2RootStub;
-	
+		
 	private final ViewFilterBuilder builder;
 	
 	private ViewFilterImpl(ViewFilterBuilder viewFilterBuilder) {
 		builder = viewFilterBuilder;
-		mapOriginalRoot2RootStub = new HashMap();
 	}
 	
-	
-	
+
 	public Set<EObject> filterElements(Collection<EObject> roots) {
-		Map<EObject, EObject> newMapOriginalRoot2RootStub = new HashMap();
 		rootListForView = new HashSet<EObject>();
-		addElementsToSelectionByLambda(roots, newMapOriginalRoot2RootStub);
-		removeOwnedAttributesFromClasses();
-		mapOriginalRoot2RootStub = newMapOriginalRoot2RootStub;
+		addElementsToSelectionByLambda(roots);
+		removeOwnedAttributesFromUmlClasses();
 		return rootListForView;
 	}
 	
 	
-	
-	
-	private void addElementsToSelectionByLambda(Collection<EObject> roots, Map<EObject, EObject> newMapOriginalRoot2RootStub) {
+	private void addElementsToSelectionByLambda(Collection<EObject> roots) {
 		if (!builder.filterByLambdaActive) {
 			return;
 		}
 		for (EObject root : roots) {
-			filterAllContents(root, builder.filter, rootListForView, newMapOriginalRoot2RootStub);
+			filterAllContents(root, builder.filter, rootListForView);
 		}
 	}
 	
 	
-	private void removeOwnedAttributesFromClasses() {
+	private void removeOwnedAttributesFromUmlClasses() {
 		if (!builder.removeAttributesActive) {
 			return;
 		}
@@ -83,14 +74,13 @@ public class ViewFilterImpl implements ViewFilter {
 	}
 	
 	
-	private void filterAllContents(EObject root, Function<EObject, Boolean> filter, Set<EObject> rootListForView, Map<EObject, EObject> newMapOriginalRoot2RootStub) {
+	private void filterAllContents(EObject root, Function<EObject, Boolean> filter, Set<EObject> rootListForView) {
 		EObject filteredModelRootStub = null;
 		Iterator<EObject> contentIterator = root.eAllContents();
 		while(contentIterator.hasNext()) {
 			EObject contentElement = contentIterator.next();
 			if (filter.apply(contentElement)) {
-				
-				filteredModelRootStub = createAndRegisterModelRootIfNotExistent(filteredModelRootStub, root, newMapOriginalRoot2RootStub);
+				filteredModelRootStub = createAndRegisterModelRootIfNotExistent(filteredModelRootStub, root);
 				EObject copyOfContentElement = EcoreUtil.copy(contentElement);
 				attachElementToRoot(filteredModelRootStub, copyOfContentElement);
 			}
@@ -129,32 +119,15 @@ public class ViewFilterImpl implements ViewFilter {
 		}
 	}
 	
-	private EObject createAndRegisterModelRootIfNotExistent(EObject filteredRoot, EObject root, Map<EObject, EObject> newMapOriginalRoot2RootStub) {
+	private EObject createAndRegisterModelRootIfNotExistent(EObject filteredRoot, EObject root) {
 		if (filteredRoot == null) {
 			EObject modelRoot = createFilteredModelRootIfNotExistent(filteredRoot, root);
 			rootListForView.add(modelRoot);
-			newMapOriginalRoot2RootStub.put(root, modelRoot);
 			return modelRoot;
 		} else {
 			return filteredRoot;
 		}
 		
-	}
-	
-	
-	private EObject findOriginalRoot(EObject root) {
-		
-		
-		if ((!mapOriginalRoot2RootStub.isEmpty()) && mapOriginalRoot2RootStub.containsValue(root)) {
-			Set<EObject> keySet = mapOriginalRoot2RootStub.keySet();
-			for (EObject key : keySet) {
-				if (mapOriginalRoot2RootStub.get(key).equals(root)) {
-					return key;
-				}
-			}
-			throw new IllegalStateException("Value should be in map, but could not be found");
-		} 
-		return root;
 	}
 	
 	
@@ -169,13 +142,6 @@ public class ViewFilterImpl implements ViewFilter {
 		}
 	}
 	
-	
-	
-
-	public Map<EObject, EObject> getMapOriginalRoot2RootStub() {
-		return mapOriginalRoot2RootStub;
-	}
-
 
 	//---------------------------------
 	/**
@@ -200,7 +166,7 @@ public class ViewFilterImpl implements ViewFilter {
 			return this;
 		}
 		
-		public ViewFilterBuilder removeOwnedAttributes() {
+		public ViewFilterBuilder removeOwnedUmlAttributes() {
 			this.removeAttributesActive = true;
 			return this;
 		}

@@ -23,12 +23,10 @@ import org.eclipse.uml2.uml.UMLFactory;
 import com.google.common.base.Preconditions;
 
 import tools.vitruv.applications.viewfilter.util.framework.impl.FilteredViewCreatingViewType;
-import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilterImpl;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilterImpl.ViewFilterBuilder;
-import tools.vitruv.applications.viewfilter.views.BasicFilterView;
 import tools.vitruv.framework.views.ChangeableViewSource;
 import tools.vitruv.framework.views.ModifiableViewSelection;
 import tools.vitruv.framework.views.View;
@@ -39,7 +37,7 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 
 	private ModifiableViewSelection viewSelection;
 
-	private ChangeableViewSource viewSource;
+	private final ChangeableViewSource viewSource;
 
 	private final FilteredViewCreatingViewType<FilterSupportingViewElementSelector<Id>, Id> viewType;
 
@@ -47,8 +45,7 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 
 	private ViewFilterImpl viewFilter;
 	
-	//TODO nbruening: Replace by Interface
-	private BasicFilterView createdView;
+	private View createdView;
 
 	public FilterSupportingViewElementSelector(
 			FilteredViewCreatingViewType<FilterSupportingViewElementSelector<Id>, Id> viewType,
@@ -58,12 +55,8 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 		Preconditions.checkArgument((viewSource != null), "view source must not be null");
 		this.viewType = viewType;
 		this.viewSource = viewSource;
-		// Copy underlying model
-		// Collection<EObject> selectableElementsCopy =
-		// EcoreUtil.copyAll(selectableElements);
 		this.viewSelection = new ElementViewSelection(selectableElements);
 		viewFilterBuilder = new ViewFilterBuilder();
-
 	}
 
 	@Override
@@ -71,7 +64,8 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 		viewFilter = viewFilterBuilder.build();
 		getSelectableElements().forEach(it -> setSelected(it, true));
 		Preconditions.checkState(this.isValid(), "the current selection is invalid, thus a view cannot be created");
-		createdView = (BasicFilterView) this.viewType.createView(this);
+		//TODO nbruening do I need "this"?
+		createdView = this.viewType.createView(this);
 		return createdView;
 	}
 
@@ -85,7 +79,7 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	}
 
 	public void removeOwnedAttributesFromClasses() {
-		viewFilterBuilder.removeOwnedAttributes();
+		viewFilterBuilder.removeOwnedUmlAttributes();
 	}
 
 	@Override
@@ -124,10 +118,6 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 
 	public FilteredViewCreatingViewType<FilterSupportingViewElementSelector<Id>, Id> getViewType() {
 		return this.viewType;
-	}
-
-	public Map<EObject, EObject> getMapOriginalRoot2RootStub() {
-		return createdView != null ? createdView.getMapOriginalRoot2RootStub() : Collections.emptyMap();
 	}
 
 	public ViewFilter getViewFilter() {

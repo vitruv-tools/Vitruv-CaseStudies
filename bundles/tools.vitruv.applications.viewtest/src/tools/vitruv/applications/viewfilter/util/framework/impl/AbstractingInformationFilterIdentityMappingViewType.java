@@ -50,7 +50,7 @@ public class AbstractingInformationFilterIdentityMappingViewType extends FilterS
 //		elementViewSelection.setSelected(informationStructure, true);
 		
 		//Hier in SingleInformation-Meta-Modell übertragen
-		BasicInformationFilterView view = new BasicInformationFilterView(selector.getViewType(), selector.getViewSource(), selector.getSelection(), selector.getViewFilter(), selector.getMapOriginalRoot2RootStub());
+		BasicInformationFilterView view = new BasicInformationFilterView(selector.getViewType(), selector.getViewSource(), selector.getSelection(), selector.getViewFilter());
 		return view;
 	}
 	

@@ -52,8 +52,7 @@ public class BasicFilterView extends BasicView {
 		if (viewFilter != null) {
 			ModifiableViewSelection filteredSelection = filterElementsForSelection();
 			updateSelectedElements(filteredSelection);
-		}
-		
+		}	
 	}
 	
 	
@@ -71,7 +70,6 @@ public class BasicFilterView extends BasicView {
 	
 	
 	protected ModifiableViewSelection filterElementsForSelection() {
-		//If the viewFilter has already been set, use it..
 		List<EObject> rootsForSelection = findRootsForSelectionInViewSource();
 		Set<EObject> filteredElements = viewFilter.filterElements(rootsForSelection);
 		ModifiableViewSelection elementViewSelection = new ElementViewSelection(filteredElements);
@@ -81,13 +79,7 @@ public class BasicFilterView extends BasicView {
 	
 	
 	protected void updateSelectedElements(ModifiableViewSelection selection) {
-		//TODO nbruening merge with filterElementsForSelection method?
 		setSelection(selection);
-	}
-	
-	
-	public Map<EObject, EObject> getMapOriginalRoot2RootStub() {
-		return viewFilter != null ? viewFilter.getMapOriginalRoot2RootStub() : Collections.emptyMap();
 	}
 
 

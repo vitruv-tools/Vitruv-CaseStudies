@@ -5,4 +5,7 @@ import tools.vitruv.framework.views.ViewType;
 
 public interface FilteredViewCreatingViewType<S extends ViewSelector, Id> extends ViewCreatingViewType<S, Id> {
 
+	
+	
+	
 }

@@ -35,8 +35,8 @@ import tools.vitruv.framework.views.ViewSource;
 
 /**
  * A view type that allows creating views based on a basic element-wise
- * selection mechanism and providing a one-to-one (identity) mapping of elements
- * within the {@link ViewSource} to a created {@link View}.
+ * selection mechanism and a filter-function. The filter-function can be used for 
+ * selecting single objects in a model. 
  */
 public class FilterSupportingIdentityMappingViewType extends AbstractFilterSupportingViewType<FilterSupportingViewElementSelector<HierarchicalId>, HierarchicalId> {
 	
@@ -47,13 +47,6 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 
 	@Override
 	public FilterSupportingViewElementSelector<HierarchicalId> createSelector(ChangeableViewSource viewSource) {
-//		FilterSupportingViewElementSelector test = new FilterSupportingViewElementSelector<>(this, viewSource,
-//				viewSource.getViewSourceModels().stream().map(resource -> {
-//					EList<EObject> allElementsInViewSource = collectAllChildrenInList(resource);
-//					return allElementsInViewSource.stream();
-//				}).flatMap(Function.identity()).filter(it -> it != null).toList());
-//		test.isSelectable(null);
-//		return test;
 		return new FilterSupportingViewElementSelector<>(this, viewSource,
 				viewSource.getViewSourceModels().stream().map(resource -> {
 					if (!resource.getContents().isEmpty() && ResourceCopier.requiresFullCopy(resource)) {
@@ -65,17 +58,6 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 				}).flatMap(Function.identity()).filter(it -> it != null).toList());
 	}
 	
-	
-//	private EList<EObject> getAllElementsInViewSource(Resource resource) {
-//		if (!resource.getContents().isEmpty() && ResourceCopier.requiresFullCopy(resource)) {
-//			// Some resources (like UML) can only be copied as a whole, so no option to select
-//			// specific root elements
-//			EList<EObject> list = new BasicEList<EObject>();
-//			list.add(resource.getContents().get(0));
-//			return list;
-//		}
-//		return resource.getContents();
-//	}
 
 	@Override
 	public ModifiableView createView(FilterSupportingViewElementSelector<HierarchicalId> selector) {
@@ -113,29 +95,5 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 				.filter(resource -> resource.getContents().stream().anyMatch(selection::isViewObjectSelected)).toList();
 		return ResourceCopier.copyViewSourceResources(resourcesWithSelectedElements, viewResourceSet,
 				selection::isViewObjectSelected);
-	}
-	
-	
-	private EList<EObject> collectAllChildrenInList(Resource resource) {
-		TreeIterator<EObject> contentInterator = resource.getAllContents();
-		EList<EObject> children = new BasicEList<EObject>();
-		while (contentInterator.hasNext()) {
-			EObject next = contentInterator.next();
-			children.addAll(collectAllChildrenInList(next));
-			children.add(next);
-		}
-		return children;
-	}
-	
-	
-	private EList<EObject> collectAllChildrenInList(EObject resource) {
-		TreeIterator<EObject> contentInterator = resource.eAllContents();
-		EList<EObject> children = new BasicEList<EObject>();
-		while (contentInterator.hasNext()) {
-			EObject next = contentInterator.next();
-			children.addAll(collectAllChildrenInList(next));
-			children.add(next);
-		}
-		return children;
 	}
 }
