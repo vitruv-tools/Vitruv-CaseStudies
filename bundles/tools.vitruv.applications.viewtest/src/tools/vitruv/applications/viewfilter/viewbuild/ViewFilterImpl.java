@@ -26,6 +26,7 @@ import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import tools.vitruv.applications.viewfilter.helpers.ViewFilterHelper;
+import tools.vitruv.framework.views.ViewSelection;
 
 public class ViewFilterImpl implements ViewFilter {
 	
@@ -43,11 +44,10 @@ public class ViewFilterImpl implements ViewFilter {
 	
 	
 	
-	public Set<EObject> filterElements(Collection<EObject> roots, Collection<Resource> viewSources) {
+	public Set<EObject> filterElements(Collection<EObject> roots) {
 		Map<EObject, EObject> newMapOriginalRoot2RootStub = new HashMap();
 		rootListForView = new HashSet<EObject>();
-		List<EObject> rootsInViewSource = extractRootsInViewSource(viewSources, roots);
-		addElementsToSelectionByLambda(rootsInViewSource, newMapOriginalRoot2RootStub);
+		addElementsToSelectionByLambda(roots, newMapOriginalRoot2RootStub);
 		removeOwnedAttributesFromClasses();
 		mapOriginalRoot2RootStub = newMapOriginalRoot2RootStub;
 		return rootListForView;
@@ -56,7 +56,7 @@ public class ViewFilterImpl implements ViewFilter {
 	
 	
 	
-	private void addElementsToSelectionByLambda(List<EObject> roots, Map<EObject, EObject> newMapOriginalRoot2RootStub) {
+	private void addElementsToSelectionByLambda(Collection<EObject> roots, Map<EObject, EObject> newMapOriginalRoot2RootStub) {
 		if (!builder.filterByLambdaActive) {
 			return;
 		}
@@ -95,16 +95,6 @@ public class ViewFilterImpl implements ViewFilter {
 				attachElementToRoot(filteredModelRootStub, copyOfContentElement);
 			}
 		}
-	}
-	
-	private List<EObject> extractRootsInViewSource(Collection<Resource> viewSources, Collection<EObject> roots) {
-		List<Resource> resourcesWithSelectedElements = viewSources.stream()
-				.filter(resource -> resource.getContents().stream()
-				.anyMatch(element -> mapOriginalRoot2RootStub.get(element) != null ? roots.contains(mapOriginalRoot2RootStub.get(element)) : false))
-				.toList();
-		List<EObject> extractedRoots = new ArrayList();
-		resourcesWithSelectedElements.forEach(it -> extractedRoots.addAll(it.getContents()));
-		return extractedRoots;
 	}
 	
 	

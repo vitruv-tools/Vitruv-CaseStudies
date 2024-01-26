@@ -8,8 +8,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 
 public interface ViewFilter {
-
-	Set<EObject> filterElements(Collection<EObject> roots, Collection<Resource> viewSources);
+	
+	Set<EObject> filterElements(Collection<EObject> roots);
 	
 	Map<EObject, EObject> getMapOriginalRoot2RootStub();
 }

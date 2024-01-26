@@ -225,6 +225,7 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 				package3.setName("niklasPackage3");
 				
 				org.eclipse.uml2.uml.Class class3 = package3.createOwnedClass("niklasClass3", false);
+				org.eclipse.uml2.uml.Class class4 = package3.createOwnedClass("niklasClass2", false);
 				
 				class2.addKeyword("subsequentlyAddedKeyword");
 				

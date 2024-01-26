@@ -69,11 +69,7 @@ public class FilterSupportingViewElementSelector<Id extends Object> implements V
 	@Override
 	public View createView() {
 		viewFilter = viewFilterBuilder.build();
-		Set<EObject> rootListForView = getViewFilter().filterElements(getSelectableElements(), viewSource.getViewSourceModels());
-
-		viewSelection = new ElementViewSelection(rootListForView);
-		rootListForView.forEach(element -> setSelected(element, true));
-		// TODO nbruening ggf noch anpassen
+		getSelectableElements().forEach(it -> setSelected(it, true));
 		Preconditions.checkState(this.isValid(), "the current selection is invalid, thus a view cannot be created");
 		createdView = (BasicFilterView) this.viewType.createView(this);
 		return createdView;

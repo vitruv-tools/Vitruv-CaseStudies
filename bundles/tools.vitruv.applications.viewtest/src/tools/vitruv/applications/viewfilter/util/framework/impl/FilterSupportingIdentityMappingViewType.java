@@ -108,25 +108,11 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 
 	private Map<Resource, Resource> createViewResources(ModifiableView view, ResourceSet viewResourceSet) {
 		Collection<Resource> viewSources = view.getViewSource().getViewSourceModels();
-		ViewSelection selection = view.getSelection();
-		Map<EObject, EObject> mapOriginalRoot2RootStub = ((BasicFilterView) view).getMapOriginalRoot2RootStub();
-		for (Resource resource : viewSources) {
-			EList<EObject> contents = resource.getContents();
-			for (EObject root : contents) {
-				EObject rootStub = mapOriginalRoot2RootStub.get(root);
-				if (rootStub != null) {
-					Boolean selected = selection.isViewObjectSelected(rootStub);
-					System.out.println("Bla");
-				}
-			}
-			
-		}
+		ViewSelection selection = ((BasicFilterView) view).getPreFilterSelection();
 		List<Resource> resourcesWithSelectedElements = viewSources.stream()
-				.filter(resource -> resource.getContents().stream()
-				.anyMatch(element -> mapOriginalRoot2RootStub.get(element) != null ? selection.isViewObjectSelected(mapOriginalRoot2RootStub.get(element)) : false))
-				.toList();
+				.filter(resource -> resource.getContents().stream().anyMatch(selection::isViewObjectSelected)).toList();
 		return ResourceCopier.copyViewSourceResources(resourcesWithSelectedElements, viewResourceSet,
-				element -> mapOriginalRoot2RootStub.get(element) != null ? selection.isViewObjectSelected(mapOriginalRoot2RootStub.get(element)) : false);
+				selection::isViewObjectSelected);
 	}
 	
 	
