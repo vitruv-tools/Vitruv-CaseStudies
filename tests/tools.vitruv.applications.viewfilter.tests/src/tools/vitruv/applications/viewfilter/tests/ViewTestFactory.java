@@ -96,10 +96,6 @@ public class ViewTestFactory extends TestViewFactory {
 		selector.getSelectableElements().stream()
 				.filter(element -> rootTypes.stream().anyMatch(it -> it.isInstance(element)))
 				.forEach(element -> selector.setSelected(element, true));
-//		if (!selector.getSelectableElements().isEmpty()) {
-//			Object obj = (selector.getSelectableElements().toArray())[0];
-//			boolean bla = obj instanceof Repository;
-//		}
 		
 		View view = selector.createView();
 		assertThat("view must not be null", view, not(equalTo(null)));
