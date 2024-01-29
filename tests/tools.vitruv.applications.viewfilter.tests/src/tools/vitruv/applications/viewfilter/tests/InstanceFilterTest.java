@@ -110,22 +110,26 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	
 	@Test
 	public void testCreateFilteredUmlView() {
-		//View view = improvedViewTestFactory.createFilteredUmlView(this);
-		View view = improvedViewTestFactory.createFilteredPcmView();
+		View view = improvedViewTestFactory.createFilteredUmlView();
+		//View view = improvedViewTestFactory.createFilteredPcmView();
 //		((FilterSupportingIdentityMappingViewType) improvedViewTestFactory.viewType)
 //				.updateView(((ModifiableView) view));
 		view.update();
 		view.update();
 		view.getRootObjects();
 		
+		//Selection: Nur ModelImpl mit niklasClass2 als einzigs PackagedElement
+		//Root Objects: ModelImpl (aber nicht nur mit niklasClass2, sondern mit allem)
+		
 		modifyModel();
-		
 		view.update();
-		
-		//view.getRootObjects();
-		//Object object = view.withChangeDerivingTrait().getRootObjects().toArray()[0];
 		view.getSelection();
 		view.getRootObjects();
+		
+		//Selection: Nur ModelImpl mit zwei Klassen die jeweils niklasClass2 als Namen haben, als PackagedElement
+		//ACHTUNG: Die zwei Klassen sind als PackagedElements in der ModelImpl!
+		//Root Objects: ModelImpl
+		
 		view.getViewType();
 	}
 	

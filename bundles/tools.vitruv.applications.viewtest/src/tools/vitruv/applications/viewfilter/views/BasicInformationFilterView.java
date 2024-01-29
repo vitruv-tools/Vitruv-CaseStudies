@@ -28,17 +28,10 @@ import tools.vitruv.framework.views.ViewSelection;
 import tools.vitruv.framework.views.ViewSelector;
 
 public class BasicInformationFilterView extends BasicFilterView {
-	
-	protected Map<EObject, EObject> mapOriginalRoot2InformationRoot;
-	protected Map<EObject, EObject> mapOriginalRoot2FilteredRootStub;
-	
 
 	public BasicInformationFilterView(FilteredViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
 			ChangeableViewSource viewSource, ViewSelection selection, ViewFilter viewFilter) {
 		super(viewType, viewSource, selection, viewFilter);
-		mapOriginalRoot2InformationRoot = new HashMap<EObject, EObject>();
-		//TODO nbruening remove
-		//this.mapOriginalRoot2FilteredRootStub = reverseMap(mapOriginalRoot2RootStub); 
 	}
 	
 	
@@ -51,49 +44,27 @@ public class BasicInformationFilterView extends BasicFilterView {
 		InformationStructure informationStructure = NiklasdomainFactory.eINSTANCE.createInformationStructure();
 		EList<SingleInformation> singleinformationList = informationStructure.getSingleinformation();
 		
-		for(EObject root : extractSelectedElements(selection)) {
-			SingleInformation transformResult = transformator.transform(root);
-			if (transformResult != null) {
-				singleinformationList.add(transformResult);
-//				mapOriginalRoot2RootStub.
-//				mapOriginalRoot2RootStub_.put(mapOriginalRoot2RootStub.get(root)), )
+		//TODO nbr Hier weitermachen! die selectableElements entsprechen den gefilterten Elementen => daraus muss ich meine Informationen berechnen
+		for(EObject root : selection.getSelectableElements()) {
+			if (selection.isSelected(root)) {
+				SingleInformation transformResult = transformator.transform(root);
+				if (transformResult != null) {
+					singleinformationList.add(transformResult);
+	//				mapOriginalRoot2RootStub.
+	//				mapOriginalRoot2RootStub_.put(mapOriginalRoot2RootStub.get(root)), )
+				}
 			}
 		}
 		
-		for (EObject key : mapOriginalRoot2FilteredRootStub.keySet()) {
-			getMapOriginalRoot2InformationRoot().put(key, informationStructure);
-		}
+//		for (EObject key : mapOriginalRoot2FilteredRootStub.keySet()) {
+//			getMapOriginalRoot2InformationRoot().put(key, informationStructure);
+//		}
 		
 		List<EObject> selectionList = new ArrayList();
 		selectionList.add(informationStructure);
 		ElementViewSelection elementViewSelection = new ElementViewSelection(selectionList);
 		elementViewSelection.setSelected(informationStructure, true);
 		setSelection(elementViewSelection);
-	}
-	
-	
-	private List<EObject> extractSelectedElements(ModifiableViewSelection selection) {
-		List<EObject> selectedElements = new LinkedList();
-		for(EObject root : getRootObjects()) {
-			if (selection.isViewObjectSelected(root)) {
-				selectedElements.add(root);
-			}
-		}
-		return selectedElements;
-	}
-	
-	
-	private Map<EObject, EObject> reverseMap(Map<EObject, EObject> map) {
-		Map<EObject, EObject> myNewHashMap = new HashMap<>();
-		for(Map.Entry<EObject, EObject> entry : map.entrySet()){
-		    myNewHashMap.put(entry.getValue(), entry.getKey());
-		}
-		return myNewHashMap;
-	}
-
-
-	public Map<EObject, EObject> getMapOriginalRoot2InformationRoot() {
-		return mapOriginalRoot2InformationRoot;
 	}
 
 }

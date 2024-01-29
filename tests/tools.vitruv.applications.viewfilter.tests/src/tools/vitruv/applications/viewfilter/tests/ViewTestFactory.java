@@ -75,6 +75,11 @@ public class ViewTestFactory extends TestViewFactory {
 		return view;
 	}
 	
+	public View createFilteredUmlView() {
+		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
+		return createFilteredForNoAttributesViewOfElements("UML", rootTypes);
+	}
+	
 	public View createFilteredPcmView() {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Repository.class);
 		return createFilteredForNoAttributesViewOfElements("PCM", rootTypes);
@@ -125,8 +130,9 @@ public class ViewTestFactory extends TestViewFactory {
 	public View createAbstractedFilteredView(String viewName, Collection<Class<?>> rootTypes, Function<EObject, Boolean> filterFunction) {
 		viewType = FilterSupportingViewTypeFactory.createAbstractedFilterViewViewType(viewName);
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
+		selector.selectElementsOfRootType(rootTypes);
 		selector.addElementsToSelectionByLambda(filterFunction);
-		selector.removeOwnedAttributesFromClasses();		
+		selector.removeOwnedAttributesFromClasses();
 
 		View view = selector.createView();
 		assertThat("view must not be null", view, not(equalTo(null)));
@@ -138,19 +144,11 @@ public class ViewTestFactory extends TestViewFactory {
 		viewType = FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName);
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
 		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		selector.deselectElementsExceptForRootType(rootTypes);
 		selector.addElementsToSelectionByLambda(function);
 		selector.removeOwnedAttributesFromClasses();		
 
-		View view = selector.createView();
-		ViewSelection selection = view.getSelection();
-		for (Object element : selector.getSelectableElements()) {
-			if (element instanceof Class) {
-				System.out.println(((Class) element).getName() + ": " + selection.isViewObjectSelected((EObject) element));
-			} else {
-				System.out.println(element.getClass() + ": " + selection.isViewObjectSelected((EObject) element));
-			}
-		}
-		
+		View view = selector.createView();		
 		assertThat("view must not be null", view, not(equalTo(null)));
 		return view;
 	}

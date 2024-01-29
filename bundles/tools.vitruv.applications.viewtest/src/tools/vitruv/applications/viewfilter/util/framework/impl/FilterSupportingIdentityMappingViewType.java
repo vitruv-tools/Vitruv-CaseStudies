@@ -20,7 +20,7 @@ import org.eclipse.uml2.uml.internal.resource.UMLResourceImpl;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopier;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.DirectViewElementSelector;
-import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelector;
+import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelectorImpl;
 import tools.vitruv.applications.viewfilter.views.BasicFilterView;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.atomic.uuid.Uuid;
@@ -38,16 +38,17 @@ import tools.vitruv.framework.views.ViewSource;
  * selection mechanism and a filter-function. The filter-function can be used for 
  * selecting single objects in a model. 
  */
-public class FilterSupportingIdentityMappingViewType extends AbstractFilterSupportingViewType<FilterSupportingViewElementSelector<HierarchicalId>, HierarchicalId> {
+public class FilterSupportingIdentityMappingViewType extends AbstractFilterSupportingViewType<FilterSupportingViewElementSelectorImpl<HierarchicalId>, HierarchicalId> {
 	
 	public FilterSupportingIdentityMappingViewType(String name) {
 		super(name);
 	}
 
 
+	//TODO nbr replace by Interface
 	@Override
-	public FilterSupportingViewElementSelector<HierarchicalId> createSelector(ChangeableViewSource viewSource) {
-		return new FilterSupportingViewElementSelector<>(this, viewSource,
+	public FilterSupportingViewElementSelectorImpl<HierarchicalId> createSelector(ChangeableViewSource viewSource) {
+		return new FilterSupportingViewElementSelectorImpl<>(this, viewSource,
 				viewSource.getViewSourceModels().stream().map(resource -> {
 					if (!resource.getContents().isEmpty() && ResourceCopier.requiresFullCopy(resource)) {
 						// Some resources (like UML) can only be copied as a whole, so no option to select
@@ -59,8 +60,9 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 	}
 	
 
+	//TODO nbr replace by interface
 	@Override
-	public ModifiableView createView(FilterSupportingViewElementSelector<HierarchicalId> selector) {
+	public ModifiableView createView(FilterSupportingViewElementSelectorImpl<HierarchicalId> selector) {
 		checkArgument(selector.getViewType() == this, "cannot create view with selector for different view type");
 		return new BasicFilterView(selector.getViewType(), selector.getViewSource(), selector.getSelection(), selector.getViewFilter());
 	}

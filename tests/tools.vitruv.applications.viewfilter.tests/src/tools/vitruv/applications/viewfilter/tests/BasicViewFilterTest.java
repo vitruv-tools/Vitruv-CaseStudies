@@ -122,6 +122,7 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 		modifyModel();
 		
 		view.update();
+		view.update();
 		
 		view.getSelection();
 	}
