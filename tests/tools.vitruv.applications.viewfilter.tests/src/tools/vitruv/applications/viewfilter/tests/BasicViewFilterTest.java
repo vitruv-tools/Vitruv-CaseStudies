@@ -4,6 +4,7 @@ import com.niklas.niklasproject.niklasdomain.InformationStructure;
 import com.niklas.niklasproject.niklasdomain.NiklasdomainFactory;
 
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -128,14 +129,51 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	
-
-//	  @Test
-//	  public void testFilterForName() {
-//	    final Procedure1<Model> _function = (Model it) -> {
-//	      it.setName((FirstTest.UML_MODEL_NAME + "big"));
-//	    };
-//	    this.createAdvancedUmlModel(_function);
-//	  }
+	@Test
+	public void testModifyView() {
+		View view = improvedViewTestFactory.createUmlView();
+		CommittableView withChangeDerivingTrait = view.withChangeDerivingTrait();
+		Collection<EObject> rootObjects = withChangeDerivingTrait.getRootObjects();
+		
+		for (EObject root : rootObjects) {
+			Model model = (Model) root;
+			for (EObject content : model.eContents()) {
+				if (content instanceof org.eclipse.uml2.uml.Package) {
+					org.eclipse.uml2.uml.Package umlPackage = (org.eclipse.uml2.uml.Package) content;
+					umlPackage.setName("test");
+				}
+			}
+			
+		}
+		
+		withChangeDerivingTrait.commitChangesAndUpdate();
+		view.getRootObjects();
+	}
+	
+	
+	@Test
+	public void testModifyFilteredView() {
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		View view = improvedViewTestFactory.createFilteredUmlView(function);
+		CommittableView withChangeDerivingTrait = view.withChangeDerivingTrait();
+		Collection<EObject> rootObjects = withChangeDerivingTrait.getRootObjects();
+		
+		for (EObject root : rootObjects) {
+			Model model = (Model) root;
+			for (EObject content : model.eContents()) {
+				if (content instanceof org.eclipse.uml2.uml.Class) {
+					org.eclipse.uml2.uml.Class umlClass = (org.eclipse.uml2.uml.Class) content;
+					umlClass.setName("modifiedNiklasClass2");
+				}
+			}
+			
+		}
+		
+		withChangeDerivingTrait.commitChangesAndUpdate();
+		view.getRootObjects();
+	}
+	
+	
 
 	@Override
 	protected Iterable<? extends ChangePropagationSpecification> getChangePropagationSpecifications() {
