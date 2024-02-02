@@ -1,9 +1,11 @@
 package tools.vitruv.applications.viewfilter.tests;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -27,6 +30,7 @@ import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.UMLFactory;
@@ -36,6 +40,7 @@ import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +48,9 @@ import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
+
+import com.niklas.niklasproject.niklasdomain.InformationStructure;
+import com.niklas.niklasproject.niklasdomain.SingleInformation;
 
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification;
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification;
@@ -106,7 +114,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	
 	//--- Actual tests ---
 	@Test
-	public void testView() throws NoSuchMethodException, InvocationTargetException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public void testUmlView() throws NoSuchMethodException, InvocationTargetException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		View createUmlView = improvedViewTestFactory.createUmlView();
 		Collection<EObject> rootObjects = createUmlView.getRootObjects();
 		//Selection should contain ModelImpl, and two SystemImpl. Only the ModelImpl should be 
@@ -141,8 +149,6 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			org.eclipse.uml2.uml.Class classObject = (Class) eObject;
 			assertEquals(classObject.getName(), "niklasClass2");
 		}
-		
-		
 		
 		modifyModel();
 		view.update();
@@ -243,10 +249,8 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			assertEquals(PCM_BASIC_COMPONENT_NAME, classObject.getEntityName());
 		}
 		
-		
 		//Selection: Nur ModelImpl mit niklasClass2 als einzigs PackagedElement
 		//Root Objects: ModelImpl (aber nicht nur mit niklasClass2, sondern mit allem) und zwei weitere ModelImpls (aber andere)
-		
 		modifyModel();
 		view.update();
 		view.getSelection();
@@ -264,6 +268,45 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			BasicComponent classObject = (BasicComponent) eObject;
 			assertEquals(PCM_BASIC_COMPONENT_NAME, classObject.getEntityName());
 		}
+	}
+	
+	@Test
+	public void testCreateCountingView() {
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		View view = improvedViewTestFactory.createCountUmlElementsView(function);
+		Assertions.assertNotNull(view.getSelection(), "selection must not be null");
+		
+		Collection<EObject> rootObjects = view.getRootObjects();
+		assertEquals(rootObjects.size(), 1);
+		for (EObject root : rootObjects) {
+			assertTrue(root instanceof InformationStructure);
+			assertTrue(view.getSelection().isViewObjectSelected(root));
+			assertEquals(root.eContents().size(), 1);
+			EObject eObject = root.eContents().get(0);
+			assertTrue(eObject instanceof SingleInformation);
+			SingleInformation singleInformation = (SingleInformation) eObject;
+			assertEquals("Anzahl Elemente", singleInformation.getTitle());
+			assertEquals(1, singleInformation.getValue());
+		}
+		
+		
+		modifyModel();
+		view.update();
+		
+		rootObjects = view.getRootObjects();
+		assertEquals(rootObjects.size(), 1);
+		for (EObject root : rootObjects) {
+			assertTrue(root instanceof InformationStructure);
+			assertTrue(view.getSelection().isViewObjectSelected(root));
+			assertEquals(root.eContents().size(), 1);
+			EObject eObject = root.eContents().get(0);
+			assertTrue(eObject instanceof SingleInformation);
+			SingleInformation singleInformation = (SingleInformation) eObject;
+			assertEquals("Anzahl Elemente", singleInformation.getTitle());
+			assertEquals(2, singleInformation.getValue());
+		}
+		
+		view.getSelection();
 	}
 	
 	
@@ -441,6 +484,18 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			}
 		}
 		return count;
+	}
+	
+	
+	private boolean hasNoAttribute(EObject object, String name) {
+		if (object instanceof org.eclipse.uml2.uml.Class) {
+			if (object instanceof NamedElement) {
+				if (name.equals(((NamedElement) object).getName())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
