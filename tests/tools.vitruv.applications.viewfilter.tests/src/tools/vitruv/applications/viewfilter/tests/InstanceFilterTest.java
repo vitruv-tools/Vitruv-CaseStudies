@@ -131,7 +131,8 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	
 	@Test
 	public void testCreateFilteredUmlView() {
-		View view = improvedViewTestFactory.createFilteredUmlView();
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		View view = improvedViewTestFactory.createFilteredUmlView(function);
 		
 		view.update();
 		view.update();
@@ -174,7 +175,9 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	@Test
 	public void testCreateFilteredUmlViewWithAdditionalPcmElementsInVsum() {
 		createPcmModel();
-		View view = improvedViewTestFactory.createFilteredUmlView();
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		
+		View view = improvedViewTestFactory.createFilteredUmlView(function);
 		view.update();
 		view.update();
 		//Selection: Nur ModelImpl mit niklasClass2 als einzigs PackagedElement

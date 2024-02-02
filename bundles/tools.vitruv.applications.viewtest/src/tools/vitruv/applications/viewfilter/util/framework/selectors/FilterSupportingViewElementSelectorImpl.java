@@ -79,11 +79,11 @@ public class FilterSupportingViewElementSelectorImpl<Id extends Object> implemen
 				.forEach(element -> setSelected(element, false));
 	}
 
-	public void addElementsToSelectionByLambda(Function<EObject, Boolean> filter) {
+	public void filterModelElementsByLambda(Function<EObject, Boolean> filter) {
 		viewFilterBuilder.filterByLambda(filter);
 	}
 
-	public void removeOwnedAttributesFromClasses() {
+	public void removeOwnedAttributesFromUmlClasses() {
 		viewFilterBuilder.removeOwnedUmlAttributes();
 	}
 

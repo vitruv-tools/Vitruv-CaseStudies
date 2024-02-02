@@ -61,7 +61,8 @@ public class ViewTestFactory extends TestViewFactory {
 	
 	public View createFilteredUmlView(FirstTest test) {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
-		View view = createFilteredForNoAttributesViewOfElements("UML", rootTypes);
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		View view = createFilteredForNoAttributesViewOfElements("UML", rootTypes, function);
 		view.getSelection().isViewObjectSelected(test.getClass1());
 		view.getSelection().isViewObjectSelected(test.getClass2());
 		return view;
@@ -69,20 +70,21 @@ public class ViewTestFactory extends TestViewFactory {
 	
 	public View createFilteredUmlView(BasicViewFilterTest test) {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
-		View view = createFilteredForNoAttributesViewOfElements("UML", rootTypes);
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		View view = createFilteredForNoAttributesViewOfElements("UML", rootTypes, function);
 		view.getSelection().isViewObjectSelected(test.getClass1());
 		view.getSelection().isViewObjectSelected(test.getClass2());
 		return view;
 	}
 	
-	public View createFilteredUmlView() {
+	public View createFilteredUmlView(Function<EObject, Boolean> function) {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
-		return createFilteredForNoAttributesViewOfElements("UML", rootTypes);
+		return createFilteredForNoAttributesViewOfElements("UML", rootTypes, function);
 	}
 	
 	public View createFilteredPcmView(Function<EObject, Boolean> filterFunction) {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Repository.class);
-		return createFilteredForNoAttributesViewOfElements("PCM", rootTypes, filterFunction);
+		return createFilteredViewOfElements("PCM", rootTypes, filterFunction);
 	}
 	
 	
@@ -130,9 +132,9 @@ public class ViewTestFactory extends TestViewFactory {
 	public View createAbstractedFilteredView(String viewName, Collection<Class<?>> rootTypes, Function<EObject, Boolean> filterFunction) {
 		viewType = FilterSupportingViewTypeFactory.createAbstractedFilterViewViewType(viewName);
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
-		selector.selectElementsOfRootType(rootTypes);
-		selector.addElementsToSelectionByLambda(filterFunction);
-		selector.removeOwnedAttributesFromClasses();
+		selector.deselectElementsExceptForRootType(rootTypes);
+		selector.filterModelElementsByLambda(filterFunction);
+		selector.removeOwnedAttributesFromUmlClasses();
 
 		View view = selector.createView();
 		assertThat("view must not be null", view, not(equalTo(null)));
@@ -140,13 +142,12 @@ public class ViewTestFactory extends TestViewFactory {
 	}
 	
 	
-	public View createFilteredForNoAttributesViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
+	public View createFilteredForNoAttributesViewOfElements(String viewName, Collection<Class<?>> rootTypes, Function<EObject, Boolean> function) {
 		viewType = FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName);
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
-		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
 		selector.deselectElementsExceptForRootType(rootTypes);
-		selector.addElementsToSelectionByLambda(function);
-		selector.removeOwnedAttributesFromClasses();		
+		selector.filterModelElementsByLambda(function);
+		selector.removeOwnedAttributesFromUmlClasses();		
 
 		View view = selector.createView();		
 		assertThat("view must not be null", view, not(equalTo(null)));
@@ -154,12 +155,12 @@ public class ViewTestFactory extends TestViewFactory {
 	}
 	
 	
-	private View createFilteredForNoAttributesViewOfElements(String viewName, Collection<Class<?>> rootTypes, Function<EObject, Boolean> filterFunction) {
+	private View createFilteredViewOfElements(String viewName, Collection<Class<?>> rootTypes, Function<EObject, Boolean> filterFunction) {
 		viewType = FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName);
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
 		Function<EObject, Boolean> function = (EObject object) -> filterFunction.apply(object);
 		selector.deselectElementsExceptForRootType(rootTypes);
-		selector.addElementsToSelectionByLambda(function);	
+		selector.filterModelElementsByLambda(function);	
 
 		View view = selector.createView();		
 		assertThat("view must not be null", view, not(equalTo(null)));
