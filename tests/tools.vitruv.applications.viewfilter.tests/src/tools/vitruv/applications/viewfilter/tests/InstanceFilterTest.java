@@ -1,8 +1,10 @@
 package tools.vitruv.applications.viewfilter.tests;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -20,12 +23,14 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.UMLFactory;
+import org.eclipse.uml2.uml.internal.impl.ModelImpl;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -34,12 +39,18 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.palladiosimulator.pcm.repository.BasicComponent;
+import org.palladiosimulator.pcm.repository.CompositeDataType;
+import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification;
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification;
 import tools.vitruv.applications.testutility.uml.UmlQueryUtil;
 import tools.vitruv.applications.viewfilter.util.framework.impl.BasicView;
 import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView;
+import tools.vitruv.applications.viewfilter.utils.PcmQueryUtil;
+import tools.vitruv.applications.viewfilter.utils.PcmUmlClassApplicationTestHelper;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
@@ -66,6 +77,10 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 
 	@Accessors(AccessorType.PROTECTED_GETTER)
 	private static final String MODEL_FILE_EXTENSION = "uml";
+	
+	private static final String PCM_BASIC_COMPONENT_NAME = "Niklas Basic PCM component 1";
+	
+	private static final String UML_MODEL_URI = "1234uri1234";
 
 	@Accessors(AccessorType.PUBLIC_GETTER)
 	private org.eclipse.uml2.uml.Class class1;
@@ -74,6 +89,10 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	private org.eclipse.uml2.uml.Class class2;
 
 	protected ViewTestFactory improvedViewTestFactory;
+
+	private Model umlModel;
+
+	
 	
 	@BeforeEach
 	public void setup() {
@@ -82,7 +101,6 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			it.setName(UML_MODEL_NAME);
 		};
 		createBiggerUmlModel(setNameFunction);
-		//createPcmModel();
 	}
 	
 	
@@ -91,46 +109,161 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	public void testView() throws NoSuchMethodException, InvocationTargetException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		View createUmlView = improvedViewTestFactory.createUmlView();
 		Collection<EObject> rootObjects = createUmlView.getRootObjects();
-		ViewSelection selection = createUmlView.getSelection();
-		
-		
-		
-//		Field declaredField = selection.getClass().getSuperclass().getDeclaredField("elementsSelection");
-//		declaredField.setAccessible(true);
-//		HashMap<EObject, Boolean> map = (HashMap<EObject, Boolean>) declaredField.get(createUmlView);
-		
 		//Selection should contain ModelImpl, and two SystemImpl. Only the ModelImpl should be 
 		//selected.
-
-		
-		assert(rootObjects.stream().anyMatch(it -> it instanceof Model));
-		assertEquals(rootObjects.size(), 1);
+		//Root Objects should only contain ModelImpl
+		assertEquals(countContainedModelImplInstances(rootObjects), 1);
+		assertEquals(1, rootObjects.size());
+		for (EObject root : rootObjects) {
+			assertTrue(root instanceof ModelImpl);
+			assertEquals(UML_MODEL_URI, ((ModelImpl) root).getURI());
+		}		
 	}
 	
 	
 	@Test
 	public void testCreateFilteredUmlView() {
 		View view = improvedViewTestFactory.createFilteredUmlView();
-		//View view = improvedViewTestFactory.createFilteredPcmView();
-//		((FilterSupportingIdentityMappingViewType) improvedViewTestFactory.viewType)
-//				.updateView(((ModifiableView) view));
-		view.update();
-		view.update();
-		view.getRootObjects();
 		
+		view.update();
+		view.update();
+		Collection<EObject> rootObjects = view.getRootObjects();
+		assertEquals(rootObjects.size(), 1);
+		//TODO nbr: remove comments..
 		//Selection: Nur ModelImpl mit niklasClass2 als einzigs PackagedElement
 		//Root Objects: ModelImpl (aber nicht nur mit niklasClass2, sondern mit allem)
+		for (EObject root : rootObjects) {
+			assertTrue(root instanceof Model);
+			assertTrue(view.getSelection().isViewObjectSelected(root));
+			assertEquals(root.eContents().size(), 1);
+			EObject eObject = root.eContents().get(0);
+			assertTrue(eObject instanceof org.eclipse.uml2.uml.Class);
+			org.eclipse.uml2.uml.Class classObject = (Class) eObject;
+			assertEquals(classObject.getName(), "niklasClass2");
+		}
+		
+		
 		
 		modifyModel();
 		view.update();
 		view.getSelection();
-		view.getRootObjects();
-		
 		//Selection: Nur ModelImpl mit zwei Klassen die jeweils niklasClass2 als Namen haben, als PackagedElement
 		//ACHTUNG: Die zwei Klassen sind als PackagedElements in der ModelImpl!
 		//Root Objects: ModelImpl
+		Collection<EObject> modifiedRootObjects = view.getRootObjects();
+		assertEquals(modifiedRootObjects.size(), 1);
+		for (EObject root : modifiedRootObjects) {
+			assertTrue(root instanceof Model);
+			assertTrue(view.getSelection().isViewObjectSelected(root));
+			assertEquals(root.eContents().size(), 2);
+			for (EObject eObject : root.eContents()) {
+				assertTrue(eObject instanceof org.eclipse.uml2.uml.Class);
+				org.eclipse.uml2.uml.Class classObject = (Class) eObject;
+				assertEquals(classObject.getName(), "niklasClass2");
+			}			
+		}
+	}
+	
+	
+	@Test
+	public void testCreateFilteredUmlViewWithAdditionalPcmElementsInVsum() {
+		createPcmModel();
+		View view = improvedViewTestFactory.createFilteredUmlView();
+		view.update();
+		view.update();
+		//Selection: Nur ModelImpl mit niklasClass2 als einzigs PackagedElement
+		//Root Objects: ModelImpl (aber nicht nur mit niklasClass2, sondern mit allem) und zwei weitere ModelImpls (aber andere)
+		Collection<EObject> rootObjects = view.getRootObjects();
+		assertEquals(rootObjects.size(), 1);
+		for (EObject root : rootObjects) {
+			assertTrue(root instanceof Model);
+			assertTrue(view.getSelection().isViewObjectSelected(root));
+			assertEquals(root.eContents().size(), 1);
+			for (EObject eObject : root.eContents()) {
+				assertTrue(eObject instanceof org.eclipse.uml2.uml.Class);
+				org.eclipse.uml2.uml.Class classObject = (Class) eObject;
+				assertEquals(classObject.getName(), "niklasClass2");
+			}			
+		}
 		
+		modifyModel();
+		view.update();
+		view.getSelection();
+		//Selection: Nur ModelImpl mit zwei Klassen die jeweils niklasClass2 als Namen haben, als PackagedElement
+		//ACHTUNG: Die zwei Klassen sind als PackagedElements in der ModelImpl!
+		//Root Objects: ModelImpl, ModelImpl, ModelImpl
+		Collection<EObject> modifiedRootObjects = view.getRootObjects();
+		assertEquals(modifiedRootObjects.size(), 1);
+		for (EObject root : modifiedRootObjects) {
+			assertTrue(root instanceof Model);
+			assertTrue(view.getSelection().isViewObjectSelected(root));
+			assertEquals(root.eContents().size(), 2);
+			for (EObject eObject : root.eContents()) {
+				assertTrue(eObject instanceof org.eclipse.uml2.uml.Class);
+				org.eclipse.uml2.uml.Class classObject = (Class) eObject;
+				assertEquals(classObject.getName(), "niklasClass2");
+			}			
+		}
+
 		view.getViewType();
+	}
+	
+	
+	@Test
+	public void testPcmView() throws NoSuchMethodException, InvocationTargetException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		createPcmModel();
+		View createPcmView = improvedViewTestFactory.createPcmView();
+		Collection<EObject> rootObjects = createPcmView.getRootObjects();
+		ViewSelection selection = createPcmView.getSelection();
+		//Selection should contain 20 elements (0-19) with two RepositoryImpl selected.
+		//Root elements should be two RepositoryImpl
+		assertEquals(2, rootObjects.size());
+		for (EObject root : rootObjects) {
+			assertTrue(root instanceof Repository);
+		}	
+	}
+	
+	
+	@Test
+	public void testCreateFilteredPcmView() {
+		createPcmModel();
+		View view = improvedViewTestFactory.createFilteredPcmView((EObject object) -> hasInstanceName(object, PCM_BASIC_COMPONENT_NAME));
+		view.update();
+		view.update();
+		
+		Collection<EObject> rootObjects = view.getRootObjects();
+		assertEquals(rootObjects.size(), 1);
+		for (EObject root : rootObjects) {
+			assertTrue(root instanceof Repository);
+			assertTrue(view.getSelection().isViewObjectSelected(root));
+			assertEquals(root.eContents().size(), 1);
+			EObject eObject = root.eContents().get(0);
+			assertTrue(eObject instanceof BasicComponent);
+			BasicComponent classObject = (BasicComponent) eObject;
+			assertEquals(PCM_BASIC_COMPONENT_NAME, classObject.getEntityName());
+		}
+		
+		
+		//Selection: Nur ModelImpl mit niklasClass2 als einzigs PackagedElement
+		//Root Objects: ModelImpl (aber nicht nur mit niklasClass2, sondern mit allem) und zwei weitere ModelImpls (aber andere)
+		
+		modifyModel();
+		view.update();
+		view.getSelection();
+		//Selection: Nur ModelImpl mit zwei Klassen die jeweils niklasClass2 als Namen haben, als PackagedElement
+		//ACHTUNG: Die zwei Klassen sind als PackagedElements in der ModelImpl!
+		//Root Objects: ModelImpl, ModelImpl, ModelImpl
+		Collection<EObject> modifiedRootObjects = view.getRootObjects();
+		assertEquals(modifiedRootObjects.size(), 1);
+		for (EObject root : modifiedRootObjects) {
+			assertTrue(root instanceof Repository);
+			assertTrue(view.getSelection().isViewObjectSelected(root));
+			assertEquals(root.eContents().size(), 1);
+			EObject eObject = root.eContents().get(0);
+			assertTrue(eObject instanceof BasicComponent);
+			BasicComponent classObject = (BasicComponent) eObject;
+			assertEquals(PCM_BASIC_COMPONENT_NAME, classObject.getEntityName());
+		}
 	}
 	
 	
@@ -139,9 +272,10 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	protected void createBiggerUmlModel(final Procedure1<? super Model> modelInitialization) {
 		try {
 			final Consumer<CommittableView> firstChangeUmlFunction = (CommittableView it) -> {
-				final Model umlModel = UMLFactory.eINSTANCE.createModel();
+				umlModel = UMLFactory.eINSTANCE.createModel();
 				createAndRegisterRoot(it, umlModel, this.getUri(getProjectModelPath(UML_MODEL_NAME)));
 				modelInitialization.apply(umlModel);
+				umlModel.setURI(UML_MODEL_URI);
 			};
 			improvedViewTestFactory.changeUmlView(firstChangeUmlFunction);
 
@@ -218,6 +352,54 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 		}
 	}
 	
+	
+	protected void createPcmModel() {
+		
+		getUserInteraction().addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE);
+		Consumer<CommittableView> createPcmRepoFunction = (CommittableView it) -> {
+			Repository repository = RepositoryFactory.eINSTANCE.createRepository();
+			repository.setEntityName(PCM_MODEL_NAME);
+			it.registerRoot(repository, getUri(getPcmProjectModelPath(repository.getEntityName(), PCM_REPOSITORY_FILE_EXTENSION)));
+			//createAndRegisterRoot(it, repository, this.getUri(getProjectModelPath(PCM_MODEL_NAME)));		
+		};
+		
+		try {
+			improvedViewTestFactory.changePcmView(createPcmRepoFunction);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		Consumer<CommittableView> changePcmFunction = (CommittableView it) -> {
+			Repository repository = getDefaultPcmRepository(it);
+			BasicComponent createBasicComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
+			createBasicComponent.setEntityName(PCM_BASIC_COMPONENT_NAME);
+			repository.getComponents__Repository().add(createBasicComponent);
+			
+			CompositeDataType compositeDataType1 = RepositoryFactory.eINSTANCE.createCompositeDataType();
+			compositeDataType1.setEntityName("niklasPcmCompositeDataType1");
+			repository.getDataTypes__Repository().add(compositeDataType1);
+
+		};
+		
+		try {
+			improvedViewTestFactory.changePcmView(changePcmFunction);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private boolean hasInstanceName(EObject object, String name) {
+		if (object instanceof org.palladiosimulator.pcm.core.entity.NamedElement) {
+			if (name.equals(((org.palladiosimulator.pcm.core.entity.NamedElement) object).getEntityName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 	private Path getPcmProjectModelPath(String modelName, String modelFileExtension) {
 		return Path.of("pcm").resolve(modelName + "." + modelFileExtension);
 	}
@@ -234,6 +416,9 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 		return UmlQueryUtil.claimUmlModel(view, UML_MODEL_NAME);
 	}
 
+	private Repository getDefaultPcmRepository(View view) {
+		return PcmQueryUtil.claimPcmRepository(view, PCM_MODEL_NAME);
+	}
 
 	@Override
 	protected Iterable<? extends ChangePropagationSpecification> getChangePropagationSpecifications() {
@@ -243,6 +428,19 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 				CollectionLiterals.<ChangePropagationSpecification>newArrayList(
 						_combinedPcmToUmlClassReactionsChangePropagationSpecification,
 						_combinedUmlClassToPcmReactionsChangePropagationSpecification));
+	}
+	
+	
+	private int countContainedModelImplInstances(Collection<EObject> collection) {
+		int count = 0;
+		Iterator<EObject> iterator = collection.iterator();
+		while(iterator.hasNext()) {
+			EObject next = iterator.next();
+			if (next instanceof ModelImpl) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 }

@@ -47,7 +47,7 @@ public class ViewTestFactory extends TestViewFactory {
 		return createViewOfElements("UML", rootTypes);
 	}
 	
-	private View createPcmView() {
+	public View createPcmView() {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Repository.class);
 		rootTypes.add(RepositoryComponent.class);
 		return createViewOfElements("PCM packages and components", rootTypes);
@@ -80,9 +80,9 @@ public class ViewTestFactory extends TestViewFactory {
 		return createFilteredForNoAttributesViewOfElements("UML", rootTypes);
 	}
 	
-	public View createFilteredPcmView() {
+	public View createFilteredPcmView(Function<EObject, Boolean> filterFunction) {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Repository.class);
-		return createFilteredForNoAttributesViewOfElements("PCM", rootTypes);
+		return createFilteredForNoAttributesViewOfElements("PCM", rootTypes, filterFunction);
 	}
 	
 	
@@ -97,7 +97,7 @@ public class ViewTestFactory extends TestViewFactory {
 	//
 	
 	public View createViewOfElements(String viewName, Collection<Class<?>> rootTypes) {
-		ViewSelector selector = viewProvider.createSelector(ViewTypeFactory.createIdentityMappingViewType(viewName));
+ 		ViewSelector selector = viewProvider.createSelector(ViewTypeFactory.createIdentityMappingViewType(viewName));
 		selector.getSelectableElements().stream()
 				.filter(element -> rootTypes.stream().anyMatch(it -> it.isInstance(element)))
 				.forEach(element -> selector.setSelected(element, true));
@@ -154,13 +154,16 @@ public class ViewTestFactory extends TestViewFactory {
 	}
 	
 	
-	private boolean hasInstanceName(EObject object, String name) {
-		if (object instanceof org.palladiosimulator.pcm.core.entity.NamedElement) {
-			if (name.equals(((org.palladiosimulator.pcm.core.entity.NamedElement) object).getEntityName())) {
-				return true;
-			}
-		}
-		return false;
+	private View createFilteredForNoAttributesViewOfElements(String viewName, Collection<Class<?>> rootTypes, Function<EObject, Boolean> filterFunction) {
+		viewType = FilterSupportingViewTypeFactory.createFilterSupportingIdentityMappingViewType(viewName);
+		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
+		Function<EObject, Boolean> function = (EObject object) -> filterFunction.apply(object);
+		selector.deselectElementsExceptForRootType(rootTypes);
+		selector.addElementsToSelectionByLambda(function);	
+
+		View view = selector.createView();		
+		assertThat("view must not be null", view, not(equalTo(null)));
+		return view;
 	}
 
 	
