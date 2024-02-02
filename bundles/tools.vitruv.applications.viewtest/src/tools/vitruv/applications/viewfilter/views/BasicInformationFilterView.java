@@ -36,7 +36,7 @@ public class BasicInformationFilterView extends BasicFilterView {
 	
 	
 	@Override
-	protected void updateSelectedElements(ModifiableViewSelection selection) {
+	protected void updateRootAndSelectedElements(ModifiableViewSelection selection) {
 		if (selection == null) {
 			throw new NullPointerException("selection is null");
 		}
@@ -62,6 +62,9 @@ public class BasicInformationFilterView extends BasicFilterView {
 		
 		List<EObject> selectionList = new ArrayList();
 		selectionList.add(informationStructure);
+		
+		setRootObjects(selectionList);
+		
 		ElementViewSelection elementViewSelection = new ElementViewSelection(selectionList);
 		elementViewSelection.setSelected(informationStructure, true);
 		setSelection(elementViewSelection);

@@ -26,7 +26,9 @@ public class BasicFilterView extends BasicView {
 	
 	private final ViewFilter viewFilter;
 	
-	private ViewSelection preFilterSelection;
+	private final ViewSelection preFilterSelection;
+	
+	private Collection<EObject> rootObjects;
 	
 
 	public BasicFilterView(FilteredViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
@@ -51,7 +53,7 @@ public class BasicFilterView extends BasicView {
 		super.modifyContents(modificationFunction);
 		if (viewFilter != null) {
 			ModifiableViewSelection filteredSelection = filterElementsForSelection();
-			updateSelectedElements(filteredSelection);
+			updateRootAndSelectedElements(filteredSelection);
 		}	
 	}
 	
@@ -78,7 +80,13 @@ public class BasicFilterView extends BasicView {
 	}
 	
 	
-	protected void updateSelectedElements(ModifiableViewSelection selection) {
+	public Collection<EObject> getRootObjects() {
+		return Collections.unmodifiableCollection(rootObjects);
+	}
+	
+	
+	protected void updateRootAndSelectedElements(ModifiableViewSelection selection) {
+		setRootObjects(selection.getSelectableElements());
 		setSelection(selection);
 	}
 
@@ -90,6 +98,11 @@ public class BasicFilterView extends BasicView {
 	
 	public ViewSelection getSelection() {
 		return super.getSelection();
+	}
+
+
+	protected void setRootObjects(Collection<EObject> rootObjects) {
+		this.rootObjects = rootObjects;
 	}
 
 }
