@@ -16,7 +16,8 @@ import com.niklas.niklasproject.niklasdomain.InformationStructure;
 import com.niklas.niklasproject.niklasdomain.NiklasdomainFactory;
 import com.niklas.niklasproject.niklasdomain.SingleInformation;
 
-import tools.vitruv.application.viewfilter.transformation.UmlToInformationTransformator;
+import tools.vitruv.application.viewfilter.transformation.CountElementsTransformator;
+import tools.vitruv.application.viewfilter.transformation.CountUmlClassesTransformator;
 import tools.vitruv.applications.viewfilter.helpers.ViewFilterHelper;
 import tools.vitruv.applications.viewfilter.util.framework.impl.FilteredViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
@@ -40,25 +41,18 @@ public class BasicInformationFilterView extends BasicFilterView {
 		if (selection == null) {
 			throw new NullPointerException("selection is null");
 		}
-		UmlToInformationTransformator transformator = new UmlToInformationTransformator();
+		CountElementsTransformator transformator = new CountUmlClassesTransformator();
 		InformationStructure informationStructure = NiklasdomainFactory.eINSTANCE.createInformationStructure();
 		EList<SingleInformation> singleinformationList = informationStructure.getSingleinformation();
 		
-		//TODO nbr Hier weitermachen! die selectableElements entsprechen den gefilterten Elementen => daraus muss ich meine Informationen berechnen
 		for(EObject root : selection.getSelectableElements()) {
 			if (selection.isSelected(root)) {
 				SingleInformation transformResult = transformator.transform(root);
 				if (transformResult != null) {
 					singleinformationList.add(transformResult);
-	//				mapOriginalRoot2RootStub.
-	//				mapOriginalRoot2RootStub_.put(mapOriginalRoot2RootStub.get(root)), )
 				}
 			}
 		}
-		
-//		for (EObject key : mapOriginalRoot2FilteredRootStub.keySet()) {
-//			getMapOriginalRoot2InformationRoot().put(key, informationStructure);
-//		}
 		
 		List<EObject> selectionList = new ArrayList();
 		selectionList.add(informationStructure);

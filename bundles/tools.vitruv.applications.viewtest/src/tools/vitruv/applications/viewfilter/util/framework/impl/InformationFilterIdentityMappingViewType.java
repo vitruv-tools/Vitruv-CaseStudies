@@ -7,9 +7,9 @@ import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSuppo
 import tools.vitruv.applications.viewfilter.views.BasicInformationFilterView;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 
-public class AbstractingInformationFilterIdentityMappingViewType extends FilterSupportingIdentityMappingViewType {
+public class InformationFilterIdentityMappingViewType extends FilterSupportingIdentityMappingViewType {
 
-	public AbstractingInformationFilterIdentityMappingViewType(String name) {
+	public InformationFilterIdentityMappingViewType(String name) {
 		super(name);
 	}
 
