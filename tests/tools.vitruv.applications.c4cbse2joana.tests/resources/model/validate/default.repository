@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repository:Repository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:repository="http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" xmlns:seff="http://palladiosimulator.org/PalladioComponentModel/SEFF/5.2" id="_dqFLECHbEd6tG9VclJz3cw" entityName="defaultRepository">
+  <components__Repository xsi:type="repository:BasicComponent" id="_SaUYgMNzEeWPE-QAhbUzuQ" entityName="TravelAgency">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_dgy9sMNzEeWPE-QAhbUzuQ" entityName="Provided_FlightOffers_TravelAgency" providedInterface__OperationProvidedRole="_OWfzMMNyEeWPE-QAhbUzuQ"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_QbI5kMN0EeWPE-QAhbUzuQ" entityName="Provided_Comission_TravelAgency" providedInterface__OperationProvidedRole="_IR9L8MN0EeWPE-QAhbUzuQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_rANwMMNzEeWPE-QAhbUzuQ" entityName="Required_FlightOffers_TravelAgency" requiredInterface__OperationRequiredRole="_OWfzMMNyEeWPE-QAhbUzuQ"/>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_21n_oPT3EeuE87M6otJwmw" describedService__SEFF="_nXaBAMN0EeWPE-QAhbUzuQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_3KA7QPT3EeuE87M6otJwmw" entityName="start" successor_AbstractAction="_3KBiUPT3EeuE87M6otJwmw"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_3KBiUPT3EeuE87M6otJwmw" entityName="stop" predecessor_AbstractAction="_3KA7QPT3EeuE87M6otJwmw"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_3ax7IPT3EeuE87M6otJwmw" describedService__SEFF="_R6uH4MNyEeWPE-QAhbUzuQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_3uao0PT3EeuE87M6otJwmw" entityName="start" successor_AbstractAction="_3uao0fT3EeuE87M6otJwmw"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_3uao0fT3EeuE87M6otJwmw" entityName="stop" predecessor_AbstractAction="_3uao0PT3EeuE87M6otJwmw"/>
+    </serviceEffectSpecifications__BasicComponent>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_j3xt4MNzEeWPE-QAhbUzuQ" entityName="Airline">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_9cO_kMNzEeWPE-QAhbUzuQ" entityName="Provided_FlightOffers_Airline" providedInterface__OperationProvidedRole="_OWfzMMNyEeWPE-QAhbUzuQ"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_1NES0MOAEeWst9mTsticNA" entityName="Provided_Booking_Airline" providedInterface__OperationProvidedRole="_y_H88MNyEeWPE-QAhbUzuQ"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_y4ZmMM5wEeWFJak7Wqvc0g" entityName="Provided_AirlineAdministration_Airline" providedInterface__OperationProvidedRole="_lKDm4M5wEeWFJak7Wqvc0g"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_OgyswMN0EeWPE-QAhbUzuQ" entityName="Required_Comission_Airline" requiredInterface__OperationRequiredRole="_IR9L8MN0EeWPE-QAhbUzuQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_nxUl8AyQEey1YdsQNY8KdA" entityName="Required_AirlineLogging_Airline" requiredInterface__OperationRequiredRole="_NhhRMAyQEey1YdsQNY8KdA"/>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_1NGIAMOAEeWst9mTsticNA" describedService__SEFF="_00dt8MNyEeWPE-QAhbUzuQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_1NGvEMOAEeWst9mTsticNA" entityName="start" successor_AbstractAction="_1NGvEcOAEeWst9mTsticNA"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_1NGvEcOAEeWst9mTsticNA" entityName="stop" predecessor_AbstractAction="_1NGvEMOAEeWst9mTsticNA"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_y4dQkM5wEeWFJak7Wqvc0g" describedService__SEFF="_ok8ZYM5wEeWFJak7Wqvc0g">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_y4d3oM5wEeWFJak7Wqvc0g" entityName="start" successor_AbstractAction="_y4d3oc5wEeWFJak7Wqvc0g"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_y4d3oc5wEeWFJak7Wqvc0g" entityName="stop" predecessor_AbstractAction="_y4d3oM5wEeWFJak7Wqvc0g"/>
+    </serviceEffectSpecifications__BasicComponent>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_5EaVoMNxEeWPE-QAhbUzuQ" entityName="TravelPlanner">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_kEhCAMN2EeWPE-QAhbUzuQ" entityName="Provided_BookingSelection_TravelPlanner" providedInterface__OperationProvidedRole="_uUkncMN0EeWPE-QAhbUzuQ"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_FLU44PUDEeuE87M6otJwmw" entityName="Provided_DeclassificationReceiver_TravelPlanner" providedInterface__OperationProvidedRole="_t2HtAPUCEeuE87M6otJwmw"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_v8ocUMNyEeWPE-QAhbUzuQ" entityName="Required_FlightOffers_TravelPlanner" requiredInterface__OperationRequiredRole="_OWfzMMNyEeWPE-QAhbUzuQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_Cq8VkMNzEeWPE-QAhbUzuQ" entityName="Required_Booking_TravelPlanner" requiredInterface__OperationRequiredRole="_y_H88MNyEeWPE-QAhbUzuQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_ce3icMN6EeWPE-QAhbUzuQ" entityName="Required_Declassification_TravelPlanner" requiredInterface__OperationRequiredRole="_CayVgMN6EeWPE-QAhbUzuQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_xnF5YMN6EeWPE-QAhbUzuQ" entityName="Required_Input_TravelPlanner" requiredInterface__OperationRequiredRole="_oZwAEMN6EeWPE-QAhbUzuQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_PXc-kPUXEeuE87M6otJwmw" entityName="Required_BookingConfirmation_TravelPlanner" requiredInterface__OperationRequiredRole="_Kk4ncPUXEeuE87M6otJwmw"/>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_09BfQPT3EeuE87M6otJwmw" describedService__SEFF="_GmUUEMN1EeWPE-QAhbUzuQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_1TFO0PT3EeuE87M6otJwmw" entityName="start" successor_AbstractAction="_1TF14PT3EeuE87M6otJwmw"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_1TF14PT3EeuE87M6otJwmw" entityName="stop" predecessor_AbstractAction="_1TFO0PT3EeuE87M6otJwmw"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_1k7z0PT3EeuE87M6otJwmw" describedService__SEFF="_602gYM5lEeWFJak7Wqvc0g">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_11vP8PT3EeuE87M6otJwmw" entityName="start" successor_AbstractAction="_11v3APT3EeuE87M6otJwmw"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_11v3APT3EeuE87M6otJwmw" entityName="stop" predecessor_AbstractAction="_11vP8PT3EeuE87M6otJwmw"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_FLVf8PUDEeuE87M6otJwmw" describedService__SEFF="_vnXBIPUCEeuE87M6otJwmw">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_FLVf8fUDEeuE87M6otJwmw" entityName="start" successor_AbstractAction="_FLVf8vUDEeuE87M6otJwmw"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_FLVf8vUDEeuE87M6otJwmw" entityName="stop" predecessor_AbstractAction="_FLVf8fUDEeuE87M6otJwmw"/>
+    </serviceEffectSpecifications__BasicComponent>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="__s82QMN5EeWPE-QAhbUzuQ" entityName="CreditCardCenter">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_WXhJsMN6EeWPE-QAhbUzuQ" entityName="Provided_Declassification_CreditCardCenter" providedInterface__OperationProvidedRole="_CayVgMN6EeWPE-QAhbUzuQ"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_vjje4MN7EeWPE-QAhbUzuQ" entityName="Provided_Configuration_CreditCardCenter" providedInterface__OperationProvidedRole="_MACf4MN3EeWPE-QAhbUzuQ"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_8wDuMM54EeW6RpZqSiINDQ" entityName="Provided_DeclassificationConfirmation_CreditCardCenter" providedInterface__OperationProvidedRole="_ggoEAM54EeW6RpZqSiINDQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_YYuzgMN6EeWPE-QAhbUzuQ" entityName="Required_Confirmation_CreditCardCenter" requiredInterface__OperationRequiredRole="_XQ1XUMN6EeWPE-QAhbUzuQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_FusEoPUDEeuE87M6otJwmw" entityName="Required_DeclassificationReceiver_CreditCardCenter" requiredInterface__OperationRequiredRole="_t2HtAPUCEeuE87M6otJwmw"/>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_WXhwwMN6EeWPE-QAhbUzuQ" describedService__SEFF="_JXJqsMN6EeWPE-QAhbUzuQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_WXhwwcN6EeWPE-QAhbUzuQ" entityName="start" successor_AbstractAction="_WXhwwsN6EeWPE-QAhbUzuQ"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_WXhwwsN6EeWPE-QAhbUzuQ" entityName="stop" predecessor_AbstractAction="_WXhwwcN6EeWPE-QAhbUzuQ"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_vjktAMN7EeWPE-QAhbUzuQ" describedService__SEFF="_N6idsMN3EeWPE-QAhbUzuQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_vjktAcN7EeWPE-QAhbUzuQ" entityName="start" successor_AbstractAction="_vjktAsN7EeWPE-QAhbUzuQ"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_vjktAsN7EeWPE-QAhbUzuQ" entityName="stop" predecessor_AbstractAction="_vjktAcN7EeWPE-QAhbUzuQ"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_8wRJkM54EeW6RpZqSiINDQ" describedService__SEFF="_p3shEM54EeW6RpZqSiINDQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_8wRwoM54EeW6RpZqSiINDQ" entityName="start" successor_AbstractAction="_8wRwoc54EeW6RpZqSiINDQ"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_8wRwoc54EeW6RpZqSiINDQ" entityName="stop" predecessor_AbstractAction="_8wRwoM54EeW6RpZqSiINDQ"/>
+    </serviceEffectSpecifications__BasicComponent>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_l3SqMO7sEeurfJm_5KAHmg" entityName="UserInterface">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_ttfxcO7sEeurfJm_5KAHmg" entityName="Provided_Confirmation_UserInterface" providedInterface__OperationProvidedRole="_XQ1XUMN6EeWPE-QAhbUzuQ"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_2uej4PT5EeuE87M6otJwmw" entityName="Provided_Input_UserInterface" providedInterface__OperationProvidedRole="_oZwAEMN6EeWPE-QAhbUzuQ"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_NnTPkPUXEeuE87M6otJwmw" entityName="Provided_BookingConfirmation_UserInterface" providedInterface__OperationProvidedRole="_Kk4ncPUXEeuE87M6otJwmw"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_r1ZOoAysEey1YdsQNY8KdA" entityName="Provided_UserIdentityConfiguration_UserInterface" providedInterface__OperationProvidedRole="_K16yUAyrEey1YdsQNY8KdA"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_uxx48O7sEeurfJm_5KAHmg" entityName="Required_BookingSelection_UserInterface" requiredInterface__OperationRequiredRole="_uUkncMN0EeWPE-QAhbUzuQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_x8m2MO7sEeurfJm_5KAHmg" entityName="Required_Configuration_UserInterface" requiredInterface__OperationRequiredRole="_MACf4MN3EeWPE-QAhbUzuQ"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_y-ei4O7sEeurfJm_5KAHmg" entityName="Required_DeclassificationConfirmation_UserInterface" requiredInterface__OperationRequiredRole="_ggoEAM54EeW6RpZqSiINDQ"/>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_ttgYgO7sEeurfJm_5KAHmg" describedService__SEFF="_hAD1sMN6EeWPE-QAhbUzuQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_ttgYge7sEeurfJm_5KAHmg" entityName="start" successor_AbstractAction="_ttgYgu7sEeurfJm_5KAHmg"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_ttgYgu7sEeurfJm_5KAHmg" entityName="stop" predecessor_AbstractAction="_ttgYge7sEeurfJm_5KAHmg"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_wJFDEe7sEeurfJm_5KAHmg" describedService__SEFF="_N6idsMN3EeWPE-QAhbUzuQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_wJFqIO7sEeurfJm_5KAHmg" entityName="start" successor_AbstractAction="_wJFqIe7sEeurfJm_5KAHmg"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_wJFqIe7sEeurfJm_5KAHmg" entityName="stop" predecessor_AbstractAction="_wJFqIO7sEeurfJm_5KAHmg"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_2ui1UPT5EeuE87M6otJwmw" describedService__SEFF="_p_HbYMN6EeWPE-QAhbUzuQ">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_2ui1UfT5EeuE87M6otJwmw" entityName="start" successor_AbstractAction="_2ujcYPT5EeuE87M6otJwmw"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_2ujcYPT5EeuE87M6otJwmw" entityName="stop" predecessor_AbstractAction="_2ui1UfT5EeuE87M6otJwmw"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_2ujcYfT5EeuE87M6otJwmw" describedService__SEFF="_Ub62oM5lEeWFJak7Wqvc0g">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_2ujcYvT5EeuE87M6otJwmw" entityName="start" successor_AbstractAction="_2ujcY_T5EeuE87M6otJwmw"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_2ujcY_T5EeuE87M6otJwmw" entityName="stop" predecessor_AbstractAction="_2ujcYvT5EeuE87M6otJwmw"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_NnVEwPUXEeuE87M6otJwmw" describedService__SEFF="_MThTgPUXEeuE87M6otJwmw">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_NnVEwfUXEeuE87M6otJwmw" entityName="start" successor_AbstractAction="_NnVEwvUXEeuE87M6otJwmw"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_NnVEwvUXEeuE87M6otJwmw" entityName="stop" predecessor_AbstractAction="_NnVEwfUXEeuE87M6otJwmw"/>
+    </serviceEffectSpecifications__BasicComponent>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_r1acwAysEey1YdsQNY8KdA" describedService__SEFF="_N0wiAAyrEey1YdsQNY8KdA">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_r1acwQysEey1YdsQNY8KdA" entityName="start" successor_AbstractAction="_r1acwgysEey1YdsQNY8KdA"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_r1acwgysEey1YdsQNY8KdA" entityName="stop" predecessor_AbstractAction="_r1acwQysEey1YdsQNY8KdA"/>
+    </serviceEffectSpecifications__BasicComponent>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_MKBSwAyQEey1YdsQNY8KdA" entityName="AirlineLogger">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_kEDC8AyQEey1YdsQNY8KdA" entityName="Provided_AirlineLogging_AirlineLogger" providedInterface__OperationProvidedRole="_NhhRMAyQEey1YdsQNY8KdA"/>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_kEE4IAyQEey1YdsQNY8KdA" describedService__SEFF="_gwavAAyQEey1YdsQNY8KdA">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_kEE4IQyQEey1YdsQNY8KdA" entityName="start" successor_AbstractAction="_kEE4IgyQEey1YdsQNY8KdA"/>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_kEE4IgyQEey1YdsQNY8KdA" entityName="stop" predecessor_AbstractAction="_kEE4IQyQEey1YdsQNY8KdA"/>
+    </serviceEffectSpecifications__BasicComponent>
+  </components__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_IR9L8MN0EeWPE-QAhbUzuQ" entityName="Comission">
+    <signatures__OperationInterface id="_nXaBAMN0EeWPE-QAhbUzuQ" entityName="payCommission">
+      <parameters__OperationSignature parameterName="value">
+        <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.0"/>
+      </parameters__OperationSignature>
+      <parameters__OperationSignature dataType__Parameter="_m8A_rc5jEeWFJak7Wqvc0g" parameterName="airline"/>
+      <returnType__OperationSignature xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.2"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_uUkncMN0EeWPE-QAhbUzuQ" entityName="BookingSelection">
+    <signatures__OperationInterface id="_GmUUEMN1EeWPE-QAhbUzuQ" entityName="bookSelected">
+      <parameters__OperationSignature dataType__Parameter="_QuDIrc5jEeWFJak7Wqvc0g" parameterName="flightOffer"/>
+    </signatures__OperationInterface>
+    <signatures__OperationInterface id="_602gYM5lEeWFJak7Wqvc0g" entityName="getFlightOffers">
+      <parameters__OperationSignature dataType__Parameter="_0D_NYM5hEeWFJak7Wqvc0g" parameterName="requestData"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_y_H88MNyEeWPE-QAhbUzuQ" entityName="Booking">
+    <signatures__OperationInterface id="_00dt8MNyEeWPE-QAhbUzuQ" entityName="bookFlightOffer">
+      <parameters__OperationSignature parameterName="offerId">
+        <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.0"/>
+      </parameters__OperationSignature>
+      <parameters__OperationSignature dataType__Parameter="_WVGGLc5iEeWFJak7Wqvc0g" parameterName="ccd_decl"/>
+      <returnType__OperationSignature xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.2"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_OWfzMMNyEeWPE-QAhbUzuQ" entityName="FlightOffers">
+    <signatures__OperationInterface id="_R6uH4MNyEeWPE-QAhbUzuQ" entityName="getFlightOffers" returnType__OperationSignature="_XfY5nM5jEeWFJak7Wqvc0g">
+      <parameters__OperationSignature dataType__Parameter="_0D_NYM5hEeWFJak7Wqvc0g" parameterName="requestData"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_MACf4MN3EeWPE-QAhbUzuQ" entityName="CreditCardConfiguration">
+    <signatures__OperationInterface id="_N6idsMN3EeWPE-QAhbUzuQ" entityName="setCreditCard">
+      <parameters__OperationSignature dataType__Parameter="_WVGGLc5iEeWFJak7Wqvc0g" parameterName="ccd"/>
+    </signatures__OperationInterface>
+    <signatures__OperationInterface id="_pZruEAyUEey1YdsQNY8KdA" entityName="getCreditCard" returnType__OperationSignature="_WVGGLc5iEeWFJak7Wqvc0g"/>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_CayVgMN6EeWPE-QAhbUzuQ" entityName="Declassification">
+    <signatures__OperationInterface id="_JXJqsMN6EeWPE-QAhbUzuQ" entityName="releaseCCD">
+      <parameters__OperationSignature dataType__Parameter="_m8A_rc5jEeWFJak7Wqvc0g" parameterName="airline"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_XQ1XUMN6EeWPE-QAhbUzuQ" entityName="Confirmation">
+    <signatures__OperationInterface id="_hAD1sMN6EeWPE-QAhbUzuQ" entityName="confirmRelease">
+      <parameters__OperationSignature dataType__Parameter="_WVGGLc5iEeWFJak7Wqvc0g" parameterName="ccd"/>
+      <parameters__OperationSignature dataType__Parameter="_m8A_rc5jEeWFJak7Wqvc0g" parameterName="airline"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_oZwAEMN6EeWPE-QAhbUzuQ" entityName="Input">
+    <signatures__OperationInterface id="_p_HbYMN6EeWPE-QAhbUzuQ" entityName="getInput"/>
+    <signatures__OperationInterface id="_Ub62oM5lEeWFJak7Wqvc0g" entityName="getSingleSelection">
+      <parameters__OperationSignature dataType__Parameter="_XfY5nM5jEeWFJak7Wqvc0g" parameterName="flightOffers"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_lKDm4M5wEeWFJak7Wqvc0g" entityName="AirlineAdministration">
+    <signatures__OperationInterface id="_ok8ZYM5wEeWFJak7Wqvc0g" entityName="setAvailableFlights">
+      <parameters__OperationSignature dataType__Parameter="_XfY5nM5jEeWFJak7Wqvc0g" parameterName="flights"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_ggoEAM54EeW6RpZqSiINDQ" entityName="DeclassificationConfirmation">
+    <signatures__OperationInterface id="_p3shEM54EeW6RpZqSiINDQ" entityName="getDeclassifiedCCD"/>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_t2HtAPUCEeuE87M6otJwmw" entityName="DeclassificationReceiver">
+    <signatures__OperationInterface id="_vnXBIPUCEeuE87M6otJwmw" entityName="DeclassifiedCCD">
+      <parameters__OperationSignature dataType__Parameter="_WVGGLc5iEeWFJak7Wqvc0g" parameterName="ccd_decl"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_Kk4ncPUXEeuE87M6otJwmw" entityName="BookingConfirmation">
+    <signatures__OperationInterface id="_MThTgPUXEeuE87M6otJwmw" entityName="ok"/>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_NhhRMAyQEey1YdsQNY8KdA" entityName="AirlineLogging">
+    <signatures__OperationInterface id="_gwavAAyQEey1YdsQNY8KdA" entityName="log">
+      <parameters__OperationSignature parameterName="entry">
+        <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+      </parameters__OperationSignature>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_K16yUAyrEey1YdsQNY8KdA" entityName="UserIdentityConfiguration">
+    <signatures__OperationInterface id="_N0wiAAyrEey1YdsQNY8KdA" entityName="setCredentials">
+      <parameters__OperationSignature parameterName="name">
+        <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+      </parameters__OperationSignature>
+      <parameters__OperationSignature parameterName="password">
+        <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+      </parameters__OperationSignature>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_0D_NYM5hEeWFJak7Wqvc0g" entityName="RequestData">
+    <innerDeclaration_CompositeDataType entityName="destination">
+      <datatype_InnerDeclaration xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+    </innerDeclaration_CompositeDataType>
+    <innerDeclaration_CompositeDataType entityName="date">
+      <datatype_InnerDeclaration xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+    </innerDeclaration_CompositeDataType>
+    <innerDeclaration_CompositeDataType entityName="userName">
+      <datatype_InnerDeclaration xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+    </innerDeclaration_CompositeDataType>
+  </dataTypes__Repository>
+  <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_m8A_rc5jEeWFJak7Wqvc0g" entityName="AirlineSpec">
+    <innerDeclaration_CompositeDataType entityName="airlineId">
+      <datatype_InnerDeclaration xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+    </innerDeclaration_CompositeDataType>
+    <innerDeclaration_CompositeDataType entityName="airlineName">
+      <datatype_InnerDeclaration xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+    </innerDeclaration_CompositeDataType>
+  </dataTypes__Repository>
+  <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_WVGGLc5iEeWFJak7Wqvc0g" entityName="CreditCardDetails">
+    <innerDeclaration_CompositeDataType entityName="creditCardNumber">
+      <datatype_InnerDeclaration xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.0"/>
+    </innerDeclaration_CompositeDataType>
+  </dataTypes__Repository>
+  <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_QuDIrc5jEeWFJak7Wqvc0g" entityName="FlightOffer">
+    <innerDeclaration_CompositeDataType entityName="id">
+      <datatype_InnerDeclaration xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.0"/>
+    </innerDeclaration_CompositeDataType>
+    <innerDeclaration_CompositeDataType entityName="airline" datatype_InnerDeclaration="_m8A_rc5jEeWFJak7Wqvc0g"/>
+  </dataTypes__Repository>
+  <dataTypes__Repository xsi:type="repository:CollectionDataType" id="_XfY5nM5jEeWFJak7Wqvc0g" entityName="FlightOffers" innerType_CollectionDataType="_QuDIrc5jEeWFJak7Wqvc0g"/>
+  <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_02efjQyqEey1YdsQNY8KdA" entityName="UserCredentials">
+    <innerDeclaration_CompositeDataType entityName="name">
+      <datatype_InnerDeclaration xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+    </innerDeclaration_CompositeDataType>
+    <innerDeclaration_CompositeDataType entityName="password">
+      <datatype_InnerDeclaration xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
+    </innerDeclaration_CompositeDataType>
+  </dataTypes__Repository>
+</repository:Repository>

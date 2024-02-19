@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+   <extension
+         id="c4cbse2joanaApplication"
+         name="Confidentiality4CBSE2JOANA Application"
+         point="tools.vitruv.framework.applications.application">
+      <application
+            class="tools.vitruv.applications.c4cbse2joana.Confidentiality4cbse2joanaApplication"></application>
+   </extension>
+
+</plugin>

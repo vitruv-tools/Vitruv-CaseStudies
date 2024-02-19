@@ -1,0 +1,748 @@
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.Confidentiality4cbsePackage
+import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.repository.SignatureInformationFlow
+import edu.kit.ipd.sdq.metamodels.joana.EntryPoint
+import edu.kit.ipd.sdq.metamodels.joana.FlowRelation
+import edu.kit.ipd.sdq.metamodels.joana.JOANARoot
+import edu.kit.ipd.sdq.metamodels.joana.SecurityLevel
+import edu.kit.ipd.sdq.metamodels.joana.Source
+import java.util.ArrayList
+import java.util.HashSet
+import java.util.List
+import java.util.stream.Collectors
+import org.eclipse.emf.common.util.BasicEList
+import org.eclipse.emf.ecore.util.EcoreUtil
+import tools.mdsd.jamopp.model.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.containers.ContainersPackage
+
+import "edu.kit.ipd.sdq.metamodels.joana" as joana
+import "edu.kit.ipd.sdq.metamodels.confidentiality4cbse" as c4c
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: c4c2joana
+in reaction to changes in c4c
+execute actions in joana
+
+/*
+ * Creates a JOANARoot, if a ConfidentialitySpecification is created without a matching JOANARoot.
+ */
+reaction ConfidentialitySpecificationCreated{
+	after element c4c::ConfidentialitySpecification created
+	call{
+		searchForJoanaRoot(affectedEObject)
+	}
+}
+
+routine searchForJoanaRoot(c4c::ConfidentialitySpecification c4cRoot){
+	match{
+		require absence of joana::JOANARoot corresponding to c4cRoot
+		val joanaRoot = retrieve optional joana::JOANARoot corresponding to ContainersPackage.Literals.PACKAGE
+	}
+	update{
+		if(joanaRoot.present){
+			addCorrespondenceBetween(joanaRoot.get, c4cRoot)
+		} else {
+			val joanaRoots = c4cRoot.eResource.allContents.toList.filter(JOANARoot).toList
+			if(joanaRoots.empty){
+				createRoot(c4cRoot)
+			} else {
+				addCorrespondenceBetween(c4cRoot, joanaRoots.get(0))
+			}
+		
+		}
+	}
+}
+
+routine createRoot(c4c::ConfidentialitySpecification c4cRoot){
+	match{
+		require absence of joana::JOANARoot corresponding to c4cRoot
+	}
+	create{
+		val joanaRoot = new joana::JOANARoot
+		val lattice = new joana::Lattice
+	}
+	update{
+		joanaRoot.name = "JoanaRoot"
+		joanaRoot.lattice = lattice
+		persistProjectRelative(c4cRoot, joanaRoot, "model/" + joanaRoot.name + ".joanaRoot")
+		addCorrespondenceBetween(c4cRoot, joanaRoot)
+		addCorrespondenceBetween(joanaRoot, ContainersPackage.Literals.PACKAGE)
+	}
+}
+
+/*
+ * Creates a SecurityLevel and the compositeSecurityLevels in reaction to the creation of a DataSet and updates the lattice.
+ */
+reaction DataSetCreated{
+	after element c4c::DataSet created
+	call {
+		testForSecurityLevel(affectedEObject)
+	}
+}
+
+routine updateSecurityLevelNames(joana::JOANARoot joanaRoot){
+	update{
+		for(level : joanaRoot.securitylevel){
+			sortLevelName(level)
+		}
+	}
+}
+
+//The code in this method is partially taken from Johannes Häring: https://github.com/KASTEL-CSSDA/PCM2Java4Joana/blob/master/bundles/edu.kit.kastel.scbs.pcm2java4joana/src/edu/kit/kastel/scbs/pcm2java4joana/utils/JoanaModelUtils.java#L124
+routine sortLevelName(joana::SecurityLevel level){
+	match{
+		val unsorted = retrieve many c4c::DataSet corresponding to level
+	}
+	update{
+		val sorted = unsorted.toList.stream().sorted([object1, object2 | object1.entityName.compareTo(object2.entityName)])
+    .collect(Collectors.toList())
+    	val newName = sorted.stream().map[object | object.entityName].collect(Collectors.joining(","))
+    	level.name = newName
+	}
+}
+
+routine testForSecurityLevel(c4c::DataSet newDataSet){
+	match {
+		require absence of joana::SecurityLevel corresponding to newDataSet
+		val joanaRoot = retrieve joana::JOANARoot corresponding to newDataSet.eContainer()
+	}
+	update {
+		createSecurityLevel(newDataSet, newDataSet.entityName, joanaRoot)
+		updateSecurityLevelNames(joanaRoot)
+	}
+}
+
+routine createSecurityLevel(c4c::DataSet set, String name, joana::JOANARoot joanaRoot){
+	create{
+		val newLevel = new joana::SecurityLevel
+	}
+	update{
+		newLevel.name = name
+		joanaRoot.securitylevel.add(newLevel)
+		addCorrespondenceBetween(newLevel, set)
+		createCompositeLevels(set, joanaRoot, newLevel)
+		addLevelToLattice(newLevel, joanaRoot)
+	}
+}
+
+routine addLevelToLattice(joana::SecurityLevel newLevel, joana::JOANARoot joanaRoot){
+	update{
+		var oldLattice = new BasicEList<FlowRelation>
+		oldLattice.addAll(joanaRoot.lattice.flowrelation)
+		val copyLattice = joanaRoot.lattice.flowrelation.clone
+		for(curFlow : copyLattice){
+			oldLattice.remove(curFlow)
+			var isLeaf = true
+			for(testFlow : copyLattice){
+				if(testFlow.^from.iterator.next.name.matches(curFlow.^to.iterator.next.name)){
+					isLeaf = false
+				}
+			}
+			var SecurityLevel newFrom = null
+			var SecurityLevel newTo = null
+			for(level : joanaRoot.securitylevel){
+				if(level.name.matches(curFlow.^from.iterator.next.name + newLevel.name)){
+					newFrom = level
+				}
+				if(level.name.matches(curFlow.^to.iterator.next.name + newLevel.name)){
+					newTo = level
+				}
+			}
+			createFlowRelation(newFrom, newTo, joanaRoot.lattice)
+			createFlowRelation(newTo, curFlow.^to.iterator.next, joanaRoot.lattice)
+			if(isLeaf){
+				createFlowRelation(newTo, newLevel, joanaRoot.lattice)
+			} else {
+				createFlowRelation(newFrom, curFlow.^from.iterator.next, joanaRoot.lattice)
+			}
+		}
+		//Create a Lattice if there are exactly two basic security levels.
+		if(joanaRoot.lattice.flowrelation.empty && joanaRoot.securitylevel.size == 3){
+			var longestString = ""
+			var SecurityLevel compLevel = null
+			for(level : joanaRoot.securitylevel){
+				if(level.name.length > longestString.length){
+					longestString = level.name
+					compLevel = level
+				}
+			}
+			for(level : joanaRoot.securitylevel){
+				if(!level.name.matches(longestString)){
+					createFlowRelation(compLevel, level, joanaRoot.lattice)
+				}
+			}
+		}
+		removeDuplicates(joanaRoot.lattice)
+	}
+}
+
+routine removeDuplicates(joana::Lattice lattice){
+	update{
+		var sortingSet = new HashSet
+		val copyLattice = lattice.flowrelation.clone
+		for(flow : copyLattice){
+			if(!sortingSet.add(flow.^from.iterator.next.name + "." + flow.^to.iterator.next.name)){
+				lattice.flowrelation.remove(flow)
+			}
+		}
+		updateLatticeOfEntryPoints(lattice.eContainer as JOANARoot, lattice)
+	}
+}
+
+routine createFlowRelation(joana::SecurityLevel fromLev, joana::SecurityLevel toLev, joana::Lattice lattice){
+	create{
+		val newFlow = new joana::FlowRelation
+	}
+	update{
+		newFlow.^from.add(fromLev)
+		newFlow.^to.add(toLev)
+		lattice.flowrelation.add(newFlow)
+	}
+}
+
+routine createCompositeLevels(c4c::DataSet newDataSet, joana::JOANARoot joanaRoot, joana::SecurityLevel originLevel){
+	update{
+		val List<SecurityLevel> dummyList = new ArrayList<SecurityLevel>
+		for(level : joanaRoot.securitylevel){
+			if(!level.name.matches(newDataSet.entityName)){
+				dummyList.add(level)
+			}
+		}
+		for(level : dummyList){
+			containsCorrespondenceToSet(newDataSet, level, level.name + newDataSet.entityName, originLevel)
+		}
+		
+	}
+}
+
+routine containsCorrespondenceToSet(c4c::DataSet set, joana::SecurityLevel level, String name, joana::SecurityLevel originLevel){
+	match{
+		val corSets = retrieve many c4c::DataSet corresponding to level
+	}
+	update{
+		var boolean flag = false
+		if(corSets.size > 0){
+			for(curSet : corSets){
+				if(set.entityName.matches(curSet.entityName)){
+					flag = true
+				}
+			}
+			if(!flag){
+				createCompositeLevel(set, name, level, originLevel)
+			}
+		}
+		
+	}
+}
+
+routine createCompositeLevel(c4c::DataSet set, String name, joana::SecurityLevel firstLevel, joana::SecurityLevel secondLevel){
+	create{
+		val newLevel = new joana::SecurityLevel
+	}
+	update{
+		newLevel.name = name
+		addCorrespondenceBetween(newLevel, set, "composite")
+		(firstLevel.eContainer as JOANARoot).securitylevel.add(newLevel)
+		addCorrespondecesToCompositeLevels(firstLevel, secondLevel, newLevel)
+	}
+}
+
+routine addCorrespondecesToCompositeLevels(joana::SecurityLevel firstLevel, joana::SecurityLevel secondLevel, joana::SecurityLevel newLevel){
+	match{
+		val sets = retrieve many c4c::DataSet corresponding to firstLevel
+		val originSets = retrieve many c4c::DataSet corresponding to secondLevel
+	}
+	update{
+		for(set : sets){
+			addCorrespondenceBetween(set, newLevel)
+		}
+		for(set : originSets){
+			addCorrespondenceBetween(set, newLevel)
+		}
+	}
+}
+
+/*
+ * Deletes all security levels connected to this DataSet and updates the lattice.
+ */
+reaction DataSetDeleted{
+	after element c4c::DataSet deleted
+	call {
+		removeLevelFromLattice(affectedEObject)
+		deleteSecurityLevel(affectedEObject)
+	}
+}
+
+routine removeLevelFromLattice(c4c::DataSet oldDataSet){
+	match{
+		val levels = retrieve many joana::SecurityLevel corresponding to oldDataSet
+	}
+	update{
+		if(!levels.empty){
+			val joanaRoot = levels.get(0).eContainer as JOANARoot
+			var lattice = joanaRoot.lattice
+			var toBeRemoved = new ArrayList
+			for(flow : lattice.flowrelation){
+				if((flow.^from.iterator.hasNext && levels.contains(flow.^from.iterator.next))
+					|| (flow.^to.iterator.hasNext && levels.contains(flow.^to.iterator.next))
+				){
+					toBeRemoved.add(flow)
+					
+				}
+			}
+			lattice.flowrelation.removeAll(toBeRemoved)
+			joanaRoot.lattice = lattice
+			updateLatticeOfEntryPoints(joanaRoot, lattice)
+		}
+	}
+}
+
+routine updateLatticeOfEntryPoints(joana::JOANARoot joanaRoot, joana::Lattice newLattice){
+	update{
+		for(flowSpec : joanaRoot.flowspecification){
+				flowSpec.entrypoint.lattice = newLattice
+		}
+	}
+}
+
+routine deleteSecurityLevel(c4c::DataSet oldDataSet){
+	match {
+		val levels = retrieve many joana::SecurityLevel corresponding to oldDataSet
+		val joanaRoot = retrieve joana::JOANARoot corresponding to ContainersPackage.Literals.PACKAGE
+	}
+	update {
+		for (oldLevel : levels){
+			removeCorrespondenceBetween(oldLevel, oldDataSet)
+			EcoreUtil.delete(oldLevel)
+		}
+		updateSecurityLevelNames(joanaRoot)
+	}
+}
+
+/*
+ * Creates a sink with matching securitylevel, the other annotations are created as a reaction in joana2c4c.reactions
+ * Transitive reaction execution is mandatory for this to work
+ */
+reaction ParameterInformationCreated{
+	after element c4c::ParameterInformation created
+	call{
+		createSource(affectedEObject)
+		createSink(affectedEObject)
+		searchForEntryPoint(affectedEObject.eContainer as SignatureInformationFlow)
+	}
+}
+
+routine searchForEntryPoint(c4c::SignatureInformationFlow flow){
+	match{
+		val joanaRoot = retrieve joana::JOANARoot corresponding to flow.eContainer
+		val method = retrieve java::Method corresponding to flow.appliedTo
+	}
+	update{
+		var EntryPoint point = null
+		for(flowSpec : joanaRoot.flowspecification){
+			if(flowSpec.entrypoint.tag.get(0).matches((method.eContainer as Interface).name + "." + method.name)){
+				point = flowSpec.entrypoint
+			}
+		}
+		if(point !== null){
+			addCorrespondenceBetween(point, flow)
+		} else {
+			createEntryPoint(flow)
+		}
+	}
+}
+
+routine createSink(c4c::ParameterInformation info){
+	match{
+		require absence of joana::Sink corresponding to info
+		val joanaRoot = retrieve joana::JOANARoot corresponding to info.eContainer.eContainer
+	}
+	create{
+		val sink = new joana::Sink
+	}
+	update{
+		addCorrespondenceBetween(sink, info)
+		addSecurityLevel(sink, info)
+		connectJavaObjectsForSink(info, sink)
+	}
+}
+
+routine createSource(c4c::ParameterInformation info){
+	match{
+		require absence of joana::Source corresponding to info
+		val joanaRoot = retrieve joana::JOANARoot corresponding to info.eContainer.eContainer
+	}
+	create{
+		val source = new joana::Source
+	}
+	update{
+		addCorrespondenceBetween(source, info)
+		addSecurityLevel(source, info)
+		connectJavaObjectsForSource(info, source)
+	}
+}
+
+routine connectJavaObjectsForSource(c4c::ParameterInformation info, joana::Source source){
+	match{
+		val joanaRoot = retrieve joana::JOANARoot corresponding to info.eContainer.eContainer
+		val para = retrieve optional java::OrdinaryParameter corresponding to info.appliedTo
+		val method = retrieve optional java::InterfaceMethod corresponding to (info.eContainer as SignatureInformationFlow).appliedTo
+	}
+	update{
+		if(method.present){
+			source.annotatedMethod = method.get
+			if(para.present && para.get !== null){
+				source.annotatedParameter = para.get
+				}
+			source.tag.add((method.get.eContainer as Interface).name + "." + method.get.name)
+		}
+		joanaRoot.annotation.add(source)
+	}
+}
+routine connectJavaObjectsForSink(c4c::ParameterInformation info, joana::Sink sink){
+	match{
+		val joanaRoot = retrieve joana::JOANARoot corresponding to info.eContainer.eContainer
+		val para = retrieve optional java::OrdinaryParameter corresponding to info.appliedTo
+		val method = retrieve optional java::InterfaceMethod corresponding to (info.eContainer as SignatureInformationFlow).appliedTo
+	}
+	update{
+		if(method.present){
+			sink.annotatedMethod = method.get
+			if(para.present && para.get !== null){
+				sink.annotatedParameter = para.get
+			}
+			val allSources = joanaRoot.annotation.filter(Source).toList()
+			for(source : allSources){
+				if(!source.tag.contains((method.get.eContainer as Interface).name + "." + method.get.name)){
+					sink.tag.add(source.tag.get(0))
+				}
+			}
+		}
+		joanaRoot.annotation.add(sink)
+	}
+}
+
+routine addSecurityLevel(joana::Annotation anno, c4c::ParameterInformation info){
+	match{
+		val joanaRoot = retrieve joana::JOANARoot corresponding to info.eContainer.eContainer
+	}
+	update{
+		val allLevels = joanaRoot.securitylevel
+		for(level : allLevels){
+			checkLevel(level, info, anno)
+		}
+	}
+}
+
+routine checkLevel(joana::SecurityLevel level, c4c::ParameterInformation info, joana::Annotation anno){
+	match{
+		val setsOfLevel = retrieve many c4c::DataSet corresponding to level
+	}
+	update{
+		var allContained = true
+		for(levelSet : setsOfLevel){
+			var singleContained = false
+			for(infoSet : info.dataTargets){
+				if(infoSet.entityName.matches(levelSet.entityName)){
+					singleContained = true
+				}
+			}
+			if(!singleContained){
+				allContained = false
+			}
+		}
+		if(setsOfLevel.size != info.dataTargets.size){
+			allContained = false
+		}
+		if(allContained){
+			anno.securitylevel.add(level)
+		}
+	}
+}
+
+/*
+ * Removes the corresponding annotations in Joana after a ParameterInformation was deleted.
+ */
+reaction ParameterInformationDeleted{
+	after element c4c::ParameterInformation deleted
+	call{
+		deleteConnectedAnnos(affectedEObject)
+	}
+}
+
+routine deleteConnectedAnnos(c4c::ParameterInformation info){
+	match{
+		val source = retrieve optional joana::Source corresponding to info
+		val sink = retrieve optional joana::Sink corresponding to info
+		val checkInfo = retrieve optional c4c::ParameterInformation corresponding to Confidentiality4cbsePackage.Literals.CONFIDENTIALITY_SPECIFICATION
+	}
+	update{
+		if(checkInfo.present){
+			removeCorrespondenceBetween(info, Confidentiality4cbsePackage.Literals.CONFIDENTIALITY_SPECIFICATION)
+		} else {
+			if(sink.present){
+				EcoreUtil.delete(sink.get)
+			}
+			if(source.present){
+				EcoreUtil.delete(source.get)
+			}
+		}
+		
+	}
+}
+
+/*
+ * Creates a corresponding Entry Point, after a SignatureInformationFlow was created.
+ */
+reaction SignatureIFCreated{
+	after element c4c::SignatureInformationFlow created
+	call{
+		createEntryPoint(affectedEObject)
+	}
+}
+
+routine createEntryPoint(c4c::SignatureInformationFlow newFlow){
+	match{
+		require absence of joana::EntryPoint corresponding to newFlow
+		val method = retrieve java::InterfaceMethod corresponding to newFlow.appliedTo
+		val joanaRoot = retrieve joana::JOANARoot corresponding to newFlow.eContainer
+	}
+	create{
+		val point = new joana::EntryPoint
+		val spec = new joana::FlowSpecification
+	}
+	update{
+		addCorrespondenceBetween(point, newFlow)
+		addCorrespondenceBetween(ContainersPackage.Literals.PACKAGE, spec)
+		point.annotatedMethod = method
+		point.securitylevels.addAll(joanaRoot.securitylevel)
+		point.tag.add((method.eContainer as Interface).name + "." + method.name)
+		spec.entrypoint = point
+		joanaRoot.flowspecification.add(spec)
+		point.lattice = joanaRoot.lattice
+		for(anno : joanaRoot.annotation){
+			if(anno.tag.contains(point.tag.get(0))){
+				spec.annotation.add(anno)
+			}
+		}
+	}
+}
+
+/*
+ * Deletes the corresponding Entry Point, after a SignatureInformationFlow was deleted.
+ */
+reaction SignatureIFDeleted{
+	after element c4c::SignatureInformationFlow deleted
+	call{
+		deleteEntryPoint(affectedEObject)
+	}
+}
+
+routine deleteEntryPoint(c4c::SignatureInformationFlow deletedFlow){
+	match{
+		val point = retrieve optional joana::EntryPoint corresponding to deletedFlow
+	}
+	update{
+		if(point.present){
+			val flowSpec = point.get.eContainer
+			EcoreUtil.delete(point.get)
+			EcoreUtil.delete(flowSpec)
+		}
+	}
+}
+
+/*
+ * Changes the Tag of the EntryPoint to the new method.
+ */
+reaction OpSigOfInformationFlowChanged{
+	after element pcm::OperationSignature inserted in c4c::SignatureInformationFlow[appliedTo]
+	call{
+		changeTagOfEntryPoint(affectedEObject, newValue)
+	}
+}
+
+routine changeTagOfEntryPoint(c4c::SignatureInformationFlow flow, pcm::OperationSignature opSig){
+	match{
+		val point = retrieve joana::EntryPoint corresponding to flow
+		val method = retrieve java::Method corresponding to opSig
+	}
+	update{
+		point.tag.clear
+		point.tag.add((method.eContainer as Interface).name + "." + method.name)
+	}
+}
+
+
+/*
+ * Updates parameter of Sinks and Sources if the parameter of the corresponding ParameterInformation is changed.
+ */
+reaction ParameterOfInformationChanged{
+	after element pcm::Parameter replaced at c4c::ParameterInformation[appliedTo]
+	call{
+		if(newValue !== null){
+			changeParameterOfAnnos(newValue, affectedEObject)
+		}
+	}
+}
+
+routine changeParameterOfAnnos(pcm::Parameter pcmPara, c4c::ParameterInformation info){
+	match{
+		val javaPara = retrieve optional java::OrdinaryParameter corresponding to pcmPara
+		val source = retrieve joana::Source corresponding to info
+		val sink = retrieve joana::Sink corresponding to info
+	}
+	update{
+		if(javaPara.present){
+			if(!source.annotatedParameter.name.matches(javaPara.get.name)){
+			source.annotatedParameter = javaPara.get
+			}
+			if(!sink.annotatedParameter.name.matches(javaPara.get.name)){
+				sink.annotatedParameter = javaPara.get
+			}
+		}
+	}
+}
+
+/*
+ * Updates the Method of Sinks and Sources if the corresponding ParameterInformation is moved
+ */
+reaction InformationAddedToFlow{
+	after element c4c::ParameterInformation inserted in c4c::SignatureInformationFlow[information]
+	call{
+		changeMethodOfAnnos(newValue, affectedEObject.appliedTo, affectedEObject)
+	}
+}
+
+routine changeMethodOfAnnos(c4c::ParameterInformation info, pcm::OperationSignature opSig, c4c::SignatureInformationFlow flow){
+	match{
+		val method = retrieve java::Method corresponding to opSig
+		val source = retrieve joana::Source corresponding to info
+		val sink = retrieve joana::Sink corresponding to info
+	}
+	update{
+		source.tag.clear
+		source.tag.add((method.eContainer as Interface).name + "." + method.name)
+		source.annotatedMethod = method
+		if(sink.tag.contains((method.eContainer as Interface).name + "." + method.name)){
+			sink.tag.remove((method.eContainer as Interface).name + "." + method.name)
+		}
+		if(!method.name.matches(sink.annotatedMethod.name)){
+			sink.tag.add((sink.annotatedMethod.eContainer as Interface).name + "." + sink.annotatedMethod.name)
+		}
+		sink.annotatedMethod = method
+	}
+}
+
+/*
+ * Adds a SecurityLevel to the corresponding Sink, Source and EntryPoint if a Data Set is added to an ParameterInformation
+ */
+reaction DataSetAddedToParameterInfo{
+	after element c4c::DataSet inserted in c4c::ParameterInformation[dataTargets]
+	call{
+		checkForLevel(affectedEObject)
+	}
+}
+
+routine checkForLevel(c4c::ParameterInformation info){
+	match{
+		val sink = retrieve joana::Sink corresponding to info
+		val source = retrieve joana::Source corresponding to info
+		val point = retrieve many joana::EntryPoint corresponding to info.eContainer
+		
+		val joanaRoot = retrieve joana::JOANARoot corresponding to info.eContainer.eContainer
+	}
+	update{
+		if(sink.securitylevel.empty){
+			addSecurityLevel(sink, info)
+		}
+		if(source.securitylevel.empty){
+			addSecurityLevel(source, info)
+		}
+		if(!sink.securitylevel.empty && !source.securitylevel.empty){
+			point.forEach[addLevelToAnnos(sink, source, it, joanaRoot, info)]
+		}
+	}
+}
+
+routine addLevelToAnnos(joana::Sink sink, joana::Source source, joana::EntryPoint point, joana::JOANARoot joanaRoot, c4c::ParameterInformation info){
+	match{
+		val sinkSets = retrieve many c4c::DataSet corresponding to sink.securitylevel.get(0)
+		val sourceSets = retrieve many c4c::DataSet corresponding to source.securitylevel.get(0)
+	}
+	update{
+		val allSets = info.dataTargets
+		val allLevels = joanaRoot.securitylevel
+		if(!sinkSets.equals(allSets)){
+			for(level : allLevels){
+				findAndReplaceLevel(level, info, sink, point)
+			}
+		}
+		if(!sourceSets.equals(allSets)){
+			for(level : allLevels){
+				findAndReplaceLevel(level, info, source, point)
+			}
+		}
+	}
+}
+
+routine findAndReplaceLevel(joana::SecurityLevel level, c4c::ParameterInformation info, joana::Annotation anno, joana::EntryPoint point){
+	match{
+		val levelSets = retrieve many c4c::DataSet corresponding to level
+	}
+	update{
+		if(levelSets.equals(info.dataTargets)){
+			anno.securitylevel.clear
+			anno.securitylevel.add(level)
+			if(!point.securitylevels.contains(level)){
+				point.securitylevels.add(level)
+			}
+		}
+	}
+}
+
+/*
+ * Removes Levels from Sinks and Sources if the corresponding DataSet is removed from the corresponding ParameterInformation.
+ * Doesn´t remove them from the EntryPoint as they may be used by other Sinks / Sources.
+ */
+reaction DataSetRemovedFromParameterInfo{
+	after element c4c::DataSet removed from c4c::ParameterInformation[dataTargets]
+	call{
+		removeLevelsFromAnnos(oldValue, affectedEObject)
+	}
+}
+
+routine removeLevelsFromAnnos(c4c::DataSet set, c4c::ParameterInformation info){
+	match{
+		val sink = retrieve joana::Sink corresponding to info
+		val source = retrieve joana::Source corresponding to info
+		val point = retrieve joana::EntryPoint corresponding to info.eContainer
+		val joanaRoot = retrieve joana::JOANARoot corresponding to info.eContainer.eContainer
+	}
+	update{
+		if(info.dataTargets.empty){
+			EcoreUtil.delete(info)
+		} else {
+			if(!sink.securitylevel.empty){
+				compareSets(info, sink, point, joanaRoot)
+			}
+			if(!source.securitylevel.empty){
+				compareSets(info, source, point, joanaRoot)
+			}
+		}
+	}
+}
+
+routine compareSets(c4c::ParameterInformation info, joana::Annotation anno, joana::EntryPoint point, joana::JOANARoot joanaRoot){
+	match{
+		val annoSets = retrieve many c4c::DataSet corresponding to anno.securitylevel.get(0)
+	}
+	update{
+		val allSets = info.dataTargets
+		val allLevels = joanaRoot.securitylevel
+		if(!annoSets.equals(allSets)){
+			for(level : allLevels){
+				findAndReplaceLevel(level, info, anno, point)
+			}
+		}
+	}
+}

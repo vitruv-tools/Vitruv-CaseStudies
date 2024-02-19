@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sourcecode:SourceCodeRoot xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:sourcecode="http://www.example.org/sourcecode" name="defaultRepository">
+  <topleveltype xsi:type="sourcecode:Class" name="TravelAgency" implements="#//@topleveltype.9 #//@topleveltype.6">
+    <fields xsi:type="sourcecode:Method" name="getFlightOffers">
+      <type xsi:type="sourcecode:CollectionType">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.23"/>
+      </type>
+      <parameter name="requestData">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.20"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="payCommission">
+      <type xsi:type="sourcecode:BuiltInType"/>
+      <parameter name="value">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="INT"/>
+      </parameter>
+      <parameter name="airline">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.21"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="FlightOffers">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.9"/>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="Airline" implements="#//@topleveltype.9 #//@topleveltype.8 #//@topleveltype.14">
+    <fields xsi:type="sourcecode:Method" name="getFlightOffers">
+      <type xsi:type="sourcecode:CollectionType">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.23"/>
+      </type>
+      <parameter name="requestData">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.20"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="bookFlightOffer">
+      <type xsi:type="sourcecode:BuiltInType"/>
+      <parameter name="offerId">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="INT"/>
+      </parameter>
+      <parameter name="ccd_decl">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="setAvailableFlights">
+      <parameter name="flights">
+        <type xsi:type="sourcecode:CollectionType">
+          <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.23"/>
+        </type>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="Comission">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.6"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="AirlineLogging">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.18"/>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="TravelPlanner" implements="#//@topleveltype.7 #//@topleveltype.16">
+    <fields xsi:type="sourcecode:Method" name="bookSelected">
+      <parameter name="flightOffer">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.23"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="getFlightOffers">
+      <parameter name="requestData">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.20"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="DeclassifiedCCD">
+      <parameter name="ccd_decl">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="FlightOffers">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.9"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="Booking">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.8"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="Declassification">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.11"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="Input">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.13"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="BookingConfirmation">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.17"/>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="CreditCardCenter" implements="#//@topleveltype.11 #//@topleveltype.10 #//@topleveltype.15">
+    <fields xsi:type="sourcecode:Method" name="releaseCCD">
+      <parameter name="airline">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.21"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="setCreditCard">
+      <parameter name="ccd">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="getCreditCard">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="getDeclassifiedCCD"/>
+    <fields xsi:type="sourcecode:Variable" name="Confirmation">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.12"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="DeclassificationReceiver">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.16"/>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="UserInterface" implements="#//@topleveltype.12 #//@topleveltype.13 #//@topleveltype.17 #//@topleveltype.19">
+    <fields xsi:type="sourcecode:Method" name="confirmRelease">
+      <parameter name="ccd">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+      </parameter>
+      <parameter name="airline">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.21"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="getInput"/>
+    <fields xsi:type="sourcecode:Method" name="getSingleSelection">
+      <parameter name="flightOffers">
+        <type xsi:type="sourcecode:CollectionType">
+          <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.23"/>
+        </type>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Method" name="ok"/>
+    <fields xsi:type="sourcecode:Method" name="setCredentials">
+      <parameter name="name">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+      </parameter>
+      <parameter name="password">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+      </parameter>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="BookingSelection">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.7"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="CreditCardConfiguration">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.10"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="DeclassificationConfirmation">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.15"/>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="AirlineLogger" implements="#//@topleveltype.18">
+    <fields xsi:type="sourcecode:Method" name="log">
+      <parameter name="entry">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+      </parameter>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="Comission">
+    <methods name="payCommission">
+      <type xsi:type="sourcecode:BuiltInType"/>
+      <parameter name="value">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="INT"/>
+      </parameter>
+      <parameter name="airline">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.21"/>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="BookingSelection">
+    <methods name="bookSelected">
+      <parameter name="flightOffer">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.23"/>
+      </parameter>
+    </methods>
+    <methods name="getFlightOffers">
+      <parameter name="requestData">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.20"/>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="Booking">
+    <methods name="bookFlightOffer">
+      <type xsi:type="sourcecode:BuiltInType"/>
+      <parameter name="offerId">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="INT"/>
+      </parameter>
+      <parameter name="ccd_decl">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="FlightOffers">
+    <methods name="getFlightOffers">
+      <type xsi:type="sourcecode:CollectionType">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.23"/>
+      </type>
+      <parameter name="requestData">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.20"/>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="CreditCardConfiguration">
+    <methods name="setCreditCard">
+      <parameter name="ccd">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+      </parameter>
+    </methods>
+    <methods name="getCreditCard">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="Declassification">
+    <methods name="releaseCCD">
+      <parameter name="airline">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.21"/>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="Confirmation">
+    <methods name="confirmRelease">
+      <parameter name="ccd">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+      </parameter>
+      <parameter name="airline">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.21"/>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="Input">
+    <methods name="getInput"/>
+    <methods name="getSingleSelection">
+      <parameter name="flightOffers">
+        <type xsi:type="sourcecode:CollectionType">
+          <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.23"/>
+        </type>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="AirlineAdministration">
+    <methods name="setAvailableFlights">
+      <parameter name="flights">
+        <type xsi:type="sourcecode:CollectionType">
+          <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.23"/>
+        </type>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="DeclassificationConfirmation">
+    <methods name="getDeclassifiedCCD"/>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="DeclassificationReceiver">
+    <methods name="DeclassifiedCCD">
+      <parameter name="ccd_decl">
+        <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.22"/>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="BookingConfirmation">
+    <methods name="ok"/>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="AirlineLogging">
+    <methods name="log">
+      <parameter name="entry">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Interface" name="UserIdentityConfiguration">
+    <methods name="setCredentials">
+      <parameter name="name">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+      </parameter>
+      <parameter name="password">
+        <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+      </parameter>
+    </methods>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="RequestData">
+    <fields xsi:type="sourcecode:Variable" name="destination">
+      <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="date">
+      <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="userName">
+      <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="AirlineSpec">
+    <fields xsi:type="sourcecode:Variable" name="airlineId">
+      <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="airlineName">
+      <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="CreditCardDetails">
+    <fields xsi:type="sourcecode:Variable" name="creditCardNumber">
+      <type xsi:type="sourcecode:BuiltInType" builtInType="INT"/>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="FlightOffer">
+    <fields xsi:type="sourcecode:Variable" name="id">
+      <type xsi:type="sourcecode:BuiltInType" builtInType="INT"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="airline">
+      <type xsi:type="sourcecode:ReferenceType" topleveltype="#//@topleveltype.21"/>
+    </fields>
+  </topleveltype>
+  <topleveltype xsi:type="sourcecode:Class" name="UserCredentials">
+    <fields xsi:type="sourcecode:Variable" name="name">
+      <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+    </fields>
+    <fields xsi:type="sourcecode:Variable" name="password">
+      <type xsi:type="sourcecode:BuiltInType" builtInType="STRING"/>
+    </fields>
+  </topleveltype>
+</sourcecode:SourceCodeRoot>
