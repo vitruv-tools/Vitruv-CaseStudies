@@ -29,4 +29,11 @@ public interface ViewFilter {
 	 * to the used filter.
 	 */
 	Set<EObject> filterElements(Collection<EObject> roots);
+	
+	
+	//TODO nbr add javadoc
+	public Map<EObject, EObject> getMapCopy2Original();
+	
+	
+	
 }

@@ -34,20 +34,25 @@ public class ViewFilterImpl implements ViewFilter {
 		
 	private final ViewFilterBuilder builder;
 	
+	private Map<EObject, EObject> mapCopy2Original;
+	
 	private ViewFilterImpl(ViewFilterBuilder viewFilterBuilder) {
 		builder = viewFilterBuilder;
 	}
 	
 
 	public Set<EObject> filterElements(Collection<EObject> roots) {
+		mapCopy2Original = new HashMap<EObject, EObject>();
+		//Collection<EObject> rootsCopy = EcoreUtil.copyAll(roots);
 		rootListForView = new HashSet<EObject>();
-		addElementsToSelectionByLambda(roots);
+		
+		copyElementsOfRootTypeToSelectionByLambda(roots);
 		removeOwnedAttributesFromUmlClasses();
 		return rootListForView;
 	}
 	
 	
-	private void addElementsToSelectionByLambda(Collection<EObject> roots) {
+	private void copyElementsOfRootTypeToSelectionByLambda(Collection<EObject> roots) {
 		if (!builder.filterByLambdaActive) {
 			return;
 		}
@@ -81,7 +86,7 @@ public class ViewFilterImpl implements ViewFilter {
 			EObject contentElement = contentIterator.next();
 			if (filter.apply(contentElement)) {
 				filteredModelRootStub = createAndRegisterModelRootIfNotExistent(filteredModelRootStub, root);
-				EObject copyOfContentElement = EcoreUtil.copy(contentElement);
+				EObject copyOfContentElement = copyEObject(contentElement);
 				attachElementToRoot(filteredModelRootStub, copyOfContentElement);
 			}
 		}
@@ -108,6 +113,13 @@ public class ViewFilterImpl implements ViewFilter {
 		}
 	} 
 	
+	private EObject copyEObject(EObject object) {
+		EObject copyOfContentElement = EcoreUtil.copy(object);
+		getMapCopy2Original().put(copyOfContentElement, object);
+		return copyOfContentElement;
+	}
+	
+	
 	
 	private void attachElementToRootPcm(Repository root, EObject object) {
 		if (object instanceof RepositoryComponent) {
@@ -122,6 +134,8 @@ public class ViewFilterImpl implements ViewFilter {
 	private EObject createAndRegisterModelRootIfNotExistent(EObject filteredRoot, EObject root) {
 		if (filteredRoot == null) {
 			EObject modelRoot = createFilteredModelRootIfNotExistent(filteredRoot, root);
+			//Map root stub to original root
+			mapCopy2Original.put(modelRoot, root);
 			rootListForView.add(modelRoot);
 			return modelRoot;
 		} else {
@@ -133,15 +147,24 @@ public class ViewFilterImpl implements ViewFilter {
 	
 	private EObject createFilteredModelRootIfNotExistent(EObject filteredRoot, EObject root) {
 		if (root instanceof Model) {
-			return UMLFactory.eINSTANCE.createModel();	
+			Model modelCopy = UMLFactory.eINSTANCE.createModel();
+			modelCopy.setName(((Model) root).getName());
+			return modelCopy;	
 		}  else if (root instanceof Repository) {
-			return RepositoryFactory.eINSTANCE.createRepository();
+			Repository repositoryCopy = RepositoryFactory.eINSTANCE.createRepository();
+			repositoryCopy.setEntityName(((Repository) root).getEntityName());
+			return repositoryCopy;
 		}
 		else {
 			throw new ImplementationError("nbruening: Not implemented yet");
 		}
 	}
 	
+
+	public Map<EObject, EObject> getMapCopy2Original() {
+		return mapCopy2Original;
+	}
+
 
 	//---------------------------------
 	/**

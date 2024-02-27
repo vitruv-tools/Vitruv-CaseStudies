@@ -13,6 +13,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Model;
@@ -53,6 +55,10 @@ import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
 
 @ExtendWith(RegisterMetamodelsInStandalone.class)
 public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
+
+	private static final String NIKLAS_MODIFIED_CLASS_NAME = "niklasModifiedClass2";
+
+	private static final String NIKLAS_PACKAGE = "niklasPackage";
 
 	@Accessors(AccessorType.PROTECTED_GETTER)
 	private static final String UML_MODEL_NAME = "model";
@@ -100,7 +106,12 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 //				.updateView(((ModifiableView) view));
 		view.update();
 		view.update();
-		view.getRootObjects();
+		Collection<EObject> rootObjects = view.getRootObjects();
+//		Object[] array = rootObjects.toArray();
+//		EObject eobject = (EObject) array[0];
+//		EObject copy = EcoreUtil.copy(eobject);
+//		EObject copy2 = EcoreUtil.copy(copy);
+//		EcoreUtil.equals(copy2, eobject);
 		
 		modifyModel();
 		
@@ -152,26 +163,54 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 	
 	
 	@Test
-	public void testModifyFilteredView() {
+	public void testModifyFilteredView() throws Exception {
 		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
 		View view = improvedViewTestFactory.createFilteredUmlView(function);
-		CommittableView withChangeDerivingTrait = view.withChangeDerivingTrait();
-		Collection<EObject> rootObjects = withChangeDerivingTrait.getRootObjects();
+		//Change view function
+		Consumer<CommittableView> modifyViewFunction = (CommittableView viewToBeModified) -> {
+			getDefaultUmlModel(viewToBeModified).getPackagedElement(NIKLAS_PACKAGE).setName("NiklasRenamedPackage");
+		};
+		//apply change
+		improvedViewTestFactory.changeViewDerivingChanges(view, modifyViewFunction);
+		view.getRootObjects();
 		
-		for (EObject root : rootObjects) {
-			Model model = (Model) root;
-			for (EObject content : model.eContents()) {
-				if (content instanceof org.eclipse.uml2.uml.Class) {
-					org.eclipse.uml2.uml.Class umlClass = (org.eclipse.uml2.uml.Class) content;
-					umlClass.setName("modifiedNiklasClass2");
-				}
-			}
-			
-		}
 		
-		withChangeDerivingTrait.commitChangesAndUpdate();
+//		CommittableView withChangeDerivingTrait = view.withChangeDerivingTrait();
+//		Collection<EObject> rootObjects = withChangeDerivingTrait.getRootObjects();
+//		for (EObject root : rootObjects) {
+//			Model model = (Model) root;
+//			for (EObject content : model.eContents()) {
+//				if (content instanceof org.eclipse.uml2.uml.Class) {
+//					org.eclipse.uml2.uml.Class umlClass = (org.eclipse.uml2.uml.Class) content;
+//					umlClass.setName("modifiedNiklasClass2");
+//				}
+//			}
+//			
+//		}
+		
+//		withChangeDerivingTrait.commitChangesAndUpdate();
 		view.getRootObjects();
 	}
+	
+	
+	@Test
+	public void testRenameClassInFilteredView() {
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		View filterView = improvedViewTestFactory.createFilteredUmlView(function);
+		try {
+			improvedViewTestFactory.changeViewRecordingChanges(filterView, (CommittableView view) ->  {
+				Model model = getDefaultUmlModel(view);
+				Class niklasClass2 = UmlQueryUtil.claimClass(model, "niklasClass2");
+				niklasClass2.setName(NIKLAS_MODIFIED_CLASS_NAME);
+			});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		filterView.getRootObjects();
+	}
+
 	
 	
 
@@ -226,11 +265,11 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 			final Consumer<CommittableView> secondChangeUmlFunction = (CommittableView it) -> {
 				org.eclipse.uml2.uml.Package _createPackage = UMLFactory.eINSTANCE.createPackage();
 				Procedure1<org.eclipse.uml2.uml.Package> setNameFunction = (org.eclipse.uml2.uml.Package it_1) -> {
-					it_1.setName("niklasPackage");
+					it_1.setName(NIKLAS_PACKAGE);
 				};
 
 				org.eclipse.uml2.uml.Package package1 = UMLFactory.eINSTANCE.createPackage();
-				package1.setName("niklasPackage");
+				package1.setName(NIKLAS_PACKAGE);
 
 				class1 = package1.createOwnedClass("niklasClass1", false);
 

@@ -26,7 +26,7 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopie
  */
 class ChangeDerivingView implements ModifiableView, CommittableView {
     @Delegate
-    BasicView view
+    protected BasicView view
 
     val StateBasedChangeResolutionStrategy changeResolutionStrategy
     var ResourceSet originalStateViewResourceSet
@@ -48,7 +48,7 @@ class ChangeDerivingView implements ModifiableView, CommittableView {
         setupReferenceState
     }
 
-    private def setupReferenceState() {
+    protected def setupReferenceState() {
         originalStateViewResourceSet = new ResourceSetImpl
         ResourceCopier.copyViewResources(view.viewResourceSet.resources, originalStateViewResourceSet)
         originalStateResourceMapping = new HashMap
@@ -76,7 +76,7 @@ class ChangeDerivingView implements ModifiableView, CommittableView {
         view.close
     }
 
-    private def VitruviusChange<HierarchicalId> generateChange(Resource newState, Resource referenceState) {
+    protected def VitruviusChange<HierarchicalId> generateChange(Resource newState, Resource referenceState) {
         if (referenceState === null) {
             return changeResolutionStrategy.getChangeSequenceForCreated(newState)
         } else if (newState === null) {

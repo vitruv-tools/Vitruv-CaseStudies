@@ -14,7 +14,9 @@ Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
  tools.vitruv.framework.applications,
  tools.vitruv.dsls.reactions.runtime,
  tools.vitruv.applications.util.temporary,
- tools.vitruv.framework.views;bundle-version="3.0.1"
+ tools.vitruv.framework.views;bundle-version="3.0.1",
+ tools.vitruv.change.atomic,
+ tools.vitruv.change.composite
 Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.viewfilter.util.framework,
  tools.vitruv.applications.viewfilter.util.framework.impl,

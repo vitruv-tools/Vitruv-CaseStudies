@@ -251,15 +251,15 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			BasicComponent classObject = (BasicComponent) eObject;
 			assertEquals(PCM_BASIC_COMPONENT_NAME, classObject.getEntityName());
 		}
-		
-		//Selection: Nur ModelImpl mit niklasClass2 als einzigs PackagedElement
-		//Root Objects: ModelImpl (aber nicht nur mit niklasClass2, sondern mit allem) und zwei weitere ModelImpls (aber andere)
+		//TODO nbr: Remove or translate comments in every test in this class
+		//Selection: Nur RepositoryImpl. Unter eSettings liegt List und darin Niklas Basic PCM component
+		//Root Objects: Identisch zu Selection (aber weniger null Werte in irrelevanten Feldern, da nicht kopiert)
 		modifyModel();
 		view.update();
 		view.getSelection();
-		//Selection: Nur ModelImpl mit zwei Klassen die jeweils niklasClass2 als Namen haben, als PackagedElement
-		//ACHTUNG: Die zwei Klassen sind als PackagedElements in der ModelImpl!
-		//Root Objects: ModelImpl, ModelImpl, ModelImpl
+		// unverändert durch selection
+		//Selection: Nur RepositoryImpl. Unter eSettings liegt List und darin Niklas Basic PCM component
+		//Root Objects: Identisch zu Selection (aber weniger null Werte in irrelevanten Feldern, da nicht kopiert)
 		Collection<EObject> modifiedRootObjects = view.getRootObjects();
 		assertEquals(modifiedRootObjects.size(), 1);
 		for (EObject root : modifiedRootObjects) {

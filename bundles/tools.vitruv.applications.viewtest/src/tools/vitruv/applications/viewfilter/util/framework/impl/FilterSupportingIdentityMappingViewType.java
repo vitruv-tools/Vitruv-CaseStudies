@@ -19,12 +19,15 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.internal.resource.UMLResourceImpl;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopier;
+import tools.vitruv.application.viewfilter.change.FilterOnOriginalResolver;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.DirectViewElementSelector;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelectorImpl;
 import tools.vitruv.applications.viewfilter.views.BasicFilterView;
+import tools.vitruv.applications.viewfilter.views.FilterableView;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.atomic.uuid.Uuid;
 import tools.vitruv.change.atomic.uuid.UuidResolver;
+import tools.vitruv.change.composite.description.CompositeContainerChange;
 import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.composite.description.VitruviusChangeResolver;
 import tools.vitruv.framework.views.ChangeableViewSource;
@@ -76,8 +79,32 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 		});
 	}
 
+	
+	public void commitViewChanges(FilterableView view, VitruviusChange<HierarchicalId> viewChange) {
+		ResourceSet viewSourceCopyResourceSet = withGlobalFactories(new ResourceSetImpl());
+//		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIds(viewSourceCopyResourceSet);
+		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIdsAndFilteredModel(viewSourceCopyResourceSet, view.getFilteredModelsInResourceSet(), view.getMapCopy2OriginalObject());
+		UuidResolver viewSourceCopyUuidResolver = UuidResolver.create(viewSourceCopyResourceSet);
+		VitruviusChangeResolver<Uuid> uuidChangeResolver = VitruviusChangeResolver.forUuids(viewSourceCopyUuidResolver);
+		Map<Resource, Resource> mapping = createViewResources(view, viewSourceCopyResourceSet);
+		mapChangeOnSourceIds(viewChange);
+		view.getViewSource().getUuidResolver().resolveResources(mapping, viewSourceCopyUuidResolver);
+		
+
+//		FilterOnOriginalResolver filterOnOriginalResolver = new FilterOnOriginalResolver();
+//		filterOnOriginalResolver.resolveFilteredChangesOnOriginalSources(viewChange);
+		VitruviusChange<EObject> resolvedChange = idChangeResolver.resolveAndApply(viewChange);
+		VitruviusChange<Uuid> unresolvedChanges = uuidChangeResolver.assignIds(resolvedChange);
+		view.getViewSource().propagateChange(unresolvedChanges);
+	}
+	
+	
 	@Override
 	public void commitViewChanges(ModifiableView view, VitruviusChange<HierarchicalId> viewChange) {
+		if (view instanceof FilterableView filterableView) {
+			commitViewChanges(filterableView, viewChange);
+			return;
+		}
 		ResourceSet viewSourceCopyResourceSet = withGlobalFactories(new ResourceSetImpl());
 		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIds(viewSourceCopyResourceSet);
 		UuidResolver viewSourceCopyUuidResolver = UuidResolver.create(viewSourceCopyResourceSet);
@@ -92,10 +119,24 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 
 	private Map<Resource, Resource> createViewResources(ModifiableView view, ResourceSet viewResourceSet) {
 		Collection<Resource> viewSources = view.getViewSource().getViewSourceModels();
-		ViewSelection selection = ((BasicFilterView) view).getPreFilterSelection();
+		ViewSelection selection = ((FilterableView) view).getPreFilterSelection();
 		List<Resource> resourcesWithSelectedElements = viewSources.stream()
 				.filter(resource -> resource.getContents().stream().anyMatch(selection::isViewObjectSelected)).toList();
 		return ResourceCopier.copyViewSourceResources(resourcesWithSelectedElements, viewResourceSet,
 				selection::isViewObjectSelected);
 	}
+	
+	
+	private void mapChangeOnSourceIds(VitruviusChange<HierarchicalId> viewChange) {
+		if (viewChange instanceof CompositeContainerChange<HierarchicalId> compositeChange) {
+			
+		} else {
+			
+		}
+		
+		
+		viewChange.getAffectedEObjects();
+		
+	}
+
 }

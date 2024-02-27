@@ -16,8 +16,8 @@ import static com.google.common.base.Preconditions.checkState
  */
 class ChangeRecordingView implements ModifiableView, CommittableView {
     @Delegate
-    BasicView view
-    ChangeRecorder changeRecorder
+    protected BasicView view
+    protected ChangeRecorder changeRecorder
 
     protected new(BasicView view) {
         checkArgument(view !== null, "view must not be null")
@@ -32,7 +32,7 @@ class ChangeRecordingView implements ModifiableView, CommittableView {
         setupChangeRecorder
     }
 
-    private def setupChangeRecorder() {
+    protected def setupChangeRecorder() {
         changeRecorder = new ChangeRecorder(view.viewResourceSet)
         changeRecorder.addToRecording(view.viewResourceSet)
         changeRecorder.beginRecording()
@@ -55,7 +55,7 @@ class ChangeRecordingView implements ModifiableView, CommittableView {
         view.close()
     }
 
-    private def void endRecordingAndClose(ChangeRecorder recorder) {
+    protected def void endRecordingAndClose(ChangeRecorder recorder) {
         if (recorder.isRecording) {
             recorder.endRecording()
         }
