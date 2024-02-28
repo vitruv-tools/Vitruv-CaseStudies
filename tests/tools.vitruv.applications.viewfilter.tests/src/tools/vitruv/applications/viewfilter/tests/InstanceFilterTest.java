@@ -34,7 +34,10 @@ import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.UMLFactory;
+import org.eclipse.uml2.uml.internal.impl.ClassImpl;
 import org.eclipse.uml2.uml.internal.impl.ModelImpl;
+import org.eclipse.uml2.uml.internal.impl.PackageImpl;
+import org.eclipse.uml2.uml.internal.impl.PrimitiveTypeImpl;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -71,12 +74,15 @@ import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
 @ExtendWith(RegisterMetamodelsInStandalone.class)
 public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	
+	private static final String NIKLAS_NESTED_PACKAGE = "niklasNestedPackage";
+
 	@Accessors(AccessorType.PROTECTED_GETTER)
 	private static final String UML_MODEL_NAME = "model";
 	
 	@Accessors(AccessorType.PROTECTED_GETTER)
 	private static final String PCM_MODEL_NAME = "Repository";
 	
+	private static final String NIKLAS_MODIFIED_CLASS_NAME = "niklasModifiedClass2";
 
 	private static final String PCM_REPOSITORY_FILE_EXTENSION = "repository";
 
@@ -313,6 +319,48 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	
+	@Test
+	public void testRenameClassInFilteredView() throws Exception {
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		View baselineUnfilteredUmlView = improvedViewTestFactory.createUmlView();
+		View filterView = improvedViewTestFactory.createFilteredUmlView(function);
+		
+		improvedViewTestFactory.changeViewRecordingChanges(filterView, (CommittableView view) ->  {
+			Model model = getDefaultUmlModel(view);
+			Class niklasClass2 = UmlQueryUtil.claimClass(model, "niklasClass2");
+			niklasClass2.setName(NIKLAS_MODIFIED_CLASS_NAME);
+		});
+		
+		
+		//Test whether everything worked
+		//Is filtered view in correct state?
+		Collection<EObject> filteredRootObjects = filterView.getRootObjects();
+		assertEquals(1, filteredRootObjects.size());
+		for (EObject filteredRoot : filteredRootObjects) {
+			EObject classObject = filteredRoot.eContents().get(0);
+			assertTrue(classObject instanceof Class);
+			assertEquals(NIKLAS_MODIFIED_CLASS_NAME, ((Class) classObject).getName());
+		}
+		//Did the update of the vsum work? Is a newly created view in correct state?
+		View secondView = improvedViewTestFactory.createUmlView();
+		Collection<EObject> newViewRootObjects = secondView.getRootObjects();
+		assertEquals(1, newViewRootObjects.size());
+		for (EObject viewRoot : newViewRootObjects) {
+			assertTrue(viewRoot instanceof Model);
+			if (viewRoot instanceof Model castedViewRoot) {
+				EObject classWithModifiedName = searchEObjectWithGivenNameInUmlModel(castedViewRoot, NIKLAS_MODIFIED_CLASS_NAME);
+				assertTrue(classWithModifiedName != null);
+				assertTrue(classWithModifiedName instanceof Class);
+				EList<EObject> niklasPackage = viewRoot.eContents().get(0).eContents();
+				assertEquals(4, niklasPackage.size());
+				assertEquals(1, niklasPackage.stream().filter(it -> {return (it instanceof PackageImpl);}).count());
+				assertEquals(2, niklasPackage.stream().filter(it -> {return (it instanceof ClassImpl);}).count());
+				assertEquals(1, niklasPackage.stream().filter(it -> {return (it instanceof PrimitiveTypeImpl);}).count());
+			}
+		}
+	}
+	
+	
 	
 	
 	protected void createBiggerUmlModel(final Procedure1<? super Model> modelInitialization) {
@@ -341,7 +389,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 
 				getUserInteraction().addNextSingleSelection(1);
 				getUserInteraction().addNextTextInput("model/System.system");
-				org.eclipse.uml2.uml.Package package2 = package1.createNestedPackage("niklasNestedPackage");
+				org.eclipse.uml2.uml.Package package2 = package1.createNestedPackage(NIKLAS_NESTED_PACKAGE);
 
 				class2 = package2.createOwnedClass("niklasClass2", false);
 				EList<PackageableElement> _packagedElements = getDefaultUmlModel(it).getPackagedElements();
@@ -443,6 +491,20 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			}
 		}
 		return false;
+	}
+	
+	
+	private EObject searchEObjectWithGivenNameInUmlModel(Model model, String searchedName) {
+		TreeIterator<EObject> umlIterator = model.eAllContents();
+		while (umlIterator.hasNext()) {
+			EObject next = umlIterator.next();
+			if (next instanceof org.eclipse.uml2.uml.Classifier) {
+				if (searchedName.equals(((Classifier) next).getName())) {
+					return next;
+				}
+			}
+		}
+		return null;
 	}
 	
 	

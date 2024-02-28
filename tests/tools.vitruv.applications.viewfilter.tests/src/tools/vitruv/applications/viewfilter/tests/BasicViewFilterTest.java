@@ -209,6 +209,8 @@ public class BasicViewFilterTest extends ViewBasedVitruvApplicationTest {
 		}
 		
 		filterView.getRootObjects();
+		View secondView = improvedViewTestFactory.createUmlView();
+		secondView.getRootObjects();
 	}
 
 	
