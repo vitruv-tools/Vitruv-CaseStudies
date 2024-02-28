@@ -23,6 +23,7 @@ import tools.vitruv.application.viewfilter.change.FilterOnOriginalResolver;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.DirectViewElementSelector;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelectorImpl;
 import tools.vitruv.applications.viewfilter.views.BasicFilterView;
+import tools.vitruv.applications.viewfilter.views.FilterChangeRecordingView;
 import tools.vitruv.applications.viewfilter.views.FilterableView;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.atomic.uuid.Uuid;
@@ -81,19 +82,31 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 
 	
 	public void commitViewChanges(FilterableView view, VitruviusChange<HierarchicalId> viewChange) {
+		ResourceSet viewResourceCopyResourceSet = withGlobalFactories(new ResourceSetImpl());
+		ResourceSet unfilteredResourceSet = ((FilterChangeRecordingView) view).getUnfilteredResourceSet();
+		ResourceSet filteredResourceSetInOriginalState = ((FilterChangeRecordingView) view).getFilteredModelsInResourceSetWithBackwardExecution();
+		VitruviusChangeResolver<HierarchicalId> viewResourceIdChangeResolver = 
+				VitruviusChangeResolver.forHierarchicalIdsAndFilteredModel(unfilteredResourceSet, filteredResourceSetInOriginalState, view.getMapCopy2OriginalObject());
+		//VitruviusChangeResolver<HierarchicalId> viewResourceIdChangeResolver = VitruviusChangeResolver.forHierarchicalIds(((FilterChangeRecordingView) view).getUnfilteredResourceSet());
+		
+		
+		VitruviusChange<EObject> viewResourceResolvedChange = viewResourceIdChangeResolver.resolveAndApply(viewChange);
+		VitruviusChangeResolver<HierarchicalId> changeResolver = VitruviusChangeResolver.forHierarchicalIds(unfilteredResourceSet);		
+		VitruviusChange<HierarchicalId> unresolvedViewResourceChanges = changeResolver.assignIds(viewResourceResolvedChange);		
+		
 		ResourceSet viewSourceCopyResourceSet = withGlobalFactories(new ResourceSetImpl());
-//		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIds(viewSourceCopyResourceSet);
-		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIdsAndFilteredModel(viewSourceCopyResourceSet, view.getFilteredModelsInResourceSet(), view.getMapCopy2OriginalObject());
+		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIds(viewSourceCopyResourceSet);
+//		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIdsAndFilteredModel(viewSourceCopyResourceSet, view.getFilteredModelsInResourceSet(), view.getMapCopy2OriginalObject());
 		UuidResolver viewSourceCopyUuidResolver = UuidResolver.create(viewSourceCopyResourceSet);
 		VitruviusChangeResolver<Uuid> uuidChangeResolver = VitruviusChangeResolver.forUuids(viewSourceCopyUuidResolver);
 		Map<Resource, Resource> mapping = createViewResources(view, viewSourceCopyResourceSet);
-		mapChangeOnSourceIds(viewChange);
+//		mapChangeOnSourceIds(unresolvedChanges);
 		view.getViewSource().getUuidResolver().resolveResources(mapping, viewSourceCopyUuidResolver);
 		
 
 //		FilterOnOriginalResolver filterOnOriginalResolver = new FilterOnOriginalResolver();
 //		filterOnOriginalResolver.resolveFilteredChangesOnOriginalSources(viewChange);
-		VitruviusChange<EObject> resolvedChange = idChangeResolver.resolveAndApply(viewChange);
+		VitruviusChange<EObject> resolvedChange = idChangeResolver.resolveAndApply(unresolvedViewResourceChanges);
 		VitruviusChange<Uuid> unresolvedChanges = uuidChangeResolver.assignIds(resolvedChange);
 		view.getViewSource().propagateChange(unresolvedChanges);
 	}

@@ -16,6 +16,7 @@ import tools.vitruv.change.atomic.EChange;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.composite.description.TransactionalChange;
 import tools.vitruv.change.composite.description.VitruviusChange;
+import tools.vitruv.change.composite.description.VitruviusChangeBackwardsExecutionHelper;
 import tools.vitruv.change.composite.description.VitruviusChangeResolver;
 import tools.vitruv.change.composite.recording.ChangeRecorder;
 import tools.vitruv.framework.views.ViewSelection;
@@ -24,6 +25,7 @@ import tools.vitruv.framework.views.ViewSelection;
 public class FilterChangeRecordingView extends ChangeRecordingView implements FilterableView {
 	
 	private Map<EObject, EObject> mapCopy2OriginalObject;
+	private TransactionalChange<EObject> recordedChange = null;
 	
 	//private ResourceSet resourceSetFromBeginningOfRecording;
 
@@ -60,16 +62,18 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 	@Override
 	public void commitChanges() {
 		getView().checkNotClosed();
-		TransactionalChange<EObject> recordedChange = changeRecorder.endRecording();
+		recordedChange = changeRecorder.endRecording();
+		
+		ResourceSet filteredModelsInResourceSet = getFilteredModelsInResourceSet();
+		ResourceSet unfilteredResourceSet = getUnfilteredResourceSet();
+//		EObject class2 = filteredModelsInResourceSet.getResources().get(0).getContents().get(0).eContents().get(0);
+//		EObject eObject = mapCopy2OriginalObject.get(class2);
 		
 		
 		//TODO nbr: ich muss hier irgendwie an das view resourceSet kommen
 		
-		VitruviusChangeResolver.forMappingFilteredObjects(getView().getFilteredModelsInResourceSet(), getView().getNonFilteredViewResourceSet(), mapCopy2OriginalObject);
-		VitruviusChangeResolver<HierarchicalId> changeResolver = VitruviusChangeResolver.forHierarchicalIds(getView().getFilteredModelsInResourceSet());
-		
-		//VitruviusChangeResolver<EObject> filter.
-		
+		//VitruviusChangeResolver.forMappingFilteredObjects(getView().getFilteredModelsInResourceSet(), getView().getNonFilteredViewResourceSet(), mapCopy2OriginalObject);
+		VitruviusChangeResolver<HierarchicalId> changeResolver = VitruviusChangeResolver.forHierarchicalIds(getView().getFilteredModelsInResourceSet());		
 		VitruviusChange<HierarchicalId> unresolvedChanges = changeResolver.assignIds(recordedChange);
 		getView().getViewType().commitViewChanges(this, unresolvedChanges);
 		getView().setViewChanged(false);
@@ -94,6 +98,22 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 	@Override
 	public ResourceSet getFilteredModelsInResourceSet() {
 		return getView().getFilteredModelsInResourceSet();
+	}
+	
+	
+	public ResourceSet getFilteredModelsInResourceSetWithBackwardExecution() {
+		ResourceSet resourceSet = getFilteredModelsInResourceSet();
+		if (recordedChange != null) {
+			//TODO nbr: What happens if changes have already been reverted?
+			VitruviusChangeBackwardsExecutionHelper changeResolver = new VitruviusChangeBackwardsExecutionHelper(resourceSet);
+			changeResolver.applyBackward(recordedChange);
+		}
+		return resourceSet;
+	}
+	
+	
+	public ResourceSet getUnfilteredResourceSet() {
+		return getView().getNonFilteredViewResourceSet();
 	}
 
 

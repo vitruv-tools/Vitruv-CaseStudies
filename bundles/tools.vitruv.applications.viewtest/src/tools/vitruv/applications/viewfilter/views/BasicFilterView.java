@@ -48,7 +48,7 @@ public class BasicFilterView extends BasicView implements FilterableView {
 		super(viewType, viewSource, selection);
 		this.viewFilter = viewFilter;
 		preFilterSelection = selection;
-		update();		
+		update();
 	}
 	
 	
@@ -86,6 +86,17 @@ public class BasicFilterView extends BasicView implements FilterableView {
 				filteredModelsResSet.createResource(rootObject2UriMapping.get(originalObject)).getContents().add(copiedRootObject);
 			}
 		}		
+		
+//		for (EObject root : rootObjects) {
+//			EObject class2 = root.eContents().get(0);
+//			EObject resClass2 = filteredModelsResSet.getResources().get(0).getContents().get(0).eContents().get(0);
+//			EObject eObject = getMapCopy2OriginalObject().get(class2);
+//			Set<EObject> keySet = getMapCopy2OriginalObject().keySet();
+//			keySet.contains(class2);
+//			System.out.println("Bla");
+//		}
+		
+		
 		return filteredModelsResSet;
 	}
 	
@@ -166,6 +177,7 @@ public class BasicFilterView extends BasicView implements FilterableView {
 	protected void setRootObjects(Collection<EObject> rootObjects) {
 		this.rootObjects = rootObjects;
 	}
+	
 	
 	
     @Override
