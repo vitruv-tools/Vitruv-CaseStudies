@@ -90,7 +90,7 @@ public class ViewTestFactory extends TestViewFactory {
 	
 	public View createCountUmlElementsView(Function<EObject, Boolean> filterFunction) {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
-		return createInformationView("Information Page", rootTypes, filterFunction);
+		return createCountUmlClassesInformationView("Information Page", rootTypes, filterFunction);
 		
 	}
 	
@@ -129,8 +129,8 @@ public class ViewTestFactory extends TestViewFactory {
 //-------------End of Boilerplate code----------------//	
 	
 	
-	public View createInformationView(String viewName, Collection<Class<?>> rootTypes, Function<EObject, Boolean> filterFunction) {
-		viewType = FilterSupportingViewTypeFactory.createInformationFilterViewViewType(viewName);
+	public View createCountUmlClassesInformationView(String viewName, Collection<Class<?>> rootTypes, Function<EObject, Boolean> filterFunction) {
+		viewType = FilterSupportingViewTypeFactory.createCountUmlClassesInformationFilterViewViewType(viewName);
 		FilterSupportingViewElementSelector selector = (FilterSupportingViewElementSelector) viewProvider.createSelector(viewType);
 		selector.deselectElementsExceptForRootType(rootTypes);
 		selector.filterModelElementsByLambda(filterFunction);
