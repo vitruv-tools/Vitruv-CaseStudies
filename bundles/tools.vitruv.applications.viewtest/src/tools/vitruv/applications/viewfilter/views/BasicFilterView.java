@@ -71,12 +71,11 @@ public class BasicFilterView extends BasicView implements FilterableView {
 	
 	
 	public ResourceSet getNonFilteredViewResourceSet() {
-		return getViewResourceSet();
+		return super.getViewResourceSet();
 	}
 	
 	
-	@Override
-	public ResourceSet getFilteredModelsInResourceSet() {
+	public ResourceSet getViewResourceSet() {
 		if (filteredModelsResSet == null) {
 			filteredModelsResSet = new ResourceSetImpl();
 			Map<EObject, EObject> mapCopy2Original = viewFilter.getMapCopy2Original();
@@ -85,30 +84,10 @@ public class BasicFilterView extends BasicView implements FilterableView {
 				EObject originalObject = mapCopy2Original.get(copiedRootObject);
 				filteredModelsResSet.createResource(rootObject2UriMapping.get(originalObject)).getContents().add(copiedRootObject);
 			}
-		}		
-		
-//		for (EObject root : rootObjects) {
-//			EObject class2 = root.eContents().get(0);
-//			EObject resClass2 = filteredModelsResSet.getResources().get(0).getContents().get(0).eContents().get(0);
-//			EObject eObject = getMapCopy2OriginalObject().get(class2);
-//			Set<EObject> keySet = getMapCopy2OriginalObject().keySet();
-//			keySet.contains(class2);
-//			System.out.println("Bla");
-//		}
-		
+		}			
 		
 		return filteredModelsResSet;
 	}
-	
-	
-//	public void applyChangesFromFilteredRootOnOriginalRoot() {
-//		Collection<EObject> filteredRoots = getRootObjects();
-//		Map<EObject, EObject> mapCopy2Original = viewFilter.getMapCopy2Original();
-//		for(EObject currentFilteredRoot : filteredRoots) {
-//			EList<EObject> contents = currentFilteredRoot.eContents();
-//			for 
-//		}
-//	}
 	
 	
 	public void setViewChanged(boolean value) {
@@ -148,7 +127,7 @@ public class BasicFilterView extends BasicView implements FilterableView {
 	private Map<EObject, URI> getRootObject2UriMapping() {
 		Map<EObject, URI> rootObject2UriMapping = new HashMap();
 		
-		for (Resource resource : getViewResourceSet().getResources()) {
+		for (Resource resource : getNonFilteredViewResourceSet().getResources()) {
 			EList<EObject> contents = resource.getContents();
 			for (EObject content : contents) {
 				rootObject2UriMapping.put(content, resource.getURI());

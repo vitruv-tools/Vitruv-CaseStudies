@@ -44,9 +44,9 @@ public class FilterChangeDerivingView extends ChangeDerivingView {
 	@Override
     protected void setupReferenceState() {
         originalStateViewResourceSet = new ResourceSetImpl();
-        ResourceCopier.copyViewResources(getView().getFilteredModelsInResourceSet().getResources(), originalStateViewResourceSet);
+        ResourceCopier.copyViewResources(getView().getViewResourceSet().getResources(), originalStateViewResourceSet);
         originalStateResourceMapping = new HashMap();
-        for (Resource resource :  getView().getFilteredModelsInResourceSet().getResources()) {
+        for (Resource resource :  getView().getViewResourceSet().getResources()) {
         	Resource searchedResource = null;
         	for (Resource originalStateResource : originalStateViewResourceSet.getResources()) {
         		if (originalStateResource.getURI() == resource.getURI()) {
@@ -69,7 +69,7 @@ public class FilterChangeDerivingView extends ChangeDerivingView {
 		
 		ArrayList changes = new ArrayList();
 		Set<Resource> allResources = new HashSet(originalStateResourceMapping.keySet());
-		allResources.addAll(getView().getFilteredModelsInResourceSet().getResources()); // consider newly added resources
+		allResources.addAll(getView().getViewResourceSet().getResources()); // consider newly added resources
 		List<Resource> pathmapResources = new ArrayList();
 		for (Resource resource : allResources) {
 			if (URIUtil.isPathmap(resource.getURI())) {
