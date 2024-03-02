@@ -1,4 +1,4 @@
-package tools.vitruv.application.viewfilter.transformation;
+package tools.vitruv.application.viewfilter.informationview.internal;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -9,7 +9,7 @@ import com.niklas.niklasproject.niklasdomain.SingleInformation;
  * counting the elements of a certain type in the given model for instance. 
  * The actual transformation depends on the overwriting implementation.}
  */
-public abstract class InformationViewTransformator {
+public interface InformationViewTransformator {
 
 	/**
 	 * Method transforms the given model (represented by its root) into a {@link SingleInformation}.

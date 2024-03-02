@@ -1,4 +1,4 @@
-package tools.vitruv.application.viewfilter.transformation;
+package tools.vitruv.application.viewfilter.informationview.internal;
 
 import org.eclipse.emf.ecore.EObject;
 

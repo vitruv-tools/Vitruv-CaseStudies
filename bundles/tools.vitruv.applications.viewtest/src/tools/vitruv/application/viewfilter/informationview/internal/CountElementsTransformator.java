@@ -1,4 +1,4 @@
-package tools.vitruv.application.viewfilter.transformation;
+package tools.vitruv.application.viewfilter.informationview.internal;
 
 import com.niklas.niklasproject.niklasdomain.NiklasdomainFactory;
 import com.niklas.niklasproject.niklasdomain.SingleInformation;
@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 
 //TODO nbr add javadoc
-public abstract class CountElementsTransformator extends InformationViewTransformator {
+public abstract class CountElementsTransformator implements InformationViewTransformator {
 	
 
 	public SingleInformation transform(EObject root) {

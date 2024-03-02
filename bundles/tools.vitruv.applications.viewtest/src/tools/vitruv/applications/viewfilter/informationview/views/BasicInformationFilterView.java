@@ -1,4 +1,4 @@
-package tools.vitruv.applications.viewfilter.views;
+package tools.vitruv.applications.viewfilter.informationview.views;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,23 +16,34 @@ import com.niklas.niklasproject.niklasdomain.InformationStructure;
 import com.niklas.niklasproject.niklasdomain.NiklasdomainFactory;
 import com.niklas.niklasproject.niklasdomain.SingleInformation;
 
-import tools.vitruv.application.viewfilter.transformation.CountElementsTransformator;
-import tools.vitruv.application.viewfilter.transformation.CountUmlClassesTransformator;
+import static com.google.common.base.Preconditions.checkArgument;
+
+import tools.vitruv.application.viewfilter.informationview.internal.CountElementsTransformator;
+import tools.vitruv.application.viewfilter.informationview.internal.CountUmlClassesTransformator;
+import tools.vitruv.application.viewfilter.informationview.internal.InformationViewTransformator;
 import tools.vitruv.applications.viewfilter.helpers.ViewFilterHelper;
 import tools.vitruv.applications.viewfilter.util.framework.impl.FilteredViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;
+import tools.vitruv.applications.viewfilter.views.BasicFilterView;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.framework.views.ChangeableViewSource;
 import tools.vitruv.framework.views.ModifiableViewSelection;
 import tools.vitruv.framework.views.ViewSelection;
 import tools.vitruv.framework.views.ViewSelector;
 
-public class BasicInformationFilterView extends BasicFilterView {
+public class BasicInformationFilterView extends BasicFilterView implements InformationView {
+
+	private final InformationViewTransformator infoTransformator;
+
 
 	public BasicInformationFilterView(FilteredViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
-			ChangeableViewSource viewSource, ViewSelection selection, ViewFilter viewFilter) {
+			ChangeableViewSource viewSource, ViewSelection selection, ViewFilter viewFilter, 
+			InformationViewTransformator infoTransformator) {
 		super(viewType, viewSource, selection, viewFilter);
+		checkArgument(infoTransformator != null, "Transformator must be not null");
+		this.infoTransformator = infoTransformator;
+		update();
 	}
 	
 	
@@ -41,13 +52,16 @@ public class BasicInformationFilterView extends BasicFilterView {
 		if (selection == null) {
 			throw new NullPointerException("selection is null");
 		}
-		CountElementsTransformator transformator = new CountUmlClassesTransformator();
+		if (infoTransformator == null) {
+			//method has been called as part of constructor and before the info transformator could be set
+			return;
+		}
 		InformationStructure informationStructure = NiklasdomainFactory.eINSTANCE.createInformationStructure();
 		EList<SingleInformation> singleinformationList = informationStructure.getSingleinformation();
 		
 		for(EObject root : selection.getSelectableElements()) {
 			if (selection.isSelected(root)) {
-				SingleInformation transformResult = transformator.transform(root);
+				SingleInformation transformResult = infoTransformator.transform(root);
 				if (transformResult != null) {
 					singleinformationList.add(transformResult);
 				}

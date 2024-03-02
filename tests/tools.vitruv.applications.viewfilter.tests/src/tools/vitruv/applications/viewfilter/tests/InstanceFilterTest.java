@@ -122,8 +122,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	public void testUmlView() throws NoSuchMethodException, InvocationTargetException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		View createUmlView = improvedViewTestFactory.createUmlView();
 		Collection<EObject> rootObjects = createUmlView.getRootObjects();
-		//Selection should contain ModelImpl, and two SystemImpl. Only the ModelImpl should be 
-		//selected.
+		//Expected: Selection should contain ModelImpl, and two SystemImpl. Only the ModelImpl should be selected.
 		//Root Objects should only contain ModelImpl
 		assertEquals(countContainedModelImplInstances(rootObjects), 1);
 		assertEquals(1, rootObjects.size());
@@ -143,9 +142,9 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 		view.update();
 		Collection<EObject> rootObjects = view.getRootObjects();
 		assertEquals(rootObjects.size(), 1);
-		//TODO nbr: remove comments..
-		//Selection: Nur ModelImpl mit niklasClass2 als einzigs PackagedElement
-		//Root Objects: ModelImpl (aber nicht nur mit niklasClass2, sondern mit allem)
+		//Expected:
+		//Selection: Only ModelImpl with class "niklasClass2" as only PackagedElement
+		//Root Objects: same structure as in selection
 		for (EObject root : rootObjects) {
 			assertTrue(root instanceof Model);
 			assertTrue(view.getSelection().isViewObjectSelected(root));
@@ -159,9 +158,8 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 		modifyModel();
 		view.update();
 		view.getSelection();
-		//Selection: Nur ModelImpl mit zwei Klassen die jeweils niklasClass2 als Namen haben, als PackagedElement
-		//ACHTUNG: Die zwei Klassen sind als PackagedElements in der ModelImpl!
-		//Root Objects: ModelImpl
+		//Expected: Selection: Only ModelImpl with two Class Objects, both with the name niklasClass2 as packagedElements
+		//Root Objects: The same
 		Collection<EObject> modifiedRootObjects = view.getRootObjects();
 		assertEquals(modifiedRootObjects.size(), 1);
 		for (EObject root : modifiedRootObjects) {
@@ -185,8 +183,8 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 		View view = improvedViewTestFactory.createFilteredUmlView(function);
 		view.update();
 		view.update();
-		//Selection: Nur ModelImpl mit niklasClass2 als einzigs PackagedElement
-		//Root Objects: ModelImpl (aber nicht nur mit niklasClass2, sondern mit allem) und zwei weitere ModelImpls (aber andere)
+		//Expected Selection: Only ModelImpl with class object "niklasClass2" as only PackagedElement
+		//Root Objects: Same structure as selection
 		Collection<EObject> rootObjects = view.getRootObjects();
 		assertEquals(rootObjects.size(), 1);
 		for (EObject root : rootObjects) {
@@ -203,9 +201,6 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 		modifyModel();
 		view.update();
 		view.getSelection();
-		//Selection: Nur ModelImpl mit zwei Klassen die jeweils niklasClass2 als Namen haben, als PackagedElement
-		//ACHTUNG: Die zwei Klassen sind als PackagedElements in der ModelImpl!
-		//Root Objects: ModelImpl, ModelImpl, ModelImpl
 		Collection<EObject> modifiedRootObjects = view.getRootObjects();
 		assertEquals(modifiedRootObjects.size(), 1);
 		for (EObject root : modifiedRootObjects) {
@@ -256,15 +251,12 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			BasicComponent classObject = (BasicComponent) eObject;
 			assertEquals(PCM_BASIC_COMPONENT_NAME, classObject.getEntityName());
 		}
-		//TODO nbr: Remove or translate comments in every test in this class
-		//Selection: Nur RepositoryImpl. Unter eSettings liegt List und darin Niklas Basic PCM component
-		//Root Objects: Identisch zu Selection (aber weniger null Werte in irrelevanten Feldern, da nicht kopiert)
+		//Expected: Selection: Only RepositoryImpl. Under eSettings is a list which contains "Niklas Basic PCM component 1"
+		//Root Objects: Identical to Selection but with less null values in irrelevant fields
 		modifyModel();
 		view.update();
 		view.getSelection();
-		// unverändert durch selection
-		//Selection: Nur RepositoryImpl. Unter eSettings liegt List und darin Niklas Basic PCM component
-		//Root Objects: Identisch zu Selection (aber weniger null Werte in irrelevanten Feldern, da nicht kopiert)
+		// Expected: Selection and Root objects should not have changed
 		Collection<EObject> modifiedRootObjects = view.getRootObjects();
 		assertEquals(modifiedRootObjects.size(), 1);
 		for (EObject root : modifiedRootObjects) {
@@ -296,7 +288,6 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			assertEquals("Anzahl Elemente", singleInformation.getTitle());
 			assertEquals(1, singleInformation.getValue());
 		}
-		
 		
 		modifyModel();
 		view.update();
@@ -453,13 +444,11 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			Repository repository = RepositoryFactory.eINSTANCE.createRepository();
 			repository.setEntityName(PCM_MODEL_NAME);
 			it.registerRoot(repository, getUri(getPcmProjectModelPath(repository.getEntityName(), PCM_REPOSITORY_FILE_EXTENSION)));
-			//createAndRegisterRoot(it, repository, this.getUri(getProjectModelPath(PCM_MODEL_NAME)));		
 		};
 		
 		try {
 			improvedViewTestFactory.changePcmView(createPcmRepoFunction);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			

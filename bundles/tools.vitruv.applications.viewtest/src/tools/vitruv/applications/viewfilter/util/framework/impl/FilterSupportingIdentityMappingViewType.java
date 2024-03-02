@@ -19,7 +19,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.internal.resource.UMLResourceImpl;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopier;
-import tools.vitruv.application.viewfilter.change.FilterOnOriginalResolver;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.DirectViewElementSelector;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelectorImpl;
 import tools.vitruv.applications.viewfilter.views.BasicFilterView;
@@ -79,53 +78,32 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 			createViewResources(view, viewResourceSet);
 		});
 	}
-
-	
-	public void commitViewChanges(FilterableView view, VitruviusChange<HierarchicalId> viewChange) {
-		ResourceSet viewResourceCopyResourceSet = withGlobalFactories(new ResourceSetImpl());
-		ResourceSet unfilteredResourceSet = ((FilterChangeRecordingView) view).getNonFilteredViewResourceSet();
-		ResourceSet filteredResourceSetInOriginalState = ((FilterChangeRecordingView) view).getFilteredModelsInResourceSetWithBackwardExecution();
-		VitruviusChangeResolver<HierarchicalId> viewResourceIdChangeResolver = 
-				VitruviusChangeResolver.forHierarchicalIdsAndFilteredModel(unfilteredResourceSet, filteredResourceSetInOriginalState, view.getMapCopy2OriginalObject());
-		//VitruviusChangeResolver<HierarchicalId> viewResourceIdChangeResolver = VitruviusChangeResolver.forHierarchicalIds(((FilterChangeRecordingView) view).getUnfilteredResourceSet());
-		
-		
-		VitruviusChange<EObject> viewResourceResolvedChange = viewResourceIdChangeResolver.resolveAndApply(viewChange);
-		VitruviusChangeResolver<HierarchicalId> changeResolver = VitruviusChangeResolver.forHierarchicalIds(unfilteredResourceSet);		
-		VitruviusChange<HierarchicalId> unresolvedViewResourceChanges = changeResolver.assignIds(viewResourceResolvedChange);		
-		
-		ResourceSet viewSourceCopyResourceSet = withGlobalFactories(new ResourceSetImpl());
-		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIds(viewSourceCopyResourceSet);
-//		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIdsAndFilteredModel(viewSourceCopyResourceSet, view.getFilteredModelsInResourceSet(), view.getMapCopy2OriginalObject());
-		UuidResolver viewSourceCopyUuidResolver = UuidResolver.create(viewSourceCopyResourceSet);
-		VitruviusChangeResolver<Uuid> uuidChangeResolver = VitruviusChangeResolver.forUuids(viewSourceCopyUuidResolver);
-		Map<Resource, Resource> mapping = createViewResources(view, viewSourceCopyResourceSet);
-//		mapChangeOnSourceIds(unresolvedChanges);
-		view.getViewSource().getUuidResolver().resolveResources(mapping, viewSourceCopyUuidResolver);
-		
-
-//		FilterOnOriginalResolver filterOnOriginalResolver = new FilterOnOriginalResolver();
-//		filterOnOriginalResolver.resolveFilteredChangesOnOriginalSources(viewChange);
-		VitruviusChange<EObject> resolvedChange = idChangeResolver.resolveAndApply(unresolvedViewResourceChanges);
-		VitruviusChange<Uuid> unresolvedChanges = uuidChangeResolver.assignIds(resolvedChange);
-		view.getViewSource().propagateChange(unresolvedChanges);
-	}
 	
 	
 	@Override
 	public void commitViewChanges(ModifiableView view, VitruviusChange<HierarchicalId> viewChange) {
+		VitruviusChange<HierarchicalId> unresolvedViewResourceChanges = viewChange;
+		
 		if (view instanceof FilterableView filterableView) {
-			commitViewChanges(filterableView, viewChange);
-			return;
+			//in case the changes have been performed on a FilteredView, the viewChange references the filterResourceSet
+			//transform the viewChanges on the ViewResourceSet first..
+			ResourceSet unfilteredResourceSet = ((FilterChangeRecordingView) view).getNonFilteredViewResourceSet();
+			ResourceSet filteredResourceSetInOriginalState = ((FilterChangeRecordingView) view).getFilteredModelsInResourceSetWithBackwardExecution();
+			VitruviusChangeResolver<HierarchicalId> viewResourceIdChangeResolver = 
+					VitruviusChangeResolver.forHierarchicalIdsAndFilteredModel(unfilteredResourceSet, filteredResourceSetInOriginalState, filterableView.getMapCopy2OriginalObject());
+			VitruviusChange<EObject> viewResourceResolvedChange = viewResourceIdChangeResolver.resolveAndApply(viewChange);
+			VitruviusChangeResolver<HierarchicalId> changeResolver = VitruviusChangeResolver.forHierarchicalIds(unfilteredResourceSet);		
+			unresolvedViewResourceChanges = changeResolver.assignIds(viewResourceResolvedChange);	
 		}
+		
 		ResourceSet viewSourceCopyResourceSet = withGlobalFactories(new ResourceSetImpl());
 		VitruviusChangeResolver<HierarchicalId> idChangeResolver = VitruviusChangeResolver.forHierarchicalIds(viewSourceCopyResourceSet);
 		UuidResolver viewSourceCopyUuidResolver = UuidResolver.create(viewSourceCopyResourceSet);
 		VitruviusChangeResolver<Uuid> uuidChangeResolver = VitruviusChangeResolver.forUuids(viewSourceCopyUuidResolver);
 		Map<Resource, Resource> mapping = createViewResources(view, viewSourceCopyResourceSet);
 		view.getViewSource().getUuidResolver().resolveResources(mapping, viewSourceCopyUuidResolver);
-
-		VitruviusChange<EObject> resolvedChange = idChangeResolver.resolveAndApply(viewChange);
+		
+		VitruviusChange<EObject> resolvedChange = idChangeResolver.resolveAndApply(unresolvedViewResourceChanges);
 		VitruviusChange<Uuid> unresolvedChanges = uuidChangeResolver.assignIds(resolvedChange);
 		view.getViewSource().propagateChange(unresolvedChanges);
 	}
@@ -137,19 +115,6 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 				.filter(resource -> resource.getContents().stream().anyMatch(selection::isViewObjectSelected)).toList();
 		return ResourceCopier.copyViewSourceResources(resourcesWithSelectedElements, viewResourceSet,
 				selection::isViewObjectSelected);
-	}
-	
-	
-	private void mapChangeOnSourceIds(VitruviusChange<HierarchicalId> viewChange) {
-		if (viewChange instanceof CompositeContainerChange<HierarchicalId> compositeChange) {
-			
-		} else {
-			
-		}
-		
-		
-		viewChange.getAffectedEObjects();
-		
 	}
 
 }
