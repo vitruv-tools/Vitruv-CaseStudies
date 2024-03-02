@@ -1,4 +1,4 @@
-package tools.vitruv.applications.viewfilter.util.framework.impl
+package tools.vitruv.applications.viewfilter.views;
 
 import org.eclipse.xtend.lib.annotations.Delegate
 import tools.vitruv.change.composite.description.VitruviusChangeResolver
@@ -9,6 +9,9 @@ import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionS
 
 import static com.google.common.base.Preconditions.checkArgument
 import static com.google.common.base.Preconditions.checkState
+import tools.vitruv.applications.viewfilter.views.AbstractBasicView
+import tools.vitruv.applications.viewfilter.views.ChangesetDeterminableView
+import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView
 
 /**
  * A {@link View} that records changes to its resources and allows to propagate them 
@@ -16,10 +19,10 @@ import static com.google.common.base.Preconditions.checkState
  */
 class ChangeRecordingView implements ModifiableView, CommittableView {
     @Delegate
-    protected BasicView view
+    protected ChangesetDeterminableView view
     protected ChangeRecorder changeRecorder
 
-    protected new(BasicView view) {
+    protected new(ChangesetDeterminableView view) {
         checkArgument(view !== null, "view must not be null")
         checkState(!view.isModified, "view must not be modified")
         this.view = view

@@ -20,7 +20,6 @@ import org.eclipse.net4j.util.ImplementationError;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
-import tools.vitruv.applications.viewfilter.util.framework.impl.BasicView;
 import tools.vitruv.applications.viewfilter.util.framework.impl.FilteredViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;
@@ -32,7 +31,7 @@ import tools.vitruv.framework.views.ViewSelection;
 import tools.vitruv.framework.views.ViewSelector;
 import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
 
-public class BasicFilterView extends BasicView implements FilterableView {
+public class BasicFilterView extends AbstractBasicView implements FilterableView {
 	
 	private final ViewFilter viewFilter;
 	
@@ -70,6 +69,7 @@ public class BasicFilterView extends BasicView implements FilterableView {
 	}
 	
 	
+	@Override
 	public ResourceSet getNonFilteredViewResourceSet() {
 		return super.getViewResourceSet();
 	}

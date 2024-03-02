@@ -15,5 +15,5 @@ public interface FilterableView extends ModifiableView {
 	
 	Map<EObject, EObject> getMapCopy2OriginalObject();
 
-	//ResourceSet getFilteredModelsInResourceSetWithBackwardExecution();
+	ResourceSet getNonFilteredViewResourceSet();
 }

@@ -10,8 +10,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopier;
-import tools.vitruv.applications.viewfilter.util.framework.impl.BasicView;
-import tools.vitruv.applications.viewfilter.util.framework.impl.ChangeRecordingView;
 import tools.vitruv.change.atomic.EChange;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.composite.description.TransactionalChange;
@@ -38,7 +36,7 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 	
 	@Override
 	public List<EChange<EObject>> setupChangeRecorder() {
-		ResourceSet filteredModelsInResourceSet = getView().getViewResourceSet();
+		ResourceSet filteredModelsInResourceSet = view.getViewResourceSet();
 		changeRecorder = new ChangeRecorder(filteredModelsInResourceSet);
         changeRecorder.addToRecording(filteredModelsInResourceSet);
         ResourceSet resourceSetCopy = new ResourceSetImpl();
@@ -61,11 +59,11 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 	
 	@Override
 	public void commitChanges() {
-		getView().checkNotClosed();
+		view.checkNotClosed();
 		recordedChange = changeRecorder.endRecording();
 		
 		ResourceSet filteredModelsInResourceSet = getViewResourceSet();
-		ResourceSet unfilteredResourceSet = getUnfilteredResourceSet();
+		ResourceSet unfilteredResourceSet = getNonFilteredViewResourceSet();
 //		EObject class2 = filteredModelsInResourceSet.getResources().get(0).getContents().get(0).eContents().get(0);
 //		EObject eObject = mapCopy2OriginalObject.get(class2);
 		
@@ -73,31 +71,31 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 		//TODO nbr: ich muss hier irgendwie an das view resourceSet kommen
 		
 		//VitruviusChangeResolver.forMappingFilteredObjects(getView().getFilteredModelsInResourceSet(), getView().getNonFilteredViewResourceSet(), mapCopy2OriginalObject);
-		VitruviusChangeResolver<HierarchicalId> changeResolver = VitruviusChangeResolver.forHierarchicalIds(getView().getViewResourceSet());		
+		VitruviusChangeResolver<HierarchicalId> changeResolver = VitruviusChangeResolver.forHierarchicalIds(view.getViewResourceSet());		
 		VitruviusChange<HierarchicalId> unresolvedChanges = changeResolver.assignIds(recordedChange);
-		getView().getViewType().commitViewChanges(this, unresolvedChanges);
-		getView().setViewChanged(false);
+		view.getViewType().commitViewChanges(this, unresolvedChanges);
+		view.setViewChanged(false);
 		changeRecorder.beginRecording();
 	}
 	
 	
 	
-	private BasicFilterView getView() {
-		return (BasicFilterView) view;
+	private FilterableView getViewAsFilterableView() {
+		return (FilterableView) view;
 	}
 
 
 
 	@Override
 	public ViewSelection getPreFilterSelection() {
-		return getView().getPreFilterSelection();
+		return getViewAsFilterableView().getPreFilterSelection();
 	}
 
 
 
 	@Override
 	public ResourceSet getViewResourceSet() {
-		return getView().getViewResourceSet();
+		return view.getViewResourceSet();
 	}
 	
 	
@@ -112,8 +110,9 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 	}
 	
 	
-	public ResourceSet getUnfilteredResourceSet() {
-		return getView().getNonFilteredViewResourceSet();
+	@Override
+	public ResourceSet getNonFilteredViewResourceSet() {
+		return getViewAsFilterableView().getNonFilteredViewResourceSet();
 	}
 
 

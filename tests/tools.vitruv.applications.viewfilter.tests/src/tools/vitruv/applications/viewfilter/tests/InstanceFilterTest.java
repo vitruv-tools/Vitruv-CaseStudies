@@ -58,7 +58,6 @@ import com.niklas.niklasproject.niklasdomain.SingleInformation;
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification;
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification;
 import tools.vitruv.applications.testutility.uml.UmlQueryUtil;
-import tools.vitruv.applications.viewfilter.util.framework.impl.BasicView;
 import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView;
 import tools.vitruv.applications.viewfilter.utils.PcmQueryUtil;
 import tools.vitruv.applications.viewfilter.utils.PcmUmlClassApplicationTestHelper;

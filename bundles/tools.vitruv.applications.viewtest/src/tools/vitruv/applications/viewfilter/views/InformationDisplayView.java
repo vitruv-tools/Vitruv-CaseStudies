@@ -15,7 +15,6 @@ import org.eclipse.xtext.xbase.lib.ListExtensions;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 
-import tools.vitruv.applications.viewfilter.util.framework.impl.BasicView;
 import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.atomic.uuid.Uuid;
@@ -30,7 +29,8 @@ import tools.vitruv.framework.views.ViewSelector;
 import tools.vitruv.framework.views.ViewType;
 import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
 
-public class InformationDisplayView extends BasicView implements View, ChangePropagationListener {
+//TODO nbr: Remove this class?
+public class InformationDisplayView extends AbstractBasicView implements View, ChangePropagationListener {
 
 
     private ResourceSet viewResourceSet;

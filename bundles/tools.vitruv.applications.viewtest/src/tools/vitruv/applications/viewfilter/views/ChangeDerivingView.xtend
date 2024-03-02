@@ -1,4 +1,4 @@
-package tools.vitruv.applications.viewfilter.util.framework.impl
+package tools.vitruv.applications.viewfilter.views;
 
 import java.util.ArrayList
 import java.util.HashMap
@@ -19,6 +19,7 @@ import static com.google.common.base.Preconditions.checkState
 
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopier
+import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView
 
 /**
  * A {@link View} that derives changes based on the changed state of its resources and allows to propagate them 
@@ -26,13 +27,13 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopie
  */
 class ChangeDerivingView implements ModifiableView, CommittableView {
     @Delegate
-    protected BasicView view
+    protected AbstractBasicView view
 
     val StateBasedChangeResolutionStrategy changeResolutionStrategy
     var ResourceSet originalStateViewResourceSet
     var HashMap<Resource, Resource> originalStateResourceMapping
 
-    protected new(BasicView view, StateBasedChangeResolutionStrategy changeResolutionStrategy) {
+    protected new(AbstractBasicView view, StateBasedChangeResolutionStrategy changeResolutionStrategy) {
         checkArgument(view !== null, "view must not be null")
         checkState(!view.isModified, "view must not be modified")
         checkState(!view.isOutdated, "view must not be outdated")

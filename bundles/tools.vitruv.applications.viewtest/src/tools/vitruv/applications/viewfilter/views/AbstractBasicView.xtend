@@ -1,4 +1,4 @@
-package tools.vitruv.applications.viewfilter.util.framework.impl
+package tools.vitruv.applications.viewfilter.views;
 
 import org.eclipse.emf.common.notify.Notification
 import org.eclipse.emf.common.notify.Notifier
@@ -23,18 +23,20 @@ import static com.google.common.base.Preconditions.checkArgument
 import static com.google.common.base.Preconditions.checkState
 
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceSetUtil.withGlobalFactories
+import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView
+import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType
 
-public class BasicView implements ModifiableView, ChangePropagationListener {
+public abstract class AbstractBasicView implements ChangesetDeterminableView, ModifiableView, ChangePropagationListener {
     @Accessors(PUBLIC_GETTER, PROTECTED_SETTER)
     var ViewSelection selection
     @Accessors(PUBLIC_GETTER, PROTECTED_SETTER)
     var ViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType
     @Accessors(PUBLIC_GETTER, PROTECTED_SETTER)
     var ChangeableViewSource viewSource
-    @Accessors(PROTECTED_GETTER)
+    @Accessors(PUBLIC_GETTER)
     var ResourceSet viewResourceSet
     boolean modelChanged
-    @Accessors(PROTECTED_SETTER)
+    @Accessors(PUBLIC_SETTER)
     boolean viewChanged
     boolean closed
 
@@ -112,7 +114,7 @@ public class BasicView implements ModifiableView, ChangePropagationListener {
         viewResourceSet.resources.findFirst[contents.contains(object)].URI = newLocation
     }
 
-    def void checkNotClosed() {
+    override void checkNotClosed() {
         checkState(!closed, "view is already closed!")
     }
 

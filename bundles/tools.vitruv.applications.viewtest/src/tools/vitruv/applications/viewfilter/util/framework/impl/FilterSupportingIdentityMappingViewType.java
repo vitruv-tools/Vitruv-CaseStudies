@@ -83,7 +83,7 @@ public class FilterSupportingIdentityMappingViewType extends AbstractFilterSuppo
 	
 	public void commitViewChanges(FilterableView view, VitruviusChange<HierarchicalId> viewChange) {
 		ResourceSet viewResourceCopyResourceSet = withGlobalFactories(new ResourceSetImpl());
-		ResourceSet unfilteredResourceSet = ((FilterChangeRecordingView) view).getUnfilteredResourceSet();
+		ResourceSet unfilteredResourceSet = ((FilterChangeRecordingView) view).getNonFilteredViewResourceSet();
 		ResourceSet filteredResourceSetInOriginalState = ((FilterChangeRecordingView) view).getFilteredModelsInResourceSetWithBackwardExecution();
 		VitruviusChangeResolver<HierarchicalId> viewResourceIdChangeResolver = 
 				VitruviusChangeResolver.forHierarchicalIdsAndFilteredModel(unfilteredResourceSet, filteredResourceSetInOriginalState, view.getMapCopy2OriginalObject());
