@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruv Viewfilter Application
-Bundle-SymbolicName: tools.vitruv.applications.viewfilter;singleton:=true
+Bundle-SymbolicName: tools.vitruv.views.viewfilter;singleton:=true
 Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.viewfilter
 Bundle-RequiredExecutionEnvironment: JavaSE-17
