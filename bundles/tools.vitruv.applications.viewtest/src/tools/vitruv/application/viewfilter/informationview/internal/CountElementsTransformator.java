@@ -16,11 +16,6 @@ public abstract class CountElementsTransformator implements InformationViewTrans
 	
 
 	public SingleInformation transform(EObject root) {
-		if (!(root instanceof Model)) {
-			//not an Uml model
-			return null;
-		}
-		//TODO nbruening hier noch generischer machen
 		SingleInformation createSingleInformation = NiklasdomainFactory.eINSTANCE.createSingleInformation();
 		createSingleInformation.setTitle(getTitle());
 		
