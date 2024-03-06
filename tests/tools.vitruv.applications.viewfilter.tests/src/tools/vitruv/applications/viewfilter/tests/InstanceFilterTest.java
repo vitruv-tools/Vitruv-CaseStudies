@@ -52,8 +52,6 @@ import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import com.niklas.niklasproject.niklasdomain.InformationStructure;
-import com.niklas.niklasproject.niklasdomain.SingleInformation;
 
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification;
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification;
@@ -69,6 +67,8 @@ import tools.vitruv.framework.views.ViewType;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone;
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InformationStructure;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.SingleInformation;
 
 @ExtendWith(RegisterMetamodelsInStandalone.class)
 public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {

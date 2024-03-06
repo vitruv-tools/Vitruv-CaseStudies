@@ -2,7 +2,7 @@ package tools.vitruv.application.viewfilter.informationview.internal;
 
 import org.eclipse.emf.ecore.EObject;
 
-import com.niklas.niklasproject.niklasdomain.SingleInformation;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.SingleInformation;
 
 /**
  * Transforms a given model into a {@link SingleInformation}. A transformation could be 

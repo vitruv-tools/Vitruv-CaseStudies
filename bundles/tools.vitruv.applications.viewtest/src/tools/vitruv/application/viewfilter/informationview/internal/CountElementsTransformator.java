@@ -1,10 +1,9 @@
 package tools.vitruv.application.viewfilter.informationview.internal;
 
-import com.niklas.niklasproject.niklasdomain.NiklasdomainFactory;
-import com.niklas.niklasproject.niklasdomain.SingleInformation;
 
 import tools.vitruv.applications.viewfilter.helpers.ViewFilterHelper;
-
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InfostructuremodelFactory;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.SingleInformation;
 import java.util.List;
 import java.util.function.Function;
 
@@ -16,7 +15,7 @@ public abstract class CountElementsTransformator implements InformationViewTrans
 	
 
 	public SingleInformation transform(EObject root) {
-		SingleInformation createSingleInformation = NiklasdomainFactory.eINSTANCE.createSingleInformation();
+		SingleInformation createSingleInformation = InfostructuremodelFactory.eINSTANCE.createSingleInformation();
 		createSingleInformation.setTitle(getTitle());
 		
 		List<EObject> allElements = ViewFilterHelper.convertTreeIterator2List(root.eAllContents());

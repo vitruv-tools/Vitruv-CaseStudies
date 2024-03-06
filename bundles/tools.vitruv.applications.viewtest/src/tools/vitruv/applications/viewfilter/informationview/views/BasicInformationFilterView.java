@@ -12,9 +12,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-import com.niklas.niklasproject.niklasdomain.InformationStructure;
-import com.niklas.niklasproject.niklasdomain.NiklasdomainFactory;
-import com.niklas.niklasproject.niklasdomain.SingleInformation;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InformationStructure;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InfostructuremodelFactory;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.SingleInformation;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -56,7 +56,7 @@ public class BasicInformationFilterView extends BasicFilterView implements Infor
 			//method has been called as part of constructor and before the info transformator could be set
 			return;
 		}
-		InformationStructure informationStructure = NiklasdomainFactory.eINSTANCE.createInformationStructure();
+		InformationStructure informationStructure = InfostructuremodelFactory.eINSTANCE.createInformationStructure();
 		EList<SingleInformation> singleinformationList = informationStructure.getSingleinformation();
 		
 		for(EObject root : selection.getSelectableElements()) {

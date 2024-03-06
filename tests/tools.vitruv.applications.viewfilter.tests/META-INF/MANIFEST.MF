@@ -10,7 +10,8 @@ Import-Package: com.niklas.niklasproject.niklasdomain,
  org.junit.jupiter.api.extension,
  tools.vitruv.applications.viewfilter.util.framework,
  tools.vitruv.applications.viewfilter.util.framework.impl,
- tools.vitruv.applications.viewfilter.util.framework.selectors
+ tools.vitruv.applications.viewfilter.util.framework.selectors,
+ tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel
 Require-Bundle: tools.vitruv.testutils.vsum,
  org.eclipse.emf.compare,
  org.hamcrest.core,
