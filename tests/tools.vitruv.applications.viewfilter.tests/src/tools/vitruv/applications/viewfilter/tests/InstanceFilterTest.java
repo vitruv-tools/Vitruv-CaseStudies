@@ -117,7 +117,6 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	
-	//--- Actual tests ---
 	@Test
 	public void testUmlView() throws NoSuchMethodException, InvocationTargetException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		View createUmlView = improvedViewTestFactory.createUmlView();
@@ -285,7 +284,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			EObject eObject = root.eContents().get(0);
 			assertTrue(eObject instanceof SingleInformation);
 			SingleInformation singleInformation = (SingleInformation) eObject;
-			assertEquals("Anzahl Elemente", singleInformation.getTitle());
+			assertEquals("Number of elements", singleInformation.getTitle());
 			assertEquals(1, singleInformation.getValue());
 		}
 		
@@ -301,7 +300,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			EObject eObject = root.eContents().get(0);
 			assertTrue(eObject instanceof SingleInformation);
 			SingleInformation singleInformation = (SingleInformation) eObject;
-			assertEquals("Anzahl Elemente", singleInformation.getTitle());
+			assertEquals("Number of elements", singleInformation.getTitle());
 			assertEquals(2, singleInformation.getValue());
 		}
 		
