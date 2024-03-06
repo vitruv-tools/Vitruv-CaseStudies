@@ -107,7 +107,6 @@ public class ViewFilterImpl implements ViewFilter {
 	
 	private void attachElementToRootUml(Model root, EObject object) {
 		if (object instanceof Type) {
-			//EObject objectCopy = EcoreUtil.copy(object);
 			root.getOwnedTypes().add((Type) object);
 		} else {
 			System.out.println("Warning: Undefined type: " + object.eClass());

@@ -94,17 +94,6 @@ public class BasicFilterView extends AbstractBasicView implements FilterableView
 		super.setViewChanged(value);
 	}
 	
-		
-	private List<EObject> findRootsForSelectionInViewSource(Collection<Resource> viewSources) {
-		ViewSelection selection = getPreFilterSelection();
-		List<Resource> resourcesWithSelectedElements = viewSources.stream()
-				.filter(resource -> resource.getContents().stream().anyMatch(selection::isViewObjectSelected)).toList();
-		List<EObject> roots = new ArrayList();
-		for(Resource resource : resourcesWithSelectedElements) {
-			roots.addAll(resource.getContents());
-		}
-		return roots;	
-	}
 	
 	
 	protected ModifiableViewSelection filterElementsForSelection() {

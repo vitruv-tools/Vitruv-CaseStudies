@@ -69,11 +69,6 @@ public class FilterSupportingViewElementSelectorImpl<Id extends Object> implemen
 		return createdView;
 	}
 
-	public void selectElementsOfRootType(Collection<Class<?>> rootTypes) {
-		getSelectableElements().stream().filter(element -> rootTypes.stream().anyMatch(it -> it.isInstance(element)))
-				.forEach(element -> setSelected(element, true));
-	}
-	
 	public void deselectElementsExceptForRootType(Collection<Class<?>> rootTypes) {
 		getSelectableElements().stream().filter(element -> (isViewObjectSelected(element) && !(rootTypes.stream().anyMatch(it -> it.isInstance(element)))))
 				.forEach(element -> setSelected(element, false));

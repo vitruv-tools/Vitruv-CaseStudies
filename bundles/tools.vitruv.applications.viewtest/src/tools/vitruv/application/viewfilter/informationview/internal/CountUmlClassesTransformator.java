@@ -4,7 +4,7 @@ import org.eclipse.emf.ecore.EObject;
 
 public class CountUmlClassesTransformator extends CountElementsTransformator {
 
-	private static final String ANZAHL_ELEMENTE = "Anzahl Elemente";
+	private static final String NUMBER_OF_ELEMENTS = "Number of elements";
 
 	@Override
 	protected boolean takeElementIntoAccount(EObject object) {
@@ -17,7 +17,7 @@ public class CountUmlClassesTransformator extends CountElementsTransformator {
 
 	@Override
 	protected String getTitle() {
-		return ANZAHL_ELEMENTE;
+		return NUMBER_OF_ELEMENTS;
 	}
 
 }
