@@ -32,7 +32,7 @@ import tools.vitruv.framework.views.ModifiableViewSelection;
 import tools.vitruv.framework.views.ViewSelection;
 import tools.vitruv.framework.views.ViewSelector;
 
-public class BasicInformationFilterView extends BasicFilterView implements InformationView {
+public class BasicInformationFilterView extends BasicFilterView {
 
 	private final InformationViewTransformator infoTransformator;
 
@@ -61,7 +61,9 @@ public class BasicInformationFilterView extends BasicFilterView implements Infor
 		
 		for(EObject root : selection.getSelectableElements()) {
 			if (selection.isSelected(root)) {
-				SingleInformation transformResult = infoTransformator.transform(root);
+				List<EObject> rootList = new ArrayList();
+				rootList.add(root);
+				SingleInformation transformResult = infoTransformator.transform(rootList);
 				if (transformResult != null) {
 					singleinformationList.add(transformResult);
 				}

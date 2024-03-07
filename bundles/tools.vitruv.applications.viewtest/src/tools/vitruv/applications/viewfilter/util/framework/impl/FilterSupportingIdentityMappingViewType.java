@@ -41,6 +41,7 @@ import tools.vitruv.framework.views.ViewSource;
  * selection mechanism and a filter-function. The filter-function can be used for 
  * selecting single objects in a model. 
  */
+//TODO nbr: Warum existiert AbstractFilterSupportingViewType interface??
 public class FilterSupportingIdentityMappingViewType extends AbstractFilterSupportingViewType<FilterSupportingViewElementSelectorImpl<HierarchicalId>, HierarchicalId> {
 	
 	public FilterSupportingIdentityMappingViewType(String name) {

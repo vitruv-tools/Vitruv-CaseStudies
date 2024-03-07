@@ -13,7 +13,7 @@ import tools.vitruv.framework.views.ViewSelector;
  * in a model. Used a given {@link ViewFilter} object to filter the model for objects which are 
  * supposed to be taken into account
  */
-public class CountUmlClassesView extends BasicInformationFilterView implements InformationView {
+public class CountUmlClassesView extends BasicInformationFilterView {
 
 	/**
 	 * Creates an {@link InformationView} object which counts all uml2.Class objects in a model

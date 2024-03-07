@@ -14,17 +14,18 @@ import org.eclipse.uml2.uml.Model;
 public abstract class CountElementsTransformator implements InformationViewTransformator {
 	
 
-	public SingleInformation transform(EObject root) {
+	public SingleInformation transform(List<EObject> roots) {
 		SingleInformation createSingleInformation = InfostructuremodelFactory.eINSTANCE.createSingleInformation();
 		createSingleInformation.setTitle(getTitle());
-		
-		List<EObject> allElements = ViewFilterHelper.convertTreeIterator2List(root.eAllContents());
-		
 		int count = 0;
 		
-		for (EObject element : allElements) { 
-			if (takeElementIntoAccount(element)) {
-				count++;
+		for (EObject root : roots) {
+			List<EObject> allElements = ViewFilterHelper.convertTreeIterator2List(root.eAllContents());
+			
+			for (EObject element : allElements) { 
+				if (takeElementIntoAccount(element)) {
+					count++;
+				}
 			}
 		}
 		
