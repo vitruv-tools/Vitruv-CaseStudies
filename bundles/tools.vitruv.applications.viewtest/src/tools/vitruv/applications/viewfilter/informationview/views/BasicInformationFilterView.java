@@ -22,7 +22,7 @@ import tools.vitruv.application.viewfilter.informationview.internal.CountElement
 import tools.vitruv.application.viewfilter.informationview.internal.CountUmlClassesTransformator;
 import tools.vitruv.application.viewfilter.informationview.internal.InformationViewTransformator;
 import tools.vitruv.applications.viewfilter.helpers.ViewFilterHelper;
-import tools.vitruv.applications.viewfilter.util.framework.impl.FilteredViewCreatingViewType;
+import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;
 import tools.vitruv.applications.viewfilter.views.BasicFilterView;
@@ -37,7 +37,7 @@ public class BasicInformationFilterView extends BasicFilterView {
 	private final InformationViewTransformator infoTransformator;
 
 
-	public BasicInformationFilterView(FilteredViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
+	public BasicInformationFilterView(ViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
 			ChangeableViewSource viewSource, ViewSelection selection, ViewFilter viewFilter, 
 			InformationViewTransformator infoTransformator) {
 		super(viewType, viewSource, selection, viewFilter);

@@ -20,7 +20,7 @@ import org.eclipse.net4j.util.ImplementationError;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
-import tools.vitruv.applications.viewfilter.util.framework.impl.FilteredViewCreatingViewType;
+import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
@@ -42,7 +42,7 @@ public class BasicFilterView extends AbstractBasicView implements FilterableView
 	private ResourceSet filteredModelsResSet = null;
 	
 
-	public BasicFilterView(FilteredViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
+	public BasicFilterView(ViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
 			ChangeableViewSource viewSource, ViewSelection selection, ViewFilter viewFilter) {
 		super(viewType, viewSource, selection);
 		this.viewFilter = viewFilter;

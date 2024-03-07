@@ -22,7 +22,7 @@ import org.eclipse.uml2.uml.UMLFactory;
 
 import com.google.common.base.Preconditions;
 
-import tools.vitruv.applications.viewfilter.util.framework.impl.FilteredViewCreatingViewType;
+import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilterImpl;
@@ -39,7 +39,7 @@ public class FilterSupportingViewElementSelectorImpl<Id extends Object> implemen
 
 	private final ChangeableViewSource viewSource;
 
-	private final FilteredViewCreatingViewType<FilterSupportingViewElementSelectorImpl<Id>, Id> viewType;
+	private final ViewCreatingViewType<FilterSupportingViewElementSelectorImpl<Id>, Id> viewType;
 
 	private ViewFilterBuilder viewFilterBuilder;
 
@@ -48,7 +48,7 @@ public class FilterSupportingViewElementSelectorImpl<Id extends Object> implemen
 	private View createdView;
 
 	public FilterSupportingViewElementSelectorImpl(
-			FilteredViewCreatingViewType<FilterSupportingViewElementSelectorImpl<Id>, Id> viewType,
+			ViewCreatingViewType<FilterSupportingViewElementSelectorImpl<Id>, Id> viewType,
 			ChangeableViewSource viewSource, Collection<EObject> selectableElements) {
 		Preconditions.checkArgument((selectableElements != null), "selectable elements must not be null");
 		Preconditions.checkArgument((viewType != null), "view type must not be null");
@@ -116,7 +116,7 @@ public class FilterSupportingViewElementSelectorImpl<Id extends Object> implemen
 		return this.viewSource;
 	}
 
-	public FilteredViewCreatingViewType<FilterSupportingViewElementSelectorImpl<Id>, Id> getViewType() {
+	public ViewCreatingViewType<FilterSupportingViewElementSelectorImpl<Id>, Id> getViewType() {
 		return this.viewType;
 	}
 

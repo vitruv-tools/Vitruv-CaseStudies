@@ -1,7 +1,7 @@
 package tools.vitruv.applications.viewfilter.informationview.views;
 
 import tools.vitruv.application.viewfilter.informationview.internal.CountUmlClassesTransformator;
-import tools.vitruv.applications.viewfilter.util.framework.impl.FilteredViewCreatingViewType;
+import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.framework.views.ChangeableViewSource;
@@ -24,7 +24,7 @@ public class CountUmlClassesView extends BasicInformationFilterView {
 	 * @param selection The selection for this {@link InformationView} object
 	 * @param viewFilter The viewFilter used to filter objects which are supposed to displayed in the view.
 	 */
-	public CountUmlClassesView(FilteredViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
+	public CountUmlClassesView(ViewCreatingViewType<? extends ViewSelector, HierarchicalId> viewType,
 			ChangeableViewSource viewSource, ViewSelection selection, ViewFilter viewFilter) {
 		super(viewType, viewSource, selection, viewFilter, new CountUmlClassesTransformator());
 		

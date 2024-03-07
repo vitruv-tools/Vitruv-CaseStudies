@@ -42,7 +42,7 @@ import tools.vitruv.framework.views.ViewSource;
  * selecting single objects in a model. 
  */
 //TODO nbr: Warum existiert AbstractFilterSupportingViewType interface??
-public class FilterSupportingIdentityMappingViewType extends AbstractFilterSupportingViewType<FilterSupportingViewElementSelectorImpl<HierarchicalId>, HierarchicalId> {
+public class FilterSupportingIdentityMappingViewType extends AbstractViewType<FilterSupportingViewElementSelectorImpl<HierarchicalId>, HierarchicalId> {
 	
 	public FilterSupportingIdentityMappingViewType(String name) {
 		super(name);
