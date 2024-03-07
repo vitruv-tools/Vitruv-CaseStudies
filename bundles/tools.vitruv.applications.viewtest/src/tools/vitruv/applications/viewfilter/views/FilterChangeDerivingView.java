@@ -1,8 +1,6 @@
 package tools.vitruv.applications.viewfilter.views;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,16 +11,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopier;
-import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.composite.description.CompositeContainerChange;
 import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.composite.description.VitruviusChangeFactory;
-import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.views.ViewSelection;
 import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
  

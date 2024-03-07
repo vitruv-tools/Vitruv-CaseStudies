@@ -1,11 +1,9 @@
 package tools.vitruv.applications.viewfilter.viewbuild;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,20 +11,17 @@ import java.util.function.Function;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.net4j.util.ImplementationError;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLFactory;
-import org.palladiosimulator.pcm.PcmFactory;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import tools.vitruv.applications.viewfilter.helpers.ViewFilterHelper;
-import tools.vitruv.framework.views.ViewSelection;
 
 public class ViewFilterImpl implements ViewFilter {
 	

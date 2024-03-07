@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 
 /**
  * A ViewFilter filters the model objects contained in a {@link View}. What kind of 

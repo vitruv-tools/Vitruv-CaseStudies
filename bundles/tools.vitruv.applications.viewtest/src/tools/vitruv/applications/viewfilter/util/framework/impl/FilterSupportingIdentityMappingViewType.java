@@ -9,17 +9,12 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.uml2.uml.internal.resource.UMLResourceImpl;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.resource.ResourceCopier;
-import tools.vitruv.applications.viewfilter.util.framework.selectors.DirectViewElementSelector;
 import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelectorImpl;
 import tools.vitruv.applications.viewfilter.views.BasicFilterView;
 import tools.vitruv.applications.viewfilter.views.FilterChangeRecordingView;
@@ -27,13 +22,10 @@ import tools.vitruv.applications.viewfilter.views.FilterableView;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
 import tools.vitruv.change.atomic.uuid.Uuid;
 import tools.vitruv.change.atomic.uuid.UuidResolver;
-import tools.vitruv.change.composite.description.CompositeContainerChange;
 import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.composite.description.VitruviusChangeResolver;
 import tools.vitruv.framework.views.ChangeableViewSource;
-import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.views.ViewSelection;
-import tools.vitruv.framework.views.ViewSource;
 
 
 /**

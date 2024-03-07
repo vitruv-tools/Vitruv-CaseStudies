@@ -1,14 +1,13 @@
 package tools.vitruv.application.viewfilter.informationview.internal;
 
 
+import java.util.List;
+
+import org.eclipse.emf.ecore.EObject;
+
 import tools.vitruv.applications.viewfilter.helpers.ViewFilterHelper;
 import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InfostructuremodelFactory;
 import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.SingleInformation;
-import java.util.List;
-import java.util.function.Function;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
 
 //TODO nbr add javadoc
 public abstract class CountElementsTransformator implements InformationViewTransformator {

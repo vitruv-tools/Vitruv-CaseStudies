@@ -10,10 +10,8 @@ import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Model;
 
 import tools.vitruv.applications.viewfilter.util.framework.FilterSupportingViewTypeFactory;
-import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.views.ViewProvider;
 import tools.vitruv.framework.views.ViewSelector;
-import tools.vitruv.framework.views.ViewTypeFactory;
 
 public class UmlViewBuilder {
 	

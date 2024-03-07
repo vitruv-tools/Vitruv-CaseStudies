@@ -1,27 +1,14 @@
 package tools.vitruv.applications.viewfilter.informationview.views;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-
-import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InformationStructure;
-import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InfostructuremodelFactory;
-import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.SingleInformation;
-
 import static com.google.common.base.Preconditions.checkArgument;
 
-import tools.vitruv.application.viewfilter.informationview.internal.CountElementsTransformator;
-import tools.vitruv.application.viewfilter.informationview.internal.CountUmlClassesTransformator;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+
 import tools.vitruv.application.viewfilter.informationview.internal.InformationViewTransformator;
-import tools.vitruv.applications.viewfilter.helpers.ViewFilterHelper;
 import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;
@@ -31,6 +18,9 @@ import tools.vitruv.framework.views.ChangeableViewSource;
 import tools.vitruv.framework.views.ModifiableViewSelection;
 import tools.vitruv.framework.views.ViewSelection;
 import tools.vitruv.framework.views.ViewSelector;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InformationStructure;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InfostructuremodelFactory;
+import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.SingleInformation;
 
 public class BasicInformationFilterView extends BasicFilterView {
 

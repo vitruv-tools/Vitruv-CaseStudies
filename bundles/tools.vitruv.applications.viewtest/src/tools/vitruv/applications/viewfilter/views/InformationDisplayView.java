@@ -1,33 +1,14 @@
 package tools.vitruv.applications.viewfilter.views;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Function;
-
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
 
 import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.change.atomic.hid.HierarchicalId;
-import tools.vitruv.change.atomic.uuid.Uuid;
-import tools.vitruv.change.composite.description.PropagatedChange;
-import tools.vitruv.change.composite.description.VitruviusChange;
 import tools.vitruv.change.composite.propagation.ChangePropagationListener;
 import tools.vitruv.framework.views.ChangeableViewSource;
-import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.views.ViewSelection;
 import tools.vitruv.framework.views.ViewSelector;
-import tools.vitruv.framework.views.ViewType;
-import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
 
 //TODO nbr: Remove this class?
 public class InformationDisplayView extends AbstractBasicView implements View, ChangePropagationListener {

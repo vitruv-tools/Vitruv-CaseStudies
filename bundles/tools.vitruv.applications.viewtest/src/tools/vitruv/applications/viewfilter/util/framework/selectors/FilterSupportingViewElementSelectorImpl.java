@@ -1,24 +1,9 @@
 package tools.vitruv.applications.viewfilter.util.framework.selectors;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.net4j.util.ImplementationError;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.Type;
-import org.eclipse.uml2.uml.UMLFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -31,7 +16,6 @@ import tools.vitruv.framework.views.ChangeableViewSource;
 import tools.vitruv.framework.views.ModifiableViewSelection;
 import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.views.ViewSelection;
-import tools.vitruv.framework.views.ViewSelector;
 
 public class FilterSupportingViewElementSelectorImpl<Id extends Object> implements FilterSupportingViewElementSelector {
 

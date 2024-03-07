@@ -1,25 +1,19 @@
 package tools.vitruv.applications.viewfilter.views;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.net4j.util.ImplementationError;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
 import tools.vitruv.applications.viewfilter.util.framework.selection.ElementViewSelection;
 import tools.vitruv.applications.viewfilter.viewbuild.ViewFilter;

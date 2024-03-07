@@ -1,5 +1,8 @@
 package tools.vitruv.applications.viewfilter.util.framework.selection;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,9 +11,6 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 
 import tools.vitruv.framework.views.ModifiableViewSelection;
-
-import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstractViewSelection implements ModifiableViewSelection {
 	final Map<EObject, Boolean> elementsSelection = new HashMap<>();
