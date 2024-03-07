@@ -1,23 +1,13 @@
 package tools.vitruv.applications.viewfilter.tests;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -25,7 +15,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
@@ -52,19 +41,15 @@ import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification;
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification;
 import tools.vitruv.applications.testutility.uml.UmlQueryUtil;
-import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView;
 import tools.vitruv.applications.viewfilter.utils.PcmQueryUtil;
 import tools.vitruv.applications.viewfilter.utils.PcmUmlClassApplicationTestHelper;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.views.ViewSelection;
-import tools.vitruv.framework.views.ViewType;
-import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone;
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
 import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.InformationStructure;

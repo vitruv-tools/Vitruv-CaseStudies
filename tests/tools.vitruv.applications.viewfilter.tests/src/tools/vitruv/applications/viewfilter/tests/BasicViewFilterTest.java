@@ -1,8 +1,5 @@
 package tools.vitruv.applications.viewfilter.tests;
 
-import com.niklas.niklasproject.niklasdomain.InformationStructure;
-import com.niklas.niklasproject.niklasdomain.NiklasdomainFactory;
-
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,7 +10,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
@@ -26,30 +22,24 @@ import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
-import org.eclipse.xtext.xbase.lib.InputOutput;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
-import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification;
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification;
 import tools.vitruv.applications.testutility.uml.UmlQueryUtil;
-import tools.vitruv.applications.viewfilter.util.framework.impl.FilterSupportingIdentityMappingViewType;
-import tools.vitruv.applications.viewfilter.util.framework.impl.ModifiableView;
 import tools.vitruv.applications.viewfilter.utils.PcmQueryUtil;
 import tools.vitruv.applications.viewfilter.utils.PcmUmlClassApplicationTestHelper;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
-import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone;
 import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
 

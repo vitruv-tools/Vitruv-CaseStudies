@@ -1,12 +1,11 @@
 package tools.vitruv.applications.viewfilter.utils;
 
-import org.eclipse.uml2.uml.UMLFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.PackageableElement;
+import org.eclipse.uml2.uml.UMLFactory;
 
 public class FluentUMLPackageBuilder {
 

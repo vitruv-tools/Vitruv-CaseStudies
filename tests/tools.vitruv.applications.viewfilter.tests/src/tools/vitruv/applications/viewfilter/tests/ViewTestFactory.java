@@ -3,33 +3,27 @@ package tools.vitruv.applications.viewfilter.tests;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.DynamicTest.stream;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import tools.vitruv.framework.views.View;
-import tools.vitruv.applications.viewfilter.util.framework.FilterSupportingViewTypeFactory;
-import tools.vitruv.applications.viewfilter.util.framework.impl.FilterSupportingIdentityMappingViewType;
-import tools.vitruv.applications.viewfilter.util.framework.impl.ViewCreatingViewType;
-import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelector;
-import tools.vitruv.framework.views.CommittableView;
-import tools.vitruv.framework.views.ViewProvider;
-import tools.vitruv.framework.views.ViewSelection;
-import tools.vitruv.framework.views.ViewSelector;
-import tools.vitruv.framework.views.ViewType;
-import tools.vitruv.framework.views.ViewTypeFactory;
-import tools.vitruv.testutils.TestViewFactory;
-
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
+
+import tools.vitruv.applications.viewfilter.util.framework.FilterSupportingViewTypeFactory;
+import tools.vitruv.applications.viewfilter.util.framework.selectors.FilterSupportingViewElementSelector;
+import tools.vitruv.framework.views.CommittableView;
+import tools.vitruv.framework.views.View;
+import tools.vitruv.framework.views.ViewProvider;
+import tools.vitruv.framework.views.ViewSelector;
+import tools.vitruv.framework.views.ViewType;
+import tools.vitruv.framework.views.ViewTypeFactory;
+import tools.vitruv.testutils.TestViewFactory;
 
 public class ViewTestFactory extends TestViewFactory {
 	
