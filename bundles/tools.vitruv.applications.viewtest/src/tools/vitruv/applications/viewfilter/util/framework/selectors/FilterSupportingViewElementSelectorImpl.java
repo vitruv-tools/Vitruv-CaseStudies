@@ -48,8 +48,7 @@ public class FilterSupportingViewElementSelectorImpl<Id extends Object> implemen
 	public View createView() {
 		viewFilter = viewFilterBuilder.build();
 		Preconditions.checkState(this.isValid(), "the current selection is invalid, thus a view cannot be created");
-		//TODO nbr do I need "this"?
-		createdView = this.viewType.createView(this);
+		createdView = viewType.createView(this);
 		return createdView;
 	}
 

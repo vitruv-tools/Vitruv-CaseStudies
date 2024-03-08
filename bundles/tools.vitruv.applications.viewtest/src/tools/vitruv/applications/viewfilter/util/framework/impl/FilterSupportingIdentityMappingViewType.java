@@ -33,7 +33,6 @@ import tools.vitruv.framework.views.ViewSelection;
  * selection mechanism and a filter-function. The filter-function can be used for 
  * selecting single objects in a model. 
  */
-//TODO nbr: Warum existiert AbstractFilterSupportingViewType interface??
 public class FilterSupportingIdentityMappingViewType extends AbstractViewType<FilterSupportingViewElementSelectorImpl<HierarchicalId>, HierarchicalId> {
 	
 	public FilterSupportingIdentityMappingViewType(String name) {
@@ -41,7 +40,7 @@ public class FilterSupportingIdentityMappingViewType extends AbstractViewType<Fi
 	}
 
 
-	//TODO nbr replace by Interface
+
 	@Override
 	public FilterSupportingViewElementSelectorImpl<HierarchicalId> createSelector(ChangeableViewSource viewSource) {
 		return new FilterSupportingViewElementSelectorImpl<>(this, viewSource,
@@ -56,7 +55,6 @@ public class FilterSupportingIdentityMappingViewType extends AbstractViewType<Fi
 	}
 	
 
-	//TODO nbr replace by interface
 	@Override
 	public ModifiableView createView(FilterSupportingViewElementSelectorImpl<HierarchicalId> selector) {
 		checkArgument(selector.getViewType() == this, "cannot create view with selector for different view type");

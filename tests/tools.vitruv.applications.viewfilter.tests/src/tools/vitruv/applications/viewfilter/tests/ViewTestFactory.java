@@ -53,15 +53,6 @@ public class ViewTestFactory extends TestViewFactory {
 	}
 	
 	
-	public View createFilteredUmlView(FirstTest test) {
-		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
-		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
-		View view = createFilteredForNoAttributesViewOfElements("UML", rootTypes, function);
-		view.getSelection().isViewObjectSelected(test.getClass1());
-		view.getSelection().isViewObjectSelected(test.getClass2());
-		return view;
-	}
-	
 	public View createFilteredUmlView(BasicViewFilterTest test) {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
 		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");

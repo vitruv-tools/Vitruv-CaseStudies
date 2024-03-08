@@ -2,6 +2,10 @@ package tools.vitruv.application.viewfilter.informationview.internal;
 
 import org.eclipse.emf.ecore.EObject;
 
+/**
+ * This transformator counts the {@link org.eclipse.uml2.Class} instances in the given models and 
+ * returns the result in a {@link SingleInformation} object.
+ */
 public class CountUmlClassesTransformator extends CountElementsTransformator {
 
 	private static final String NUMBER_OF_ELEMENTS = "Number of elements";
