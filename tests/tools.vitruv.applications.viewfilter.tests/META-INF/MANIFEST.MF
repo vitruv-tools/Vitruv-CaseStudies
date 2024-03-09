@@ -5,8 +5,7 @@ Bundle-SymbolicName: tools.vitruv.views.viewfilter.tests
 Bundle-Version: 3.0.1.qualifier
 Automatic-Module-Name: tools.vitruv.applications.viewfilter.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Import-Package: com.niklas.niklasproject.niklasdomain,
- org.junit.jupiter.api,
+Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.api.extension,
  tools.vitruv.applications.viewfilter.util.framework,
  tools.vitruv.applications.viewfilter.util.framework.impl,

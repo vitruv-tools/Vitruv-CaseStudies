@@ -9,6 +9,7 @@ tmp/
 
 # Genenerated Files
 src-gen/
+*.polyglot.META-INF
 
 # Xtend
 xtend-gen/
@@ -25,4 +26,4 @@ EvaluationData
 *.polyglot
 *.pom.tycho
 *.classpath
-tests/tools.vitruv.applications.umljava.tests/src/tools/vitruv/applications/umljava/tests/java2uml/constructionsimulationtest/JavaSourceOrClassFileResourceWithArraysDefaultFactoryImpl.java
+*.settings/
