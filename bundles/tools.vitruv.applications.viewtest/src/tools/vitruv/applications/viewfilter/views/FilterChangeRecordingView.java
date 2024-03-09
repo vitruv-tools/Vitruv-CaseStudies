@@ -23,7 +23,6 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 	private Map<EObject, EObject> mapCopy2OriginalObject;
 	private TransactionalChange<EObject> recordedChange = null;
 	
-	//private ResourceSet resourceSetFromBeginningOfRecording;
 
 	protected FilterChangeRecordingView(BasicFilterView view, Map<EObject, EObject> mapCopy2OriginalObject) {
 		super(view);
@@ -38,8 +37,6 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 		changeRecorder = new ChangeRecorder(filteredModelsInResourceSet);
         changeRecorder.addToRecording(filteredModelsInResourceSet);
         ResourceSet resourceSetCopy = new ResourceSetImpl();
-        //Map<Resource, Resource> copyResourceMapping = ResourceCopier.copyViewResources(filteredModelsInResourceSet.getResources(), resourceSetCopy);
-        //resourceSetFromBeginningOfRecording = resourceSetCopy;
         
         return changeRecorder.beginRecording();
 	}
@@ -52,23 +49,12 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 	}
 	
 	
-	//private Map<EObject, >
-	
 	
 	@Override
 	public void commitChanges() {
 		view.checkNotClosed();
 		recordedChange = changeRecorder.endRecording();
-		
-		ResourceSet filteredModelsInResourceSet = getViewResourceSet();
-		ResourceSet unfilteredResourceSet = getNonFilteredViewResourceSet();
-//		EObject class2 = filteredModelsInResourceSet.getResources().get(0).getContents().get(0).eContents().get(0);
-//		EObject eObject = mapCopy2OriginalObject.get(class2);
-		
-		
-		//TODO nbr: ich muss hier irgendwie an das view resourceSet kommen
-		
-		//VitruviusChangeResolver.forMappingFilteredObjects(getView().getFilteredModelsInResourceSet(), getView().getNonFilteredViewResourceSet(), mapCopy2OriginalObject);
+
 		VitruviusChangeResolver<HierarchicalId> changeResolver = VitruviusChangeResolver.forHierarchicalIds(view.getViewResourceSet());		
 		VitruviusChange<HierarchicalId> unresolvedChanges = changeResolver.assignIds(recordedChange);
 		view.getViewType().commitViewChanges(this, unresolvedChanges);

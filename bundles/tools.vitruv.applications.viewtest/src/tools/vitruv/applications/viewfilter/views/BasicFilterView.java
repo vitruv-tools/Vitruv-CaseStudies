@@ -91,8 +91,6 @@ public class BasicFilterView extends AbstractBasicView implements FilterableView
 	
 	
 	protected ModifiableViewSelection filterElementsForSelection() {
-		//TODO nbr: Hat das für Probleme gesorgt, dass ich hier nicht mehr überprüfe, ob alle Elemente auch in selection sind?
-//		List<EObject> rootsForSelection = findRootsForSelectionInViewSource(getViewSource().getViewSourceModels(););
 		Collection<EObject> rootsForFiltering = super.getRootObjects();
 		
 		Set<EObject> filteredElements = viewFilter.filterElements(rootsForFiltering);
