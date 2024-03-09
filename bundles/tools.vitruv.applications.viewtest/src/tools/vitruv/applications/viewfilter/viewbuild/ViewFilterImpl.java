@@ -95,7 +95,7 @@ public class ViewFilterImpl implements ViewFilter {
 		} else if (root instanceof Repository) {
 			attachElementToRootPcm((Repository) root, object);
 		} else {
-			throw new ImplementationError("Not implemented yet! Undefined type: " + object.eClass());
+			throw new RuntimeException("Not implemented yet! Undefined type: " + object.eClass());
 		}
 	}
 	
@@ -104,7 +104,7 @@ public class ViewFilterImpl implements ViewFilter {
 		if (object instanceof Type) {
 			root.getOwnedTypes().add((Type) object);
 		} else {
-			System.out.println("Warning: Undefined type: " + object.eClass());
+			throw new RuntimeException("Warning: Undefined type: " + object.eClass());
 		}
 	} 
 	
@@ -122,7 +122,7 @@ public class ViewFilterImpl implements ViewFilter {
 		} else if (object instanceof DataType) {
 			root.getDataTypes__Repository().add((DataType) object);
 		} else {
-			System.out.println("Warning: Undefined type: " + object.eClass());
+			throw new RuntimeException("Warning: Undefined type: " + object.eClass());
 		}
 	}
 	
@@ -138,8 +138,8 @@ public class ViewFilterImpl implements ViewFilter {
 		}
 		
 	}
-	
-	
+		
+					
 	private EObject createFilteredModelRootIfNotExistent(EObject filteredRoot, EObject root) {
 		if (root instanceof Model) {
 			Model modelCopy = UMLFactory.eINSTANCE.createModel();
@@ -151,7 +151,7 @@ public class ViewFilterImpl implements ViewFilter {
 			return repositoryCopy;
 		}
 		else {
-			throw new ImplementationError("nbruening: Not implemented yet");
+			throw new RuntimeException("The type " + root.getClass() + " is not supported!");
 		}
 	}
 	
