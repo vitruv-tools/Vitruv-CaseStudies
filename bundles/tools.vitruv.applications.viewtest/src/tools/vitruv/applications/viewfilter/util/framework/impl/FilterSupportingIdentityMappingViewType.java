@@ -79,7 +79,7 @@ public class FilterSupportingIdentityMappingViewType extends AbstractViewType<Fi
 			//in case the changes have been performed on a FilteredView, the viewChange references the filterResourceSet
 			//transform the viewChanges on the ViewResourceSet first..
 			ResourceSet unfilteredResourceSet = ((FilterChangeRecordingView) view).getNonFilteredViewResourceSet();
-			ResourceSet filteredResourceSetInOriginalState = ((FilterChangeRecordingView) view).getFilteredModelsInResourceSetWithBackwardExecution();
+			ResourceSet filteredResourceSetInOriginalState = ((FilterChangeRecordingView) view).backwardExecuteChangesAndReturnResourceSet();
 			VitruviusChangeResolver<HierarchicalId> viewResourceIdChangeResolver = 
 					VitruviusChangeResolver.forHierarchicalIdsAndFilteredModel(unfilteredResourceSet, filteredResourceSetInOriginalState, filterableView.getMapCopy2OriginalObject());
 			VitruviusChange<EObject> viewResourceResolvedChange = viewResourceIdChangeResolver.resolveAndApply(viewChange);

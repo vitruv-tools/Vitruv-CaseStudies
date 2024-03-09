@@ -30,7 +30,13 @@ public interface ViewFilter {
 	Set<EObject> filterElements(Collection<EObject> roots);
 	
 	
-	//TODO nbr add javadoc
+	/**
+	 * Returns a {@link Map} which can be used to map the copied {@link EObject} in a Filter-Model
+	 * to its original {@link EObject}. The map can only be used to map {@link EObject}s which have 
+	 * been created by the same {@link ViewFilter} instance on which this method is then called.
+	 * 
+	 * @return A map which maps the copied {@link EObject} on its original {@link EObject} in the unfiltered model
+	 */
 	public Map<EObject, EObject> getMapCopy2Original();
 	
 	

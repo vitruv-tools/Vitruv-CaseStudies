@@ -97,12 +97,18 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 	}
 	
 	
-	public ResourceSet getFilteredModelsInResourceSetWithBackwardExecution() {
+	/**
+	 * Executes the current recorded changes backwards. May only be executed when the 
+	 * changes are currently really applied. This means that the method should not be 
+	 * executed twice without forward executing the changes in between. Returns the 
+	 * {@link ResourceSet} afterwards.
+	 * 
+	 * @return The filtered {@link ResourceSet} in the state before the current recorded changes have been applied
+	 */
+	public ResourceSet backwardExecuteChangesAndReturnResourceSet() {
 		ResourceSet resourceSet = getViewResourceSet();
 		if (recordedChange != null) {
-			//TODO nbr: What happens if changes have already been reverted?
-			VitruviusChangeBackwardsExecutionHelper changeResolver = new VitruviusChangeBackwardsExecutionHelper(resourceSet);
-			changeResolver.applyBackward(recordedChange);
+			 VitruviusChangeBackwardsExecutionHelper.applyBackward(resourceSet, recordedChange);
 		}
 		return resourceSet;
 	}
