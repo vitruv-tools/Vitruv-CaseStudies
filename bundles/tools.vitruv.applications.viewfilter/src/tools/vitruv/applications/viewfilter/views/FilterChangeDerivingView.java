@@ -21,7 +21,7 @@ import tools.vitruv.change.composite.description.VitruviusChangeFactory;
 import tools.vitruv.framework.views.ViewSelection;
 import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionStrategy;
  
-public class FilterChangeDerivingView extends ChangeDerivingView implements FilterableView, FilterChangeView {
+public class FilterChangeDerivingView extends ChangeDerivingView implements FilterableView {
 
 	// TODO nbr add javadoc
 	private Map<EObject, EObject> mapCopy2OriginalObject;
@@ -95,7 +95,6 @@ public class FilterChangeDerivingView extends ChangeDerivingView implements Filt
 		return (FilterableView) view;
 	}
 
-	@Override
 	public ResourceSet getViewResourceSet() {
 		return view.getViewResourceSet();
 	}

@@ -18,7 +18,7 @@ import tools.vitruv.change.composite.recording.ChangeRecorder;
 import tools.vitruv.framework.views.ViewSelection;
 
 //TODO nbr: Hier nicht ChangeRecordingView überschreiben, sondern eigen implementieren und Sichtbarkeiten in ChangeRecordingView zurücksetzen
-public class FilterChangeRecordingView extends ChangeRecordingView implements FilterableView, FilterChangeView {
+public class FilterChangeRecordingView extends ChangeRecordingView implements FilterableView {
 	
 	private Map<EObject, EObject> mapCopy2OriginalObject;
 	private TransactionalChange<EObject> recordedChange = null;
@@ -76,8 +76,6 @@ public class FilterChangeRecordingView extends ChangeRecordingView implements Fi
 	}
 
 
-
-	@Override
 	public ResourceSet getViewResourceSet() {
 		return view.getViewResourceSet();
 	}
