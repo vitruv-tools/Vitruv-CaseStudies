@@ -86,7 +86,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	@Accessors(AccessorType.PUBLIC_GETTER)
 	private org.eclipse.uml2.uml.Class class2;
 
-	protected ViewTestFactory improvedViewTestFactory;
+	protected FilterAndInfoViewTestFactory improvedViewTestFactory;
 
 	private Model umlModel;
 
@@ -94,7 +94,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	
 	@BeforeEach
 	public void setup() {
-		improvedViewTestFactory = new ViewTestFactory(getVirtualModel());
+		improvedViewTestFactory = new FilterAndInfoViewTestFactory(getVirtualModel());
 		final Procedure1<Model> setNameFunction = (Model it) -> {
 			it.setName(UML_MODEL_NAME);
 		};

@@ -25,12 +25,12 @@ import tools.vitruv.framework.views.ViewType;
 import tools.vitruv.framework.views.ViewTypeFactory;
 import tools.vitruv.testutils.TestViewFactory;
 
-public class ViewTestFactory extends TestViewFactory {
+public class FilterAndInfoViewTestFactory extends TestViewFactory {
 	
 	private ViewProvider viewProvider;
 	ViewType<? extends ViewSelector> viewType;
 
-	public ViewTestFactory(ViewProvider viewProvider) {
+	public FilterAndInfoViewTestFactory(ViewProvider viewProvider) {
 		super(viewProvider);
 		this.viewProvider = viewProvider;
 	}
@@ -52,15 +52,6 @@ public class ViewTestFactory extends TestViewFactory {
 		return createViewOfElements("UML and PCM components", rootTypes);
 	}
 	
-	
-	public View createFilteredUmlView(BasicViewFilterTest test) {
-		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
-		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
-		View view = createFilteredForNoAttributesViewOfElements("UML", rootTypes, function);
-		view.getSelection().isViewObjectSelected(test.getClass1());
-		view.getSelection().isViewObjectSelected(test.getClass2());
-		return view;
-	}
 	
 	public View createFilteredUmlView(Function<EObject, Boolean> function) {
 		Collection<Class<?>> rootTypes = createCollectionOfRootTypes(Model.class);
@@ -150,20 +141,6 @@ public class ViewTestFactory extends TestViewFactory {
 		View view = selector.createView();		
 		assertThat("view must not be null", view, not(equalTo(null)));
 		return view;
-	}
-
-	
-	
-	private boolean hasNoAttribute(EObject object, String name) {
-		if (object instanceof org.eclipse.uml2.uml.Class) {
-			if (object instanceof NamedElement) {
-				if (name.equals(((NamedElement) object).getName())) {
-					return true;
-				}
-			}
-			
-		}
-		return false;
 	}
 	
 	
