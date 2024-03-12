@@ -7,9 +7,6 @@ Automatic-Module-Name: tools.vitruv.applications.viewfilter.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.api.extension,
- tools.vitruv.applications.viewfilter.util.framework,
- tools.vitruv.applications.viewfilter.util.framework.impl,
- tools.vitruv.applications.viewfilter.util.framework.selectors,
  tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel
 Require-Bundle: tools.vitruv.testutils.vsum,
  org.eclipse.emf.compare,
@@ -25,6 +22,7 @@ Require-Bundle: tools.vitruv.testutils.vsum,
  edu.kit.ipd.sdq.commons.util.emf,
  slf4j.api;bundle-version="2.0.9",
  org.emftext.language.java;bundle-version="1.4.1",
- org.eclipse.emf.ecore
+ org.eclipse.emf.ecore,
+ tools.vitruv.views.viewfilter
 Export-Package: tools.vitruv.applications.viewfilter.tests
 Bundle-Vendor: vitruv.tools
