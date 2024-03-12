@@ -58,7 +58,7 @@ import tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel.Sing
 @ExtendWith(RegisterMetamodelsInStandalone.class)
 public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	
-	private static final String NIKLAS_NESTED_PACKAGE = "niklasNestedPackage";
+	private static final String NESTED_PACKAGE_TEST_NAME = "testNestedPackage";
 
 	@Accessors(AccessorType.PROTECTED_GETTER)
 	private static final String UML_MODEL_NAME = "model";
@@ -66,7 +66,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	@Accessors(AccessorType.PROTECTED_GETTER)
 	private static final String PCM_MODEL_NAME = "Repository";
 	
-	private static final String NIKLAS_MODIFIED_CLASS_NAME = "niklasModifiedClass2";
+	private static final String TEST_MODIFIED_CLASS_NAME = "testModifiedClass2";
 
 	private static final String PCM_REPOSITORY_FILE_EXTENSION = "repository";
 
@@ -76,7 +76,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	@Accessors(AccessorType.PROTECTED_GETTER)
 	private static final String MODEL_FILE_EXTENSION = "uml";
 	
-	private static final String PCM_BASIC_COMPONENT_NAME = "Niklas Basic PCM component 1";
+	private static final String PCM_BASIC_COMPONENT_NAME = "Test Basic PCM component 1";
 	
 	private static final String UML_MODEL_URI = "1234uri1234";
 
@@ -119,7 +119,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	
 	@Test
 	public void testCreateFilteredUmlView() {
-		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "testClass2");
 		View view = improvedViewTestFactory.createFilteredUmlView(function);
 		
 		view.update();
@@ -127,7 +127,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 		Collection<EObject> rootObjects = view.getRootObjects();
 		assertEquals(rootObjects.size(), 1);
 		//Expected:
-		//Selection: Only ModelImpl with class "niklasClass2" as only PackagedElement
+		//Selection: Only ModelImpl with class "testClass2" as only PackagedElement
 		//Root Objects: same structure as in selection
 		for (EObject root : rootObjects) {
 			assertTrue(root instanceof Model);
@@ -136,13 +136,13 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			EObject eObject = root.eContents().get(0);
 			assertTrue(eObject instanceof org.eclipse.uml2.uml.Class);
 			org.eclipse.uml2.uml.Class classObject = (Class) eObject;
-			assertEquals(classObject.getName(), "niklasClass2");
+			assertEquals(classObject.getName(), "testClass2");
 		}
 		
 		modifyModel();
 		view.update();
 		view.getSelection();
-		//Expected: Selection: Only ModelImpl with two Class Objects, both with the name niklasClass2 as packagedElements
+		//Expected: Selection: Only ModelImpl with two Class Objects, both with the name testClass2 as packagedElements
 		//Root Objects: The same
 		Collection<EObject> modifiedRootObjects = view.getRootObjects();
 		assertEquals(modifiedRootObjects.size(), 1);
@@ -153,7 +153,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			for (EObject eObject : root.eContents()) {
 				assertTrue(eObject instanceof org.eclipse.uml2.uml.Class);
 				org.eclipse.uml2.uml.Class classObject = (Class) eObject;
-				assertEquals(classObject.getName(), "niklasClass2");
+				assertEquals(classObject.getName(), "testClass2");
 			}			
 		}
 	}
@@ -162,12 +162,12 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	@Test
 	public void testCreateFilteredUmlViewWithAdditionalPcmElementsInVsum() {
 		createPcmModel();
-		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "testClass2");
 		
 		View view = improvedViewTestFactory.createFilteredUmlView(function);
 		view.update();
 		view.update();
-		//Expected Selection: Only ModelImpl with class object "niklasClass2" as only PackagedElement
+		//Expected Selection: Only ModelImpl with class object "testClass2" as only PackagedElement
 		//Root Objects: Same structure as selection
 		Collection<EObject> rootObjects = view.getRootObjects();
 		assertEquals(rootObjects.size(), 1);
@@ -178,7 +178,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			for (EObject eObject : root.eContents()) {
 				assertTrue(eObject instanceof org.eclipse.uml2.uml.Class);
 				org.eclipse.uml2.uml.Class classObject = (Class) eObject;
-				assertEquals(classObject.getName(), "niklasClass2");
+				assertEquals(classObject.getName(), "testClass2");
 			}			
 		}
 		
@@ -194,7 +194,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			for (EObject eObject : root.eContents()) {
 				assertTrue(eObject instanceof org.eclipse.uml2.uml.Class);
 				org.eclipse.uml2.uml.Class classObject = (Class) eObject;
-				assertEquals(classObject.getName(), "niklasClass2");
+				assertEquals(classObject.getName(), "testClass2");
 			}			
 		}
 
@@ -235,7 +235,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			BasicComponent classObject = (BasicComponent) eObject;
 			assertEquals(PCM_BASIC_COMPONENT_NAME, classObject.getEntityName());
 		}
-		//Expected: Selection: Only RepositoryImpl. Under eSettings is a list which contains "Niklas Basic PCM component 1"
+		//Expected: Selection: Only RepositoryImpl. Under eSettings is a list which contains the content of PCM_BASIC_COMPONENT_NAME
 		//Root Objects: Identical to Selection but with less null values in irrelevant fields
 		modifyModel();
 		view.update();
@@ -256,7 +256,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	
 	@Test
 	public void testCreateCountingView() {
-		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "testClass2");
 		View view = improvedViewTestFactory.createCountUmlElementsView(function);
 		Assertions.assertNotNull(view.getSelection(), "selection must not be null");
 		
@@ -295,14 +295,14 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 	
 	@Test
 	public void testRenameClassInFilteredView() throws Exception {
-		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "niklasClass2");
+		Function<EObject, Boolean> function = (EObject object) -> hasNoAttribute(object, "testClass2");
 		View baselineUnfilteredUmlView = improvedViewTestFactory.createUmlView();
 		View filterView = improvedViewTestFactory.createFilteredUmlView(function);
 		
 		improvedViewTestFactory.changeViewRecordingChanges(filterView, (CommittableView view) ->  {
 			Model model = getDefaultUmlModel(view);
-			Class niklasClass2 = UmlQueryUtil.claimClass(model, "niklasClass2");
-			niklasClass2.setName(NIKLAS_MODIFIED_CLASS_NAME);
+			Class testClass2 = UmlQueryUtil.claimClass(model, "testClass2");
+			testClass2.setName(TEST_MODIFIED_CLASS_NAME);
 		});
 		
 		
@@ -313,7 +313,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 		for (EObject filteredRoot : filteredRootObjects) {
 			EObject classObject = filteredRoot.eContents().get(0);
 			assertTrue(classObject instanceof Class);
-			assertEquals(NIKLAS_MODIFIED_CLASS_NAME, ((Class) classObject).getName());
+			assertEquals(TEST_MODIFIED_CLASS_NAME, ((Class) classObject).getName());
 		}
 		//Did the update of the vsum work? Is a newly created view in correct state?
 		View secondView = improvedViewTestFactory.createUmlView();
@@ -322,14 +322,14 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 		for (EObject viewRoot : newViewRootObjects) {
 			assertTrue(viewRoot instanceof Model);
 			if (viewRoot instanceof Model castedViewRoot) {
-				EObject classWithModifiedName = searchEObjectWithGivenNameInUmlModel(castedViewRoot, NIKLAS_MODIFIED_CLASS_NAME);
+				EObject classWithModifiedName = searchEObjectWithGivenNameInUmlModel(castedViewRoot, TEST_MODIFIED_CLASS_NAME);
 				assertTrue(classWithModifiedName != null);
 				assertTrue(classWithModifiedName instanceof Class);
-				EList<EObject> niklasPackage = viewRoot.eContents().get(0).eContents();
-				assertEquals(4, niklasPackage.size());
-				assertEquals(1, niklasPackage.stream().filter(it -> {return (it instanceof PackageImpl);}).count());
-				assertEquals(2, niklasPackage.stream().filter(it -> {return (it instanceof ClassImpl);}).count());
-				assertEquals(1, niklasPackage.stream().filter(it -> {return (it instanceof PrimitiveTypeImpl);}).count());
+				EList<EObject> testPackage = viewRoot.eContents().get(0).eContents();
+				assertEquals(4, testPackage.size());
+				assertEquals(1, testPackage.stream().filter(it -> {return (it instanceof PackageImpl);}).count());
+				assertEquals(2, testPackage.stream().filter(it -> {return (it instanceof ClassImpl);}).count());
+				assertEquals(1, testPackage.stream().filter(it -> {return (it instanceof PrimitiveTypeImpl);}).count());
 			}
 		}
 	}
@@ -353,25 +353,25 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			final Consumer<CommittableView> secondChangeUmlFunction = (CommittableView it) -> {
 				org.eclipse.uml2.uml.Package _createPackage = UMLFactory.eINSTANCE.createPackage();
 				Procedure1<org.eclipse.uml2.uml.Package> setNameFunction = (org.eclipse.uml2.uml.Package it_1) -> {
-					it_1.setName("niklasPackage");
+					it_1.setName("testPackage");
 				};
 
 				org.eclipse.uml2.uml.Package package1 = UMLFactory.eINSTANCE.createPackage();
-				package1.setName("niklasPackage");
+				package1.setName("testPackage");
 
-				class1 = package1.createOwnedClass("niklasClass1", false);
+				class1 = package1.createOwnedClass("testClass1", false);
 
 				getUserInteraction().addNextSingleSelection(1);
 				getUserInteraction().addNextTextInput("model/System.system");
-				org.eclipse.uml2.uml.Package package2 = package1.createNestedPackage(NIKLAS_NESTED_PACKAGE);
+				org.eclipse.uml2.uml.Package package2 = package1.createNestedPackage(NESTED_PACKAGE_TEST_NAME);
 
-				class2 = package2.createOwnedClass("niklasClass2", false);
+				class2 = package2.createOwnedClass("testClass2", false);
 				EList<PackageableElement> _packagedElements = getDefaultUmlModel(it).getPackagedElements();
 				_packagedElements.add(package1);
 
 				// create Attribute for class2
-				PrimitiveType stringPrimitiveType = package1.createOwnedPrimitiveType("niklasPrimitiveType1");
-				class2.createOwnedAttribute("niklasClass2Attribute", stringPrimitiveType, 0, 1);
+				PrimitiveType stringPrimitiveType = package1.createOwnedPrimitiveType("testPrimitiveType1");
+				class2.createOwnedAttribute("testClass2Attribute", stringPrimitiveType, 0, 1);
 			};
 			improvedViewTestFactory.changeUmlView(secondChangeUmlFunction);
 
@@ -387,16 +387,16 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			
 			Consumer<CommittableView> changeUmlFunction = (CommittableView it) -> {
 				org.eclipse.uml2.uml.Package package3 = UMLFactory.eINSTANCE.createPackage();
-				package3.setName("niklasPackage3");
+				package3.setName("testPackage3");
 				
-				org.eclipse.uml2.uml.Class class3 = package3.createOwnedClass("niklasClass3", false);
-				org.eclipse.uml2.uml.Class class4 = package3.createOwnedClass("niklasClass2", false);
+				org.eclipse.uml2.uml.Class class3 = package3.createOwnedClass("testClass3", false);
+				org.eclipse.uml2.uml.Class class4 = package3.createOwnedClass("testClass2", false);
 				
 				class2.addKeyword("subsequentlyAddedKeyword");
 				
 				final Comment comment = this.class2.createOwnedComment();
-				comment.setBody("niklasCommentClass2");
-				String searchedName = "niklasClass2";
+				comment.setBody("testCommentedClass2");
+				String searchedName = "testClass2";
 				comment.addKeyword("bla");
 				
 				TreeIterator<EObject> umlIterator = getDefaultUmlModel(it).eAllContents();
@@ -443,7 +443,7 @@ public class InstanceFilterTest extends ViewBasedVitruvApplicationTest {
 			repository.getComponents__Repository().add(createBasicComponent);
 			
 			CompositeDataType compositeDataType1 = RepositoryFactory.eINSTANCE.createCompositeDataType();
-			compositeDataType1.setEntityName("niklasPcmCompositeDataType1");
+			compositeDataType1.setEntityName("testPcmCompositeDataType1");
 			repository.getDataTypes__Repository().add(compositeDataType1);
 
 		};
