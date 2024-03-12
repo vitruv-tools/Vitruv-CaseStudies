@@ -23,7 +23,6 @@ import tools.vitruv.framework.views.changederivation.StateBasedChangeResolutionS
  
 public class FilterChangeDerivingView extends ChangeDerivingView implements FilterableView {
 
-	// TODO nbr add javadoc
 	private Map<EObject, EObject> mapCopy2OriginalObject;
 
 	private ResourceSet originalStateViewResourceSet;
