@@ -24,5 +24,4 @@ Require-Bundle: tools.vitruv.testutils.vsum,
  org.emftext.language.java;bundle-version="1.4.1",
  org.eclipse.emf.ecore,
  tools.vitruv.views.viewfilter
-Export-Package: tools.vitruv.applications.viewfilter.tests
 Bundle-Vendor: vitruv.tools
