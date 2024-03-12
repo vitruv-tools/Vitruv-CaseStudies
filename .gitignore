@@ -25,5 +25,4 @@ EvaluationData
 *.DS_Store
 *.polyglot
 *.pom.tycho
-*.classpath
 *.settings/
