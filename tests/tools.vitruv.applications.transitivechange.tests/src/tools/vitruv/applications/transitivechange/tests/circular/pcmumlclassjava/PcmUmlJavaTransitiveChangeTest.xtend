@@ -42,6 +42,10 @@ import tools.vitruv.applications.util.temporary.java.JavaSetup
 import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.testutils.RegisterMetamodelsInStandalone
 import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTest
+import org.eclipse.emf.ecore.util.EcoreUtil
+import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
+import org.eclipse.uml2.uml.PrimitiveType
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
@@ -145,6 +149,15 @@ abstract class PcmUmlJavaTransitiveChangeTest extends LegacyPcmUmlClassApplicati
 		val javaInterface = javaMethod.eContainer as Interface
 		assertJavaInterfaceMethodTraits(javaMethod, umlOperation.name, null, javaMethod.parameters, javaInterface)
 		assertJavaModifiableAbstract(javaMethod, umlOperation.abstract)
+	}
+	
+	def protected void assertUmlTypeEquality(Type firstType, Type secondType) {
+		if(firstType instanceof PrimitiveType) {
+			val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(firstType.eResource.resourceSet)
+			assertTrue(EcoreUtil.equals(PcmUmlClassHelper.mapUmlToPcmPrimitiveType(firstType as PrimitiveType, pcmPrimitiveTypes), PcmUmlClassHelper.mapUmlToPcmPrimitiveType(secondType as PrimitiveType, pcmPrimitiveTypes)))
+		} else {
+			assertTrue(EcoreUtil.equals(firstType, secondType))
+		}
 	}
 
 	/**

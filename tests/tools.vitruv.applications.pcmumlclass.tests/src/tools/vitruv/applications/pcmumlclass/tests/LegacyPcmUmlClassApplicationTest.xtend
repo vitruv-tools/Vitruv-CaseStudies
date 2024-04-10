@@ -126,7 +126,7 @@ abstract class LegacyPcmUmlClassApplicationTest extends LegacyVitruvApplicationT
 		int lower,
 		int upper
 	) {
-		val correspondingPrimitiveType = corresponds(pcmDatatype, umlType, TagLiterals.DATATYPE__TYPE)
+		val correspondingPrimitiveType = corresponds(pcmDatatype, umlType, TagLiterals.DATATYPE__TYPE) || corresponds(pcmDatatype, umlType, TagLiterals.DATATYPE__TYPE__ALTERNATIVE)
 		val correspondingCompositeType = corresponds(pcmDatatype, umlType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		return (correspondingPrimitiveType || correspondingCompositeType) // inner collection types are not supported
 		&& upper == 1 // && lower == 1 // lower could also be 0

@@ -175,24 +175,33 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 	update {
 		val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(pcmRepo)
 		val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(pcmRepo.eResource.resourceSet)
+
+		// store primary correspondces for prefered mapping between PCM and UML PrimitiveDatatypes
 		for (pcmType : pcmPrimitiveTypes) {
-			val umlTypes = PcmUmlClassHelper.mapPrimitiveTypes(pcmType, umlPrimitiveTypes)
-			for (umlType : umlTypes) {
-				addPrimitiveDatatypeCorrespondence(pcmType, umlType)
+			val umlType = PcmUmlClassHelper.mapPcmToUmlPrimitiveType(pcmType, umlPrimitiveTypes)
+			if (umlType !== null) {
+				addPrimitiveDatatypeCorrespondence(pcmType, umlType, TagLiterals.DATATYPE__TYPE)
+			}
+		}
+
+		// store alternative correspondces for mapping between PCM and UML PrimitiveDatatypes in case non prefered UML datatypes are used
+		for (umlType : umlPrimitiveTypes) {
+			val pcmType = PcmUmlClassHelper.mapUmlToPcmPrimitiveType(umlType, pcmPrimitiveTypes)
+			if (pcmType !== null) {
+				addPrimitiveDatatypeCorrespondence(pcmType, umlType, TagLiterals.DATATYPE__TYPE__ALTERNATIVE)
 			}
 		}
 	}
 }
 
-routine addPrimitiveDatatypeCorrespondence(pcm::PrimitiveDataType pcmPrimitiveType, uml::PrimitiveType umlPrimitiveType) {
+routine addPrimitiveDatatypeCorrespondence(pcm::PrimitiveDataType pcmPrimitiveType, uml::PrimitiveType umlPrimitiveType, String tag) {
 	match {
-		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged TagLiterals.
-			DATATYPE__TYPE with it == umlPrimitiveType
-		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged TagLiterals.
-			DATATYPE__TYPE with it == pcmPrimitiveType
+		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged tag with it == umlPrimitiveType
+		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged tag with it ==
+			pcmPrimitiveType
 	}
 	update {
-		addCorrespondenceBetween(pcmPrimitiveType, umlPrimitiveType, TagLiterals.DATATYPE__TYPE)
+		addCorrespondenceBetween(pcmPrimitiveType, umlPrimitiveType, tag)
 	}
 }
 

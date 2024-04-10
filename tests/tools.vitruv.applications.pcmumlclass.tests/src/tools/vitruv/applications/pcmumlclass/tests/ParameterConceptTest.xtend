@@ -1,22 +1,31 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.eclipse.emf.ecore.util.EcoreUtil
+import edu.kit.ipd.sdq.commons.util.java.Pair
+import edu.kit.ipd.sdq.commons.util.java.Quadruple
+import java.util.ArrayList
+import java.util.List
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
+import org.eclipse.xtext.xbase.lib.Functions.Function1
+import org.junit.jupiter.api.Test
+import org.palladiosimulator.pcm.core.entity.NamedElement
 import org.palladiosimulator.pcm.repository.DataType
-import org.palladiosimulator.pcm.repository.Parameter
-import org.palladiosimulator.pcm.repository.ParameterModifier
+import org.palladiosimulator.pcm.repository.Interface
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
-import tools.vitruv.applications.pcmumlclass.TagLiterals
-import org.junit.jupiter.api.Test
-
-import static org.junit.jupiter.api.Assertions.assertNull
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertTrue
-import java.nio.file.Path
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMCollectionDataTypeBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMCompositeDataTypeBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMOperationInterfaceBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentPCMRepositoryBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLClassBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLInterfaceBuilder
+import tools.vitruv.applications.pcmumlclass.tests.helper.FluentUMLPackageBuilder
+import tools.vitruv.applications.testutility.uml.UmlQueryUtil
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Parameter 
@@ -24,150 +33,172 @@ import java.nio.file.Path
  * <br><br>
  * Related files: PcmParameter.reactions, UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
  */
-class ParameterConceptTest extends LegacyPcmUmlClassApplicationTest {
+class ParameterConceptTest extends PcmUmlClassApplicationTest {
 
 	static val TEST_PARAMETER_NAME = "testParameter"
 
-	def private static boolean checkParameterModifiers(ParameterModifier pcmModifier,
-		ParameterDirectionKind umlDirection) {
-		return umlDirection == PcmUmlClassHelper.getMatchingParameterDirection(pcmModifier)
-	}
+	private def void createRepositoryWithSignature() {
+		initPCMRepository()
 
-	def checkParameterConcept(
-		Parameter pcmParam,
-		org.eclipse.uml2.uml.Parameter umlParam
-	) {
-		assertNotNull(pcmParam)
-		assertNotNull(umlParam)
-		assertTrue(corresponds(pcmParam, umlParam, TagLiterals.PARAMETER__REGULAR_PARAMETER))
-		assertTrue(pcmParam.parameterName == umlParam.name)
-		assertTrue(checkParameterModifiers(pcmParam.modifier__Parameter, umlParam.direction))
-		assertTrue(isCorrect_DataType_Parameter_Correspondence(pcmParam.dataType__Parameter, umlParam))
-		assertTrue(
-			corresponds(pcmParam.operationSignature__Parameter, umlParam.operation,
-				TagLiterals.SIGNATURE__OPERATION))
-	}
-
-	def protected checkParameterConcept(Parameter pcmParam) {
-		val mUmlParam = helper.getModifiableCorr(pcmParam, org.eclipse.uml2.uml.Parameter,
-			TagLiterals.PARAMETER__REGULAR_PARAMETER)
-		checkParameterConcept(pcmParam, mUmlParam)
-	}
-
-	def protected checkParameterConcept(org.eclipse.uml2.uml.Parameter umlParam) {
-		val mPcmParam = helper.getModifiableCorr(umlParam, Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
-		checkParameterConcept(mPcmParam, umlParam)
-	}
-
-	def private Repository createRepositoryWithSignature() {
-		val pcmRepository = helper.createRepository()
-		helper.createCompositeDataType(pcmRepository)
-		val pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
-		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
-		val pcmInterface = helper.createOperationInterface(pcmRepository)
-		helper.createOperationSignature(pcmInterface)
-
-		userInteraction.addNextTextInput(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-			contents += pcmRepository
+		changePcmView[
+			PcmUmlClassApplicationTestHelper.createCompositeDataType(defaultPcmRepository)
+			val pcmCompositeType_2 = PcmUmlClassApplicationTestHelper.createCompositeDataType_2(defaultPcmRepository)
+			PcmUmlClassApplicationTestHelper.createCollectionDataType(defaultPcmRepository, pcmCompositeType_2)
+			val pcmInterface = PcmUmlClassApplicationTestHelper.createOperationInterface(defaultPcmRepository)
+			PcmUmlClassApplicationTestHelper.createOperationSignature(pcmInterface)
 		]
-		propagate
-		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(LegacyPcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-
-		return pcmRepository.clearResourcesAndReloadRoot
 	}
 
-	private def void testCreateParameterConcept_UML(Repository inPcmRepository, Type umlType, int lower, int upper) {
-		var pcmRepository = inPcmRepository
-		var pcmInterface = helper.getPcmOperationInterface(pcmRepository)
-		var umlOperation = helper.getUmlOperation(pcmInterface)
-		startRecordingChanges(umlOperation)
+	private def void testCreateParameterConcept_UML(Function1<? super Type, Boolean> umlTypeSelector, int lower,
+		int upper, List<DataType> expectedDataTypes, Interface expectedInterface) {
+		createRepositoryWithSignature()
 
-		var umlParameter = umlOperation.createOwnedParameter(TEST_PARAMETER_NAME, null)
-		umlParameter.direction = ParameterDirectionKind.INOUT_LITERAL
-		umlParameter.type = umlType
-		umlParameter.lower = lower
-		umlParameter.upper = upper
-		propagate
+		changeUmlView[
+			val umlType = it.getRootObjects(Model).flatMap[it.eAllContents.toList].filter[it instanceof Type].map [
+				it as Type
+			].findFirst(umlTypeSelector) as Type
 
-		umlParameter.clearResourcesAndReloadRoot
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
-		umlOperation = helper.getUmlOperation(pcmInterface)
+			val umlInterface = UmlQueryUtil.claimInterface(umlContractsPackage,
+				PcmUmlClassApplicationTestHelper.INTERFACE_NAME)
+			val umlOperation = UmlQueryUtil.claimOperation(umlInterface,
+				PcmUmlClassApplicationTestHelper.SIGNATURE_NAME)
 
-		umlParameter = umlOperation.ownedParameters.findFirst[it.name == TEST_PARAMETER_NAME]
-		assertNotNull(umlParameter)
-		checkParameterConcept(umlParameter)
-		var reloadedUmlType = helper.getModifiableInstance(umlType)
-		assertNotNull(reloadedUmlType, "The DataType should not be null after reload")
-		assertTrue(EcoreUtil.equals(umlParameter.type, reloadedUmlType))
-		assertTrue(umlParameter.lower == lower)
-		assertTrue(umlParameter.upper == upper)
+			var umlParameter = umlOperation.createOwnedParameter(TEST_PARAMETER_NAME, null)
+			umlParameter.direction = ParameterDirectionKind.INOUT_LITERAL
+			umlParameter.type = umlType
+			umlParameter.lower = lower
+			umlParameter.upper = upper
+		]
+
+		validatePcmView[
+			val pcmRepositoryBuilder = new FluentPCMRepositoryBuilder(PACKAGE_NAME_FIRST_UPPER).addInterface(
+				expectedInterface)
+			expectedDataTypes.forEach[pcmRepositoryBuilder.addDataType(it)]
+
+			assertEqualityOfPcmRepository(defaultPcmRepository, pcmRepositoryBuilder.build)
+		]
 	}
 
 	@Test
 	def void testCreateParameterConcept_UML_primitiveType() {
-		var pcmRepository = createRepositoryWithSignature
-		assertNotNull(helper.UML_INT, "Initialization of PrimitiveTypes seems to have failed")
-		testCreateParameterConcept_UML(pcmRepository, helper.UML_INT, 1, 1)
+		val pcmCompositeDataType2 = new FluentPCMCompositeDataTypeBuilder(
+			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2).build
+		val pcmCompositeDataType1 = new FluentPCMCompositeDataTypeBuilder(
+			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME).build
+		val pcmCollectionDataType = new FluentPCMCollectionDataTypeBuilder(
+			PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME, pcmCompositeDataType2).build
+		val pcmIntDataType = PcmUmlClassApplicationTestHelper.createPrimitiveDataType(PrimitiveTypeEnum.INT)
+		val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
+			addSignature(PcmUmlClassApplicationTestHelper.SIGNATURE_NAME,
+				#[new Pair(TEST_PARAMETER_NAME, pcmIntDataType)]).build
+		testCreateParameterConcept_UML([it.name == "Integer"], 1, 1,
+			#[pcmCompositeDataType1, pcmCompositeDataType2, pcmCollectionDataType], pcmInterface)
 	}
 
 	@Test
 	def void testCreateParameterConcept_UML_compositeType() {
-		var pcmRepository = createRepositoryWithSignature
-		testCreateParameterConcept_UML(pcmRepository, helper.getUmlCompositeDataTypeClass(pcmRepository), 1, 1)
+		val pcmCompositeDataType2 = new FluentPCMCompositeDataTypeBuilder(
+			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2).build
+		val pcmCompositeDataType1 = new FluentPCMCompositeDataTypeBuilder(
+			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME).build
+		val pcmCollectionDataType = new FluentPCMCollectionDataTypeBuilder(
+			PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME, pcmCompositeDataType2).build
+		val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
+			addSignature(PcmUmlClassApplicationTestHelper.SIGNATURE_NAME,
+				#[new Pair(TEST_PARAMETER_NAME, pcmCompositeDataType1)]).build
+
+		testCreateParameterConcept_UML([it.name == PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME], 1, 1,
+			#[pcmCompositeDataType1, pcmCompositeDataType2, pcmCollectionDataType], pcmInterface)
 	}
 
 	@Test
 	def void testCreateParameterConcept_UML_collectionType() {
-		var pcmRepository = createRepositoryWithSignature
-		testCreateParameterConcept_UML(pcmRepository, helper.getUmlCompositeDataTypeClass_2(pcmRepository), 0,
-			LiteralUnlimitedNatural.UNLIMITED)
+		val pcmCompositeDataType2 = new FluentPCMCompositeDataTypeBuilder(
+			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2).build
+		val pcmCompositeDataType1 = new FluentPCMCompositeDataTypeBuilder(
+			PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME).build
+		val pcmCollectionDataType = new FluentPCMCollectionDataTypeBuilder(
+			PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME, pcmCompositeDataType2).build
+		val pcmInterface = new FluentPCMOperationInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
+			addSignature(PcmUmlClassApplicationTestHelper.SIGNATURE_NAME,
+				#[new Pair(TEST_PARAMETER_NAME, pcmCollectionDataType)]).build
+
+		testCreateParameterConcept_UML([it.name == PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2], 0,
+			LiteralUnlimitedNatural.UNLIMITED, #[pcmCompositeDataType1, pcmCompositeDataType2, pcmCollectionDataType],
+			pcmInterface)
 	}
 
-	private def void _testCreateParameterConcept_PCM_withType(Repository inPcmRepository, DataType pcmType) {
-		var pcmRepository = inPcmRepository
-		var pcmInterface = helper.getPcmOperationInterface(pcmRepository)
-		var pcmSignature = helper.getPcmOperationSignature(pcmInterface)
+	private def void testCreateParameterConcept_PCM(Function1<Iterable<DataType>, DataType> pcmTypeSelector,
+		String expectedParameterTypeName, int expectedParameterLowerValue, int expectedParameterUpperValue) {
+		createRepositoryWithSignature()
 
-		var pcmParameter = RepositoryFactory.eINSTANCE.createParameter
-		pcmParameter.parameterName = ParameterConceptTest.TEST_PARAMETER_NAME
-		pcmParameter.dataType__Parameter = pcmType
-		pcmSignature.parameters__OperationSignature += pcmParameter
+		changePcmView[
+			val pcmType = pcmTypeSelector.apply(it.getRootObjects(Repository).flatMap[it.dataTypes__Repository])
+			var pcmInterface = PcmUmlClassApplicationTestHelper.getPcmOperationInterface(defaultPcmRepository)
+			var pcmSignature = PcmUmlClassApplicationTestHelper.getPcmOperationSignature(pcmInterface)
 
-		propagate
-		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
-		pcmSignature = helper.getPcmOperationSignature(pcmInterface)
-
-		pcmParameter = pcmSignature.parameters__OperationSignature.findFirst [
-			it.parameterName == ParameterConceptTest.TEST_PARAMETER_NAME
+			var pcmParameter = RepositoryFactory.eINSTANCE.createParameter
+			pcmParameter.parameterName = TEST_PARAMETER_NAME
+			pcmParameter.dataType__Parameter = pcmType
+			pcmSignature.parameters__OperationSignature += pcmParameter
 		]
-		assertNotNull(pcmParameter)
-		checkParameterConcept(pcmParameter)
-		val reloadedPcmType = helper.getModifiableInstance(pcmType)
-		assertNotNull(reloadedPcmType, "The DataType should not be null after reload")
-		assertTrue(EcoreUtil.equals(pcmParameter.dataType__Parameter, reloadedPcmType))
-	}
 
+		validateUmlView[
+			val allUmlPrimitiveTypes = it.getRootObjects().flatMap[it.eAllContents.toList].filter [
+				it instanceof PrimitiveType
+			].map[it as Type].toList
+			val umlTestCompositeType2 = new FluentUMLClassBuilder(
+				PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2, false).build
+			val umlTestCompositeType1 = new FluentUMLClassBuilder(
+				PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME, false).build
+			val expectedDataTypesPackage = new FluentUMLPackageBuilder(DATATYPES_PACKAGE).addPackagedElement(
+				umlTestCompositeType1).addPackagedElement(umlTestCompositeType2).build
+
+			var allPossibleParameterTypes = new ArrayList(allUmlPrimitiveTypes)
+			allPossibleParameterTypes.add(umlTestCompositeType1)
+			allPossibleParameterTypes.add(umlTestCompositeType2)
+			val expectedParameterType = allPossibleParameterTypes.findFirst [
+				it.name == expectedParameterTypeName
+			]
+			val umlInterface = new FluentUMLInterfaceBuilder(PcmUmlClassApplicationTestHelper.INTERFACE_NAME).
+				addOperation(PcmUmlClassApplicationTestHelper.SIGNATURE_NAME,
+					#[
+						new Quadruple(TEST_PARAMETER_NAME, expectedParameterType, expectedParameterLowerValue,
+							expectedParameterUpperValue)]).build
+			val expectedContractsPackage = new FluentUMLPackageBuilder(CONTRACTS_PACKAGE).
+				addPackagedElement(umlInterface).build
+
+			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel, String.join(".", PACKAGE_NAME, DATATYPES_PACKAGE),
+				expectedDataTypesPackage)
+			assertEqualityAndContainmentOfUmlPackage(defaultUmlModel, String.join(".", PACKAGE_NAME, CONTRACTS_PACKAGE),
+				expectedContractsPackage)
+		]
+	}
+	
 	@Test
 	def void testCreateParameterConcept_PCM_primitiveType() {
-		var pcmRepository = createRepositoryWithSignature
-		assertNotNull(helper.PCM_INT, "Initialization of PrimitiveTypes seems to have failed")
-		_testCreateParameterConcept_PCM_withType(pcmRepository, helper.PCM_INT)
+		testCreateParameterConcept_PCM([
+			it.filter[it instanceof PrimitiveDataType].findFirst [
+				(it as PrimitiveDataType).type == PrimitiveTypeEnum.INT
+			]
+		], "Integer", 1, 1)
 	}
 
 	@Test
 	def void testCreateParameterConcept_PCM_compositeType() {
-		var pcmRepository = createRepositoryWithSignature
-		_testCreateParameterConcept_PCM_withType(pcmRepository, helper.getPcmCompositeDataType(pcmRepository))
+		testCreateParameterConcept_PCM([
+			it.findFirst [
+				(it as NamedElement).entityName == PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME
+			]
+		], PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME, 1, 1)
 	}
 
 	@Test
 	def void testCreateParameterConcept_PCM_collectionType() {
-		var pcmRepository = createRepositoryWithSignature
-		_testCreateParameterConcept_PCM_withType(pcmRepository, helper.getPcmCollectionDataType(pcmRepository))
+		testCreateParameterConcept_PCM([
+			it.findFirst [
+				(it as NamedElement).entityName == PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME
+			]
+		], PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2, 0, -1)
 	}
-
 }
