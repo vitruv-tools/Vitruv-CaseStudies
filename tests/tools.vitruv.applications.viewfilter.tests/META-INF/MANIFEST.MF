@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Vitruv PCM-UML Class Application Tests
+Bundle-SymbolicName: tools.vitruv.views.viewfilter.tests
+Bundle-Version: 3.0.1.qualifier
+Automatic-Module-Name: tools.vitruv.applications.viewfilter.tests
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Import-Package: org.junit.jupiter.api,
+ org.junit.jupiter.api.extension,
+ tools.vitruv.views.viewfilter.infostructure.model.infostructuremodel
+Require-Bundle: tools.vitruv.testutils.vsum,
+ org.eclipse.emf.compare,
+ org.hamcrest.core,
+ tools.vitruv.applications.pcmumlclass,
+ tools.vitruv.applications.util.temporary,
+ org.eclipse.xtend.lib,
+ edu.kit.ipd.sdq.commons.util.java,
+ org.palladiosimulator.pcm.resources,
+ edu.kit.ipd.sdq.activextendannotations,
+ tools.vitruv.applications.testutility,
+ org.palladiosimulator.pcm,
+ edu.kit.ipd.sdq.commons.util.emf,
+ slf4j.api;bundle-version="2.0.9",
+ org.emftext.language.java;bundle-version="1.4.1",
+ org.eclipse.emf.ecore,
+ tools.vitruv.views.viewfilter
+Bundle-Vendor: vitruv.tools
