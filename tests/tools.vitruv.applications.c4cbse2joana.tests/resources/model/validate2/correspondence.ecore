@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:correspondencemodel="http://www.example.org/correspondencemodel"
+    xmlns:securitycorrespondencemodel="www.example.org/securitycorrespondencemodel">
+  <correspondencemodel:StructuralCorrespondenceModel>
+    <component2class javaClass="structure.sourcecode#//@topleveltype.0">
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.6/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.6/@methods.0/@parameter.0">
+            <pcmparameter id="value" name="value"/>
+          </parameter2parameter>
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.6/@methods.0/@parameter.1">
+            <pcmparameter id="airline" name="airline"/>
+          </parameter2parameter>
+          <pcmoperation id="_nXaBAMN0EeWPE-QAhbUzuQ" name="payCommission"/>
+        </operation2method>
+        <pcminterface id="_IR9L8MN0EeWPE-QAhbUzuQ" name="Comission"/>
+      </interface2interface>
+      <pcmcomponent id="_SaUYgMNzEeWPE-QAhbUzuQ" name="TravelAgency"/>
+    </component2class>
+    <component2class javaClass="structure.sourcecode#//@topleveltype.1">
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.9/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.9/@methods.0/@parameter.0">
+            <pcmparameter id="requestData" name="requestData"/>
+          </parameter2parameter>
+          <pcmoperation id="_R6uH4MNyEeWPE-QAhbUzuQ" name="getFlightOffers"/>
+        </operation2method>
+        <pcminterface id="_OWfzMMNyEeWPE-QAhbUzuQ" name="FlightOffers"/>
+      </interface2interface>
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.8/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.8/@methods.0/@parameter.0">
+            <pcmparameter id="offerId" name="offerId"/>
+          </parameter2parameter>
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.8/@methods.0/@parameter.1">
+            <pcmparameter id="ccd_decl" name="ccd_decl"/>
+          </parameter2parameter>
+          <pcmoperation id="_00dt8MNyEeWPE-QAhbUzuQ" name="bookFlightOffer"/>
+        </operation2method>
+        <pcminterface id="_y_H88MNyEeWPE-QAhbUzuQ" name="Booking"/>
+      </interface2interface>
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.14/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.14/@methods.0/@parameter.0">
+            <pcmparameter id="flights" name="flights"/>
+          </parameter2parameter>
+          <pcmoperation id="_ok8ZYM5wEeWFJak7Wqvc0g" name="setAvailableFlights"/>
+        </operation2method>
+        <pcminterface id="_lKDm4M5wEeWFJak7Wqvc0g" name="AirlineAdministration"/>
+      </interface2interface>
+      <pcmcomponent id="_j3xt4MNzEeWPE-QAhbUzuQ" name="Airline"/>
+    </component2class>
+    <component2class javaClass="structure.sourcecode#//@topleveltype.2">
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.7/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.7/@methods.0/@parameter.0">
+            <pcmparameter id="flightOffer" name="flightOffer"/>
+          </parameter2parameter>
+          <pcmoperation id="_GmUUEMN1EeWPE-QAhbUzuQ" name="bookSelected"/>
+        </operation2method>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.7/@methods.1">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.7/@methods.1/@parameter.0">
+            <pcmparameter id="requestData" name="requestData"/>
+          </parameter2parameter>
+          <pcmoperation id="_602gYM5lEeWFJak7Wqvc0g" name="getFlightOffers"/>
+        </operation2method>
+        <pcminterface id="_uUkncMN0EeWPE-QAhbUzuQ" name="BookingSelection"/>
+      </interface2interface>
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.16/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.16/@methods.0/@parameter.0">
+            <pcmparameter id="ccd_decl" name="ccd_decl"/>
+          </parameter2parameter>
+          <pcmoperation id="_vnXBIPUCEeuE87M6otJwmw" name="DeclassifiedCCD"/>
+        </operation2method>
+        <pcminterface id="_t2HtAPUCEeuE87M6otJwmw" name="DeclassificationReceiver"/>
+      </interface2interface>
+      <pcmcomponent id="_5EaVoMNxEeWPE-QAhbUzuQ" name="TravelPlanner"/>
+    </component2class>
+    <component2class javaClass="structure.sourcecode#//@topleveltype.3">
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.11/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.11/@methods.0/@parameter.0">
+            <pcmparameter id="airline" name="airline"/>
+          </parameter2parameter>
+          <pcmoperation id="_JXJqsMN6EeWPE-QAhbUzuQ" name="releaseCCD"/>
+        </operation2method>
+        <pcminterface id="_CayVgMN6EeWPE-QAhbUzuQ" name="Declassification"/>
+      </interface2interface>
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.10/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.10/@methods.0/@parameter.0">
+            <pcmparameter id="ccd" name="ccd"/>
+          </parameter2parameter>
+          <pcmoperation id="_N6idsMN3EeWPE-QAhbUzuQ" name="setCreditCard"/>
+        </operation2method>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.10/@methods.1">
+          <pcmoperation id="_pZruEAyUEey1YdsQNY8KdA" name="getCreditCard"/>
+        </operation2method>
+        <pcminterface id="_MACf4MN3EeWPE-QAhbUzuQ" name="CreditCardConfiguration"/>
+      </interface2interface>
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.15/@methods.0">
+          <pcmoperation id="_p3shEM54EeW6RpZqSiINDQ" name="getDeclassifiedCCD"/>
+        </operation2method>
+        <pcminterface id="_ggoEAM54EeW6RpZqSiINDQ" name="DeclassificationConfirmation"/>
+      </interface2interface>
+      <pcmcomponent id="__s82QMN5EeWPE-QAhbUzuQ" name="CreditCardCenter"/>
+    </component2class>
+    <component2class javaClass="structure.sourcecode#//@topleveltype.4">
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.12/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.12/@methods.0/@parameter.0">
+            <pcmparameter id="ccd" name="ccd"/>
+          </parameter2parameter>
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.12/@methods.0/@parameter.1">
+            <pcmparameter id="airline" name="airline"/>
+          </parameter2parameter>
+          <pcmoperation id="_hAD1sMN6EeWPE-QAhbUzuQ" name="confirmRelease"/>
+        </operation2method>
+        <pcminterface id="_XQ1XUMN6EeWPE-QAhbUzuQ" name="Confirmation"/>
+      </interface2interface>
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.13/@methods.0">
+          <pcmoperation id="_p_HbYMN6EeWPE-QAhbUzuQ" name="getInput"/>
+        </operation2method>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.13/@methods.1">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.13/@methods.1/@parameter.0">
+            <pcmparameter id="flightOffers" name="flightOffers"/>
+          </parameter2parameter>
+          <pcmoperation id="_Ub62oM5lEeWFJak7Wqvc0g" name="getSingleSelection"/>
+        </operation2method>
+        <pcminterface id="_oZwAEMN6EeWPE-QAhbUzuQ" name="Input"/>
+      </interface2interface>
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.17/@methods.0">
+          <pcmoperation id="_MThTgPUXEeuE87M6otJwmw" name="ok"/>
+        </operation2method>
+        <pcminterface id="_Kk4ncPUXEeuE87M6otJwmw" name="BookingConfirmation"/>
+      </interface2interface>
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.19/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.19/@methods.0/@parameter.0">
+            <pcmparameter id="name" name="name"/>
+          </parameter2parameter>
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.19/@methods.0/@parameter.1">
+            <pcmparameter id="password" name="password"/>
+          </parameter2parameter>
+          <pcmoperation id="_N0wiAAyrEey1YdsQNY8KdA" name="setCredentials"/>
+        </operation2method>
+        <pcminterface id="_K16yUAyrEey1YdsQNY8KdA" name="UserIdentityConfiguration"/>
+      </interface2interface>
+      <pcmcomponent id="_l3SqMO7sEeurfJm_5KAHmg" name="UserInterface"/>
+    </component2class>
+    <component2class javaClass="structure.sourcecode#//@topleveltype.5">
+      <interface2interface>
+        <operation2method javaMethod="structure.sourcecode#//@topleveltype.18/@methods.0">
+          <parameter2parameter javaParameter="structure.sourcecode#//@topleveltype.18/@methods.0/@parameter.0">
+            <pcmparameter id="entry" name="entry"/>
+          </parameter2parameter>
+          <pcmoperation id="_gwavAAyQEey1YdsQNY8KdA" name="log"/>
+        </operation2method>
+        <pcminterface id="_NhhRMAyQEey1YdsQNY8KdA" name="AirlineLogging"/>
+      </interface2interface>
+      <pcmcomponent id="_MKBSwAyQEey1YdsQNY8KdA" name="AirlineLogger"/>
+    </component2class>
+  </correspondencemodel:StructuralCorrespondenceModel>
+  <securitycorrespondencemodel:SecurityCorrespondenceModel>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.1" annotatedMethod="structure.sourcecode#//@topleveltype.14/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.14/@methods.0/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_Cu2sE85yEeWFJak7Wqvc0g"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.4" annotatedMethod="structure.sourcecode#//@topleveltype.13/@methods.1"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.13/@methods.1/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_XhR8s85zEeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.2" annotatedMethod="structure.sourcecode#//@topleveltype.7/@methods.1"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.7/@methods.1/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_Y7ea4-RNEeWuZOK2YocvJA"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.2" annotatedMethod="structure.sourcecode#//@topleveltype.7/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.7/@methods.0/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_SKPxI850EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.3" annotatedMethod="structure.sourcecode#//@topleveltype.10/@methods.0"
+          securitylevel="security.joana#//@securitylevel.234" annotatedParameter="structure.sourcecode#//@topleveltype.10/@methods.0/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_otcRQ850EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.4" annotatedMethod="structure.sourcecode#//@topleveltype.12/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.12/@methods.0/@parameter.1"/>
+      <conf4cbseparametersanddatapair id="_Kk7JE851EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.4" annotatedMethod="structure.sourcecode#//@topleveltype.12/@methods.0"
+          securitylevel="security.joana#//@securitylevel.234" annotatedParameter="structure.sourcecode#//@topleveltype.12/@methods.0/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_3XZkQM50EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.1" annotatedMethod="structure.sourcecode#//@topleveltype.8/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.8/@methods.0/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_fegnE851EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.1" annotatedMethod="structure.sourcecode#//@topleveltype.8/@methods.0"
+          securitylevel="security.joana#//@securitylevel.134" annotatedParameter="structure.sourcecode#//@topleveltype.8/@methods.0/@parameter.1"/>
+      <conf4cbseparametersanddatapair id="_oO43k851EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.1" annotatedMethod="structure.sourcecode#//@topleveltype.8/@methods.0"
+          securitylevel="security.joana#//@securitylevel.119"/>
+      <conf4cbseparametersanddatapair id="_UuIJU-RQEeWuZOK2YocvJA"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.0" annotatedMethod="structure.sourcecode#//@topleveltype.9/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.9/@methods.0/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_2eLAw851EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.1" annotatedMethod="structure.sourcecode#//@topleveltype.9/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.9/@methods.0/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_2eLAw851EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.0" annotatedMethod="structure.sourcecode#//@topleveltype.9/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155"/>
+      <conf4cbseparametersanddatapair id="_Dh6HY853EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.1" annotatedMethod="structure.sourcecode#//@topleveltype.9/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155"/>
+      <conf4cbseparametersanddatapair id="_Dh6HY853EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.3" annotatedMethod="structure.sourcecode#//@topleveltype.11/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.11/@methods.0/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_bZZg8853EeW6RpZqSiINDQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.0" annotatedMethod="structure.sourcecode#//@topleveltype.6/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155"/>
+      <conf4cbseparametersanddatapair id="_z07ThQZ2EeyXAMBxzqY9rQ"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.4" annotatedMethod="structure.sourcecode#//@topleveltype.19/@methods.0"
+          securitylevel="security.joana#//@securitylevel.234" annotatedParameter="structure.sourcecode#//@topleveltype.19/@methods.0/@parameter.1"/>
+      <conf4cbseparametersanddatapair id="_VIKBtQysEey1YdsQNY8KdA"/>
+    </parametersanddatapair2annotation>
+    <parametersanddatapair2annotation>
+      <joanaAnnotation annotatedClass="structure.sourcecode#//@topleveltype.4" annotatedMethod="structure.sourcecode#//@topleveltype.19/@methods.0"
+          securitylevel="security.joana#//@securitylevel.155" annotatedParameter="structure.sourcecode#//@topleveltype.19/@methods.0/@parameter.0"/>
+      <conf4cbseparametersanddatapair id="_bSn_5QysEey1YdsQNY8KdA"/>
+    </parametersanddatapair2annotation>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="__WYS5MOFEeWst9mTsticNA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_FoQgpMOGEeWst9mTsticNA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_9N5G9MOGEeWst9mTsticNA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_W7aTtM5sEeWFJak7Wqvc0g"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_EZMjdM5xEeWFJak7Wqvc0g"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_0HJZgAyYEey1YdsQNY8KdA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_h0BOIAydEey1YdsQNY8KdA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_R8EgMAysEey1YdsQNY8KdA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="__WYS5MOFEeWst9mTsticNA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_FoQgpMOGEeWst9mTsticNA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_9N5G9MOGEeWst9mTsticNA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_W7aTtM5sEeWFJak7Wqvc0g"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_EZMjdM5xEeWFJak7Wqvc0g"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_0HJZgAyYEey1YdsQNY8KdA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_h0BOIAydEey1YdsQNY8KdA"/>
+    </dataset2securitylevel>
+    <dataset2securitylevel>
+      <conf4cbsedataset id="_R8EgMAysEey1YdsQNY8KdA"/>
+    </dataset2securitylevel>
+  </securitycorrespondencemodel:SecurityCorrespondenceModel>
+</xmi:XMI>

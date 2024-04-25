@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ASCII"?>
+<edu.kit.kastel.scbs.confidentiality:ConfidentialitySpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:edu.kit.kastel.scbs.confidentiality="http://edu.kit.kastel.scbs.confidentiality" xmlns:edu.kit.kastel.scbs.confidentiality.data="http://edu.kit.kastel.scbs.confidentiality/data" xmlns:edu.kit.kastel.scbs.confidentiality.information="http://edu.kit.kastel.scbs.confidentiality/information" xmlns:edu.kit.kastel.scbs.confidentiality.repository="http://edu.kit.kastel.scbs.confidentiality.repository" id="_4fg0MJziEeWvbrCzHVJijg">
+  <dataIdentifier xsi:type="edu.kit.kastel.scbs.confidentiality.data:DataSet" id="__WYS5MOFEeWst9mTsticNA" entityName="CreditCardInformation"/>
+  <dataIdentifier xsi:type="edu.kit.kastel.scbs.confidentiality.data:DataSet" id="_FoQgpMOGEeWst9mTsticNA" entityName="TravelData"/>
+  <dataIdentifier xsi:type="edu.kit.kastel.scbs.confidentiality.data:DataSet" id="_9N5G9MOGEeWst9mTsticNA" entityName="CreditCardInformationDeclassified"/>
+  <dataIdentifier xsi:type="edu.kit.kastel.scbs.confidentiality.data:DataSet" id="_W7aTtM5sEeWFJak7Wqvc0g" entityName="FlightOffer"/>
+  <dataIdentifier xsi:type="edu.kit.kastel.scbs.confidentiality.data:DataSet" id="_EZMjdM5xEeWFJak7Wqvc0g" entityName="Selection"/>
+  <dataIdentifier xsi:type="edu.kit.kastel.scbs.confidentiality.data:DataSet" id="_0HJZgAyYEey1YdsQNY8KdA" entityName="TechnicalSupportInformation"/>
+  <dataIdentifier xsi:type="edu.kit.kastel.scbs.confidentiality.data:DataSet" id="_h0BOIAydEey1YdsQNY8KdA" entityName="Comissioning"/>
+  <dataIdentifier xsi:type="edu.kit.kastel.scbs.confidentiality.data:DataSet" id="_R8EgMAysEey1YdsQNY8KdA" entityName="UserDetails"/>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_qOZrd-pbEe2qJZquBz4Scg">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_DlUR0Ph9Ee2dM-lboQAwDQ" dataTargets="_W7aTtM5sEeWFJak7Wqvc0g">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.8/@signatures__OperationInterface.0/@parameters__OperationSignature.0"/>
+    </information>
+    <appliedTo href="resources/model/default.repository#_ok8ZYM5wEeWFJak7Wqvc0g"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_Y3o__Ph9Ee2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_hoaSAPh9Ee2dM-lboQAwDQ" dataTargets="_W7aTtM5sEeWFJak7Wqvc0g">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.7/@signatures__OperationInterface.1/@parameters__OperationSignature.0"/>
+    </information>
+    <appliedTo href="resources/model/default.repository#_Ub62oM5lEeWFJak7Wqvc0g"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_qcmEfPh9Ee2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_6sk6EPh9Ee2dM-lboQAwDQ" dataTargets="_FoQgpMOGEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.1/@signatures__OperationInterface.1/@parameters__OperationSignature.0"/>
+    </information>
+    <appliedTo href="resources/model/default.repository#_602gYM5lEeWFJak7Wqvc0g"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_OZzSrPh-Ee2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_QsdRwPh-Ee2dM-lboQAwDQ" dataTargets="_EZMjdM5xEeWFJak7Wqvc0g _W7aTtM5sEeWFJak7Wqvc0g _FoQgpMOGEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.1/@signatures__OperationInterface.0/@parameters__OperationSignature.0"/>
+    </information>
+    <appliedTo href="resources/model/default.repository#_GmUUEMN1EeWPE-QAhbUzuQ"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_fQ-EHPh-Ee2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_mHgeEPh-Ee2dM-lboQAwDQ" dataTargets="__WYS5MOFEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.4/@signatures__OperationInterface.0/@parameters__OperationSignature.0"/>
+    </information>
+    <appliedTo href="resources/model/default.repository#_N6idsMN3EeWPE-QAhbUzuQ"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_nZU13Ph_Ee2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_pu7bQPh_Ee2dM-lboQAwDQ" dataTargets="_W7aTtM5sEeWFJak7Wqvc0g _EZMjdM5xEeWFJak7Wqvc0g _FoQgpMOGEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.6/@signatures__OperationInterface.0/@parameters__OperationSignature.1"/>
+    </information>
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_ymHeYPh_Ee2dM-lboQAwDQ" dataTargets="__WYS5MOFEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.6/@signatures__OperationInterface.0/@parameters__OperationSignature.0"/>
+    </information>
+    <appliedTo href="resources/model/default.repository#_hAD1sMN6EeWPE-QAhbUzuQ"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_FeX93PiAEe2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_I_c34PiAEe2dM-lboQAwDQ" dataTargets="_W7aTtM5sEeWFJak7Wqvc0g _EZMjdM5xEeWFJak7Wqvc0g _FoQgpMOGEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.2/@signatures__OperationInterface.0/@parameters__OperationSignature.0"/>
+    </information>
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_N8zisPiAEe2dM-lboQAwDQ" dataTargets="_9N5G9MOGEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.2/@signatures__OperationInterface.0/@parameters__OperationSignature.1"/>
+    </information>
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ReturnValueInformation" id="_RqzecviAEe2dM-lboQAwDQ" dataTargets="_9N5G9MOGEeWst9mTsticNA _W7aTtM5sEeWFJak7Wqvc0g _EZMjdM5xEeWFJak7Wqvc0g _FoQgpMOGEeWst9mTsticNA"/>
+    <appliedTo href="resources/model/default.repository#_00dt8MNyEeWPE-QAhbUzuQ"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_X4vnZ_iAEe2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_tkSGwPiAEe2dM-lboQAwDQ" dataTargets="_FoQgpMOGEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.1/@signatures__OperationInterface.1/@parameters__OperationSignature.0"/>
+    </information>
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ReturnValueInformation" id="_zMY-wviAEe2dM-lboQAwDQ" dataTargets="_W7aTtM5sEeWFJak7Wqvc0g _FoQgpMOGEeWst9mTsticNA"/>
+    <appliedTo href="resources/model/default.repository#_R6uH4MNyEeWPE-QAhbUzuQ"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_1UukTPiAEe2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_5_Rn0PiAEe2dM-lboQAwDQ" dataTargets="_W7aTtM5sEeWFJak7Wqvc0g _EZMjdM5xEeWFJak7Wqvc0g _FoQgpMOGEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.5/@signatures__OperationInterface.0/@parameters__OperationSignature.0"/>
+    </information>
+    <appliedTo href="resources/model/default.repository#_JXJqsMN6EeWPE-QAhbUzuQ"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_BF6TXPiBEe2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:CallInformation" id="_DokdU_iBEe2dM-lboQAwDQ" dataTargets="_FoQgpMOGEeWst9mTsticNA"/>
+    <appliedTo href="resources/model/default.repository#_nXaBAMN0EeWPE-QAhbUzuQ"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_F2BzbPiBEe2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_KxaIQPiBEe2dM-lboQAwDQ" dataTargets="_0HJZgAyYEey1YdsQNY8KdA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.12/@signatures__OperationInterface.0/@parameters__OperationSignature.0"/>
+    </information>
+    <appliedTo href="resources/model/default.repository#_gwavAAyQEey1YdsQNY8KdA"/>
+  </informationFlows>
+  <informationFlows xsi:type="edu.kit.kastel.scbs.confidentiality.repository:SignatureInformationFlow" id="_PwpCbPiBEe2dM-lboQAwDQ">
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_TI-3MPiBEe2dM-lboQAwDQ" dataTargets="_R8EgMAysEey1YdsQNY8KdA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.13/@signatures__OperationInterface.0/@parameters__OperationSignature.1"/>
+    </information>
+    <information xsi:type="edu.kit.kastel.scbs.confidentiality.information:ParameterInformation" id="_Wz97MPiBEe2dM-lboQAwDQ" dataTargets="_FoQgpMOGEeWst9mTsticNA">
+      <appliedTo href="resources/model/default.repository#//@interfaces__Repository.13/@signatures__OperationInterface.0/@parameters__OperationSignature.0"/>
+    </information>
+    <appliedTo href="resources/model/default.repository#_N0wiAAyrEey1YdsQNY8KdA"/>
+  </informationFlows>
+  <locations id="__RugEc6AEeWqSdNpnh9tmQ" entityName="TravelAgency"/>
+  <locations id="_CB0pIc6BEeWqSdNpnh9tmQ" entityName="Airline"/>
+  <locations id="_DCp0Ac6BEeWqSdNpnh9tmQ" entityName="UserControlled"/>
+  <locations id="_IYDLYc6BEeWqSdNpnh9tmQ" entityName="Internet"/>
+  <locations id="_SpLngc6CEeWqSdNpnh9tmQ" entityName="CoffeShop"/>
+  <locations id="_nv3tYc6CEeWqSdNpnh9tmQ" entityName="Street"/>
+  <locations id="_NX09KgylEey1YdsQNY8KdA" entityName="SupportCenter"/>
+  <tamperProtections id="_tGO4u5MlEeyXH89NZ6CP6A" entityName="AirlineLock"/>
+  <tamperProtections id="_uzwKe5MlEeyXH89NZ6CP6A" entityName="TravelAgencyLock"/>
+  <tamperProtections id="_xoN2K5MlEeyXH89NZ6CP6A" entityName="ConfidentialView"/>
+  <tamperProtections id="_1ZcsG5MlEeyXH89NZ6CP6A" entityName="Underground"/>
+  <tamperProtections id="_5bQUq5MlEeyXH89NZ6CP6A" entityName="SupportCenterLock"/>
+</edu.kit.kastel.scbs.confidentiality:ConfidentialitySpecification>

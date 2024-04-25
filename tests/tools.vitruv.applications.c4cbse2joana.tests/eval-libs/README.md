@@ -1,0 +1,2 @@
+# Usage
+Please put these jars into the dropins/plugins/ folder of your eclipse installation to install them. Be aware that the .joana-jars are different as the define the "example.org/joana" and "example.org/joana2" Metamodel mappings used for the results by haering and by becker in the evaluation.

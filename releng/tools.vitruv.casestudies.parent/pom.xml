@@ -39,7 +39,7 @@
 		<repository>
 			<id>Demo Metamodels</id>
 			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/release/metamodels/demo/1.8.2</url>
+			<url>https://kit-sdq.github.io/updatesite/release/metamodels/demo/1.9.0</url>
 		</repository>
 		<repository>
 			<id>SDQ Commons</id>
@@ -55,6 +55,11 @@
 			<id>EMFText and JaMoPP (P2 Wrapper)</id>
 			<layout>p2</layout>
 			<url>https://kit-sdq.github.io/updatesite/release/p2-wrapper/latest/</url>
+		</repository>
+		<repository>
+			<id>New Jamopp</id>
+			<layout>p2</layout>
+			<url>https://updatesite.palladio-simulator.com/palladio-supporting-eclipsejavadevelopmenttools/releases/5.1.0/</url>
 		</repository>
 		<repository>
 			<id>Palladiosimulator</id>

@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: tools.vitruv.applications.c4cbse2joana
+Bundle-SymbolicName: tools.vitruv.applications.c4cbse2joana;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Export-Package: tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification
+Require-Bundle: edu.kit.ipd.sdq.metamodels.joana,
+ edu.kit.ipd.sdq.metamodels.confidentiality4cbse,
+ tools.mdsd.jamopp.model,
+ tools.vitruv.dsls.reactions.runtime,
+ edu.kit.ipd.sdq.commons.util.emf,
+ org.eclipse.emf.common,
+ org.palladiosimulator.pcm
+Automatic-Module-Name: C4CBSE2JOANA
+Bundle-RequiredExecutionEnvironment: JavaSE-17

@@ -24,3 +24,6 @@ EvaluationData
 *.DS_Store
 *.polyglot
 *.pom.tycho
+*.tycho
+.polyglot.META-INF
+.polyglot.feature.xml
