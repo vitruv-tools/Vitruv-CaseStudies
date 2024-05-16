@@ -1,0 +1,5 @@
+package tools.vitruv.applications.smartHomeumljava
+
+class SmartHomeToUmlChangePropagationSpecification extends mir.reactions.javaToUml.JavaToUmlChangePropagationSpecification {
+	
+}
