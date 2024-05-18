@@ -2,21 +2,21 @@ package tools.vitruv.applications.cbs.commonalities.java.operators
 
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
-import org.emftext.language.java.JavaUniquePathConstructor
 import org.emftext.language.java.commons.NamespaceAwareElement
 import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.containers.ContainersPackage
 import org.emftext.language.java.containers.Package
-import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper
+import tools.vitruv.applications.cbs.testutils.oldmetamodelutils.JavaPersistenceHelper
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.reference.AbstractReferenceMappingOperator
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.reference.ReferenceMappingOperator
 import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState
 
 import static com.google.common.base.Preconditions.*
 import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.*
+import static extension tools.vitruv.applications.cbs.testutils.oldmetamodelutils.JavaContainerAndClassifierUtil.*
 
 import static extension tools.vitruv.dsls.commonalities.runtime.helper.IntermediateModelHelper.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
-import org.emftext.language.java.containers.ContainersPackage
+import org.emftext.language.java.JavaUniquePathConstructor
 
 // TODO Some duplication with JavaSubPackagesOperator
 @ReferenceMappingOperator(
@@ -49,6 +49,10 @@ class JavaPackageCompilationUnitsOperator extends AbstractReferenceMappingOperat
 		val Package package = validateContainer(container)
 		logger.trace('''  Found compilation units in package '«package.packageString»': «package.compilationUnits»''')
 		return package.compilationUnits
+	}
+	
+	def Iterable<CompilationUnit> compilationUnits(Package package1) {
+		package1.containedObjects.filter(CompilationUnit).toList
 	}
 
 	override getContainer(EObject object) {

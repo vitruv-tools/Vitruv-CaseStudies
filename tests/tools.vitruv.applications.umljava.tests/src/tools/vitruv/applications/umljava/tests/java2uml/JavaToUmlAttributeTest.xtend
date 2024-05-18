@@ -2,10 +2,10 @@ package tools.vitruv.applications.umljava.tests.java2uml
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.JavaClasspath
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.JavaClasspath
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.members.MembersFactory
+import tools.mdsd.jamopp.model.java.types.TypeReference
 import org.junit.jupiter.api.Test
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
@@ -92,7 +92,7 @@ class JavaToUmlAttributeTest extends AbstractJavaToUmlTest {
 	def void testCreateAttributeOfStandardLibraryClass() {
 		createJavaClassInRootPackage(CLASS_NAME)
 		changeJavaView [
-			val standardLibraryClass = JavaClasspath.get().getClassifier("java.lang.Iterable") as ConcreteClassifier
+			val standardLibraryClass = JavaClasspath.get().getConcreteClassifier("java.lang.Iterable") as ConcreteClassifier
 			claimJavaClass(CLASS_NAME) => [
 				members += MembersFactory.eINSTANCE.createField => [
 					name = ATTRIBUTE_NAME

@@ -3,8 +3,8 @@ package tools.vitruv.applications.umljava.tests.java2uml
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.members.MembersFactory
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 
 import static org.hamcrest.CoreMatchers.*
@@ -16,6 +16,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
 
 /**
  * This class contains Tests for creating, deleting and renaming enumerations.
@@ -177,6 +178,7 @@ class JavaToUmlEnumTest extends AbstractJavaToUmlTest {
 		changeJavaView [
 			claimJavaEnum(ENUM_NAME) => [
 				members += MembersFactory.eINSTANCE.createClassMethod => [
+					statement = StatementsFactory.eINSTANCE.createEmptyStatement
 					name = OPERATION_NAME
 					typeReference = TypesFactory.eINSTANCE.createVoid
 					makePublic

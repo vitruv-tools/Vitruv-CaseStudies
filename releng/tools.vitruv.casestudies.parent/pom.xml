@@ -57,6 +57,11 @@
 			<url>https://kit-sdq.github.io/updatesite/release/p2-wrapper/latest/</url>
 		</repository>
 		<repository>
+			<id>JaMoPP Extended</id>
+			<layout>p2</layout>
+			<url>https://updatesite.mdsd.tools/extended-java-model-parser-and-printer/nightly/</url>
+		</repository>
+		<repository>
 			<id>Palladiosimulator</id>
 			<layout>p2</layout>
 			<url>https://updatesite.palladio-simulator.com/palladio-build-updatesite/releases/5.0.0/</url>

@@ -5,11 +5,11 @@ import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.apache.log4j.Logger
-import org.emftext.language.java.classifiers.ClassifiersFactory
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.types.Type
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.classifiers.ClassifiersFactory
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.types.Type
+import tools.mdsd.jamopp.model.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*

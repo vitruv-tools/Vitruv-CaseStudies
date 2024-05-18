@@ -10,9 +10,9 @@ import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper
-import org.emftext.language.java.commons.NamedElement
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.Package
+import tools.mdsd.jamopp.model.java.commons.NamedElement
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.Package
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.palladiosimulator.pcm.repository.Repository

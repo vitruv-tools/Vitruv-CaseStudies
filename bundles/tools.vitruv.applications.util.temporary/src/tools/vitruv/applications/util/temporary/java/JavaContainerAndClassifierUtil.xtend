@@ -7,30 +7,30 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.Iterator
 import java.util.List
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.classifiers.Classifier
-import org.emftext.language.java.classifiers.ClassifiersFactory
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.classifiers.Enumeration
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.commons.NamedElement
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.ContainersFactory
-import org.emftext.language.java.containers.Package
-import org.emftext.language.java.members.Constructor
-import org.emftext.language.java.members.EnumConstant
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.Member
-import org.emftext.language.java.parameters.Parameter
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.classifiers.Classifier
+import tools.mdsd.jamopp.model.java.classifiers.ClassifiersFactory
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.classifiers.Enumeration
+import tools.mdsd.jamopp.model.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.commons.NamedElement
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.ContainersFactory
+import tools.mdsd.jamopp.model.java.containers.Package
+import tools.mdsd.jamopp.model.java.members.Constructor
+import tools.mdsd.jamopp.model.java.members.EnumConstant
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.members.Member
+import tools.mdsd.jamopp.model.java.parameters.Parameter
+import tools.mdsd.jamopp.model.java.types.NamespaceClassifierReference
+import tools.mdsd.jamopp.model.java.types.TypeReference
 
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import java.util.Optional
-import org.emftext.language.java.commons.NamespaceAwareElement
+import tools.mdsd.jamopp.model.java.commons.NamespaceAwareElement
 import static java.util.Collections.emptyList
-import org.emftext.language.java.containers.ContainersPackage
+import tools.mdsd.jamopp.model.java.containers.ContainersPackage
 import static extension edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil.isPathmap
 import tools.vitruv.change.correspondence.view.EditableCorrespondenceModelView
 
@@ -183,13 +183,8 @@ class JavaContainerAndClassifierUtil {
 		}
 	}
 
-	def static removeJavaClassifierFromPackage(Package jPackage, ConcreteClassifier jClassifier) {
-		val iter = jPackage.compilationUnits.iterator
-		while (iter.hasNext) {
-			if (iter.next.name.equals(jClassifier.name)) {
-				iter.remove
-			}
-		}
+	def static removeJavaClassifierFromPackage(ConcreteClassifier jClassifier) {
+		jClassifier.package = null;
 	}
 
 	def static File createPackageInfo(String directory, String packageName) {
@@ -212,7 +207,7 @@ class JavaContainerAndClassifierUtil {
 	 */
 	static def <T extends ConcreteClassifier> T findClassifier(String name, Package javaPackage,
 		java.lang.Class<T> classifierType) {
-		val matchingClassifiers = javaPackage.compilationUnits.map[it.classifiers].flatten.filter(classifierType).filter [
+		val matchingClassifiers = javaPackage.classifiers.filter(classifierType).filter [
 			it.name.toFirstUpper == name.toFirstUpper
 		]
 		if (matchingClassifiers.size > 1)

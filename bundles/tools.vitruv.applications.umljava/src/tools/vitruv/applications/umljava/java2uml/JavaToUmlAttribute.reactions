@@ -2,7 +2,7 @@ import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimNotMany
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
-import "http://www.emftext.org/java" as java
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
 
 reactions: javaToUmlAttribute
 in reaction to changes in java

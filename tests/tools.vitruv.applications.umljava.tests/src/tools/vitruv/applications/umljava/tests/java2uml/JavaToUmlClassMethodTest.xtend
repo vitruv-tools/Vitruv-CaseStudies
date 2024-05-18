@@ -2,10 +2,10 @@ package tools.vitruv.applications.umljava.tests.java2uml
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.members.ClassMethod
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.parameters.ParametersFactory
-import org.emftext.language.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.members.ClassMethod
+import tools.mdsd.jamopp.model.java.members.MembersFactory
+import tools.mdsd.jamopp.model.java.parameters.ParametersFactory
+import tools.mdsd.jamopp.model.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -20,6 +20,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
 import static extension tools.vitruv.applications.umljava.tests.util.JavaQueryUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
 
 /**
  * A test class to test the class method reactions.
@@ -119,7 +120,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 	}
 
 	private def void changeAndCheckPropertyOfMethod(String className, String methodName,
-		(org.emftext.language.java.members.ClassMethod)=>void changeJavaMethod,
+		(tools.mdsd.jamopp.model.java.members.ClassMethod)=>void changeJavaMethod,
 		(org.eclipse.uml2.uml.Operation)=>void validateUmlMethod) {
 		changeClassMethod(CLASS_NAME, OPERATION_NAME) [
 			changeJavaMethod.apply(it)
@@ -291,6 +292,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 		changeJavaView [
 			claimJavaClass(CLASS_NAME) => [
 				members += MembersFactory.eINSTANCE.createConstructor => [
+					block = StatementsFactory.eINSTANCE.createBlock
 					name = CLASS_NAME
 					javaVisibilityModifier = JavaVisibility.PUBLIC
 				]
@@ -304,6 +306,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaToUmlTest {
 		changeJavaView [
 			claimJavaClass(className) => [
 				members += MembersFactory.eINSTANCE.createClassMethod => [
+					statement = StatementsFactory.eINSTANCE.createEmptyStatement
 					name = methodName
 					typeReference = TypesFactory.eINSTANCE.createVoid
 					makePublic

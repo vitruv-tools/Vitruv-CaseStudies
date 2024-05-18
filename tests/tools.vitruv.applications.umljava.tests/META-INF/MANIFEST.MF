@@ -18,9 +18,9 @@ Require-Bundle: tools.vitruv.applications.umljava,
  edu.kit.ipd.sdq.commons.util.java,
  org.eclipse.xtend.lib,
  org.apache.log4j,
- org.emftext.language.java.resource.java,
- org.emftext.language.java.resource,
- tools.vitruv.applications.testutility
+ tools.vitruv.applications.testutility,
+ tools.mdsd.jamopp.model;bundle-version="6.0.0",
+ tools.mdsd.jamopp.resource;bundle-version="6.0.0"
 Bundle-ClassPath: .,
  target/dependency/json.jar
 Bundle-Vendor: vitruv.tools

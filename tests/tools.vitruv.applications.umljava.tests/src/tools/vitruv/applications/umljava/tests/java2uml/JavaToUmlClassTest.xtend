@@ -134,7 +134,7 @@ class JavaToUmlClassTest extends AbstractJavaToUmlTest {
 	}
 
 	private def void changeAndCheckPropertyOfClass(String className,
-		(org.emftext.language.java.classifiers.Class)=>void changeJavaClass,
+		(tools.mdsd.jamopp.model.java.classifiers.Class)=>void changeJavaClass,
 		(org.eclipse.uml2.uml.Class)=>void validateUmlClass) {
 		changeJavaView [
 			claimJavaClass(className) => [

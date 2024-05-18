@@ -3,8 +3,8 @@ package tools.vitruv.applications.util.temporary.java;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.resource.Resource;
-import org.emftext.language.java.JavaClasspath;
-import org.emftext.language.java.resource.JavaSourceOrClassFileResourceFactoryImpl;
+import tools.mdsd.jamopp.model.java.JavaClasspath;
+import tools.mdsd.jamopp.resource.JavaResource2Factory;
 
 public final class JavaSetup {
 	private JavaSetup() {
@@ -23,7 +23,7 @@ public final class JavaSetup {
 	 * Prepares for using Java without an OSGI environment registering file extensions for the default resource factories.
 	 */
 	public static void prepareFactories() {
-		prepareFactories(() -> new JavaSourceOrClassFileResourceFactoryImpl());
+		prepareFactories(() -> new JavaResource2Factory());
 	}
 
 	/**
@@ -33,7 +33,7 @@ public final class JavaSetup {
 	 * @see JamoppLibraryHelper#registerStdLib()
 	 */
 	public static void resetClasspathAndRegisterStandardLibrary() {
-		JavaClasspath.reset();
+		JavaClasspath.get().clear();
 		JamoppLibraryHelper.registerStdLib();
 	}
 	

@@ -1,11 +1,10 @@
 package tools.vitruv.applications.util.temporary.java
 
-import org.emftext.language.java.JavaClasspath
-import org.emftext.language.java.JavaClasspath.Initializer
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.emf.common.util.URI
-import static com.google.common.base.Preconditions.checkState
 import java.nio.file.Path
+import org.eclipse.emf.common.util.URI
+import tools.mdsd.jamopp.model.java.JavaClasspath
+
+import static com.google.common.base.Preconditions.checkState
 
 /**
  * This helper class allows to load the Java standard library in JaMoPP also with
@@ -32,13 +31,6 @@ class JamoppLibraryHelper {
 		// To do so, we disable automatic initialization of the standard library using the classpath 
 		// (where library cannot be found in Java 9 and above) and manually load the base Java module
 		} else {
-			JavaClasspath.initializers.add(new Initializer() {
-				override initialize(Resource resource) {}
-
-				override requiresLocalClasspath() { false }
-
-				override requiresStdLib() { false }
-			})
 			registerStdLibraryModule(BASE_LIBRARY_NAME)
 		}
 	}
@@ -55,9 +47,7 @@ class JamoppLibraryHelper {
 
 		val modulePath = System.getProperty("java.home") + STANDARD_LIBRARY_FOLDER_IN_HOME + name + ".jmod"
 		val moduleUri = URI.createFileURI(modulePath)
-		// From java 9, the module files do not directly contain the classes in the package structure
-		// but are placed in the "classes" folder, so that prefix has to be removed.
-		JavaClasspath.get().registerClassifierJar(moduleUri, "classes/");
+		JavaClasspath.get().registerZip(moduleUri);
 	}
 
 	/**
@@ -67,7 +57,7 @@ class JamoppLibraryHelper {
 	 * @param pathToLibrary - the path to the library to register
 	 */
 	static def void registerLocalLibrary(Path pathToLibrary) {
-		JavaClasspath.get().registerClassifierJar(URI.createFileURI(pathToLibrary.toString), "");
+		JavaClasspath.get().registerZip(URI.createFileURI(pathToLibrary.toString));
 	}
 
 }

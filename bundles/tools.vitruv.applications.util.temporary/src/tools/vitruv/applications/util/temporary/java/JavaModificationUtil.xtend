@@ -2,41 +2,41 @@ package tools.vitruv.applications.util.temporary.java
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.apache.log4j.Logger
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.TypesFactory
-import org.emftext.language.java.parameters.Parameter
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.parameters.ParametersFactory
-import org.emftext.language.java.statements.StatementsFactory
-import org.emftext.language.java.expressions.ExpressionsFactory
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.statements.Statement
-import org.emftext.language.java.references.ReferencesFactory
-import org.emftext.language.java.literals.LiteralsFactory
-import org.emftext.language.java.operators.OperatorsFactory
-import org.emftext.language.java.imports.Import
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.classifiers.Classifier
-import org.emftext.language.java.imports.ImportsFactory
-import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.types.Char
-import org.emftext.language.java.types.Int
+import tools.mdsd.jamopp.model.java.types.NamespaceClassifierReference
+import tools.mdsd.jamopp.model.java.types.TypesFactory
+import tools.mdsd.jamopp.model.java.parameters.Parameter
+import tools.mdsd.jamopp.model.java.types.TypeReference
+import tools.mdsd.jamopp.model.java.parameters.ParametersFactory
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
+import tools.mdsd.jamopp.model.java.expressions.ExpressionsFactory
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.statements.Statement
+import tools.mdsd.jamopp.model.java.references.ReferencesFactory
+import tools.mdsd.jamopp.model.java.literals.LiteralsFactory
+import tools.mdsd.jamopp.model.java.operators.OperatorsFactory
+import tools.mdsd.jamopp.model.java.imports.Import
+import tools.mdsd.jamopp.model.java.classifiers.ConcreteClassifier
+import tools.mdsd.jamopp.model.java.classifiers.Classifier
+import tools.mdsd.jamopp.model.java.imports.ImportsFactory
+import tools.mdsd.jamopp.model.java.types.PrimitiveType
+import tools.mdsd.jamopp.model.java.types.Char
+import tools.mdsd.jamopp.model.java.types.Int
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.emftext.language.java.imports.ClassifierImport
-import org.emftext.language.java.JavaClasspath
+import tools.mdsd.jamopp.model.java.modifiers.ModifiersFactory
+import tools.mdsd.jamopp.model.java.imports.ClassifierImport
+import tools.mdsd.jamopp.model.java.JavaClasspath
 import static tools.vitruv.applications.util.temporary.java.JavaQueryUtil.*
-import org.emftext.language.java.modifiers.AnnotableAndModifiable
-import org.emftext.language.java.annotations.AnnotationsFactory
-import org.emftext.language.java.classifiers.ClassifiersFactory
+import tools.mdsd.jamopp.model.java.modifiers.AnnotableAndModifiable
+import tools.mdsd.jamopp.model.java.annotations.AnnotationsFactory
+import tools.mdsd.jamopp.model.java.classifiers.ClassifiersFactory
 import java.util.List
-import org.emftext.language.java.members.Constructor
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.instantiations.NewConstructorCall
-import org.emftext.language.java.references.IdentifierReference
+import tools.mdsd.jamopp.model.java.members.Constructor
+import tools.mdsd.jamopp.model.java.classifiers.Class
+import tools.mdsd.jamopp.model.java.members.MembersFactory
+import tools.mdsd.jamopp.model.java.instantiations.NewConstructorCall
+import tools.mdsd.jamopp.model.java.references.IdentifierReference
 import java.util.ArrayList
-import org.emftext.language.java.references.ReferenceableElement
+import tools.mdsd.jamopp.model.java.references.ReferenceableElement
 
 @Utility 
 class JavaModificationUtil {
@@ -165,7 +165,7 @@ class JavaModificationUtil {
 	}
 
 	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(
-		org.emftext.language.java.types.Void type) {
+		tools.mdsd.jamopp.model.java.types.Void type) {
 		createNamespaceClassifierReferenceForName("java.lang", "Void")
 	}
 
@@ -192,7 +192,7 @@ class JavaModificationUtil {
 	def static ConcreteClassifier getClassifier(String qualifiedName) {
 		// To resolve classifiers from the Java standard library, this requires the Java standard library to be
 		// registered (JavaClasspath.get().registerStdLib). Should be done by the domain by default.
-		JavaClasspath.get().getClassifier(qualifiedName) as ConcreteClassifier
+		JavaClasspath.get().getConcreteClassifier(qualifiedName) as ConcreteClassifier
 	}
 
 	def static addAnnotationToAnnotableAndModifiable(AnnotableAndModifiable annotableAndModifiable,
@@ -221,6 +221,7 @@ class JavaModificationUtil {
 	
 	def static addConstructorToClass(Class javaClass) {
 		val Constructor constructor = MembersFactory.eINSTANCE.createConstructor
+		constructor.block = StatementsFactory.eINSTANCE.createBlock
 		addConstructorToClass(constructor, javaClass)
 	}
 

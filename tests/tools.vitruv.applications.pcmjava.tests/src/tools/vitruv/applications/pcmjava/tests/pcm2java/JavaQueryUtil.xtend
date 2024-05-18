@@ -1,8 +1,8 @@
 package tools.vitruv.applications.pcmjava.tests.pcm2java
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.Package
+import tools.mdsd.jamopp.model.java.containers.CompilationUnit
+import tools.mdsd.jamopp.model.java.containers.Package
 import tools.vitruv.framework.views.View
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne

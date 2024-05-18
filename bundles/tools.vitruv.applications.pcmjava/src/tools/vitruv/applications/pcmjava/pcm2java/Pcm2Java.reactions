@@ -6,19 +6,19 @@ import java.util.List
 import java.util.Stack
 import java.util.Vector
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.containers.ContainersPackage
-import org.emftext.language.java.expressions.AssignmentExpression
-import org.emftext.language.java.generics.GenericsFactory
-import org.emftext.language.java.imports.ClassifierImport
-import org.emftext.language.java.instantiations.NewConstructorCall
-import org.emftext.language.java.members.Constructor
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.emftext.language.java.references.IdentifierReference
-import org.emftext.language.java.references.SelfReference
-import org.emftext.language.java.statements.ExpressionStatement
-import org.emftext.language.java.types.PrimitiveType
+import tools.mdsd.jamopp.model.java.classifiers.Interface
+import tools.mdsd.jamopp.model.java.containers.ContainersPackage
+import tools.mdsd.jamopp.model.java.expressions.AssignmentExpression
+import tools.mdsd.jamopp.model.java.generics.GenericsFactory
+import tools.mdsd.jamopp.model.java.imports.ClassifierImport
+import tools.mdsd.jamopp.model.java.instantiations.NewConstructorCall
+import tools.mdsd.jamopp.model.java.members.Constructor
+import tools.mdsd.jamopp.model.java.members.Field
+import tools.mdsd.jamopp.model.java.modifiers.ModifiersFactory
+import tools.mdsd.jamopp.model.java.references.IdentifierReference
+import tools.mdsd.jamopp.model.java.references.SelfReference
+import tools.mdsd.jamopp.model.java.statements.ExpressionStatement
+import tools.mdsd.jamopp.model.java.types.PrimitiveType
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
@@ -37,8 +37,10 @@ import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelpe
 import static extension tools.vitruv.applications.pcmjava.PcmJavaTransformationUtil.getCorrespondingPackageName
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
+import tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil
+import tools.mdsd.jamopp.model.java.statements.StatementsFactory
 
-import "http://www.emftext.org/java" as java
+import "https://mdsd.tools/jamopp/6.0.0/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: pcm2java
@@ -260,6 +262,7 @@ routine createAssemblyContextConstructor(pcm::AssemblyContext assemblyContext, j
 		val constructor = new java::Constructor
 	}
 	update {
+		constructor.block = StatementsFactory.eINSTANCE.createBlock
 		createAssemblyContextStatement(assemblyContext, constructor, compositeComponentJavaClass)
 		addConstructorToClass(constructor, compositeComponentJavaClass)
 	}
@@ -699,7 +702,7 @@ routine createOrFindJavaClass(pcm::NamedElement pcmElement, java::Package contai
 		require absence of java::Class corresponding to pcmElement
 	}
 	update {
-		val foundClass = findClassifier(className, containingPackage, org.emftext.language.java.classifiers.Class)
+		val foundClass = findClassifier(className, containingPackage, tools.mdsd.jamopp.model.java.classifiers.Class)
 		if (foundClass === null) {
 			createJavaClass(pcmElement, containingPackage, className)
 		} else {
@@ -766,7 +769,7 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 			classifier.name.toFirstUpper + ".java"
 		compilationUnit.classifiers += classifier;
 		persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
-		containingPackage.compilationUnits += compilationUnit
+		JavaContainerAndClassifierUtil.updateNamespaces(compilationUnit, containingPackage);
 	}
 }
 
@@ -1051,6 +1054,7 @@ routine createMethodForOperationSignature(pcm::OperationSignature operationSigna
 	update {
 		addCorrespondenceBetween(interfaceMethod, operationSignature)
 		interfaceMethod.name = operationSignature.entityName;
+		interfaceMethod.statement = StatementsFactory.eINSTANCE.createEmptyStatement
 		changeInterfaceMethodReturnType(interfaceMethod, operationSignature.returnType__OperationSignature);
 		javaInterface.members += interfaceMethod;
 	}

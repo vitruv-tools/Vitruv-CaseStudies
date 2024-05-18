@@ -7,12 +7,12 @@ Bundle-Version: 3.0.1.qualifier
 Bundle-Vendor: vitruv.tools
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.uml2.uml;visibility:=reexport,
- org.emftext.language.java;visibility:=reexport,
  edu.kit.ipd.sdq.activextendannotations,
  edu.kit.ipd.sdq.commons.util.emf,
  edu.kit.ipd.sdq.commons.util.java,
  tools.vitruv.framework.applications,
  tools.vitruv.dsls.reactions.runtime,
- tools.vitruv.applications.util.temporary;visibility:=reexport
+ tools.vitruv.applications.util.temporary;visibility:=reexport,
+ tools.mdsd.jamopp.model;bundle-version="6.0.0"
 Export-Package: tools.vitruv.applications.umljava,
  tools.vitruv.applications.umljava.util
