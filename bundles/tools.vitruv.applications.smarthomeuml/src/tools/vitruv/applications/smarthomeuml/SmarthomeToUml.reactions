@@ -29,13 +29,13 @@ routine createUmlModel(smarthome::SmartHomeSystem smartHomeSystem) {
 		model.URI = smartHomeSystem.eResource.URI.appendFileExtension("uml").toString
 		var res = smartHomeSystem.eResource.resourceSet.createResource(URI.createURI(model.URI))
 		res.contents.add(model)
-		createComponentUmlInterface(smartHomeSystem)
-		createProtocolUmlInterface()
+		createComponentUmlInterface()
+		createProtocolUmlInterface(smartHomeSystem)
 	}
 }
 
 
-routine createProtocolUmlInterface() {
+routine createProtocolUmlInterface(smarthome::SmartHomeSystem smartHomeSystem) {
 	match {
 //		require absence of uml::Action corresponding to service
 		val model = retrieve uml::Model corresponding to UMLPackage.eINSTANCE
@@ -66,7 +66,7 @@ routine createComponentUmlInterface() {
 }
 
 reaction DeviceInserted {
-	after element smarthome::Device inserted in smarthome::SmartHomeSystem[device]
+	after element smarthome::Device inserted in smarthome::SmartHomeSystem[components]
 	call {
 		createDeviceUmlClass(newValue)
 		}
@@ -87,7 +87,7 @@ routine createDeviceUmlClass(smarthome::Device device) {
 }
 
 reaction ServerInserted {
-	after element smarthome::Server inserted in smarthome::SmartHomeSystem[server]
+	after element smarthome::Server inserted in smarthome::SmartHomeSystem[components]
 	call {
 		createServerUmlClass(newValue)
 		}
