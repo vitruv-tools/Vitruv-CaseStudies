@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Smarthomeuml
-Bundle-SymbolicName: tools.vitruv.applications.smarthomeuml
-Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: tools.vitruv.applications.smarthomeuml;singleton:=true
+Bundle-Version: 3.0.1.qualifier
+Bundle-Vendor: vitruv.tools
 Export-Package: tools.vitruv.applications.smarthomeuml
 Automatic-Module-Name: tools.vitruv.applications.smarthomeuml
 Bundle-RequiredExecutionEnvironment: JavaSE-17

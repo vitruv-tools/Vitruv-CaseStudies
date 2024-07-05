@@ -24,5 +24,6 @@ Require-Bundle: tools.vitruv.dsls.reactions,
  tools.vitruv.dsls.demo.insurancepersons,
  edu.kit.ipd.sdq.metamodels.autosar,
  edu.kit.ipd.sdq.metamodels.simulink,
+ edu.kit.ipd.sdq.metamodels.smarthome,
  tools.vitruv.dsls.demo.insurancepersons.tests
 Bundle-Vendor: tools.vitruv
