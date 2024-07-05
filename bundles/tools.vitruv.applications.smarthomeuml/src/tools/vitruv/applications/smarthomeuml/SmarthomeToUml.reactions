@@ -1,0 +1,108 @@
+import org.eclipse.emf.common.util.URI
+import edu.kit.ipd.sdq.metamodels.smarthome.SmarthomePackage
+import org.eclipse.uml2.uml.UMLPackage
+import edu.kit.ipd.sdq.metamodels.smarthome.impl.SmarthomeFactoryImpl
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "edu.kit.ipd.sdq.metamodels.smarthome" as smarthome
+
+reactions: smarthomeToUml
+in reaction to changes in smarthome
+execute actions in uml
+
+reaction SystemArchitectureCreation {
+	after element smarthome::SmartHomeSystem created
+	call createUmlModel(affectedEObject)
+}
+
+routine createUmlModel(smarthome::SmartHomeSystem smartHomeSystem) {
+	match {
+		require absence of uml::Model corresponding to smartHomeSystem
+	}
+	create {
+		val model = new uml::Model
+	}
+	update {
+		addCorrespondenceBetween(smartHomeSystem, model)
+		addCorrespondenceBetween(SmarthomePackage.eINSTANCE, smartHomeSystem)
+		addCorrespondenceBetween(UMLPackage.eINSTANCE, model)
+		model.URI = smartHomeSystem.eResource.URI.appendFileExtension("uml").toString
+		var res = smartHomeSystem.eResource.resourceSet.createResource(URI.createURI(model.URI))
+		res.contents.add(model)
+		createComponentUmlInterface(smartHomeSystem)
+		createProtocolUmlInterface()
+	}
+}
+
+
+routine createProtocolUmlInterface() {
+	match {
+//		require absence of uml::Action corresponding to service
+		val model = retrieve uml::Model corresponding to UMLPackage.eINSTANCE
+	}
+	create {
+		val interf = new uml::Interface
+	}
+	update {
+		addCorrespondenceBetween(smartHomeSystem, interf)
+		model.packagedElements += interf
+	}
+}
+
+routine createComponentUmlInterface() {
+	match {
+//		require absence of uml::Action corresponding to service
+		val model = retrieve uml::Model corresponding to UMLPackage.eINSTANCE
+	}
+	create {
+		val interf = new uml::Interface
+	}
+	update {
+		val smartHomeFactory = SmarthomeFactoryImpl.init()
+		val component = smartHomeFactory.createComponent()
+		addCorrespondenceBetween(component, interf)
+		model.packagedElements += interf
+	}
+}
+
+reaction DeviceInserted {
+	after element smarthome::Device inserted in smarthome::SmartHomeSystem[device]
+	call {
+		createDeviceUmlClass(newValue)
+		}
+}
+
+routine createDeviceUmlClass(smarthome::Device device) {
+	match {
+//		require absence of uml::Action corresponding to service
+		val model = retrieve uml::Model corresponding to UMLPackage.eINSTANCE
+	}
+	create {
+		val class = new uml::Class
+	}
+	update {
+		addCorrespondenceBetween(device, class)
+		model.packagedElements += class
+	}
+}
+
+reaction ServerInserted {
+	after element smarthome::Server inserted in smarthome::SmartHomeSystem[server]
+	call {
+		createServerUmlClass(newValue)
+		}
+}
+
+routine createServerUmlClass(smarthome::Server server) {
+	match {
+//		require absence of uml::Action corresponding to service
+		val model = retrieve uml::Model corresponding to UMLPackage.eINSTANCE
+	}
+	create {
+		val class = new uml::Class
+	}
+	update {
+		addCorrespondenceBetween(server, class)
+		model.packagedElements += class
+	}
+}
