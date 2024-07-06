@@ -17,6 +17,7 @@
 		<vitruv.change.url>https://vitruv-tools.github.io/updatesite/nightly/change</vitruv.change.url>
 		<vitruv.framework.url>https://vitruv-tools.github.io/updatesite/nightly/framework</vitruv.framework.url>
 		<vitruv.dsls.url>https://vitruv-tools.github.io/updatesite/nightly/dsls</vitruv.dsls.url>
+		<kit-sdq.demometamodels.url>https://kit-sdq.github.io/updatesite/release/metamodels/demo/${sdq.demometamodels.version}</kit-sdq.demometamodels.url>
 	</properties>
 
 	<repositories>
@@ -39,7 +40,7 @@
 		<repository>
 			<id>Demo Metamodels</id>
 			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/release/metamodels/demo/${sdq.demometamodels.version}</url>
+			<url>${kit-sdq.demometamodels.url}</url>
 		</repository>
 		<repository>
 			<id>SDQ Commons</id>
@@ -120,6 +121,18 @@
 			</activation>
 			<properties>
 				<vitruv.dsls.url>file:///${vitruv.dsls.path}/releng/tools.vitruv.dsls.updatesite/target/repository</vitruv.dsls.url>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>local-demometamodels</id>
+			<activation>
+				<property>
+					<name>kit-sdq.demometamodels.path</name>
+				</property>
+			</activation>
+			<properties>
+				<kit-sdq.demometamodels.url>file:///${kit-sdq.demometamodels.path}/releng/edu.kit.ipd.sdq.metamodels.demo.updatesite/target/repository</kit-sdq.demometamodels.url>
 			</properties>
 		</profile>
 
