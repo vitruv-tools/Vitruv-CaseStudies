@@ -9,6 +9,7 @@ tmp/
 
 # Genenerated Files
 src-gen/
+*.polyglot.META-INF
 
 # Xtend
 xtend-gen/
@@ -24,3 +25,4 @@ EvaluationData
 *.DS_Store
 *.polyglot
 *.pom.tycho
+*.settings/
