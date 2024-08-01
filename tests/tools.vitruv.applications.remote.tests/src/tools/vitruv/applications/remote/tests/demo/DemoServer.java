@@ -1,8 +1,6 @@
 package tools.vitruv.applications.remote.tests.demo;
 
-import org.eclipse.equinox.app.IApplication;
-import org.eclipse.equinox.app.IApplicationContext;
-
+import java.io.IOException;
 import edu.kit.ipd.sdq.metamodels.families.FamiliesFactory;
 import edu.kit.ipd.sdq.metamodels.families.Family;
 import edu.kit.ipd.sdq.metamodels.families.FamilyRegister;
@@ -10,15 +8,18 @@ import edu.kit.ipd.sdq.metamodels.families.Member;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.remote.server.VitruvServer;
 
-public class DemoServer implements IApplication {
-	
-	private VitruvServer server;
-
-	@Override
-	public Object start(IApplicationContext context) throws Exception {
-		server = new VitruvServer(() -> {
-			FamiliesPersonsModel model = new FamiliesPersonsModel();
-			CommittableView view = model.getTestView().withChangeRecordingTrait();
+public class DemoServer {
+	public static void main(String[] args) throws IOException {
+		var server = new VitruvServer(() -> {
+			FamiliesPersonsVsumWrapper vsumWrapper = new FamiliesPersonsVsumWrapper();
+			try {
+				vsumWrapper.initialize();
+			} catch (Exception ex) {
+				throw new RuntimeException("Could not initialize the VSUM.", ex);
+			}
+			
+			// Create a family.
+			CommittableView view = vsumWrapper.getFamilyView().withChangeRecordingTrait();
 			FamilyRegister database = view.getRootObjects(FamilyRegister.class).iterator().next();
 			Family family = FamiliesFactory.eINSTANCE.createFamily();
 			family.setLastName("Mustermann");
@@ -31,17 +32,15 @@ public class DemoServer implements IApplication {
 			family.setMother(mother);
 			database.getFamilies().add(family);
 			view.commitChanges();
-			return model.get();
-		});
+			try {
+				view.close();
+			} catch (Exception ex) {
+				throw new RuntimeException("Could not close view.", ex);
+			}
+			
+			return vsumWrapper.getVsum();
+		}, DemoUtility.SERVER_PORT);
 		server.start();
-		server.awaitInit();
-		return IApplicationContext.EXIT_ASYNC_RESULT;
-	}
-
-	@Override
-	public void stop() {
-		if (server != null) {
-			server.stop();
-		}
+		System.out.println("Vitruvius server started on: " + DemoUtility.SERVER_PORT);
 	}
 }
