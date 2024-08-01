@@ -24,7 +24,6 @@ Require-Bundle: org.eclipse.emf.ecore,
  org.eclipse.emf.compare,
  org.eclipse.emf.ecore.xmi,
  tools.vitruv.framework.remote,
- edu.kit.ipd.sdq.commons.util.java,
- org.apache.commons.io
+ edu.kit.ipd.sdq.commons.util.java
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: vitruv.tools

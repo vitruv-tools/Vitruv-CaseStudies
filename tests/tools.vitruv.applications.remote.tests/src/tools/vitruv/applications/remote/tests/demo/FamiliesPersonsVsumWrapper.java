@@ -3,9 +3,9 @@ package tools.vitruv.applications.remote.tests.demo;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.io.FileUtils;
 import org.eclipse.emf.common.util.URI;
 import edu.kit.ipd.sdq.metamodels.families.FamiliesFactory;
 import tools.vitruv.change.interaction.UserInteractionFactory;
@@ -30,7 +30,7 @@ public class FamiliesPersonsVsumWrapper {
 		DemoUtility.registerFactories();
 		
 		if (Files.exists(ROOT_PATH)) {
-			FileUtils.deleteDirectory(ROOT_PATH.toFile());
+			deletePath(ROOT_PATH);
 		} else {
 			Files.createDirectories(ROOT_PATH);
 		}
@@ -40,6 +40,22 @@ public class FamiliesPersonsVsumWrapper {
 		buildInternalVirtualModel();
 		
 		generateInitialFamilyRegister();
+	}
+	
+	private void deletePath(Path pathToDelete) {
+		if (Files.isRegularFile(pathToDelete)) {
+			try {
+				Files.deleteIfExists(pathToDelete);
+			} catch (IOException ioEx) {
+				throw new IllegalStateException("The path " + pathToDelete.toString() + " should be removable.", ioEx);
+			}
+		} else if (Files.isDirectory(pathToDelete)) {
+			try {
+				Files.list(pathToDelete).forEach(this::deletePath);
+			} catch (IOException ioEx) {
+				throw new IllegalStateException("Could not iterate over the path " + pathToDelete.toString(), ioEx);
+			}
+		}
 	}
 	
 	private void generateViewTypes() {
