@@ -8,6 +8,8 @@ import edu.kit.ipd.sdq.metamodels.families.FamiliesPackage;
 import edu.kit.ipd.sdq.metamodels.families.impl.FamiliesPackageImpl;
 import edu.kit.ipd.sdq.metamodels.persons.PersonsPackage;
 import edu.kit.ipd.sdq.metamodels.persons.impl.PersonsPackageImpl;
+import tools.vitruv.change.atomic.AtomicPackage;
+import tools.vitruv.change.atomic.impl.AtomicPackageImpl;
 import tools.vitruv.dsls.reactions.runtime.correspondence.CorrespondencePackage;
 import tools.vitruv.dsls.reactions.runtime.correspondence.impl.CorrespondencePackageImpl;
 
@@ -22,5 +24,6 @@ public class DemoUtility {
 		EPackage.Registry.INSTANCE.put(CorrespondencePackage.eNS_URI, CorrespondencePackageImpl.eINSTANCE);
 		EPackage.Registry.INSTANCE.put(FamiliesPackage.eNS_URI, FamiliesPackageImpl.eINSTANCE);
 		EPackage.Registry.INSTANCE.put(PersonsPackage.eNS_URI, PersonsPackageImpl.eINSTANCE);
+		EPackage.Registry.INSTANCE.put(AtomicPackage.eNS_URI, AtomicPackageImpl.eINSTANCE);
 	}
 }
