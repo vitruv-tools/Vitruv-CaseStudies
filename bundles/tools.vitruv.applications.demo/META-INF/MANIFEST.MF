@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Vitruv Framwork Demo
+Bundle-SymbolicName: tools.vitruv.applications.demo;singleton:=true
+Automatic-Module-Name: tools.vitruv.applications.demo
+Bundle-Version: 3.0.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Require-Bundle: org.eclipse.emf.ecore,
+ edu.kit.ipd.sdq.metamodels.families,
+ edu.kit.ipd.sdq.metamodels.persons,
+ tools.vitruv.framework.vsum,
+ tools.vitruv.dsls.demo.familiespersons;visibility:=reexport,
+ org.eclipse.core.runtime,
+ org.eclipse.emf.edit,
+ tools.vitruv.dsls.reactions.runtime,
+ org.eclipse.emf.ecore.xmi,
+ edu.kit.ipd.sdq.commons.util.java
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: vitruv.tools
