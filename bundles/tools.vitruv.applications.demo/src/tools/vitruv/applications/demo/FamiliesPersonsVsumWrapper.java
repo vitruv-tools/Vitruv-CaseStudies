@@ -1,4 +1,4 @@
-package tools.vitruv.applications.remote.tests.demo;
+package tools.vitruv.applications.demo;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,15 +15,15 @@ import tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamilies
 import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.views.ViewType;
 import tools.vitruv.framework.views.ViewTypeFactory;
+import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.framework.vsum.VirtualModelBuilder;
-import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
 
 public class FamiliesPersonsVsumWrapper {
 	private static final Path ROOT_PATH = Paths.get("target", "root").toAbsolutePath();
 	private static final Path FAMILIES_MODEL_PATH = ROOT_PATH.resolve("model/families.families");
 	private static final URI FAMILIES_MODEL_URI = URI.createFileURI(FAMILIES_MODEL_PATH.toString());
 	
-	private InternalVirtualModel vsum;
+	private VirtualModel vsum;
 	private Map<String, ViewType<?>> viewTypes;
 
 	public void initialize() throws Exception {
@@ -99,7 +99,7 @@ public class FamiliesPersonsVsumWrapper {
 	//---------------------------------------------------------------------------------------------------------
 	
 
-	public InternalVirtualModel getVsum() {
+	public VirtualModel getVsum() {
 		return vsum;
 	}
 	

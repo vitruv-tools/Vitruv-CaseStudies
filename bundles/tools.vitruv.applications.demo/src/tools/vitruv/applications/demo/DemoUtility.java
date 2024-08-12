@@ -1,4 +1,4 @@
-package tools.vitruv.applications.remote.tests.demo;
+package tools.vitruv.applications.demo;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;

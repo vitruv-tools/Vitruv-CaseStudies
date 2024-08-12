@@ -1,4 +1,4 @@
-package tools.vitruv.applications.remote.tests.demo;
+package tools.vitruv.applications.demo.remote;
 
 import java.io.IOException;
 import edu.kit.ipd.sdq.metamodels.families.FamiliesFactory;
@@ -6,6 +6,8 @@ import edu.kit.ipd.sdq.metamodels.families.Family;
 import edu.kit.ipd.sdq.metamodels.families.FamilyRegister;
 import edu.kit.ipd.sdq.metamodels.families.Member;
 import tools.vitruv.framework.views.CommittableView;
+import tools.vitruv.applications.demo.DemoUtility;
+import tools.vitruv.applications.demo.FamiliesPersonsVsumWrapper;
 import tools.vitruv.framework.remote.server.VitruvServer;
 
 public class DemoServer {

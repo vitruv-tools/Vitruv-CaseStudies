@@ -1,9 +1,10 @@
-package tools.vitruv.applications.remote.tests.demo;
+package tools.vitruv.applications.demo.remote;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import edu.kit.ipd.sdq.metamodels.families.FamilyRegister;
 import edu.kit.ipd.sdq.metamodels.persons.PersonRegister;
+import tools.vitruv.applications.demo.DemoUtility;
 import tools.vitruv.framework.remote.client.VitruvClientFactory;
 
 public class DemoClient {
