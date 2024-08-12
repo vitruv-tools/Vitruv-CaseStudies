@@ -17,11 +17,14 @@ import tools.vitruv.framework.views.ViewType;
 import tools.vitruv.framework.views.ViewTypeFactory;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.framework.vsum.VirtualModelBuilder;
+import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
 
 public class FamiliesPersonsVsumWrapper {
 	private static final Path ROOT_PATH = Paths.get("target", "root").toAbsolutePath();
 	private static final Path FAMILIES_MODEL_PATH = ROOT_PATH.resolve("model/families.families");
 	private static final URI FAMILIES_MODEL_URI = URI.createFileURI(FAMILIES_MODEL_PATH.toString());
+	private static final Path PERSONS_MODEL_PATH = ROOT_PATH.resolve("model/persons.persons");
+	private static final URI PERSONS_MODEL_URI = URI.createFileURI(PERSONS_MODEL_PATH.toString());
 	
 	private VirtualModel vsum;
 	private Map<String, ViewType<?>> viewTypes;
@@ -105,5 +108,13 @@ public class FamiliesPersonsVsumWrapper {
 	
 	public View getFamilyView() {
 		return getView(DemoUtility.FAMILIES_VIEW_TYPE_NAME, FAMILIES_MODEL_URI);
+	}
+	
+	public View getPersonsView() {
+		return getView(DemoUtility.PERSONS_VIEW_TYPE_NAME, PERSONS_MODEL_URI);
+	}
+	
+	public void close() {
+		((InternalVirtualModel) this.vsum).dispose();
 	}
 }
