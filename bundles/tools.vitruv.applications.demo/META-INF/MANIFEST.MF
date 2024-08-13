@@ -15,6 +15,7 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.dsls.reactions.runtime,
  org.eclipse.emf.ecore.xmi,
  edu.kit.ipd.sdq.commons.util.java,
- tools.vitruv.framework.remote
+ tools.vitruv.framework.remote,
+ org.apache.commons.math
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: vitruv.tools
