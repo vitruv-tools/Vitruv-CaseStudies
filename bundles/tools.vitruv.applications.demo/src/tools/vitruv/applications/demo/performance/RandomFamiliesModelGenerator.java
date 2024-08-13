@@ -7,14 +7,16 @@ import edu.kit.ipd.sdq.metamodels.families.Member;
 public class RandomFamiliesModelGenerator {
 	private RandomFamiliesModelGenerator() {}
 	
-	public static void createFamilies(FamilyRegister register, int noFamilies, int noMembersPerFamily) {
-		for (long familyNumber = 0; familyNumber < noFamilies; familyNumber++) {
+	public static record FamilyModelGenerationParameters(int noFamilies, int noMembersPerFamily) {}
+	
+	public static void createFamilies(FamilyRegister register, FamilyModelGenerationParameters params) {
+		for (long familyNumber = 0; familyNumber < params.noFamilies(); familyNumber++) {
 			var family = FamiliesFactory.eINSTANCE.createFamily();
 			family.setLastName(generateName());
 			family.setFather(createMember());
 			family.setMother(createMember());
 			
-			for (long childCount = 0; childCount < noMembersPerFamily; childCount++) {
+			for (long childCount = 0; childCount < params.noMembersPerFamily(); childCount++) {
 				var rnd = Math.random();
 				if (rnd < 0.5) {
 					family.getDaughters().add(createMember());
