@@ -20,27 +20,35 @@ import tools.vitruv.framework.vsum.VirtualModelBuilder;
 import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
 
 public class FamiliesPersonsVsumWrapper {
-	private static final Path ROOT_PATH = Paths.get("target", "root").toAbsolutePath();
-	private static final Path FAMILIES_MODEL_PATH = ROOT_PATH.resolve("model/families.families");
-	private static final URI FAMILIES_MODEL_URI = URI.createFileURI(FAMILIES_MODEL_PATH.toString());
-	private static final Path PERSONS_MODEL_PATH = ROOT_PATH.resolve("model/persons.persons");
-	private static final URI PERSONS_MODEL_URI = URI.createFileURI(PERSONS_MODEL_PATH.toString());
+	private Path familiesModelPath;
+	private URI familiesModelUri;
+	private Path personsModelPath;
+	private URI personsModelUri;
 	
 	private VirtualModel vsum;
 	private Map<String, ViewType<?>> viewTypes;
-
+	
 	public void initialize() throws Exception {
+		initialize(Paths.get("target", "root").toAbsolutePath());
+	}
+
+	public void initialize(Path rootPath) throws Exception {
+		familiesModelPath = rootPath.resolve("model/families.families");
+		familiesModelUri = URI.createFileURI(familiesModelPath.toString());
+		personsModelPath = rootPath.resolve("model/persons.persons");
+		personsModelUri = URI.createFileURI(personsModelPath.toString());
+		
 		DemoUtility.registerFactories();
 		
-		if (Files.exists(ROOT_PATH)) {
-			deletePath(ROOT_PATH);
+		if (Files.exists(rootPath)) {
+			deletePath(rootPath);
 		} else {
-			Files.createDirectories(ROOT_PATH);
+			Files.createDirectories(rootPath);
 		}
-		ProjectMarker.markAsProjectRootFolder(ROOT_PATH);
+		ProjectMarker.markAsProjectRootFolder(rootPath);
 		
 		generateViewTypes();
-		buildInternalVirtualModel();
+		buildInternalVirtualModel(rootPath);
 		
 		generateInitialFamilyRegister();
 	}
@@ -67,11 +75,11 @@ public class FamiliesPersonsVsumWrapper {
 		viewTypes.put(DemoUtility.PERSONS_VIEW_TYPE_NAME, ViewTypeFactory.createIdentityMappingViewType(DemoUtility.PERSONS_VIEW_TYPE_NAME));
 	}
 	
-	private void buildInternalVirtualModel() {
+	private void buildInternalVirtualModel(Path storage) {
 		this.vsum = new VirtualModelBuilder()
 			.withChangePropagationSpecification(new FamiliesToPersonsChangePropagationSpecification())
 			.withChangePropagationSpecification(new PersonsToFamiliesChangePropagationSpecification())
-			.withStorageFolder(ROOT_PATH)
+			.withStorageFolder(storage)
 			.withViewTypes(viewTypes.values())
 			.withUserInteractor(UserInteractionFactory.instance.createUserInteractor(
 					UserInteractionFactory.instance.createPredefinedInteractionResultProvider(null)))
@@ -83,7 +91,7 @@ public class FamiliesPersonsVsumWrapper {
 		familyRegister.setId("Family Register");
 		
 		var view = getFamilyView().withChangeRecordingTrait();
-		view.registerRoot(familyRegister, FAMILIES_MODEL_URI);
+		view.registerRoot(familyRegister, familiesModelUri);
 		// The consistency preservation is active and generates a person register automatically.
 		view.commitChanges();
 		view.close();
@@ -107,11 +115,11 @@ public class FamiliesPersonsVsumWrapper {
 	}
 	
 	public View getFamilyView() {
-		return getView(DemoUtility.FAMILIES_VIEW_TYPE_NAME, FAMILIES_MODEL_URI);
+		return getView(DemoUtility.FAMILIES_VIEW_TYPE_NAME, familiesModelUri);
 	}
 	
 	public View getPersonsView() {
-		return getView(DemoUtility.PERSONS_VIEW_TYPE_NAME, PERSONS_MODEL_URI);
+		return getView(DemoUtility.PERSONS_VIEW_TYPE_NAME, personsModelUri);
 	}
 	
 	public void close() {
