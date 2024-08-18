@@ -26,7 +26,7 @@ public class DemoClient {
 		// Get a view and change the family name.
 		var viewSource = familiesViewType.get().createSelector(null);
 		viewSource.getSelectableElements().forEach(element -> viewSource.setSelected(element, true));
-		var view = viewSource.createView().withChangeDerivingTrait();
+		var view = viewSource.createView().withChangeRecordingTrait();
 		var familyRegister = view.getRootObjects(FamilyRegister.class).iterator().next();
 		var family = familyRegister.getFamilies().get(0);
 		family.setLastName("Musterfrau");
