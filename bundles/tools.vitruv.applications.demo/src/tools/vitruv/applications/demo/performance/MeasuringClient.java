@@ -7,11 +7,14 @@ import edu.kit.ipd.sdq.metamodels.families.FamilyRegister;
 import tools.vitruv.applications.demo.DemoUtility;
 import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator.FamilyModelGenerationParameters;
 import tools.vitruv.framework.remote.client.VitruvClientFactory;
+import tools.vitruv.framework.remote.common.apm.VitruvApmController;
 import tools.vitruv.framework.views.ViewType;
 
 public class MeasuringClient {
 	public static void main(String[] args) throws Exception {
 		var root = Paths.get("target");
+		VitruvApmController.enable(root.resolve("client-performance.txt"));
+		
 		var tempRoot = root.resolve("temp");
 		DemoUtility.registerFactories();
 		var client = VitruvClientFactory.create(Configuration.HOST_NAME_OR_IP, Configuration.PORT, tempRoot);

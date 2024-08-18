@@ -1,11 +1,16 @@
 package tools.vitruv.applications.demo.performance;
 
 import java.io.IOException;
+import java.nio.file.Paths;
+
 import tools.vitruv.applications.demo.FamiliesPersonsVsumWrapper;
+import tools.vitruv.framework.remote.common.apm.VitruvApmController;
 import tools.vitruv.framework.remote.server.VitruvServer;
 
 public class MeasuringServer {
 	public static void main(String[] args) throws IOException {
+		VitruvApmController.enable(Paths.get("target", "server-performance.txt"));
+		
 		var server = new VitruvServer(() -> {
 			FamiliesPersonsVsumWrapper vsumWrapper = new FamiliesPersonsVsumWrapper();
 			try {
