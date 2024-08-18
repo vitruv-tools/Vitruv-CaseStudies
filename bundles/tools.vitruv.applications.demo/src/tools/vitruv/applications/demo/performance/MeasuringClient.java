@@ -21,12 +21,13 @@ public class MeasuringClient {
 		}
 		
 		var outputPrefix = "client-" + Configuration.HOST_NAME_OR_IP + "-";
+		
 		System.out.println("--- Small configuration with Vitruvius client ---");
-		measureClientPerformance(Configuration.REPETITIONS, familyViewType.get(), root.resolve(outputPrefix + "small.csv"), Configuration.SMALL_MODEL_PARAMETERS);
+		measureClientPerformance(Configuration.REPETITIONS_SMALL, familyViewType.get(), root.resolve(outputPrefix + "small.csv"), Configuration.SMALL_MODEL_PARAMETERS);
 		System.out.println("--- Medium configuration with local Vitruvius client ---");
-		measureClientPerformance(Configuration.REPETITIONS, familyViewType.get(), root.resolve(outputPrefix + "medium.csv"), Configuration.MEDIUM_MODEL_PARAMETERS);
+		measureClientPerformance(Configuration.REPETITIONS_MEDIUM, familyViewType.get(), root.resolve(outputPrefix + "medium.csv"), Configuration.MEDIUM_MODEL_PARAMETERS);
 		System.out.println("--- Large configuration with local Vitruvius client ---");
-		measureClientPerformance(Configuration.REPETITIONS, familyViewType.get(), root.resolve(outputPrefix + "large.csv"), Configuration.LARGE_MODEL_PARAMETERS);
+		measureClientPerformance(Configuration.REPETITIONS_LARGE, familyViewType.get(), root.resolve(outputPrefix + "large.csv"), Configuration.LARGE_MODEL_PARAMETERS);
 	}
 	
 	public static void measureClientPerformance(int repetitions, ViewType<?> familyViewType, Path output, FamilyModelGenerationParameters params) throws Exception {
@@ -35,11 +36,7 @@ public class MeasuringClient {
 		for (int rIdx = 0; rIdx < repetitions; rIdx++) {
 			System.out.println("Round " + rIdx);
 			var familySelector = familyViewType.createSelector(null);
-			familySelector.getSelectableElements().forEach((element) -> {
-//				if (element.eResource().getURI().toString().contains("families")) {
-					familySelector.setSelected(element, true);
-//				}
-			});
+			familySelector.getSelectableElements().forEach((element) -> familySelector.setSelected(element, true));
 			var familyView = familySelector.createView().withChangeRecordingTrait();
 			var familyRegister = familyView.getRootObjects(FamilyRegister.class).stream().findAny();
 			if (familyRegister.isEmpty()) {
@@ -58,6 +55,7 @@ public class MeasuringClient {
 			familyView.commitChanges();
 			
 			familyView.close();
+			
 			System.out.format("%d ms (creation), %d ms (propagation)%n", cTime, pTime);
 			data.addExternalData(new ExternalPerformanceData(cTime, pTime));
 		}
