@@ -13,7 +13,7 @@ import tools.vitruv.framework.views.ViewType;
 public class MeasuringClient {
 	public static void main(String[] args) throws Exception {
 		var root = Paths.get("target");
-		VitruvApmController.enable(root.resolve("client-performance.txt"));
+		VitruvApmController.enable(root.resolve(OutputConstants.CLIENT_APM_FILE_NAME));
 		
 		var tempRoot = root.resolve("temp");
 		DemoUtility.registerFactories();
@@ -23,14 +23,16 @@ public class MeasuringClient {
 			throw new IllegalStateException("Did not find the families view type.");
 		}
 		
-		var outputPrefix = "client-" + Configuration.HOST_NAME_OR_IP + "-";
-		
+		var outputPrefix = OutputConstants.CLIENT_DATA_FILE_NAME_PREFIX + Configuration.HOST_NAME_OR_IP;
 		System.out.println("--- Small configuration with Vitruvius client ---");
-		measureClientPerformance(Configuration.REPETITIONS_SMALL, familyViewType.get(), root.resolve(outputPrefix + "small.csv"), Configuration.SMALL_MODEL_PARAMETERS);
+		measureClientPerformance(Configuration.REPETITIONS_SMALL, familyViewType.get(),
+				root.resolve(outputPrefix + OutputConstants.CLIENT_DATA_FILE_NAME_SMALL), Configuration.SMALL_MODEL_PARAMETERS);
 		System.out.println("--- Medium configuration with local Vitruvius client ---");
-		measureClientPerformance(Configuration.REPETITIONS_MEDIUM, familyViewType.get(), root.resolve(outputPrefix + "medium.csv"), Configuration.MEDIUM_MODEL_PARAMETERS);
+		measureClientPerformance(Configuration.REPETITIONS_MEDIUM, familyViewType.get(),
+				root.resolve(outputPrefix + OutputConstants.CLIENT_DATA_FILE_NAME_MEDIUM), Configuration.MEDIUM_MODEL_PARAMETERS);
 		System.out.println("--- Large configuration with local Vitruvius client ---");
-		measureClientPerformance(Configuration.REPETITIONS_LARGE, familyViewType.get(), root.resolve(outputPrefix + "large.csv"), Configuration.LARGE_MODEL_PARAMETERS);
+		measureClientPerformance(Configuration.REPETITIONS_LARGE, familyViewType.get(),
+				root.resolve(outputPrefix + OutputConstants.CLIENT_DATA_FILE_NAME_LARGE), Configuration.LARGE_MODEL_PARAMETERS);
 	}
 	
 	public static void measureClientPerformance(int repetitions, ViewType<?> familyViewType, Path output, FamilyModelGenerationParameters params) throws Exception {

@@ -9,7 +9,7 @@ import tools.vitruv.framework.remote.server.VitruvServer;
 
 public class MeasuringServer {
 	public static void main(String[] args) throws IOException {
-		VitruvApmController.enable(Paths.get("target", "server-performance.txt"));
+		VitruvApmController.enable(Paths.get("target", OutputConstants.SERVER_APM_FILE_NAME));
 		
 		var server = new VitruvServer(() -> {
 			FamiliesPersonsVsumWrapper vsumWrapper = new FamiliesPersonsVsumWrapper();

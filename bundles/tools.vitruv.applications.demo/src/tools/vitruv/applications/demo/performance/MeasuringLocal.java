@@ -11,11 +11,14 @@ public class MeasuringLocal {
 	public static void main(String[] args) throws Exception {
 		var root = Paths.get("target");
 		System.out.println("--- Small configuration with local Vitruvius ---");
-		measureLocalPerformance(Configuration.REPETITIONS_SMALL, root.resolve("local-small"), root.resolve("local-small.csv"), Configuration.SMALL_MODEL_PARAMETERS);
+		measureLocalPerformance(Configuration.REPETITIONS_SMALL, root.resolve("local-small"),
+				root.resolve(OutputConstants.LOCAL_DATA_FILE_NAME_SMALL), Configuration.SMALL_MODEL_PARAMETERS);
 		System.out.println("--- Medium configuration with local Vitruvius ---");
-		measureLocalPerformance(Configuration.REPETITIONS_MEDIUM, root.resolve("local-medium"), root.resolve("local-medium.csv"), Configuration.MEDIUM_MODEL_PARAMETERS);
+		measureLocalPerformance(Configuration.REPETITIONS_MEDIUM, root.resolve("local-medium"),
+				root.resolve(OutputConstants.LOCAL_DATA_FILE_NAME_MEDIUM), Configuration.MEDIUM_MODEL_PARAMETERS);
 		System.out.println("--- Large configuration with local Vitruvius ---");
-		measureLocalPerformance(Configuration.REPETITIONS_LARGE, root.resolve("local-large"), root.resolve("local-large.csv"), Configuration.LARGE_MODEL_PARAMETERS);
+		measureLocalPerformance(Configuration.REPETITIONS_LARGE, root.resolve("local-large"),
+				root.resolve(OutputConstants.LOCAL_DATA_FILE_NAME_LARGE), Configuration.LARGE_MODEL_PARAMETERS);
 	}
 	
 	private static void measureLocalPerformance(int repetitions, Path rootPath, Path output, FamilyModelGenerationParameters genParams) throws Exception {
