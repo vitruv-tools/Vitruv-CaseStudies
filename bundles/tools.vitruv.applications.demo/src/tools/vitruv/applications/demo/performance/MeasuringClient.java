@@ -69,7 +69,6 @@ public class MeasuringClient {
 			data.addExternalData(new ExternalPerformanceData(cTime, pTime));
 		}
 		
-		data.calculateAndPrintStatistics();
 		data.save(output);
 	}
 }
