@@ -33,6 +33,10 @@ public class MeasuringClient {
 		System.out.println("--- Large configuration with local Vitruvius client ---");
 		measureClientPerformance(Configuration.REPETITIONS_LARGE, familyViewType.get(),
 				root.resolve(outputPrefix + OutputConstants.CLIENT_DATA_FILE_NAME_LARGE), Configuration.LARGE_MODEL_PARAMETERS);
+		
+		System.out.println("Please do not stop this process. We are waiting one minute to ensure that all relevant data is written. Afterward, we stop automatically.");
+		Thread.sleep(60000); // 60,000 ms = 1 min
+		System.out.println("Thank you.");
 	}
 	
 	public static void measureClientPerformance(int repetitions, ViewType<?> familyViewType, Path output, FamilyModelGenerationParameters params) throws Exception {
