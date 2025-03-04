@@ -24,3 +24,18 @@ EvaluationData
 *.DS_Store
 *.polyglot
 *.pom.tycho
+
+### NEW ###
+
+# VS Code
+.vscode/
+
+# Maven
+target/
+*.log
+.mvn/wrapper/*.jar
+
+# Eclipse
+META-INF
+build.properties
+plugin.properties
