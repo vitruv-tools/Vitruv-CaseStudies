@@ -19,6 +19,7 @@
 
   <modules>
     <module>commonalities</module>
+    <!-- <module>equivalence</module> --> <!-- old JaMoPP version requires Java 8 class path environment variable, so we need to update the JaMoPP version -->
     <module>testutils</module>
   </modules>
 </project>
