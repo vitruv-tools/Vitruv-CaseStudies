@@ -107,6 +107,7 @@
               <outputDirectory>${project.build.directory}/test-classes/dependencies</outputDirectory>
               <excludeTransitive>true</excludeTransitive>
               <stripVersion>true</stripVersion>
+              <includeArtifactIds>json</includeArtifactIds>
             </configuration>
           </execution>
         </executions>

@@ -45,7 +45,7 @@
     <!-- Vitruvius dependencies -->
     <dependency>
       <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.change.correspondence</artifactId>
+      <artifactId>tools.vitruv.change.atomic</artifactId>
     </dependency>
     <dependency>
       <groupId>tools.vitruv</groupId>
@@ -57,23 +57,11 @@
     </dependency>
     <dependency>
       <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.dsls.commonalities.runtime</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.dsls.reactions.runtime</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.framework.applications</artifactId>
+      <artifactId>tools.vitruv.change.propagation</artifactId>
     </dependency>
     <dependency>
       <groupId>tools.vitruv</groupId>
       <artifactId>tools.vitruv.framework.testutils.deprecated</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.framework.testutils.integration</artifactId>
     </dependency>
 
     <!-- external dependencies -->
@@ -82,50 +70,22 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.xtend</groupId>
-      <artifactId>org.eclipse.xtend.lib</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.xtend</groupId>
-      <artifactId>org.eclipse.xtend.lib.macro</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.xtext</groupId>
       <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
+      <artifactId>hamcrest</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opentest4j</groupId>
-      <artifactId>opentest4j</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
     </dependency>
 
     <!-- p2 dependencies -->
     <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
-      <artifactId>edu.kit.ipd.sdq.metamodels.autosar</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
-      <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>sdq-commons</groupId>
-      <artifactId>edu.kit.ipd.sdq.commons.util.emf</artifactId>
-    </dependency>
-    <dependency>
       <groupId>sdq-commons</groupId>
       <artifactId>edu.kit.ipd.sdq.commons.util.java</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>sdq-commons</groupId>
-      <artifactId>edu.kit.ipd.sdq.commons.util.pcm</artifactId>
     </dependency>
     <dependency>
       <groupId>xannotations</groupId>

@@ -20,7 +20,6 @@
     <plugins>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.4.2</version>
         <executions>
           <execution>
             <id>javadoc-jar</id>
@@ -54,6 +53,18 @@
     </dependency>
     <dependency>
       <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
       <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
     </dependency>
     <dependency>
@@ -63,6 +74,10 @@
     <dependency>
       <groupId>emftext-jamopp</groupId>
       <artifactId>org.emftext.language.java.resource</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>emftext-jamopp</groupId>
+      <artifactId>org.emftext.language.java.resource.java</artifactId>
     </dependency>
     <dependency>
       <groupId>palladio</groupId>

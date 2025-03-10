@@ -121,7 +121,27 @@
       <!-- Vitruvius dependencies -->
       <dependency>
         <groupId>tools.vitruv</groupId>
+        <artifactId>tools.vitruv.change.atomic</artifactId>
+        <version>${vitruv.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>tools.vitruv.change.composite</artifactId>
+        <version>${vitruv.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.correspondence</artifactId>
+        <version>${vitruv.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>tools.vitruv.change.interaction</artifactId>
+        <version>${vitruv.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>tools.vitruv.change.propagation</artifactId>
         <version>${vitruv.version}</version>
       </dependency>
       <dependency>
@@ -136,7 +156,17 @@
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
+        <artifactId>tools.vitruv.change.utils</artifactId>
+        <version>${vitruv.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.dsls.commonalities.runtime</artifactId>
+        <version>${vitruv.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>tools.vitruv.dsls.commonalities.runtime.operators</artifactId>
         <version>${vitruv.version}</version>
       </dependency>
       <dependency>
@@ -171,12 +201,22 @@
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
+        <artifactId>tools.vitruv.framework.testutils.deprecated</artifactId>
+        <version>${vitruv.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.framework.testutils.integration</artifactId>
         <version>${vitruv.version}</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
-        <artifactId>tools.vitruv.framework.testutils.deprecated</artifactId>
+        <artifactId>tools.vitruv.framework.views</artifactId>
+        <version>${vitruv.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>tools.vitruv.framework.vsum</artifactId>
         <version>${vitruv.version}</version>
       </dependency>
 
@@ -188,8 +228,33 @@
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>2.24.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-core</artifactId>
         <version>2.24.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.emf.common</artifactId>
+        <version>2.41.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.emf.ecore</artifactId>
+        <version>2.38.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+        <version>2.38.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.common</artifactId>
+        <version>3.19.200</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
@@ -210,6 +275,11 @@
         <groupId>org.eclipse.xtext</groupId>
         <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
         <version>2.37.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest</artifactId>
+        <version>3.0</version>
       </dependency>
       <dependency>
         <groupId>org.hamcrest</groupId>
@@ -238,7 +308,7 @@
       </dependency>
       <dependency>
         <groupId>org.junit.platform</groupId>
-        <artifactId>junit-platform-launcher</artifactId>
+        <artifactId>junit-platform-engine</artifactId>
         <version>1.12.0</version>
       </dependency>
       <dependency>
@@ -251,6 +321,21 @@
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.autosar</artifactId>
+        <version>1.9.0.202311201524</version>
+      </dependency>
+      <dependency>
+        <groupId>sdq-demo-metamodels</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+        <version>1.9.0.202311201524</version>
+      </dependency>
+      <dependency>
+        <groupId>sdq-demo-metamodels</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+        <version>1.9.0.202311201524</version>
+      </dependency>
+      <dependency>
+        <groupId>sdq-demo-metamodels</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
         <version>1.9.0.202311201524</version>
       </dependency>
       <dependency>
@@ -280,12 +365,22 @@
       </dependency>
       <dependency>
         <groupId>emftext-jamopp</groupId>
+        <artifactId>org.emftext.commons.layout</artifactId>
+        <version>1.4.1.v201207310007</version>
+      </dependency>
+      <dependency>
+        <groupId>emftext-jamopp</groupId>
         <artifactId>org.emftext.language.java</artifactId>
         <version>1.4.1.v201901100335</version>
       </dependency>
       <dependency>
         <groupId>emftext-jamopp</groupId>
         <artifactId>org.emftext.language.java.resource</artifactId>
+        <version>1.4.1.v201901100335</version>
+      </dependency>
+      <dependency>
+        <groupId>emftext-jamopp</groupId>
+        <artifactId>org.emftext.language.java.resource.java</artifactId>
         <version>1.4.1.v201901100335</version>
       </dependency>
       <dependency>
