@@ -1,4 +1,4 @@
-package tools.vitruv.applications.umljava.tests.util
+package tools.vitruv.applications.testutility.integration
 
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.NamedElement

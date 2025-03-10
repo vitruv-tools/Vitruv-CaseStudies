@@ -3,7 +3,7 @@ import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.util.temporary.java.JavaModificationUtil
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+import static tools.vitruv.applications.util.temporary.java.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import org.eclipse.emf.ecore.util.EcoreUtil
 

@@ -7,8 +7,8 @@ import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
-import tools.vitruv.applications.umljava.util.UmlJavaCorrespondenceTag
-import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
+import tools.vitruv.applications.util.temporary.java.UmlJavaCorrespondenceTag
+import static tools.vitruv.applications.util.temporary.java.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml

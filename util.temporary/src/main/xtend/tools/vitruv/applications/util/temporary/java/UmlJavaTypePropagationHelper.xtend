@@ -1,4 +1,4 @@
-package tools.vitruv.applications.umljava.util
+package tools.vitruv.applications.util.temporary.java
 
 import java.util.ArrayList
 import java.util.HashSet
@@ -18,7 +18,7 @@ import tools.vitruv.applications.util.temporary.java.JavaModificationUtil
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
 import tools.vitruv.change.interaction.UserInteractor
 
-import static tools.vitruv.applications.umljava.util.CommonUtil.*
+import static tools.vitruv.applications.util.temporary.java.CommonUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.eclipse.emf.ecore.resource.ResourceSet

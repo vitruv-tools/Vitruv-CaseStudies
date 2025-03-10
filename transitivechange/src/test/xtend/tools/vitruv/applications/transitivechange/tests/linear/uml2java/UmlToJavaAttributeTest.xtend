@@ -17,8 +17,8 @@ import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParamet
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
-import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
-import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
+import static tools.vitruv.applications.testutility.integration.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.JavaUmlElementEqualityValidation.*
 
 /**
  * This Test class checks the creating, deleting and modifying of attributes in den uml to java

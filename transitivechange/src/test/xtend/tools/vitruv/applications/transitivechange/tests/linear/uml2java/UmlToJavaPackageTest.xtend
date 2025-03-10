@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import java.nio.file.Path
 import org.emftext.language.java.containers.ContainersFactory
-import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
+import static tools.vitruv.applications.testutility.integration.JavaUmlElementEqualityValidation.*
 
 /**
  * This test class contains basic test cases for package creation, renaming and deletion.

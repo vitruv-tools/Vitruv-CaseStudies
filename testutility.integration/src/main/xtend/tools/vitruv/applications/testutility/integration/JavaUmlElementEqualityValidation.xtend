@@ -1,4 +1,4 @@
-package tools.vitruv.applications.umljava.tests.util
+package tools.vitruv.applications.testutility.integration
 
 import org.eclipse.uml2.uml.Feature
 import org.eclipse.uml2.uml.Operation
@@ -21,7 +21,7 @@ import org.eclipse.uml2.uml.Model
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.ClassMethod
 import org.eclipse.uml2.uml.VisibilityKind
-import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
+import tools.vitruv.applications.util.temporary.java.UmlJavaTypePropagationHelper
 
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
@@ -43,8 +43,8 @@ import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.DataType
 import org.emftext.language.java.parameters.VariableLengthParameter
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
-import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.JavaElementsTestAssertions.*
 
 /**
  * Utility class for assertions that works bidirectional.

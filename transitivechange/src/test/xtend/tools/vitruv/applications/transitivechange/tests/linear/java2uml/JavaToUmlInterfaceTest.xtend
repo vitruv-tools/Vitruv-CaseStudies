@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
-import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
-import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
+import static tools.vitruv.applications.testutility.integration.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.JavaUmlElementEqualityValidation.*
 
 /**
  * A Test class for interface tests. Checks their creation, renaming, deleting and the 

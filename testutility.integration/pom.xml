@@ -11,9 +11,9 @@
     <version>3.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>tools.vitruv.applications.transitivechange</artifactId>
+  <artifactId>tools.vitruv.applications.testutility.integration</artifactId>
 
-  <name>Transitive Transformation Tests between PCM, Java, and UML Class</name>
+  <name>Vitruv Test Utils for Integration Tests</name>
   <description />
 
   <build>
@@ -33,32 +33,12 @@
     <!-- internal dependencies -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>tools.vitruv.applications.cbs.testutils</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>tools.vitruv.applications.umljava</artifactId>
+      <artifactId>tools.vitruv.applications.util.temporary</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>tools.vitruv.applications.pcmumlclass</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>tools.vitruv.applications.pcmjava</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>tools.vitruv.applications.testutility</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>tools.vitruv.applications.testutility.integration</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -85,11 +65,11 @@
     </dependency>
     <dependency>
       <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.dsls.demo.familiespersons</artifactId>
+      <artifactId>tools.vitruv.framework.applications</artifactId>
     </dependency>
     <dependency>
       <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.framework.applications</artifactId>
+      <artifactId>tools.vitruv.framework.testutils.deprecated</artifactId>
     </dependency>
     <dependency>
       <groupId>tools.vitruv</groupId>
@@ -124,22 +104,6 @@
     <dependency>
       <groupId>org.opentest4j</groupId>
       <artifactId>opentest4j</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-commons</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-launcher</artifactId>
     </dependency>
 
     <!-- p2 dependencies -->
@@ -182,10 +146,6 @@
     <dependency>
       <groupId>palladio</groupId>
       <artifactId>org.palladiosimulator.pcm.resources</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>eclipse</groupId>
-      <artifactId>org.eclipse.emf.cdo</artifactId>
     </dependency>
     <dependency>
       <groupId>eclipse</groupId>

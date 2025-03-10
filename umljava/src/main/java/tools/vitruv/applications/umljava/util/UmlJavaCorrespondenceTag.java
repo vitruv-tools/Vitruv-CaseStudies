@@ -1,4 +1,4 @@
-package tools.vitruv.applications.umljava.util;
+package tools.vitruv.applications.util.temporary.java;
 
 import edu.kit.ipd.sdq.activextendannotations.Utility;
 

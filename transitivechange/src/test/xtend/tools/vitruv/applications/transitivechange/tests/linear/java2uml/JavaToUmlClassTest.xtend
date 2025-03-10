@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertEquals
-import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
-import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
+import static tools.vitruv.applications.testutility.integration.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.JavaUmlElementEqualityValidation.*
 
 /**
  * A Test class to test classes and their traits.

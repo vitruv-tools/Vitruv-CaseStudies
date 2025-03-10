@@ -1,4 +1,4 @@
-package tools.vitruv.applications.umljava.util
+package tools.vitruv.applications.util.temporary.java
 
 import tools.vitruv.change.interaction.UserInteractor
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality

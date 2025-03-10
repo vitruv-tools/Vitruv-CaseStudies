@@ -8,7 +8,7 @@ import org.eclipse.uml2.uml.UMLPackage
 import org.emftext.language.java.containers.ContainersPackage
 import tools.vitruv.change.interaction.UserInteractionOptions.NotificationType
 import tools.vitruv.change.interaction.UserInteractionOptions.WindowModality
-import static extension tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+import static extension tools.vitruv.applications.util.temporary.java.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper.*
 import static com.google.common.base.Preconditions.checkState

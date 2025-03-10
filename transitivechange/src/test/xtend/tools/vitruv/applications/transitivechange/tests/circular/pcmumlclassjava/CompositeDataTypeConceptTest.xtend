@@ -10,7 +10,7 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmUserSelection
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTestHelper
+import tools.vitruv.applications.testutility.integration.LegacyPcmUmlClassApplicationTestHelper
 
 import static org.junit.jupiter.api.Assertions.*
 

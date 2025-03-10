@@ -29,7 +29,8 @@
     <module>pcmumlclass</module>
     <module>simulinkautosar</module>
     <module>testutility</module>
-    <!-- <module>transitivechange</module> --> <!-- tests reference test classes from umljava module, which have dependencies on umljava main code, so we have to refactor to break the circular dependencies -->
+    <module>testutility.integration</module>
+    <module>transitivechange</module>
     <module>umljava</module>
     <module>util.temporary</module>
   </modules>

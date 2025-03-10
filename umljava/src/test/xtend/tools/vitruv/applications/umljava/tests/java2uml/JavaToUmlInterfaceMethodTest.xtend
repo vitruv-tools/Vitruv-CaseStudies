@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
-import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.UmlElementsTestAssertions.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*

@@ -15,7 +15,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
-import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTestHelper
+import tools.vitruv.applications.testutility.integration.LegacyPcmUmlClassApplicationTestHelper
 import org.eclipse.uml2.uml.PrimitiveType
 import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil

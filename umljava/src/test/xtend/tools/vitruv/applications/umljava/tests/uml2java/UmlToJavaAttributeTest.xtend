@@ -15,8 +15,8 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
-import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
-import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.assertUmlClassDontHaveOperation
+import static tools.vitruv.applications.testutility.integration.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.UmlElementsTestAssertions.assertUmlClassDontHaveOperation
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.getJavaVisibilityConstantFromUmlVisibilityKind

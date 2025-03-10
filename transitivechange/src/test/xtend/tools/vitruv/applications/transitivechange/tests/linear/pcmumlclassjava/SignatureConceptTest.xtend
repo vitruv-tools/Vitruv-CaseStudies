@@ -16,7 +16,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 
 import static org.junit.jupiter.api.Assertions.*
 import java.nio.file.Path
-import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTestHelper
+import tools.vitruv.applications.testutility.integration.LegacyPcmUmlClassApplicationTestHelper
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.

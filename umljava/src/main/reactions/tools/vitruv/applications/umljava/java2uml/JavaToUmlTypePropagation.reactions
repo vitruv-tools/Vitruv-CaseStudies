@@ -1,5 +1,5 @@
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+import static tools.vitruv.applications.util.temporary.java.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.UMLPackage

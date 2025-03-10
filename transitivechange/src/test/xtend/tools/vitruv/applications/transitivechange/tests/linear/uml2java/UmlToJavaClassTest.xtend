@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
-import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
+import static tools.vitruv.applications.testutility.integration.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.JavaUmlElementEqualityValidation.*
 
 /**
  * This class provides tests for basic class tests in the uml to java direction

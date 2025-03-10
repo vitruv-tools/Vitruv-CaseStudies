@@ -14,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import java.nio.file.Path
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import org.junit.jupiter.api.Disabled
-import static tools.vitruv.applications.umljava.tests.util.UmlElementsTestAssertions.*
-import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
+import static tools.vitruv.applications.testutility.integration.UmlElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.JavaUmlElementEqualityValidation.*
 
 /**
  * This class contains basis tests for java packages.

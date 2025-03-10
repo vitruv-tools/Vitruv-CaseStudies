@@ -34,14 +34,14 @@ import static org.junit.jupiter.api.Assertions.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.transitivechange.tests.util.TransitiveChangeSetup.*
 import org.emftext.language.java.containers.ContainersPackage
-import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
-import static tools.vitruv.applications.umljava.tests.util.JavaUmlElementEqualityValidation.*
+import static tools.vitruv.applications.testutility.integration.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.JavaUmlElementEqualityValidation.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.BeforeAll
 import tools.vitruv.applications.util.temporary.java.JavaSetup
 import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.change.testutils.RegisterMetamodelsInStandalone
-import tools.vitruv.applications.pcmumlclass.tests.LegacyPcmUmlClassApplicationTest
+import tools.vitruv.applications.testutility.integration.LegacyPcmUmlClassApplicationTest
 import org.eclipse.emf.ecore.util.EcoreUtil
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper

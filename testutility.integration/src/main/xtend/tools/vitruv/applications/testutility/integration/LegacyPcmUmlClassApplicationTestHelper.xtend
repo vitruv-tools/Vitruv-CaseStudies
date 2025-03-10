@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclass.tests
+package tools.vitruv.applications.testutility.integration
 
 import java.util.function.Function
 import org.eclipse.emf.common.util.URI

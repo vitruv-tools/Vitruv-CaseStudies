@@ -6,7 +6,7 @@ import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.emftext.language.java.types.TypesFactory
 import org.junit.jupiter.api.Test
 
-import static tools.vitruv.applications.umljava.tests.util.JavaElementsTestAssertions.*
+import static tools.vitruv.applications.testutility.integration.JavaElementsTestAssertions.*
 import static tools.vitruv.applications.util.temporary.java.JavaModificationUtil.*
 
 import static extension tools.vitruv.applications.testutility.uml.UmlQueryUtil.*
