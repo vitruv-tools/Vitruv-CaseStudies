@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>tools.vitruv</groupId>
+    <artifactId>tools.vitruv.applications</artifactId>
+    <version>3.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>tools.vitruv.applications.testutility.integration</artifactId>
+
+  <name>Vitruv Test Utils for Integration Tests</name>
+  <description />
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.xtend</groupId>
+        <artifactId>xtend-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!-- internal dependencies -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>tools.vitruv.applications.util.temporary</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>tools.vitruv.applications.pcmumlclass</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Vitruvius dependencies -->
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>tools.vitruv.change.atomic</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>tools.vitruv.change.testutils.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>tools.vitruv.change.testutils.integration</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>tools.vitruv.change.propagation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>tools.vitruv.framework.testutils.deprecated</artifactId>
+    </dependency>
+
+    <!-- external dependencies -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.xtext</groupId>
+      <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
+
+    <!-- p2 dependencies -->
+    <dependency>
+      <groupId>sdq-commons</groupId>
+      <artifactId>edu.kit.ipd.sdq.commons.util.java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>xannotations</groupId>
+      <artifactId>edu.kit.ipd.sdq.activextendannotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>emftext-jamopp</groupId>
+      <artifactId>org.emftext.language.java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>emftext-jamopp</groupId>
+      <artifactId>org.emftext.language.java.resource</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>palladio</groupId>
+      <artifactId>org.palladiosimulator.pcm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>palladio</groupId>
+      <artifactId>org.palladiosimulator.pcm.resources</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>eclipse</groupId>
+      <artifactId>org.eclipse.uml2.uml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>eclipse</groupId>
+      <artifactId>org.eclipse.uml2.uml.resources</artifactId>
+    </dependency>
+  </dependencies>
+</project>
