@@ -1,32 +1,3 @@
-# Eclipse/Java
-.metadata
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*.class
-
-# Genenerated Files
-src-gen/
-
-# Xtend
-xtend-gen/
-*._trace
-*.xtendbin
-
-# Maven
-target/
-.mvn/wrapper/maven-wrapper.jar
-
-# Custom
-EvaluationData
-*.DS_Store
-*.polyglot
-*.pom.tycho
-
-### NEW ###
-
 # VS Code
 .vscode/
 
