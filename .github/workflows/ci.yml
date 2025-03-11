@@ -20,6 +20,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
+        exclude:
+          - os: windows-latest # TODO: Windows builds currently fail as documented in https://github.com/vitruv-tools/Vitruv-CaseStudies/issues/241
 
     steps:
     - name: Support Longpaths [Windows]
