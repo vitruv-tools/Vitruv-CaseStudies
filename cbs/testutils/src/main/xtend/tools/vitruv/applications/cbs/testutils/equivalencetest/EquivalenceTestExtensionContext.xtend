@@ -108,6 +108,10 @@ package class EquivalenceTestExtensionContext implements ExtensionContext {
 		throw new UnsupportedOperationException()
 	}
 
+	override getEnclosingTestClasses() {
+		throw new UnsupportedOperationException()
+	}
+
 	def package void close() {
 		val throwableCollector = new ThrowableCollector[it instanceof TestAbortedException]
 		// make a snapshot before iterating in case some concurrent modification happens
