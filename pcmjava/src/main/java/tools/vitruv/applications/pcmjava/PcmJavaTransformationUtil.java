@@ -1,8 +1,6 @@
 package tools.vitruv.applications.pcmjava;
 
-import edu.kit.ipd.sdq.activextendannotations.Utility;
 import java.util.Objects;
-import org.eclipse.xtext.xbase.lib.StringExtensions;
 import org.emftext.language.java.containers.Package;
 import org.palladiosimulator.pcm.core.entity.Entity;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -10,7 +8,7 @@ import org.palladiosimulator.pcm.system.System;
 
 public final class PcmJavaTransformationUtil {
     public static String getCorrespondingPackageName(Entity entity) {
-        return StringExtensions.toFirstLower(entity.getEntityName());
+        return toFirstLower(entity.getEntityName());
     }
 
     // Method to check if the package corresponds to the given entity.
@@ -27,6 +25,16 @@ public final class PcmJavaTransformationUtil {
 
         // Otherwise, compare the lowercased entity name with the lowercased package name.
         return Objects.equals(pkg.getName().toLowerCase(), entity.getEntityName().toLowerCase());
+    }
+
+    private static String toFirstLower(String s) {
+        if (s == null || s.length() == 0)
+            return s;
+        if (Character.isLowerCase(s.charAt(0)))
+            return s;
+        if (s.length() == 1)
+            return s.toLowerCase();
+        return s.substring(0, 1).toLowerCase() + s.substring(1);
     }
 
     private PcmJavaTransformationUtil() {
