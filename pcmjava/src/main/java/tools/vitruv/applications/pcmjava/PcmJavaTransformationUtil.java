@@ -8,7 +8,6 @@ import org.palladiosimulator.pcm.core.entity.Entity;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
-@Utility
 public final class PcmJavaTransformationUtil {
     public static String getCorrespondingPackageName(Entity entity) {
         return StringExtensions.toFirstLower(entity.getEntityName());
