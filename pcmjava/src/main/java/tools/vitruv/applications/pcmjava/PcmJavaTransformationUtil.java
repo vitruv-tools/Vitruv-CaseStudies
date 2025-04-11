@@ -7,6 +7,10 @@ import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
 public final class PcmJavaTransformationUtil {
+
+    private PcmJavaTransformationUtil() {
+    }
+
     public static String getCorrespondingPackageName(Entity entity) {
         return toFirstLower(entity.getEntityName());
     }
@@ -37,6 +41,5 @@ public final class PcmJavaTransformationUtil {
         return s.substring(0, 1).toLowerCase() + s.substring(1);
     }
 
-    private PcmJavaTransformationUtil() {
-    }
+
 }
