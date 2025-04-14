@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
-import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.framework.applications.VitruvApplication;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 
@@ -14,7 +13,7 @@ public class PcmJavaApplication implements VitruvApplication {
 	public Set<ChangePropagationSpecification> getChangePropagationSpecifications() {
 		Set<ChangePropagationSpecification> specs = new HashSet<ChangePropagationSpecification>();
 		specs.add(new Pcm2JavaChangePropagationSpecification());
-		specs.add(new Java2PcmChangePropagationSpecification());
+		specs.add((ChangePropagationSpecification) new Java2PcmChangePropagationSpecification());
 		return specs;
 	}
 
