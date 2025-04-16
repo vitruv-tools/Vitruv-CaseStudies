@@ -14,7 +14,7 @@ public class PcmJavaApplication implements VitruvApplication {
 	public Set<ChangePropagationSpecification> getChangePropagationSpecifications() {
 		Set<ChangePropagationSpecification> specs = new HashSet<ChangePropagationSpecification>();
 		specs.add(new Pcm2JavaChangePropagationSpecification());
-		specs.add(new Java2PcmChangePropagationSpecification());
+		specs.add((ChangePropagationSpecification) new Java2PcmChangePropagationSpecification());
 		return specs;
 	}
 
