@@ -1,4 +1,4 @@
-package tools.vitruv.applications.util.temporary.java
+package tools.vitruv.applications.util.temporary.java;
 
 /**
  * Enum for the four possible visibilities in java. We created this
@@ -7,6 +7,13 @@ package tools.vitruv.applications.util.temporary.java
  *
  * @author Fei
  */
-enum JavaVisibility {
-    PUBLIC, PRIVATE, PROTECTED, PACKAGE
+@SuppressWarnings("all")
+public enum JavaVisibility {
+    PUBLIC,
+
+    PRIVATE,
+
+    PROTECTED,
+
+    PACKAGE;
 }
