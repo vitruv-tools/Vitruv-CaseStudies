@@ -48,7 +48,7 @@ class JavaPersistenceHelper {
 			}
 		}
 	}
-	
+
 	static def getSimpleName(CompilationUnit compilationUnit) {
 		var simpleName = compilationUnit.name
 		checkState(simpleName.endsWith(FILE_EXTENSION_WITH_SEPARATOR), "compilation unit has to end with '%s' but doesn't: %s", FILE_EXTENSION_WITH_SEPARATOR, compilationUnit.name)
@@ -56,7 +56,7 @@ class JavaPersistenceHelper {
 		simpleName = simpleName.substring(simpleName.lastIndexOf('.') + 1)
 		return simpleName
 	}
-	
+
 	static def String buildJavaPath(String sourcePath, Iterable<String> namespaces) {
 		return buildJavaFilePath(sourcePath, namespaces, "", "")
 	}
@@ -76,7 +76,7 @@ class JavaPersistenceHelper {
 	static def String buildJavaFilePath(String fileName, Iterable<String> namespaces) {
 		return buildJavaFilePath(javaProjectSrc, namespaces, fileName, null)
 	}
-		
+
 	// Uses 'src/' as source path.
 	static def dispatch String buildJavaFilePath(CompilationUnit compilationUnit) {
 		return buildJavaFilePath(javaProjectSrc, compilationUnit.namespaces, compilationUnit.simpleName, JAVA_FILE_EXTENSION)
