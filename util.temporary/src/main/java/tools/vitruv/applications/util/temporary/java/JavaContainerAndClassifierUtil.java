@@ -1,8 +1,10 @@
 package tools.vitruv.applications.util.temporary.java;
 
 import com.google.common.collect.Iterables;
+import edu.kit.ipd.sdq.activextendannotations.Utility;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,15 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Exceptions;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
-import org.eclipse.xtext.xbase.lib.StringExtensions;
-import org.eclipse.xtext.xbase.lib.XbaseGenerated;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ClassifiersFactory;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
@@ -28,7 +24,8 @@ import org.emftext.language.java.commons.NamedElement;
 import org.emftext.language.java.commons.NamespaceAwareElement;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.ContainersFactory;
-import org.emftext.language.java.containers.ContainersPackage;
+import org.emftext.language.java.containers.Package;
+import org.emftext.language.java.containers.ContainersPackage.Literals;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.EnumConstant;
 import org.emftext.language.java.members.Field;
@@ -40,429 +37,492 @@ import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.change.correspondence.view.EditableCorrespondenceModelView;
 
 /**
- * Class for java classifier, package and compilation unit util functions
- *
+ * A utility class for creating, manipulating, and querying JaMoPP (Java Model
+ * Printer and Parser) elements related to containers (Packages, CompilationUnits)
+ * and classifiers (Classes, Interfaces, Enums).
  */
+@Utility
 public final class JavaContainerAndClassifierUtil {
+
     /**
-     * Creates and returns a new Java class with the given name, visibility, and modifiers.
-     * The new class is not contained in a compilation unit.
-     *
-     * @param name the name of the class
-     * @param visibility the visibility of the class
-     * @param abstr true if the class should be abstract
-     * @param fin true if the class should be final
-     * @return the new class with the given attributes
+     * Private constructor to prevent instantiation of this utility class.
      */
-    public static org.emftext.language.java.classifiers.Class createJavaClass(
-            final String name,
-            final JavaVisibility visibility,
-            final boolean abstr,
-            final boolean fin) {
+    private JavaContainerAndClassifierUtil() {
+    }
 
-        final org.emftext.language.java.classifiers.Class jClass =
-                ClassifiersFactory.eINSTANCE.createClass();
-
+    /**
+     * Creates a new JaMoPP Class.
+     *
+     * @param name         The simple name of the class.
+     * @param visibility   The visibility of the class (e.g., PUBLIC, PRIVATE).
+     * @param isAbstract   A boolean indicating if the class should be abstract.
+     * @param isFinal      A boolean indicating if the class should be final.
+     * @return The newly created {@link org.emftext.language.java.classifiers.Class}.
+     */
+    public static org.emftext.language.java.classifiers.Class createJavaClass(final String name,
+                                                                              final JavaVisibility visibility, final boolean isAbstract, final boolean isFinal) {
+        final org.emftext.language.java.classifiers.Class jClass = ClassifiersFactory.eINSTANCE.createClass();
         JavaModifierUtil.setName(jClass, name);
         JavaModifierUtil.setJavaVisibilityModifier(jClass, visibility);
-        JavaModifierUtil.setAbstract(jClass, abstr);
-        JavaModifierUtil.setFinal(jClass, fin);
-
+        JavaModifierUtil.setAbstract(jClass, isAbstract);
+        JavaModifierUtil.setFinal(jClass, isFinal);
         return jClass;
     }
 
-
     /**
-     * Creates a new java package
-     * @param name the name of the new package
-     * @param containingPackage the super package of the new package or null if it is the default package
-     * @return the new package
+     * Creates a new JaMoPP Package.
+     *
+     * @param name              The name of the package segment to create (e.g., "mypackage").
+     * @param containingPackage The parent package, or null if it is a root package.
+     * @return The newly created {@link Package}.
      */
-    public static org.emftext.language.java.containers.Package createJavaPackage(final String name, final org.emftext.language.java.containers.Package containingPackage) {
-        final org.emftext.language.java.containers.Package jPackage = ContainersFactory.eINSTANCE.createPackage();
+    public static Package createJavaPackage(final String name, final Package containingPackage) {
+        final Package jPackage = ContainersFactory.eINSTANCE.createPackage();
         JavaModifierUtil.setName(jPackage, name);
-        EList<String> namespaces = jPackage.getNamespaces();
-        List<String> packageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(containingPackage);
-        Iterables.<String>addAll(namespaces, packageAsStringList);
+        final EList<String> namespaces = jPackage.getNamespaces();
+        final List<String> packageStringList = getJavaPackageAsStringList(containingPackage);
+        Iterables.addAll(namespaces, packageStringList);
         return jPackage;
     }
 
-
-
     /**
-     * Creates a new java interface with the given name and list of super interfaces
-     * The created interface is not contained in a compilation unit.
-     * @param name the name of the interface
-     * @param superInterfaces the superinterfaces of the interface
-     * @return the new interface
+     * Creates a new JaMoPP Interface.
+     *
+     * @param name            The simple name of the interface.
+     * @param superInterfaces A list of interfaces that this new interface should extend. Can be empty.
+     * @return The newly created {@link Interface}.
      */
     public static Interface createJavaInterface(final String name, final List<Interface> superInterfaces) {
         final Interface jInterface = ClassifiersFactory.eINSTANCE.createInterface();
         JavaModifierUtil.setName(jInterface, name);
         jInterface.makePublic();
-        if (!IterableExtensions.isNullOrEmpty(superInterfaces)) {
+        if (superInterfaces != null && !superInterfaces.isEmpty()) {
             jInterface.getExtends().addAll(JavaTypeUtil.createNamespaceReferenceFromList(superInterfaces));
         }
         return jInterface;
     }
 
     /**
-     * Creats a new java enum with the given properties
-     * The created Enum is not contained in a compilationunit.
-     * @param name the name of the enum
-     * @param visibility the visibility of the enum
-     * @param constantsList list of enum constants for the enum
-     * @return the new enum
+     * Creates a new JaMoPP Enumeration.
+     *
+     * @param name          The simple name of the enum.
+     * @param visibility    The visibility of the enum.
+     * @param constantsList A list of {@link EnumConstant}s for the enum. Can be null or empty.
+     * @return The newly created {@link Enumeration}.
      */
-    public static Enumeration createJavaEnum(final String name, final JavaVisibility visibility, final List<EnumConstant> constantsList) {
+    public static Enumeration createJavaEnum(final String name, final JavaVisibility visibility,
+                                             final List<EnumConstant> constantsList) {
         final Enumeration jEnum = ClassifiersFactory.eINSTANCE.createEnumeration();
         JavaModifierUtil.setName(jEnum, name);
         JavaModifierUtil.setJavaVisibilityModifier(jEnum, visibility);
-        JavaContainerAndClassifierUtil.addEnumConstantIfNotNull(jEnum, constantsList);
+        addEnumConstantIfNotNull(jEnum, constantsList);
         return jEnum;
     }
 
     /**
-     * Add constantList to the enum constants of the given jEnum if constantsList is not null or empty
+     * Adds a list of enum constants to an enumeration if the list is not null or empty.
+     *
+     * @param jEnum         The enumeration to which the constants will be added.
+     * @param constantsList The list of constants to add.
+     * @return {@code true} if constants were added, {@code false} otherwise.
      */
     public static boolean addEnumConstantIfNotNull(final Enumeration jEnum, final List<EnumConstant> constantsList) {
-        boolean wasAdded = false;
-        if (!IterableExtensions.isNullOrEmpty(constantsList)) {
-            wasAdded = jEnum.getConstants().addAll(constantsList);
+        if (constantsList != null && !constantsList.isEmpty()) {
+            return jEnum.getConstants().addAll(constantsList);
         }
-        return wasAdded;
+        return false;
     }
 
     /**
-     * Creates a java compilation unit with the given naem
-     * The method automatically sets the .java FileExtension for the compilation unit name
-     * There are no classifiers in the compilation unit yet.
-     * @param nameWithoutFileExtension the name without .java file extension
-     * @return the new compilation unit
+     * Creates an empty compilation unit with a derived name.
+     *
+     * @param nameWithoutFileExtension The name of the main classifier, which will be used to name the file.
+     * @return A new, empty {@link CompilationUnit}.
      */
     public static CompilationUnit createEmptyCompilationUnit(final String nameWithoutFileExtension) {
         final CompilationUnit cu = ContainersFactory.eINSTANCE.createCompilationUnit();
-        cu.setName((nameWithoutFileExtension + ".java"));
+        cu.setName(nameWithoutFileExtension + ".java");
         return cu;
     }
 
-    public static CompilationUnit createJavaCompilationUnitWithClassifierInPackage(final ConcreteClassifier jClassifier, final org.emftext.language.java.containers.Package jPackage) {
-        final CompilationUnit compUnit = JavaContainerAndClassifierUtil.createEmptyCompilationUnit(jClassifier.getName());
-        EList<ConcreteClassifier> classifiers = compUnit.getClassifiers();
-        classifiers.add(jClassifier);
-        compUnit.getNamespaces().addAll(JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage));
+    /**
+     * Creates a new compilation unit containing a given classifier within a specified package.
+     *
+     * @param jClassifier The classifier to be placed in the compilation unit.
+     * @param jPackage    The package that will contain the compilation unit.
+     * @return The newly created {@link CompilationUnit}.
+     */
+    public static CompilationUnit createJavaCompilationUnitWithClassifierInPackage(final ConcreteClassifier jClassifier,
+                                                                                   final Package jPackage) {
+        final CompilationUnit compUnit = createEmptyCompilationUnit(jClassifier.getName());
+        compUnit.getClassifiers().add(jClassifier);
+        compUnit.getNamespaces().addAll(getJavaPackageAsStringList(jPackage));
         return compUnit;
     }
 
     /**
-     * Removes all classifiers of the iterator which has the same name as the given classifier classif
-     * @param iter iterator of typreferences
-     * @param classif classifier that should be removed from the iterator
+     * Removes a type reference from an iterator if it refers to the specified classifier.
+     *
+     * @param iterator    An iterator over a collection of {@link TypeReference}s.
+     * @param classifier The classifier whose references should be removed.
      */
-    public static void removeClassifierFromIterator(final Iterator<TypeReference> iter, final ConcreteClassifier classif) {
-        while (iter.hasNext()) {
-            TypeReference nextReference = iter.next();
-            final Classifier type = IterableExtensions.<ClassifierReference>head(((NamespaceClassifierReference) nextReference).getClassifierReferences()).getTarget();
-            boolean namesAreEqual = classif.getName().equals(type.getName());
-            if (namesAreEqual) {
-                iter.remove();
+    public static void removeClassifierFromIterator(final Iterator<TypeReference> iterator,
+                                                    final ConcreteClassifier classifier) {
+        while (iterator.hasNext()) {
+            final TypeReference typeReference = iterator.next();
+            if (typeReference instanceof NamespaceClassifierReference) {
+                final NamespaceClassifierReference ncr = (NamespaceClassifierReference) typeReference;
+                final Classifier target = ncr.getClassifierReferences().get(0).getTarget();
+                if (classifier.getName().equals(target.getName())) {
+                    iterator.remove();
+                }
             }
         }
     }
 
     /**
-     * For org.example.package it will return [org, example, package]
-     * Returns empty list if jPackage is the default package.
+     * Converts a JaMoPP package into a list of its namespace segments including its own name.
+     *
+     * @param jPackage The package to convert.
+     * @return A list of strings representing the fully qualified package name, or an empty list if the package is null or unnamed.
      */
-    public static List<String> getJavaPackageAsStringList(final org.emftext.language.java.containers.Package jPackage) {
-        if (((jPackage == null) || StringExtensions.isNullOrEmpty(jPackage.getName()))) {
-            return Collections.<String>emptyList();
+    public static List<String> getJavaPackageAsStringList(final Package jPackage) {
+        if (jPackage != null && jPackage.getName() != null && !jPackage.getName().isEmpty()) {
+            final ArrayList<String> packageStringList = new ArrayList<>();
+            packageStringList.addAll(jPackage.getNamespaces());
+            packageStringList.add(jPackage.getName());
+            return packageStringList;
         }
-        final ArrayList<String> packageStringList = new ArrayList<String>();
-        packageStringList.addAll(jPackage.getNamespaces());
-        String name = jPackage.getName();
-        packageStringList.add(name);
-        return packageStringList;
+        return Collections.emptyList();
     }
 
-    public static Field getJavaAttributeByName(final org.emftext.language.java.classifiers.Class jClass, final String attributeName) {
-        final Iterable<Field> candidates = Iterables.<Field>filter(jClass.getMembers(), Field.class);
-        for (final Field member : candidates) {
-            String name = member.getName();
-            boolean namesAreEqual = Objects.equals(name, attributeName);
-            if (namesAreEqual) {
+    /**
+     * Finds a Java field (attribute) within a class by its name.
+     *
+     * @param jClass        The class to search within.
+     * @param attributeName The name of the field to find.
+     * @return The found {@link Field}, or {@code null} if no field with that name exists.
+     */
+    public static Field getJavaAttributeByName(final org.emftext.language.java.classifiers.Class jClass,
+                                               final String attributeName) {
+        for (final Field member : Iterables.filter(jClass.getMembers(), Field.class)) {
+            if (Objects.equals(member.getName(), attributeName)) {
                 return member;
             }
         }
         return null;
     }
 
+    /**
+     * Retrieves the first constructor defined in a Java class.
+     *
+     * @param jClass The class to search within.
+     * @return The first found {@link Constructor}, or {@code null} if the class has no explicit constructors.
+     */
     public static Constructor getFirstJavaConstructor(final org.emftext.language.java.classifiers.Class jClass) {
-        final Iterable<Constructor> candidates = Iterables.<Constructor>filter(jClass.getMembers(), Constructor.class);
-        if (!IterableExtensions.isNullOrEmpty(candidates)) {
-            return IterableExtensions.<Constructor>head(candidates);
-        } else {
-            return null;
-        }
+        final Iterable<Constructor> candidates = Iterables.filter(jClass.getMembers(), Constructor.class);
+        return !Iterables.isEmpty(candidates) ? Iterables.get(candidates, 0) : null;
     }
 
-    public static void removeJavaClassifierFromPackage(final org.emftext.language.java.containers.Package jPackage, final ConcreteClassifier jClassifier) {
-        final Iterator<CompilationUnit> iter = jPackage.getCompilationUnits().iterator();
-        while (iter.hasNext()) {
-            boolean namesAreEqual = iter.next().getName().equals(jClassifier.getName());
-            if (namesAreEqual) {
-                iter.remove();
+    /**
+     * Removes the compilation unit containing a specific classifier from a package.
+     *
+     * @param jPackage    The package from which to remove the compilation unit.
+     * @param jClassifier The classifier whose containing compilation unit should be removed.
+     */
+    public static void removeJavaClassifierFromPackage(final Package jPackage, final ConcreteClassifier jClassifier) {
+        final Iterator<CompilationUnit> iterator = jPackage.getCompilationUnits().iterator();
+        final String classifierName = jClassifier.getName();
+        while (iterator.hasNext()) {
+            if (iterator.next().getName().startsWith(classifierName + ".")) {
+                iterator.remove();
             }
         }
     }
 
+    /**
+     * Creates a {@code package-info.java} file in a given directory.
+     *
+     * @param directory   The path to the directory where the file will be created.
+     * @param packageName The fully qualified name of the package.
+     * @return The created {@link File}.
+     */
     public static File createPackageInfo(final String directory, final String packageName) {
         try {
-            final File file = new File((directory + "/package-info.java"));
+            final File file = new File(directory + "/package-info.java");
             file.createNewFile();
-            final PrintWriter writer = new PrintWriter(file);
-            writer.println((("package " + packageName) + ";"));
-            writer.close();
+            try (PrintWriter writer = new PrintWriter(file)) {
+                writer.println("package " + packageName + ";");
+            }
             return file;
-        } catch (Throwable e) {
+        } catch (final IOException e) {
             throw Exceptions.sneakyThrow(e);
         }
     }
 
     /**
-     * Finds and retrieves a specific {@link ConcreteClassifier} that is contained in a {@link Package}.
-     * The {@link ConcreteClassifier} is found by name, ignoring the capitalization of the first letter.
-     * @param name is the name of the desired {@link ConcreteClassifier}, the first letter can be upper and lower case.
-     * @param javaPackage is the specific {@link Package} to search in.
-     * @param classifierType specifies the class of the desired {@link ConcreteClassifier}, e.g. {@link Interface}.
-     * @return the found classifier, or null if there is no matching classifer.
-     * @throws IllegalStateException if there are multiple classifers in the package with a matching name.
+     * Finds a classifier of a specific type by name within a package. The search is case-insensitive.
+     *
+     * @param <T>            The type of the classifier to find (e.g., Class, Interface).
+     * @param name           The simple name of the classifier.
+     * @param javaPackage    The package to search in.
+     * @param classifierType The class object for the generic type T.
+     * @return The found classifier, or {@code null} if none is found.
+     * @throws IllegalStateException if more than one matching classifier is found.
      */
-    public static <T extends ConcreteClassifier> T findClassifier(final String name, final org.emftext.language.java.containers.Package javaPackage, final Class<T> classifierType) {
-        final Function1<CompilationUnit, EList<ConcreteClassifier>> getClassifierList = (CompilationUnit it) -> it.getClassifiers();
+    public static <T extends ConcreteClassifier> T findClassifier(final String name, final Package javaPackage,
+                                                                  final Class<T> classifierType) {
 
-        final Function1<T, Boolean> nameMatches = (T it) -> {
-            String classifierNameUpper = StringExtensions.toFirstUpper(it.getName());
-            String searchNameUpper = StringExtensions.toFirstUpper(name);
-            return Objects.equals(classifierNameUpper, searchNameUpper);
-        };
+        final List<T> matchingClassifiers = javaPackage.getCompilationUnits().stream()
+                .flatMap(cu -> cu.getClassifiers().stream())
+                .filter(classifierType::isInstance)
+                .map(classifierType::cast)
+                .filter(it -> it.getName().equalsIgnoreCase(name))
+                .collect(Collectors.toList());
 
-        final Iterable<T> matchingClassifiers = IterableExtensions.filter(
-                Iterables.filter(
-                        Iterables.concat(
-                                ListExtensions.map(javaPackage.getCompilationUnits(), getClassifierList)
-                        ),
-                        classifierType
-                ),
-                nameMatches
-        );
-
-        int size = IterableExtensions.size(matchingClassifiers);
-        if (size > 1) {
-            throw new IllegalStateException(("Multiple matching classifers were found: " + matchingClassifiers));
+        if (matchingClassifiers.size() > 1) {
+            throw new IllegalStateException("Multiple matching classifers were found: " + matchingClassifiers);
         }
-        return IterableExtensions.<T>head(matchingClassifiers);
-    }
-
-    public static org.emftext.language.java.containers.Package getContainingPackageFromCorrespondenceModel(final Classifier classifier, final EditableCorrespondenceModelView<?> correspondenceModel) {
-        String namespace = classifier.getContainingCompilationUnit().getNamespacesAsString();
-        if ((namespace.endsWith("$") || namespace.endsWith("."))) {
-            int length = namespace.length();
-            int minusOne = (length - 1);
-            namespace = namespace.substring(0, minusOne);
-        }
-        final String finalNamespace = namespace;
-        Iterable<org.emftext.language.java.containers.Package> packagesWithCorrespondences = Iterables.<org.emftext.language.java.containers.Package>filter(correspondenceModel.getCorrespondingEObjects(
-                ContainersPackage.Literals.PACKAGE), org.emftext.language.java.containers.Package.class);
-
-        final Function1<org.emftext.language.java.containers.Package, Boolean> packageMatchesNamespace = (org.emftext.language.java.containers.Package pack) -> {
-            String namespacesAsString = pack.getNamespacesAsString();
-            String name = pack.getName();
-            String fullPackageName = (namespacesAsString + name);
-            return finalNamespace.equals(fullPackageName);
-        };
-
-        final Iterable<org.emftext.language.java.containers.Package> packagesWithNamespace = IterableExtensions.<org.emftext.language.java.containers.Package>filter(packagesWithCorrespondences, packageMatchesNamespace);
-
-        if (packagesWithNamespace != null && IterableExtensions.size(packagesWithNamespace) > 0 && packagesWithNamespace.iterator().next() != null) {
-            return packagesWithNamespace.iterator().next();
-        }
-        return null;
+        return matchingClassifiers.isEmpty() ? null : matchingClassifiers.get(0);
     }
 
     /**
-     * Returns the namespace of the compilation unit where the given object is directly or indirectly contained
+     * Finds the JaMoPP package corresponding to a given classifier by querying a correspondence model.
+     *
+     * @param classifier          The classifier whose containing package is sought.
+     * @param correspondenceModel The correspondence model view to query.
+     * @return The corresponding {@link Package}, or {@code null} if not found.
      */
-    protected static List<String> getJavaNamespaceForCompilationUnit(final CompilationUnit compUnit) {
-        return compUnit.getNamespaces();
+    public static Package getContainingPackageFromCorrespondenceModel(final Classifier classifier,
+                                                                      final EditableCorrespondenceModelView<?> correspondenceModel) {
+        String namespace = classifier.getContainingCompilationUnit().getNamespacesAsString();
+        if (namespace.endsWith("$") || namespace.endsWith(".")) {
+            namespace = namespace.substring(0, namespace.length() - 1);
+        }
+
+        final String finalNamespace = namespace;
+        final Iterable<Package> packagesWithCorrespondences = Iterables.filter(
+                correspondenceModel.getCorrespondingEObjects(Literals.PACKAGE), Package.class);
+
+        return Iterables.tryFind(packagesWithCorrespondences,
+                pack -> finalNamespace.equals(pack.getNamespacesAsString() + pack.getName())).orNull();
     }
 
-    protected static List<String> getJavaNamespaceForConcreteClassifier(final ConcreteClassifier classifier) {
-        EObject eContainer = classifier.eContainer();
-        return JavaContainerAndClassifierUtil.getJavaNamespaceForCompilationUnit(((CompilationUnit) eContainer));
+    /**
+     * Retrieves the list of namespace segments for a given Java element.
+     *
+     * @param element The element (e.g., a Classifier, CompilationUnit).
+     * @return The list of namespace strings.
+     * @throws IllegalArgumentException if the element type is not supported.
+     */
+    public static List<String> getJavaNamespace(final NamedElement element) {
+        if (element instanceof ConcreteClassifier) {
+            return getJavaNamespace(getContainingCompilationUnit(element));
+        }
+        if (element instanceof CompilationUnit) {
+            return ((CompilationUnit) element).getNamespaces();
+        }
+        if (element == null) {
+            throw new IllegalArgumentException("Can not retrieve namespace for null");
+        }
+        throw new IllegalArgumentException("Unsupported type for retrieving namespace: " + element.getClass().getName());
     }
 
-    protected static List<String> getJavaNamespaceForNamedElement(final NamedElement element) {
-        throw new IllegalArgumentException(("Unsupported type for retrieving namespace: " + element));
+    /**
+     * Retrieves the containing compilation unit for a given Java element.
+     *
+     * @param element The element (e.g., a Classifier, Member, Parameter).
+     * @return The containing {@link CompilationUnit}.
+     * @throws IllegalArgumentException if the element type is not supported.
+     */
+    public static CompilationUnit getContainingCompilationUnit(final NamedElement element) {
+        if (element instanceof CompilationUnit) {
+            return (CompilationUnit) element;
+        }
+        if (element instanceof ConcreteClassifier) {
+            return (CompilationUnit) element.eContainer();
+        }
+        if (element instanceof Member) {
+            return getContainingCompilationUnit((ConcreteClassifier) element.eContainer());
+        }
+        if (element instanceof Parameter) {
+            return getContainingCompilationUnit((Member) element.eContainer());
+        }
+        if (element == null) {
+            throw new IllegalArgumentException("Can not retrieve compilation unit for null");
+        }
+        throw new IllegalArgumentException(
+                "Unsupported type for retrieving compilation unit: " + element.getClass().getName());
     }
 
-    protected static List<String> getJavaNamespaceForVoid(final Void element) {
-        throw new IllegalArgumentException(("Can not retrieve namespace for " + element));
-    }
-
-    protected static CompilationUnit getContainingCompilationUnitForConcreteClassifier(final ConcreteClassifier classifier) {
-        EObject eContainer = classifier.eContainer();
-        return ((CompilationUnit) eContainer);
-    }
-
-    protected static CompilationUnit getContainingCompilationUnitForMember(final Member mem) {
-        EObject eContainer = mem.eContainer();
-        return JavaContainerAndClassifierUtil.getContainingCompilationUnitForConcreteClassifier(((ConcreteClassifier) eContainer));
-    }
-
-    protected static CompilationUnit getContainingCompilationUnitForParameter(final Parameter param) {
-        EObject eContainer = param.eContainer();
-        return JavaContainerAndClassifierUtil.getContainingCompilationUnitForMember(((Member) eContainer));
-    }
-
-    protected static CompilationUnit getContainingCompilationUnitForNamedElement(final NamedElement element) {
-        throw new IllegalArgumentException(("Unsupported type for retrieving compilation unit: " + element));
-    }
-
-    protected static CompilationUnit getContainingCompilationUnitForVoid(final Void element) {
-        throw new IllegalArgumentException(("Can not retrieve compilation unit for " + element));
-    }
-
+    /**
+     * Extracts the root segment from a fully qualified package name.
+     *
+     * @param packageName The package name (e.g., "org.example.test").
+     * @return The root segment ("org"), or the full name if there are no dots. Returns null if input is null.
+     */
     public static String getRootPackageName(final String packageName) {
         if (packageName == null) {
             return null;
         }
-        String[] parts = packageName.split("\\.");
-        if (parts.length > 0) {
-            return parts[0];
-        }
-        return ""; // for empty packageName
+        final String[] packageParts = packageName.split("\\.");
+        return packageParts.length > 0 ? packageParts[0] : null;
     }
 
+    /**
+     * Extracts all but the root segment from a fully qualified package name.
+     *
+     * @param packageName The package name (e.g., "org.example.test").
+     * @return The trailing segments ("example.test"), or the full name if there are no dots. Returns null if input is null.
+     */
     public static String getLastPackageName(final String packageName) {
         if (packageName == null) {
             return null;
         }
-        int firstDotIndex = packageName.indexOf(".");
-        if (firstDotIndex < 0) {
-            return packageName; // No dot found, return the whole string as per original logic
-        }
-        return packageName.substring(firstDotIndex + 1);
+        final int firstDotIndex = packageName.indexOf(".");
+        return firstDotIndex >= 0 ? packageName.substring(firstDotIndex + 1) : packageName;
     }
 
-    private static String buildCompilationUnitName(final String namespacesAsString, final String classifierName) {
-        return ((namespacesAsString + classifierName) + ".java");
+    /**
+     * Constructs the fully qualified name for a compilation unit based on a classifier name and its namespaces.
+     *
+     * @param namespacesAsString A dot-separated string of parent packages.
+     * @param classifierName     The simple name of the main classifier in the unit.
+     * @return The full name of the compilation unit (e.g., "com.example.MyClass.java").
+     */
+    private static String getCompilationUnitName(final String namespacesAsString, final String classifierName) {
+        return namespacesAsString + classifierName + ".java";
     }
 
-    public static String getCompilationUnitName(final org.emftext.language.java.containers.Package containingPackage, final String className) {
-        StringConcatenation builder = new StringConcatenation();
+    /**
+     * Constructs the fully qualified name for a compilation unit.
+     *
+     * @param containingPackage The package containing the unit. Can be null.
+     * @param className         The simple name of the main class in the unit.
+     * @return The full name of the compilation unit.
+     */
+    public static String getCompilationUnitName(final Package containingPackage, final String className) {
+        final StringBuilder builder = new StringBuilder();
         if (containingPackage != null) {
-            String namespacesAsString = containingPackage.getNamespacesAsString();
-            builder.append(namespacesAsString);
-            String name = containingPackage.getName();
-            builder.append(name);
+            builder.append(containingPackage.getNamespacesAsString());
+            builder.append(containingPackage.getName());
             builder.append(".");
         }
-        return JavaContainerAndClassifierUtil.buildCompilationUnitName(builder.toString(), className);
+        return getCompilationUnitName(builder.toString(), className);
     }
 
-    public static String getCompilationUnitName(final Optional<org.emftext.language.java.containers.Package> containingPackage, final String className) {
-        return JavaContainerAndClassifierUtil.getCompilationUnitName(containingPackage.orElse(null), className);
+    /**
+     * Constructs the fully qualified name for a compilation unit from an Optional package.
+     *
+     * @param containingPackage An Optional that may contain the package.
+     * @param className         The simple name of the main class in the unit.
+     * @return The full name of the compilation unit.
+     */
+    public static String getCompilationUnitName(final Optional<Package> containingPackage, final String className) {
+        return getCompilationUnitName(containingPackage.orElse(null), className);
     }
 
-    public static boolean updateNamespaces(final NamespaceAwareElement elementToChange, final List<String> newNamespaces) {
-        EList<String> currentNamespaces = elementToChange.getNamespaces();
-        boolean notEquals = (!Objects.equals(newNamespaces, currentNamespaces));
-        if (notEquals) {
-            elementToChange.getNamespaces().clear();
-            EList<String> namespacesToUpdate = elementToChange.getNamespaces();
-            Iterables.<String>addAll(namespacesToUpdate, newNamespaces);
+    /**
+     * Updates the namespaces of an element.
+     *
+     * @param elementToChange The element whose namespaces are to be updated.
+     * @param newNamespaces   The new list of namespace strings.
+     * @return {@code true} if the namespaces were changed, {@code false} otherwise.
+     */
+    public static boolean updateNamespaces(final NamespaceAwareElement elementToChange,
+                                           final List<String> newNamespaces) {
+        final EList<String> currentNamespaces = elementToChange.getNamespaces();
+        if (!Objects.equals(newNamespaces, currentNamespaces)) {
+            currentNamespaces.clear();
+            currentNamespaces.addAll(newNamespaces);
             return true;
         }
         return false;
     }
 
-    public static boolean updateNamespaces(final NamespaceAwareElement elementToChange, final Optional<org.emftext.language.java.containers.Package> containingPackage) {
-        if (containingPackage.isPresent()) {
-            return JavaContainerAndClassifierUtil.updateNamespaces(elementToChange, containingPackage.get());
-        } else {
-            return JavaContainerAndClassifierUtil.updateNamespaces(elementToChange, Collections.<String>emptyList());
-        }
+    /**
+     * Updates the namespaces of an element based on an Optional containing package.
+     *
+     * @param elementToChange   The element to update.
+     * @param containingPackage An Optional that may contain the package.
+     * @return {@code true} if the namespaces were changed, {@code false} otherwise.
+     */
+    public static boolean updateNamespaces(final NamespaceAwareElement elementToChange,
+                                           final Optional<Package> containingPackage) {
+        final List<String> newNamespaces = containingPackage.map(JavaContainerAndClassifierUtil::getJavaPackageAsStringList)
+                .orElse(Collections.emptyList());
+        return updateNamespaces(elementToChange, newNamespaces);
     }
 
-    public static boolean updateNamespaces(final NamespaceAwareElement elementToChange, final org.emftext.language.java.containers.Package containingPackage) {
-        return JavaContainerAndClassifierUtil.updateNamespaces(elementToChange, JavaContainerAndClassifierUtil.getJavaPackageAsStringList(containingPackage));
+    /**
+     * Updates the namespaces of an element to match a given package.
+     *
+     * @param elementToChange   The element to update.
+     * @param containingPackage The package whose namespace structure should be adopted.
+     * @return {@code true} if the namespaces were changed, {@code false} otherwise.
+     */
+    public static boolean updateNamespaces(final NamespaceAwareElement elementToChange, final Package containingPackage) {
+        return updateNamespaces(elementToChange, getJavaPackageAsStringList(containingPackage));
     }
 
+    /**
+     * Updates the name of a named element.
+     *
+     * @param elementToChange The element whose name is to be updated.
+     * @param newName         The new name for the element.
+     * @return {@code true} if the name was changed, {@code false} otherwise.
+     */
     public static boolean updateName(final NamedElement elementToChange, final String newName) {
-        String currentName = elementToChange.getName();
-        boolean notEquals = (!Objects.equals(newName, currentName));
-        if (notEquals) {
+        if (!Objects.equals(newName, elementToChange.getName())) {
             elementToChange.setName(newName);
             return true;
         }
         return false;
     }
 
+    /**
+     * Updates the file name of a compilation unit based on its namespaces and a new simple name.
+     *
+     * @param compilationUnit The compilation unit to update.
+     * @param simpleName      The new simple name of the primary classifier.
+     */
     public static void updateCompilationUnitName(final CompilationUnit compilationUnit, final String simpleName) {
-        // Use the built-in JaMoPP method to get the correctly formatted namespace string (e.g., "my.package.")
-        String namespaceString = compilationUnit.getNamespacesAsString();
-        compilationUnit.setName(JavaContainerAndClassifierUtil.buildCompilationUnitName(namespaceString, simpleName));
+        final String namespacesAsString = String.join(".", compilationUnit.getNamespaces());
+        final String prefix = namespacesAsString.isEmpty() ? "" : namespacesAsString + ".";
+        compilationUnit.setName(prefix + simpleName + ".java");
     }
 
     /**
-     * Updates the classifier name together with the name of its compilation unit.
+     * Changes the name of a classifier and updates the name of its containing compilation unit accordingly.
+     *
+     * @param classifier The classifier to rename.
+     * @param newName    The new simple name for the classifier.
      */
     public static void changeNameWithCompilationUnit(final Classifier classifier, final String newName) {
-        JavaContainerAndClassifierUtil.updateName(classifier, newName);
-        CompilationUnit containingCompilationUnit = classifier.getContainingCompilationUnit();
+        updateName(classifier, newName);
+        final CompilationUnit containingCompilationUnit = classifier.getContainingCompilationUnit();
         if (containingCompilationUnit != null) {
-            JavaContainerAndClassifierUtil.updateCompilationUnitName(containingCompilationUnit, newName);
+            updateCompilationUnitName(containingCompilationUnit, newName);
         }
     }
 
+    /**
+     * Checks if a compilation unit is part of an existing library (e.g., the JDK) by checking its URI scheme.
+     *
+     * @param compilationUnit The compilation unit to check.
+     * @return {@code true} if the unit is from a library identified by a pathmap URI, {@code false} otherwise.
+     */
     public static boolean isInExistingLibrary(final CompilationUnit compilationUnit) {
         return URIUtil.isPathmap(compilationUnit.eResource().getURI());
     }
 
+    /**
+     * Checks if a classifier is part of an existing library.
+     *
+     * @param classifier The classifier to check.
+     * @return {@code true} if the classifier is from a library, {@code false} otherwise.
+     */
     public static boolean isInExistingLibrary(final Classifier classifier) {
-        return JavaContainerAndClassifierUtil.isInExistingLibrary(classifier.getContainingCompilationUnit());
-    }
-
-    @XbaseGenerated
-    public static List<String> getJavaNamespace(final NamedElement classifier) {
-        if (classifier instanceof ConcreteClassifier) {
-            return getJavaNamespaceForConcreteClassifier((ConcreteClassifier)classifier);
-        } else if (classifier instanceof CompilationUnit) {
-            return getJavaNamespaceForCompilationUnit((CompilationUnit)classifier);
-        } else if (classifier != null) {
-            return getJavaNamespaceForNamedElement(classifier);
-        } else {
-            return getJavaNamespaceForVoid((Void)null);
-        }
-    }
-
-    @XbaseGenerated
-    public static CompilationUnit getContainingCompilationUnit(final NamedElement classifier) {
-        if (classifier instanceof ConcreteClassifier) {
-            return getContainingCompilationUnitForConcreteClassifier((ConcreteClassifier)classifier);
-        } else if (classifier instanceof Parameter) {
-            return getContainingCompilationUnitForParameter((Parameter)classifier);
-        } else if (classifier instanceof Member) {
-            return getContainingCompilationUnitForMember((Member)classifier);
-        } else if (classifier != null) {
-            return getContainingCompilationUnitForNamedElement(classifier);
-        } else {
-            return getContainingCompilationUnitForVoid((Void)null);
-        }
-    }
-
-    private JavaContainerAndClassifierUtil() {
-
+        return isInExistingLibrary(classifier.getContainingCompilationUnit());
     }
 }

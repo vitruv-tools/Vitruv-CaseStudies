@@ -9,10 +9,12 @@ import java.util.Objects;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
+import org.eclipse.xtext.xbase.lib.XbaseGenerated;
 import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.annotations.AnnotationInstance;
 import org.emftext.language.java.annotations.AnnotationsFactory;
@@ -38,6 +40,7 @@ import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.parameters.Parameter;
 import org.emftext.language.java.parameters.ParametersFactory;
 import org.emftext.language.java.references.IdentifierReference;
+import org.emftext.language.java.references.Reference;
 import org.emftext.language.java.references.ReferenceableElement;
 import org.emftext.language.java.references.ReferencesFactory;
 import org.emftext.language.java.references.SelfReference;
@@ -55,27 +58,27 @@ import org.emftext.language.java.types.TypesFactory;
 import org.emftext.language.java.types.Void;
 
 /**
- * A utility class for programmatically modifying Java code models (ASTs) using the JaMoPP framework.
- * It provides high-level helper methods for common code generation tasks like adding fields,
- * constructors, imports, and complex statements.
+ * Utility class for creating and modifying JaMoPP (Java Model-to-Model Printer) Ecore models programmatically.
+ * This class provides helper methods for common tasks such as creating parameters, fields, imports, and assignments.
  */
 @Utility
 public final class JavaModificationUtil {
-
     private static final Logger logger = Logger.getLogger(JavaModificationUtil.class);
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private JavaModificationUtil() {
-        // Private constructor to prevent instantiation of this utility class.
     }
 
     /**
-     * Creates a new method parameter.
+     * Creates an ordinary method parameter.
      *
-     * @param typeReference The type of the parameter (e.g., a reference to String.class).
-     * @param name          The name of the parameter (e.g., "myString").
-     * @return The newly created {@link Parameter} object.
+     * @param typeReference The type of the parameter.
+     * @param name The name of the parameter.
+     * @return The newly created {@link Parameter}.
      */
-    public static Parameter createOrdinaryParameter(TypeReference typeReference, String name) {
+    public static Parameter createOrdinaryParameter(final TypeReference typeReference, final String name) {
         OrdinaryParameter parameter = ParametersFactory.eINSTANCE.createOrdinaryParameter();
         parameter.setName(name);
         parameter.setTypeReference(typeReference);
@@ -83,113 +86,96 @@ public final class JavaModificationUtil {
     }
 
     /**
-     * Creates a statement that assigns a parameter's value to a field, e.g., {@code this.field = parameter;}.
+     * Creates a statement that assigns a parameter's value to a field (e.g., "this.field = parameter;").
      *
-     * @param field     The class field to assign to.
-     * @param parameter The parameter to assign from.
+     * @param field The field to assign to.
+     * @param parameter The parameter whose value will be assigned.
      * @return The newly created assignment {@link Statement}.
      */
-    public static Statement createAssignmentFromParameterToField(Field field, Parameter parameter) {
-        // The statement is an ExpressionStatement that holds the assignment.
+    public static Statement createAssignmentFromParameterToField(final Field field, final Parameter parameter) {
         ExpressionStatement expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement();
+        AssignmentExpression assigmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression();
 
-        // Create the core assignment expression: LHS = RHS
-        AssignmentExpression assignmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression();
-
-        // Build the Left Hand Side (LHS): this.field
         SelfReference selfReference = ReferencesFactory.eINSTANCE.createSelfReference();
         selfReference.setSelf(LiteralsFactory.eINSTANCE.createThis());
+        assigmentExpression.setChild(selfReference);
+
         IdentifierReference fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference();
         fieldReference.setTarget(field);
-        selfReference.setNext(fieldReference); // Chain them: this -> .field
-        assignmentExpression.setChild(selfReference);
+        selfReference.setNext(fieldReference);
 
-        // Set the assignment operator: =
-        assignmentExpression.setAssignmentOperator(OperatorsFactory.eINSTANCE.createAssignment());
+        assigmentExpression.setAssignmentOperator(OperatorsFactory.eINSTANCE.createAssignment());
 
-        // Build the Right Hand Side (RHS): a reference to the parameter
         IdentifierReference identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference();
         identifierReference.setTarget(parameter);
-        assignmentExpression.setValue(identifierReference);
+        assigmentExpression.setValue(identifierReference);
 
-        expressionStatement.setExpression(assignmentExpression);
+        expressionStatement.setExpression(assigmentExpression);
         return expressionStatement;
     }
 
     /**
      * Creates a {@link NamespaceClassifierReference} for a given {@link ConcreteClassifier}.
-     * This is used to create a typed reference to a class, including its package name.
      *
-     * @param concreteClassifier The classifier to reference (e.g., the JaMoPP model for ArrayList).
+     * @param concreteClassifier The classifier to reference.
      * @return The newly created {@link NamespaceClassifierReference}.
      */
-    public static NamespaceClassifierReference createNamespaceClassifierReference(ConcreteClassifier concreteClassifier) {
+    public static NamespaceClassifierReference createNamespaceClassifierReference(final ConcreteClassifier concreteClassifier) {
         NamespaceClassifierReference namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference();
         createNamespaceClassifierReference(namespaceClassifierReference, concreteClassifier);
         return namespaceClassifierReference;
     }
 
     /**
-     * Adds an import statement for a given classifier to the compilation unit of another classifier.
+     * Adds an import for a classifier to the compilation unit of another classifier.
      *
-     * @param requiredInterfaceImport
-     * @param classifier              The classifier whose compilation unit will receive the new import.
-     * @param classifierToImport      The classifier that needs to be imported.
-     * @return The newly created {@link Import} object.
+     * @param classifier The classifier whose compilation unit will receive the import.
+     * @param classifierToImport The classifier to be imported.
+     * @return The newly created {@link Import}.
      */
-    public static Import addImportToCompilationUnitOfClassifier(ClassifierImport requiredInterfaceImport, Classifier classifier, ConcreteClassifier classifierToImport) {
+    public static Import addImportToCompilationUnitOfClassifier(final Classifier classifier, final ConcreteClassifier classifierToImport) {
         ClassifierImport classifierImport = ImportsFactory.eINSTANCE.createClassifierImport();
-
-        CompilationUnit compilationUnitToImportFrom = classifierToImport.getContainingCompilationUnit();
-        if (compilationUnitToImportFrom != null) {
-            // Copy the package (namespaces) from the source compilation unit.
-            EList<String> namespaces = compilationUnitToImportFrom.getNamespaces();
+        CompilationUnit containingCompilationUnit = classifierToImport.getContainingCompilationUnit();
+        if (containingCompilationUnit != null) {
+            EList<String> namespaces = containingCompilationUnit.getNamespaces();
             if (namespaces != null) {
                 classifierImport.getNamespaces().addAll(namespaces);
             }
             classifier.getContainingCompilationUnit().getImports().add(classifierImport);
         }
-
         classifierImport.setClassifier(classifierToImport);
         return classifierImport;
     }
 
     /**
-     * Populates a {@link NamespaceClassifierReference} with the details from a {@link ConcreteClassifier}.
-     * This includes handling classifiers that are proxies (e.g., from external JARs).
+     * Populates a {@link NamespaceClassifierReference} to point to a given {@link ConcreteClassifier}.
+     * This method handles both resolved classifiers within a compilation unit and proxy classifiers from the classpath.
      *
-     * @param namespaceClassifierReference The reference object to populate.
-     * @param concreteClassifier           The classifier to get the details from.
-     * @return True if namespaces were successfully added, false otherwise.
+     * @param namespaceClassifierReference The reference to populate.
+     * @param concreteClassifier The target classifier.
+     * @return {@code true} if namespaces were successfully added to the reference, {@code false} otherwise.
      */
-    public static boolean createNamespaceClassifierReference(NamespaceClassifierReference namespaceClassifierReference, ConcreteClassifier concreteClassifier) {
-        // Create the reference to the class itself.
+    public static boolean createNamespaceClassifierReference(final NamespaceClassifierReference namespaceClassifierReference, final ConcreteClassifier concreteClassifier) {
         ClassifierReference classifierRef = TypesFactory.eINSTANCE.createClassifierReference();
         classifierRef.setTarget(concreteClassifier);
         namespaceClassifierReference.getClassifierReferences().add(classifierRef);
 
-        // Handle adding the package (namespaces).
-        CompilationUnit containingUnit = concreteClassifier.getContainingCompilationUnit();
-        if (containingUnit != null) {
-            // Case 1: The classifier is fully loaded in the model.
-            return Iterables.addAll(namespaceClassifierReference.getNamespaces(), containingUnit.getNamespaces());
+        CompilationUnit containingCompilationUnit = concreteClassifier.getContainingCompilationUnit();
+        if (containingCompilationUnit != null) {
+            return Iterables.addAll(namespaceClassifierReference.getNamespaces(), containingCompilationUnit.getNamespaces());
         } else if (concreteClassifier.eIsProxy()) {
-            // Case 2: The classifier is a proxy, likely from a JAR file resolved by JaMoPP's classpath.
-            // We need to parse the package name from its URI.
             URI uri = EcoreUtil.getURI(concreteClassifier);
+            String prefix = "/javaclass/";
+            String suffix = concreteClassifier.getName() + ".java";
             String path = uri.path();
 
-            // JaMoPP URIs for compiled classes often look like: /javaclass/java.lang.String.java
-            String prefix = "/javaclass/";
-            String suffix = concreteClassifier.getName() + ".java"; // Construct the expected suffix.
-
             if (path != null && path.startsWith(prefix) && path.endsWith(suffix)) {
-                // Extract the middle part containing the package name.
-                int packageEndIndex = path.length() - suffix.length() - 1; // -1 for the dot before class name
-                if (packageEndIndex > prefix.length()) {
-                    String packagePath = path.substring(prefix.length(), packageEndIndex);
-                    String[] namespaces = packagePath.split("\\.");
-                    return Iterables.addAll(namespaceClassifierReference.getNamespaces(), Arrays.asList(namespaces));
+                int beginIndex = prefix.length();
+                int endIndex = path.length() - suffix.length() -1; // remove trailing dot
+                if (beginIndex < endIndex) {
+                    String namespaceString = path.substring(beginIndex, endIndex);
+                    String[] namespaces = namespaceString.split("\\.");
+                    return Iterables.addAll(namespaceClassifierReference.getNamespaces(), (Iterable<String>) Conversions.doWrapArray(namespaces));
                 }
             }
         }
@@ -197,20 +183,18 @@ public final class JavaModificationUtil {
     }
 
     /**
-     * Populates a {@link Field} object to be a private field.
+     * Configures a {@link Field} to be a private field with a given type and name.
      * If the name is null or empty, a default name is generated based on the type.
      *
-     * @param field     The Field object to configure.
-     * @param reference The type of the field.
-     * @param name      The desired name for the field.
+     * @param field The field EObject to configure.
+     * @param reference The type reference for the field.
+     * @param name The desired name for the field.
      */
-    public static void createPrivateField(Field field, TypeReference reference, String name) {
+    public static void createPrivateField(final Field field, final TypeReference reference, final String name) {
         field.setTypeReference(EcoreUtil.copy(reference));
         field.getAnnotationsAndModifiers().add(ModifiersFactory.eINSTANCE.createPrivate());
-
         String fieldName = name;
         if (StringExtensions.isNullOrEmpty(name)) {
-            // Generate a default name if none is provided.
             String typeName = JavaQueryUtil.getNameFromJaMoPPType(reference);
             fieldName = "field_" + typeName;
         }
@@ -218,47 +202,114 @@ public final class JavaModificationUtil {
     }
 
     /**
-     * Gets the corresponding wrapper class type reference for a given primitive type.
-     * For example, for {@code int}, it returns a reference to {@code java.lang.Integer}.
+     * Default dispatch method for finding a wrapper type for a primitive type. Logs a warning.
      *
      * @param type The primitive type.
-     * @return A {@link TypeReference} to the wrapper class, or null if no mapping exists.
+     * @return {@code null}, as no specific wrapper is found.
      */
-    public static TypeReference getWrapperTypeReferenceForPrimitive(PrimitiveType type) {
-        if (type instanceof Int) return getWrapperTypeReferenceFor((Int) type);
-        if (type instanceof Char) return getWrapperTypeReferenceFor((Char) type);
-        if (type instanceof org.emftext.language.java.types.Boolean) return getWrapperTypeReferenceFor((org.emftext.language.java.types.Boolean) type);
-        if (type instanceof org.emftext.language.java.types.Byte) return getWrapperTypeReferenceFor((org.emftext.language.java.types.Byte) type);
-        if (type instanceof org.emftext.language.java.types.Double) return getWrapperTypeReferenceFor((org.emftext.language.java.types.Double) type);
-        if (type instanceof org.emftext.language.java.types.Float) return getWrapperTypeReferenceFor((org.emftext.language.java.types.Float) type);
-        if (type instanceof org.emftext.language.java.types.Long) return getWrapperTypeReferenceFor((org.emftext.language.java.types.Long) type);
-        if (type instanceof org.emftext.language.java.types.Short) return getWrapperTypeReferenceFor((org.emftext.language.java.types.Short) type);
-        if (type instanceof Void) return getWrapperTypeReferenceFor((Void) type);
-
-        logger.warn("No dispatch method found for primitive type: " + type);
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final PrimitiveType type) {
+        logger.warn("no dispatch method found for type: " + type);
         return null;
     }
 
-    // Private helper methods for primitive-to-wrapper mapping.
-    private static TypeReference getWrapperTypeReferenceFor(org.emftext.language.java.types.Boolean type) { return createNamespaceClassifierReferenceForName("java.lang.Boolean"); }
-    private static TypeReference getWrapperTypeReferenceFor(org.emftext.language.java.types.Byte type) { return createNamespaceClassifierReferenceForName("java.lang.Byte"); }
-    private static TypeReference getWrapperTypeReferenceFor(Char type) { return createNamespaceClassifierReferenceForName("java.lang.Character"); }
-    private static TypeReference getWrapperTypeReferenceFor(org.emftext.language.java.types.Double type) { return createNamespaceClassifierReferenceForName("java.lang.Double"); }
-    private static TypeReference getWrapperTypeReferenceFor(org.emftext.language.java.types.Float type) { return createNamespaceClassifierReferenceForName("java.lang.Float"); }
-    private static TypeReference getWrapperTypeReferenceFor(Int type) { return createNamespaceClassifierReferenceForName("java.lang.Integer"); }
-    private static TypeReference getWrapperTypeReferenceFor(org.emftext.language.java.types.Long type) { return createNamespaceClassifierReferenceForName("java.lang.Long"); }
-    private static TypeReference getWrapperTypeReferenceFor(org.emftext.language.java.types.Short type) { return createNamespaceClassifierReferenceForName("java.lang.Short"); }
-    private static TypeReference getWrapperTypeReferenceFor(Void type) { return createNamespaceClassifierReferenceForName("java.lang.Void"); }
-
+    /**
+     * Returns a type reference to {@code java.lang.Boolean} for the primitive {@code boolean} type.
+     *
+     * @param type The boolean primitive type instance (not used, for dispatch only).
+     * @return A {@link TypeReference} for the Boolean wrapper class.
+     */
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final org.emftext.language.java.types.Boolean type) {
+        return createNamespaceClassifierReferenceForName("java.lang", "Boolean");
+    }
 
     /**
-     * Creates an import statement for a class given its fully qualified name.
+     * Returns a type reference to {@code java.lang.Byte} for the primitive {@code byte} type.
      *
-     * @param qualifiedName The fully qualified name of the class to import (e.g., "java.util.List").
-     * @return The newly created {@link ClassifierImport}.
+     * @param type The byte primitive type instance (not used, for dispatch only).
+     * @return A {@link TypeReference} for the Byte wrapper class.
      */
-    public static ClassifierImport createJavaClassImport(String qualifiedName) {
-        ConcreteClassifier classifier = getClassifier(qualifiedName);
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final org.emftext.language.java.types.Byte type) {
+        return createNamespaceClassifierReferenceForName("java.lang", "Byte");
+    }
+
+    /**
+     * Returns a type reference to {@code java.lang.Character} for the primitive {@code char} type.
+     *
+     * @param type The char primitive type instance.
+     * @return A {@link TypeReference} for the Character wrapper class.
+     */
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final Char type) {
+        return createNamespaceClassifierReferenceForName("java.lang", "Character");
+    }
+
+    /**
+     * Returns a type reference to {@code java.lang.Double} for the primitive {@code double} type.
+     *
+     * @param type The double primitive type instance (not used, for dispatch only).
+     * @return A {@link TypeReference} for the Double wrapper class.
+     */
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final org.emftext.language.java.types.Double type) {
+        return createNamespaceClassifierReferenceForName("java.lang", "Double");
+    }
+
+    /**
+     * Returns a type reference to {@code java.lang.Float} for the primitive {@code float} type.
+     *
+     * @param type The float primitive type instance (not used, for dispatch only).
+     * @return A {@link TypeReference} for the Float wrapper class.
+     */
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final org.emftext.language.java.types.Float type) {
+        return createNamespaceClassifierReferenceForName("java.lang", "Float");
+    }
+
+    /**
+     * Returns a type reference to {@code java.lang.Integer} for the primitive {@code int} type.
+     *
+     * @param type The int primitive type instance.
+     * @return A {@link TypeReference} for the Integer wrapper class.
+     */
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final Int type) {
+        return createNamespaceClassifierReferenceForName("java.lang", "Integer");
+    }
+
+    /**
+     * Returns a type reference to {@code java.lang.Long} for the primitive {@code long} type.
+     *
+     * @param type The long primitive type instance (not used, for dispatch only).
+     * @return A {@link TypeReference} for the Long wrapper class.
+     */
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final org.emftext.language.java.types.Long type) {
+        return createNamespaceClassifierReferenceForName("java.lang", "Long");
+    }
+
+    /**
+     * Returns a type reference to {@code java.lang.Short} for the primitive {@code short} type.
+     *
+     * @param type The short primitive type instance (not used, for dispatch only).
+     * @return A {@link TypeReference} for the Short wrapper class.
+     */
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final org.emftext.language.java.types.Short type) {
+        return createNamespaceClassifierReferenceForName("java.lang", "Short");
+    }
+
+    /**
+     * Returns a type reference to {@code java.lang.Void}.
+     *
+     * @param type The void primitive type instance.
+     * @return A {@link TypeReference} for the Void wrapper class.
+     */
+    protected static TypeReference getWrapperTypeReferenceForPrimitiveType(final Void type) {
+        return createNamespaceClassifierReferenceForName("java.lang", "Void");
+    }
+
+    /**
+     * Creates a Java class import statement from a fully qualified class name.
+     *
+     * @param name The fully qualified name of the class to import.
+     * @return The created {@link ClassifierImport}.
+     */
+    public static ClassifierImport createJavaClassImport(final String name) {
+        ConcreteClassifier classifier = getClassifier(name);
         ClassifierImport classifierImport = ImportsFactory.eINSTANCE.createClassifierImport();
         classifierImport.setClassifier(classifier);
         return classifierImport;
@@ -267,11 +318,11 @@ public final class JavaModificationUtil {
     /**
      * Creates a {@link NamespaceClassifierReference} for a class given its namespace and simple name.
      *
-     * @param namespace The package name (e.g., "java.lang").
-     * @param name      The simple class name (e.g., "String").
-     * @return The newly created {@link NamespaceClassifierReference}.
+     * @param namespace The package/namespace of the class (e.g., "java.lang").
+     * @param name The simple name of the class (e.g., "String").
+     * @return The created {@link NamespaceClassifierReference}.
      */
-    public static NamespaceClassifierReference createNamespaceClassifierReferenceForName(String namespace, String name) {
+    public static NamespaceClassifierReference createNamespaceClassifierReferenceForName(final String namespace, final String name) {
         ConcreteClassifier classifier = getClassifier(namespace + "." + name);
         return createNamespaceClassifierReference(classifier);
     }
@@ -279,64 +330,63 @@ public final class JavaModificationUtil {
     /**
      * Creates a {@link NamespaceClassifierReference} for a class given its fully qualified name.
      *
-     * @param qualifiedName The fully qualified name (e.g., "java.util.ArrayList").
-     * @return The newly created {@link NamespaceClassifierReference}.
+     * @param qualifiedName The fully qualified name of the class (e.g., "java.util.List").
+     * @return The created {@link NamespaceClassifierReference}.
      */
-    public static NamespaceClassifierReference createNamespaceClassifierReferenceForName(String qualifiedName) {
+    public static NamespaceClassifierReference createNamespaceClassifierReferenceForName(final String qualifiedName) {
         return createNamespaceClassifierReference(getClassifier(qualifiedName));
     }
 
     /**
-     * Retrieves a {@link ConcreteClassifier} from the Java classpath using its fully qualified name.
+     * Retrieves a {@link ConcreteClassifier} from the Java classpath by its fully qualified name.
      *
      * @param qualifiedName The fully qualified name of the classifier.
-     * @return The resolved {@link ConcreteClassifier}.
+     * @return The found {@link ConcreteClassifier}, or a proxy if not fully resolved.
      */
-    public static ConcreteClassifier getClassifier(String qualifiedName) {
-        return (ConcreteClassifier) JavaClasspath.get().getClassifier(qualifiedName);
+    public static ConcreteClassifier getClassifier(final String qualifiedName) {
+        EObject classifier = JavaClasspath.get().getClassifier(qualifiedName);
+        return (ConcreteClassifier) classifier;
     }
 
     /**
      * Adds an annotation to a modifiable element (like a class, field, or method).
      *
      * @param annotableAndModifiable The element to annotate.
-     * @param annotationName         The simple name of the annotation (e.g., "Override").
-     * @return True if the annotation was successfully added.
+     * @param annotationName The simple name of the annotation class.
+     * @return {@code true} if the annotation was successfully added.
      */
-    public static boolean addAnnotationToAnnotableAndModifiable(AnnotableAndModifiable annotableAndModifiable, String annotationName) {
+    public static boolean addAnnotationToAnnotableAndModifiable(final AnnotableAndModifiable annotableAndModifiable, final String annotationName) {
         AnnotationInstance newAnnotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance();
-        // We create a dummy class to represent the annotation type.
-        // JaMoPP's post-processors will resolve this to the actual annotation.
-        Class annotationClass = ClassifiersFactory.eINSTANCE.createClass();
-        annotationClass.setName(annotationName);
-        newAnnotation.setAnnotation(annotationClass);
+        Class jaMoPPClass = ClassifiersFactory.eINSTANCE.createClass();
+        jaMoPPClass.setName(annotationName);
+        newAnnotation.setAnnotation(jaMoPPClass);
         return annotableAndModifiable.getAnnotationsAndModifiers().add(newAnnotation);
     }
 
     /**
-     * Adds an import to a class's compilation unit, checking to avoid duplicates.
+     * Adds an import to a class's compilation unit if it doesn't already exist.
      *
-     * @param targetClass     The class whose compilation unit will get the import.
-     * @param namespaceArray  The package of the entity to import, as a list of strings.
-     * @param entityToImport  The simple name of the class/interface to import.
+     * @param jaMoPPClass The class whose compilation unit will receive the import.
+     * @param namespaceArray The namespace parts of the import (e.g., ["com", "google", "inject"]).
+     * @param entityToImport The simple name of the class to import (e.g., "Inject").
      */
-    public static void addImportToClassFromString(ConcreteClassifier targetClass, List<String> namespaceArray, String entityToImport) {
-        // Check if the import already exists to avoid duplicates.
-        for (Import existingImport : targetClass.getContainingCompilationUnit().getImports()) {
-            if (existingImport instanceof ClassifierImport) {
-                if (Objects.equals(((ClassifierImport) existingImport).getClassifier().getName(), entityToImport)) {
-                    return; // Import already exists.
+    public static void addImportToClassFromString(final ConcreteClassifier jaMoPPClass, final List<String> namespaceArray, final String entityToImport) {
+        // Check if the import already exists
+        for (Import currentImport : jaMoPPClass.getContainingCompilationUnit().getImports()) {
+            if (currentImport instanceof ClassifierImport) {
+                String importedClassName = ((ClassifierImport) currentImport).getClassifier().getName();
+                if (Objects.equals(importedClassName, entityToImport)) {
+                    return; // Import already present
                 }
             }
         }
 
-        // Create and add the new import.
         ClassifierImport newImport = ImportsFactory.eINSTANCE.createClassifierImport();
-        ConcreteClassifier importedClassifier = ClassifiersFactory.eINSTANCE.createClass();
-        importedClassifier.setName(entityToImport);
-        newImport.setClassifier(importedClassifier);
+        ConcreteClassifier classifierToImport = ClassifiersFactory.eINSTANCE.createClass();
+        classifierToImport.setName(entityToImport);
+        newImport.setClassifier(classifierToImport);
         newImport.getNamespaces().addAll(namespaceArray);
-        targetClass.getContainingCompilationUnit().getImports().add(newImport);
+        jaMoPPClass.getContainingCompilationUnit().getImports().add(newImport);
     }
 
     /**
@@ -345,19 +395,19 @@ public final class JavaModificationUtil {
      * @param javaClass The class to which the constructor will be added.
      * @return The newly created {@link Constructor}.
      */
-    public static Constructor addConstructorToClass(Class javaClass) {
+    public static Constructor addConstructorToClass(final Class javaClass) {
         Constructor constructor = MembersFactory.eINSTANCE.createConstructor();
         return addConstructorToClass(constructor, javaClass);
     }
 
     /**
-     * Adds a given constructor to a Java class, setting its name and public visibility.
+     * Adds a given constructor to a Java class, setting its name and making it public.
      *
-     * @param constructor The constructor object to add.
-     * @param javaClass   The class to which the constructor will be added.
-     * @return The constructor that was added.
+     * @param constructor The constructor to add and configure.
+     * @param javaClass The class to which the constructor will be added.
+     * @return The configured and added {@link Constructor}.
      */
-    public static Constructor addConstructorToClass(Constructor constructor, Class javaClass) {
+    public static Constructor addConstructorToClass(final Constructor constructor, final Class javaClass) {
         constructor.setName(javaClass.getName());
         constructor.getAnnotationsAndModifiers().add(ModifiersFactory.eINSTANCE.createPublic());
         javaClass.getMembers().add(constructor);
@@ -365,125 +415,175 @@ public final class JavaModificationUtil {
     }
 
     /**
-     * Creates an assignment statement in a constructor to initialize a field with a new object instance.
-     * Example: {@code this.myField = new MyFieldType(...);}
-     * The method intelligently tries to find arguments for the constructor call from other fields or parameters.
+     * Populates a {@link ClassifierImport} and adds it to the compilation unit of a classifier.
      *
-     * @param newConstructorCall The {@link NewConstructorCall} object to configure (for the RHS).
-     * @param constructor        The constructor where the statement will be added.
-     * @param field              The field to be initialized.
-     * @return True if the statement was successfully added, null if the target classifier is not a Class.
+     * @param classifierImport The import object to configure and add.
+     * @param classifier The classifier whose compilation unit will receive the import.
+     * @param classifierToImport The classifier to be imported.
      */
-    public static Boolean createNewForFieldInConstructor(NewConstructorCall newConstructorCall, Constructor constructor, Field field) {
-        ConcreteClassifier classifier = field.getContainingConcreteClassifier();
-        if (!(classifier instanceof Class targetClass)) {
-            return null; // Can only do this within a class.
+    public static void addImportToCompilationUnitOfClassifier(final ClassifierImport classifierImport, final Classifier classifier, final ConcreteClassifier classifierToImport) {
+        CompilationUnit containingCompilationUnit = classifierToImport.getContainingCompilationUnit();
+        if (containingCompilationUnit != null) {
+            EList<String> namespaces = containingCompilationUnit.getNamespaces();
+            if (namespaces != null) {
+                classifierImport.getNamespaces().addAll(namespaces);
+            }
+            classifier.getContainingCompilationUnit().getImports().add(classifierImport);
         }
-
-        boolean wasAdded = addNewStatementToConstructor(newConstructorCall, constructor, field,
-                (Field[]) Conversions.unwrapArray(targetClass.getFields(), Field.class),
-                (Parameter[]) Conversions.unwrapArray(constructor.getParameters(), Parameter.class));
-        return wasAdded;
+        classifierImport.setClassifier(classifierToImport);
     }
 
     /**
-     * Helper method to build and add the field initialization statement to a constructor.
+     * Creates a "new" expression for a field and adds it as an initialization statement in a constructor.
+     * Example: this.myField = new MyField(...);
      *
-     * @param newConstructorCall        The {@link NewConstructorCall} object to configure.
-     * @param constructor               The constructor to modify.
-     * @param field                     The field to initialize.
-     * @param fieldsToUseAsArgument     An array of other fields available as potential constructor arguments.
-     * @param parametersToUseAsArgument An array of parameters available as potential constructor arguments.
-     * @return True if the statement was successfully added.
+     * @param newConstructorCall The {@link NewConstructorCall} EObject to be configured.
+     * @param constructor The constructor where the initialization statement will be added.
+     * @param field The field to be initialized.
+     * @return {@code true} if the statement was added successfully, {@code null} if the field's container is not a Class.
      */
-    public static boolean addNewStatementToConstructor(NewConstructorCall newConstructorCall, Constructor constructor, Field field, Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
-        // Create the statement that will hold the expression.
+    public static Boolean createNewForFieldInConstructor(final NewConstructorCall newConstructorCall, final Constructor constructor, final Field field) {
+        ConcreteClassifier classifier = field.getContainingConcreteClassifier();
+        if (classifier instanceof Class jaMoPPClass) {
+            Field[] fields = (Field[]) Conversions.unwrapArray(jaMoPPClass.getFields(), Field.class);
+            Parameter[] parameters = (Parameter[]) Conversions.unwrapArray(constructor.getParameters(), Parameter.class);
+            return addNewStatementToConstructor(newConstructorCall, constructor, field, fields, parameters);
+        }
+        return null;
+    }
+
+    /**
+     * Adds a statement to a constructor to initialize a field with a new object instance.
+     * It attempts to resolve arguments for the new object's constructor from available fields and parameters.
+     *
+     * @param newConstructorCall The "new" expression to configure.
+     * @param constructor The constructor to add the statement to.
+     * @param field The field to initialize.
+     * @param fieldsToUseAsArgument An array of fields available as potential constructor arguments.
+     * @param parametersToUseAsArgument An array of parameters available as potential constructor arguments.
+     * @return {@code true} if the statement was successfully added.
+     */
+    public static boolean addNewStatementToConstructor(final NewConstructorCall newConstructorCall, final Constructor constructor, final Field field, final Field[] fieldsToUseAsArgument, final Parameter[] parametersToUseAsArgument) {
         ExpressionStatement expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement();
+        AssignmentExpression assigmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression();
 
-        // Create the assignment expression: this.field = new ...
-        AssignmentExpression assignmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression();
-
-        // Build the LHS: this.field
         SelfReference selfReference = ReferencesFactory.eINSTANCE.createSelfReference();
         selfReference.setSelf(LiteralsFactory.eINSTANCE.createThis());
+        assigmentExpression.setChild(selfReference);
+
         IdentifierReference fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference();
         fieldReference.setTarget(field);
         selfReference.setNext(EcoreUtil.copy(fieldReference));
-        assignmentExpression.setChild(selfReference);
-        assignmentExpression.setAssignmentOperator(OperatorsFactory.eINSTANCE.createAssignment());
 
-        // Build the RHS: new Type(...)
+        assigmentExpression.setAssignmentOperator(OperatorsFactory.eINSTANCE.createAssignment());
+
         newConstructorCall.setTypeReference(EcoreUtil.copy(field.getTypeReference()));
         updateArgumentsOfConstructorCall(field, fieldsToUseAsArgument, parametersToUseAsArgument, newConstructorCall);
-        assignmentExpression.setValue(newConstructorCall);
+        assigmentExpression.setValue(newConstructorCall);
 
-        expressionStatement.setExpression(assignmentExpression);
+        expressionStatement.setExpression(assigmentExpression);
         return constructor.getStatements().add(expressionStatement);
     }
 
     /**
-     * Intelligently populates the arguments of a {@link NewConstructorCall}.
-     * It inspects the constructor of the field's type and tries to find matching arguments
-     * among the available fields and parameters.
+     * Scans the constructor parameters of a field's type and attempts to find matching arguments
+     * from a list of available fields and parameters. It then populates the arguments of the given {@link NewConstructorCall}.
      *
-     * @param field                     The field being initialized, used to determine the type to construct.
-     * @param fieldsToUseAsArgument     Available fields to use as arguments.
-     * @param parametersToUseAsArgument Available parameters to use as arguments.
-     * @param newConstructorCall        The constructor call object to populate with arguments.
+     * @param field The field being initialized.
+     * @param fieldsToUseAsArgument Fields available as arguments.
+     * @param parametersToUseAsArgument Parameters available as arguments.
+     * @param newConstructorCall The constructor call whose arguments will be populated.
      */
-    private static void updateArgumentsOfConstructorCall(Field field, Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument, NewConstructorCall newConstructorCall) {
-        // Step 1: Find the parameter types of the constructor we need to call.
-        List<TypeReference> requiredParameterTypes = new ArrayList<>();
-        Type fieldType = field.getTypeReference().getTarget();
-        if (fieldType instanceof Class fieldClass) {
-            // Find the first available constructor for the field's class.
-            Iterable<Constructor> constructorsForClass = Iterables.filter(fieldClass.getMembers(), Constructor.class);
-            if (!IterableExtensions.isNullOrEmpty(constructorsForClass)) {
-                Constructor constructorForClass = constructorsForClass.iterator().next();
-                for (Parameter parameter : constructorForClass.getParameters()) {
-                    requiredParameterTypes.add(parameter.getTypeReference());
+    private static void updateArgumentsOfConstructorCall(final Field field, final Field[] fieldsToUseAsArgument, final Parameter[] parametersToUseAsArgument, final NewConstructorCall newConstructorCall) {
+        List<TypeReference> typeListForConstructor = new ArrayList<>();
+        if (field.getTypeReference() != null &&
+                field.getTypeReference().getPureClassifierReference() != null &&
+                field.getTypeReference().getPureClassifierReference().getTarget() != null) {
+
+            Classifier classifier = field.getTypeReference().getPureClassifierReference().getTarget();
+            if (classifier instanceof Class) {
+                Class jaMoPPClass = (Class) classifier;
+                Iterable<Constructor> constructorsForClass = Iterables.filter(jaMoPPClass.getMembers(), Constructor.class);
+                if (!IterableExtensions.isNullOrEmpty(constructorsForClass)) {
+                    Constructor constructorForClass = ((Constructor[]) Conversions.unwrapArray(constructorsForClass, Constructor.class))[0];
+                    for (Parameter parameter : constructorForClass.getParameters()) {
+                        typeListForConstructor.add(parameter.getTypeReference());
+                    }
                 }
             }
         }
 
-        // Step 2: For each required parameter, try to find a matching source.
-        for (TypeReference requiredType : requiredParameterTypes) {
-            ReferenceableElement matchingSource = findMatchingTypeInParametersOrFields(requiredType, fieldsToUseAsArgument, parametersToUseAsArgument);
-            if (matchingSource != null) {
-                // A match was found, create a reference to it.
-                IdentifierReference argumentReference = ReferencesFactory.eINSTANCE.createIdentifierReference();
-                argumentReference.setTarget(matchingSource);
-                newConstructorCall.getArguments().add(argumentReference);
+        for (TypeReference typeRef : typeListForConstructor) {
+            ReferenceableElement refElement = findMatchingTypeInParametersOrFields(typeRef, fieldsToUseAsArgument, parametersToUseAsArgument);
+            if (refElement != null) {
+                IdentifierReference identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference();
+                identifierReference.setTarget(refElement);
+                newConstructorCall.getArguments().add(identifierReference);
             } else {
-                // No match found, pass null as a fallback.
                 newConstructorCall.getArguments().add(LiteralsFactory.eINSTANCE.createNullLiteral());
             }
         }
     }
 
     /**
-     * Searches for a parameter or field that matches a given type.
+     * Finds a parameter or field that matches a given type reference.
      *
-     * @param typeReferenceToFind       The type of the argument we are looking for.
-     * @param fieldsToSearch            An array of fields to search within.
-     * @param parametersToSearch        An array of parameters to search within.
-     * @return The matching {@link Parameter} or {@link Field}, or null if no match is found.
+     * @param typeReferenceToFind The type to match.
+     * @param fieldsToUseAsArgument An array of fields to search in.
+     * @param parametersToUseAsArgument An array of parameters to search in.
+     * @return The matching {@link ReferenceableElement} (field or parameter), or {@code null} if none is found.
      */
-    private static ReferenceableElement findMatchingTypeInParametersOrFields(TypeReference typeReferenceToFind, Field[] fieldsToSearch, Parameter[] parametersToSearch) {
-        // Priority 1: Search in constructor parameters.
-        for (Parameter parameter : parametersToSearch) {
-            if (Objects.equals(parameter.getTypeReference().getTarget(), typeReferenceToFind.getTarget())) {
+    private static ReferenceableElement findMatchingTypeInParametersOrFields(final TypeReference typeReferenceToFind, final Field[] fieldsToUseAsArgument, final Parameter[] parametersToUseAsArgument) {
+        for (Parameter parameter : parametersToUseAsArgument) {
+            Type parameterType = parameter.getTypeReference().getTarget();
+            Type typeToFind = typeReferenceToFind.getTarget();
+            if (Objects.equals(parameterType, typeToFind)) {
                 return parameter;
             }
         }
 
-        // Priority 2: Search in other class fields.
-        for (Field field : fieldsToSearch) {
-            if (Objects.equals(field.getTypeReference().getTarget(), typeReferenceToFind.getTarget())) {
+        for (Field field : fieldsToUseAsArgument) {
+            Type fieldType = field.getTypeReference().getTarget();
+            Type typeToFind = typeReferenceToFind.getTarget();
+            if (Objects.equals(fieldType, typeToFind)) {
                 return field;
             }
         }
+        return null;
+    }
 
-        return null; // No match found.
+    /**
+     * Dispatches to the appropriate protected method to get the wrapper type for a given primitive type object.
+     * This method provides type-safe dispatching for different subclasses of {@link PrimitiveType}.
+     *
+     * @param type The primitive type object (e.g., an instance of {@link Int}, {@link Char}).
+     * @return A {@link TypeReference} to the corresponding wrapper class (e.g., {@code java.lang.Integer}).
+     * @throws IllegalArgumentException if the type is not a recognized primitive type.
+     */
+    @XbaseGenerated
+    public static TypeReference getWrapperTypeReferenceForPrimitiveType(final Object type) {
+        if (type instanceof Char) {
+            return getWrapperTypeReferenceForPrimitiveType((Char) type);
+        } else if (type instanceof Int) {
+            return getWrapperTypeReferenceForPrimitiveType((Int) type);
+        } else if (type instanceof Void) {
+            return getWrapperTypeReferenceForPrimitiveType((Void) type);
+        } else if (type instanceof org.emftext.language.java.types.Byte) {
+            return getWrapperTypeReferenceForPrimitiveType((org.emftext.language.java.types.Byte) type);
+        } else if (type instanceof org.emftext.language.java.types.Double) {
+            return getWrapperTypeReferenceForPrimitiveType((org.emftext.language.java.types.Double) type);
+        } else if (type instanceof org.emftext.language.java.types.Float) {
+            return getWrapperTypeReferenceForPrimitiveType((org.emftext.language.java.types.Float) type);
+        } else if (type instanceof org.emftext.language.java.types.Long) {
+            return getWrapperTypeReferenceForPrimitiveType((org.emftext.language.java.types.Long) type);
+        } else if (type instanceof org.emftext.language.java.types.Short) {
+            return getWrapperTypeReferenceForPrimitiveType((org.emftext.language.java.types.Short) type);
+        } else if (type instanceof org.emftext.language.java.types.Boolean) {
+            return getWrapperTypeReferenceForPrimitiveType((org.emftext.language.java.types.Boolean) type);
+        } else if (type instanceof PrimitiveType) {
+            return getWrapperTypeReferenceForPrimitiveType((PrimitiveType) type);
+        } else {
+            throw new IllegalArgumentException("Unhandled parameter types: " + Arrays.asList(type).toString());
+        }
     }
 }

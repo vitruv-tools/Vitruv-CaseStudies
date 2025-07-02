@@ -480,10 +480,10 @@ public final class JavaMemberAndParameterUtil {
         if (param != null) {
             param.setTypeReference(EcoreUtil.copy(jAttribute.getTypeReference()));
             ExpressionStatement expStatement = IterableExtensions.head(Iterables.filter(setter.getStatements(), ExpressionStatement.class));
-            boolean _expressionHasAttributeSelfReference = JavaStatementUtil.expressionHasAttributeSelfReference(expStatement, jAttribute);
-            if (_expressionHasAttributeSelfReference) {
-                Expression _expression = expStatement.getExpression();
-                ((AssignmentExpression)_expression).setValue(JavaStatementUtil.createIdentifierReference(param));
+            boolean expressionHasAttributeSelfReference = JavaStatementUtil.expressionHasAttributeSelfReference(expStatement, jAttribute);
+            if (expressionHasAttributeSelfReference) {
+                Expression expression = expStatement.getExpression();
+                ((AssignmentExpression) expression).setValue(JavaStatementUtil.createIdentifierReference(param));
             }
         }
 
