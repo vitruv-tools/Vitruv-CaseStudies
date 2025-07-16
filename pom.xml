@@ -14,7 +14,7 @@
 
   <!-- Project Information -->
   <artifactId>tools.vitruv.applications</artifactId>
-  <version>3.2.2</version>
+  <version>3.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Vitruv Case Studies</name>
@@ -48,7 +48,7 @@
 
   <!-- Dependency Management -->
   <properties>
-    <vitruv.version>3.2.0-SNAPSHOT</vitruv.version>
+    <vitruv.version>3.2.2</vitruv.version>
     <!-- p2 updatesite versions -->
     <repo.sdq-demo-metamodels.version>1.9.0</repo.sdq-demo-metamodels.version>
     <repo.sdq-commons.version>2.2.0</repo.sdq-commons.version>
