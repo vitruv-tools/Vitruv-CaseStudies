@@ -113,7 +113,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void basicPrimitiveClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void basicPrimitiveClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.basicPrimitiveClassPropertyCreation.createAndSynchronize()
 		targetModelsProvider.getModels.basicPrimitiveClassPropertyCreation.check()
@@ -123,7 +123,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void privateClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void privateClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.privateClassPropertyCreation.createAndSynchronize()
 		targetModelsProvider.getModels.privateClassPropertyCreation.check()
@@ -131,7 +131,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void publicClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void publicClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.publicClassPropertyCreation.createAndSynchronize()
 		targetModelsProvider.getModels.publicClassPropertyCreation.check()
@@ -139,7 +139,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void protectedClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void protectedClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.protectedClassPropertyCreation.createAndSynchronize()
 		targetModelsProvider.getModels.protectedClassPropertyCreation.check()
@@ -147,7 +147,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void packagePrivateClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void packagePrivateClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.packagePrivateClassPropertyCreation.createAndSynchronize()
 		targetModelsProvider.getModels.packagePrivateClassPropertyCreation.check()
@@ -157,7 +157,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void finalClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void finalClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.finalClassPropertyCreation.createAndSynchronize()
 		targetModelsProvider.getModels.finalClassPropertyCreation.check()
@@ -165,7 +165,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void staticClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void staticClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.finalClassPropertyCreation.createAndSynchronize()
 		targetModelsProvider.getModels.finalClassPropertyCreation.check()
@@ -173,7 +173,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classPropertyWithMultipleModifiersCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classPropertyWithMultipleModifiersCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classPropertyWithMultipleModifiersCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classPropertyWithMultipleModifiersCreation.check()
@@ -183,7 +183,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void stringClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void stringClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.stringClassPropertyCreation.createAndSynchronize()
 		targetModelsProvider.getModels.stringClassPropertyCreation.check()
@@ -193,7 +193,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void multipleClassesInDifferentPackagesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void multipleClassesInDifferentPackagesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.multiplePrimitiveClassPropertiesCreation.createAndSynchronize()
 		targetModelsProvider.getModels.multiplePrimitiveClassPropertiesCreation.check()

@@ -37,7 +37,7 @@ class PackageTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void singleRootPackageCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void singleRootPackageCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.singleRootPackageCreation.createAndSynchronize()
 		targetModelsProvider.getModels.singleRootPackageCreation.check()
@@ -45,7 +45,7 @@ class PackageTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void multiRootPackageCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void multiRootPackageCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.multiRootPackageCreation.createAndSynchronize()
 		targetModelsProvider.getModels.multiRootPackageCreation.check()
@@ -53,7 +53,7 @@ class PackageTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void subPackagesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void subPackagesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.subPackagesCreation.createAndSynchronize()
 		targetModelsProvider.getModels.subPackagesCreation.check()

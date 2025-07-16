@@ -63,7 +63,7 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void emptyInterfaceCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void emptyInterfaceCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.emptyInterfaceCreation.createAndSynchronize()
 		targetModelsProvider.getModels.emptyInterfaceCreation.check()
@@ -73,7 +73,7 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void multipleInterfacesInSamePackageCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void multipleInterfacesInSamePackageCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.multipleInterfacesInSamePackageCreation.createAndSynchronize()
 		targetModelsProvider.getModels.multipleInterfacesInSamePackageCreation.check()
@@ -81,7 +81,7 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void multipleInterfacesInDifferentPackagesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void multipleInterfacesInDifferentPackagesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.multipleInterfacesInDifferentPackagesCreation.createAndSynchronize()
 		targetModelsProvider.getModels.multipleInterfacesInDifferentPackagesCreation.check()
@@ -91,7 +91,7 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceWithSuperInterfaceCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceWithSuperInterfaceCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceWithSuperInterfaceCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceWithSuperInterfaceCreation.check()
@@ -99,7 +99,7 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceWithMultipleSuperInterfacesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceWithMultipleSuperInterfacesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceWithMultipleSuperInterfacesCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceWithMultipleSuperInterfacesCreation.check()

@@ -49,7 +49,7 @@ class ProvidedRoleTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void componentWithProvidedRoleCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void componentWithProvidedRoleCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.componentWithProvidedRoleCreation.createAndSynchronize()
 		targetModelsProvider.getModels.componentWithProvidedRoleCreation.check()
@@ -57,7 +57,7 @@ class ProvidedRoleTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void componentWithMultipleProvidedRolesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void componentWithMultipleProvidedRolesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.componentWithMultipleProvidedRolesCreation.createAndSynchronize()
 		targetModelsProvider.getModels.componentWithMultipleProvidedRolesCreation.check()

@@ -1,0 +1,378 @@
+import edu.kit.ipd.sdq.metamodels.families.Family
+import edu.kit.ipd.sdq.metamodels.persons.Female
+import edu.kit.ipd.sdq.metamodels.persons.Male
+import tools.vitruv.dsls.demo.familiespersons.persons2families.FamilyRole
+import static tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper.askUserWhetherPersonIsParentOrChild
+import static tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper.askUserWhetherPersonIsParentOrChildDuringRenaming
+import static tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper.askUserWhichFamilyToInsertTheMemberIn
+import static tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper.assertValidFullname
+import static tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper.noParent
+import static tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper.sameLastname
+import static extension tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper.getFirstname
+import static extension tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper.getLastname
+import static extension tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper.getRegister
+import static extension edu.kit.ipd.sdq.metamodels.families.FamiliesUtil.getFamily
+import static extension edu.kit.ipd.sdq.metamodels.families.FamiliesUtil.getMembers
+
+import "edu.kit.ipd.sdq.metamodels.persons" as persons
+import "edu.kit.ipd.sdq.metamodels.families" as families
+
+reactions: personsToFamilies
+in reaction to changes in persons
+execute actions in families
+
+// =================================
+// Creation/ deletion of a registers
+// =================================
+reaction InsertedPersonRegister {
+	after element persons::PersonRegister inserted as root
+	call createFamilyRegister(newValue)
+}
+
+routine createFamilyRegister(persons::PersonRegister createdPersonRegister) {
+	match {
+		require absence of families::FamilyRegister corresponding to createdPersonRegister
+	}
+	create {
+		val newFamilyRegister = new families::FamilyRegister
+	}
+	update {
+		persistProjectRelative(createdPersonRegister, newFamilyRegister, "model/families.families")
+		addCorrespondenceBetween(newFamilyRegister, createdPersonRegister)
+	}
+}
+
+reaction DeletedPersonRegister {
+	after element persons::PersonRegister deleted
+	call deleteFamilyRegister(affectedEObject)
+}
+
+routine deleteFamilyRegister(persons::PersonRegister deletedPersonsRegister) {
+	match {
+		val familyRegister = retrieve families::FamilyRegister corresponding to deletedPersonsRegister
+	}
+	update {
+		removeObject(familyRegister)
+		removeCorrespondenceBetween(familyRegister, deletedPersonsRegister)
+	}
+}
+
+// ========================
+// New creation of a member
+// ========================
+reaction InsertedPerson {
+	after element persons::Person inserted in persons::PersonRegister[persons]
+	call insertAsParentOrChild(newValue)
+}
+
+routine insertAsParentOrChild(persons::Person insertedPerson) {
+	match {
+		require absence of families::Member corresponding to insertedPerson 
+		check {
+			assertValidFullname(insertedPerson)
+			true
+		}
+	}
+	update {
+		val FamilyRole role = askUserWhetherPersonIsParentOrChild(userInteractor, insertedPerson)
+		switch role {
+			case FamilyRole.Child: createChild(insertedPerson)
+			case FamilyRole.Parent: createParent(insertedPerson)
+		}
+	}
+}
+
+routine createChild(persons::Person insertedPerson) {
+	match {
+		val familiesRegister = retrieve families::FamilyRegister corresponding to insertedPerson.register
+	}
+	update {
+		val Iterable<Family> matchingFamilies = familiesRegister.families.filter(sameLastname(insertedPerson))
+		val Family familyToInsertInto = if(matchingFamilies.empty) null else askUserWhichFamilyToInsertTheMemberIn(
+				userInteractor, insertedPerson, matchingFamilies)
+		if (familyToInsertInto === null) {
+			createChildInNewFamily(insertedPerson)
+		} else {
+			createChildInExistingFamily(insertedPerson, familyToInsertInto)
+		}
+	}
+}
+
+routine createParent(persons::Person insertedPerson) {
+	match {
+		val familiesRegister = retrieve families::FamilyRegister corresponding to insertedPerson.register
+	}
+	update {
+		val Iterable<Family> matchingFamilies = familiesRegister.families.filter(sameLastname(insertedPerson)).filter(
+			noParent(insertedPerson))
+		val Family familyToInsertInto = if(matchingFamilies.empty) null else askUserWhichFamilyToInsertTheMemberIn(
+				userInteractor, insertedPerson, matchingFamilies)
+		if (familyToInsertInto === null) {
+			createParentInNewFamily(insertedPerson)
+		} else {
+			createParentInExistingFamily(insertedPerson, familyToInsertInto)
+		}
+	}
+}
+
+routine createChildInNewFamily(persons::Person insertedPerson) {
+	match {
+		val familiesRegister = retrieve families::FamilyRegister corresponding to insertedPerson.register
+	}
+	create {
+		val newFamily = new families::Family
+	}
+	update {
+		newFamily.lastName = insertedPerson.lastname
+		familiesRegister.families += newFamily
+		createChildInExistingFamily(insertedPerson, newFamily)
+	}
+}
+
+routine createParentInNewFamily(persons::Person insertedPerson) {
+	match {
+		val familiesRegister = retrieve families::FamilyRegister corresponding to insertedPerson.register
+	}
+	create {
+		val newFamily = new families::Family
+	}
+	update {
+		newFamily.lastName = insertedPerson.lastname
+		familiesRegister.families += newFamily
+		createParentInExistingFamily(insertedPerson, newFamily)
+	}
+}
+
+routine createChildInExistingFamily(persons::Person insertedPerson, families::Family familyToInsertInto) {
+	create {
+		val newMember = new families::Member
+	}
+	update {
+		newMember.firstName = insertedPerson.firstname
+		switch insertedPerson {
+			Male: familyToInsertInto.sons += newMember
+			Female: familyToInsertInto.daughters += newMember
+		}
+		addCorrespondenceBetween(insertedPerson, familyToInsertInto)
+		addCorrespondenceBetween(insertedPerson, newMember)
+	}
+}
+
+routine createParentInExistingFamily(persons::Person insertedPerson, families::Family familyToInsertInto) {
+	create {
+		val newMember = new families::Member
+	}
+	update {
+		newMember.firstName = insertedPerson.firstname
+		switch insertedPerson {
+			Male: familyToInsertInto.father = newMember
+			Female: familyToInsertInto.mother = newMember
+		}
+		addCorrespondenceBetween(insertedPerson, familyToInsertInto)
+		addCorrespondenceBetween(insertedPerson, newMember)
+	}
+}
+
+// ==============================================================
+// Inserting existing member into different family after renaming
+// ==============================================================
+reaction ChangedFullName {
+	after attribute replaced at persons::Person[fullName]
+	with oldValue !== null && !oldValue.equals(newValue)
+	call changeNames(affectedEObject, oldValue)
+}
+
+/* Apply firstname changes to the corresponding {@link Member}
+ * Apply lastname changes to the corresponding {@link Family}
+ */
+routine changeNames(persons::Person renamedPerson, String oldFullname) {
+	match {
+		check {
+			assertValidFullname(renamedPerson)
+			true
+		}
+		val oldFamily = retrieve families::Family corresponding to renamedPerson
+		val correspondingMember = retrieve families::Member corresponding to renamedPerson
+	}
+	update {
+		// Update firstname
+		correspondingMember.firstName = renamedPerson.firstname	
+		if (correspondingMember.family.lastName != renamedPerson.lastname) {
+			// Update lastname and potentially role
+			reactToLastnameAndFamilyRoleChanges(renamedPerson, oldFullname)
+		}
+	}
+}
+
+routine reactToLastnameAndFamilyRoleChanges(persons::Person renamedPerson, String oldFullname) {
+	match {
+		val oldFamily = retrieve families::Family corresponding to renamedPerson
+		val correspondingMember = retrieve families::Member corresponding to renamedPerson
+		val familiesRegister = retrieve families::FamilyRegister corresponding to renamedPerson.register
+	}
+	update {
+		val boolean wasChildBeforeRenaming = correspondingMember.familySon === oldFamily ||
+			correspondingMember.familyDaughter === oldFamily
+		val boolean isSupposedToBeAChild = askUserWhetherPersonIsParentOrChildDuringRenaming(userInteractor,
+			oldFullname, renamedPerson.fullName, wasChildBeforeRenaming) == FamilyRole.Child
+			
+		if (oldFamily.members.size == 1 && familiesRegister.families.filter(sameLastname(renamedPerson)).isEmpty) {
+			// If the member is alone in its family just rename the oldFamily
+			// and maybe adjust the role of the member which is no problem
+			// since the member is alone.
+			oldFamily.lastName = renamedPerson.lastname
+			if (wasChildBeforeRenaming !== isSupposedToBeAChild) {
+				if (isSupposedToBeAChild) {
+					switch renamedPerson {
+						Male: oldFamily.sons += correspondingMember
+						Female: oldFamily.daughters += correspondingMember
+					}
+				} else {
+					switch renamedPerson {
+						Male: oldFamily.father = correspondingMember
+						Female: oldFamily.mother = correspondingMember
+					}
+				}
+			}
+		} else {
+			// If the member is not alone move it to
+			// a different family depending on lastname and supposed role
+			if (isSupposedToBeAChild) {
+				insertExistingMemberIntoUserChosenFamilyAsChild(renamedPerson)
+			} else {
+				insertExistingMemberIntoUserChosenFamilyAsParent(renamedPerson)
+			}
+			deleteFamilyIfEmpty(oldFamily)
+		}
+	}
+}
+
+routine insertExistingMemberIntoUserChosenFamilyAsParent(persons::Person renamedPerson) {
+	match {
+		val familiesRegister = retrieve families::FamilyRegister corresponding to renamedPerson.register
+		val correspondingMember = retrieve families::Member corresponding to renamedPerson
+	}
+	update {
+		val Iterable<Family> matchingFamilies = familiesRegister.families.filter(sameLastname(renamedPerson)).filter(
+			noParent(renamedPerson))
+		val Family chosenFamily = if(matchingFamilies.empty) null else askUserWhichFamilyToInsertTheMemberIn(
+				userInteractor, renamedPerson, matchingFamilies)
+		if (chosenFamily === null) {
+			insertExistingMemberIntoNewFamilyAsParent(renamedPerson)
+		} else {
+			insertExistingMemberIntoExistingFamilyAsParent(renamedPerson, chosenFamily)
+		}
+	}
+}
+
+routine insertExistingMemberIntoUserChosenFamilyAsChild(persons::Person renamedPerson) {
+	match {
+		val familiesRegister = retrieve families::FamilyRegister corresponding to renamedPerson.register
+		val correspondingMember = retrieve families::Member corresponding to renamedPerson
+	}
+	update {
+		val Iterable<Family> matchingFamilies = familiesRegister.families.filter(sameLastname(renamedPerson))
+		val Family chosenFamily = if(matchingFamilies.empty) null else askUserWhichFamilyToInsertTheMemberIn(
+				userInteractor, renamedPerson, matchingFamilies)
+		if (chosenFamily === null) {
+			insertExistingMemberIntoNewFamilyAsChild(renamedPerson)
+		} else {
+			insertExistingMemberIntoExistingFamilyAsChild(renamedPerson, chosenFamily)
+		}
+	}
+}
+
+routine insertExistingMemberIntoNewFamilyAsParent(persons::Person renamedPerson) {
+	match {
+		val familiesRegister = retrieve families::FamilyRegister corresponding to renamedPerson.register
+		val correspondingMember = retrieve families::Member corresponding to renamedPerson
+	}
+	create {
+		val familyToInsertInto = new families::Family
+	}
+	update {
+		familyToInsertInto.lastName = renamedPerson.lastname
+		familiesRegister.families += familyToInsertInto
+		insertExistingMemberIntoExistingFamilyAsParent(renamedPerson, familyToInsertInto)
+	}
+}
+
+routine insertExistingMemberIntoNewFamilyAsChild(persons::Person renamedPerson) {
+	match {
+		val familiesRegister = retrieve families::FamilyRegister corresponding to renamedPerson.register
+		val correspondingMember = retrieve families::Member corresponding to renamedPerson
+	}
+	create {
+		val familyToInsertInto = new families::Family
+	}
+	update {
+		familyToInsertInto.lastName = renamedPerson.lastname
+		familiesRegister.families += familyToInsertInto
+		insertExistingMemberIntoExistingFamilyAsChild(renamedPerson, familyToInsertInto)
+	}
+}
+
+routine insertExistingMemberIntoExistingFamilyAsParent(persons::Person renamedPerson, families::Family familyToInsertInto) {
+	match {
+		val oldFamily = retrieve families::Family corresponding to renamedPerson
+		val correspondingMember = retrieve families::Member corresponding to renamedPerson
+	}
+	update {
+		switch renamedPerson {
+			Male: familyToInsertInto.father = correspondingMember
+			Female: familyToInsertInto.mother = correspondingMember
+		}
+		removeCorrespondenceBetween(renamedPerson, oldFamily)
+		addCorrespondenceBetween(renamedPerson, familyToInsertInto)
+	// correspondence between renamedPerson and correspondingMember does already exist
+	}
+}
+
+routine insertExistingMemberIntoExistingFamilyAsChild(persons::Person renamedPerson, families::Family familyToInsertInto) {
+	match {
+		val oldFamily = retrieve families::Family corresponding to renamedPerson
+		val correspondingMember = retrieve families::Member corresponding to renamedPerson
+	}
+	update {
+		switch renamedPerson {
+			Male: familyToInsertInto.sons += correspondingMember
+			Female: familyToInsertInto.daughters += correspondingMember
+		}
+		removeCorrespondenceBetween(renamedPerson, oldFamily)
+		addCorrespondenceBetween(renamedPerson, familyToInsertInto)
+	// correspondence between renamedPerson and correspondingMember does already exist
+	}
+}
+
+//=================================================================================
+// Deletion of a person and therefore of corresponding member and maybe also family
+//=================================================================================
+reaction DeletePerson {
+	after element persons::Person deleted
+	call deleteMember(affectedEObject)
+}
+
+routine deleteMember(persons::Person person) {
+	match {
+		val member = retrieve families::Member corresponding to person
+		val family = retrieve families::Family corresponding to person
+	}
+	update {
+		removeObject(member)
+		removeCorrespondenceBetween(person, family)
+		removeCorrespondenceBetween(person, member)
+		deleteFamilyIfEmpty(family)
+	}
+}
+
+routine deleteFamilyIfEmpty(families::Family family) {
+	match {
+		check family.father === null
+		check family.mother === null
+		check family.sons.empty
+		check family.daughters.empty
+	}
+	update {
+		removeObject(family)
+	}
+}

@@ -33,7 +33,7 @@ class RepositoryTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void emptyRepositoryCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void emptyRepositoryCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.emptyRepositoryCreation.createAndSynchronize()
 		targetModelsProvider.getModels.emptyRepositoryCreation.check()

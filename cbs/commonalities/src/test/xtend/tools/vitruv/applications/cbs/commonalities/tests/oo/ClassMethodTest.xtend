@@ -130,7 +130,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void basicClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void basicClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.basicClassMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.basicClassMethodCreation.check()
@@ -140,7 +140,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void publicClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void publicClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.publicClassMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.publicClassMethodCreation.check()
@@ -148,7 +148,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void protectedClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void protectedClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.protectedClassMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.protectedClassMethodCreation.check()
@@ -156,7 +156,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void packagePrivateClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void packagePrivateClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.packagePrivateClassMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.packagePrivateClassMethodCreation.check()
@@ -164,7 +164,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void privateClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void privateClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.privateClassMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.privateClassMethodCreation.check()
@@ -174,7 +174,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void finalClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void finalClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.finalClassMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.finalClassMethodCreation.check()
@@ -182,7 +182,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void abstractClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void abstractClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.abstractClassMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.abstractClassMethodCreation.check()
@@ -190,7 +190,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void staticClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void staticClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.staticClassMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.staticClassMethodCreation.check()
@@ -200,7 +200,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void IntegerReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void IntegerReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithIntegerReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithIntegerReturnCreation.check()
@@ -208,7 +208,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithStringReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithStringReturnCreation.check()
@@ -216,7 +216,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithClassReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithClassReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithClassReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithClassReturnCreation.check()
@@ -224,7 +224,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithSelfReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithSelfReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithSelfReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithSelfReturnCreation.check()
@@ -234,7 +234,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithIntegerInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithIntegerInputCreation.check()
@@ -242,7 +242,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithMultiplePrimitiveInputsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithMultiplePrimitiveInputsCreation.check()
@@ -250,7 +250,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithStringInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithStringInputCreation.check()
@@ -258,7 +258,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithClassInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithClassInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithClassInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithClassInputCreation.check()
@@ -266,7 +266,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithSelfInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithSelfInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithSelfInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithSelfInputCreation.check()
@@ -274,7 +274,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithMixedInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithMixedInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithMixedInputsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithMixedInputsCreation.check()
@@ -284,7 +284,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void classMethodWithMixedInputsAndReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void classMethodWithMixedInputsAndReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.classMethodWithMixedInputsAndReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.classMethodWithMixedInputsAndReturnCreation.check()
@@ -294,7 +294,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void multipleClassMethodsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void multipleClassMethodsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.multipleClassMethodsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.multipleClassMethodsCreation.check()

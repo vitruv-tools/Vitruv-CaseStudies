@@ -12,7 +12,10 @@
   </parent>
 
   <artifactId>tools.vitruv.applications.demo.familiespersons</artifactId>
-
+  <properties>
+    <vitruv.version>3.2.2</vitruv.version>
+    <wrapper.version>3.1.2</wrapper.version>
+  </properties>
   <name>Vitruv Families-Persons Demo Application</name>
   <description>The families persons demo case study (ATL zoo)</description>
 
@@ -21,10 +24,77 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-source-reactions</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.basedir}/src/main/reactions</source>
+                <source>${project.build.directory}/generated-sources/reactions</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>xtend-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.xtext</groupId>
+        <artifactId>xtext-maven-plugin</artifactId>
+        <configuration>
+          <languages>
+            <language>
+              <setup>tools.vitruv.dsls.reactions.ReactionsLanguageStandaloneSetup</setup>
+              <outputConfigurations>
+                <outputConfiguration>
+                  <outputDirectory>${project.build.directory}/generated-sources/reactions</outputDirectory>
+                </outputConfiguration>
+              </outputConfigurations>
+            </language>
+            <language>
+              <setup>org.eclipse.xtend.core.XtendStandaloneSetup</setup>
+              <outputConfigurations>
+                <outputConfiguration>
+                  <outputDirectory>${project.build.directory}/generated-sources/xtend</outputDirectory>
+                </outputConfiguration>
+              </outputConfigurations>
+            </language>
+          </languages>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>tools.vitruv.dsls.common</artifactId>
+            <version>${vitruv.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>tools.vitruv.dsls.reactions</artifactId>
+            <version>${vitruv.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>tools.vitruv.dsls.reactions.language</artifactId>
+            <version>${vitruv.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>tools.vitruv.dsls.reactions.runtime</artifactId>
+            <version>${vitruv.version}</version>
+          </dependency>
+          <!-- p2 dependencies cannot directly be referenced in plugin dependencies -->
+          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>tools.vitruv.dsls.demo.sdq-demo-metamodels-wrapper</artifactId>
+            <version>${wrapper.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
@@ -49,11 +119,6 @@
     <dependency>
       <groupId>tools.vitruv</groupId>
       <artifactId>tools.vitruv.change.testutils.integration</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.dsls.demo.familiespersons</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

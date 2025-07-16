@@ -49,7 +49,7 @@ class MediaStoreTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void mediaStoreCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void mediaStoreCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.mediaStoreCreation.createAndSynchronize()
 		targetModelsProvider.getModels.mediaStoreCreation.check()

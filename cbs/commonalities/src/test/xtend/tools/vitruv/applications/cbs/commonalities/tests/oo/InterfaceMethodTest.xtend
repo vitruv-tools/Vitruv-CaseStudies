@@ -119,7 +119,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void basicInterfaceMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void basicInterfaceMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.basicInterfaceMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.basicInterfaceMethodCreation.check()
@@ -129,7 +129,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void staticInterfaceMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void staticInterfaceMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.staticInterfaceMethodCreation.createAndSynchronize()
 		targetModelsProvider.getModels.staticInterfaceMethodCreation.check()
@@ -139,7 +139,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithIntegerReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithIntegerReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithIntegerReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithIntegerReturnCreation.check()
@@ -147,7 +147,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithStringReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithStringReturnCreation.check()
@@ -155,7 +155,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithClassReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithClassReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithClassReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithClassReturnCreation.check()
@@ -163,7 +163,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithSelfReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithSelfReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithSelfReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithSelfReturnCreation.check()
@@ -173,7 +173,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithIntegerInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithIntegerInputCreation.check()
@@ -181,7 +181,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithMultiplePrimitiveInputsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithMultiplePrimitiveInputsCreation.check()
@@ -189,7 +189,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithStringInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithStringInputCreation.check()
@@ -197,7 +197,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithClassInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithClassInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithClassInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithClassInputCreation.check()
@@ -205,7 +205,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithSelfInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithSelfInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithSelfInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithSelfInputCreation.check()
@@ -213,7 +213,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithMixedInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithMixedInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithMixedInputsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithMixedInputsCreation.check()
@@ -223,7 +223,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void interfaceMethodWithMixedInputsAndReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void interfaceMethodWithMixedInputsAndReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.interfaceMethodWithMixedInputsAndReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.interfaceMethodWithMixedInputsAndReturnCreation.check()
@@ -233,7 +233,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void multipleInterfaceMethodsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void multipleInterfaceMethodsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.multipleInterfaceMethodsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.multipleInterfaceMethodsCreation.check()

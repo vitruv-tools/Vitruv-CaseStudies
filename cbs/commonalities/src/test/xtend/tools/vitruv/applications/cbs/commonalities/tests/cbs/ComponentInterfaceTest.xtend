@@ -35,7 +35,7 @@ class ComponentInterfaceTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void emptyComponentInterfaceCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void emptyComponentInterfaceCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.emptyComponentInterfaceCreation.createAndSynchronize()
 		targetModelsProvider.getModels.emptyComponentInterfaceCreation.check()

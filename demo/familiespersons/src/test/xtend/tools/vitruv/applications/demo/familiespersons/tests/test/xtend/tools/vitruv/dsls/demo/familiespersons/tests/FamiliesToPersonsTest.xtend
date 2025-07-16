@@ -1,4 +1,4 @@
-package tools.vitruv.applications.demo.familiespersons.tests
+package tools.vitruv.application.demo.familiespersons.tests
 
 import edu.kit.ipd.sdq.metamodels.families.FamiliesFactory
 import edu.kit.ipd.sdq.metamodels.families.Family
@@ -12,6 +12,7 @@ import edu.kit.ipd.sdq.metamodels.persons.PersonsFactory
 import java.io.IOException
 import java.nio.file.Path
 import java.util.stream.Stream
+import org.apache.logging.log4j.Logger
 import org.apache.logging.log4j.LogManager
 import org.eclipse.xtend.lib.annotations.Delegate
 import org.junit.jupiter.api.AfterEach
@@ -23,10 +24,10 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import tools.vitruv.change.propagation.ChangePropagationSpecification
-import tools.vitruv.change.testutils.TestLogging
+import tools.vitruv.application.demo.familiespersons.families2persons.FamiliesToPersonsChangePropagationSpecification
 import tools.vitruv.application.demo.familiespersons.families2persons.FamiliesToPersonsHelper
 import tools.vitruv.application.demo.familiespersons.persons2families.PersonsToFamiliesChangePropagationSpecification
-import tools.vitruv.application.demo.familiespersons.families2persons.FamiliesToPersonsChangePropagationSpecification
+import tools.vitruv.change.testutils.TestLogging
 import tools.vitruv.change.testutils.TestProject
 import tools.vitruv.change.testutils.TestProjectManager
 import tools.vitruv.change.testutils.views.TestView

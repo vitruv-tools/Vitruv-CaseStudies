@@ -80,7 +80,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void emptyCompositeDataTypeCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void emptyCompositeDataTypeCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.emptyCompositeDataTypeCreation.createAndSynchronize()
 		targetModelsProvider.getModels.emptyCompositeDataTypeCreation.check()
@@ -90,7 +90,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void compositeDataTypeWithBooleanElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void compositeDataTypeWithBooleanElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.compositeDataTypeWithBooleanElementCreation.createAndSynchronize()
 		targetModelsProvider.getModels.compositeDataTypeWithBooleanElementCreation.check()
@@ -98,7 +98,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void compositeDataTypeWithIntegerElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void compositeDataTypeWithIntegerElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.compositeDataTypeWithIntegerElementCreation.createAndSynchronize()
 		targetModelsProvider.getModels.compositeDataTypeWithIntegerElementCreation.check()
@@ -106,7 +106,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void compositeDataTypeWithDoubleElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void compositeDataTypeWithDoubleElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.compositeDataTypeWithDoubleElementCreation.createAndSynchronize()
 		targetModelsProvider.getModels.compositeDataTypeWithDoubleElementCreation.check()
@@ -114,7 +114,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void compositeDataTypeWithStringElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void compositeDataTypeWithStringElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.compositeDataTypeWithStringElementCreation.createAndSynchronize()
 		targetModelsProvider.getModels.compositeDataTypeWithStringElementCreation.check()
@@ -122,7 +122,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void compositeDataTypeWithWithMultiplePrimitiveElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void compositeDataTypeWithWithMultiplePrimitiveElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.compositeDataTypeWithWithMultiplePrimitiveElementsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.compositeDataTypeWithWithMultiplePrimitiveElementsCreation.check()
@@ -132,7 +132,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void multipleCompositeDataTypesWithPrimitiveElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void multipleCompositeDataTypesWithPrimitiveElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.multipleCompositeDataTypesWithPrimitiveElementsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.multipleCompositeDataTypesWithPrimitiveElementsCreation.check()
@@ -140,7 +140,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void compositeDataTypeWithCompositeElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void compositeDataTypeWithCompositeElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.compositeDataTypeWithCompositeElementsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.compositeDataTypeWithCompositeElementsCreation.check()

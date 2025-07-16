@@ -25,17 +25,17 @@ abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest
 	}
 	
 	@BeforeEach
-	def setupChangePropagationMode() {
+	public def setupChangePropagationMode() {
 		virtualModel.changePropagationMode = ChangePropagationMode.TRANSITIVE_EXCEPT_LEAVES
 	}
 	
 	@BeforeAll
-	def static void setupJavaFactories() {
+	public def static void setupJavaFactories() {
 		JavaSetup.prepareFactories()
 	}
 	
 	@BeforeEach
-	def protected setupJaMoPP() {
+	def public setupJaMoPP() {
 		JavaSetup.resetClasspathAndRegisterStandardLibrary()
 	}
 	
@@ -44,7 +44,7 @@ abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest
 	}
 
 	@Accessors(PROTECTED_GETTER)
-	val VitruvApplicationTestAdapter vitruvApplicationTestAdapter = new VitruvApplicationTestAdapter() {
+	public val VitruvApplicationTestAdapter vitruvApplicationTestAdapter = new VitruvApplicationTestAdapter() {
 		/**
 		 * Returns a resource from the runtime test project
 		 */
@@ -78,12 +78,12 @@ abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest
 	var ResourceSet validationResourceSet
 
 	@BeforeEach
-	def protected void setupResourceSets() {
+	def public void setupResourceSets() {
 		validationResourceSet = new ResourceSetImpl()
 	}
 
 	@AfterEach
-	def protected void cleanupResourceSets() {
+	def public void cleanupResourceSets() {
 		validationResourceSet.resources.forEach[unload]
 		validationResourceSet.resources.clear
 		validationResourceSet = null

@@ -97,7 +97,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void basicConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void basicConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.basicConstructorCreation.createAndSynchronize()
 		targetModelsProvider.getModels.basicConstructorCreation.check()
@@ -107,7 +107,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void publicConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void publicConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.publicConstructorCreation.createAndSynchronize()
 		targetModelsProvider.getModels.publicConstructorCreation.check()
@@ -115,7 +115,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void protectedConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void protectedConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.protectedConstructorCreation.createAndSynchronize()
 		targetModelsProvider.getModels.protectedConstructorCreation.check()
@@ -123,7 +123,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void packagePrivateConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void packagePrivateConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.packagePrivateConstructorCreation.createAndSynchronize()
 		targetModelsProvider.getModels.packagePrivateConstructorCreation.check()
@@ -131,7 +131,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void privateConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void privateConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.privateConstructorCreation.createAndSynchronize()
 		targetModelsProvider.getModels.privateConstructorCreation.check()
@@ -141,7 +141,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void constructorWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void constructorWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.constructorWithIntegerInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.constructorWithIntegerInputCreation.check()
@@ -149,7 +149,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void constructorWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void constructorWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.constructorWithMultiplePrimitiveInputsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.constructorWithMultiplePrimitiveInputsCreation.check()
@@ -157,7 +157,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void constructorWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void constructorWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.constructorWithStringInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.constructorWithStringInputCreation.check()
@@ -165,7 +165,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void constructorWithClassInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void constructorWithClassInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.constructorWithClassInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.constructorWithClassInputCreation.check()
@@ -173,7 +173,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void constructorWithSelfInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void constructorWithSelfInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.constructorWithSelfInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.constructorWithSelfInputCreation.check()
@@ -181,7 +181,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void constructorWithMixedInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void constructorWithMixedInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.constructorWithMixedInputsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.constructorWithMixedInputsCreation.check()
@@ -195,7 +195,7 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 	@Disabled
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void multipleConstructorsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void multipleConstructorsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.multipleConstructorsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.multipleConstructorsCreation.check()

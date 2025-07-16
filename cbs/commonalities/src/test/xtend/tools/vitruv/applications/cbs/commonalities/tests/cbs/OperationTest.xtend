@@ -81,7 +81,7 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void emptyOperationCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void emptyOperationCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.emptyOperationCreation.createAndSynchronize()
 		targetModelsProvider.getModels.emptyOperationCreation.check()
@@ -91,7 +91,7 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void operationWithIntegerReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void operationWithIntegerReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.operationWithIntegerReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.operationWithIntegerReturnCreation.check()
@@ -99,7 +99,7 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void operationWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void operationWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.operationWithStringReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.operationWithStringReturnCreation.check()
@@ -109,7 +109,7 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void operationWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void operationWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.operationWithIntegerInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.operationWithIntegerInputCreation.check()
@@ -117,7 +117,7 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void operationWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void operationWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.operationWithMultiplePrimitiveInputsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.operationWithMultiplePrimitiveInputsCreation.check()
@@ -125,7 +125,7 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void operationWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void operationWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.operationWithStringInputCreation.createAndSynchronize()
 		targetModelsProvider.getModels.operationWithStringInputCreation.check()
@@ -135,7 +135,7 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void operationWithMixedInputsAndReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void operationWithMixedInputsAndReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.operationWithMixedInputsAndReturnCreation.createAndSynchronize()
 		targetModelsProvider.getModels.operationWithMixedInputsAndReturnCreation.check()
@@ -145,7 +145,7 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 
 	@ParameterizedTest(name='{0} to {1}')
 	@MethodSource("testParameters")
-	def void multipleOperationsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	public def void multipleOperationsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
 		sourceModelsProvider.getModels.multipleOperationsCreation.createAndSynchronize()
 		targetModelsProvider.getModels.multipleOperationsCreation.check()
