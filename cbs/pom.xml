@@ -15,11 +15,12 @@
   <packaging>pom</packaging>
 
   <name>Vitruv CBS Commonalities</name>
-  <description />
+  <description>The CBS commonalities application project</description>
 
   <modules>
     <module>commonalities</module>
-    <!-- <module>equivalence</module> --> <!-- old JaMoPP version requires Java 8 class path environment variable, so we need to update the JaMoPP version -->
+    <!-- <module>equivalence</module> --> <!-- old JaMoPP version requires Java 8 class path environment variable, so we
+    need to update the JaMoPP version -->
     <module>testutils</module>
   </modules>
 </project>

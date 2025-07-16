@@ -18,7 +18,7 @@
   <packaging>pom</packaging>
 
   <name>Vitruv Case Studies</name>
-  <description />
+  <description>The case studies project with many example on how to write reactions, create Vsum(m)s and Views(types)</description>
 
   <!-- Build Specification -->
   <modules>
@@ -48,7 +48,7 @@
 
   <!-- Dependency Management -->
   <properties>
-    <vitruv.version>3.2.2</vitruv.version>
+    <vitruv.version>3.2.1</vitruv.version>
     <!-- p2 updatesite versions -->
     <repo.sdq-demo-metamodels.version>1.9.0</repo.sdq-demo-metamodels.version>
     <repo.sdq-commons.version>2.2.0</repo.sdq-commons.version>

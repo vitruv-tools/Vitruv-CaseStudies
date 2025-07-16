@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.cbs.equivalence</artifactId>
 
   <name>Component-Based Applications Equivalence Tests</name>
-  <description />
+  <description>The equivalence project</description>
 
   <build>
     <plugins>
