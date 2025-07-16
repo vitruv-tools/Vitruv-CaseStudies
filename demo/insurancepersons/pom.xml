@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.demo.insurancepersons</artifactId>
 
   <name>Vitruv Insurance-Persons Demo Application</name>
-  <description />
+  <description>The insurance persons demo case study</description>
 
   <build>
     <plugins>

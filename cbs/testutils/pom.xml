@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.cbs.testutils</artifactId>
 
   <name>Component-Based Systems Application Test Utilities</name>
-  <description />
+  <description>Test utils project</description>
 
   <build>
     <plugins>
