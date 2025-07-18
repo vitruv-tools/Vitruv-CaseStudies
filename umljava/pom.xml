@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.umljava</artifactId>
 
   <name>Vitruv UML-Java Application</name>
-  <description />
+  <description>The UML Java application case study</description>
 
   <build>
     <plugins>

@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.simulinkautosar</artifactId>
 
   <name>Vitruv Simulink-AutoSAR Application</name>
-  <description />
+  <description>The Simulink AutoSAR case study</description>
 
   <build>
     <plugins>

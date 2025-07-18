@@ -15,7 +15,7 @@
   <packaging>pom</packaging>
 
   <name>Vitruv Demo Application</name>
-  <description />
+  <description>The demo project, formerly located in the DSLs repository</description>
 
   <modules>
     <module>familiespersons</module>

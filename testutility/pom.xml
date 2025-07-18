@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.testutility</artifactId>
 
   <name>Vitruv Test Utils</name>
-  <description />
+  <description>Test utils project</description>
 
   <build>
     <plugins>
