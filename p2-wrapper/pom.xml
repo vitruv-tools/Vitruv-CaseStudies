@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>tools.vitruv</groupId>
+    <artifactId>tools.vitruv.applications</artifactId>
+    <version>3.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
+
+  <name>P2 Wrapper</name>
+  <description>The p2-layout-resolver does not support dependencies for build plugins, which requires wrapping them in a native Maven dependency.</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>javadoc-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>javadoc</classifier>
+            </configuration>
+          </execution>
+          <execution>
+            <id>sources-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>sources</classifier>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.autosar</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>emftext-jamopp</groupId>
+      <artifactId>org.emftext.language.java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>emftext-jamopp</groupId>
+      <artifactId>org.emftext.language.java.resource</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>emftext-jamopp</groupId>
+      <artifactId>org.emftext.language.java.resource.java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>palladio</groupId>
+      <artifactId>org.palladiosimulator.pcm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>palladio</groupId>
+      <artifactId>org.palladiosimulator.pcm.resources</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>eclipse</groupId>
+      <artifactId>org.eclipse.emf.cdo</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>eclipse</groupId>
+      <artifactId>org.eclipse.uml2.uml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>eclipse</groupId>
+      <artifactId>org.eclipse.uml2.uml.resources</artifactId>
+    </dependency>
+  </dependencies>
+</project>

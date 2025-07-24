@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>tools.vitruv</groupId>
+    <artifactId>tools.vitruv.applications</artifactId>
+    <version>3.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>tools.vitruv.applications.demo</artifactId>
+  <packaging>pom</packaging>
+
+  <name>Vitruv Demo Application</name>
+  <description>The demo project, formerly located in the DSLs repository</description>
+
+  <modules>
+    <module>familiespersons</module>
+    <module>insurancefamilies</module>
+    <module>insurancepersons</module>
+  </modules>
+</project>
