@@ -4,7 +4,7 @@ import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.UMLPackage
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.Interface
-import tools.vitruv.dsls.reactions.runtime.helper.PersistenceHelper
+import tools.vitruv.dsls.^reactions.runtime.helper.PersistenceHelper
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlClass
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlEnum
