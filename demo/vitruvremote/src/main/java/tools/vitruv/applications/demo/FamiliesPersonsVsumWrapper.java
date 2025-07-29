@@ -9,7 +9,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 import edu.kit.ipd.sdq.metamodels.families.FamiliesFactory;
 import tools.vitruv.change.interaction.UserInteractionFactory;
-import tools.vitruv.change.propagation.ProjectMarker;
+import tools.vitruv.change.utils.ProjectMarker;
 import tools.vitruv.dsls.demo.familiespersons.families2persons.FamiliesToPersonsChangePropagationSpecification;
 import tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesChangePropagationSpecification;
 import tools.vitruv.framework.views.View;
