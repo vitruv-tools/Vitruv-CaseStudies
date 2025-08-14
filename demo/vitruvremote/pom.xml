@@ -16,9 +16,19 @@
     </dependency>
 
     <dependency>
-      <groupId>tools.vitruv</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>tools.vitruv.server.security-server2</artifactId>
-      <version>3.2.0-SNAPSHOT</version>
+      <version>${vitruv.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>tools.vitruv.server.security-server</artifactId>
+      <version>${vitruv.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>tools.vitruv.server.remote-jetty</artifactId>
+      <version>${vitruv.version}</version>
     </dependency>
 
     <!-- OIDC protocol specific -->
