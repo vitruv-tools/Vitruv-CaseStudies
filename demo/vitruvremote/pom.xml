@@ -15,7 +15,24 @@
       <version>${project.version}</version>
     </dependency>
 
-  
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>tools.vitruv.server.security-server2</artifactId>
+      <version>3.2.0-SNAPSHOT</version>
+    </dependency>
+
+    <!-- OIDC protocol specific -->
+    <dependency>
+      <groupId>com.nimbusds</groupId>
+      <artifactId>oauth2-oidc-sdk</artifactId>
+      <version>11.27</version>
+    </dependency>
+    <dependency>
+      <groupId>com.nimbusds</groupId>
+      <artifactId>nimbus-jose-jwt</artifactId>
+      <version>10.4.1</version>
+    </dependency>
+
  	 <!-- Vitruvius dependencies -->
  	<dependency>
   	  <groupId>tools.vitruv</groupId>
