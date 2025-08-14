@@ -20,7 +20,12 @@ public class MeasuringServer {
 			}
 			return vsumWrapper.getVsum();
 		}, Configuration.PORT, Configuration.HOST_NAME_OR_IP);
-		server.start();
+
+		try {
+			server.start();
+		} catch (Exception e) {
+			throw new RuntimeException("Could not start server.", e);
+		}
 		
 		System.out.format("Vitruvius server started on: http://%s:%d%n", Configuration.HOST_NAME_OR_IP, Configuration.PORT);
 	}

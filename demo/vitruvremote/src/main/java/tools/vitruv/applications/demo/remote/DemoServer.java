@@ -42,7 +42,13 @@ public class DemoServer {
 			
 			return vsumWrapper.getVsum();
 		}, DemoUtility.SERVER_PORT);
-		server.start();
+
+		try {
+			server.start();
+		} catch (Exception e) {
+			throw new RuntimeException("Could not start server", e);
+		}
+		
 		System.out.println("Vitruvius server started on: " + DemoUtility.SERVER_PORT);
 	}
 }
