@@ -36,6 +36,7 @@ public class OIDCMockServer {
     ) {}
 
     private OIDCMockServerConfiguration config;
+    private String baseUri;
     private Server server;
 
     public OIDCMockServer(OIDCMockServerConfiguration config) {
@@ -45,8 +46,8 @@ public class OIDCMockServer {
     public void start() throws Exception {
         boolean useTls = this.config.tlsConfig() != null;
         
-        String baseUri = String.format(
-            "http%s://%s:%s",
+        baseUri = String.format(
+            "http%s://%s:%d",
             useTls ? "s" : "",
             this.config.connectionConfig.hostOrIp(),
             this.config.connectionConfig.port()
@@ -93,6 +94,10 @@ public class OIDCMockServer {
         server.setHandler(handler);
 
         server.start();
+    }
+
+    public String getBaseUri() {
+        return this.baseUri;
     }
 
     public void stop() throws Exception {
