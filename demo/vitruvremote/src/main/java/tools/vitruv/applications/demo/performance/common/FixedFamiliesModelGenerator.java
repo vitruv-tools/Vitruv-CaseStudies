@@ -3,11 +3,10 @@ package tools.vitruv.applications.demo.performance.common;
 import edu.kit.ipd.sdq.metamodels.families.FamiliesFactory;
 import edu.kit.ipd.sdq.metamodels.families.FamilyRegister;
 import edu.kit.ipd.sdq.metamodels.families.Member;
+import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator.FamilyModelGenerationParameters;
 
 public class FixedFamiliesModelGenerator {
 	private FixedFamiliesModelGenerator() {}
-	
-	public static record FamilyModelGenerationParameters(int noFamilies, int noMembersPerFamily) {}
 	
 	public static void createFamilies(FamilyRegister register, FamilyModelGenerationParameters params) {
 		for (long familyNumber = 0; familyNumber < params.noFamilies(); familyNumber++) {

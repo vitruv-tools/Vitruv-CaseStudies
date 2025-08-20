@@ -17,7 +17,12 @@ public class PerformanceDataContainer {
 		long propagationTime
 	) {}
 
+	private Path temporaryStoragePath;
 	private List<PerformanceDataPoint> data = new ArrayList<>();
+
+	public PerformanceDataContainer(Path temporaryStoragePath) {
+		this.temporaryStoragePath = temporaryStoragePath;
+	}
 	
 	public void addData(PerformanceDataPoint data) {
 		this.data.add(data);
@@ -27,10 +32,13 @@ public class PerformanceDataContainer {
 		return new Gson().toJson(this.data);
 	}
 	
-	public void save(Path file) throws IOException {
+	public void save() {
 		var dataJson = this.getAllDataAsJson();
-		try (var writer = Files.newBufferedWriter(file)) {
+		try (var writer = Files.newBufferedWriter(this.temporaryStoragePath)) {
 			writer.append(dataJson);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Could not store performance data. This will be ignored.");
 		}
 	}
 }

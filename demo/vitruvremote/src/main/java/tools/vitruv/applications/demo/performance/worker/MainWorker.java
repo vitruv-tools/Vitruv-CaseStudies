@@ -23,6 +23,8 @@ import tools.vitruv.applications.demo.oidc.OIDCMockServer.OIDCMockServerConfigur
 import tools.vitruv.applications.demo.performance.common.PathConstants;
 import tools.vitruv.applications.demo.performance.common.VitruvClientController;
 import tools.vitruv.applications.demo.performance.common.VitruvServerController;
+import tools.vitruv.applications.demo.performance.configs.ConfigNames;
+import tools.vitruv.applications.demo.performance.configs.LocalConfiguration;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.applications.demo.performance.worker.handler.ClientStateHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.PerformanceDataSendHandler;
@@ -63,6 +65,7 @@ public final class MainWorker {
             workDirString = "target";
         }
         var workDir = Paths.get(workDirString);
+        var vsumDir = workDir.resolve("vsum");
 
         var certDir = Paths.get("certs");
         var keyStorePath = certDir.resolve("keystore.ks");
@@ -86,6 +89,15 @@ public final class MainWorker {
         }
 
         // Measure local configurations.
+        ConfigNames.COMMUNICATION = ConfigNames.COMMUNICATION_SIDE_WORKER;
+        var dataContainer = new PerformanceDataContainer(workDir.resolve("perf-data.json"));
+        try {
+            LocalConfiguration.executeLocalConfiguration(vsumDir, dataContainer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Could not fully execute local configurations. Stopping.");
+            return;
+        }
 
         // Start servers for controller - worker communication.
         OIDCMockServer oidcServer = new OIDCMockServer(new OIDCMockServerConfiguration(
@@ -116,7 +128,6 @@ public final class MainWorker {
         connector.setPort(serverPort);
         server.addConnector(connector);
 
-        var dataContainer = new PerformanceDataContainer();
         var serverController = new VitruvServerController();
         var clientController = new VitruvClientController();
 
