@@ -23,6 +23,7 @@ import tools.vitruv.applications.demo.oidc.OIDCMockServer.OIDCMockServerConfigur
 import tools.vitruv.applications.demo.performance.common.PathConstants;
 import tools.vitruv.applications.demo.performance.common.VitruvClientController;
 import tools.vitruv.applications.demo.performance.common.VitruvServerController;
+import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.applications.demo.performance.worker.handler.ClientStateHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.PerformanceDataSendHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.StartClientHandler;
@@ -115,6 +116,7 @@ public final class MainWorker {
         connector.setPort(serverPort);
         server.addConnector(connector);
 
+        var dataContainer = new PerformanceDataContainer();
         var serverController = new VitruvServerController();
         var clientController = new VitruvClientController();
 
@@ -130,7 +132,7 @@ public final class MainWorker {
         coreHandler.addHandler(new ContextHandler(new StopServerHandler(serverController), PathConstants.PATH_SERVER_STOP));
         coreHandler.addHandler(new ContextHandler(new StartClientHandler(clientController), PathConstants.PATH_CLIENT_START));
         coreHandler.addHandler(new ContextHandler(new ClientStateHandler(clientController), PathConstants.PATH_CLIENT_STATE));
-        coreHandler.addHandler(new ContextHandler(new PerformanceDataSendHandler(), PathConstants.PATH_PERFORMANCE_DATA));
+        coreHandler.addHandler(new ContextHandler(new PerformanceDataSendHandler(dataContainer), PathConstants.PATH_PERFORMANCE_DATA));
         
         server.setHandler(coreHandler);
 
