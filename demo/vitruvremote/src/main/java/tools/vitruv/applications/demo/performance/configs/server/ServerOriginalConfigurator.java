@@ -1,5 +1,6 @@
-package tools.vitruv.applications.demo.performance.configs;
+package tools.vitruv.applications.demo.performance.configs.server;
 
+import tools.vitruv.applications.demo.performance.configs.MeasuredVsumInitializer;
 import tools.vitruv.framework.remote.server.VitruvServer;
 import tools.vitruv.framework.remote.server.VitruvServerConfiguration;
 import tools.vitruv.framework.remote.server.VitruviusServer;

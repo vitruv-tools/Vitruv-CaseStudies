@@ -8,7 +8,7 @@ import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.util.Callback;
 
 import tools.vitruv.applications.demo.performance.common.PathConstants;
-import tools.vitruv.applications.demo.performance.common.VitruvClientController;
+import tools.vitruv.applications.demo.performance.configs.VitruvClientController;
 
 public class StartClientHandler extends Handler.Abstract.NonBlocking {
     private VitruvClientController controller;

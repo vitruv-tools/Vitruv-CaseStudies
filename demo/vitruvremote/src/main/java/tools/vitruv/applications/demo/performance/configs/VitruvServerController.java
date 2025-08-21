@@ -1,13 +1,12 @@
-package tools.vitruv.applications.demo.performance.common;
+package tools.vitruv.applications.demo.performance.configs;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import tools.vitruv.applications.demo.performance.configs.ConfigNames;
-import tools.vitruv.applications.demo.performance.configs.ServerJettyConfigurator;
-import tools.vitruv.applications.demo.performance.configs.ServerOriginalConfigurator;
-import tools.vitruv.applications.demo.performance.configs.ServerSecurity2Configurator;
-import tools.vitruv.applications.demo.performance.configs.ServerSupplier;
+import tools.vitruv.applications.demo.performance.configs.server.ServerJettyConfigurator;
+import tools.vitruv.applications.demo.performance.configs.server.ServerOriginalConfigurator;
+import tools.vitruv.applications.demo.performance.configs.server.ServerSecurity2Configurator;
+import tools.vitruv.applications.demo.performance.configs.server.ServerSupplier;
 import tools.vitruv.framework.remote.server.VitruvServerConfiguration;
 import tools.vitruv.framework.remote.server.VitruviusServer;
 import tools.vitruv.remote.seccommon.TlsContextConfiguration;

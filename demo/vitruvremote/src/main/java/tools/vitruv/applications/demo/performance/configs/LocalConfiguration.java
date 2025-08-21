@@ -7,7 +7,7 @@ import org.apache.commons.io.FileUtils;
 import edu.kit.ipd.sdq.metamodels.families.FamilyRegister;
 import tools.vitruv.applications.demo.FamiliesPersonsVsumWrapper;
 import tools.vitruv.applications.demo.performance.Configuration;
-import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator.FamilyModelGenerationParameters;
+import tools.vitruv.applications.demo.performance.common.FamilyModelGenerationParameters;
 import tools.vitruv.applications.demo.performance.common.FixedFamiliesModelGenerator;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer.PerformanceDataPoint;

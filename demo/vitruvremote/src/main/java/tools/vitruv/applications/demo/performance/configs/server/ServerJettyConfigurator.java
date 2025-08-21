@@ -1,4 +1,4 @@
-package tools.vitruv.applications.demo.performance.configs;
+package tools.vitruv.applications.demo.performance.configs.server;
 
 import tools.vitruv.framework.remote.server.VitruvServerConfiguration;
 import tools.vitruv.framework.remote.server.VitruviusServer;

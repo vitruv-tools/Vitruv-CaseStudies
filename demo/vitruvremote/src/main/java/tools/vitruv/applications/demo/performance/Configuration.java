@@ -1,7 +1,7 @@
 package tools.vitruv.applications.demo.performance;
 
 import tools.vitruv.applications.demo.DemoUtility;
-import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator.FamilyModelGenerationParameters;
+import tools.vitruv.applications.demo.performance.common.FamilyModelGenerationParameters;
 
 public class Configuration {
 	private Configuration() {}

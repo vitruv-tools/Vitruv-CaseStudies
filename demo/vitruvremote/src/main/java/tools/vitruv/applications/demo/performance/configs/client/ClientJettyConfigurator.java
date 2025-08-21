@@ -1,4 +1,4 @@
-package tools.vitruv.applications.demo.performance.configs;
+package tools.vitruv.applications.demo.performance.configs.client;
 
 import tools.vitruv.framework.remote.client.http.VitruvHttpClientWrapper;
 import tools.vitruv.framework.remote.client.jetty.JettyHttpClientWrapper;

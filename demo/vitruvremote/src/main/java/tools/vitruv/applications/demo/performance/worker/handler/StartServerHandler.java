@@ -7,7 +7,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.util.Callback;
 
-import tools.vitruv.applications.demo.performance.common.VitruvServerController;
+import tools.vitruv.applications.demo.performance.configs.VitruvServerController;
 
 public class StartServerHandler extends Handler.Abstract.NonBlocking {
     private VitruvServerController controller;

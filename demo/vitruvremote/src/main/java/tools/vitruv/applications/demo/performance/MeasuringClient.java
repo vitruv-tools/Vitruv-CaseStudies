@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 
 import edu.kit.ipd.sdq.metamodels.families.FamilyRegister;
 import tools.vitruv.applications.demo.DemoUtility;
-import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator.FamilyModelGenerationParameters;
+import tools.vitruv.applications.demo.performance.common.FamilyModelGenerationParameters;
 import tools.vitruv.framework.remote.client.VitruvClientFactory;
 import tools.vitruv.framework.remote.common.apm.VitruvApmController;
 import tools.vitruv.framework.views.ViewType;

@@ -1,7 +1,8 @@
-package tools.vitruv.applications.demo.performance.configs;
+package tools.vitruv.applications.demo.performance.configs.server;
 
 import org.eclipse.jetty.security.openid.OpenIdConfiguration;
 
+import tools.vitruv.applications.demo.performance.configs.MeasuredVsumInitializer;
 import tools.vitruv.framework.remote.server.VitruvServerConfiguration;
 import tools.vitruv.framework.remote.server.VitruviusServer;
 import tools.vitruv.remote.secclient.JettySecureHttpClientFactory;

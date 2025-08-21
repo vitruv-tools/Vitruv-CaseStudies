@@ -1,4 +1,4 @@
-package tools.vitruv.applications.demo.performance.common;
+package tools.vitruv.applications.demo.performance.configs;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -8,11 +8,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import tools.vitruv.applications.demo.performance.configs.ClientJettyConfigurator;
-import tools.vitruv.applications.demo.performance.configs.ClientOriginalConfigurator;
-import tools.vitruv.applications.demo.performance.configs.ClientSecurityConfigurator;
-import tools.vitruv.applications.demo.performance.configs.ClientSupplier;
-import tools.vitruv.applications.demo.performance.configs.ConfigNames;
+import tools.vitruv.applications.demo.performance.configs.client.ClientExecutor;
+import tools.vitruv.applications.demo.performance.configs.client.ClientJettyConfigurator;
+import tools.vitruv.applications.demo.performance.configs.client.ClientOriginalConfigurator;
+import tools.vitruv.applications.demo.performance.configs.client.ClientSecurityConfigurator;
+import tools.vitruv.applications.demo.performance.configs.client.ClientSupplier;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.framework.remote.common.AvailableHttpVersions;
 import tools.vitruv.remote.seccommon.TlsContextConfiguration;

@@ -1,4 +1,4 @@
-package tools.vitruv.applications.demo.performance.common;
+package tools.vitruv.applications.demo.performance.configs.client;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -9,7 +9,7 @@ import edu.kit.ipd.sdq.metamodels.families.FamilyRegister;
 import tools.vitruv.applications.demo.DemoUtility;
 import tools.vitruv.applications.demo.performance.Configuration;
 import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator;
-import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator.FamilyModelGenerationParameters;
+import tools.vitruv.applications.demo.performance.common.FamilyModelGenerationParameters;
 import tools.vitruv.applications.demo.performance.configs.ConfigNames;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer.PerformanceDataPoint;
@@ -72,7 +72,7 @@ public class ClientExecutor {
             FileUtils.deleteDirectory(this.vsumDir.toFile());
         } catch (IOException e) {
         }
-        
+
         this.progress = 1.5;
     }
 

@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 
 import edu.kit.ipd.sdq.metamodels.families.FamilyRegister;
 import tools.vitruv.applications.demo.FamiliesPersonsVsumWrapper;
-import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator.FamilyModelGenerationParameters;
+import tools.vitruv.applications.demo.performance.common.FamilyModelGenerationParameters;
 
 public class MeasuringLocal {
 	public static void main(String[] args) throws Exception {
