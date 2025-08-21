@@ -17,9 +17,11 @@ public class ClientStateHandler extends Handler.Abstract.NonBlocking {
 
     @Override
     public boolean handle(Request request, Response response, Callback callback) throws Exception {
-        var configName = Request.getPathInContext(request).substring(1);
-        var running = this.controller.isClientRunning(configName);
-        Content.Sink.write(response, true, "" + running, callback);
+        var body = "";
+        if (this.controller.isClientRunning()) {
+            body += this.controller.getProgress();
+        }
+        Content.Sink.write(response, true, "" + body, callback);
         return true;
     }
 }

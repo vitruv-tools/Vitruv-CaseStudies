@@ -7,6 +7,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.util.Callback;
 
+import tools.vitruv.applications.demo.performance.common.PathConstants;
 import tools.vitruv.applications.demo.performance.common.VitruvClientController;
 
 public class StartClientHandler extends Handler.Abstract.NonBlocking {
@@ -19,13 +20,15 @@ public class StartClientHandler extends Handler.Abstract.NonBlocking {
     @Override
     public boolean handle(Request request, Response response, Callback callback) throws Exception {
         var configName = Request.getPathInContext(request).substring(1);
-        if (!this.controller.isClientRunning(configName)) {
+        var serverConfig = Request.extractQueryParameters(request).get(PathConstants.QUERY_PARAMETER_SERVER_CONFIG);
+        if (!this.controller.isClientRunning() && configName != null && serverConfig != null) {
             var uri = Content.Source.asString(request);
-            this.controller.startClient(configName, uri);
-            Content.Sink.write(response, true, "", callback);
-            return true;
+            this.controller.startClient(configName, serverConfig.getValue(), uri);
+        } else if (this.controller.isClientRunning()) {
+            response.setStatus(HttpStatus.CREATED_201);
+        } else if (configName == null || serverConfig == null) {
+            response.setStatus(HttpStatus.BAD_REQUEST_400);
         }
-        response.setStatus(HttpStatus.CREATED_201);
         Content.Sink.write(response, true, "", callback);
         return true;
     }

@@ -66,6 +66,7 @@ public final class MainWorker {
         }
         var workDir = Paths.get(workDirString);
         var vsumDir = workDir.resolve("vsum");
+        var clientVsumDir = workDir.resolve("vsum-client");
 
         var certDir = Paths.get("certs");
         var keyStorePath = certDir.resolve("keystore.ks");
@@ -133,7 +134,7 @@ public final class MainWorker {
             tlsConfig,
             oidcServer.getBaseUri()
         );
-        var clientController = new VitruvClientController();
+        var clientController = new VitruvClientController(tlsConfig, dataContainer, clientVsumDir, "");
 
         ContextHandlerCollection coreHandler = new ContextHandlerCollection();
         
