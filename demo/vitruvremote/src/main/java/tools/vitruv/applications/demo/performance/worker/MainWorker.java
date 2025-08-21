@@ -100,17 +100,17 @@ public final class MainWorker {
         }
 
         // Start servers for controller - worker communication.
+        var tlsConfig = new TlsContextConfiguration(
+            keyStorePath,
+            null,
+            tlsPwd,
+            trustStorePath,
+            null,
+            tlsPwd,
+            null
+        );
         OIDCMockServer oidcServer = new OIDCMockServer(new OIDCMockServerConfiguration(
-            new VitruvServerConfiguration("", oidcPort),
-            new TlsContextConfiguration(
-                keyStorePath,
-                null,
-                tlsPwd,
-                trustStorePath,
-                null,
-                tlsPwd,
-                null
-            )
+            new VitruvServerConfiguration("", oidcPort), tlsConfig
         ));
         try {
             oidcServer.start();
@@ -128,7 +128,11 @@ public final class MainWorker {
         connector.setPort(serverPort);
         server.addConnector(connector);
 
-        var serverController = new VitruvServerController();
+        var serverController = new VitruvServerController(
+            new VitruvServerConfiguration("", serverPort),
+            tlsConfig,
+            oidcServer.getBaseUri()
+        );
         var clientController = new VitruvClientController();
 
         ContextHandlerCollection coreHandler = new ContextHandlerCollection();

@@ -17,9 +17,8 @@ public class StopServerHandler extends Handler.Abstract.NonBlocking {
 
     @Override
     public boolean handle(Request request, Response response, Callback callback) throws Exception {
-        var configName = Request.getPathInContext(request).substring(1);
-        if (this.controller.isServerRunning(configName)) {
-            this.controller.stopServer(configName);
+        if (this.controller.isServerRunning()) {
+            this.controller.stopServer();
         }
         Content.Sink.write(response, true, "", callback);
         return true;

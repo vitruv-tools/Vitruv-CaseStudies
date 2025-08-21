@@ -20,6 +20,11 @@ public class StartServerHandler extends Handler.Abstract.NonBlocking {
     public boolean handle(Request request, Response response, Callback callback) throws Exception {
         var configName = Request.getPathInContext(request).substring(1);
         if (!this.controller.isServerRunning(configName)) {
+            if (this.controller.isServerRunning()) {
+                response.setStatus(HttpStatus.CONFLICT_409);
+                Content.Sink.write(response, true, "A server is already running.", callback);
+                return true;
+            }
             this.controller.startServer(configName);
             Content.Sink.write(response, true, "", callback);
             return true;
