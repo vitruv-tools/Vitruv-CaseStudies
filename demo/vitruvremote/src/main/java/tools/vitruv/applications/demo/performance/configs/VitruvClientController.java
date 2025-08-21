@@ -23,13 +23,13 @@ public class VitruvClientController {
     private ExecutorService parallelExecutor = Executors.newFixedThreadPool(1);
     private Future<?> currentAwaitedResult;
 
-    public VitruvClientController(TlsContextConfiguration tslConfig, PerformanceDataContainer dataContainer, Path vsumDir, String serverUri) {
+    public VitruvClientController(TlsContextConfiguration tslConfig, PerformanceDataContainer dataContainer, Path vsumDir) {
         this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_ORIGINAL, new ClientOriginalConfigurator());
         this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_JETTY_HTTP11, new ClientJettyConfigurator(AvailableHttpVersions.HTTP_1_1));
         this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_JETTY_HTTP2, new ClientJettyConfigurator(AvailableHttpVersions.HTTP_2));
-        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, new ClientSecurityConfigurator(tslConfig, AvailableHttpVersions.HTTP_1_1, serverUri));
-        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2, new ClientSecurityConfigurator(tslConfig, AvailableHttpVersions.HTTP_2, serverUri));
-        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3, new ClientSecurityConfigurator(tslConfig, AvailableHttpVersions.HTTP_3, serverUri));
+        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, new ClientSecurityConfigurator(tslConfig, AvailableHttpVersions.HTTP_1_1));
+        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2, new ClientSecurityConfigurator(tslConfig, AvailableHttpVersions.HTTP_2));
+        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3, new ClientSecurityConfigurator(tslConfig, AvailableHttpVersions.HTTP_3));
 
         this.executor = new ClientExecutor(vsumDir, dataContainer);
     }

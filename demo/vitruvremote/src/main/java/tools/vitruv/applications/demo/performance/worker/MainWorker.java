@@ -1,5 +1,6 @@
 package tools.vitruv.applications.demo.performance.worker;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -81,7 +82,7 @@ public final class MainWorker {
 
         var workDirString = System.getenv(ENV_KEY_VITRUV_WORKER_WORK_DIR);
         if (workDirString == null || workDirString.isBlank()) {
-            workDirString = "target";
+            workDirString = "target" + File.separator + "worker";
         }
         var workDir = Paths.get(workDirString);
         var vsumDir = workDir.resolve("vsum");
@@ -158,7 +159,7 @@ public final class MainWorker {
             oidcServer.getBaseUri(),
             vsumDir
         );
-        var clientController = new VitruvClientController(tlsConfig, dataContainer, clientVsumDir, secureServerUri);
+        var clientController = new VitruvClientController(tlsConfig, dataContainer, clientVsumDir);
 
         // Measure server - client on localhost.
         if (!skipLocalMeasurements) {

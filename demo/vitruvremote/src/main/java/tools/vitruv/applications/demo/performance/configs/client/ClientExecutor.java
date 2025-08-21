@@ -14,7 +14,9 @@ import tools.vitruv.applications.demo.performance.configs.ConfigNames;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.framework.remote.client.VitruvClientFactory;
 import tools.vitruv.framework.remote.client.http.VitruvHttpClientWrapper;
+import tools.vitruv.framework.remote.client.http.VitruvHttpRequest;
 import tools.vitruv.framework.views.ViewType;
+import tools.vitruv.remote.secserver.handler.ApiPaths;
 
 public class ClientExecutor {
     private Path vsumDir;
@@ -36,6 +38,14 @@ public class ClientExecutor {
         this.progress = 0.0;
         this.serverConfig = serverConfig;
         this.clientConfig = clientConfig;
+
+        if (serverUri.startsWith("https")) {
+            try {
+                VitruvHttpRequest.GET(serverUri + ApiPaths.OPENID_LOGIN_PATH).sendRequest(clientWrapper);
+            } catch (Exception e) {
+                throw new IllegalStateException("Could not establish authentication.", e);
+            }
+        }
 
 		var client = VitruvClientFactory.create(serverUri, clientWrapper, this.vsumDir);
 		
