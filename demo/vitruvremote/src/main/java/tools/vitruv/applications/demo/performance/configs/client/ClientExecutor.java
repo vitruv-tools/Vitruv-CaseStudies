@@ -12,7 +12,6 @@ import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator;
 import tools.vitruv.applications.demo.performance.common.FamilyModelGenerationParameters;
 import tools.vitruv.applications.demo.performance.configs.ConfigNames;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
-import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer.PerformanceDataPoint;
 import tools.vitruv.framework.remote.client.VitruvClientFactory;
 import tools.vitruv.framework.remote.client.http.VitruvHttpClientWrapper;
 import tools.vitruv.framework.views.ViewType;
@@ -102,7 +101,7 @@ public class ClientExecutor {
 			familyView.close();
 			
 			System.out.format("%d ms (creation), %d ms (propagation)%n", cTime, pTime);
-			this.dataContainer.addData(new PerformanceDataPoint(this.serverConfig, this.clientConfig, ConfigNames.COMMUNICATION, cTime, pTime));
+			this.dataContainer.addData(this.serverConfig, this.clientConfig, ConfigNames.COMMUNICATION, cTime, pTime);
             this.progress += rIdx / repetitions / 3;
 		}
         this.dataContainer.save();

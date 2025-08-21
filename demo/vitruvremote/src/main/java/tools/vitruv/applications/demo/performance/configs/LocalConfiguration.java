@@ -10,7 +10,6 @@ import tools.vitruv.applications.demo.performance.Configuration;
 import tools.vitruv.applications.demo.performance.common.FamilyModelGenerationParameters;
 import tools.vitruv.applications.demo.performance.common.FixedFamiliesModelGenerator;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
-import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer.PerformanceDataPoint;
 
 public final class LocalConfiguration {
 	private LocalConfiguration() {}
@@ -52,7 +51,7 @@ public final class LocalConfiguration {
 			wrapper.close();
 			
 			System.out.format("Finished round %d with %d ms (creation) and %d ms (propagation).%n", rIdx, cTime, pTime);
-			dataContainer.addData(new PerformanceDataPoint(ConfigNames.CONFIG_LOCAL, ConfigNames.CONFIG_LOCAL, ConfigNames.COMMUNICATION, cTime, pTime));
+			dataContainer.addData(ConfigNames.CONFIG_LOCAL, ConfigNames.CONFIG_LOCAL, ConfigNames.COMMUNICATION, cTime, pTime);
 		}
 		
 		FileUtils.deleteDirectory(vsumPath.toFile());
