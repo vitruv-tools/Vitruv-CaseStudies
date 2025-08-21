@@ -1,5 +1,7 @@
 package tools.vitruv.applications.demo.performance.configs.server;
 
+import java.nio.file.Path;
+
 import org.eclipse.jetty.security.openid.OpenIdConfiguration;
 
 import tools.vitruv.applications.demo.performance.configs.MeasuredVsumInitializer;
@@ -15,16 +17,20 @@ public class ServerSecurity2Configurator implements ServerSupplier {
     private VitruvServerConfiguration serverConfig;
     private TlsContextConfiguration tlsConfig;
     private String oidcUri;
+    private Path vsumDir;
     private boolean useDirectConnection;
 
     public ServerSecurity2Configurator(
             VitruvServerConfiguration serverConfig,
             TlsContextConfiguration tlsConfig,
             String oidcUri,
-            boolean useDirectConnection) {
+            Path vsumDir,
+            boolean useDirectConnection
+    ) {
         this.serverConfig = serverConfig;
         this.tlsConfig = tlsConfig;
         this.oidcUri = oidcUri;
+        this.vsumDir = vsumDir;
         this.useDirectConnection = useDirectConnection;
     }
 
@@ -53,8 +59,7 @@ public class ServerSecurity2Configurator implements ServerSupplier {
 		
         var vitruvSecServer = nextBuilder.authenticateWith(AuthenticationMode.OPEN_ID)
 			.withOpenIdConfiguration(oidcConfig)
-			.buildFor(new MeasuredVsumInitializer()
-        );
+			.buildFor(new MeasuredVsumInitializer(this.vsumDir));
 		
 		vitruvSecServer.start();
         

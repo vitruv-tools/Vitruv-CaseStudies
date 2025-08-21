@@ -13,6 +13,10 @@ public final class PathConstants {
 
     public static final String PATH_PERFORMANCE_DATA = "/data";
 
+    public static final String PATH_WORKER_STOP = "/worker/stop";
+
+    public static final String PATH_GET_OIDC = "/oidc";
+
     public static final String QUERY_PARAMETER_SERVER_CONFIG = "serverconfig";
 
     private PathConstants() {}

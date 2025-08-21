@@ -1,7 +1,10 @@
 package tools.vitruv.applications.demo.performance.configs;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
 
 import tools.vitruv.applications.demo.performance.configs.server.ServerJettyConfigurator;
 import tools.vitruv.applications.demo.performance.configs.server.ServerOriginalConfigurator;
@@ -15,16 +18,20 @@ public class VitruvServerController {
     private Map<String, ServerSupplier> configToSupplier = new HashMap<>();
     private String currentRunningConfig;
     private VitruviusServer currentRunningServer;
+    private Path vsumDir;
     
     public VitruvServerController(
         VitruvServerConfiguration serverConfig,
         TlsContextConfiguration tslConfig,
-        String oidcUri
+        String oidcUri,
+        Path vsumDir
     ) {
-        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE, new ServerSecurity2Configurator(serverConfig, tslConfig, oidcUri, true));
-        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE, new ServerSecurity2Configurator(serverConfig, tslConfig, oidcUri, false));
-        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_ORIGINAL, new ServerOriginalConfigurator(serverConfig));
-        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_JETTY, new ServerJettyConfigurator(serverConfig));
+        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE, new ServerSecurity2Configurator(serverConfig, tslConfig, oidcUri, vsumDir, true));
+        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE, new ServerSecurity2Configurator(serverConfig, tslConfig, oidcUri, vsumDir, false));
+        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_ORIGINAL, new ServerOriginalConfigurator(serverConfig, vsumDir));
+        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_JETTY, new ServerJettyConfigurator(serverConfig, vsumDir));
+
+        this.vsumDir = vsumDir;
     }
 
     public void startServer(String configName) throws Exception {
@@ -46,6 +53,7 @@ public class VitruvServerController {
         this.currentRunningServer.stop();
         this.currentRunningServer = null;
         this.currentRunningConfig = null;
+        FileUtils.deleteDirectory(this.vsumDir.toFile());
     }
 
     public boolean isServerRunning() {

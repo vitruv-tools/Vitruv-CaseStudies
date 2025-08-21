@@ -1,12 +1,14 @@
 package tools.vitruv.applications.demo.performance.configs.server;
 
+import java.nio.file.Path;
+
 import tools.vitruv.framework.remote.server.VitruvServerConfiguration;
 import tools.vitruv.framework.remote.server.VitruviusServer;
 import tools.vitruv.framework.remote.server.jetty.JettyVitruvServer;
 
 public class ServerJettyConfigurator extends ServerOriginalConfigurator {
-    public ServerJettyConfigurator(VitruvServerConfiguration serverConfig) {
-        super(serverConfig);
+    public ServerJettyConfigurator(VitruvServerConfiguration serverConfig, Path vsumDir) {
+        super(serverConfig, vsumDir);
     }
     
     @Override

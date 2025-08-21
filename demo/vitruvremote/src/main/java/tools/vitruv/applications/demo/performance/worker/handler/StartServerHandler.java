@@ -26,10 +26,9 @@ public class StartServerHandler extends Handler.Abstract.NonBlocking {
                 return true;
             }
             this.controller.startServer(configName);
-            Content.Sink.write(response, true, "", callback);
-            return true;
+        } else {
+            response.setStatus(HttpStatus.CREATED_201);
         }
-        response.setStatus(HttpStatus.CREATED_201);
         Content.Sink.write(response, true, "", callback);
         return true;
     }
