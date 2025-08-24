@@ -15,5 +15,7 @@ public final class PathConstants {
 
     public static final String PATH_GET_OIDC = "/oidc";
 
+    public static final String HEADER_VITRUV_SECRET = "Vitruv";
+
     private PathConstants() {}
 }

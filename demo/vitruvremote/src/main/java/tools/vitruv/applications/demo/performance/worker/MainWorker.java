@@ -10,8 +10,6 @@ import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.PathMappingsHandler;
-import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.util.resource.ResourceFactory;
 
 import tools.vitruv.applications.demo.oidc.OIDCMockServer;
 import tools.vitruv.applications.demo.oidc.OIDCMockServer.OIDCMockServerConfiguration;
@@ -29,6 +27,7 @@ import tools.vitruv.applications.demo.performance.worker.handler.PerformanceData
 import tools.vitruv.applications.demo.performance.worker.handler.StartConfigHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.StopServerHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.StopWorkerHandler;
+import tools.vitruv.applications.demo.performance.worker.handler.TrustStoreHandler;
 import tools.vitruv.framework.remote.server.VitruvServerConfiguration;
 import tools.vitruv.remote.seccommon.TlsContextConfiguration;
 import tools.vitruv.remote.seccommon.cert.CertificateGenerator;
@@ -95,10 +94,7 @@ public final class MainWorker {
         server.addConnector(connector);
 
         var coreHandler = new PathMappingsHandler();
-        ResourceHandler trustStoreHandler = new ResourceHandler();
-        trustStoreHandler.setBaseResource(ResourceFactory.of(trustStoreHandler).newResource(fileStructure.getTrustStorePath()));
-        coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_TRUST_STORE), trustStoreHandler);
-        
+        coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_TRUST_STORE), new TrustStoreHandler(fileStructure.getTrustStorePath(), fileStructure.getRemoteServerTrustStorePath(), tlsPwd));
         coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_START_CONFIG), new StartConfigHandler(executionController));
         coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_SERVER_STOP), new StopServerHandler(serverController));
         coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_STATE), new StateHandler(executionController));
