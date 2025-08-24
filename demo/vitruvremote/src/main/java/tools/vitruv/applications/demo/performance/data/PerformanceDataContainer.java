@@ -15,6 +15,7 @@ public class PerformanceDataContainer {
 
 	private Path temporaryStoragePath;
 	private Map<String, List<PerformanceDataPoint>> data = new HashMap<>();
+	private Gson gson = new Gson();
 
 	public PerformanceDataContainer(Path temporaryStoragePath) {
 		this.temporaryStoragePath = temporaryStoragePath;
@@ -30,8 +31,20 @@ public class PerformanceDataContainer {
 		points.add(new PerformanceDataPoint(creationTime, propagationTime));
 	}
 
+	public void addDataFromJson(String json) {
+		var newData = this.gson.<Map<String, List<PerformanceDataPoint>>>fromJson(json, this.data.getClass());
+		for (var entry : newData.entrySet()) {
+			var list = this.data.get(entry.getKey());
+			if (list != null) {
+				list.addAll(entry.getValue());
+			} else {
+				this.data.put(entry.getKey(), entry.getValue());
+			}
+		}
+	}
+
 	public String getAllDataAsJson() {
-		return new Gson().toJson(this.data);
+		return this.gson.toJson(this.data);
 	}
 	
 	public void save() {
