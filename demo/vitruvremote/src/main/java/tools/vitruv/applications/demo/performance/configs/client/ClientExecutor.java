@@ -10,6 +10,7 @@ import tools.vitruv.applications.demo.DemoUtility;
 import tools.vitruv.applications.demo.performance.Configuration;
 import tools.vitruv.applications.demo.performance.RandomFamiliesModelGenerator;
 import tools.vitruv.applications.demo.performance.common.FamilyModelGenerationParameters;
+import tools.vitruv.applications.demo.performance.common.ProgressUtility;
 import tools.vitruv.applications.demo.performance.configs.ConfigNames;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.framework.remote.client.VitruvClientFactory;
@@ -21,7 +22,7 @@ import tools.vitruv.remote.secserver.handler.ApiPaths;
 public class ClientExecutor {
     private Path vsumDir;
     private PerformanceDataContainer dataContainer;
-    private double progress;
+    private double progress = ProgressUtility.DEFAULT_NO_PROGRESS_VALUE;
     private String serverConfig;
     private String clientConfig;
     

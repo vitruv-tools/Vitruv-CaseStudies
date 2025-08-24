@@ -3,11 +3,8 @@ package tools.vitruv.applications.demo.performance.configs;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
+import tools.vitruv.applications.demo.performance.common.ProgressUtility;
 import tools.vitruv.applications.demo.performance.configs.client.ClientExecutor;
 import tools.vitruv.applications.demo.performance.configs.client.ClientJettyConfigurator;
 import tools.vitruv.applications.demo.performance.configs.client.ClientOriginalConfigurator;
@@ -20,8 +17,6 @@ import tools.vitruv.remote.seccommon.TlsContextConfiguration;
 public class VitruvClientController {
     private Map<String, ClientSupplier> configToClientSupplier = new HashMap<>();
     private ClientExecutor executor;
-    private ExecutorService parallelExecutor = Executors.newFixedThreadPool(1);
-    private Future<?> currentAwaitedResult;
 
     public VitruvClientController(TlsContextConfiguration tslConfig, PerformanceDataContainer dataContainer, Path vsumDir) {
         this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_ORIGINAL, new ClientOriginalConfigurator());
@@ -34,7 +29,7 @@ public class VitruvClientController {
         this.executor = new ClientExecutor(vsumDir, dataContainer);
     }
 
-    public void startClient(String configName, String serverConfig, String uri) throws Exception {
+    public void excuteClient(String configName, String serverConfig, String uri) throws Exception {
         if (this.isClientRunning()) {
             throw new IllegalStateException("Client already running.");
         }
@@ -45,7 +40,7 @@ public class VitruvClientController {
         }
 
         var wrapper = supplier.get();
-        this.currentAwaitedResult = this.parallelExecutor.submit(() -> this.executor.executeMeasurements(uri, wrapper, serverConfig, configName));
+        this.executor.executeMeasurements(uri, wrapper, serverConfig, configName);
     }
 
     public double getProgress() {
@@ -53,13 +48,6 @@ public class VitruvClientController {
     }
 
     public boolean isClientRunning() {
-        return this.currentAwaitedResult != null && !this.currentAwaitedResult.isDone();
-    }
-
-    public void waitForCompletion() {
-        try {
-            this.currentAwaitedResult.get();
-        } catch (InterruptedException | ExecutionException e) {
-        }
+        return this.executor.getProgress() < ProgressUtility.DEFAULT_NO_PROGRESS_VALUE;
     }
 }

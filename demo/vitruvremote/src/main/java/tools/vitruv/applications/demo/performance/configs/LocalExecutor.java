@@ -9,12 +9,18 @@ import tools.vitruv.applications.demo.FamiliesPersonsVsumWrapper;
 import tools.vitruv.applications.demo.performance.Configuration;
 import tools.vitruv.applications.demo.performance.common.FamilyModelGenerationParameters;
 import tools.vitruv.applications.demo.performance.common.FixedFamiliesModelGenerator;
+import tools.vitruv.applications.demo.performance.common.ProgressUtility;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 
-public final class LocalConfiguration {
-	private LocalConfiguration() {}
+public final class LocalExecutor{
+	private double progress = ProgressUtility.DEFAULT_NO_PROGRESS_VALUE;
 
-	public static void executeLocalConfiguration(Path vsumDir, PerformanceDataContainer dataContainer) throws Exception {
+	public double getProgress() {
+		return this.progress;
+	}
+
+	public void executeLocalConfiguration(Path vsumDir, PerformanceDataContainer dataContainer) throws Exception {
+		this.progress = 0.0;
 		System.out.println("--- Small configuration with local Vitruvius ---");
 		measureLocalPerformance(Configuration.REPETITIONS_SMALL, vsumDir,
 				Configuration.SMALL_MODEL_PARAMETERS, dataContainer);
@@ -24,9 +30,10 @@ public final class LocalConfiguration {
 		System.out.println("--- Large configuration with local Vitruvius ---");
 		measureLocalPerformance(Configuration.REPETITIONS_LARGE, vsumDir,
 				Configuration.LARGE_MODEL_PARAMETERS, dataContainer);
+		this.progress = 1.5;
 	}
 	
-	private static void measureLocalPerformance(int repetitions, Path vsumPath, FamilyModelGenerationParameters genParams, PerformanceDataContainer dataContainer) throws Exception {
+	private void measureLocalPerformance(int repetitions, Path vsumPath, FamilyModelGenerationParameters genParams, PerformanceDataContainer dataContainer) throws Exception {
 		for (int rIdx = 0; rIdx < repetitions; rIdx++) {
 			System.out.println("Starting round " + rIdx);
 			
@@ -49,12 +56,13 @@ public final class LocalConfiguration {
 			
 			familyView.close();
 			wrapper.close();
+			FileUtils.deleteDirectory(vsumPath.toFile());
 			
 			System.out.format("Finished round %d with %d ms (creation) and %d ms (propagation).%n", rIdx, cTime, pTime);
 			dataContainer.addData(ConfigNames.CONFIG_LOCAL, ConfigNames.CONFIG_LOCAL, ConfigNames.COMMUNICATION, cTime, pTime);
+
+			this.progress += (rIdx / repetitions) / 3;
 		}
-		
-		FileUtils.deleteDirectory(vsumPath.toFile());
 		dataContainer.save();
 	}
 }
