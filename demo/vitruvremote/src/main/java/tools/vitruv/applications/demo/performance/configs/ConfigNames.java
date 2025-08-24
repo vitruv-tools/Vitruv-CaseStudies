@@ -17,6 +17,12 @@ public final class ConfigNames {
 
     public static final String CONFIG_CLIENT_SECURITY_JETTY_HTTP3 = "client-security-jetty-http3";
 
+    public static final String CONFIG_CLIENT_SECURITY_JETTY_HTTP11_LOCAL = "client-security-jetty-http11-local";
+
+    public static final String CONFIG_CLIENT_SECURITY_JETTY_HTTP2_LOCAL = "client-security-jetty-http2-local";
+
+    public static final String CONFIG_CLIENT_SECURITY_JETTY_HTTP3_LOCAL = "client-security-jetty-http3-local";
+
     public static final String CONFIG_CLIENT_ORIGINAL = "client-original";
 
     public static final String CONFIG_CLIENT_JETTY_HTTP11 = "client-jetty-http11";

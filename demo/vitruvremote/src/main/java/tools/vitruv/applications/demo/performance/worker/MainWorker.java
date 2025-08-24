@@ -58,8 +58,7 @@ public final class MainWorker {
             new GeneralName[] { new GeneralName(GeneralName.iPAddress, ip), new GeneralName(GeneralName.dNSName, ip) }
         );
         
-        // Start OpenID Connect server.
-        var tlsConfig = new TlsContextConfiguration(
+        var localTlsConfig = new TlsContextConfiguration(
             fileStructure.getKeyStorePath(),
             null,
             tlsPwd,
@@ -68,19 +67,29 @@ public final class MainWorker {
             tlsPwd,
             fileStructure.getTempCertDir()
         );
+        var remoteTlsConfig = new TlsContextConfiguration(
+            null,
+            null,
+            tlsPwd,
+            fileStructure.getRemoteServerTrustStorePath(),
+            null,
+            tlsPwd,
+            fileStructure.getTempCertDir()
+        );
+
         OIDCMockServer oidcServer = new OIDCMockServer(new OIDCMockServerConfiguration(
-            new VitruvServerConfiguration(ip, oidcPort), tlsConfig
+            new VitruvServerConfiguration(ip, oidcPort), localTlsConfig
         ));
         oidcServer.start();
 
         var dataContainer = new PerformanceDataContainer(fileStructure.getPerformanceDataFile());
         var serverController = new VitruvServerController(
             new VitruvServerConfiguration(ip, vitruvServerPort),
-            tlsConfig,
+            localTlsConfig,
             oidcServer.getBaseUri(),
             fileStructure.getVsumServerDir()
         );
-        var clientController = new VitruvClientController(tlsConfig, dataContainer, fileStructure.getVsumClientDir());
+        var clientController = new VitruvClientController(localTlsConfig, remoteTlsConfig, dataContainer, fileStructure.getVsumClientDir());
         var localController = new LocalExecutionController(serverController, clientController, fileStructure.getVsumServerDir(), dataContainer);
         var executionController = new ConfigExecutionController(serverController, clientController, localController);
 
