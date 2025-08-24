@@ -2,7 +2,7 @@ package tools.vitruv.applications.demo.performance.configs.exchange;
 
 public class StartConfigurationSetting {
     private String serverConfig;
-    private String clientConfig;
+    private String[] clientConfig;
     private String communication;
     private String serverUri;
 
@@ -14,11 +14,11 @@ public class StartConfigurationSetting {
         this.serverConfig = serverConfig;
     }
 
-    public String getClientConfig() {
+    public String[] getClientConfigs() {
         return clientConfig;
     }
 
-    public void setClientConfig(String clientConfig) {
+    public void setClientConfig(String[] clientConfig) {
         this.clientConfig = clientConfig;
     }
 

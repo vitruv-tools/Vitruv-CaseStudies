@@ -29,17 +29,19 @@ public class LocalExecutionController {
         return Math.min(this.clientController.getProgress(), this.localController.getProgress());
     }
 
-    public void startLocalMeasurement(String serverConfig, String clientConfig) throws Exception {
+    public void startLocalMeasurement(String serverConfig, String[] clientConfigs) throws Exception {
         if (serverConfig.equals(ConfigNames.CONFIG_LOCAL)) {
             this.localController.executeLocalConfiguration(this.vsumDir, this.dataContainer);
         } else {
-            this.executeLocalServerClientMeasurement(serverConfig, clientConfig);
+            this.executeLocalServerClientMeasurement(serverConfig, clientConfigs);
         }
     }
 
-    private void executeLocalServerClientMeasurement(String serverConfig, String clientConfig) throws Exception {
+    private void executeLocalServerClientMeasurement(String serverConfig, String[] clientConfigs) throws Exception {
         var uri = this.serverController.startServer(serverConfig);
-        this.clientController.excuteClient(clientConfig, serverConfig, uri);
+        for (var cConfig : clientConfigs) {
+            this.clientController.excuteClient(cConfig, serverConfig, uri);
+        }
         this.serverController.stopServer();
     }
 

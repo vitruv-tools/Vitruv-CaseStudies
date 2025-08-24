@@ -27,21 +27,25 @@ public class ConfigExecutionController {
 
     public String executeConfig(StartConfigurationSetting configSetting) throws Exception {
         ConfigNames.COMMUNICATION = configSetting.getCommunication();
-        if (configSetting.getCommunication().equals(ConfigNames.COMMUNICATION_SIDE_CONTROLLER)) {
+        if (configSetting.getCommunication().equals(ConfigNames.COMMUNICATION_SIDE_WORKER)) {
             this.executionService.execute(() -> {
                 try {
-                    this.localController.startLocalMeasurement(configSetting.getServerConfig(), configSetting.getServerConfig());
+                    this.localController.startLocalMeasurement(configSetting.getServerConfig(), configSetting.getClientConfigs());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
-        } else if (configSetting.getClientConfig() == null) {
+        } else if (configSetting.getClientConfigs() == null) {
             return this.serverController.startServer(configSetting.getServerConfig());
         } else {
+            if (configSetting.getClientConfigs().length <= 0) {
+                throw new IllegalStateException("No client configuration given.");
+            }
+            
             this.executionService.execute(() -> {
                 try {
                     this.clientController.excuteClient(
-                        configSetting.getClientConfig(),
+                        configSetting.getClientConfigs()[0],
                         configSetting.getServerConfig(),
                         configSetting.getServerUri()
                     );
