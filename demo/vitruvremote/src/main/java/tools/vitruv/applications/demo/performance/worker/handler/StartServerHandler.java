@@ -25,10 +25,11 @@ public class StartServerHandler extends Handler.Abstract.NonBlocking {
                 Content.Sink.write(response, true, "A server is already running.", callback);
                 return true;
             }
-            this.controller.startServer(configName);
-        } else {
-            response.setStatus(HttpStatus.CREATED_201);
+            var serverUri = this.controller.startServer(configName);
+            Content.Sink.write(response, true, serverUri, callback);
+            return true;
         }
+        response.setStatus(HttpStatus.CREATED_201);
         Content.Sink.write(response, true, "", callback);
         return true;
     }

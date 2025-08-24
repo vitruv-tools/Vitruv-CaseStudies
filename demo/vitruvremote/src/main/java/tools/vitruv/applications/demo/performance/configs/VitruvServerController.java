@@ -34,16 +34,19 @@ public class VitruvServerController {
         this.vsumDir = vsumDir;
     }
 
-    public void startServer(String configName) throws Exception {
+    public String startServer(String configName) throws Exception {
         if (this.isServerRunning()) {
             throw new IllegalStateException("A server is already running. Cannot start another.");
         }
+
         var supplier = this.configToSupplier.get(configName);
         if (supplier == null) {
             throw new IllegalArgumentException("Configuration not found.");
         }
+        
         this.currentRunningServer = supplier.get();
         this.currentRunningConfig = configName;
+        return this.currentRunningServer.getBaseUrl();
     }
 
     public void stopServer() throws Exception {
