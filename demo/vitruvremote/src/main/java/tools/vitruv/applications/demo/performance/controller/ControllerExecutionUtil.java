@@ -40,7 +40,7 @@ public class ControllerExecutionUtil {
 
     public void executePureLocalMeasurements() throws Exception {
         ConfigNames.COMMUNICATION = ConfigNames.COMMUNICATION_SIDE_CONTROLLER;
-        sendStartConfigRequest(ConfigNames.CONFIG_LOCAL, "", null);
+        sendStartConfigRequest(ConfigNames.CONFIG_LOCAL, new String [0], null);
         localController.startLocalMeasurement(ConfigNames.CONFIG_LOCAL, null);
         waitForWorker();
     }
@@ -62,11 +62,11 @@ public class ControllerExecutionUtil {
         logger.info(serverConfig);
 
         ConfigNames.COMMUNICATION = ConfigNames.COMMUNICATION_CONTROLLER_TO_WORKER;
-        sendStartConfigRequest(serverConfig, "", null);
+        var vitruvServerUri = sendStartConfigRequest(serverConfig, new String [0], null);
 
         for (var cConfig : clientConfigs) {
             logger.info("Client config " + cConfig);
-            clientController.excuteClient(cConfig, serverConfig, remoteUri);
+            clientController.excuteClient(cConfig, serverConfig, vitruvServerUri);
         }
 
         client.GET(remoteUri + PathConstants.PATH_SERVER_STOP);
@@ -119,11 +119,11 @@ public class ControllerExecutionUtil {
         }
     }
 
-    private void sendStartConfigRequest(String serverConfig, String clientConfig, String serverUri) throws Exception {
-        sendStartConfigRequest(serverConfig, new String[] { clientConfig }, serverUri);
+    private String sendStartConfigRequest(String serverConfig, String clientConfig, String serverUri) throws Exception {
+        return sendStartConfigRequest(serverConfig, new String[] { clientConfig }, serverUri);
     }
 
-    private void sendStartConfigRequest(String serverConfig, String[] clientConfigs, String serverUri) throws Exception {
+    private String sendStartConfigRequest(String serverConfig, String[] clientConfigs, String serverUri) throws Exception {
         var response = client
             .POST(remoteUri + PathConstants.PATH_START_CONFIG)
             .body(toConfigSettingsContent(serverConfig, clientConfigs, serverUri))
@@ -131,10 +131,11 @@ public class ControllerExecutionUtil {
         if (response.getStatus() != HttpStatus.OK_200) {
             throw new IllegalStateException("Something went wrong. Got response: " + response.getStatus());
         }
+        return response.getContentAsString();
     }
 
     private Content toConfigSettingsContent(
-        String serverConnfig,
+        String serverConfig,
         String[] clientConfigs,
         String serverUri
     ) {
@@ -143,10 +144,10 @@ public class ControllerExecutionUtil {
         if (ConfigNames.COMMUNICATION.equals(ConfigNames.COMMUNICATION_SIDE_CONTROLLER)) {
             config.setCommunication(ConfigNames.COMMUNICATION_SIDE_WORKER);
         }
-        config.setServerConfig(serverConnfig);
+        config.setServerConfig(serverConfig);
         config.setClientConfig(clientConfigs);
         config.setServerUri(serverUri);
-        var bodyString = new Gson().toJson(serverConnfig);
+        var bodyString = new Gson().toJson(config);
         return new StringRequestContent(bodyString);
     }
 }

@@ -7,10 +7,12 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.bouncycastle.asn1.x509.GeneralName;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
+import tools.vitruv.applications.demo.DemoUtility;
 import tools.vitruv.applications.demo.performance.common.EnvUtility;
 import tools.vitruv.applications.demo.performance.common.IpUtil;
 import tools.vitruv.applications.demo.performance.common.PathConstants;
@@ -34,16 +36,18 @@ public final class MainController {
     public static void main(String[] args) throws Exception {
         logger.info("Starting the performance measurement controller.");
 
+        DemoUtility.registerFactories();
+
         // Setup environment.
-        var remoteUri = EnvUtility.asString(EnvUtility.ENV_KEY_VITRUV_CONTROLLER_REMOTE_WORKER_URI, "http://");
-        var vitruvServerPort = EnvUtility.asInt(EnvUtility.ENV_KEY_VITRUV_PERF_VITRUV_SERVER_PORT, 9095);
+        var remoteUri = EnvUtility.asString(EnvUtility.ENV_KEY_VITRUV_CONTROLLER_REMOTE_WORKER_URI, "http://192.168.2.101:9094");
+        var vitruvServerPort = EnvUtility.asInt(EnvUtility.ENV_KEY_VITRUV_PERF_VITRUV_SERVER_PORT, 9097);
         
         var workDirString = EnvUtility.asString(EnvUtility.ENV_KEY_VITRUV_PERF_WORK_DIR, "target" + File.separator + "controller");
         var workDir = Paths.get(workDirString);
         var fileStructure = new PerformanceDirectoryStructure(workDir);
 
         var workerClient = JettyHttpClientFactory.createClearTextHttpClient(List.of(AvailableHttpVersions.HTTP_2));
-        workerClient.setExecutor(new QueuedThreadPool(1));
+        workerClient.setExecutor(new QueuedThreadPool(4));
         workerClient.start();
         var oidcUri = obtainOidcUri(workerClient, remoteUri);
         var tlsPwd = downloadTrustStore(workerClient, remoteUri, fileStructure.getRemoteServerTrustStorePath());
@@ -52,7 +56,14 @@ public final class MainController {
 
         // Prepare local measurements for server - client communication.
         var ip = IpUtil.getHostIp();
-        CertificateGenerator.generateFullCertificateChain(tlsPwd, fileStructure.getKeyStorePath(), tlsPwd, fileStructure.getTrustStorePath(), ip, null);
+        CertificateGenerator.generateFullCertificateChain(
+            tlsPwd,
+            fileStructure.getKeyStorePath(),
+            tlsPwd,
+            fileStructure.getTrustStorePath(),
+            ip,
+            new GeneralName[] { new GeneralName(GeneralName.iPAddress, ip), new GeneralName(GeneralName.dNSName, ip) }
+        );
         uploadTrustStore(workerClient, remoteUri, fileStructure.getTrustStorePath());
 
         var localTlsConfig = new TlsContextConfiguration(

@@ -35,13 +35,9 @@ public class ConfigExecutionController {
                     e.printStackTrace();
                 }
             });
-        } else if (configSetting.getClientConfigs() == null) {
+        } else if (configSetting.getClientConfigs() == null || configSetting.getClientConfigs().length == 0) {
             return this.serverController.startServer(configSetting.getServerConfig());
         } else {
-            if (configSetting.getClientConfigs().length <= 0) {
-                throw new IllegalStateException("No client configuration given.");
-            }
-            
             this.executionService.execute(() -> {
                 try {
                     this.clientController.excuteClient(

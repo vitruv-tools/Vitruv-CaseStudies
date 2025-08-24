@@ -22,12 +22,12 @@ public class VitruvServerController {
     
     public VitruvServerController(
         VitruvServerConfiguration serverConfig,
-        TlsContextConfiguration tslConfig,
+        TlsContextConfiguration serverTlsConfig,
         String oidcUri,
         Path vsumDir
     ) {
-        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_SECURITY2_DIRECT_MODE, new ServerSecurity2Configurator(serverConfig, tslConfig, oidcUri, vsumDir, true));
-        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE, new ServerSecurity2Configurator(serverConfig, tslConfig, oidcUri, vsumDir, false));
+        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_SECURITY2_DIRECT_MODE, new ServerSecurity2Configurator(serverConfig, serverTlsConfig, oidcUri, vsumDir, true));
+        this.configToSupplier.put(ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE, new ServerSecurity2Configurator(serverConfig, serverTlsConfig, oidcUri, vsumDir, false));
         this.configToSupplier.put(ConfigNames.CONFIG_SERVER_ORIGINAL, new ServerOriginalConfigurator(serverConfig, vsumDir));
         this.configToSupplier.put(ConfigNames.CONFIG_SERVER_JETTY, new ServerJettyConfigurator(serverConfig, vsumDir));
 

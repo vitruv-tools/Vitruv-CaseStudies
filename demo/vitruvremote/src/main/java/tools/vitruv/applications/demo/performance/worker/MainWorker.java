@@ -12,6 +12,7 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.PathMappingsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
+import tools.vitruv.applications.demo.DemoUtility;
 import tools.vitruv.applications.demo.oidc.OIDCMockServer;
 import tools.vitruv.applications.demo.oidc.OIDCMockServer.OIDCMockServerConfiguration;
 import tools.vitruv.applications.demo.performance.common.EnvUtility;
@@ -38,6 +39,9 @@ public final class MainWorker {
 
     public static void main(String[] args) throws Exception {
         // Set environment up.
+
+        DemoUtility.registerFactories();
+
         var serverPort = EnvUtility.asInt(EnvUtility.ENV_KEY_VITRUV_PERF_SERVER_PORT, 9094);
         var oidcPort = EnvUtility.asInt(EnvUtility.ENV_KEY_VITRUV_WORKER_OIDC_PORT, 9095);
         var vitruvServerPort = EnvUtility.asInt(EnvUtility.ENV_KEY_VITRUV_PERF_VITRUV_SERVER_PORT, 9096);
