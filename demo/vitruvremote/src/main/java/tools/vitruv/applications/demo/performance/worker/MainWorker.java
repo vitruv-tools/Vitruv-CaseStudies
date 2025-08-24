@@ -10,6 +10,7 @@ import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.PathMappingsHandler;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 import tools.vitruv.applications.demo.oidc.OIDCMockServer;
 import tools.vitruv.applications.demo.oidc.OIDCMockServer.OIDCMockServerConfiguration;
@@ -94,7 +95,7 @@ public final class MainWorker {
         var executionController = new ConfigExecutionController(serverController, clientController, localController);
 
         // Start server for worker - controller communication.
-        Server server = new Server();
+        Server server = new Server(new QueuedThreadPool(4));
 
         HttpConfiguration httpConfig = new HttpConfiguration();
         HTTP2CServerConnectionFactory h2c = new HTTP2CServerConnectionFactory(httpConfig);

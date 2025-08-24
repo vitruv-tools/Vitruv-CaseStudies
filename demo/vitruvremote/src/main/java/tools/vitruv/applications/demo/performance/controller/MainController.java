@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.http.HttpStatus;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 import tools.vitruv.applications.demo.performance.common.EnvUtility;
 import tools.vitruv.applications.demo.performance.common.IpUtil;
@@ -42,6 +43,7 @@ public final class MainController {
         var fileStructure = new PerformanceDirectoryStructure(workDir);
 
         var workerClient = JettyHttpClientFactory.createClearTextHttpClient(List.of(AvailableHttpVersions.HTTP_2));
+        workerClient.setExecutor(new QueuedThreadPool(1));
         workerClient.start();
         var oidcUri = obtainOidcUri(workerClient, remoteUri);
         var tlsPwd = downloadTrustStore(workerClient, remoteUri, fileStructure.getRemoteServerTrustStorePath());

@@ -3,6 +3,7 @@ package tools.vitruv.applications.demo.performance.configs.server;
 import java.nio.file.Path;
 
 import org.eclipse.jetty.security.openid.OpenIdConfiguration;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 import tools.vitruv.applications.demo.performance.configs.MeasuredVsumInitializer;
 import tools.vitruv.framework.remote.server.VitruvServerConfiguration;
@@ -39,6 +40,7 @@ public class ServerSecurity2Configurator implements ServerSupplier {
         // Since we use a self-signed server certificate, the HTTP client used by Jetty for communicating with
 		// the OpenID Connect provider must know the server certificate. Thus, we create our own HTTP client.
 		var openIdHttpClient = JettySecureHttpClientFactory.createSecureHttpClient(this.tlsConfig);
+        openIdHttpClient.setExecutor(new QueuedThreadPool(4));
 		OpenIdConfiguration oidcConfig = new OpenIdConfiguration(this.oidcUri, null, null, "42", "a", openIdHttpClient);
 		
 		var builder = VitruvSecurityServer2Builder.createBuilder()

@@ -9,6 +9,7 @@ import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.PathMappingsHandler;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 import com.nimbusds.openid.connect.sdk.op.OIDCProviderConfigurationRequest;
 
@@ -63,7 +64,7 @@ public class OIDCMockServer {
             )
         );
 
-        this.server = new Server();
+        this.server = new Server(new QueuedThreadPool(4));
 
         if (useTls) {
             JettyServerConnectionInitializer.initializeConnectors(
