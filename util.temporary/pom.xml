@@ -69,7 +69,6 @@
       <groupId>org.eclipse.xtext</groupId>
       <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
     </dependency>
-
     <!-- p2 dependencies -->
     <dependency>
       <groupId>sdq-commons</groupId>

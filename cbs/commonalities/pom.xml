@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.cbs.commonalities</artifactId>
 
   <name>Vitruv CBS Commonalities Application</name>
-  <description />
+  <description>The CBS commonalities application project</description>
 
   <build>
     <plugins>

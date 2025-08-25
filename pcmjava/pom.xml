@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.pcmjava</artifactId>
 
   <name>Vitruv PCM-Java Application</name>
-  <description />
+  <description>The PCM Java case study</description>
 
   <build>
     <plugins>

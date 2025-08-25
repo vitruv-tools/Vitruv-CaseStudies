@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.demo.insurancefamilies</artifactId>
 
   <name>Vitruv Insurance-Families Demo Application</name>
-  <description />
+  <description>The insurance families demo case study</description>
 
   <build>
     <plugins>
