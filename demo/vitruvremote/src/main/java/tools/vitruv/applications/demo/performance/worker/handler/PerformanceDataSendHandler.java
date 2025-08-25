@@ -11,7 +11,9 @@ import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 public class PerformanceDataSendHandler extends Handler.Abstract.NonBlocking {
     private PerformanceDataContainer dataContainer;
 
-    public PerformanceDataSendHandler(PerformanceDataContainer dataContainer) {}
+    public PerformanceDataSendHandler(PerformanceDataContainer dataContainer) {
+        this.dataContainer = dataContainer;
+    }
 
     @Override
     public boolean handle(Request request, Response response, Callback callback) throws Exception {

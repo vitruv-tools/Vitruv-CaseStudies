@@ -3,6 +3,8 @@ package tools.vitruv.applications.demo.performance.common;
 public final class PathConstants {
     public static final String PATH_TRUST_STORE = "/truststore";
 
+    public static final String PATH_KEY_STORE = "/keystore";
+
     public static final String PATH_START_CONFIG = "/start";
 
     public static final String PATH_SERVER_STOP = "/server/stop";

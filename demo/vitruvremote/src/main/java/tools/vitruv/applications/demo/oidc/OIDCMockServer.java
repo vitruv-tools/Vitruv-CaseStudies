@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.eclipse.jetty.http.pathmap.RegexPathSpec;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
+import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.Slf4jRequestLogWriter;
 import org.eclipse.jetty.server.handler.PathMappingsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
@@ -64,13 +66,13 @@ public class OIDCMockServer {
             )
         );
 
-        this.server = new Server(new QueuedThreadPool(4));
+        this.server = new Server(new QueuedThreadPool(8));
 
         if (useTls) {
             JettyServerConnectionInitializer.initializeConnectors(
                 server,
                 new ServerConnectionConfiguration(
-                    List.of(AvailableHttpVersions.HTTP_1_1, AvailableHttpVersions.HTTP_2),
+                    List.of(AvailableHttpVersions.HTTP_1_1, AvailableHttpVersions.HTTP_2, AvailableHttpVersions.HTTP_3),
                     this.config.connectionConfig().hostOrIp(),
                     this.config.connectionConfig().port(),
                     this.config.tlsConfig()

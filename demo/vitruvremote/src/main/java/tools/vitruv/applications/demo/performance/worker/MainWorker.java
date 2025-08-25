@@ -12,6 +12,8 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.PathMappingsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
+import com.google.common.io.Files;
+
 import tools.vitruv.applications.demo.DemoUtility;
 import tools.vitruv.applications.demo.oidc.OIDCMockServer;
 import tools.vitruv.applications.demo.oidc.OIDCMockServer.OIDCMockServerConfiguration;
@@ -25,6 +27,7 @@ import tools.vitruv.applications.demo.performance.configs.VitruvServerController
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.applications.demo.performance.worker.handler.StateHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.GetOidcHandler;
+import tools.vitruv.applications.demo.performance.worker.handler.KeyStoreHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.PerformanceDataSendHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.StartConfigHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.StopServerHandler;
@@ -62,18 +65,10 @@ public final class MainWorker {
             ip,
             new GeneralName[] { new GeneralName(GeneralName.iPAddress, ip), new GeneralName(GeneralName.dNSName, ip) }
         );
+        Files.copy(fileStructure.getTrustStorePath().toFile(), fileStructure.getRemoteServerTrustStorePath().toFile());
         
-        var localTlsConfig = new TlsContextConfiguration(
+        var tlsConfig = new TlsContextConfiguration(
             fileStructure.getKeyStorePath(),
-            null,
-            tlsPwd,
-            fileStructure.getTrustStorePath(),
-            null,
-            tlsPwd,
-            fileStructure.getTempCertDir()
-        );
-        var remoteTlsConfig = new TlsContextConfiguration(
-            null,
             null,
             tlsPwd,
             fileStructure.getRemoteServerTrustStorePath(),
@@ -83,23 +78,23 @@ public final class MainWorker {
         );
 
         OIDCMockServer oidcServer = new OIDCMockServer(new OIDCMockServerConfiguration(
-            new VitruvServerConfiguration(ip, oidcPort), localTlsConfig
+            new VitruvServerConfiguration(ip, oidcPort), tlsConfig
         ));
         oidcServer.start();
 
         var dataContainer = new PerformanceDataContainer(fileStructure.getPerformanceDataFile());
         var serverController = new VitruvServerController(
             new VitruvServerConfiguration(ip, vitruvServerPort),
-            localTlsConfig,
+            tlsConfig,
             oidcServer.getBaseUri(),
             fileStructure.getVsumServerDir()
         );
-        var clientController = new VitruvClientController(localTlsConfig, remoteTlsConfig, dataContainer, fileStructure.getVsumClientDir());
+        var clientController = new VitruvClientController(tlsConfig, dataContainer, fileStructure.getVsumClientDir());
         var localController = new LocalExecutionController(serverController, clientController, fileStructure.getVsumServerDir(), dataContainer);
         var executionController = new ConfigExecutionController(serverController, clientController, localController);
 
         // Start server for worker - controller communication.
-        Server server = new Server(new QueuedThreadPool(4));
+        Server server = new Server(new QueuedThreadPool(8));
 
         HttpConfiguration httpConfig = new HttpConfiguration();
         HTTP2CServerConnectionFactory h2c = new HTTP2CServerConnectionFactory(httpConfig);
@@ -109,6 +104,7 @@ public final class MainWorker {
 
         var coreHandler = new PathMappingsHandler();
         coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_TRUST_STORE), new TrustStoreHandler(fileStructure.getTrustStorePath(), fileStructure.getRemoteServerTrustStorePath(), tlsPwd));
+        coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_KEY_STORE), new KeyStoreHandler(fileStructure.getKeyStorePath(), ip));
         coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_START_CONFIG), new StartConfigHandler(executionController));
         coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_SERVER_STOP), new StopServerHandler(serverController));
         coreHandler.addMapping(new RegexPathSpec(PathConstants.PATH_STATE), new StateHandler(executionController));

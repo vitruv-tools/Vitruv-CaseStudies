@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.apache.commons.io.FileUtils;
+
 public class PerformanceDirectoryStructure {
     private Path vsumServerDir;
     private Path vsumClientDir;
@@ -16,7 +18,13 @@ public class PerformanceDirectoryStructure {
 
     public PerformanceDirectoryStructure(Path rootDir) throws IOException {
         vsumServerDir = rootDir.resolve("vsum-server");
+        if (Files.exists(vsumServerDir)) {
+            FileUtils.deleteDirectory(vsumServerDir.toFile());
+        }
         vsumClientDir = rootDir.resolve("vsum-client");
+        if (Files.exists(vsumClientDir)) {
+            FileUtils.deleteDirectory(vsumClientDir.toFile());
+        }
 
         certDir = rootDir.resolve("certs");
         keyStorePath = certDir.resolve("keystore.ks");

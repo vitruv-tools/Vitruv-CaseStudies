@@ -39,7 +39,7 @@ public final class MainController {
         DemoUtility.registerFactories();
 
         // Setup environment.
-        var remoteUri = EnvUtility.asString(EnvUtility.ENV_KEY_VITRUV_CONTROLLER_REMOTE_WORKER_URI, "http://192.168.2.101:9094");
+        var remoteUri = EnvUtility.asString(EnvUtility.ENV_KEY_VITRUV_CONTROLLER_REMOTE_WORKER_URI, "http://localhost:9094");
         var vitruvServerPort = EnvUtility.asInt(EnvUtility.ENV_KEY_VITRUV_PERF_VITRUV_SERVER_PORT, 9097);
         
         var workDirString = EnvUtility.asString(EnvUtility.ENV_KEY_VITRUV_PERF_WORK_DIR, "target" + File.separator + "controller");
@@ -47,7 +47,7 @@ public final class MainController {
         var fileStructure = new PerformanceDirectoryStructure(workDir);
 
         var workerClient = JettyHttpClientFactory.createClearTextHttpClient(List.of(AvailableHttpVersions.HTTP_2));
-        workerClient.setExecutor(new QueuedThreadPool(4));
+        workerClient.setExecutor(new QueuedThreadPool(8));
         workerClient.start();
         var oidcUri = obtainOidcUri(workerClient, remoteUri);
         var tlsPwd = downloadTrustStore(workerClient, remoteUri, fileStructure.getRemoteServerTrustStorePath());
@@ -56,27 +56,23 @@ public final class MainController {
 
         // Prepare local measurements for server - client communication.
         var ip = IpUtil.getHostIp();
-        CertificateGenerator.generateFullCertificateChain(
-            tlsPwd,
-            fileStructure.getKeyStorePath(),
-            tlsPwd,
-            fileStructure.getTrustStorePath(),
-            ip,
-            new GeneralName[] { new GeneralName(GeneralName.iPAddress, ip), new GeneralName(GeneralName.dNSName, ip) }
-        );
-        uploadTrustStore(workerClient, remoteUri, fileStructure.getTrustStorePath());
+        if (remoteUri.contains(ip)) {
+            downloadKeyStore(workerClient, remoteUri, fileStructure.getKeyStorePath());
+        } else {
+            CertificateGenerator.generateFullCertificateChain(
+                tlsPwd,
+                fileStructure.getKeyStorePath(),
+                tlsPwd,
+                fileStructure.getTrustStorePath(),
+                ip,
+                new GeneralName[] { new GeneralName(GeneralName.iPAddress, ip), new GeneralName(GeneralName.dNSName, ip) }
+            );
+            uploadTrustStore(workerClient, remoteUri, fileStructure.getTrustStorePath());
+            CertificateGenerator.mergeKeyStores(fileStructure.getRemoteServerTrustStorePath(), tlsPwd, fileStructure.getTrustStorePath(), tlsPwd, false);
+        }
 
-        var localTlsConfig = new TlsContextConfiguration(
+        var tlsConfig = new TlsContextConfiguration(
             fileStructure.getKeyStorePath(),
-            null,
-            tlsPwd,
-            fileStructure.getTrustStorePath(),
-            null,
-            tlsPwd,
-            fileStructure.getTempCertDir()
-        );
-        var remoteTlsConfig = new TlsContextConfiguration(
-            null,
             null,
             tlsPwd,
             fileStructure.getRemoteServerTrustStorePath(),
@@ -84,9 +80,9 @@ public final class MainController {
             tlsPwd,
             fileStructure.getTempCertDir()
         );
-
-        var serverController = new VitruvServerController(new VitruvServerConfiguration(ip, vitruvServerPort), localTlsConfig, oidcUri, fileStructure.getVsumServerDir());
-        var clientController = new VitruvClientController(localTlsConfig, remoteTlsConfig, dataContainer, fileStructure.getVsumClientDir());
+        
+        var serverController = new VitruvServerController(new VitruvServerConfiguration(ip, vitruvServerPort), tlsConfig, oidcUri, fileStructure.getVsumServerDir());
+        var clientController = new VitruvClientController(tlsConfig, dataContainer, fileStructure.getVsumClientDir());
         var localController = new LocalExecutionController(serverController, clientController, fileStructure.getVsumServerDir(), dataContainer);
         var executionUtil = new ControllerExecutionUtil(serverController, clientController, localController, workerClient, remoteUri);
 
@@ -99,7 +95,7 @@ public final class MainController {
 
         executionUtil.executeLocalMeasurements(
             ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE,
-            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11_LOCAL }
+            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11 }
         );
 
         executionUtil.executeRemoteMeasurements(
@@ -109,7 +105,7 @@ public final class MainController {
 
         executionUtil.executeRemoteMeasurements(
             ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE,
-            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3 }
+            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3 }
         );
 
         executionUtil.executeRemoteMeasurements(
@@ -132,6 +128,11 @@ public final class MainController {
         var response = client.GET(baseUri + PathConstants.PATH_TRUST_STORE);
         Files.write(trustStorePath, response.getContent());
         return response.getHeaders().get(PathConstants.HEADER_VITRUV_SECRET);
+    }
+
+    private static void downloadKeyStore(HttpClient client, String baseUri, Path keyStorePath) throws Exception {
+        var response = client.GET(baseUri + PathConstants.PATH_KEY_STORE);
+        Files.write(keyStorePath, response.getContent());
     }
 
     private static void uploadTrustStore(HttpClient client, String baseUri, Path trustStorePath) throws Exception {

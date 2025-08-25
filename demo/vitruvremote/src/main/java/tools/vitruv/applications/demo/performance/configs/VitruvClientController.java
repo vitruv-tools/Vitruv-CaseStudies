@@ -18,16 +18,13 @@ public class VitruvClientController {
     private Map<String, ClientSupplier> configToClientSupplier = new HashMap<>();
     private ClientExecutor executor;
 
-    public VitruvClientController(TlsContextConfiguration localTlsConfig, TlsContextConfiguration remoteTlsConfig, PerformanceDataContainer dataContainer, Path vsumDir) {
+    public VitruvClientController(TlsContextConfiguration tlsConfig, PerformanceDataContainer dataContainer, Path vsumDir) {
         this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_ORIGINAL, new ClientOriginalConfigurator());
         this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_JETTY_HTTP11, new ClientJettyConfigurator(AvailableHttpVersions.HTTP_1_1));
         this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_JETTY_HTTP2, new ClientJettyConfigurator(AvailableHttpVersions.HTTP_2));
-        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11_LOCAL, new ClientSecurityConfigurator(localTlsConfig, AvailableHttpVersions.HTTP_1_1));
-        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2_LOCAL, new ClientSecurityConfigurator(localTlsConfig, AvailableHttpVersions.HTTP_2));
-        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3_LOCAL, new ClientSecurityConfigurator(localTlsConfig, AvailableHttpVersions.HTTP_3));
-        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, new ClientSecurityConfigurator(remoteTlsConfig, AvailableHttpVersions.HTTP_1_1));
-        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2, new ClientSecurityConfigurator(remoteTlsConfig, AvailableHttpVersions.HTTP_2));
-        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3, new ClientSecurityConfigurator(remoteTlsConfig, AvailableHttpVersions.HTTP_3));
+        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, new ClientSecurityConfigurator(tlsConfig, AvailableHttpVersions.HTTP_1_1));
+        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2, new ClientSecurityConfigurator(tlsConfig, AvailableHttpVersions.HTTP_2));
+        this.configToClientSupplier.put(ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3, new ClientSecurityConfigurator(tlsConfig, AvailableHttpVersions.HTTP_3));
 
         this.executor = new ClientExecutor(vsumDir, dataContainer);
     }
