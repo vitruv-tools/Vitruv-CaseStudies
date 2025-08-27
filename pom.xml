@@ -9,7 +9,7 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>parent</artifactId>
-    <version>3.0.7</version>
+    <version>3.3.1</version>
   </parent>
 
   <!-- Project Information -->
@@ -18,7 +18,7 @@
   <packaging>pom</packaging>
 
   <name>Vitruv Case Studies</name>
-  <description />
+  <description>The case studies project with many example on how to write reactions, create Vsum(m)s and Views(types)</description>
 
   <!-- Build Specification -->
   <modules>
@@ -229,7 +229,7 @@
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-api</artifactId>
-        <version>2.24.3</version>
+        <version>2.25.1</version>
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
@@ -239,7 +239,7 @@
       <dependency>
         <groupId>org.eclipse.emf</groupId>
         <artifactId>org.eclipse.emf.common</artifactId>
-        <version>2.41.0</version>
+        <version>2.42.0</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.emf</groupId>
@@ -249,7 +249,7 @@
       <dependency>
         <groupId>org.eclipse.emf</groupId>
         <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-        <version>2.38.0</version>
+        <version>2.39.0</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
@@ -264,17 +264,17 @@
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>org.eclipse.xtend.lib</artifactId>
-        <version>2.38.0</version>
+        <version>2.39.0</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>org.eclipse.xtend.lib.macro</artifactId>
-        <version>2.38.0</version>
+        <version>2.39.0</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtext</groupId>
         <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
-        <version>2.38.0</version>
+        <version>2.40.0</version>
       </dependency>
       <dependency>
         <groupId>org.hamcrest</groupId>

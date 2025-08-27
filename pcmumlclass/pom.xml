@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.pcmumlclass</artifactId>
 
   <name>Vitruv PCM-UML Class Application</name>
-  <description />
+  <description>The PCM UML case study</description>
 
   <build>
     <plugins>

@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.testutility.integration</artifactId>
 
   <name>Vitruv Test Utils for Integration Tests</name>
-  <description />
+  <description>The test utils for integration tests project</description>
 
   <build>
     <plugins>

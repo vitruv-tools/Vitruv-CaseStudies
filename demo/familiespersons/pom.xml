@@ -14,7 +14,7 @@
   <artifactId>tools.vitruv.applications.demo.familiespersons</artifactId>
 
   <name>Vitruv Families-Persons Demo Application</name>
-  <description />
+  <description>The families persons demo case study (ATL zoo)</description>
 
   <build>
     <plugins>
