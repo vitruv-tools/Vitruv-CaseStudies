@@ -58,7 +58,7 @@ public final class MainController {
         var dataContainer = new PerformanceDataContainer(fileStructure.getPerformanceDataFile());
 
         // Prepare local measurements for server - client communication.
-        var ip = IpUtil.getHostIp();
+        var ip = EnvUtility.asString(EnvUtility.ENV_KEY_VITRUV_PERF_SERVER_HOST, IpUtil.getHostIp());
         if (remoteUri.contains(ip)) {
             downloadKeyStore(workerClient, remoteUri, fileStructure.getKeyStorePath());
         } else {

@@ -50,7 +50,7 @@ public final class MainWorker {
         var oidcPort = EnvUtility.asInt(EnvUtility.ENV_KEY_VITRUV_WORKER_OIDC_PORT, 9095);
         var vitruvServerPort = EnvUtility.asInt(EnvUtility.ENV_KEY_VITRUV_PERF_VITRUV_SERVER_PORT, 9096);
 
-        var ip = IpUtil.getHostIp();
+        var ip = EnvUtility.asString(EnvUtility.ENV_KEY_VITRUV_PERF_SERVER_HOST, IpUtil.getHostIp());
 
         var workDirString = EnvUtility.asString(EnvUtility.ENV_KEY_VITRUV_PERF_WORK_DIR, "target" + File.separator + "worker");
         var workDir = Paths.get(workDirString);
