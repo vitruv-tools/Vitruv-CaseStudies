@@ -1,5 +1,7 @@
 package tools.vitruv.applications.demo.performance.controller;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.Request.Content;
@@ -10,11 +12,12 @@ import com.nimbusds.jose.shaded.gson.Gson;
 
 import tools.vitruv.applications.demo.performance.common.PathConstants;
 import tools.vitruv.applications.demo.performance.common.ProgressUtility;
-import tools.vitruv.applications.demo.performance.configs.ConfigNames;
 import tools.vitruv.applications.demo.performance.configs.LocalExecutionController;
 import tools.vitruv.applications.demo.performance.configs.VitruvClientController;
 import tools.vitruv.applications.demo.performance.configs.VitruvServerController;
+import tools.vitruv.applications.demo.performance.configs.exchange.ConfigNames;
 import tools.vitruv.applications.demo.performance.configs.exchange.StartConfigurationSetting;
+import tools.vitruv.applications.demo.performance.configs.exchange.StartConfigurationSetting.RepeatedModelGenerationConfiguration;
 
 public class ControllerExecutionUtil {
     private static final Logger logger = Logger.getLogger(ControllerExecutionUtil.class);
@@ -38,41 +41,59 @@ public class ControllerExecutionUtil {
         this.remoteUri = remoteUri;
     }
 
-    public void executePureLocalMeasurements() throws Exception {
+    public void executePureLocalMeasurements(List<RepeatedModelGenerationConfiguration> generationConfigs) throws Exception {
         ConfigNames.COMMUNICATION = ConfigNames.COMMUNICATION_SIDE_CONTROLLER;
-        sendStartConfigRequest(ConfigNames.CONFIG_LOCAL, new String [0], null);
-        localController.startLocalMeasurement(ConfigNames.CONFIG_LOCAL, null);
+        var setting = asSetting(ConfigNames.CONFIG_LOCAL, null, null, generationConfigs);
+        sendStartConfigRequest(setting);
+        localController.startLocalMeasurement(setting);
         waitForWorker();
     }
 
-    public void executeLocalMeasurements(String serverConfig, String[] clientConfigs) throws Exception {
+    public void executeLocalMeasurements(
+        String serverConfig,
+        String[] clientConfigs,
+        List<RepeatedModelGenerationConfiguration> generationConfigs
+    ) throws Exception {
         ConfigNames.COMMUNICATION = ConfigNames.COMMUNICATION_SIDE_CONTROLLER;
-        sendStartConfigRequest(serverConfig, clientConfigs, null);
-        this.localController.startLocalMeasurement(serverConfig, clientConfigs);
+        var setting = asSetting(serverConfig, clientConfigs, null, generationConfigs);
+        sendStartConfigRequest(setting);
+        this.localController.startLocalMeasurement(setting);
         waitForWorker();
     }
 
-    public void executeRemoteMeasurements(String serverConfig, String[] clientConfigs) throws Exception {
-        executeControllerToWorkerMeasurements(serverConfig, clientConfigs);
-        executeWorkerToControllerMeasurements(serverConfig, clientConfigs);
+    public void executeRemoteMeasurements(
+        String serverConfig,
+        String[] clientConfigs,
+        List<RepeatedModelGenerationConfiguration> generationConfigs
+    ) throws Exception {
+        executeControllerToWorkerMeasurements(serverConfig, clientConfigs, generationConfigs);
+        executeWorkerToControllerMeasurements(serverConfig, clientConfigs, generationConfigs);
     }
 
-    public void executeControllerToWorkerMeasurements(String serverConfig, String[] clientConfigs) throws Exception {
+    public void executeControllerToWorkerMeasurements(
+        String serverConfig,
+        String[] clientConfigs,
+        List<RepeatedModelGenerationConfiguration> generationConfigs
+    ) throws Exception {
         logger.info("Starting with (controller -> worker):");
         logger.info(serverConfig);
 
         ConfigNames.COMMUNICATION = ConfigNames.COMMUNICATION_CONTROLLER_TO_WORKER;
-        var vitruvServerUri = sendStartConfigRequest(serverConfig, new String [0], null);
+        var vitruvServerUri = sendStartConfigRequest(serverConfig, new String [0], null, generationConfigs);
 
         for (var cConfig : clientConfigs) {
             logger.info("Client config " + cConfig);
-            clientController.excuteClient(cConfig, serverConfig, vitruvServerUri);
+            clientController.excuteClient(null, cConfig, vitruvServerUri);
         }
 
         client.GET(remoteUri + PathConstants.PATH_SERVER_STOP);
     }
 
-    public void executeWorkerToControllerMeasurements(String serverConfig, String[] clientConfigs) throws Exception {
+    public void executeWorkerToControllerMeasurements(
+        String serverConfig,
+        String[] clientConfigs,
+        List<RepeatedModelGenerationConfiguration> generationConfigs
+    ) throws Exception {
         logger.info("Starting with (worker -> controller):");
         logger.info(serverConfig);
 
@@ -82,7 +103,7 @@ public class ControllerExecutionUtil {
         for (var cConfig : clientConfigs) {
             logger.info("Client config: " + cConfig);
             try {
-                sendStartConfigRequest(serverConfig, cConfig, serverUri);
+                sendStartConfigRequest(serverConfig, cConfig, serverUri, generationConfigs);
             } catch (Exception e) {
                 continue;
             }
@@ -96,7 +117,7 @@ public class ControllerExecutionUtil {
         logger.info("Waiting for worker.");
 
         var progress = 0.0;
-        long defaultWaitingTime = 1000 * 60 * 5;
+        long defaultWaitingTime = 1000 * 10;
         var waitingTime = defaultWaitingTime;
 
         while (progress < ProgressUtility.DEFAULT_NO_PROGRESS_VALUE) {
@@ -112,21 +133,35 @@ public class ControllerExecutionUtil {
             if (estimatedRemainingTime < defaultWaitingTime) {
                 waitingTime = defaultWaitingTime;
             } else {
-                waitingTime = Math.max((long) estimatedRemainingTime, 5 * defaultWaitingTime);
+                waitingTime = Math.max((long) estimatedRemainingTime, 25 * defaultWaitingTime);
             }
 
             progress = currentProgress;
         }
     }
 
-    private String sendStartConfigRequest(String serverConfig, String clientConfig, String serverUri) throws Exception {
-        return sendStartConfigRequest(serverConfig, new String[] { clientConfig }, serverUri);
+    private String sendStartConfigRequest(
+        String serverConfig,
+        String clientConfig,
+        String serverUri,
+        List<RepeatedModelGenerationConfiguration> generationConfigs
+    ) throws Exception {
+        return sendStartConfigRequest(serverConfig, new String[] { clientConfig }, serverUri, generationConfigs);
     }
 
-    private String sendStartConfigRequest(String serverConfig, String[] clientConfigs, String serverUri) throws Exception {
+    private String sendStartConfigRequest(
+        String serverConfig,
+        String[] clientConfigs,
+        String serverUri,
+        List<RepeatedModelGenerationConfiguration> generationConfigs
+    ) throws Exception {
+        return this.sendStartConfigRequest(asSetting(serverConfig, clientConfigs, serverUri, generationConfigs));
+    }
+
+    private String sendStartConfigRequest(StartConfigurationSetting setting) throws Exception {
         var response = client
             .POST(remoteUri + PathConstants.PATH_START_CONFIG)
-            .body(toConfigSettingsContent(serverConfig, clientConfigs, serverUri))
+            .body(toConfigSettingsContent(setting))
             .send();
         if (response.getStatus() != HttpStatus.OK_200) {
             throw new IllegalStateException("Something went wrong. Got response: " + response.getStatus());
@@ -134,10 +169,16 @@ public class ControllerExecutionUtil {
         return response.getContentAsString();
     }
 
-    private Content toConfigSettingsContent(
+    private Content toConfigSettingsContent(StartConfigurationSetting setting) {
+        var bodyString = new Gson().toJson(setting);
+        return new StringRequestContent(bodyString);
+    }
+
+    private StartConfigurationSetting asSetting(
         String serverConfig,
         String[] clientConfigs,
-        String serverUri
+        String serverUri,
+        List<RepeatedModelGenerationConfiguration> generationConfigs
     ) {
         var config = new StartConfigurationSetting();
         config.setCommunication(ConfigNames.COMMUNICATION);
@@ -147,7 +188,8 @@ public class ControllerExecutionUtil {
         config.setServerConfig(serverConfig);
         config.setClientConfig(clientConfigs);
         config.setServerUri(serverUri);
-        var bodyString = new Gson().toJson(config);
-        return new StringRequestContent(bodyString);
+        config.getGenerationConfigurations().addAll(generationConfigs);
+        config.setRandomExecution(false);
+        return config;
     }
 }

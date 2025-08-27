@@ -13,14 +13,17 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 import tools.vitruv.applications.demo.DemoUtility;
+import tools.vitruv.applications.demo.performance.Configuration;
 import tools.vitruv.applications.demo.performance.common.EnvUtility;
 import tools.vitruv.applications.demo.performance.common.IpUtil;
 import tools.vitruv.applications.demo.performance.common.PathConstants;
 import tools.vitruv.applications.demo.performance.common.PerformanceDirectoryStructure;
-import tools.vitruv.applications.demo.performance.configs.ConfigNames;
 import tools.vitruv.applications.demo.performance.configs.LocalExecutionController;
 import tools.vitruv.applications.demo.performance.configs.VitruvClientController;
 import tools.vitruv.applications.demo.performance.configs.VitruvServerController;
+import tools.vitruv.applications.demo.performance.configs.client.MeasurementExecutionEngine;
+import tools.vitruv.applications.demo.performance.configs.exchange.ConfigNames;
+import tools.vitruv.applications.demo.performance.configs.exchange.StartConfigurationSetting.RepeatedModelGenerationConfiguration;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.framework.remote.client.jetty.JettyHttpClientFactory;
 import tools.vitruv.framework.remote.common.AvailableHttpVersions;
@@ -81,44 +84,56 @@ public final class MainController {
             fileStructure.getTempCertDir()
         );
         
+        var executionEngine = new MeasurementExecutionEngine(fileStructure.getVsumClientDir(), dataContainer);
         var serverController = new VitruvServerController(new VitruvServerConfiguration(ip, vitruvServerPort), tlsConfig, oidcUri, fileStructure.getVsumServerDir());
-        var clientController = new VitruvClientController(tlsConfig, dataContainer, fileStructure.getVsumClientDir());
-        var localController = new LocalExecutionController(serverController, clientController, fileStructure.getVsumServerDir(), dataContainer);
+        var clientController = new VitruvClientController(tlsConfig, executionEngine);
+        var localController = new LocalExecutionController(serverController, clientController, executionEngine);
         var executionUtil = new ControllerExecutionUtil(serverController, clientController, localController, workerClient, remoteUri);
 
-        executionUtil.executePureLocalMeasurements();
+        executionUtil.executePureLocalMeasurements(List.of(new RepeatedModelGenerationConfiguration(100, Configuration.SMALL_MODEL_PARAMETERS)));
+
+        var generationConfigs = getGenerationConfigs();
+
+        executionUtil.executePureLocalMeasurements(generationConfigs);
 
         executionUtil.executeLocalMeasurements(
             ConfigNames.CONFIG_SERVER_ORIGINAL,
-            new String[] { ConfigNames.CONFIG_CLIENT_ORIGINAL }
+            new String[] { ConfigNames.CONFIG_CLIENT_ORIGINAL },
+            generationConfigs
         );
 
         executionUtil.executeLocalMeasurements(
             ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE,
-            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11 }
+            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11 },
+            generationConfigs
         );
 
         executionUtil.executeRemoteMeasurements(
             ConfigNames.CONFIG_SERVER_SECURITY2_DIRECT_MODE,
-            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2 }
+            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2 },
+            generationConfigs
         );
 
         executionUtil.executeRemoteMeasurements(
             ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE,
-            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3 }
+            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3 },
+            generationConfigs
         );
 
         executionUtil.executeRemoteMeasurements(
             ConfigNames.CONFIG_SERVER_ORIGINAL,
-            new String[] { ConfigNames.CONFIG_CLIENT_ORIGINAL }
+            new String[] { ConfigNames.CONFIG_CLIENT_ORIGINAL },
+            generationConfigs
         );
 
         executionUtil.executeRemoteMeasurements(
             ConfigNames.CONFIG_SERVER_JETTY,
-            new String[] { ConfigNames.CONFIG_CLIENT_JETTY_HTTP11 }
+            new String[] { ConfigNames.CONFIG_CLIENT_JETTY_HTTP11 },
+            generationConfigs
         );
 
         obtainAndStorePerformanceData(workerClient, remoteUri, dataContainer);
+        dataContainer.toCsv(fileStructure.getPerformanceDataFile().resolveSibling("perf.csv"));
         stopRemoteServer(workerClient, remoteUri);
         workerClient.stop();
         logger.info("Finished. Have a nice day.");
@@ -156,5 +171,17 @@ public final class MainController {
 
     private static void stopRemoteServer(HttpClient client, String baseUri) throws Exception {
         client.GET(baseUri + PathConstants.PATH_WORKER_STOP);
+    }
+
+    private static List<RepeatedModelGenerationConfiguration> getGenerationConfigs() {
+        return getDefaultGenerationConfigs();
+    }
+
+    private static List<RepeatedModelGenerationConfiguration> getDefaultGenerationConfigs() {
+        return List.of(
+            new RepeatedModelGenerationConfiguration(Configuration.REPETITIONS_SMALL, Configuration.SMALL_MODEL_PARAMETERS),
+            new RepeatedModelGenerationConfiguration(Configuration.REPETITIONS_MEDIUM, Configuration.MEDIUM_MODEL_PARAMETERS),
+            new RepeatedModelGenerationConfiguration(Configuration.REPETITIONS_LARGE, Configuration.LARGE_MODEL_PARAMETERS)
+        );
     }
 }

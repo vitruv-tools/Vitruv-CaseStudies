@@ -3,10 +3,10 @@ package tools.vitruv.applications.demo.performance.worker;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import tools.vitruv.applications.demo.performance.configs.ConfigNames;
 import tools.vitruv.applications.demo.performance.configs.LocalExecutionController;
 import tools.vitruv.applications.demo.performance.configs.VitruvClientController;
 import tools.vitruv.applications.demo.performance.configs.VitruvServerController;
+import tools.vitruv.applications.demo.performance.configs.exchange.ConfigNames;
 import tools.vitruv.applications.demo.performance.configs.exchange.StartConfigurationSetting;
 
 public class ConfigExecutionController {
@@ -30,7 +30,7 @@ public class ConfigExecutionController {
         if (configSetting.getCommunication().equals(ConfigNames.COMMUNICATION_SIDE_WORKER)) {
             this.executionService.execute(() -> {
                 try {
-                    this.localController.startLocalMeasurement(configSetting.getServerConfig(), configSetting.getClientConfigs());
+                    this.localController.startLocalMeasurement(configSetting);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -41,8 +41,8 @@ public class ConfigExecutionController {
             this.executionService.execute(() -> {
                 try {
                     this.clientController.excuteClient(
+                        configSetting,
                         configSetting.getClientConfigs()[0],
-                        configSetting.getServerConfig(),
                         configSetting.getServerUri()
                     );
                 } catch (Exception e) {

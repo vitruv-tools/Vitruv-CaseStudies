@@ -1,46 +1,41 @@
 package tools.vitruv.applications.demo.performance.configs;
 
-import java.nio.file.Path;
-
 import tools.vitruv.applications.demo.performance.common.ProgressUtility;
-import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
+import tools.vitruv.applications.demo.performance.configs.client.MeasurementExecutionEngine;
+import tools.vitruv.applications.demo.performance.configs.exchange.ConfigNames;
+import tools.vitruv.applications.demo.performance.configs.exchange.StartConfigurationSetting;
 
 public class LocalExecutionController {
     private VitruvServerController serverController;
     private VitruvClientController clientController;
-    private LocalExecutor localController;
-    private Path vsumDir;
-    private PerformanceDataContainer dataContainer;
+    private MeasurementExecutionEngine executionEngine;
 
     public LocalExecutionController(
         VitruvServerController serverController,
         VitruvClientController clientController,
-        Path vsumDir,
-        PerformanceDataContainer dataContainer
+        MeasurementExecutionEngine executionEngine
     ) {
         this.serverController = serverController;
         this.clientController = clientController;
-        this.localController = new LocalExecutor();
-        this.vsumDir = vsumDir;
-        this.dataContainer = dataContainer;
+        this.executionEngine = executionEngine;
     }
 
     public double getProgress() {
-        return Math.min(this.clientController.getProgress(), this.localController.getProgress());
+        return this.executionEngine.getProgress();
     }
 
-    public void startLocalMeasurement(String serverConfig, String[] clientConfigs) throws Exception {
-        if (serverConfig.equals(ConfigNames.CONFIG_LOCAL)) {
-            this.localController.executeLocalConfiguration(this.vsumDir, this.dataContainer);
+    public void startLocalMeasurement(StartConfigurationSetting setting) throws Exception {
+        if (setting.getServerConfig().equals(ConfigNames.CONFIG_LOCAL)) {
+            this.executionEngine.executeLocalMeasurements(setting);
         } else {
-            this.executeLocalServerClientMeasurement(serverConfig, clientConfigs);
+            this.executeLocalServerClientMeasurement(setting);
         }
     }
 
-    private void executeLocalServerClientMeasurement(String serverConfig, String[] clientConfigs) throws Exception {
-        var uri = this.serverController.startServer(serverConfig);
-        for (var cConfig : clientConfigs) {
-            this.clientController.excuteClient(cConfig, serverConfig, uri);
+    private void executeLocalServerClientMeasurement(StartConfigurationSetting setting) throws Exception {
+        var uri = this.serverController.startServer(setting.getServerConfig());
+        for (var cConfig : setting.getClientConfigs()) {
+            this.clientController.excuteClient(setting, cConfig, uri);
         }
         this.serverController.stopServer();
     }

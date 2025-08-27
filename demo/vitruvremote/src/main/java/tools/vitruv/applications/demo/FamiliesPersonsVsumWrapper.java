@@ -98,7 +98,7 @@ public class FamiliesPersonsVsumWrapper {
 	}
 	
 	private View getView(String viewTypeName, URI srcUri) {
-		var selector = vsum.createSelector(viewTypes.get(viewTypeName));
+		var selector = vsum.createSelector(getViewType(viewTypeName));
 		selector
 			.getSelectableElements()
 			.stream()
@@ -112,6 +112,10 @@ public class FamiliesPersonsVsumWrapper {
 
 	public VirtualModel getVsum() {
 		return vsum;
+	}
+
+	public ViewType<?> getViewType(String viewTypeName) {
+		return viewTypes.get(viewTypeName);
 	}
 	
 	public View getFamilyView() {

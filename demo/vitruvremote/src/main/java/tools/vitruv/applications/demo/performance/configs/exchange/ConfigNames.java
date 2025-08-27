@@ -1,4 +1,4 @@
-package tools.vitruv.applications.demo.performance.configs;
+package tools.vitruv.applications.demo.performance.configs.exchange;
 
 public final class ConfigNames {
     public static final String CONFIG_LOCAL = "local";

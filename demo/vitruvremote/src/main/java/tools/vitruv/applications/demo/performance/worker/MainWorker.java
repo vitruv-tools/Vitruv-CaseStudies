@@ -24,6 +24,7 @@ import tools.vitruv.applications.demo.performance.common.PerformanceDirectoryStr
 import tools.vitruv.applications.demo.performance.configs.LocalExecutionController;
 import tools.vitruv.applications.demo.performance.configs.VitruvClientController;
 import tools.vitruv.applications.demo.performance.configs.VitruvServerController;
+import tools.vitruv.applications.demo.performance.configs.client.MeasurementExecutionEngine;
 import tools.vitruv.applications.demo.performance.data.PerformanceDataContainer;
 import tools.vitruv.applications.demo.performance.worker.handler.StateHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.GetOidcHandler;
@@ -89,8 +90,9 @@ public final class MainWorker {
             oidcServer.getBaseUri(),
             fileStructure.getVsumServerDir()
         );
-        var clientController = new VitruvClientController(tlsConfig, dataContainer, fileStructure.getVsumClientDir());
-        var localController = new LocalExecutionController(serverController, clientController, fileStructure.getVsumServerDir(), dataContainer);
+        var executionEngine = new MeasurementExecutionEngine(fileStructure.getVsumClientDir(), dataContainer);
+        var clientController = new VitruvClientController(tlsConfig, executionEngine);
+        var localController = new LocalExecutionController(serverController, clientController, executionEngine);
         var executionController = new ConfigExecutionController(serverController, clientController, localController);
 
         // Start server for worker - controller communication.
