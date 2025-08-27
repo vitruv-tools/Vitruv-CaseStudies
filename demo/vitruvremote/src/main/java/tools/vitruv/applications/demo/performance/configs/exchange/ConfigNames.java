@@ -1,6 +1,8 @@
 package tools.vitruv.applications.demo.performance.configs.exchange;
 
 public final class ConfigNames {
+    public static final String CONFIG_PRE_MEASUREMENTS = "pre";
+    
     public static final String CONFIG_LOCAL = "local";
 
     public static final String CONFIG_SERVER_SECURITY2_PROXY_MODE = "server-security2-proxy";

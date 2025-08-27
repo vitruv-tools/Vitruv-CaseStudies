@@ -25,7 +25,8 @@ public class LocalExecutionController {
     }
 
     public void startLocalMeasurement(StartConfigurationSetting setting) throws Exception {
-        if (setting.getServerConfig().equals(ConfigNames.CONFIG_LOCAL)) {
+        if (setting.getServerConfig().equals(ConfigNames.CONFIG_LOCAL)
+            || setting.getServerConfig().equals(ConfigNames.CONFIG_PRE_MEASUREMENTS)) {
             this.executionEngine.executeLocalMeasurements(setting);
         } else {
             this.executeLocalServerClientMeasurement(setting);

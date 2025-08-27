@@ -41,9 +41,17 @@ public class ControllerExecutionUtil {
         this.remoteUri = remoteUri;
     }
 
+    public void executePreMeasurements(List<RepeatedModelGenerationConfiguration> generationConfigs) throws Exception {
+        this.executePureLocal(ConfigNames.CONFIG_PRE_MEASUREMENTS, generationConfigs);
+    }
+
     public void executePureLocalMeasurements(List<RepeatedModelGenerationConfiguration> generationConfigs) throws Exception {
+        this.executePureLocal(ConfigNames.CONFIG_LOCAL, generationConfigs);
+    }
+
+    private void executePureLocal(String configName, List<RepeatedModelGenerationConfiguration> generationConfigs) throws Exception {
         ConfigNames.COMMUNICATION = ConfigNames.COMMUNICATION_SIDE_CONTROLLER;
-        var setting = asSetting(ConfigNames.CONFIG_LOCAL, null, null, generationConfigs);
+        var setting = asSetting(configName, null, null, generationConfigs);
         sendStartConfigRequest(setting);
         localController.startLocalMeasurement(setting);
         waitForWorker();

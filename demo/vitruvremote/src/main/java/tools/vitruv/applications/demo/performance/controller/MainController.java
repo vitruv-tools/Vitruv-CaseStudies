@@ -90,7 +90,7 @@ public final class MainController {
         var localController = new LocalExecutionController(serverController, clientController, executionEngine);
         var executionUtil = new ControllerExecutionUtil(serverController, clientController, localController, workerClient, remoteUri);
 
-        executionUtil.executePureLocalMeasurements(List.of(new RepeatedModelGenerationConfiguration(100, Configuration.SMALL_MODEL_PARAMETERS)));
+        executionUtil.executePreMeasurements(List.of(new RepeatedModelGenerationConfiguration(100, Configuration.SMALL_MODEL_PARAMETERS)));
 
         var generationConfigs = getGenerationConfigs();
 

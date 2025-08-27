@@ -54,8 +54,8 @@ public class MeasurementExecutionEngine {
         var familyViewType = wrapper.getViewType(DemoUtility.FAMILIES_VIEW_TYPE_NAME);
         var viewPair = new InternalViewTypeSourcePair(familyViewType, (ChangeableViewSource) wrapper.getVsum());
         this.progress = 0.0;
-        this.serverConfig = ConfigNames.CONFIG_LOCAL;
-        this.clientConfig = ConfigNames.CONFIG_LOCAL;
+        this.serverConfig = setting.getServerConfig();
+        this.clientConfig = setting.getServerConfig();
 
         try {
             System.out.println("--- Starting with local measurements. ---");
