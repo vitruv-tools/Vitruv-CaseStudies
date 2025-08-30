@@ -3,6 +3,8 @@ package tools.vitruv.applications.demo.performance.worker;
 import java.io.File;
 import java.nio.file.Paths;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.eclipse.jetty.http.pathmap.RegexPathSpec;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
@@ -35,6 +37,7 @@ import tools.vitruv.applications.demo.performance.worker.handler.StopServerHandl
 import tools.vitruv.applications.demo.performance.worker.handler.StopWorkerHandler;
 import tools.vitruv.applications.demo.performance.worker.handler.TrustStoreHandler;
 import tools.vitruv.framework.remote.server.VitruvServerConfiguration;
+import tools.vitruv.framework.remote.common.AddressBinderUtil;
 import tools.vitruv.remote.seccommon.TlsContextConfiguration;
 import tools.vitruv.remote.seccommon.cert.CertificateGenerator;
 
@@ -43,7 +46,8 @@ public final class MainWorker {
 
     public static void main(String[] args) throws Exception {
         // Set environment up.
-
+        Configurator.setRootLevel(Level.OFF);
+        
         DemoUtility.registerFactories();
 
         var serverPort = EnvUtility.asInt(EnvUtility.ENV_KEY_VITRUV_PERF_SERVER_PORT, 9094);
@@ -102,6 +106,7 @@ public final class MainWorker {
         HTTP2CServerConnectionFactory h2c = new HTTP2CServerConnectionFactory(httpConfig);
         ServerConnector connector = new ServerConnector(server, h2c);
         connector.setPort(serverPort);
+        connector.setHost(AddressBinderUtil.getAddressForBinding(ip));
         server.addConnector(connector);
 
         var coreHandler = new PathMappingsHandler();

@@ -4,12 +4,10 @@ import java.util.List;
 
 import org.eclipse.jetty.http.pathmap.RegexPathSpec;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
-import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.Slf4jRequestLogWriter;
 import org.eclipse.jetty.server.handler.PathMappingsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
@@ -23,6 +21,7 @@ import tools.vitruv.applications.demo.oidc.handler.ProviderMetadataHandler;
 import tools.vitruv.applications.demo.oidc.handler.TokenHandler;
 import tools.vitruv.framework.remote.common.AvailableHttpVersions;
 import tools.vitruv.framework.remote.server.VitruvServerConfiguration;
+import tools.vitruv.framework.remote.common.AddressBinderUtil;
 import tools.vitruv.remote.seccommon.SecurityProviderInitialization;
 import tools.vitruv.remote.seccommon.TlsContextConfiguration;
 import tools.vitruv.remote.secserver.config.ServerConnectionConfiguration;
@@ -83,7 +82,7 @@ public class OIDCMockServer {
             HttpConnectionFactory http1 = new HttpConnectionFactory(httpConfig);
             HTTP2CServerConnectionFactory h2c = new HTTP2CServerConnectionFactory(httpConfig);
             ServerConnector connector = new ServerConnector(server, http1, h2c);
-            connector.setHost(this.config.connectionConfig().hostOrIp());
+            connector.setHost(AddressBinderUtil.getAddressForBinding(this.config.connectionConfig().hostOrIp()));
             connector.setPort(this.config.connectionConfig().port());
             server.addConnector(connector);
         }

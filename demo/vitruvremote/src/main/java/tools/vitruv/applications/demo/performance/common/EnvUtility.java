@@ -3,7 +3,7 @@ package tools.vitruv.applications.demo.performance.common;
 public final class EnvUtility {
     public static final String ENV_KEY_VITRUV_PERF_SERVER_PORT = "VITRUV_PERF_SERVER_PORT";
 
-    public static final String ENV_KEY_VITRUV_PERF_VITRUV_SERVER_PORT = "VITRUV_PERF_SERVER_PORT";
+    public static final String ENV_KEY_VITRUV_PERF_VITRUV_SERVER_PORT = "VITRUV_PERF_VITRUV_SERVER_PORT";
 
     public static final String ENV_KEY_VITRUV_PERF_WORK_DIR = "VITRUV_PERF_WORK_DIR";
 
