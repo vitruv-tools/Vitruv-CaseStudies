@@ -91,7 +91,8 @@ public class ControllerExecutionUtil {
 
         for (var cConfig : clientConfigs) {
             logger.info("Client config " + cConfig);
-            clientController.excuteClient(null, cConfig, vitruvServerUri);
+            var setting = asSetting(serverConfig, new String[0], this.remoteUri, generationConfigs);
+            clientController.excuteClient(setting, cConfig, vitruvServerUri);
         }
 
         client.GET(remoteUri + PathConstants.PATH_SERVER_STOP);
