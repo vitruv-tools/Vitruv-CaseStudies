@@ -110,13 +110,13 @@ public final class MainController {
 
         executionUtil.executeRemoteMeasurements(
             ConfigNames.CONFIG_SERVER_SECURITY2_DIRECT_MODE,
-            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2 },
+            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3 },
             generationConfigs
         );
 
         executionUtil.executeRemoteMeasurements(
             ConfigNames.CONFIG_SERVER_SECURITY2_PROXY_MODE,
-            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3 },
+            new String[] { ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP2, ConfigNames.CONFIG_CLIENT_SECURITY_JETTY_HTTP3 },
             generationConfigs
         );
 
@@ -128,7 +128,7 @@ public final class MainController {
 
         executionUtil.executeRemoteMeasurements(
             ConfigNames.CONFIG_SERVER_JETTY,
-            new String[] { ConfigNames.CONFIG_CLIENT_JETTY_HTTP11 },
+            new String[] { ConfigNames.CONFIG_CLIENT_JETTY_HTTP11, ConfigNames.CONFIG_CLIENT_JETTY_HTTP2 },
             generationConfigs
         );
 

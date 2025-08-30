@@ -141,7 +141,7 @@ public class ControllerExecutionUtil {
             if (estimatedRemainingTime < defaultWaitingTime) {
                 waitingTime = defaultWaitingTime;
             } else {
-                waitingTime = Math.max((long) estimatedRemainingTime, 25 * defaultWaitingTime);
+                waitingTime = Math.max((long) estimatedRemainingTime, 5 * defaultWaitingTime);
             }
 
             progress = currentProgress;
