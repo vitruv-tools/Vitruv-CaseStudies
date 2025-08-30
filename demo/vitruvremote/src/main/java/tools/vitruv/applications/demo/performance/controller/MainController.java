@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.http.HttpStatus;
@@ -37,6 +39,8 @@ public final class MainController {
     private MainController() {}
 
     public static void main(String[] args) throws Exception {
+        Configurator.setRootLevel(Level.INFO);
+
         logger.info("Starting the performance measurement controller.");
 
         DemoUtility.registerFactories();

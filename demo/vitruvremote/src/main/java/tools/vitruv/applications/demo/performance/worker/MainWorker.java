@@ -46,7 +46,7 @@ public final class MainWorker {
 
     public static void main(String[] args) throws Exception {
         // Set environment up.
-        Configurator.setRootLevel(Level.OFF);
+        Configurator.setRootLevel(Level.INFO);
         
         DemoUtility.registerFactories();
 

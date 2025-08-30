@@ -1,0 +1,21 @@
+services:
+  worker:
+    build:
+      context: ..
+      dockerfile: ./Vitruv-CaseStudies/Dockerfile.performance
+    entrypoint: java -cp /app/performance-app.jar:/app/libs/* tools.vitruv.applications.demo.performance.worker.MainWorker
+    environment:
+      - VITRUV_PERF_SERVER_PORT=9094
+      - VITRUV_PERF_VITRUV_SERVER_PORT=9096
+      - VITRUV_PERF_WORK_DIR=/performance
+      - VITRUV_PERF_TLS_PWD=vitruv
+      - VITRUV_PERF_SERVER_HOST=127.0.0.1
+      - VITRUV_WORKER_OIDC_PORT=9095
+    volumes:
+      - ./performance-worker:/performance
+    ports:
+      - 9094:9094
+      - 9095:9095
+      - 9096:9096
+    cpus: 1
+    mem_limit: 1073741824
