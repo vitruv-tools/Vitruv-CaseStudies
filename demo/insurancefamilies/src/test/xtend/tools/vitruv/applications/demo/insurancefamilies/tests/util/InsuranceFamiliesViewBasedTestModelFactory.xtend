@@ -1,6 +1,6 @@
 package tools.vitruv.applications.demo.insurancefamilies.tests.util
 
-import tools.vitruv.framework.testutils.view.TestViewFactory
+import tools.vitruv.framework.testutils.integration.TestViewFactory
 import static tools.vitruv.applications.demo.insurancefamilies.tests.util.TestModelViewAdapter.createTestModelAdapter
 import edu.kit.ipd.sdq.metamodels.insurance.InsuranceDatabase
 import edu.kit.ipd.sdq.metamodels.families.FamilyRegister

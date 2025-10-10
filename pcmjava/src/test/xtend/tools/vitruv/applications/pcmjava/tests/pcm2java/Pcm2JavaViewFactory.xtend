@@ -6,7 +6,7 @@ import org.emftext.language.java.containers.Package
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.system.System
 import tools.vitruv.framework.views.View
-import tools.vitruv.framework.testutils.view.TestViewFactory
+import tools.vitruv.framework.testutils.integration.TestViewFactory
 
 @FinalFieldsConstructor
 class Pcm2JavaViewFactory extends TestViewFactory {

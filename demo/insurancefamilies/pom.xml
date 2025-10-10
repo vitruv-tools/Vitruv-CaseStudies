@@ -68,6 +68,11 @@
     </dependency>
     <dependency>
       <groupId>tools.vitruv</groupId>
+      <artifactId>tools.vitruv.dsls.reactions.runtime</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
       <artifactId>tools.vitruv.dsls.testutils</artifactId>
       <scope>test</scope>
     </dependency>
