@@ -17,13 +17,13 @@ class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformation
 	def void testAddInterface() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -35,20 +35,20 @@ class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testRenameInterface() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val interface = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				interface.entityName = Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX

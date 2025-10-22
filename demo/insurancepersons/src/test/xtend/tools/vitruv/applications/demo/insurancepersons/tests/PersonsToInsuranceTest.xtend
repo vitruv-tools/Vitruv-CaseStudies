@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.change.propagation.ChangePropagationSpecification
-import tools.vitruv.dsls.demo.insurancepersons.persons2insurance.PersonsToInsuranceChangePropagationSpecification
+import tools.vitruv.applications.demo.insurancepersons.persons2insurance.PersonsToInsuranceChangePropagationSpecification
 import tools.vitruv.change.testutils.TestLogging
 import tools.vitruv.change.testutils.TestProject
 import tools.vitruv.change.testutils.TestProjectManager
