@@ -23,7 +23,7 @@
   <!-- Build Specification -->
   <modules>
     <module>util.temporary</module>
-    <module>cbs</module>
+    <!-- <module>cbs</module> -->
     <module>demo</module>
     <module>umljava</module>
     <module>pcmjava</module>

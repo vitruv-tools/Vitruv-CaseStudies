@@ -184,12 +184,9 @@
 
     <!-- p2 dependencies -->
     <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
-      <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
-      <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>sdq-commons</groupId>

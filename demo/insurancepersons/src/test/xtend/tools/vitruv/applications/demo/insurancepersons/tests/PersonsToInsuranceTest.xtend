@@ -37,7 +37,7 @@ class PersonsToInsuranceTest implements TestView {
 	}
 
 	protected def Iterable<ChangePropagationSpecification> getChangePropagationSpecifications() {
-		return #[new PersonsToInsuranceChangePropagationSpecification()]
+		return #[new PersonsToInsuranceChangePropagationSpecification() as ChangePropagationSpecification]
 	}
 
 	@BeforeEach
