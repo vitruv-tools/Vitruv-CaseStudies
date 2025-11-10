@@ -28,7 +28,7 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 	@Test
 	def void testCreateSEFF() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME)
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -40,7 +40,7 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val signature = claimOperationInterface(it, Pcm2JavaTestUtils.INTERFACE_NAME).
 					signatures__OperationInterface.claimOne
@@ -49,7 +49,7 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -68,7 +68,7 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 	@Test
 	def void testRenameSEFF() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME)
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -81,7 +81,7 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val signature = claimOperationInterface(it, Pcm2JavaTestUtils.INTERFACE_NAME).
 					signatures__OperationInterface.claimOne
@@ -89,7 +89,7 @@ class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX

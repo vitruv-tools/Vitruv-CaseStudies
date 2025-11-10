@@ -1,0 +1,95 @@
+import edu.kit.ipd.sdq.metamodels.insurance.Gender
+import edu.kit.ipd.sdq.metamodels.persons.Male
+import edu.kit.ipd.sdq.metamodels.persons.Female
+import static extension edu.kit.ipd.sdq.metamodels.persons.PersonsUtil.getPersonRegister
+
+import "edu.kit.ipd.sdq.metamodels.persons" as persons
+import "edu.kit.ipd.sdq.metamodels.insurance" as insurance
+
+reactions: personsToInsurance
+in reaction to changes in persons
+execute actions in insurance
+
+reaction InsertedPersonRegister {
+	after element persons::PersonRegister inserted as root
+	call createInsuranceDatabase(newValue)
+}
+
+routine createInsuranceDatabase(persons::PersonRegister personRegister) {
+	create {
+		val insuranceDatabase = new insurance::InsuranceDatabase
+	}
+	update {
+		persistProjectRelative(personRegister, insuranceDatabase, "model/insurance.insurance")
+		addCorrespondenceBetween(insuranceDatabase, personRegister)
+	}
+}
+
+reaction DeletedPersonRegister {
+	after element persons::PersonRegister deleted
+	call deleteInsuranceDatabase(affectedEObject)
+}
+
+routine deleteInsuranceDatabase(persons::PersonRegister personsRegister) {
+	match {
+		val insuranceDatabase = retrieve insurance::InsuranceDatabase corresponding to personsRegister
+	}
+	update {
+		removeObject(insuranceDatabase)
+		removeCorrespondenceBetween(insuranceDatabase, personsRegister)
+	}
+}
+
+reaction InsertedPerson {
+	after element persons::Person inserted in persons::PersonRegister[persons]
+	call createInsuranceClient(newValue)
+}
+
+routine createInsuranceClient(persons::Person person) {
+	match {
+		val insuranceDatabase = retrieve insurance::InsuranceDatabase corresponding to person.getPersonRegister
+	}
+	create {
+		val newClient = new insurance::InsuranceClient
+	}
+	update {
+		newClient.name = person.fullName
+		switch person {
+			Male: newClient.gender = Gender.MALE
+			Female: newClient.gender = Gender.FEMALE
+			default: throw new IllegalArgumentException("Gender of client is unknown.")
+		}
+		insuranceDatabase.insuranceclient += newClient
+		addCorrespondenceBetween(person, newClient)
+	}
+}
+
+reaction ChangedFullName {
+	after attribute replaced at persons::Person[fullName]
+	call changeNames(affectedEObject)
+}
+
+routine changeNames(persons::Person person) {
+	match {
+		val client = retrieve insurance::InsuranceClient corresponding to person
+	}
+	update {
+		client.name = person.fullName
+	}
+}
+
+reaction DeletedPerson {
+	after element persons::Person deleted
+	call deleteClient(affectedEObject)
+}
+
+routine deleteClient(persons::Person person) {
+	match {
+		val client = retrieve insurance::InsuranceClient corresponding to person
+	}
+	update {
+		removeObject(client)
+		removeCorrespondenceBetween(person, client)
+	}
+}
+

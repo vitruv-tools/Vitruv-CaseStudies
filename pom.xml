@@ -22,17 +22,17 @@
 
   <!-- Build Specification -->
   <modules>
-    <module>cbs</module>
+    <module>util.temporary</module>
+    <!-- <module>cbs</module> -->
     <module>demo</module>
-    <module>p2-wrapper</module>
+    <module>umljava</module>
     <module>pcmjava</module>
     <module>pcmumlclass</module>
     <module>simulinkautosar</module>
     <module>testutility</module>
     <module>testutility.integration</module>
     <module>transitivechange</module>
-    <module>umljava</module>
-    <module>util.temporary</module>
+    <module>p2-wrapper</module>
   </modules>
 
   <build>
@@ -48,7 +48,8 @@
 
   <!-- Dependency Management -->
   <properties>
-    <vitruv.version>3.2.0-SNAPSHOT</vitruv.version>
+    <vitruv.version>3.2.3-SNAPSHOT</vitruv.version>
+    <xtend.version>2.40.0</xtend.version>
     <!-- p2 updatesite versions -->
     <repo.sdq-demo-metamodels.version>1.9.0</repo.sdq-demo-metamodels.version>
     <repo.sdq-commons.version>2.2.0</repo.sdq-commons.version>
@@ -161,6 +162,11 @@
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
+        <artifactId>tools.vitruv.dsls.commonalities.language</artifactId>
+        <version>${vitruv.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.dsls.commonalities.runtime</artifactId>
         <version>${vitruv.version}</version>
       </dependency>
@@ -234,17 +240,17 @@
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-core</artifactId>
-        <version>2.24.3</version>
+        <version>2.25.2</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.emf</groupId>
         <artifactId>org.eclipse.emf.common</artifactId>
-        <version>2.42.0</version>
+        <version>2.43.0</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.emf</groupId>
         <artifactId>org.eclipse.emf.ecore</artifactId>
-        <version>2.38.0</version>
+        <version>2.40.0</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.emf</groupId>
@@ -254,27 +260,27 @@
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.equinox.common</artifactId>
-        <version>3.20.0</version>
+        <version>3.20.100</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>org.eclipse.xtend.core</artifactId>
-        <version>2.39.0</version>
+        <version>${xtend.version}</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>org.eclipse.xtend.lib</artifactId>
-        <version>2.39.0</version>
+        <version>${xtend.version}</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>org.eclipse.xtend.lib.macro</artifactId>
-        <version>2.39.0</version>
+        <version>${xtend.version}</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtext</groupId>
         <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
-        <version>2.40.0</version>
+        <version>${xtend.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hamcrest</groupId>
@@ -294,22 +300,33 @@
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-        <version>5.12.2</version>
+        <version>6.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-params</artifactId>
-        <version>5.12.2</version>
+        <version>6.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>6.0.0</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.platform</groupId>
         <artifactId>junit-platform-commons</artifactId>
-        <version>1.12.2</version>
+        <version>6.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.junit.platform</groupId>
         <artifactId>junit-platform-engine</artifactId>
-        <version>1.12.2</version>
+        <version>6.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.platform</groupId>
+        <artifactId>junit-platform-launcher</artifactId>
+        <version>6.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.json</groupId>
