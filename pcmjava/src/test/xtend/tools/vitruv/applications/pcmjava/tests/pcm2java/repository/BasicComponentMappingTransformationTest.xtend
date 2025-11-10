@@ -18,13 +18,13 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 	def void testAddBasicComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
@@ -36,20 +36,20 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 	@Test
 	def void testDeleteBasicComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val component = claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 				EcoreUtil.delete(component)
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			assertExistenceOfCompilationUnitsDeeplyEqualTo(List.of())
 		]
 	}
@@ -57,20 +57,20 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 	@Test
 	def void testRenameBasicComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME).entityName = Pcm2JavaTestUtils.
 					BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME +
@@ -83,21 +83,21 @@ class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest
 	@Test
 	def void testAddTowBasicComponentAndDeleteOne() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME_SEC)
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val secondComponent = claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME_SEC)
 				it.components__Repository -= secondComponent
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME

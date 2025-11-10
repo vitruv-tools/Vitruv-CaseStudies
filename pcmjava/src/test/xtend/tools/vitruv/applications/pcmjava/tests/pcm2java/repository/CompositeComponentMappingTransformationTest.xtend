@@ -31,13 +31,13 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	def void testCreateCompositeComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				components__Repository += createCompositeComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME
@@ -50,13 +50,13 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testAddProvidedRoleToCompositeComponent() {
 		this.addRepositoryAndCompositeComponent()
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
 
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				var operationInterface = it.claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				var compositeComponent = claimComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)
@@ -65,7 +65,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX).build
 			val compositeComponentCompilationUnit = new FluentJavaClassBuilder(
@@ -81,13 +81,13 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testAddRequiredRoleToCompositeComponent() {
 		this.addRepositoryAndCompositeComponent()
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
 
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				var operationInterface = it.claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				var compositeComponent = claimComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)
@@ -96,7 +96,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX).build
 			val compositeComponentCompilationUnit = new FluentJavaClassBuilder(
@@ -118,14 +118,14 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testAddAssemblyContextToCompositeComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 				components__Repository += createCompositeComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)
 			]
 		]
 
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				var basicComponent = components__Repository.filter(BasicComponent).claimOne
 				var compositeComponent = components__Repository.filter(CompositeComponent).claimOne
@@ -134,7 +134,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val basicComponentCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME
@@ -156,13 +156,13 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	def void testAddRequiredDelegationRoleToCompositeComponent() {
 		addRepositoryAndCompositeComponent()
 
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				interfaces__Repository += createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX).build
 			val compositeComponentCompilationUnit = new FluentJavaClassBuilder(
@@ -178,7 +178,7 @@ class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformation
 	def void addRepositoryAndCompositeComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				components__Repository += createCompositeComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)
 			]
