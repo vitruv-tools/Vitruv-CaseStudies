@@ -23,9 +23,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import tools.vitruv.change.propagation.ChangePropagationSpecification
-import tools.vitruv.dsls.demo.familiespersons.families2persons.FamiliesToPersonsChangePropagationSpecification
-import tools.vitruv.dsls.demo.familiespersons.families2persons.FamiliesToPersonsHelper
-import tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesChangePropagationSpecification
+import tools.vitruv.applications.demo.familiespersons.families2persons.FamiliesToPersonsChangePropagationSpecification
+import tools.vitruv.applications.demo.familiespersons.families2persons.FamiliesToPersonsHelper
+import tools.vitruv.applications.demo.familiespersons.persons2families.PersonsToFamiliesChangePropagationSpecification
 import tools.vitruv.change.testutils.TestLogging
 import tools.vitruv.change.testutils.TestProject
 import tools.vitruv.change.testutils.TestProjectManager

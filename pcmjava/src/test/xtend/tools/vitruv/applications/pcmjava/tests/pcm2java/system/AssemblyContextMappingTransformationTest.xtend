@@ -21,20 +21,20 @@ class AssemblyContextMappingTransformationTest extends Pcm2JavaTransformationTes
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		val basicComponent = createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				components__Repository += basicComponent
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmSystem(it) => [
 				assemblyContexts__ComposedStructure +=
 					createAssemblyContext(basicComponent, Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME)
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val basicComponentCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + "." + Pcm2JavaTestUtils.BASIC_COMPONENT_NAME

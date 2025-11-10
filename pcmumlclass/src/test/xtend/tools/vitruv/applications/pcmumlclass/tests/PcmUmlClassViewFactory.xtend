@@ -1,6 +1,6 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import tools.vitruv.framework.testutils.view.TestViewFactory
+import tools.vitruv.framework.testutils.integration.TestViewFactory
 import tools.vitruv.framework.views.View
 import org.eclipse.uml2.uml.Model
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor

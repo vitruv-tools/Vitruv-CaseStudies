@@ -19,8 +19,8 @@ import tools.vitruv.change.interaction.UserInteractionOptions.NotificationType
 import tools.vitruv.change.propagation.ChangePropagationSpecification
 import tools.vitruv.change.propagation.ChangePropagationSpecificationRepository
 import tools.vitruv.change.propagation.impl.DefaultChangeRecordingModelRepository
-import tools.vitruv.dsls.demo.insurancefamilies.insurance2families.InsuranceToFamiliesChangePropagationSpecification
-import tools.vitruv.dsls.demo.insurancefamilies.insurance2families.PositionPreference
+import tools.vitruv.applications.demo.insurancefamilies.insurance2families.InsuranceToFamiliesChangePropagationSpecification
+import tools.vitruv.applications.demo.insurancefamilies.insurance2families.PositionPreference
 import tools.vitruv.applications.demo.insurancefamilies.tests.util.InsuranceFamiliesDefaultTestModelFactory
 import tools.vitruv.applications.demo.insurancefamilies.tests.util.InsuranceFamiliesTestModelFactory
 import tools.vitruv.dsls.testutils.TestModel
