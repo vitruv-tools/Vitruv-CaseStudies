@@ -4,7 +4,7 @@ import edu.kit.ipd.sdq.metamodels.autosar.AutoSARModel
 import edu.kit.ipd.sdq.metamodels.simulink.SimulinkModel
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import tools.vitruv.framework.views.View
-import tools.vitruv.framework.testutils.view.TestViewFactory
+import tools.vitruv.framework.testutils.integration.TestViewFactory
 
 
 @FinalFieldsConstructor

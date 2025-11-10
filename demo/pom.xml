@@ -22,4 +22,58 @@
     <module>insurancefamilies</module>
     <module>insurancepersons</module>
   </modules>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openntf.maven</groupId>
+        <artifactId>p2-layout-resolver</artifactId>
+        <version>1.9.0</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>sdq-demo-metamodels</id>
+      <name>SDQ Demo Metamodels</name>
+      <url>https://kit-sdq.github.io/updatesite/release/metamodels/demo/${repo.sdq-demo-metamodels.version}</url>
+      <layout>p2</layout>
+    </repository>
+  </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>sdq-demo-metamodels</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+        <version>1.9.0.202311201524</version>
+      </dependency>
+      <dependency>
+        <groupId>sdq-demo-metamodels</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
+        <version>1.9.0.202311201524</version>
+      </dependency>
+      <dependency>
+        <groupId>sdq-demo-metamodels</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+        <version>1.9.0.202311201524</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <pluginRepositories>
+    <!-- required for the p2-layout-resolver plugin -->
+    <pluginRepository>
+      <id>artifactory.openntf.org</id>
+      <name>artifactory.openntf.org</name>
+      <url>https://artifactory.openntf.org/openntf</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
 </project>
