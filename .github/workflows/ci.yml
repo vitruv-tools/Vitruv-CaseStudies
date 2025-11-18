@@ -29,7 +29,7 @@ jobs:
       run: git config --system core.longpaths true
 
     - name: Checkout repository
-      uses: actions/checkout@v5.0.0
+      uses: actions/checkout@v5.0.1
 
     - name: Setup Java and Maven cache
       uses: actions/setup-java@v5.0.0
