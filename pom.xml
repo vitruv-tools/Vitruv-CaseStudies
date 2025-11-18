@@ -260,7 +260,7 @@
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.equinox.common</artifactId>
-        <version>3.20.100</version>
+        <version>3.20.200</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
@@ -300,7 +300,7 @@
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-        <version>6.0.0</version>
+        <version>6.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -321,7 +321,7 @@
       <dependency>
         <groupId>org.junit.platform</groupId>
         <artifactId>junit-platform-engine</artifactId>
-        <version>6.0.0</version>
+        <version>6.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.junit.platform</groupId>
