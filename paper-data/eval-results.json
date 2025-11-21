@@ -1,0 +1,655 @@
+{
+  "pre1-pre-worker-10-5": {
+    "name": ["pre1-pre-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-4.0757],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "local-local-worker-10-5": {
+    "name": ["local-local-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-8.3038],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "local-local-worker-100-10": {
+    "name": ["local-local-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-15.5741],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "local-local-worker-300-20": {
+    "name": ["local-local-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.5667],
+      "statistic": [-2.0239],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-original-client-original-worker-10-5": {
+    "name": ["server-original-client-original-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-9.4299],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-original-client-original-worker-100-10": {
+    "name": ["server-original-client-original-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-4.5899],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-original-client-original-worker-300-20": {
+    "name": ["server-original-client-original-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-5.7108],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [true],
+    "n": [100],
+    "p25": [21380.5],
+    "median": [21477.5],
+    "p75": [21546.25],
+    "p99": [21668.07],
+    "iqr": [165.75],
+    "mad": [111.195],
+    "qcd": [0.0039],
+    "normalTestResult": {
+      "pValue": [0.7442],
+      "statistic": [0.991],
+      "method": ["Shapiro-Wilk normality test"]
+    },
+    "normLowerBound": [],
+    "normUpperBound": []
+  },
+  "server-security2-proxy-client-security-jetty-http11-worker-10-5": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-9.4045],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http11-worker-100-10": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-6.9916],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http11-worker-300-20": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.0103],
+      "statistic": [-4.0355],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.1]
+  },
+  "pre2-pre-controller-10-5": {
+    "name": ["pre2-pre-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.5083],
+      "statistic": [-2.165],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "local-local-controller-10-5": {
+    "name": ["local-local-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-10.7661],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "local-local-controller-100-10": {
+    "name": ["local-local-controller-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-6.8246],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "local-local-controller-300-20": {
+    "name": ["local-local-controller-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.3423],
+      "statistic": [-2.5658],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.0784]
+  },
+  "server-original-client-original-controller-10-5": {
+    "name": ["server-original-client-original-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-10.1261],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-original-client-original-controller-100-10": {
+    "name": ["server-original-client-original-controller-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-9.3314],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-original-client-original-controller-300-20": {
+    "name": ["server-original-client-original-controller-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.2804],
+      "statistic": [-2.7151],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-security2-proxy-client-security-jetty-http11-controller-10-5": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-8.6294],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http11-controller-100-10": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-controller-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.2298],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http11-controller-300-20": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-controller-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-4.2858],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "pre3-pre-worker-10-5": {
+    "name": ["pre3-pre-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.4911],
+      "statistic": [-2.2064],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "pre4-pre-controller-10-5": {
+    "name": ["pre4-pre-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.0972],
+      "statistic": [-3.1677],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-security2-direct-client-security-jetty-http11-controller-to-worker-10-5": {
+    "name": ["server-security2-direct-client-security-jetty-http11-controller-to-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-8.2427],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-direct-client-security-jetty-http11-controller-to-worker-100-10": {
+    "name": ["server-security2-direct-client-security-jetty-http11-controller-to-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-6.822],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-direct-client-security-jetty-http11-controller-to-worker-300-20": {
+    "name": ["server-security2-direct-client-security-jetty-http11-controller-to-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.668],
+      "statistic": [-1.7794],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-security2-direct-client-security-jetty-http2-controller-to-worker-10-5": {
+    "name": ["server-security2-direct-client-security-jetty-http2-controller-to-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-10.2649],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-direct-client-security-jetty-http2-controller-to-worker-100-10": {
+    "name": ["server-security2-direct-client-security-jetty-http2-controller-to-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.6348],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-direct-client-security-jetty-http2-controller-to-worker-300-20": {
+    "name": ["server-security2-direct-client-security-jetty-http2-controller-to-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-4.4186],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "pre5-pre-controller-10-5": {
+    "name": ["pre5-pre-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.0494],
+      "statistic": [-3.4576],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-original-client-original-controller-to-worker-10-5": {
+    "name": ["server-original-client-original-controller-to-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.3766],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-original-client-original-controller-to-worker-100-10": {
+    "name": ["server-original-client-original-controller-to-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-6.2092],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-original-client-original-controller-to-worker-300-20": {
+    "name": ["server-original-client-original-controller-to-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.4086],
+      "statistic": [-2.4056],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-jetty-client-jetty-http11-controller-to-worker-10-5": {
+    "name": ["server-jetty-client-jetty-http11-controller-to-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.9808],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-jetty-client-jetty-http11-controller-to-worker-100-10": {
+    "name": ["server-jetty-client-jetty-http11-controller-to-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-14.091],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-jetty-client-jetty-http11-controller-to-worker-300-20": {
+    "name": ["server-jetty-client-jetty-http11-controller-to-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-4.9232],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-jetty-client-jetty-http2-controller-to-worker-10-5": {
+    "name": ["server-jetty-client-jetty-http2-controller-to-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-9.2015],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-jetty-client-jetty-http2-controller-to-worker-100-10": {
+    "name": ["server-jetty-client-jetty-http2-controller-to-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-13.3011],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-jetty-client-jetty-http2-controller-to-worker-300-20": {
+    "name": ["server-jetty-client-jetty-http2-controller-to-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-4.6627],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "pre6-pre-worker-10-5": {
+    "name": ["pre6-pre-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-4.4681],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-original-client-original-worker-to-controller-10-5": {
+    "name": ["server-original-client-original-worker-to-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.2499],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-original-client-original-worker-to-controller-100-10": {
+    "name": ["server-original-client-original-worker-to-controller-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.3374],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-original-client-original-worker-to-controller-300-20": {
+    "name": ["server-original-client-original-worker-to-controller-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.1135],
+      "statistic": [-3.118],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-jetty-client-jetty-http11-worker-to-controller-10-5": {
+    "name": ["server-jetty-client-jetty-http11-worker-to-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-8.8379],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-jetty-client-jetty-http11-worker-to-controller-100-10": {
+    "name": ["server-jetty-client-jetty-http11-worker-to-controller-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.639],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-jetty-client-jetty-http11-worker-to-controller-300-20": {
+    "name": ["server-jetty-client-jetty-http11-worker-to-controller-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.2549],
+      "statistic": [-2.7768],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "pre7-pre-worker-10-5": {
+    "name": ["pre7-pre-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.0602],
+      "statistic": [-3.3894],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-security2-proxy-client-security-jetty-http11-worker-to-controller-10-5": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-worker-to-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-10.2028],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http11-worker-to-controller-100-10": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-worker-to-controller-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.3388],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http11-worker-to-controller-300-20": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-worker-to-controller-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.0788],
+      "statistic": [-3.2781],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-security2-proxy-client-security-jetty-http2-worker-to-controller-10-5": {
+    "name": ["server-security2-proxy-client-security-jetty-http2-worker-to-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-10.0953],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http2-worker-to-controller-100-10": {
+    "name": ["server-security2-proxy-client-security-jetty-http2-worker-to-controller-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-6.9624],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http2-worker-to-controller-300-20": {
+    "name": ["server-security2-proxy-client-security-jetty-http2-worker-to-controller-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.1933],
+      "statistic": [-2.9254],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.1]
+  },
+  "server-jetty-client-jetty-http2-worker-to-controller-10-5": {
+    "name": ["server-jetty-client-jetty-http2-worker-to-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.6383],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-jetty-client-jetty-http2-worker-to-controller-100-10": {
+    "name": ["server-jetty-client-jetty-http2-worker-to-controller-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-8.5705],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-jetty-client-jetty-http2-worker-to-controller-300-20": {
+    "name": ["server-jetty-client-jetty-http2-worker-to-controller-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.0148],
+      "statistic": [-3.9424],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.1]
+  },
+  "pre8-pre-controller-10-5": {
+    "name": ["pre8-pre-controller-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.4477],
+      "statistic": [-2.3114],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-security2-proxy-client-security-jetty-http11-controller-to-worker-10-5": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-controller-to-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-13.9024],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http11-controller-to-worker-100-10": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-controller-to-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-7.9445],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http11-controller-to-worker-300-20": {
+    "name": ["server-security2-proxy-client-security-jetty-http11-controller-to-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.7873],
+      "statistic": [-1.4914],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "stationarity": [false],
+    "kpss": [0.01]
+  },
+  "server-security2-proxy-client-security-jetty-http2-controller-to-worker-10-5": {
+    "name": ["server-security2-proxy-client-security-jetty-http2-controller-to-worker-10-5"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-11.7799],
+      "parameter": [9],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http2-controller-to-worker-100-10": {
+    "name": ["server-security2-proxy-client-security-jetty-http2-controller-to-worker-100-10"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-12.5543],
+      "parameter": [7],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  },
+  "server-security2-proxy-client-security-jetty-http2-controller-to-worker-300-20": {
+    "name": ["server-security2-proxy-client-security-jetty-http2-controller-to-worker-300-20"],
+    "stationarityTestResult": {
+      "pValue": [0.01],
+      "statistic": [-11.9954],
+      "parameter": [4],
+      "method": ["Augmented Dickey-Fuller Test"]
+    },
+    "iid": [false]
+  }
+}
