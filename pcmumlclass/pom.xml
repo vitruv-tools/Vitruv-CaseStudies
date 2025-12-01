@@ -8,7 +8,7 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>tools.vitruv.applications</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>tools.vitruv.applications.pcmumlclass</artifactId>

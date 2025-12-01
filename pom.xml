@@ -14,7 +14,7 @@
 
   <!-- Project Information -->
   <artifactId>tools.vitruv.applications</artifactId>
-  <version>3.1.0</version>
+  <version>3.1.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Vitruv Case Studies</name>
