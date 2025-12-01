@@ -17,7 +17,7 @@
   <description>The families persons demo case study (ATL zoo)</description>
 
   <properties>
-    <vitruv.version>3.2.2</vitruv.version>
+    <vitruv.version>3.2.3</vitruv.version>
     <wrapper.version>3.1.2</wrapper.version>
   </properties>
 

@@ -48,7 +48,7 @@
 
   <!-- Dependency Management -->
   <properties>
-    <vitruv.version>3.2.3-SNAPSHOT</vitruv.version>
+    <vitruv.version>3.2.3</vitruv.version>
     <xtend.version>2.41.0</xtend.version>
     <!-- p2 updatesite versions -->
     <repo.sdq-demo-metamodels.version>1.9.0</repo.sdq-demo-metamodels.version>
