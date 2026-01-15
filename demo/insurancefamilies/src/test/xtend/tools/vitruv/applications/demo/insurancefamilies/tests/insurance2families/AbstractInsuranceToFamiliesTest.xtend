@@ -105,7 +105,7 @@ abstract class AbstractInsuranceToFamiliesTest {
 	}
 
 	def protected Iterable<ChangePropagationSpecification> getChangePropagationSpecifications() {
-		return #[new InsuranceToFamiliesChangePropagationSpecification()]
+		 return #[new InsuranceToFamiliesChangePropagationSpecification() as ChangePropagationSpecification]
 	}
 
 	protected def void createAndRegisterRoot(TestModel<InsuranceDatabase> model, InsuranceDatabase rootObject, URI persistenceUri) {
