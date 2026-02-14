@@ -1,0 +1,13 @@
+FROM eclipse-temurin:17 AS build
+WORKDIR /app
+COPY ./Vitruv-Server ./Vitruv-Server/
+COPY ./Vitruv-CaseStudies ./Vitruv-CaseStudies/
+WORKDIR ./Vitruv-Server
+RUN ./mvnw clean install
+WORKDIR ../Vitruv-CaseStudies
+RUN ./mvnw clean verify -Dmaven.test.skip=true -pl :vitruvremote -am
+
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY --from=build /app/Vitruv-CaseStudies/demo/vitruvremote/target/vitruvremote-3.1.0-SNAPSHOT.jar /app/performance-app.jar
+COPY --from=build /app/Vitruv-CaseStudies/demo/vitruvremote/target/libs /app/libs/
