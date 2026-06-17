@@ -1,0 +1,17 @@
+services:
+  controller:
+    build:
+      context: ..
+      dockerfile: ./Vitruv-CaseStudies/Dockerfile.performance
+    entrypoint: java -cp /app/performance-app.jar:/app/libs/* tools.vitruv.applications.demo.performance.controller.MainController
+    environment:
+      - VITRUV_PERF_VITRUV_SERVER_PORT=9097
+      - VITRUV_PERF_WORK_DIR=/performance
+      - VITRUV_PERF_SERVER_HOST=127.0.0.1
+      - VITRUV_CONTROLLER_REMOTE_WORKER_URI=http://127.0.0.1:9094
+    volumes:
+      - ./performance-controller:/performance
+    ports:
+      - 9097:9097
+    cpus: 1
+    mem_limit: 1073741824
