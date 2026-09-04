@@ -91,7 +91,7 @@ routine createExistingUmlClass(java::Class existingJavaClass) {
 	}
 	update {
 		umlClass.name = existingJavaClass.name
-		findUmlPackage(umlModel, existingJavaClass.containingCompilationUnit.namespaces.last) => [
+		findUmlPackage(umlModel, existingJavaClass.containingCompilationUnit.namespaces.get(existingJavaClass.containingCompilationUnit.namespaces.size - 1)) => [
 			packagedElements += umlClass
 		]
 		addCorrespondenceBetween(existingJavaClass, umlClass)
@@ -108,7 +108,7 @@ routine createExistingUmlInterface(java::Interface existingJavaInterface) {
 	}
 	update {
 		umlInterface.name = existingJavaInterface.name
-		findUmlPackage(umlModel, existingJavaInterface.containingCompilationUnit.namespaces.last) => [
+		findUmlPackage(umlModel, existingJavaInterface.containingCompilationUnit.namespaces.get(existingJavaInterface.containingCompilationUnit.namespaces.size - 1)) => [
 			packagedElements += umlInterface
 		]
 		addCorrespondenceBetween(existingJavaInterface, umlInterface)
