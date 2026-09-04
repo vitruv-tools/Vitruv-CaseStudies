@@ -70,7 +70,8 @@ class PersonsToFamiliesHelper {
 		if (!person.fullName.contains(" ")) {
 			return ""
 		} else {
-			return person.fullName.split(" ").last
+			val nameParts = person.fullName.split(" ")
+			return nameParts.get(nameParts.size - 1)
 		}
 	}
 

@@ -494,8 +494,9 @@ routine addSuperTypeToDataType(pcm::DataType dataType, java::TypeReference inner
 	update {
 		val collectionTypeClassImport = createJavaClassImport(superTypeQualifiedName);
 		dataTypeImplementation.containingCompilationUnit.imports += collectionTypeClassImport;
+		val classifierImports = dataTypeImplementation.containingCompilationUnit.imports.filter(ClassifierImport)
 		createNamespaceClassifierReference(namespaceClassifier,
-			dataTypeImplementation.containingCompilationUnit.imports.filter(ClassifierImport).last.classifier);
+			classifierImports.get(classifierImports.size - 1).classifier);
 		val qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
 		qualifiedTypeArgument.typeReference = innerTypeReference;
 		namespaceClassifier.classifierReferences.get(0).typeArguments += qualifiedTypeArgument;

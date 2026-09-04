@@ -48,7 +48,10 @@
 
   <!-- Dependency Management -->
   <properties>
-    <vitruv.version>3.2.4-SNAPSHOT</vitruv.version>
+    <vitruv.version>3.2.3</vitruv.version>
+    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
     <xtend.version>2.42.0</xtend.version>
     <!-- p2 updatesite versions -->
     <repo.sdq-demo-metamodels.version>1.9.0</repo.sdq-demo-metamodels.version>
@@ -230,17 +233,17 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>33.5.0-jre</version>
+        <version>33.6.0-jre</version>
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-api</artifactId>
-        <version>2.25.4</version>
+        <version>2.26.0</version>
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-core</artifactId>
-        <version>2.25.4</version>
+        <version>2.26.0</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.emf</groupId>
@@ -267,6 +270,12 @@
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
         <version>3.34.200</version>
+      </dependency>
+      <!-- Keep the split org.eclipse.core.runtime package signed by matching Eclipse bundles. -->
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.registry</artifactId>
+        <version>3.12.600</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
@@ -306,12 +315,12 @@
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-        <version>6.0.3</version>
+        <version>6.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-params</artifactId>
-        <version>6.0.3</version>
+        <version>6.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -322,17 +331,17 @@
       <dependency>
         <groupId>org.junit.platform</groupId>
         <artifactId>junit-platform-commons</artifactId>
-        <version>6.0.3</version>
+        <version>6.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.junit.platform</groupId>
         <artifactId>junit-platform-engine</artifactId>
-        <version>6.0.3</version>
+        <version>6.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.junit.platform</groupId>
         <artifactId>junit-platform-launcher</artifactId>
-        <version>6.0.3</version>
+        <version>6.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.json</groupId>
