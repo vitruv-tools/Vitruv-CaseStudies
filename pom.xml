@@ -268,6 +268,12 @@
         <artifactId>org.eclipse.core.runtime</artifactId>
         <version>3.34.200</version>
       </dependency>
+      <!-- Keep the split org.eclipse.core.runtime package signed by matching Eclipse bundles. -->
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.registry</artifactId>
+        <version>3.12.600</version>
+      </dependency>
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>org.eclipse.xtend.core</artifactId>
