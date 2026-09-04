@@ -26,7 +26,8 @@ class InsuranceToFamiliesHelper {
 	}
 	
 	def static String getLastName(InsuranceClient insuranceClient) {
-		insuranceClient.name.split(" ").last
+		val nameParts = insuranceClient.name.split(" ")
+		nameParts.get(nameParts.size - 1)
 	}
 	
 	def static String getFirstName(InsuranceClient insuranceClient) {
