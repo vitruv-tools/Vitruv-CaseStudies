@@ -143,7 +143,7 @@ routine addUmlElementToModelOrPackage(java::JavaRoot javaRoot, uml::PackageableE
 		val uPackage = if (javaRoot.namespaces.nullOrEmpty) {
 				uModel
 			} else {
-				findUmlPackage(uModel, javaRoot.namespaces.last)
+				findUmlPackage(uModel, javaRoot.namespaces.get(javaRoot.namespaces.size - 1))
 			}
 		checkState(uPackage !== null, "Package %s does not exist in UML model", javaRoot.namespaces)
 		if (uPackage !== umlPackageableElement.eContainer) {
@@ -208,7 +208,11 @@ routine createOrFindUmlClass(java::Class jClass, java::CompilationUnit jCompUnit
 		require absence of uml::DataType corresponding to jClass
 	}
 	update {
-		val uClass = findUmlClass(uModel, jClass.name, jCompUnit.namespaces.last)
+		val uClass = if (jCompUnit.namespaces.nullOrEmpty) {
+			null
+		} else {
+			findUmlClass(uModel, jClass.name, jCompUnit.namespaces.get(jCompUnit.namespaces.size - 1))
+		}
 		if (uClass === null) {
 			createUmlClass(jClass, jCompUnit)
 		} else {
@@ -379,7 +383,11 @@ routine createOrFindUmlInterface(java::Interface jInterface, java::CompilationUn
 		require absence of uml::Interface corresponding to jInterface
 	}
 	update {
-		val uInterface = findUmlInterface(uModel, jInterface.name, jCompUnit.namespaces.last)
+		val uInterface = if (jCompUnit.namespaces.nullOrEmpty) {
+			null
+		} else {
+			findUmlInterface(uModel, jInterface.name, jCompUnit.namespaces.get(jCompUnit.namespaces.size - 1))
+		}
 		if (uInterface === null) {
 			createUmlInterface(jInterface, jCompUnit)
 		} else {
@@ -470,7 +478,11 @@ routine createOrFindUmlEnum(java::Enumeration jEnum, java::CompilationUnit jComp
 		require absence of uml::Enumeration corresponding to jEnum
 	}
 	update {
-		val uEnum = findUmlEnum(uModel, jEnum.name, jCompUnit.namespaces.last)
+		val uEnum = if (jCompUnit.namespaces.nullOrEmpty) {
+			null
+		} else {
+			findUmlEnum(uModel, jEnum.name, jCompUnit.namespaces.get(jCompUnit.namespaces.size - 1))
+		}
 		if (uEnum === null) {
 			createUmlEnum(jEnum, jCompUnit)
 		} else {
@@ -622,7 +634,7 @@ routine createUmlPackage(java::Package jPackage, uml::Model uModel) {
 			addUmlElementToPackage(uPackage, uModel)
 		} else {
 			// find package by name is necessary, since jPackage does not explicitly model parent-child package relations
-			val parentPackage = findUmlPackage(uModel, jPackage.namespaces.last)
+			val parentPackage = findUmlPackage(uModel, jPackage.namespaces.get(jPackage.namespaces.size - 1))
 			checkState(parentPackage !== null, "UML package %s does not exist", jPackage.namespaces)
 			addUmlElementToPackage(uPackage, parentPackage)
 		}

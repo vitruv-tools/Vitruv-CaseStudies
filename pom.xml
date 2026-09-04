@@ -48,7 +48,10 @@
 
   <!-- Dependency Management -->
   <properties>
-    <vitruv.version>3.2.4-SNAPSHOT</vitruv.version>
+    <vitruv.version>3.2.3</vitruv.version>
+    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
     <xtend.version>2.42.0</xtend.version>
     <!-- p2 updatesite versions -->
     <repo.sdq-demo-metamodels.version>1.9.0</repo.sdq-demo-metamodels.version>
@@ -267,6 +270,12 @@
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
         <version>3.34.200</version>
+      </dependency>
+      <!-- Keep the split org.eclipse.core.runtime package signed by matching Eclipse bundles. -->
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.registry</artifactId>
+        <version>3.12.600</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.xtend</groupId>
