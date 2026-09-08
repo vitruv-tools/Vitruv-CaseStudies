@@ -15,6 +15,7 @@ import tools.vitruv.applications.demo.insurancefamilies.families2insurance.Famil
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertThrows
+import static tools.vitruv.applications.demo.insurancefamilies.tests.util.PropagationExceptionAssertions.assertPropagationException
 import static tools.vitruv.applications.demo.insurancefamilies.tests.util.CreatorsUtil.createFamily
 import static tools.vitruv.applications.demo.insurancefamilies.tests.util.CreatorsUtil.createFamilyMember
 import static tools.vitruv.applications.demo.insurancefamilies.tests.util.CreatorsUtil.createInsuranceClient
@@ -917,7 +918,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 	def void testExceptionSexChanges_AssignMotherToFather() {
 		createTwoCompleteFamilies()
 		val thrownExceptionAssignMotherToFather = assertThrows(
-			UnsupportedOperationException,
+			RuntimeException,
 			[
 				changeFamilyModel[
 					claimFamilies(it) => [
@@ -930,7 +931,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		)
 
 		val String expectedMessage = "The position of a male family member can only be assigned to members with no or a male corresponding insurance client."
-		assertEquals(expectedMessage, thrownExceptionAssignMotherToFather.message)
+		assertPropagationException(thrownExceptionAssignMotherToFather, UnsupportedOperationException, expectedMessage)
 	}
 
 	@Test
@@ -938,7 +939,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		createTwoCompleteFamilies()
 
 		val thrownExceptionAssignDaughterToSon = assertThrows(
-			UnsupportedOperationException,
+			RuntimeException,
 			[
 				changeFamilyModel[
 					claimFamilies(it) => [
@@ -951,7 +952,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		)
 
 		val String expectedMessage = "The position of a male family member can only be assigned to members with no or a male corresponding insurance client."
-		assertEquals(expectedMessage, thrownExceptionAssignDaughterToSon.message)
+		assertPropagationException(thrownExceptionAssignDaughterToSon, UnsupportedOperationException, expectedMessage)
 	}
 
 	@Test
@@ -959,7 +960,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		createTwoCompleteFamilies()
 
 		val thrownExceptionAssignFatherToMother = assertThrows(
-			UnsupportedOperationException,
+			RuntimeException,
 			[
 				changeFamilyModel[
 					claimFamilies(it) => [
@@ -972,7 +973,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		)
 
 		val String expectedMessage = "The position of a female family member can only be assigned to members with no or a female corresponding insurance client."
-		assertEquals(expectedMessage, thrownExceptionAssignFatherToMother.message)
+		assertPropagationException(thrownExceptionAssignFatherToMother, UnsupportedOperationException, expectedMessage)
 	}
 
 	@Test
@@ -980,7 +981,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		createTwoCompleteFamilies()
 
 		val thrownExceptionAssignSonToDaughter = assertThrows(
-			UnsupportedOperationException,
+			RuntimeException,
 			[
 				changeFamilyModel[
 					claimFamilies(it) => [
@@ -993,7 +994,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		)
 
 		val String expectedMessage = "The position of a female family member can only be assigned to members with no or a female corresponding insurance client."
-		assertEquals(expectedMessage, thrownExceptionAssignSonToDaughter.message)
+		assertPropagationException(thrownExceptionAssignSonToDaughter, UnsupportedOperationException, expectedMessage)
 	}
 
 	def String unescapeString(String string) {
@@ -1009,7 +1010,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		createOneCompleteFamily()
 
 		val thrownExceptionSetNullAsFirstName = assertThrows(
-			IllegalStateException,
+			RuntimeException,
 			[
 				changeFamilyModel[
 					claimFamilies(it) => [
@@ -1033,7 +1034,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		)
 
 		val String expectedMessage = expectedExceptionMessage
-		assertEquals(expectedMessage, thrownExceptionSetNullAsFirstName.message)
+		assertPropagationException(thrownExceptionSetNullAsFirstName, IllegalStateException, expectedMessage)
 	}
 
 	@ParameterizedTest(name="{index} => role={0}, escapedNewName={1}, expectedExceptionMessage={2}")
@@ -1044,7 +1045,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		createOneCompleteFamily()
 
 		val thrownExceptionSetNullAsFirstName = assertThrows(
-			IllegalStateException,
+			RuntimeException,
 			[
 				changeFamilyModel[
 					claimFamilies(it) => [
@@ -1062,7 +1063,7 @@ class FamiliesToInsuranceTest extends AbstractFamiliesToInsuranceTest {
 		)
 
 		val String expectedMessage = expectedExceptionMessage
-		assertEquals(expectedMessage, thrownExceptionSetNullAsFirstName.message)
+		assertPropagationException(thrownExceptionSetNullAsFirstName, IllegalStateException, expectedMessage)
 	}
 
 	def static Stream<Arguments> nameAndExceptionProvider() {
