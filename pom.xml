@@ -48,7 +48,7 @@
 
   <!-- Dependency Management -->
   <properties>
-    <vitruv.version>3.2.3</vitruv.version>
+    <vitruv.version>4.0.0</vitruv.version>
     <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
