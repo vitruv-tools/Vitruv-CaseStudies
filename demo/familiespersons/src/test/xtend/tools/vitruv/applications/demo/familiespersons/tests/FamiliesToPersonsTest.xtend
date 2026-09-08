@@ -35,6 +35,7 @@ import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertThrows
+import static tools.vitruv.applications.demo.familiespersons.tests.PropagationExceptionAssertions.assertPropagationException
 import static tools.vitruv.change.testutils.matchers.ModelMatchers.*
 import static tools.vitruv.change.testutils.views.ChangePublishingTestView.createDefaultChangePublishingTestView
 
@@ -1277,7 +1278,7 @@ class FamiliesToPersonsTest implements TestView {
 		logger.trace(nameOfTestMethod + " - begin")
 		this.createTwoFamiliesBeforeTesting()
 		logger.trace(nameOfTestMethod + " - preparation done")
-		val thrownExceptionAssignMotherToFather = assertThrows(UnsupportedOperationException, [
+		val thrownExceptionAssignMotherToFather = assertThrows(RuntimeException, [
 			FamilyRegister.from(FAMILIES_MODEL).propagate [
 				val family1 = families.findFirst[family|family.lastName.equals(LAST_NAME_1)]
 				val family2 = families.findFirst[family|family.lastName.equals(LAST_NAME_2)]
@@ -1286,7 +1287,7 @@ class FamiliesToPersonsTest implements TestView {
 		])
 		logger.trace(nameOfTestMethod + " - propagation done")
 		val String expectedMessage = "The position of a male family member can only be assigned to members with no or a male corresponding person."
-		assertEquals(thrownExceptionAssignMotherToFather.message, expectedMessage)
+		assertPropagationException(thrownExceptionAssignMotherToFather, UnsupportedOperationException, expectedMessage)
 		logger.trace(nameOfTestMethod + " - finished without errors")
 	}
 
@@ -1298,7 +1299,7 @@ class FamiliesToPersonsTest implements TestView {
 		logger.trace(nameOfTestMethod + " - begin")
 		this.createTwoFamiliesBeforeTesting()
 		logger.trace(nameOfTestMethod + " - preparation done")
-		val thrownExceptionAssignDaughterToSon = assertThrows(UnsupportedOperationException, [
+		val thrownExceptionAssignDaughterToSon = assertThrows(RuntimeException, [
 			FamilyRegister.from(FAMILIES_MODEL).propagate [
 				val family1 = families.findFirst[family|family.lastName.equals(LAST_NAME_1)]
 				val family2 = families.findFirst[family|family.lastName.equals(LAST_NAME_2)]
@@ -1307,7 +1308,7 @@ class FamiliesToPersonsTest implements TestView {
 		])
 		logger.trace(nameOfTestMethod + " - propagation done")
 		val String expectedMessage = "The position of a male family member can only be assigned to members with no or a male corresponding person."
-		assertEquals(thrownExceptionAssignDaughterToSon.message, expectedMessage)
+		assertPropagationException(thrownExceptionAssignDaughterToSon, UnsupportedOperationException, expectedMessage)
 		logger.trace(nameOfTestMethod + " - finished without errors")
 	}
 
@@ -1319,7 +1320,7 @@ class FamiliesToPersonsTest implements TestView {
 		logger.trace(nameOfTestMethod + " - begin")
 		this.createTwoFamiliesBeforeTesting()
 		logger.trace(nameOfTestMethod + " - preparation done")
-		val thrownExceptionAssignFatherToMother = assertThrows(UnsupportedOperationException, [
+		val thrownExceptionAssignFatherToMother = assertThrows(RuntimeException, [
 			FamilyRegister.from(FAMILIES_MODEL).propagate [
 				val family1 = families.findFirst[family|family.lastName.equals(LAST_NAME_1)]
 				val family2 = families.findFirst[family|family.lastName.equals(LAST_NAME_2)]
@@ -1328,7 +1329,7 @@ class FamiliesToPersonsTest implements TestView {
 		])
 		logger.trace(nameOfTestMethod + " - propagation done")
 		val String expectedMessage = "The position of a female family member can only be assigned to members with no or a female corresponding person."
-		assertEquals(thrownExceptionAssignFatherToMother.message, expectedMessage)
+		assertPropagationException(thrownExceptionAssignFatherToMother, UnsupportedOperationException, expectedMessage)
 		logger.trace(nameOfTestMethod + " - finished without errors")
 	}
 
@@ -1340,7 +1341,7 @@ class FamiliesToPersonsTest implements TestView {
 		logger.trace(nameOfTestMethod + " - begin")
 		this.createTwoFamiliesBeforeTesting()
 		logger.trace(nameOfTestMethod + " - preparation done")
-		val thrownExceptionAssignSonToDaughter = assertThrows(UnsupportedOperationException, [
+		val thrownExceptionAssignSonToDaughter = assertThrows(RuntimeException, [
 			FamilyRegister.from(FAMILIES_MODEL).propagate [
 				val family1 = families.findFirst[family|family.lastName.equals(LAST_NAME_1)]
 				val family2 = families.findFirst[family|family.lastName.equals(LAST_NAME_2)]
@@ -1349,7 +1350,7 @@ class FamiliesToPersonsTest implements TestView {
 		])
 		logger.trace(nameOfTestMethod + " - propagation done")
 		val String expectedMessage = "The position of a female family member can only be assigned to members with no or a female corresponding person."
-		assertEquals(thrownExceptionAssignSonToDaughter.message, expectedMessage)
+		assertPropagationException(thrownExceptionAssignSonToDaughter, UnsupportedOperationException, expectedMessage)
 		logger.trace(nameOfTestMethod + " - finished without errors")
 	}
 
@@ -1371,7 +1372,7 @@ class FamiliesToPersonsTest implements TestView {
 		val unescapedNewName = if (escapedNewName !== null) unescapeString(escapedNewName) else null
 		this.createOneFamilyBeforeTesting()
 		logger.trace(nameOfTestMethod + " - preparation done")
-		val thrownExceptionSetNullAsFirstName = assertThrows(IllegalStateException, [
+		val thrownExceptionSetNullAsFirstName = assertThrows(RuntimeException, [
 			FamilyRegister.from(FAMILIES_MODEL).propagate [
 				val family1 = families.findFirst[family|family.lastName.equals(LAST_NAME_1)]
 				switch role {
@@ -1384,7 +1385,7 @@ class FamiliesToPersonsTest implements TestView {
 		])
 		logger.trace(nameOfTestMethod + " - propagation done")
 		val String expectedMessage = expectedExceptionMessage
-		assertEquals(thrownExceptionSetNullAsFirstName.message, expectedMessage)
+		assertPropagationException(thrownExceptionSetNullAsFirstName, IllegalStateException, expectedMessage)
 		logger.trace(nameOfTestMethod + " - finished without errors")
 	}
 
@@ -1396,7 +1397,7 @@ class FamiliesToPersonsTest implements TestView {
 		val unescapedNewName = if (escapedNewName !== null) unescapeString(escapedNewName) else null
 		this.createOneFamilyBeforeTesting()
 		logger.trace(nameOfTestMethod + " - preparation done")
-		val thrownExceptionSetNullAsFirstName = assertThrows(IllegalStateException, [
+		val thrownExceptionSetNullAsFirstName = assertThrows(RuntimeException, [
 			FamilyRegister.from(FAMILIES_MODEL).propagate [
 				val family1 = families.findFirst[family|family.lastName.equals(LAST_NAME_1)]
 				val Member newMember = FamiliesFactory.eINSTANCE.createMember => [firstName = unescapedNewName]
@@ -1410,7 +1411,7 @@ class FamiliesToPersonsTest implements TestView {
 		])
 		logger.trace(nameOfTestMethod + " - propagation done")
 		val String expectedMessage = expectedExceptionMessage
-		assertEquals(thrownExceptionSetNullAsFirstName.message, expectedMessage)
+		assertPropagationException(thrownExceptionSetNullAsFirstName, IllegalStateException, expectedMessage)
 		logger.trace(nameOfTestMethod + " - finished without errors")
 	}
 
