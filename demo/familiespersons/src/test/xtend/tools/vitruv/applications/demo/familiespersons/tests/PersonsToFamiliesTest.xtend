@@ -35,6 +35,7 @@ import static org.hamcrest.MatcherAssert.assertThat
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertThrows
 import static org.junit.jupiter.api.Assertions.assertTrue
+import static tools.vitruv.applications.demo.familiespersons.tests.PropagationExceptionAssertions.assertPropagationException
 import static tools.vitruv.change.testutils.matchers.ModelMatchers.*
 import static tools.vitruv.change.testutils.views.ChangePublishingTestView.createDefaultChangePublishingTestView
 
@@ -1427,13 +1428,13 @@ class PersonsToFamiliesTest implements TestView {
 		logger.trace(this.nameOfTestMethod + " - begin")
 		val unescapedNewName = if (escapedNewName !== null) unescapeString(escapedNewName) else null
 		logger.trace(this.nameOfTestMethod + " - preparation done")
-		val thrownException = assertThrows(IllegalStateException, [
+		val thrownException = assertThrows(RuntimeException, [
 			PersonRegister.from(PERSONS_MODEL).propagate [
 				persons += PersonsFactory.eINSTANCE.createMale => [fullName = unescapedNewName]
 			]
 		])
 		logger.trace(this.nameOfTestMethod + " - propagation done")
-		assertEquals(thrownException.message, expectedExceptionMessage)
+		assertPropagationException(thrownException, IllegalStateException, expectedExceptionMessage)
 		logger.trace(this.nameOfTestMethod + " - finished without errors")
 	}
 
@@ -1446,14 +1447,14 @@ class PersonsToFamiliesTest implements TestView {
 		val unescapedNewName = if (escapedNewName !== null) unescapeString(escapedNewName) else null
 		this.createFamiliesForTesting()
 		logger.trace(this.nameOfTestMethod + " - preparation done")
-		val thrownException = assertThrows(IllegalStateException, [
+		val thrownException = assertThrows(RuntimeException, [
 			PersonRegister.from(PERSONS_MODEL).propagate [
 				val searchedDad = persons.findFirst[person|person.fullName.equals(FIRST_DAD_1 + " " + LAST_NAME_1)]
 				searchedDad.fullName = unescapedNewName
 			]
 		])
 		logger.trace(this.nameOfTestMethod + " - propagation done")
-		assertEquals(thrownException.message, expectedExceptionMessage)
+		assertPropagationException(thrownException, IllegalStateException, expectedExceptionMessage)
 		logger.trace(this.nameOfTestMethod + " - finished without errors")
 	}
 

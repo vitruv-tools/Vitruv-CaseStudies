@@ -32,7 +32,7 @@ import java.util.ArrayList
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.AfterEach
 import java.nio.file.Path
-import tools.vitruv.framework.testutils.deprecated.LegacyVitruvApplicationTest
+import tools.vitruv.applications.testutility.integration.NonTransactionalVitruvApplicationTest
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -46,7 +46,7 @@ import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.change.testutils.RegisterMetamodelsInStandalone
 
 @ExtendWith(RegisterMetamodelsInStandalone)
-abstract class LegacyPcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
+abstract class LegacyPcmUmlClassApplicationTest extends NonTransactionalVitruvApplicationTest {
 	override protected getChangePropagationSpecifications() {
 		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
