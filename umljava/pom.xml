@@ -164,10 +164,6 @@
       <groupId>tools.vitruv</groupId>
       <artifactId>tools.vitruv.framework.testutils.integration</artifactId>
     </dependency>
-    <dependency>
-      <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.framework.testutils.deprecated</artifactId>
-    </dependency>
 
     <!-- external dependencies -->
     <dependency>
