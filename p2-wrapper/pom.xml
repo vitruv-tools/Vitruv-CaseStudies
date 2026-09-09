@@ -90,14 +90,54 @@
     <dependency>
       <groupId>eclipse</groupId>
       <artifactId>org.eclipse.emf.cdo</artifactId>
+      <exclusions>
+        <!-- Provided by org.eclipse.platform:* from Maven Central (pulled in transitively
+             by the xtext-maven-plugin). Keeping both copies on the same classpath makes the
+             JVM load org.eclipse.core.runtime classes from two differently-signed JARs,
+             which fails with "signer information does not match". -->
+        <exclusion>
+          <groupId>eclipse</groupId>
+          <artifactId>org.eclipse.core.runtime</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>eclipse</groupId>
+          <artifactId>org.eclipse.core.resources</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>eclipse</groupId>
+          <artifactId>org.eclipse.core.expressions</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>eclipse</groupId>
       <artifactId>org.eclipse.uml2.uml</artifactId>
+      <exclusions>
+        <!-- See exclusions on org.eclipse.emf.cdo above. -->
+        <exclusion>
+          <groupId>eclipse</groupId>
+          <artifactId>org.eclipse.core.runtime</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>eclipse</groupId>
+          <artifactId>org.eclipse.core.resources</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>eclipse</groupId>
       <artifactId>org.eclipse.uml2.uml.resources</artifactId>
+      <exclusions>
+        <!-- See exclusions on org.eclipse.emf.cdo above. -->
+        <exclusion>
+          <groupId>eclipse</groupId>
+          <artifactId>org.eclipse.core.runtime</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>eclipse</groupId>
+          <artifactId>org.eclipse.core.resources</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>
