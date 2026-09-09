@@ -273,17 +273,17 @@
         <version>3.12.600</version>
       </dependency>
       <dependency>
-        <groupId>org.eclipse.xtend</groupId>
+        <groupId>org.eclipse.xtext</groupId>
         <artifactId>org.eclipse.xtend.core</artifactId>
         <version>${xtend.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.eclipse.xtend</groupId>
+        <groupId>org.eclipse.xtext</groupId>
         <artifactId>org.eclipse.xtend.lib</artifactId>
         <version>${xtend.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.eclipse.xtend</groupId>
+        <groupId>org.eclipse.xtext</groupId>
         <artifactId>org.eclipse.xtend.lib.macro</artifactId>
         <version>${xtend.version}</version>
       </dependency>
