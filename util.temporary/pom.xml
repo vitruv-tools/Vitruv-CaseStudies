@@ -8,7 +8,7 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>tools.vitruv.applications</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>tools.vitruv.applications.util.temporary</artifactId>
@@ -23,7 +23,7 @@
         <artifactId>build-helper-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.eclipse.xtend</groupId>
+        <groupId>org.eclipse.xtext</groupId>
         <artifactId>xtend-maven-plugin</artifactId>
       </plugin>
     </plugins>
@@ -69,7 +69,6 @@
       <groupId>org.eclipse.xtext</groupId>
       <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
     </dependency>
-
     <!-- p2 dependencies -->
     <dependency>
       <groupId>sdq-commons</groupId>
@@ -106,6 +105,11 @@
     <dependency>
       <groupId>eclipse</groupId>
       <artifactId>org.eclipse.uml2.uml.resources</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

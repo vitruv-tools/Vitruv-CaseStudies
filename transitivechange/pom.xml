@@ -8,13 +8,13 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>tools.vitruv.applications</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>tools.vitruv.applications.transitivechange</artifactId>
 
   <name>Transitive Transformation Tests between PCM, Java, and UML Class</name>
-  <description />
+  <description>The PCM, Java and UML class diagram case study</description>
 
   <build>
     <plugins>
@@ -23,7 +23,7 @@
         <artifactId>build-helper-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.eclipse.xtend</groupId>
+        <groupId>org.eclipse.xtext</groupId>
         <artifactId>xtend-maven-plugin</artifactId>
       </plugin>
     </plugins>
@@ -82,11 +82,6 @@
     <dependency>
       <groupId>tools.vitruv</groupId>
       <artifactId>tools.vitruv.change.propagation</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.framework.testutils.deprecated</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

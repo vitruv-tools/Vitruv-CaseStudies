@@ -24,14 +24,14 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testAddOperationSignature() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				interfaces__Repository += interface
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val interface = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				interface.signatures__OperationInterface +=
@@ -39,7 +39,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -53,7 +53,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testRenameOperationSignature() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				interface.signatures__OperationInterface +=
@@ -62,7 +62,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val operationSignature = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME).
 					signatures__OperationInterface.claimOne
@@ -71,7 +71,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -86,7 +86,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testChangeOperationSignatureReturnType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				interface.signatures__OperationInterface +=
@@ -95,7 +95,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val operationSignature = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME).
 					signatures__OperationInterface.claimOne
@@ -105,7 +105,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -118,14 +118,14 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testCreateOperationSignatureWithReturnType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				interfaces__Repository += interface
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val interface = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
 				val dataType = createPrimitiveDataType(PrimitiveTypeEnum.INT)
@@ -136,7 +136,7 @@ class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX

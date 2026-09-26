@@ -26,11 +26,11 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
-import tools.vitruv.framework.testutils.deprecated.LegacyCorrespondenceRetriever
+import tools.vitruv.applications.testutility.integration.CorrespondenceRetriever
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 final class LegacyPcmUmlClassApplicationTestHelper {
-	new(LegacyCorrespondenceRetriever correspondenceRetriever, Function<URI, Resource> resourceRetriever) {
+	new(CorrespondenceRetriever correspondenceRetriever, Function<URI, Resource> resourceRetriever) {
 		this.correspondenceRetriever = correspondenceRetriever
 		this.resourceRetriever = resourceRetriever
 
@@ -49,7 +49,7 @@ final class LegacyPcmUmlClassApplicationTestHelper {
 		UML_STRING = umlPrimitiveTypes.findFirst[it.name.toLowerCase == "string"]
 	}
 
-	val LegacyCorrespondenceRetriever correspondenceRetriever
+	val CorrespondenceRetriever correspondenceRetriever
 	val Function<URI, Resource> resourceRetriever
 
 	/**

@@ -30,7 +30,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 	@Test
 	def void testAddOperationRequiredRole() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME)
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -40,7 +40,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val component = claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 				val interface = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -48,7 +48,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -74,19 +74,19 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				interfaces__Repository += interface
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmSystem() => [
 				requiredRoles_InterfaceRequiringEntity += createOperationRequiredRole(interface, it)
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -107,7 +107,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 	@Test
 	def void testAddOperationRequiredRoleToCompositeComponent() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME)
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -117,7 +117,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val component = claimComponent(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME)
 				val interface = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -125,7 +125,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -157,7 +157,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 	 */
 	def void testChangeOperationRequiredRole() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME)
 				val interface1 = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -174,7 +174,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val component2 = claimComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX)
 				val interface2 = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME +
@@ -186,7 +186,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val interface1CompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -224,7 +224,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 	def void testChangeNameOfOperationRequiredRole() {
 		val NEW_OPERATION_REQUIRED_ROLE_NAME = "operationReqRoleNameChange"
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME)
 				val interface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -236,7 +236,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val operationRequiredRole = claimComponent(it, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME).
 					requiredRoles_InterfaceRequiringEntity.filter(OperationRequiredRole).claimOne
@@ -244,7 +244,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX
@@ -272,7 +272,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 	 */
 	def void testChangeTypeOfOperationRequiredRole() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val signature = createOperationSignature(Pcm2JavaTestUtils.OPERATION_SIGNATURE_NAME)
 				val interface1 = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
@@ -287,7 +287,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val interface2 = claimOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME +
 					Pcm2JavaTestUtils.RENAME_SUFFIX)
@@ -297,7 +297,7 @@ class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformat
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interface1CompilationUnit = new FluentJavaInterfaceBuilder(
 				Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX

@@ -13,7 +13,7 @@ import static tools.vitruv.applications.demo.insurancefamilies.tests.util.Insura
 import static tools.vitruv.applications.demo.insurancefamilies.tests.util.CreatorsUtil.createFamily
 import static tools.vitruv.applications.demo.insurancefamilies.tests.util.CreatorsUtil.createFamilyMember
 import static tools.vitruv.applications.demo.insurancefamilies.tests.util.CreatorsUtil.createInsuranceClient
-import tools.vitruv.dsls.demo.insurancefamilies.insurance2families.PositionPreference
+import tools.vitruv.applications.demo.insurancefamilies.insurance2families.PositionPreference
 
 class InsuranceToFamiliesTest extends AbstractInsuranceToFamiliesTest {	
 	

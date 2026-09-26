@@ -8,13 +8,13 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>tools.vitruv.applications</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>tools.vitruv.applications.testutility.integration</artifactId>
 
   <name>Vitruv Test Utils for Integration Tests</name>
-  <description />
+  <description>The test utils for integration tests project</description>
 
   <build>
     <plugins>
@@ -23,7 +23,7 @@
         <artifactId>build-helper-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.eclipse.xtend</groupId>
+        <groupId>org.eclipse.xtext</groupId>
         <artifactId>xtend-maven-plugin</artifactId>
       </plugin>
     </plugins>
@@ -61,7 +61,7 @@
     </dependency>
     <dependency>
       <groupId>tools.vitruv</groupId>
-      <artifactId>tools.vitruv.framework.testutils.deprecated</artifactId>
+      <artifactId>tools.vitruv.framework.testutils.integration</artifactId>
     </dependency>
 
     <!-- external dependencies -->

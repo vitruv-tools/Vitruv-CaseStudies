@@ -5,7 +5,7 @@ import org.apache.log4j.Logger
 import java.util.function.Function
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
-import tools.vitruv.framework.testutils.deprecated.LegacyVitruvApplicationTest
+import tools.vitruv.applications.testutility.integration.NonTransactionalVitruvApplicationTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.BeforeAll
 import tools.vitruv.applications.util.temporary.java.JavaSetup
@@ -19,8 +19,8 @@ import tools.vitruv.change.testutils.RegisterMetamodelsInStandalone
  * @author Fei
  */
 @ExtendWith(RegisterMetamodelsInStandalone)
-abstract class AbstractUmlJavaTest extends LegacyVitruvApplicationTest {
-	static val logger = Logger.getLogger(typeof(LegacyVitruvApplicationTest).simpleName)
+abstract class AbstractUmlJavaTest extends NonTransactionalVitruvApplicationTest {
+	static val logger = Logger.getLogger(typeof(NonTransactionalVitruvApplicationTest).simpleName)
 
 	protected val Function<URI, Resource> resourceRetriever = [uri|uri.resourceAt]
 

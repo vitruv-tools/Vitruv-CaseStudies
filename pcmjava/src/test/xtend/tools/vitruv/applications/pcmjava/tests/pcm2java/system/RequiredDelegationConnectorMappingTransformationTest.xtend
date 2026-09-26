@@ -38,7 +38,7 @@ class RequiredDelegationConnectorMappingTransformationTest extends Pcm2JavaTrans
 		createSystem(Pcm2JavaTestUtils.SYSTEM_NAME)
 		val basicComponent = createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 		val operationInterface = createOperationInterface(Pcm2JavaTestUtils.INTERFACE_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				interfaces__Repository += operationInterface
 				components__Repository += basicComponent
@@ -52,7 +52,7 @@ class RequiredDelegationConnectorMappingTransformationTest extends Pcm2JavaTrans
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmSystem(it) => [
 				val assemblyContext = it.assemblyContexts__ComposedStructure.claimOne
 				val systemRequiredRole = it.requiredRoles_InterfaceRequiringEntity.filter(OperationRequiredRole).
@@ -71,7 +71,7 @@ class RequiredDelegationConnectorMappingTransformationTest extends Pcm2JavaTrans
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val interfaceCompilationUnit = new FluentJavaInterfaceBuilder(Pcm2JavaTestUtils.INTERFACE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.CONTRACTS_SUFFIX).build
 			val basicComponentCompilationUnit = new FluentJavaClassBuilder(

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.change.propagation.ChangePropagationSpecification
-import tools.vitruv.dsls.demo.insurancepersons.insurance2persons.InsuranceToPersonsChangePropagationSpecification
+import tools.vitruv.applications.demo.insurancepersons.insurance2persons.InsuranceToPersonsChangePropagationSpecification
 import tools.vitruv.change.testutils.TestLogging
 import tools.vitruv.change.testutils.TestProject
 import tools.vitruv.change.testutils.TestProjectManager
@@ -37,7 +37,7 @@ class InsuranceToPersonsTest implements TestView {
 	}
 
 	protected def Iterable<ChangePropagationSpecification> getChangePropagationSpecifications() {
-		return #[new InsuranceToPersonsChangePropagationSpecification()]
+		return #[new InsuranceToPersonsChangePropagationSpecification as ChangePropagationSpecification]
 	}
 
 	@BeforeEach

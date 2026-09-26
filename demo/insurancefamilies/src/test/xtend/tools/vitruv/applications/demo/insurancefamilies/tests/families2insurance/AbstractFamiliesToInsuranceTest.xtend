@@ -17,7 +17,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.^extension.ExtendWith
 import tools.vitruv.change.propagation.ChangePropagationSpecification
-import tools.vitruv.dsls.demo.insurancefamilies.families2insurance.FamiliesToInsuranceChangePropagationSpecification
+import tools.vitruv.applications.demo.insurancefamilies.families2insurance.FamiliesToInsuranceChangePropagationSpecification
 import tools.vitruv.applications.demo.insurancefamilies.tests.util.InsuranceFamiliesDefaultTestModelFactory
 import tools.vitruv.applications.demo.insurancefamilies.tests.util.InsuranceFamiliesTestModelFactory
 import tools.vitruv.dsls.testutils.TestModel

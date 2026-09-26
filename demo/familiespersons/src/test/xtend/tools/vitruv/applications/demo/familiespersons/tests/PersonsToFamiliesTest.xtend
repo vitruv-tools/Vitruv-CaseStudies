@@ -21,9 +21,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import tools.vitruv.change.propagation.ChangePropagationSpecification
-import tools.vitruv.dsls.demo.familiespersons.families2persons.FamiliesToPersonsChangePropagationSpecification
-import tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesChangePropagationSpecification
-import tools.vitruv.dsls.demo.familiespersons.persons2families.PersonsToFamiliesHelper
+import tools.vitruv.applications.demo.familiespersons.families2persons.FamiliesToPersonsChangePropagationSpecification
+import tools.vitruv.applications.demo.familiespersons.persons2families.PersonsToFamiliesChangePropagationSpecification
+import tools.vitruv.applications.demo.familiespersons.persons2families.PersonsToFamiliesHelper
 import tools.vitruv.change.testutils.TestLogging
 import tools.vitruv.change.testutils.TestProject
 import tools.vitruv.change.testutils.TestProjectManager
@@ -35,6 +35,7 @@ import static org.hamcrest.MatcherAssert.assertThat
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertThrows
 import static org.junit.jupiter.api.Assertions.assertTrue
+import static tools.vitruv.applications.demo.familiespersons.tests.PropagationExceptionAssertions.assertPropagationException
 import static tools.vitruv.change.testutils.matchers.ModelMatchers.*
 import static tools.vitruv.change.testutils.views.ChangePublishingTestView.createDefaultChangePublishingTestView
 
@@ -1427,13 +1428,13 @@ class PersonsToFamiliesTest implements TestView {
 		logger.trace(this.nameOfTestMethod + " - begin")
 		val unescapedNewName = if (escapedNewName !== null) unescapeString(escapedNewName) else null
 		logger.trace(this.nameOfTestMethod + " - preparation done")
-		val thrownException = assertThrows(IllegalStateException, [
+		val thrownException = assertThrows(RuntimeException, [
 			PersonRegister.from(PERSONS_MODEL).propagate [
 				persons += PersonsFactory.eINSTANCE.createMale => [fullName = unescapedNewName]
 			]
 		])
 		logger.trace(this.nameOfTestMethod + " - propagation done")
-		assertEquals(thrownException.message, expectedExceptionMessage)
+		assertPropagationException(thrownException, IllegalStateException, expectedExceptionMessage)
 		logger.trace(this.nameOfTestMethod + " - finished without errors")
 	}
 
@@ -1446,14 +1447,14 @@ class PersonsToFamiliesTest implements TestView {
 		val unescapedNewName = if (escapedNewName !== null) unescapeString(escapedNewName) else null
 		this.createFamiliesForTesting()
 		logger.trace(this.nameOfTestMethod + " - preparation done")
-		val thrownException = assertThrows(IllegalStateException, [
+		val thrownException = assertThrows(RuntimeException, [
 			PersonRegister.from(PERSONS_MODEL).propagate [
 				val searchedDad = persons.findFirst[person|person.fullName.equals(FIRST_DAD_1 + " " + LAST_NAME_1)]
 				searchedDad.fullName = unescapedNewName
 			]
 		])
 		logger.trace(this.nameOfTestMethod + " - propagation done")
-		assertEquals(thrownException.message, expectedExceptionMessage)
+		assertPropagationException(thrownException, IllegalStateException, expectedExceptionMessage)
 		logger.trace(this.nameOfTestMethod + " - finished without errors")
 	}
 

@@ -8,13 +8,13 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>tools.vitruv.applications</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>tools.vitruv.applications.pcmumlclass</artifactId>
 
   <name>Vitruv PCM-UML Class Application</name>
-  <description />
+  <description>The PCM UML case study</description>
 
   <build>
     <plugins>
@@ -40,6 +40,7 @@
       <plugin>
         <groupId>org.eclipse.xtext</groupId>
         <artifactId>xtext-maven-plugin</artifactId>
+        <version>2.44.0</version>
         <configuration>
           <languages>
             <language>
@@ -84,7 +85,7 @@
         </dependencies>
       </plugin>
       <plugin>
-        <groupId>org.eclipse.xtend</groupId>
+        <groupId>org.eclipse.xtext</groupId>
         <artifactId>xtend-maven-plugin</artifactId>
         <executions>
           <execution>
@@ -176,7 +177,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.xtend</groupId>
+      <groupId>org.eclipse.xtext</groupId>
       <artifactId>org.eclipse.xtend.lib</artifactId>
       <scope>test</scope>
     </dependency>
