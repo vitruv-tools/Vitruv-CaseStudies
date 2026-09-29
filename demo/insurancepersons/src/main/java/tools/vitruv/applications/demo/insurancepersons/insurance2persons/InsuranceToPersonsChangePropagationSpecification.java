@@ -1,0 +1,4 @@
+package tools.vitruv.applications.demo.insurancepersons.insurance2persons;
+
+public class InsuranceToPersonsChangePropagationSpecification extends mir.reactions.insuranceToPersons.InsuranceToPersonsChangePropagationSpecification {
+}
