@@ -17,7 +17,7 @@ import tools.vitruv.applications.cbs.commonalities.tests.oo.InterfaceMethodTest;
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel;
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter;
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsBase;
-import tools.vitruv.applications.cbs.commonalities.uml.UmlPrimitiveType;
+import tools.vitruv.applications.cbs.operators.uml.UmlPrimitiveType;
 
 public class UmlInterfaceMethodTestModels extends UmlTestModelsBase implements InterfaceMethodTest.DomainModels {
 

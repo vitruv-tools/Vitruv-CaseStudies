@@ -8,7 +8,7 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>tools.vitruv.applications</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>tools.vitruv.applications.cbs</artifactId>
@@ -18,8 +18,10 @@
   <description>The CBS commonalities application project</description>
 
   <modules>
-    <module>operators</module>
+    <!-- operators and commonalities are disabled: tools.vitruv.dsls.commonalities.language cannot be resolved for Vitruv 4 -->
+    <!-- <module>operators</module> -->
     <module>testutils</module>
-    <module>commonalities</module>
+    <!-- <module>commonalities</module> -->
+    <module>equivalence</module>
   </modules>
 </project>

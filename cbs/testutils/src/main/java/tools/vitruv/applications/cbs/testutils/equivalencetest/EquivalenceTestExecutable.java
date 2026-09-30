@@ -13,7 +13,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.xtext.xbase.lib.Pair;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -23,15 +22,15 @@ import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor;
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings;
 import tools.vitruv.change.composite.description.PropagatedChange;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
-import tools.vitruv.framework.vsum.VirtualModelBuilder;
+import tools.vitruv.framework.testutils.integration.DefaultVirtualModelBasedTestView;
 import tools.vitruv.change.testutils.TestProjectManager;
 import tools.vitruv.change.testutils.TestUserInteraction;
+import tools.vitruv.change.testutils.printing.PrintMode;
 import tools.vitruv.change.testutils.printing.DefaultPrintIdProvider;
 import tools.vitruv.change.testutils.printing.ModelPrinting;
 import tools.vitruv.change.testutils.printing.PrintIdProvider;
 import tools.vitruv.change.testutils.printing.UriReplacingPrinter;
 import tools.vitruv.change.testutils.views.BasicTestView;
-import tools.vitruv.change.testutils.views.ChangePublishingTestView;
 import tools.vitruv.change.testutils.views.TestView;
 import tools.vitruv.change.testutils.views.UriMode;
 
@@ -104,17 +103,9 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
         Path viewDirectory = testProjectManager.getProject("", extensionContext);
         Path vsumDirectory = testProjectManager.getProject("vsum", extensionContext);
 
-        Collection<ChangePropagationSpecification> changePropagationSpecifications = this.changePropagationSpecifications;
-        TestUserInteraction userInteraction = new TestUserInteraction();
-        var vsum = new VirtualModelBuilder()
-                .withStorageFolder(vsumDirectory)
-                .withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(userInteraction))
-                .withChangePropagationSpecifications(changePropagationSpecifications)
-                .buildAndInitialize();
-
         return new DirectoryTestView(
-                new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum,
-                        (resource, resolver) -> vsum.getUuidResolver()),
+                new DefaultVirtualModelBasedTestView(viewDirectory, vsumDirectory, changePropagationSpecifications,
+                        uriMode),
                 viewDirectory);
     }
 
@@ -170,12 +161,11 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
     }
 
     private AutoCloseable installViewDirectoryUriReplacement(TestView testView, TestView referenceView) {
-        Map<URI, URI> replacements = Map.of(
-                referenceView.getUri(Path.of(".")).appendSegment(""),
-                URI.createFileURI("[reference view]/"),
-                testView.getUri(Path.of(".")).appendSegment(""),
-                URI.createFileURI("[test view]/"));
-        return ModelPrinting.prepend(new UriReplacingPrinter((List<Pair<URI, URI>>) replacements));
+        return ModelPrinting.prepend(new UriReplacingPrinter(List.of(
+                Map.entry(referenceView.getUri(Path.of(".")).appendSegment(""),
+                        URI.createFileURI("[reference view]/")),
+                Map.entry(testView.getUri(Path.of(".")).appendSegment(""),
+                        URI.createFileURI("[test view]/")))));
     }
 
     @Override
@@ -259,55 +249,59 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
         }
 
         @Override
-        public <T extends EObject> T from(Class<T> arg0, URI arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'from'");
+        public Resource resourceAt(URI uri) {
+            return delegate.resourceAt(uri);
         }
 
         @Override
-        public URI getUri(Path arg0) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getUri'");
+        public Resource resourceAt(Path viewRelativePath) {
+            return delegate.resourceAt(viewRelativePath);
+        }
+
+        @Override
+        public <T extends EObject> T from(Class<T> clazz, URI uri) {
+            return delegate.from(clazz, uri);
+        }
+
+        @Override
+        public <T extends EObject> T from(Class<T> clazz, Resource resource) {
+            return delegate.from(clazz, resource);
+        }
+
+        @Override
+        public <T extends EObject> T from(Class<T> clazz, Path viewRelativePath) {
+            return delegate.from(clazz, viewRelativePath);
+        }
+
+        @Override
+        public URI getUri(Path viewRelativePath) {
+            return delegate.getUri(viewRelativePath);
+        }
+
+        @Override
+        public void moveTo(Resource resource, Path newViewRelativePath) {
+            delegate.moveTo(resource, newViewRelativePath);
+        }
+
+        @Override
+        public void moveTo(Resource resource, URI newUri) {
+            delegate.moveTo(resource, newUri);
+        }
+
+        @Override
+        public <T extends Notifier> T record(T notifier, Consumer<T> consumer) {
+            return delegate.record(notifier, consumer);
+        }
+
+        @Override
+        public <T extends Notifier> List<PropagatedChange> propagate(T notifier, Consumer<T> consumer) {
+            return delegate.propagate(notifier, consumer);
         }
 
         @Override
         public TestUserInteraction getUserInteraction() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getUserInteraction'");
+            return delegate.getUserInteraction();
         }
-
-        @Override
-        public void moveTo(Resource arg0, Path arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'moveTo'");
-        }
-
-        @Override
-        public void moveTo(Resource arg0, URI arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'moveTo'");
-        }
-
-        @Override
-        public <T extends Notifier> List<PropagatedChange> propagate(T arg0, Consumer<T> arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'propagate'");
-        }
-
-        @Override
-        public <T extends Notifier> T record(T arg0, Consumer<T> arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'record'");
-        }
-
-        @Override
-        public Resource resourceAt(URI arg0) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'resourceAt'");
-        }
-
-        // Delegate all TestView methods to 'delegate'
-        // ... (implement as needed)
     }
 
     private static class ModelFilesMatcher extends TypeSafeMatcher<DirectoryTestView> {
@@ -326,9 +320,10 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
         @Override
         public void describeTo(Description description) {
-            description.appendText("exactly these resource paths to exist in the test view: ");
-            // Implement appendPrintResult and printSet as needed
-            // description.appendPrintResult(...);
+            ModelPrinting.appendPrintResult(
+                    description.appendText("exactly these resource paths to exist in the test view: "),
+                    target -> target.printSet(referenceFiles, PrintMode.MULTI_LINE_LIST,
+                            (subTarget, path) -> subTarget.print(path.toString())));
         }
 
         @Override
@@ -340,23 +335,31 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
         @Override
         protected void describeMismatchSafely(DirectoryTestView testView, Description mismatchDescription) {
-            Set<Path> missingResources = new LinkedHashSet<>(referenceFiles);
-            missingResources.removeAll(testFiles);
-            Set<Path> unexpectedResources = new LinkedHashSet<>(testFiles);
-            unexpectedResources.removeAll(referenceFiles);
+            Set<Resource> missingResources = new LinkedHashSet<>();
+            for (Path path : referenceFiles) {
+                if (!testFiles.contains(path)) {
+                    missingResources.add(referenceView.resourceAt(path));
+                }
+            }
+            Set<Resource> unexpectedResources = new LinkedHashSet<>();
+            for (Path path : testFiles) {
+                if (!referenceFiles.contains(path)) {
+                    unexpectedResources.add(referenceView.resourceAt(path));
+                }
+            }
 
-            // Map missing/unexpected resources to model values if needed
-            // and append to mismatchDescription using appendModelValueSet
             if (!missingResources.isEmpty()) {
-                mismatchDescription.appendText("the following resources are missing in the test view: ");
-                // mismatchDescription.appendModelValueSet(...);
+                ModelPrinting.appendModelValueSet(
+                        mismatchDescription.appendText("the following resources are missing in the test view: "),
+                        missingResources, PrintMode.MULTI_LINE_LIST, idProvider);
             }
             if (!unexpectedResources.isEmpty()) {
                 if (!missingResources.isEmpty()) {
                     mismatchDescription.appendText(System.lineSeparator()).appendText("    and ");
                 }
-                mismatchDescription.appendText("the test view contains the following unexpected resources: ");
-                // mismatchDescription.appendModelValueSet(...);
+                ModelPrinting.appendModelValueSet(
+                        mismatchDescription.appendText("the test view contains the following unexpected resources: "),
+                        unexpectedResources, PrintMode.MULTI_LINE_LIST, idProvider);
             }
         }
     }

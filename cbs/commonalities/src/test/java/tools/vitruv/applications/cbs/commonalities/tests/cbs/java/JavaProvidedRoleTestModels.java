@@ -22,7 +22,7 @@ public class JavaProvidedRoleTestModels extends JavaTestModelsBase implements Pr
 
     private static Package newJavaComponentPackage() {
         Package componentPackage = ContainersFactory.eINSTANCE.createPackage();
-        componentPackage.setName(COMPONENT_NAME.toLowerCase());
+        componentPackage.setName(Character.toLowerCase(COMPONENT_NAME.charAt(0)) + COMPONENT_NAME.substring(1));
         return componentPackage;
     }
 

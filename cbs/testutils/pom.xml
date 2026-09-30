@@ -8,7 +8,7 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>tools.vitruv.applications.cbs</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>tools.vitruv.applications.cbs.testutils</artifactId>
@@ -68,6 +68,10 @@
     </dependency>
     <dependency>
       <groupId>tools.vitruv</groupId>
+      <artifactId>tools.vitruv.framework.testutils.integration</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
       <artifactId>tools.vitruv.framework.vsum</artifactId>
     </dependency>
 
@@ -77,7 +81,7 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.xtend</groupId>
+      <groupId>org.eclipse.xtext</groupId>
       <artifactId>org.eclipse.xtend.lib</artifactId>
     </dependency>
     <dependency>

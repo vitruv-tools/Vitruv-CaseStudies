@@ -126,7 +126,7 @@ public class JavaCompositeDataTypeTestModels extends JavaTestModelsBase
             // Create datatype class with integer field
             Class datatypeClass = newJavaCompositeDataTypeClass();
             Field field = newJavaElementField();
-            field.setName(COMPOSITE_DATATYPE_1_NAME);
+            field.setName(INTEGER_ELEMENT_NAME);
             field.setTypeReference(TypesFactory.eINSTANCE.createInt());
             datatypeClass.getMembers().add(field);
 
@@ -144,8 +144,22 @@ public class JavaCompositeDataTypeTestModels extends JavaTestModelsBase
 
     @Override
     public DomainModel compositeDataTypeWithDoubleElementCreation() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'compositeDataTypeWithDoubleElementCreation'");
+        return newModel(() -> {
+            JavaRepositoryModel javaRepositoryModel = new JavaRepositoryModel();
+            Package datatypesPackage = javaRepositoryModel.getDatatypesPackage();
+
+            Class datatypeClass = newJavaCompositeDataTypeClass();
+            Field field = newJavaElementField();
+            field.setName(DOUBLE_ELEMENT_NAME);
+            field.setTypeReference(TypesFactory.eINSTANCE.createDouble());
+            datatypeClass.getMembers().add(field);
+
+            CompilationUnit compilationUnit = newCompilationUnit(datatypesPackage, datatypeClass);
+
+            List<EObject> rootObjects = new ArrayList<>(javaRepositoryModel.getRootObjects());
+            rootObjects.add(compilationUnit);
+            return rootObjects;
+        });
     }
 
     @Override
@@ -158,10 +172,10 @@ public class JavaCompositeDataTypeTestModels extends JavaTestModelsBase
             // Create datatype class
             Class datatypeClass = newJavaCompositeDataTypeClass();
 
-            // Create and add double field
+            // Create and add string field
             Field field = newJavaElementField();
-            field.setName(DOUBLE_ELEMENT_NAME);
-            field.setTypeReference(TypesFactory.eINSTANCE.createDouble());
+            field.setName(STRING_ELEMENT_NAME);
+            field.setTypeReference(referenceJamoppType(String.class));
             datatypeClass.getMembers().add(field);
 
             // Create compilation unit

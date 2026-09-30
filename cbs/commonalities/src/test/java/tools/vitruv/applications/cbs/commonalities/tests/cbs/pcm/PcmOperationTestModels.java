@@ -7,7 +7,7 @@ import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import tools.vitruv.applications.cbs.commonalities.pcm.PcmPrimitiveDataType;
+import tools.vitruv.applications.cbs.operators.pcm.PcmPrimitiveDataType;
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.OperationTest;
 import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelHelper;
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel;

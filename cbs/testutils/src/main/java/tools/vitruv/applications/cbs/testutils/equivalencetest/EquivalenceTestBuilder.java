@@ -13,7 +13,7 @@ import tools.vitruv.change.testutils.views.TestView;
  * metamodels
  * and checks that if propagated, the steps lead to the same results.
  */
-interface EquivalenceTestBuilder {
+public interface EquivalenceTestBuilder {
 
     /**
      * Registers a step in the provided {@code metamodel}, executing the provided
