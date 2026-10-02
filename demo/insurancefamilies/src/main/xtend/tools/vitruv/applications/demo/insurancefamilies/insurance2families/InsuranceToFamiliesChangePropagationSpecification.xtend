@@ -1,5 +1,0 @@
-package tools.vitruv.applications.demo.insurancefamilies.insurance2families
-
-class InsuranceToFamiliesChangePropagationSpecification extends mir.reactions.insuranceToFamilies.InsuranceToFamiliesChangePropagationSpecification {
-	
-}
