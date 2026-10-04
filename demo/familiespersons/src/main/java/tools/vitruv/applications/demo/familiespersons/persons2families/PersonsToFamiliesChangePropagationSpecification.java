@@ -1,0 +1,4 @@
+package tools.vitruv.applications.demo.familiespersons.persons2families;
+
+public class PersonsToFamiliesChangePropagationSpecification extends mir.reactions.personsToFamilies.PersonsToFamiliesChangePropagationSpecification {
+}
