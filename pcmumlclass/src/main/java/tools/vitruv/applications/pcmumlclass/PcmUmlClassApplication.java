@@ -3,7 +3,7 @@ package tools.vitruv.applications.pcmumlclass;
 import java.util.HashSet;
 import java.util.Set;
 
-import tools.vitruv.framework.applications.VitruvApplication;
+import tools.vitruv.applications.util.temporary.VitruvApplication;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 
 public class PcmUmlClassApplication implements VitruvApplication {

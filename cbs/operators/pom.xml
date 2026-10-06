@@ -47,10 +47,6 @@
         </dependency>
         <dependency>
             <groupId>tools.vitruv</groupId>
-            <artifactId>tools.vitruv.framework.applications</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.dsls.commonalities.runtime</artifactId>
         </dependency>
         <dependency>
