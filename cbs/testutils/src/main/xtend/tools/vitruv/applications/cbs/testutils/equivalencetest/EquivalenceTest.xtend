@@ -6,7 +6,7 @@ import java.lang.annotation.Target
 import org.junit.jupiter.api.^extension.ExtendWith
 import java.lang.annotation.Inherited
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings
-import tools.vitruv.framework.applications.VitruvApplication
+import tools.vitruv.applications.util.temporary.VitruvApplication
 import tools.vitruv.change.testutils.TestLogging
 
 @Retention(RUNTIME)

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification;
-import tools.vitruv.framework.applications.VitruvApplication;
+import tools.vitruv.applications.util.temporary.VitruvApplication;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 
 public class PcmJavaApplication implements VitruvApplication {
