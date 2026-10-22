@@ -84,6 +84,10 @@ public final class TypeReferenceCorrespondenceHelper {
     }
 
     public static DataType getDataTypeFromTypeReference(final TypeReference typeReference, final EditableCorrespondenceModelView<?> correspondenceModel, final UserInteractor userInteractor, final Repository repo) {
+        // void has no PCM data type: PCM represents it by an absent return type
+        if (typeReference instanceof org.emftext.language.java.types.Void) {
+            return null;
+        }
         DataType type = null;
         if (typeReference instanceof PrimitiveType) {
             type = TypeReferenceCorrespondenceHelper.claimPCMDataTypeForJaMoPPPrimitiveType((PrimitiveType) typeReference);
