@@ -11,14 +11,14 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.emf.common.util.BasicEList
-import tools.mdsd.jamopp.model.java.classifiers.Interface
-import tools.mdsd.jamopp.model.java.containers.ContainersPackage
-import tools.mdsd.jamopp.model.java.members.InterfaceMethod
+import org.emftext.language.java.classifiers.Interface
+import org.emftext.language.java.containers.ContainersPackage
+import org.emftext.language.java.members.InterfaceMethod
 import org.eclipse.emf.ecore.util.EcoreUtil
 
 import "edu.kit.ipd.sdq.metamodels.joana" as joana
 import "edu.kit.ipd.sdq.metamodels.confidentiality4cbse" as c4c
-import "https://mdsd.tools/jamopp/6.0.0/java" as java
+import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: joana2c4c
@@ -186,9 +186,9 @@ routine updateLatticeOfEntryPoints(joana::JOANARoot joanaRoot, joana::Lattice ne
 routine removeDuplicates(joana::Lattice lattice){
 	update{
 		var sortingSet = new HashSet
-		for(flow : lattice.flowrelation){
+		for(flow : lattice.flowrelation.clone){
 			if(!sortingSet.add(flow.^from.iterator.next.name + "." + flow.^to.iterator.next.name)){
-				lattice.flowrelation.remove(flow)
+				EcoreUtil.delete(flow)
 			}
 		}
 	}
@@ -301,7 +301,9 @@ routine removeSingleLevelFromLattice(joana::SecurityLevel level, joana::Lattice 
 				toRemove.add(flow)
 			}
 		}
-		lattice.flowrelation.remove(toRemove)
+		for (flow : toRemove) {
+			EcoreUtil.delete(flow)
+		}
 		updateLatticeOfEntryPoints(lattice.eContainer as JOANARoot, lattice)
 	}
 }
@@ -320,7 +322,9 @@ routine removeLevelFromLattice(c4c::DataSet oldDataSet, joana::Lattice lattice){
 			}
 			
 		}
-		lattice.flowrelation.remove(toRemove)
+		for (flow : toRemove) {
+			EcoreUtil.delete(flow)
+		}
 		updateLatticeOfEntryPoints(lattice.eContainer as JOANARoot, lattice)
 	}
 }
@@ -329,6 +333,7 @@ routine removeCompositeLevelFromLattice(joana::SecurityLevel oldLevel, joana::La
 	update{
 		var fromList = new ArrayList<SecurityLevel>
 		var toList = new ArrayList<SecurityLevel>
+		val toRemove = new HashSet<FlowRelation>
 		for(flow : lattice.flowrelation){
 			if(flow.^from.empty){
 				toList.add(flow.^to.iterator.next)
@@ -337,14 +342,17 @@ routine removeCompositeLevelFromLattice(joana::SecurityLevel oldLevel, joana::La
 			} else {
 				if(flow.^from.iterator.next.name.matches(oldLevel.name)){
 					fromList.add(flow.^to.iterator.next)
-					lattice.flowrelation.remove(flow)
+					toRemove.add(flow)
 				}
 				if(flow.^to.iterator.next.name.matches(oldLevel.name)){
 					toList.add(flow.^from.iterator.next)
-					lattice.flowrelation.remove(flow)
+					toRemove.add(flow)
 				}
 			}
 			
+		}
+		for (flow : toRemove) {
+			EcoreUtil.delete(flow)
 		}
 		for(fromLev : fromList){
 			for(toLev : toList){

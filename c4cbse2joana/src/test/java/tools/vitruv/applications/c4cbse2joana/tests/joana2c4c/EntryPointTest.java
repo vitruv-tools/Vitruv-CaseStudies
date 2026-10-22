@@ -1,8 +1,8 @@
-package joana2confidentiality4cbsemodelpreservation.tests.joana2c4c;
+package tools.vitruv.applications.c4cbse2joana.tests.joana2c4c;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ public class EntryPointTest extends Joana2c4cTestSetup {
 	void entryPointCreationTest() {
 		addEntryPoint();
 		CommittableView view = getCombinedJavaJoanaView();
-		assertEquals(2, getCompilationUnits(getJavaRoot(getJavaView())).get(0).getClassifiers().get(0).getMembers().size());
+		assertEquals(2, getCompilationUnits(getJavaView()).get(0).getClassifiers().get(0).getMembers().size());
 		assertEquals(2, getJoanaRoot(getJoanaView()).getAnnotation().size());
 		assertEquals(2, getJoanaRoot(view).getFlowspecification().size());
 		assertEquals(2, getC4CRoot(getC4CView()).getInformationFlows().size());

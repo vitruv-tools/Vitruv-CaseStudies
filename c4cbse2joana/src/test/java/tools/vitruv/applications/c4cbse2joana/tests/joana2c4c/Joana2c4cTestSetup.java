@@ -1,20 +1,21 @@
-package joana2confidentiality4cbsemodelpreservation.tests.joana2c4c;
+package tools.vitruv.applications.c4cbse2joana.tests.joana2c4c;
 
-import static org.junit.Assert.assertEquals;
+import java.nio.file.Path;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import tools.mdsd.jamopp.model.java.JavaClasspath;
-import tools.mdsd.jamopp.model.java.classifiers.ClassifiersFactory;
-import tools.mdsd.jamopp.model.java.classifiers.Interface;
-import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
-import tools.mdsd.jamopp.model.java.containers.ContainersFactory;
-import tools.mdsd.jamopp.model.java.containers.Package;
-import tools.mdsd.jamopp.model.java.members.InterfaceMethod;
-import tools.mdsd.jamopp.model.java.members.MembersFactory;
-import tools.mdsd.jamopp.model.java.members.Method;
-import tools.mdsd.jamopp.model.java.parameters.OrdinaryParameter;
-import tools.mdsd.jamopp.model.java.parameters.Parameter;
-import tools.mdsd.jamopp.model.java.parameters.ParametersFactory;
+import org.emftext.language.java.JavaClasspath;
+import org.emftext.language.java.classifiers.ClassifiersFactory;
+import org.emftext.language.java.classifiers.Interface;
+import org.emftext.language.java.containers.CompilationUnit;
+import org.emftext.language.java.containers.ContainersFactory;
+import org.emftext.language.java.containers.Package;
+import org.emftext.language.java.members.InterfaceMethod;
+import org.emftext.language.java.members.MembersFactory;
+import org.emftext.language.java.members.Method;
+import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.parameters.Parameter;
+import org.emftext.language.java.parameters.ParametersFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,7 @@ import edu.kit.ipd.sdq.metamodels.joana.JoanaFactory;
 import edu.kit.ipd.sdq.metamodels.joana.SecurityLevel;
 import edu.kit.ipd.sdq.metamodels.joana.Sink;
 import edu.kit.ipd.sdq.metamodels.joana.Source;
+import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper;
 import tools.vitruv.framework.views.CommittableView;
 
 public class Joana2c4cTestSetup extends Joana2c4cTest {
@@ -41,8 +43,7 @@ public class Joana2c4cTestSetup extends Joana2c4cTest {
 	public void testCreateJoanaRoot() {
 		CommittableView view = getJoanaViewWithJOANARoot();
 		assertEquals(1, getJoanaView().getRootObjects().size());
-		//The EcoreUtil Copier prints a second PCM Root here, but it doesn´t cause problems.
-		assertEquals(2, getC4CView().getRootObjects().size());
+		assertEquals(1, getC4CView().getRootObjects().size());
 	}
 	
 	@BeforeEach
@@ -58,19 +59,19 @@ public class Joana2c4cTestSetup extends Joana2c4cTest {
 		CompilationUnit compUnit = ContainersFactory.eINSTANCE.createCompilationUnit();
 		compUnit.setName("TestJava.java");
 		compUnit.getNamespaces().add(MY_ROOT);
-		getCompilationUnits(getJavaRoot(javaView)).add(compUnit);
+		javaView.registerRoot(compUnit, getUri(Path.of(JavaPersistenceHelper.buildJavaFilePath(compUnit))));
 		getUserInteraction().addNextSingleSelection(0);
 		javaView.commitChanges();
 		
 		javaView = getCombinedJavaJoanaView();
-		compUnit = getCompilationUnits(getJavaRoot(javaView)).get(0);
+		compUnit = getCompilationUnits(javaView).get(0);
 		Interface javaInterface = ClassifiersFactory.eINSTANCE.createInterface();
 		javaInterface.setName(MY_INTERFACE);
 		compUnit.getClassifiers().add(javaInterface);
 		javaView.commitChanges();
 		
 		javaView = getCombinedJavaJoanaView();
-		compUnit = getCompilationUnits(getJavaRoot(javaView)).get(0);
+		compUnit = getCompilationUnits(javaView).get(0);
 		javaInterface = (Interface) compUnit.getClassifiers().get(0);
 		InterfaceMethod method = MembersFactory.eINSTANCE.createInterfaceMethod();
 		method.setName(MY_METHOD);
@@ -78,7 +79,7 @@ public class Joana2c4cTestSetup extends Joana2c4cTest {
 		javaView.commitChanges();
 		
 		javaView = getCombinedJavaJoanaView();
-		compUnit = getCompilationUnits(getJavaRoot(javaView)).get(0);
+		compUnit = getCompilationUnits(javaView).get(0);
 		javaInterface = (Interface) compUnit.getClassifiers().get(0);
 		method = (InterfaceMethod) javaInterface.getMembers().get(0);
 		Parameter para = ParametersFactory.eINSTANCE.createOrdinaryParameter();
@@ -93,7 +94,7 @@ public class Joana2c4cTestSetup extends Joana2c4cTest {
 	void setupJoana() {
 		CommittableView view = getCombinedJavaJoanaView();
 		
-		Interface javaInterface = (Interface) getCompilationUnits(getJavaRoot(view)).iterator().next().getClassifiers().iterator().next();
+		Interface javaInterface = (Interface) getCompilationUnits(view).iterator().next().getClassifiers().iterator().next();
 		Method method = (InterfaceMethod) javaInterface.getMethods().iterator().next();
 		OrdinaryParameter para = (OrdinaryParameter) method.getParameters().iterator().next();
 		SecurityLevel level = JoanaFactory.eINSTANCE.createSecurityLevel();
@@ -113,29 +114,29 @@ public class Joana2c4cTestSetup extends Joana2c4cTest {
 		CommittableView view = getCombinedJavaJoanaView();
 		InterfaceMethod method = MembersFactory.eINSTANCE.createInterfaceMethod();
 		method.setName("secondMethod");
-		getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMembers().add(method);
+		getCompilationUnits(view).get(0).getClassifiers().get(0).getMembers().add(method);
 		view.commitChanges();
 		view = getCombinedJavaJoanaView();
-		method = (InterfaceMethod) getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMembers().get(1);
+		method = (InterfaceMethod) getCompilationUnits(view).get(0).getClassifiers().get(0).getMembers().get(1);
 		EntryPoint point = JoanaFactory.eINSTANCE.createEntryPoint();
 		FlowSpecification flow = JoanaFactory.eINSTANCE.createFlowSpecification();
 		flow.setEntrypoint(point);
 		getJoanaRoot(view).getFlowspecification().add(flow);
 		point.setAnnotatedMethod(method);
 		view.commitChanges();
-		assertEquals(2, getCompilationUnits(getJavaRoot(getJavaView())).get(0).getClassifiers().get(0).getMembers().size());
+		assertEquals(2, getCompilationUnits(getJavaView()).get(0).getClassifiers().get(0).getMembers().size());
 	}
 	
 	void addNewSource() {
 		CommittableView view = getCombinedJavaJoanaView();
-		Interface javaInterface = (Interface) getCompilationUnits(getJavaRoot(view)).iterator().next().getClassifiers().iterator().next();
+		Interface javaInterface = (Interface) getCompilationUnits(view).iterator().next().getClassifiers().iterator().next();
 		Method method = (InterfaceMethod) javaInterface.getMethods().iterator().next();
 		Parameter para = ParametersFactory.eINSTANCE.createOrdinaryParameter();
 		para.setName(MY_PARAMETER);
 		method.getParameters().add(para);
 		view.commitChanges();
 		view = getCombinedJavaJoanaView();
-		javaInterface = (Interface) getCompilationUnits(getJavaRoot(view)).iterator().next().getClassifiers().iterator().next();
+		javaInterface = (Interface) getCompilationUnits(view).iterator().next().getClassifiers().iterator().next();
 		method = javaInterface.getMethods().get(0);
 		para = method.getParameters().get(1);
 		Source source = JoanaFactory.eINSTANCE.createSource();

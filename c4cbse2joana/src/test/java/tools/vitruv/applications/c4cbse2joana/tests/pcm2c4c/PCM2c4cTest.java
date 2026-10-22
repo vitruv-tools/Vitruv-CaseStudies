@@ -1,45 +1,47 @@
-package joana2confidentiality4cbsemodelpreservation.tests.pcm2c4c;
+package tools.vitruv.applications.c4cbse2joana.tests.pcm2c4c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Path;
 import java.util.List;
 
-import org.eclipse.xtend.lib.annotations.AccessorType;
-import org.eclipse.xtend.lib.annotations.Accessors;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.ConfidentialitySpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.C4C2joanaChangePropagationSpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.Joana2c4cChangePropagationSpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.PCM2c4cChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.C4C2joanaChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.Joana2c4cChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.PCM2c4cChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.tests.util.MetamodelSetup;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
-import tools.vitruv.testutils.TestViewFactory;
-import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
+import tools.vitruv.framework.testutils.integration.TestViewFactory;
+import tools.vitruv.framework.testutils.integration.ViewBasedVitruvApplicationTest;
 
 public class PCM2c4cTest extends ViewBasedVitruvApplicationTest {
+
+	@BeforeAll
+	public static void registerCaseStudyMetamodels() {
+		MetamodelSetup.registerMetamodels();
+	}
 	
 	TestViewFactory viewFactory;
 
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private static String MODEL_FOLDER_NAME = "model";
+	protected static final String MODEL_FOLDER_NAME = "model";
 
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private static String MODEL_FILE_EXTENSION = "pcm";
+	protected static final String MODEL_FILE_EXTENSION = "pcm";
 
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private static String MODEL_FILE_NAME = "test";
+	protected static final String MODEL_FILE_NAME = "test";
 	
 	@Override
-	protected Iterable<? extends ChangePropagationSpecification> getChangePropagationSpecifications() {
+	protected Iterable<ChangePropagationSpecification> getChangePropagationSpecifications() {
 		return List.of(new Java2PcmChangePropagationSpecification(), 
 				new Joana2c4cChangePropagationSpecification(), 
 				new C4C2joanaChangePropagationSpecification(), 

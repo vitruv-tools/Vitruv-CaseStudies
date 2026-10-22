@@ -2,11 +2,13 @@ import edu.kit.ipd.sdq.metamodels.joana.EntryPoint
 import edu.kit.ipd.sdq.metamodels.joana.Sink
 import edu.kit.ipd.sdq.metamodels.joana.Source
 import edu.kit.ipd.sdq.metamodels.joana.JOANARoot
-import tools.mdsd.jamopp.model.java.containers.ContainersPackage
+import org.emftext.language.java.containers.ContainersPackage
 import org.eclipse.emf.ecore.util.EcoreUtil
 
+import static tools.vitruv.applications.c4cbse2joana.JoanaAnnotationUtil.annotates
+
 import "edu.kit.ipd.sdq.metamodels.joana" as joana
-import "https://mdsd.tools/jamopp/6.0.0/java" as java
+import "http://www.emftext.org/java" as java
 
 reactions: jamopp2joana
 in reaction to changes in java
@@ -82,7 +84,7 @@ reaction ParameterDeleted{
 
 routine deleteConnectedCommentsForMethods(java::NamedElement deletedObject, java::NamedElement container){
 	match {
-		val joanaRoot = retrieve optional joana::JOANARoot corresponding to container.eContainer.eContainer
+		val joanaRoot = retrieve optional joana::JOANARoot corresponding to ContainersPackage.Literals.PACKAGE
 	}
 	update {
 		if(!joanaRoot.empty){
@@ -90,19 +92,19 @@ routine deleteConnectedCommentsForMethods(java::NamedElement deletedObject, java
 			val allSources = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof Source].toList()
 			val allPoints = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof EntryPoint].toList()
 			for(sink : allSinks){
-				if((sink as Sink).annotatedMethod.name.matches(deletedObject.name)){
+				if(annotates((sink as Sink).annotatedMethod, deletedObject)){
 					EcoreUtil.delete(sink)
 					removeCorrespondenceBetween(sink, deletedObject)
 				}
 			}
 			for(source : allSources){
-				if((source as Source).annotatedMethod.name.matches(deletedObject.name)){
+				if(annotates((source as Source).annotatedMethod, deletedObject)){
 					EcoreUtil.delete(source)
 					removeCorrespondenceBetween(source, deletedObject)
 				}
 			}
 			for(point : allPoints){
-				if((point as EntryPoint).annotatedMethod.name.matches(deletedObject.name)){
+				if(annotates((point as EntryPoint).annotatedMethod, deletedObject)){
 					EcoreUtil.delete(point)
 					removeCorrespondenceBetween(point, deletedObject)
 				}
@@ -113,7 +115,7 @@ routine deleteConnectedCommentsForMethods(java::NamedElement deletedObject, java
 
 routine deleteConnectedCommentsForParameters(java::NamedElement deletedObject, java::NamedElement container){
 	match {
-		val joanaRoot = retrieve optional joana::JOANARoot corresponding to container.eContainer.eContainer.eContainer
+		val joanaRoot = retrieve optional joana::JOANARoot corresponding to ContainersPackage.Literals.PACKAGE
 	}
 	update {
 		if(joanaRoot.present){
@@ -121,22 +123,22 @@ routine deleteConnectedCommentsForParameters(java::NamedElement deletedObject, j
 			val allSources = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof Source].toList()
 			val allPoints = joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof EntryPoint].toList()
 			for(sink : allSinks){
-				if((sink as Sink).annotatedParameter.name.matches(deletedObject.name)){
+				if(annotates((sink as Sink).annotatedParameter, deletedObject)){
 					EcoreUtil.delete(sink)
 					removeCorrespondenceBetween(sink, deletedObject)
 				}
 			}
 			for(source : allSources){
-				if((source as Source).annotatedParameter.name.matches(deletedObject.name)){
+				if(annotates((source as Source).annotatedParameter, deletedObject)){
 					EcoreUtil.delete(source)
 					removeCorrespondenceBetween(source, deletedObject)
 				}
 			}
 			for(point : allPoints){
-				if((point as EntryPoint).annotatedMethod.name.matches(container.name)){
+				if((point as EntryPoint).annotatedMethod?.name == container.name){
 					var anotherSinkFound = false
 					for(sink : joanaRoot.get.eResource().allContents.toList.iterator().filter[it instanceof Sink].toList()){
-						if((sink as Sink).annotatedMethod.name.matches(container.name)){
+						if((sink as Sink).annotatedMethod?.name == container.name){
 							anotherSinkFound = true
 						}
 					}

@@ -11,12 +11,12 @@ import java.util.List
 import java.util.stream.Collectors
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.ecore.util.EcoreUtil
-import tools.mdsd.jamopp.model.java.classifiers.Interface
-import tools.mdsd.jamopp.model.java.containers.ContainersPackage
+import org.emftext.language.java.classifiers.Interface
+import org.emftext.language.java.containers.ContainersPackage
 
 import "edu.kit.ipd.sdq.metamodels.joana" as joana
 import "edu.kit.ipd.sdq.metamodels.confidentiality4cbse" as c4c
-import "https://mdsd.tools/jamopp/6.0.0/java" as java
+import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: c4c2joana
@@ -182,7 +182,7 @@ routine removeDuplicates(joana::Lattice lattice){
 		val copyLattice = lattice.flowrelation.clone
 		for(flow : copyLattice){
 			if(!sortingSet.add(flow.^from.iterator.next.name + "." + flow.^to.iterator.next.name)){
-				lattice.flowrelation.remove(flow)
+				EcoreUtil.delete(flow)
 			}
 		}
 		updateLatticeOfEntryPoints(lattice.eContainer as JOANARoot, lattice)
@@ -290,7 +290,9 @@ routine removeLevelFromLattice(c4c::DataSet oldDataSet){
 					
 				}
 			}
-			lattice.flowrelation.removeAll(toBeRemoved)
+			for (flow : toBeRemoved) {
+				EcoreUtil.delete(flow)
+			}
 			joanaRoot.lattice = lattice
 			updateLatticeOfEntryPoints(joanaRoot, lattice)
 		}
@@ -555,9 +557,11 @@ routine deleteEntryPoint(c4c::SignatureInformationFlow deletedFlow){
  * Changes the Tag of the EntryPoint to the new method.
  */
 reaction OpSigOfInformationFlowChanged{
-	after element pcm::OperationSignature inserted in c4c::SignatureInformationFlow[appliedTo]
+	after element pcm::OperationSignature replaced at c4c::SignatureInformationFlow[appliedTo]
 	call{
-		changeTagOfEntryPoint(affectedEObject, newValue)
+		if(newValue !== null){
+			changeTagOfEntryPoint(affectedEObject, newValue)
+		}
 	}
 }
 

@@ -1,3 +1,3 @@
-package tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification;
+package tools.vitruv.applications.c4cbse2joana.changepropagationspecification;
 
 public class C4C2joanaChangePropagationSpecification  extends mir.reactions.c4c2joana.C4c2joanaChangePropagationSpecification {}

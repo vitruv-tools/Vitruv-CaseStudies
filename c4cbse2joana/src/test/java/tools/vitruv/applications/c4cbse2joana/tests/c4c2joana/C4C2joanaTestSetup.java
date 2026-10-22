@@ -1,4 +1,4 @@
-package joana2confidentiality4cbsemodelpreservation.tests.c4c2joana;
+package tools.vitruv.applications.c4cbse2joana.tests.c4c2joana;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,6 +15,7 @@ import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.data.DataSet;
 import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.information.InformationFactory;
 import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.information.ParameterInformation;
 import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.repository.SignatureInformationFlow;
+import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
 import tools.vitruv.framework.views.CommittableView;
 
@@ -35,7 +36,9 @@ public class C4C2joanaTestSetup extends C4C2joanaTest {
 	@Test
 	public void testCreateJoanaRoot() {
 		getC4CViewWithC4CRoot();
-		assertEquals(4, getCombinedJavaJoanaView().getRootObjects().size());
+		var javaJoanaView = getCombinedJavaJoanaView();
+		assertEquals(3, javaJoanaView.getRootObjects(org.emftext.language.java.containers.Package.class).size());
+		assertEquals(1, javaJoanaView.getRootObjects(JOANARoot.class).size());
 		assertEquals(2, getCombinedPCMC4CView().getRootObjects().size());
 	}
 

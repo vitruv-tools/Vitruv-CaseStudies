@@ -1,7 +1,7 @@
-package joana2confidentiality4cbsemodelpreservation.tests.c4c2joana;
+package tools.vitruv.applications.c4cbse2joana.tests.c4c2joana;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.jupiter.api.Disabled;

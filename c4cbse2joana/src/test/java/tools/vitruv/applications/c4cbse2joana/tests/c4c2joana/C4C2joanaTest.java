@@ -1,14 +1,13 @@
-package joana2confidentiality4cbsemodelpreservation.tests.c4c2joana;
+package tools.vitruv.applications.c4cbse2joana.tests.c4c2joana;
 
 import java.nio.file.Path;
 import java.util.List;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.xtend.lib.annotations.AccessorType;
-import org.eclipse.xtend.lib.annotations.Accessors;
 
-import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
-import tools.mdsd.jamopp.model.java.containers.Package;
+import org.emftext.language.java.containers.CompilationUnit;
+import org.emftext.language.java.containers.Package;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
@@ -16,34 +15,37 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory;
 import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.Confidentiality4cbseFactory;
 import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.ConfidentialitySpecification;
 import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.C4C2joanaChangePropagationSpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.Joana2c4cChangePropagationSpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.PCM2c4cChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.C4C2joanaChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.Joana2c4cChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.PCM2c4cChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.tests.util.MetamodelSetup;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.applications.util.temporary.java.JavaSetup;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
-import tools.vitruv.testutils.TestViewFactory;
-import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
+import tools.vitruv.framework.testutils.integration.TestViewFactory;
+import tools.vitruv.framework.testutils.integration.ViewBasedVitruvApplicationTest;
 
 public class C4C2joanaTest extends ViewBasedVitruvApplicationTest {
+
+	@BeforeAll
+	public static void registerCaseStudyMetamodels() {
+		MetamodelSetup.registerMetamodels();
+	}
 	
 	protected TestViewFactory viewFactory;
 
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private static String MODEL_FOLDER_NAME = "model";
+	protected static final String MODEL_FOLDER_NAME = "model";
 
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private static String MODEL_FILE_EXTENSION = "confidentiality4cbse";
+	protected static final String MODEL_FILE_EXTENSION = "confidentiality4cbse";
 
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private static String MODEL_FILE_NAME = "test";
+	protected static final String MODEL_FILE_NAME = "test";
 
 	@Override
-	protected Iterable<? extends ChangePropagationSpecification> getChangePropagationSpecifications() {
+	protected Iterable<ChangePropagationSpecification> getChangePropagationSpecifications() {
 		return List.of(new Java2PcmChangePropagationSpecification(), 
 				new Joana2c4cChangePropagationSpecification(), 
 				new C4C2joanaChangePropagationSpecification(), 
@@ -112,8 +114,8 @@ public class C4C2joanaTest extends ViewBasedVitruvApplicationTest {
 		return null;
 	}
 	
-	protected List<CompilationUnit> getCompilationUnits(Package package1) {
-		return package1.getClassifiers().stream().map(it -> it.getContainingCompilationUnit()).toList();
+	protected List<CompilationUnit> getCompilationUnits(View view) {
+		return List.copyOf(view.getRootObjects(CompilationUnit.class));
 	}
 	
 	protected Package getJavaContracts(View view) {
@@ -153,7 +155,7 @@ public class C4C2joanaTest extends ViewBasedVitruvApplicationTest {
 	
 	
 	protected CommittableView getCombinedJavaJoanaView() {
-		return getView("combined", List.of(JOANARoot.class, Package.class));
+		return getView("combined", List.of(JOANARoot.class, Package.class, CompilationUnit.class));
 	}
 	
 	protected CommittableView getCombinedPCMC4CView() {

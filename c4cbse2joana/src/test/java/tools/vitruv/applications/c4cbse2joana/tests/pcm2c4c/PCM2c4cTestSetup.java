@@ -1,4 +1,4 @@
-package joana2confidentiality4cbsemodelpreservation.tests.pcm2c4c;
+package tools.vitruv.applications.c4cbse2joana.tests.pcm2c4c;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.palladiosimulator.pcm.repository.OperationInterface;

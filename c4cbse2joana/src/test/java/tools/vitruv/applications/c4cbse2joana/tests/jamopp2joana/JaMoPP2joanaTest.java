@@ -1,47 +1,50 @@
-package joana2confidentiality4cbsemodelpreservation.tests.jamopp2joana;
+package tools.vitruv.applications.c4cbse2joana.tests.jamopp2joana;
 
 import java.nio.file.Path;
 import java.util.List;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.xtend.lib.annotations.AccessorType;
-import org.eclipse.xtend.lib.annotations.Accessors;
-import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
-import tools.mdsd.jamopp.model.java.containers.ContainersFactory;
-import tools.mdsd.jamopp.resource.JavaResource2Factory;
-import tools.mdsd.jamopp.model.java.JavaPackage;
+import org.emftext.language.java.containers.CompilationUnit;
+import org.emftext.language.java.containers.ContainersFactory;
+import org.emftext.language.java.resource.JavaSourceOrClassFileResourceFactoryImpl;
+import org.emftext.language.java.JavaPackage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.C4C2joanaChangePropagationSpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.Joana2c4cChangePropagationSpecification;
-import tools.vitruv.applications.joana2c4cbsemodelpreservation.changepropagationspecification.PCM2c4cChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.C4C2joanaChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.JaMoPP2joanaChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.Joana2c4cChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.changepropagationspecification.PCM2c4cChangePropagationSpecification;
+import tools.vitruv.applications.c4cbse2joana.tests.util.MetamodelSetup;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
-import tools.vitruv.testutils.TestViewFactory;
-import tools.vitruv.testutils.ViewBasedVitruvApplicationTest;
+import tools.vitruv.framework.testutils.integration.TestViewFactory;
+import tools.vitruv.framework.testutils.integration.ViewBasedVitruvApplicationTest;
 import tools.vitruv.applications.pcmjava.java2pcm.Java2PcmChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.pcm2java.Pcm2JavaChangePropagationSpecification;
+import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper;
+import tools.vitruv.applications.util.temporary.java.JavaSetup;
 
-import tools.mdsd.jamopp.model.java.containers.Package;
+import org.emftext.language.java.containers.Package;
 
 public class JaMoPP2joanaTest extends ViewBasedVitruvApplicationTest {
+
+	@BeforeAll
+	public static void registerCaseStudyMetamodels() {
+		MetamodelSetup.registerMetamodels();
+	}
 	
 	TestViewFactory viewFactory;
 
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private static String MODEL_FOLDER_NAME = "model";
+	protected static final String MODEL_FOLDER_NAME = "model";
 
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private static String MODEL_FILE_EXTENSION = "java";
+	protected static final String MODEL_FILE_EXTENSION = "java";
 
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private static String MODEL_FILE_NAME = "test";
+	protected static final String MODEL_FILE_NAME = "test";
 	
 	@Override
-	protected Iterable<? extends ChangePropagationSpecification> getChangePropagationSpecifications() {
+	protected Iterable<ChangePropagationSpecification> getChangePropagationSpecifications() {
 		return List.of(new Java2PcmChangePropagationSpecification(), 
 				new Joana2c4cChangePropagationSpecification(), 
 				new C4C2joanaChangePropagationSpecification(), 
@@ -58,7 +61,7 @@ public class JaMoPP2joanaTest extends ViewBasedVitruvApplicationTest {
 	@BeforeAll
 	public static void registerMetamodels() {
 		EPackage.Registry.INSTANCE.put(JavaPackage.eNS_URI, JavaPackage.eINSTANCE);
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(MODEL_FILE_EXTENSION, new JavaResource2Factory());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(MODEL_FILE_EXTENSION, new JavaSourceOrClassFileResourceFactoryImpl());
 	}
 	
 	@BeforeEach
@@ -125,11 +128,11 @@ public class JaMoPP2joanaTest extends ViewBasedVitruvApplicationTest {
 	}
 	
 	protected CommittableView getCombinedJavaJoanaView() {
-		return getView("combined", List.of(JOANARoot.class, Package.class));
+		return getView("combined", List.of(JOANARoot.class, Package.class, CompilationUnit.class));
 	}
 	
-	protected List<CompilationUnit> getCompilationUnits(Package package1) {
-		return package1.getClassifiers().stream().map(it -> it.getContainingCompilationUnit()).toList();
+	protected List<CompilationUnit> getCompilationUnits(View view) {
+		return List.copyOf(view.getRootObjects(CompilationUnit.class));
 	}
 
 }

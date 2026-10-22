@@ -1,6 +1,6 @@
-package joana2confidentiality4cbsemodelpreservation.tests.pcm2c4c;
+package tools.vitruv.applications.c4cbse2joana.tests.pcm2c4c;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.jupiter.api.Test;

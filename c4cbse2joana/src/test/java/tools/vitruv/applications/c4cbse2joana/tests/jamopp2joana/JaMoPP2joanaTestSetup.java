@@ -1,18 +1,20 @@
-package joana2confidentiality4cbsemodelpreservation.tests.jamopp2joana;
+package tools.vitruv.applications.c4cbse2joana.tests.jamopp2joana;
+
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import tools.mdsd.jamopp.model.java.JavaClasspath;
-import tools.mdsd.jamopp.model.java.classifiers.ClassifiersFactory;
-import tools.mdsd.jamopp.model.java.classifiers.Interface;
-import tools.mdsd.jamopp.model.java.containers.CompilationUnit;
-import tools.mdsd.jamopp.model.java.containers.ContainersFactory;
-import tools.mdsd.jamopp.model.java.containers.Package;
-import tools.mdsd.jamopp.model.java.members.InterfaceMethod;
-import tools.mdsd.jamopp.model.java.members.MembersFactory;
-import tools.mdsd.jamopp.model.java.members.Method;
-import tools.mdsd.jamopp.model.java.parameters.Parameter;
-import tools.mdsd.jamopp.model.java.parameters.ParametersFactory;
+import org.emftext.language.java.JavaClasspath;
+import org.emftext.language.java.classifiers.ClassifiersFactory;
+import org.emftext.language.java.classifiers.Interface;
+import org.emftext.language.java.containers.CompilationUnit;
+import org.emftext.language.java.containers.ContainersFactory;
+import org.emftext.language.java.containers.Package;
+import org.emftext.language.java.members.InterfaceMethod;
+import org.emftext.language.java.members.MembersFactory;
+import org.emftext.language.java.members.Method;
+import org.emftext.language.java.parameters.Parameter;
+import org.emftext.language.java.parameters.ParametersFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +24,7 @@ import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
 import edu.kit.ipd.sdq.metamodels.joana.JoanaFactory;
 import edu.kit.ipd.sdq.metamodels.joana.Sink;
 import edu.kit.ipd.sdq.metamodels.joana.Source;
+import tools.vitruv.applications.util.temporary.java.JavaPersistenceHelper;
 import tools.vitruv.framework.views.CommittableView;
 
 public class JaMoPP2joanaTestSetup extends JaMoPP2joanaTest {
@@ -29,7 +32,7 @@ public class JaMoPP2joanaTestSetup extends JaMoPP2joanaTest {
 	@Test
 	public void testCreateJavaRootPackage() {
 		assertEquals(1, getJoanaView().getRootObjects().size());
-		assertEquals(3, getJavaView().getRootObjects().size());
+		assertEquals(3, getJavaView().getRootObjects(Package.class).size());
 	}
 	
 	@BeforeEach
@@ -42,7 +45,7 @@ public class JaMoPP2joanaTestSetup extends JaMoPP2joanaTest {
 		CompilationUnit compUnit = ContainersFactory.eINSTANCE.createCompilationUnit();
 		compUnit.setName("TestJava.java");
 		compUnit.getNamespaces().add("MyRoot");
-		getCompilationUnits(getJavaRoot(javaView)).add(compUnit);
+		javaView.registerRoot(compUnit, getUri(Path.of(JavaPersistenceHelper.buildJavaFilePath(compUnit))));
 		getUserInteraction().addNextSingleSelection(0);
 		InterfaceMethod method = MembersFactory.eINSTANCE.createInterfaceMethod();
 		method.setName("testJava");
@@ -52,7 +55,7 @@ public class JaMoPP2joanaTestSetup extends JaMoPP2joanaTest {
 		javaInterface.getMembers().add(method);
 		Parameter para = ParametersFactory.eINSTANCE.createOrdinaryParameter();
 		para.setName("TestParameter");
-		getCompilationUnits(getJavaRoot(javaView)).iterator().next().getClassifiers().iterator().next().getMethods().iterator().next().getParameters().add(para);
+		getCompilationUnits(javaView).iterator().next().getClassifiers().iterator().next().getMethods().iterator().next().getParameters().add(para);
 		javaView.commitChanges();
 		setupJoana();
 	}
@@ -64,7 +67,7 @@ public class JaMoPP2joanaTestSetup extends JaMoPP2joanaTest {
 		EntryPoint point = JoanaFactory.eINSTANCE.createEntryPoint();
 		FlowSpecification flow = JoanaFactory.eINSTANCE.createFlowSpecification();
 		flow.setEntrypoint(point);
-		Method method = getCompilationUnits(getJavaRoot(getJavaView())).iterator().next().getClassifiers().iterator().next().getMethods().iterator().next();
+		Method method = getCompilationUnits(getJavaView()).iterator().next().getClassifiers().iterator().next().getMethods().iterator().next();
 		sink.setAnnotatedMethod(method);
 		source.setAnnotatedMethod(method);
 		point.setAnnotatedMethod(method);

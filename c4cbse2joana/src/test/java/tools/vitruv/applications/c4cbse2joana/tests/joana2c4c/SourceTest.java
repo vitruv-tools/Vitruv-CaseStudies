@@ -1,12 +1,13 @@
-package joana2confidentiality4cbsemodelpreservation.tests.joana2c4c;
+package tools.vitruv.applications.c4cbse2joana.tests.joana2c4c;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import tools.mdsd.jamopp.model.java.members.InterfaceMethod;
-import tools.mdsd.jamopp.model.java.members.MembersFactory;
-import tools.mdsd.jamopp.model.java.parameters.OrdinaryParameter;
-import tools.mdsd.jamopp.model.java.parameters.ParametersFactory;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.emftext.language.java.members.InterfaceMethod;
+import org.emftext.language.java.members.MembersFactory;
+import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.parameters.ParametersFactory;
 import org.junit.jupiter.api.Test;
 
 import edu.kit.ipd.sdq.metamodels.joana.Annotation;
@@ -59,9 +60,9 @@ public class SourceTest extends Joana2c4cTestSetup{
 		CommittableView view = getCombinedJavaJoanaView();
 		InterfaceMethod method = MembersFactory.eINSTANCE.createInterfaceMethod();
 		method.setName(MY_METHOD);
-		getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMembers().add(method);
+		getCompilationUnits(view).get(0).getClassifiers().get(0).getMembers().add(method);
 		view.commitChanges();
-		method = (InterfaceMethod) getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMethods().get(1);
+		method = (InterfaceMethod) getCompilationUnits(view).get(0).getClassifiers().get(0).getMethods().get(1);
 		assertTrue(method.getName().matches(MY_METHOD));
 		assertEquals(2, getJoanaRoot(view).getAnnotation().size());
 		for(Annotation anno : getJoanaRoot(view).getAnnotation()) {
@@ -83,10 +84,10 @@ public class SourceTest extends Joana2c4cTestSetup{
 		CommittableView view = getCombinedJavaJoanaView();
 		OrdinaryParameter secondPara = ParametersFactory.eINSTANCE.createOrdinaryParameter();
 		secondPara.setName(MY_PARAMETER);
-		((InterfaceMethod) getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMembers().get(0)).getParameters().add(secondPara);
+		((InterfaceMethod) getCompilationUnits(view).get(0).getClassifiers().get(0).getMembers().get(0)).getParameters().add(secondPara);
 		view.commitChanges();
 		view = getCombinedJavaJoanaView();
-		secondPara = (OrdinaryParameter) ((InterfaceMethod) getCompilationUnits(getJavaRoot(view)).get(0).getClassifiers().get(0).getMethods().get(0)).getParameters().get(1);
+		secondPara = (OrdinaryParameter) ((InterfaceMethod) getCompilationUnits(view).get(0).getClassifiers().get(0).getMethods().get(0)).getParameters().get(1);
 		for(Annotation anno : getJoanaRoot(view).getAnnotation()) {
 			if(anno instanceof Source) {
 				
@@ -105,7 +106,7 @@ public class SourceTest extends Joana2c4cTestSetup{
 	void sourceDeletionTest() {
 		CommittableView view = getCombinedJavaJoanaView();
 		
-		getJoanaRoot(view).getAnnotation().remove(1);
+		EcoreUtil.delete(getJoanaRoot(view).getAnnotation().get(1));
 		view.commitChanges();
 		assertEquals(0, getJoanaRoot(getJoanaView()).getAnnotation().size());
 		assertEquals(0, getC4CRoot(getC4CView()).getInformationFlows().get(0).getInformation().size());

@@ -53,11 +53,19 @@
     </dependency>
     <dependency>
       <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.confidentiality4cbse</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
       <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
     </dependency>
     <dependency>
       <groupId>sdq-demo-metamodels</groupId>
       <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>sdq-demo-metamodels</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.joana</artifactId>
     </dependency>
     <dependency>
       <groupId>sdq-demo-metamodels</groupId>

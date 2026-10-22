@@ -1,11 +1,11 @@
-package joana2confidentiality4cbsemodelpreservation.tests.joana2c4c;
+package tools.vitruv.applications.c4cbse2joana.tests.joana2c4c;
 
 import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.ConfidentialitySpecification;
 import edu.kit.ipd.sdq.metamodels.confidentiality4cbse.data.DataSet;
 import edu.kit.ipd.sdq.metamodels.joana.JOANARoot;
 import edu.kit.ipd.sdq.metamodels.joana.JoanaFactory;
 import edu.kit.ipd.sdq.metamodels.joana.SecurityLevel;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
