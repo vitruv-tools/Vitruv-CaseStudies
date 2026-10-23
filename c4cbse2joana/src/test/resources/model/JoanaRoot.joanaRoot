@@ -1,0 +1,1487 @@
+<?xml version="1.0" encoding="ASCII"?>
+<edu.kit.kastel.scbs.pcm2java4joana.joana:JOANARoot xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:edu.kit.kastel.scbs.pcm2java4joana.joana="http://www.example.org/joana" xmlns:members="http://www.emftext.org/java/members" xmlns:parameters="http://www.emftext.org/java/parameters" name="JoanaRoot">
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>AirlineAdministration.setAvailableFlights</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/AirlineAdministration.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>Input.getSingleSelection</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Input.java#//@classifiers.0/@members.1"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>BookingSelection.getFlightOffers</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.1"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>BookingSelection.bookSelected</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>CreditCardConfiguration.setCreditCard</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/CreditCardConfiguration.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>Confirmation.confirmRelease</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Confirmation.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>Booking.bookFlightOffer</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Booking.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>FlightOffers.getFlightOffers</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/FlightOffers.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>Declassification.releaseCCD</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Declassification.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>Comission.payCommission</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Comission.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>AirlineLogging.log</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/AirlineLogging.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <flowspecification>
+    <entrypoint securitylevels="//@securitylevel.0 //@securitylevel.1 //@securitylevel.2 //@securitylevel.3 //@securitylevel.4 //@securitylevel.5 //@securitylevel.6 //@securitylevel.7 //@securitylevel.8 //@securitylevel.9 //@securitylevel.10 //@securitylevel.11 //@securitylevel.12 //@securitylevel.13 //@securitylevel.14 //@securitylevel.15 //@securitylevel.16 //@securitylevel.17 //@securitylevel.18 //@securitylevel.19 //@securitylevel.20 //@securitylevel.21 //@securitylevel.22 //@securitylevel.23 //@securitylevel.24 //@securitylevel.25 //@securitylevel.26 //@securitylevel.27 //@securitylevel.28 //@securitylevel.29 //@securitylevel.30 //@securitylevel.31 //@securitylevel.32 //@securitylevel.33 //@securitylevel.34 //@securitylevel.35 //@securitylevel.36 //@securitylevel.37 //@securitylevel.38 //@securitylevel.39 //@securitylevel.40 //@securitylevel.41 //@securitylevel.42 //@securitylevel.43 //@securitylevel.44 //@securitylevel.45 //@securitylevel.46 //@securitylevel.47 //@securitylevel.48 //@securitylevel.49 //@securitylevel.50 //@securitylevel.51 //@securitylevel.52 //@securitylevel.53 //@securitylevel.54 //@securitylevel.55 //@securitylevel.56 //@securitylevel.57 //@securitylevel.58 //@securitylevel.59 //@securitylevel.60 //@securitylevel.61 //@securitylevel.62 //@securitylevel.63 //@securitylevel.64 //@securitylevel.65 //@securitylevel.66 //@securitylevel.67 //@securitylevel.68 //@securitylevel.69 //@securitylevel.70 //@securitylevel.71 //@securitylevel.72 //@securitylevel.73 //@securitylevel.74 //@securitylevel.75 //@securitylevel.76 //@securitylevel.77 //@securitylevel.78 //@securitylevel.79 //@securitylevel.80 //@securitylevel.81 //@securitylevel.82 //@securitylevel.83 //@securitylevel.84 //@securitylevel.85 //@securitylevel.86 //@securitylevel.87 //@securitylevel.88 //@securitylevel.89 //@securitylevel.90 //@securitylevel.91 //@securitylevel.92 //@securitylevel.93 //@securitylevel.94 //@securitylevel.95 //@securitylevel.96 //@securitylevel.97 //@securitylevel.98 //@securitylevel.99 //@securitylevel.100 //@securitylevel.101 //@securitylevel.102 //@securitylevel.103 //@securitylevel.104 //@securitylevel.105 //@securitylevel.106 //@securitylevel.107 //@securitylevel.108 //@securitylevel.109 //@securitylevel.110 //@securitylevel.111 //@securitylevel.112 //@securitylevel.113 //@securitylevel.114 //@securitylevel.115 //@securitylevel.116 //@securitylevel.117 //@securitylevel.118 //@securitylevel.119 //@securitylevel.120 //@securitylevel.121 //@securitylevel.122 //@securitylevel.123 //@securitylevel.124 //@securitylevel.125 //@securitylevel.126 //@securitylevel.127 //@securitylevel.128 //@securitylevel.129 //@securitylevel.130 //@securitylevel.131 //@securitylevel.132 //@securitylevel.133 //@securitylevel.134 //@securitylevel.135 //@securitylevel.136 //@securitylevel.137 //@securitylevel.138 //@securitylevel.139 //@securitylevel.140 //@securitylevel.141 //@securitylevel.142 //@securitylevel.143 //@securitylevel.144 //@securitylevel.145 //@securitylevel.146 //@securitylevel.147 //@securitylevel.148 //@securitylevel.149 //@securitylevel.150 //@securitylevel.151 //@securitylevel.152 //@securitylevel.153 //@securitylevel.154 //@securitylevel.155 //@securitylevel.156 //@securitylevel.157 //@securitylevel.158 //@securitylevel.159 //@securitylevel.160 //@securitylevel.161 //@securitylevel.162 //@securitylevel.163 //@securitylevel.164 //@securitylevel.165 //@securitylevel.166 //@securitylevel.167 //@securitylevel.168 //@securitylevel.169 //@securitylevel.170 //@securitylevel.171 //@securitylevel.172 //@securitylevel.173 //@securitylevel.174 //@securitylevel.175 //@securitylevel.176 //@securitylevel.177 //@securitylevel.178 //@securitylevel.179 //@securitylevel.180 //@securitylevel.181 //@securitylevel.182 //@securitylevel.183 //@securitylevel.184 //@securitylevel.185 //@securitylevel.186 //@securitylevel.187 //@securitylevel.188 //@securitylevel.189 //@securitylevel.190 //@securitylevel.191 //@securitylevel.192 //@securitylevel.193 //@securitylevel.194 //@securitylevel.195 //@securitylevel.196 //@securitylevel.197 //@securitylevel.198 //@securitylevel.199 //@securitylevel.200 //@securitylevel.201 //@securitylevel.202 //@securitylevel.203 //@securitylevel.204 //@securitylevel.205 //@securitylevel.206 //@securitylevel.207 //@securitylevel.208 //@securitylevel.209 //@securitylevel.210 //@securitylevel.211 //@securitylevel.212 //@securitylevel.213 //@securitylevel.214 //@securitylevel.215 //@securitylevel.216 //@securitylevel.217 //@securitylevel.218 //@securitylevel.219 //@securitylevel.220 //@securitylevel.221 //@securitylevel.222 //@securitylevel.223 //@securitylevel.224 //@securitylevel.225 //@securitylevel.226 //@securitylevel.227 //@securitylevel.228 //@securitylevel.229 //@securitylevel.230 //@securitylevel.231 //@securitylevel.232 //@securitylevel.233 //@securitylevel.234 //@securitylevel.235 //@securitylevel.236 //@securitylevel.237 //@securitylevel.238 //@securitylevel.239 //@securitylevel.240 //@securitylevel.241 //@securitylevel.242 //@securitylevel.243 //@securitylevel.244 //@securitylevel.245 //@securitylevel.246 //@securitylevel.247 //@securitylevel.248 //@securitylevel.249 //@securitylevel.250 //@securitylevel.251 //@securitylevel.252 //@securitylevel.253 //@securitylevel.254" lattice="//@lattice">
+      <tag>UserIdentityConfiguration.setCredentials</tag>
+      <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/UserIdentityConfiguration.java#//@classifiers.0/@members.0"/>
+    </entrypoint>
+  </flowspecification>
+  <lattice>
+    <flowrelation from="//@securitylevel.2" to="//@securitylevel.0"/>
+    <flowrelation from="//@securitylevel.2" to="//@securitylevel.1"/>
+    <flowrelation from="//@securitylevel.6" to="//@securitylevel.4"/>
+    <flowrelation from="//@securitylevel.4" to="//@securitylevel.0"/>
+    <flowrelation from="//@securitylevel.4" to="//@securitylevel.3"/>
+    <flowrelation from="//@securitylevel.6" to="//@securitylevel.5"/>
+    <flowrelation from="//@securitylevel.5" to="//@securitylevel.1"/>
+    <flowrelation from="//@securitylevel.5" to="//@securitylevel.3"/>
+    <flowrelation from="//@securitylevel.10" to="//@securitylevel.8"/>
+    <flowrelation from="//@securitylevel.8" to="//@securitylevel.0"/>
+    <flowrelation from="//@securitylevel.8" to="//@securitylevel.7"/>
+    <flowrelation from="//@securitylevel.10" to="//@securitylevel.9"/>
+    <flowrelation from="//@securitylevel.9" to="//@securitylevel.1"/>
+    <flowrelation from="//@securitylevel.9" to="//@securitylevel.7"/>
+    <flowrelation from="//@securitylevel.14" to="//@securitylevel.12"/>
+    <flowrelation from="//@securitylevel.12" to="//@securitylevel.4"/>
+    <flowrelation from="//@securitylevel.14" to="//@securitylevel.6"/>
+    <flowrelation from="//@securitylevel.12" to="//@securitylevel.8"/>
+    <flowrelation from="//@securitylevel.12" to="//@securitylevel.11"/>
+    <flowrelation from="//@securitylevel.11" to="//@securitylevel.3"/>
+    <flowrelation from="//@securitylevel.11" to="//@securitylevel.7"/>
+    <flowrelation from="//@securitylevel.14" to="//@securitylevel.13"/>
+    <flowrelation from="//@securitylevel.13" to="//@securitylevel.5"/>
+    <flowrelation from="//@securitylevel.13" to="//@securitylevel.9"/>
+    <flowrelation from="//@securitylevel.13" to="//@securitylevel.11"/>
+    <flowrelation from="//@securitylevel.18" to="//@securitylevel.16"/>
+    <flowrelation from="//@securitylevel.16" to="//@securitylevel.0"/>
+    <flowrelation from="//@securitylevel.16" to="//@securitylevel.15"/>
+    <flowrelation from="//@securitylevel.18" to="//@securitylevel.17"/>
+    <flowrelation from="//@securitylevel.17" to="//@securitylevel.1"/>
+    <flowrelation from="//@securitylevel.17" to="//@securitylevel.15"/>
+    <flowrelation from="//@securitylevel.22" to="//@securitylevel.20"/>
+    <flowrelation from="//@securitylevel.20" to="//@securitylevel.4"/>
+    <flowrelation from="//@securitylevel.22" to="//@securitylevel.6"/>
+    <flowrelation from="//@securitylevel.20" to="//@securitylevel.16"/>
+    <flowrelation from="//@securitylevel.20" to="//@securitylevel.19"/>
+    <flowrelation from="//@securitylevel.19" to="//@securitylevel.3"/>
+    <flowrelation from="//@securitylevel.19" to="//@securitylevel.15"/>
+    <flowrelation from="//@securitylevel.22" to="//@securitylevel.21"/>
+    <flowrelation from="//@securitylevel.21" to="//@securitylevel.5"/>
+    <flowrelation from="//@securitylevel.21" to="//@securitylevel.17"/>
+    <flowrelation from="//@securitylevel.21" to="//@securitylevel.19"/>
+    <flowrelation from="//@securitylevel.26" to="//@securitylevel.24"/>
+    <flowrelation from="//@securitylevel.24" to="//@securitylevel.8"/>
+    <flowrelation from="//@securitylevel.26" to="//@securitylevel.10"/>
+    <flowrelation from="//@securitylevel.24" to="//@securitylevel.16"/>
+    <flowrelation from="//@securitylevel.24" to="//@securitylevel.23"/>
+    <flowrelation from="//@securitylevel.23" to="//@securitylevel.7"/>
+    <flowrelation from="//@securitylevel.23" to="//@securitylevel.15"/>
+    <flowrelation from="//@securitylevel.26" to="//@securitylevel.25"/>
+    <flowrelation from="//@securitylevel.25" to="//@securitylevel.9"/>
+    <flowrelation from="//@securitylevel.25" to="//@securitylevel.17"/>
+    <flowrelation from="//@securitylevel.25" to="//@securitylevel.23"/>
+    <flowrelation from="//@securitylevel.30" to="//@securitylevel.28"/>
+    <flowrelation from="//@securitylevel.28" to="//@securitylevel.12"/>
+    <flowrelation from="//@securitylevel.30" to="//@securitylevel.14"/>
+    <flowrelation from="//@securitylevel.28" to="//@securitylevel.20"/>
+    <flowrelation from="//@securitylevel.30" to="//@securitylevel.22"/>
+    <flowrelation from="//@securitylevel.28" to="//@securitylevel.24"/>
+    <flowrelation from="//@securitylevel.28" to="//@securitylevel.27"/>
+    <flowrelation from="//@securitylevel.27" to="//@securitylevel.11"/>
+    <flowrelation from="//@securitylevel.27" to="//@securitylevel.19"/>
+    <flowrelation from="//@securitylevel.27" to="//@securitylevel.23"/>
+    <flowrelation from="//@securitylevel.30" to="//@securitylevel.29"/>
+    <flowrelation from="//@securitylevel.29" to="//@securitylevel.13"/>
+    <flowrelation from="//@securitylevel.29" to="//@securitylevel.21"/>
+    <flowrelation from="//@securitylevel.29" to="//@securitylevel.25"/>
+    <flowrelation from="//@securitylevel.29" to="//@securitylevel.27"/>
+    <flowrelation from="//@securitylevel.34" to="//@securitylevel.32"/>
+    <flowrelation from="//@securitylevel.32" to="//@securitylevel.0"/>
+    <flowrelation from="//@securitylevel.32" to="//@securitylevel.31"/>
+    <flowrelation from="//@securitylevel.34" to="//@securitylevel.33"/>
+    <flowrelation from="//@securitylevel.33" to="//@securitylevel.1"/>
+    <flowrelation from="//@securitylevel.33" to="//@securitylevel.31"/>
+    <flowrelation from="//@securitylevel.38" to="//@securitylevel.36"/>
+    <flowrelation from="//@securitylevel.36" to="//@securitylevel.4"/>
+    <flowrelation from="//@securitylevel.38" to="//@securitylevel.6"/>
+    <flowrelation from="//@securitylevel.36" to="//@securitylevel.32"/>
+    <flowrelation from="//@securitylevel.36" to="//@securitylevel.35"/>
+    <flowrelation from="//@securitylevel.35" to="//@securitylevel.3"/>
+    <flowrelation from="//@securitylevel.35" to="//@securitylevel.31"/>
+    <flowrelation from="//@securitylevel.38" to="//@securitylevel.37"/>
+    <flowrelation from="//@securitylevel.37" to="//@securitylevel.5"/>
+    <flowrelation from="//@securitylevel.37" to="//@securitylevel.33"/>
+    <flowrelation from="//@securitylevel.37" to="//@securitylevel.35"/>
+    <flowrelation from="//@securitylevel.42" to="//@securitylevel.40"/>
+    <flowrelation from="//@securitylevel.40" to="//@securitylevel.8"/>
+    <flowrelation from="//@securitylevel.42" to="//@securitylevel.10"/>
+    <flowrelation from="//@securitylevel.40" to="//@securitylevel.32"/>
+    <flowrelation from="//@securitylevel.40" to="//@securitylevel.39"/>
+    <flowrelation from="//@securitylevel.39" to="//@securitylevel.7"/>
+    <flowrelation from="//@securitylevel.39" to="//@securitylevel.31"/>
+    <flowrelation from="//@securitylevel.42" to="//@securitylevel.41"/>
+    <flowrelation from="//@securitylevel.41" to="//@securitylevel.9"/>
+    <flowrelation from="//@securitylevel.41" to="//@securitylevel.33"/>
+    <flowrelation from="//@securitylevel.41" to="//@securitylevel.39"/>
+    <flowrelation from="//@securitylevel.46" to="//@securitylevel.44"/>
+    <flowrelation from="//@securitylevel.44" to="//@securitylevel.12"/>
+    <flowrelation from="//@securitylevel.46" to="//@securitylevel.14"/>
+    <flowrelation from="//@securitylevel.44" to="//@securitylevel.36"/>
+    <flowrelation from="//@securitylevel.46" to="//@securitylevel.38"/>
+    <flowrelation from="//@securitylevel.44" to="//@securitylevel.40"/>
+    <flowrelation from="//@securitylevel.44" to="//@securitylevel.43"/>
+    <flowrelation from="//@securitylevel.43" to="//@securitylevel.11"/>
+    <flowrelation from="//@securitylevel.43" to="//@securitylevel.35"/>
+    <flowrelation from="//@securitylevel.43" to="//@securitylevel.39"/>
+    <flowrelation from="//@securitylevel.46" to="//@securitylevel.45"/>
+    <flowrelation from="//@securitylevel.45" to="//@securitylevel.13"/>
+    <flowrelation from="//@securitylevel.45" to="//@securitylevel.37"/>
+    <flowrelation from="//@securitylevel.45" to="//@securitylevel.41"/>
+    <flowrelation from="//@securitylevel.45" to="//@securitylevel.43"/>
+    <flowrelation from="//@securitylevel.50" to="//@securitylevel.48"/>
+    <flowrelation from="//@securitylevel.48" to="//@securitylevel.16"/>
+    <flowrelation from="//@securitylevel.50" to="//@securitylevel.18"/>
+    <flowrelation from="//@securitylevel.48" to="//@securitylevel.32"/>
+    <flowrelation from="//@securitylevel.48" to="//@securitylevel.47"/>
+    <flowrelation from="//@securitylevel.47" to="//@securitylevel.15"/>
+    <flowrelation from="//@securitylevel.47" to="//@securitylevel.31"/>
+    <flowrelation from="//@securitylevel.50" to="//@securitylevel.49"/>
+    <flowrelation from="//@securitylevel.49" to="//@securitylevel.17"/>
+    <flowrelation from="//@securitylevel.49" to="//@securitylevel.33"/>
+    <flowrelation from="//@securitylevel.49" to="//@securitylevel.47"/>
+    <flowrelation from="//@securitylevel.54" to="//@securitylevel.52"/>
+    <flowrelation from="//@securitylevel.52" to="//@securitylevel.20"/>
+    <flowrelation from="//@securitylevel.54" to="//@securitylevel.22"/>
+    <flowrelation from="//@securitylevel.52" to="//@securitylevel.36"/>
+    <flowrelation from="//@securitylevel.54" to="//@securitylevel.38"/>
+    <flowrelation from="//@securitylevel.52" to="//@securitylevel.48"/>
+    <flowrelation from="//@securitylevel.52" to="//@securitylevel.51"/>
+    <flowrelation from="//@securitylevel.51" to="//@securitylevel.19"/>
+    <flowrelation from="//@securitylevel.51" to="//@securitylevel.35"/>
+    <flowrelation from="//@securitylevel.51" to="//@securitylevel.47"/>
+    <flowrelation from="//@securitylevel.54" to="//@securitylevel.53"/>
+    <flowrelation from="//@securitylevel.53" to="//@securitylevel.21"/>
+    <flowrelation from="//@securitylevel.53" to="//@securitylevel.37"/>
+    <flowrelation from="//@securitylevel.53" to="//@securitylevel.49"/>
+    <flowrelation from="//@securitylevel.53" to="//@securitylevel.51"/>
+    <flowrelation from="//@securitylevel.58" to="//@securitylevel.56"/>
+    <flowrelation from="//@securitylevel.56" to="//@securitylevel.24"/>
+    <flowrelation from="//@securitylevel.58" to="//@securitylevel.26"/>
+    <flowrelation from="//@securitylevel.56" to="//@securitylevel.40"/>
+    <flowrelation from="//@securitylevel.58" to="//@securitylevel.42"/>
+    <flowrelation from="//@securitylevel.56" to="//@securitylevel.48"/>
+    <flowrelation from="//@securitylevel.56" to="//@securitylevel.55"/>
+    <flowrelation from="//@securitylevel.55" to="//@securitylevel.23"/>
+    <flowrelation from="//@securitylevel.55" to="//@securitylevel.39"/>
+    <flowrelation from="//@securitylevel.55" to="//@securitylevel.47"/>
+    <flowrelation from="//@securitylevel.58" to="//@securitylevel.57"/>
+    <flowrelation from="//@securitylevel.57" to="//@securitylevel.25"/>
+    <flowrelation from="//@securitylevel.57" to="//@securitylevel.41"/>
+    <flowrelation from="//@securitylevel.57" to="//@securitylevel.49"/>
+    <flowrelation from="//@securitylevel.57" to="//@securitylevel.55"/>
+    <flowrelation from="//@securitylevel.62" to="//@securitylevel.60"/>
+    <flowrelation from="//@securitylevel.60" to="//@securitylevel.28"/>
+    <flowrelation from="//@securitylevel.62" to="//@securitylevel.30"/>
+    <flowrelation from="//@securitylevel.60" to="//@securitylevel.44"/>
+    <flowrelation from="//@securitylevel.62" to="//@securitylevel.46"/>
+    <flowrelation from="//@securitylevel.60" to="//@securitylevel.52"/>
+    <flowrelation from="//@securitylevel.62" to="//@securitylevel.54"/>
+    <flowrelation from="//@securitylevel.60" to="//@securitylevel.56"/>
+    <flowrelation from="//@securitylevel.60" to="//@securitylevel.59"/>
+    <flowrelation from="//@securitylevel.59" to="//@securitylevel.27"/>
+    <flowrelation from="//@securitylevel.59" to="//@securitylevel.43"/>
+    <flowrelation from="//@securitylevel.59" to="//@securitylevel.51"/>
+    <flowrelation from="//@securitylevel.59" to="//@securitylevel.55"/>
+    <flowrelation from="//@securitylevel.62" to="//@securitylevel.61"/>
+    <flowrelation from="//@securitylevel.61" to="//@securitylevel.29"/>
+    <flowrelation from="//@securitylevel.61" to="//@securitylevel.45"/>
+    <flowrelation from="//@securitylevel.61" to="//@securitylevel.53"/>
+    <flowrelation from="//@securitylevel.61" to="//@securitylevel.57"/>
+    <flowrelation from="//@securitylevel.61" to="//@securitylevel.59"/>
+    <flowrelation from="//@securitylevel.66" to="//@securitylevel.64"/>
+    <flowrelation from="//@securitylevel.64" to="//@securitylevel.0"/>
+    <flowrelation from="//@securitylevel.64" to="//@securitylevel.63"/>
+    <flowrelation from="//@securitylevel.66" to="//@securitylevel.65"/>
+    <flowrelation from="//@securitylevel.65" to="//@securitylevel.1"/>
+    <flowrelation from="//@securitylevel.65" to="//@securitylevel.63"/>
+    <flowrelation from="//@securitylevel.70" to="//@securitylevel.68"/>
+    <flowrelation from="//@securitylevel.68" to="//@securitylevel.4"/>
+    <flowrelation from="//@securitylevel.70" to="//@securitylevel.6"/>
+    <flowrelation from="//@securitylevel.68" to="//@securitylevel.64"/>
+    <flowrelation from="//@securitylevel.68" to="//@securitylevel.67"/>
+    <flowrelation from="//@securitylevel.67" to="//@securitylevel.3"/>
+    <flowrelation from="//@securitylevel.67" to="//@securitylevel.63"/>
+    <flowrelation from="//@securitylevel.70" to="//@securitylevel.69"/>
+    <flowrelation from="//@securitylevel.69" to="//@securitylevel.5"/>
+    <flowrelation from="//@securitylevel.69" to="//@securitylevel.65"/>
+    <flowrelation from="//@securitylevel.69" to="//@securitylevel.67"/>
+    <flowrelation from="//@securitylevel.74" to="//@securitylevel.72"/>
+    <flowrelation from="//@securitylevel.72" to="//@securitylevel.8"/>
+    <flowrelation from="//@securitylevel.74" to="//@securitylevel.10"/>
+    <flowrelation from="//@securitylevel.72" to="//@securitylevel.64"/>
+    <flowrelation from="//@securitylevel.72" to="//@securitylevel.71"/>
+    <flowrelation from="//@securitylevel.71" to="//@securitylevel.7"/>
+    <flowrelation from="//@securitylevel.71" to="//@securitylevel.63"/>
+    <flowrelation from="//@securitylevel.74" to="//@securitylevel.73"/>
+    <flowrelation from="//@securitylevel.73" to="//@securitylevel.9"/>
+    <flowrelation from="//@securitylevel.73" to="//@securitylevel.65"/>
+    <flowrelation from="//@securitylevel.73" to="//@securitylevel.71"/>
+    <flowrelation from="//@securitylevel.78" to="//@securitylevel.76"/>
+    <flowrelation from="//@securitylevel.76" to="//@securitylevel.12"/>
+    <flowrelation from="//@securitylevel.78" to="//@securitylevel.14"/>
+    <flowrelation from="//@securitylevel.76" to="//@securitylevel.68"/>
+    <flowrelation from="//@securitylevel.78" to="//@securitylevel.70"/>
+    <flowrelation from="//@securitylevel.76" to="//@securitylevel.72"/>
+    <flowrelation from="//@securitylevel.76" to="//@securitylevel.75"/>
+    <flowrelation from="//@securitylevel.75" to="//@securitylevel.11"/>
+    <flowrelation from="//@securitylevel.75" to="//@securitylevel.67"/>
+    <flowrelation from="//@securitylevel.75" to="//@securitylevel.71"/>
+    <flowrelation from="//@securitylevel.78" to="//@securitylevel.77"/>
+    <flowrelation from="//@securitylevel.77" to="//@securitylevel.13"/>
+    <flowrelation from="//@securitylevel.77" to="//@securitylevel.69"/>
+    <flowrelation from="//@securitylevel.77" to="//@securitylevel.73"/>
+    <flowrelation from="//@securitylevel.77" to="//@securitylevel.75"/>
+    <flowrelation from="//@securitylevel.82" to="//@securitylevel.80"/>
+    <flowrelation from="//@securitylevel.80" to="//@securitylevel.16"/>
+    <flowrelation from="//@securitylevel.82" to="//@securitylevel.18"/>
+    <flowrelation from="//@securitylevel.80" to="//@securitylevel.64"/>
+    <flowrelation from="//@securitylevel.80" to="//@securitylevel.79"/>
+    <flowrelation from="//@securitylevel.79" to="//@securitylevel.15"/>
+    <flowrelation from="//@securitylevel.79" to="//@securitylevel.63"/>
+    <flowrelation from="//@securitylevel.82" to="//@securitylevel.81"/>
+    <flowrelation from="//@securitylevel.81" to="//@securitylevel.17"/>
+    <flowrelation from="//@securitylevel.81" to="//@securitylevel.65"/>
+    <flowrelation from="//@securitylevel.81" to="//@securitylevel.79"/>
+    <flowrelation from="//@securitylevel.86" to="//@securitylevel.84"/>
+    <flowrelation from="//@securitylevel.84" to="//@securitylevel.20"/>
+    <flowrelation from="//@securitylevel.86" to="//@securitylevel.22"/>
+    <flowrelation from="//@securitylevel.84" to="//@securitylevel.68"/>
+    <flowrelation from="//@securitylevel.86" to="//@securitylevel.70"/>
+    <flowrelation from="//@securitylevel.84" to="//@securitylevel.80"/>
+    <flowrelation from="//@securitylevel.84" to="//@securitylevel.83"/>
+    <flowrelation from="//@securitylevel.83" to="//@securitylevel.19"/>
+    <flowrelation from="//@securitylevel.83" to="//@securitylevel.67"/>
+    <flowrelation from="//@securitylevel.83" to="//@securitylevel.79"/>
+    <flowrelation from="//@securitylevel.86" to="//@securitylevel.85"/>
+    <flowrelation from="//@securitylevel.85" to="//@securitylevel.21"/>
+    <flowrelation from="//@securitylevel.85" to="//@securitylevel.69"/>
+    <flowrelation from="//@securitylevel.85" to="//@securitylevel.81"/>
+    <flowrelation from="//@securitylevel.85" to="//@securitylevel.83"/>
+    <flowrelation from="//@securitylevel.90" to="//@securitylevel.88"/>
+    <flowrelation from="//@securitylevel.88" to="//@securitylevel.24"/>
+    <flowrelation from="//@securitylevel.90" to="//@securitylevel.26"/>
+    <flowrelation from="//@securitylevel.88" to="//@securitylevel.72"/>
+    <flowrelation from="//@securitylevel.90" to="//@securitylevel.74"/>
+    <flowrelation from="//@securitylevel.88" to="//@securitylevel.80"/>
+    <flowrelation from="//@securitylevel.88" to="//@securitylevel.87"/>
+    <flowrelation from="//@securitylevel.87" to="//@securitylevel.23"/>
+    <flowrelation from="//@securitylevel.87" to="//@securitylevel.71"/>
+    <flowrelation from="//@securitylevel.87" to="//@securitylevel.79"/>
+    <flowrelation from="//@securitylevel.90" to="//@securitylevel.89"/>
+    <flowrelation from="//@securitylevel.89" to="//@securitylevel.25"/>
+    <flowrelation from="//@securitylevel.89" to="//@securitylevel.73"/>
+    <flowrelation from="//@securitylevel.89" to="//@securitylevel.81"/>
+    <flowrelation from="//@securitylevel.89" to="//@securitylevel.87"/>
+    <flowrelation from="//@securitylevel.94" to="//@securitylevel.92"/>
+    <flowrelation from="//@securitylevel.92" to="//@securitylevel.28"/>
+    <flowrelation from="//@securitylevel.94" to="//@securitylevel.30"/>
+    <flowrelation from="//@securitylevel.92" to="//@securitylevel.76"/>
+    <flowrelation from="//@securitylevel.94" to="//@securitylevel.78"/>
+    <flowrelation from="//@securitylevel.92" to="//@securitylevel.84"/>
+    <flowrelation from="//@securitylevel.94" to="//@securitylevel.86"/>
+    <flowrelation from="//@securitylevel.92" to="//@securitylevel.88"/>
+    <flowrelation from="//@securitylevel.92" to="//@securitylevel.91"/>
+    <flowrelation from="//@securitylevel.91" to="//@securitylevel.27"/>
+    <flowrelation from="//@securitylevel.91" to="//@securitylevel.75"/>
+    <flowrelation from="//@securitylevel.91" to="//@securitylevel.83"/>
+    <flowrelation from="//@securitylevel.91" to="//@securitylevel.87"/>
+    <flowrelation from="//@securitylevel.94" to="//@securitylevel.93"/>
+    <flowrelation from="//@securitylevel.93" to="//@securitylevel.29"/>
+    <flowrelation from="//@securitylevel.93" to="//@securitylevel.77"/>
+    <flowrelation from="//@securitylevel.93" to="//@securitylevel.85"/>
+    <flowrelation from="//@securitylevel.93" to="//@securitylevel.89"/>
+    <flowrelation from="//@securitylevel.93" to="//@securitylevel.91"/>
+    <flowrelation from="//@securitylevel.98" to="//@securitylevel.96"/>
+    <flowrelation from="//@securitylevel.96" to="//@securitylevel.32"/>
+    <flowrelation from="//@securitylevel.98" to="//@securitylevel.34"/>
+    <flowrelation from="//@securitylevel.96" to="//@securitylevel.64"/>
+    <flowrelation from="//@securitylevel.96" to="//@securitylevel.95"/>
+    <flowrelation from="//@securitylevel.95" to="//@securitylevel.31"/>
+    <flowrelation from="//@securitylevel.95" to="//@securitylevel.63"/>
+    <flowrelation from="//@securitylevel.98" to="//@securitylevel.97"/>
+    <flowrelation from="//@securitylevel.97" to="//@securitylevel.33"/>
+    <flowrelation from="//@securitylevel.97" to="//@securitylevel.65"/>
+    <flowrelation from="//@securitylevel.97" to="//@securitylevel.95"/>
+    <flowrelation from="//@securitylevel.102" to="//@securitylevel.100"/>
+    <flowrelation from="//@securitylevel.100" to="//@securitylevel.36"/>
+    <flowrelation from="//@securitylevel.102" to="//@securitylevel.38"/>
+    <flowrelation from="//@securitylevel.100" to="//@securitylevel.68"/>
+    <flowrelation from="//@securitylevel.102" to="//@securitylevel.70"/>
+    <flowrelation from="//@securitylevel.100" to="//@securitylevel.96"/>
+    <flowrelation from="//@securitylevel.100" to="//@securitylevel.99"/>
+    <flowrelation from="//@securitylevel.99" to="//@securitylevel.35"/>
+    <flowrelation from="//@securitylevel.99" to="//@securitylevel.67"/>
+    <flowrelation from="//@securitylevel.99" to="//@securitylevel.95"/>
+    <flowrelation from="//@securitylevel.102" to="//@securitylevel.101"/>
+    <flowrelation from="//@securitylevel.101" to="//@securitylevel.37"/>
+    <flowrelation from="//@securitylevel.101" to="//@securitylevel.69"/>
+    <flowrelation from="//@securitylevel.101" to="//@securitylevel.97"/>
+    <flowrelation from="//@securitylevel.101" to="//@securitylevel.99"/>
+    <flowrelation from="//@securitylevel.106" to="//@securitylevel.104"/>
+    <flowrelation from="//@securitylevel.104" to="//@securitylevel.40"/>
+    <flowrelation from="//@securitylevel.106" to="//@securitylevel.42"/>
+    <flowrelation from="//@securitylevel.104" to="//@securitylevel.72"/>
+    <flowrelation from="//@securitylevel.106" to="//@securitylevel.74"/>
+    <flowrelation from="//@securitylevel.104" to="//@securitylevel.96"/>
+    <flowrelation from="//@securitylevel.104" to="//@securitylevel.103"/>
+    <flowrelation from="//@securitylevel.103" to="//@securitylevel.39"/>
+    <flowrelation from="//@securitylevel.103" to="//@securitylevel.71"/>
+    <flowrelation from="//@securitylevel.103" to="//@securitylevel.95"/>
+    <flowrelation from="//@securitylevel.106" to="//@securitylevel.105"/>
+    <flowrelation from="//@securitylevel.105" to="//@securitylevel.41"/>
+    <flowrelation from="//@securitylevel.105" to="//@securitylevel.73"/>
+    <flowrelation from="//@securitylevel.105" to="//@securitylevel.97"/>
+    <flowrelation from="//@securitylevel.105" to="//@securitylevel.103"/>
+    <flowrelation from="//@securitylevel.110" to="//@securitylevel.108"/>
+    <flowrelation from="//@securitylevel.108" to="//@securitylevel.44"/>
+    <flowrelation from="//@securitylevel.110" to="//@securitylevel.46"/>
+    <flowrelation from="//@securitylevel.108" to="//@securitylevel.76"/>
+    <flowrelation from="//@securitylevel.110" to="//@securitylevel.78"/>
+    <flowrelation from="//@securitylevel.108" to="//@securitylevel.100"/>
+    <flowrelation from="//@securitylevel.110" to="//@securitylevel.102"/>
+    <flowrelation from="//@securitylevel.108" to="//@securitylevel.104"/>
+    <flowrelation from="//@securitylevel.108" to="//@securitylevel.107"/>
+    <flowrelation from="//@securitylevel.107" to="//@securitylevel.43"/>
+    <flowrelation from="//@securitylevel.107" to="//@securitylevel.75"/>
+    <flowrelation from="//@securitylevel.107" to="//@securitylevel.99"/>
+    <flowrelation from="//@securitylevel.107" to="//@securitylevel.103"/>
+    <flowrelation from="//@securitylevel.110" to="//@securitylevel.109"/>
+    <flowrelation from="//@securitylevel.109" to="//@securitylevel.45"/>
+    <flowrelation from="//@securitylevel.109" to="//@securitylevel.77"/>
+    <flowrelation from="//@securitylevel.109" to="//@securitylevel.101"/>
+    <flowrelation from="//@securitylevel.109" to="//@securitylevel.105"/>
+    <flowrelation from="//@securitylevel.109" to="//@securitylevel.107"/>
+    <flowrelation from="//@securitylevel.114" to="//@securitylevel.112"/>
+    <flowrelation from="//@securitylevel.112" to="//@securitylevel.48"/>
+    <flowrelation from="//@securitylevel.114" to="//@securitylevel.50"/>
+    <flowrelation from="//@securitylevel.112" to="//@securitylevel.80"/>
+    <flowrelation from="//@securitylevel.114" to="//@securitylevel.82"/>
+    <flowrelation from="//@securitylevel.112" to="//@securitylevel.96"/>
+    <flowrelation from="//@securitylevel.112" to="//@securitylevel.111"/>
+    <flowrelation from="//@securitylevel.111" to="//@securitylevel.47"/>
+    <flowrelation from="//@securitylevel.111" to="//@securitylevel.79"/>
+    <flowrelation from="//@securitylevel.111" to="//@securitylevel.95"/>
+    <flowrelation from="//@securitylevel.114" to="//@securitylevel.113"/>
+    <flowrelation from="//@securitylevel.113" to="//@securitylevel.49"/>
+    <flowrelation from="//@securitylevel.113" to="//@securitylevel.81"/>
+    <flowrelation from="//@securitylevel.113" to="//@securitylevel.97"/>
+    <flowrelation from="//@securitylevel.113" to="//@securitylevel.111"/>
+    <flowrelation from="//@securitylevel.118" to="//@securitylevel.116"/>
+    <flowrelation from="//@securitylevel.116" to="//@securitylevel.52"/>
+    <flowrelation from="//@securitylevel.118" to="//@securitylevel.54"/>
+    <flowrelation from="//@securitylevel.116" to="//@securitylevel.84"/>
+    <flowrelation from="//@securitylevel.118" to="//@securitylevel.86"/>
+    <flowrelation from="//@securitylevel.116" to="//@securitylevel.100"/>
+    <flowrelation from="//@securitylevel.118" to="//@securitylevel.102"/>
+    <flowrelation from="//@securitylevel.116" to="//@securitylevel.112"/>
+    <flowrelation from="//@securitylevel.116" to="//@securitylevel.115"/>
+    <flowrelation from="//@securitylevel.115" to="//@securitylevel.51"/>
+    <flowrelation from="//@securitylevel.115" to="//@securitylevel.83"/>
+    <flowrelation from="//@securitylevel.115" to="//@securitylevel.99"/>
+    <flowrelation from="//@securitylevel.115" to="//@securitylevel.111"/>
+    <flowrelation from="//@securitylevel.118" to="//@securitylevel.117"/>
+    <flowrelation from="//@securitylevel.117" to="//@securitylevel.53"/>
+    <flowrelation from="//@securitylevel.117" to="//@securitylevel.85"/>
+    <flowrelation from="//@securitylevel.117" to="//@securitylevel.101"/>
+    <flowrelation from="//@securitylevel.117" to="//@securitylevel.113"/>
+    <flowrelation from="//@securitylevel.117" to="//@securitylevel.115"/>
+    <flowrelation from="//@securitylevel.122" to="//@securitylevel.120"/>
+    <flowrelation from="//@securitylevel.120" to="//@securitylevel.56"/>
+    <flowrelation from="//@securitylevel.122" to="//@securitylevel.58"/>
+    <flowrelation from="//@securitylevel.120" to="//@securitylevel.88"/>
+    <flowrelation from="//@securitylevel.122" to="//@securitylevel.90"/>
+    <flowrelation from="//@securitylevel.120" to="//@securitylevel.104"/>
+    <flowrelation from="//@securitylevel.122" to="//@securitylevel.106"/>
+    <flowrelation from="//@securitylevel.120" to="//@securitylevel.112"/>
+    <flowrelation from="//@securitylevel.120" to="//@securitylevel.119"/>
+    <flowrelation from="//@securitylevel.119" to="//@securitylevel.55"/>
+    <flowrelation from="//@securitylevel.119" to="//@securitylevel.87"/>
+    <flowrelation from="//@securitylevel.119" to="//@securitylevel.103"/>
+    <flowrelation from="//@securitylevel.119" to="//@securitylevel.111"/>
+    <flowrelation from="//@securitylevel.122" to="//@securitylevel.121"/>
+    <flowrelation from="//@securitylevel.121" to="//@securitylevel.57"/>
+    <flowrelation from="//@securitylevel.121" to="//@securitylevel.89"/>
+    <flowrelation from="//@securitylevel.121" to="//@securitylevel.105"/>
+    <flowrelation from="//@securitylevel.121" to="//@securitylevel.113"/>
+    <flowrelation from="//@securitylevel.121" to="//@securitylevel.119"/>
+    <flowrelation from="//@securitylevel.126" to="//@securitylevel.124"/>
+    <flowrelation from="//@securitylevel.124" to="//@securitylevel.60"/>
+    <flowrelation from="//@securitylevel.126" to="//@securitylevel.62"/>
+    <flowrelation from="//@securitylevel.124" to="//@securitylevel.92"/>
+    <flowrelation from="//@securitylevel.126" to="//@securitylevel.94"/>
+    <flowrelation from="//@securitylevel.124" to="//@securitylevel.108"/>
+    <flowrelation from="//@securitylevel.126" to="//@securitylevel.110"/>
+    <flowrelation from="//@securitylevel.124" to="//@securitylevel.116"/>
+    <flowrelation from="//@securitylevel.126" to="//@securitylevel.118"/>
+    <flowrelation from="//@securitylevel.124" to="//@securitylevel.120"/>
+    <flowrelation from="//@securitylevel.124" to="//@securitylevel.123"/>
+    <flowrelation from="//@securitylevel.123" to="//@securitylevel.59"/>
+    <flowrelation from="//@securitylevel.123" to="//@securitylevel.91"/>
+    <flowrelation from="//@securitylevel.123" to="//@securitylevel.107"/>
+    <flowrelation from="//@securitylevel.123" to="//@securitylevel.115"/>
+    <flowrelation from="//@securitylevel.123" to="//@securitylevel.119"/>
+    <flowrelation from="//@securitylevel.126" to="//@securitylevel.125"/>
+    <flowrelation from="//@securitylevel.125" to="//@securitylevel.61"/>
+    <flowrelation from="//@securitylevel.125" to="//@securitylevel.93"/>
+    <flowrelation from="//@securitylevel.125" to="//@securitylevel.109"/>
+    <flowrelation from="//@securitylevel.125" to="//@securitylevel.117"/>
+    <flowrelation from="//@securitylevel.125" to="//@securitylevel.121"/>
+    <flowrelation from="//@securitylevel.125" to="//@securitylevel.123"/>
+    <flowrelation from="//@securitylevel.130" to="//@securitylevel.128"/>
+    <flowrelation from="//@securitylevel.128" to="//@securitylevel.0"/>
+    <flowrelation from="//@securitylevel.128" to="//@securitylevel.127"/>
+    <flowrelation from="//@securitylevel.130" to="//@securitylevel.129"/>
+    <flowrelation from="//@securitylevel.129" to="//@securitylevel.1"/>
+    <flowrelation from="//@securitylevel.129" to="//@securitylevel.127"/>
+    <flowrelation from="//@securitylevel.134" to="//@securitylevel.132"/>
+    <flowrelation from="//@securitylevel.132" to="//@securitylevel.4"/>
+    <flowrelation from="//@securitylevel.134" to="//@securitylevel.6"/>
+    <flowrelation from="//@securitylevel.132" to="//@securitylevel.128"/>
+    <flowrelation from="//@securitylevel.132" to="//@securitylevel.131"/>
+    <flowrelation from="//@securitylevel.131" to="//@securitylevel.3"/>
+    <flowrelation from="//@securitylevel.131" to="//@securitylevel.127"/>
+    <flowrelation from="//@securitylevel.134" to="//@securitylevel.133"/>
+    <flowrelation from="//@securitylevel.133" to="//@securitylevel.5"/>
+    <flowrelation from="//@securitylevel.133" to="//@securitylevel.129"/>
+    <flowrelation from="//@securitylevel.133" to="//@securitylevel.131"/>
+    <flowrelation from="//@securitylevel.138" to="//@securitylevel.136"/>
+    <flowrelation from="//@securitylevel.136" to="//@securitylevel.8"/>
+    <flowrelation from="//@securitylevel.138" to="//@securitylevel.10"/>
+    <flowrelation from="//@securitylevel.136" to="//@securitylevel.128"/>
+    <flowrelation from="//@securitylevel.136" to="//@securitylevel.135"/>
+    <flowrelation from="//@securitylevel.135" to="//@securitylevel.7"/>
+    <flowrelation from="//@securitylevel.135" to="//@securitylevel.127"/>
+    <flowrelation from="//@securitylevel.138" to="//@securitylevel.137"/>
+    <flowrelation from="//@securitylevel.137" to="//@securitylevel.9"/>
+    <flowrelation from="//@securitylevel.137" to="//@securitylevel.129"/>
+    <flowrelation from="//@securitylevel.137" to="//@securitylevel.135"/>
+    <flowrelation from="//@securitylevel.142" to="//@securitylevel.140"/>
+    <flowrelation from="//@securitylevel.140" to="//@securitylevel.12"/>
+    <flowrelation from="//@securitylevel.142" to="//@securitylevel.14"/>
+    <flowrelation from="//@securitylevel.140" to="//@securitylevel.132"/>
+    <flowrelation from="//@securitylevel.142" to="//@securitylevel.134"/>
+    <flowrelation from="//@securitylevel.140" to="//@securitylevel.136"/>
+    <flowrelation from="//@securitylevel.140" to="//@securitylevel.139"/>
+    <flowrelation from="//@securitylevel.139" to="//@securitylevel.11"/>
+    <flowrelation from="//@securitylevel.139" to="//@securitylevel.131"/>
+    <flowrelation from="//@securitylevel.139" to="//@securitylevel.135"/>
+    <flowrelation from="//@securitylevel.142" to="//@securitylevel.141"/>
+    <flowrelation from="//@securitylevel.141" to="//@securitylevel.13"/>
+    <flowrelation from="//@securitylevel.141" to="//@securitylevel.133"/>
+    <flowrelation from="//@securitylevel.141" to="//@securitylevel.137"/>
+    <flowrelation from="//@securitylevel.141" to="//@securitylevel.139"/>
+    <flowrelation from="//@securitylevel.146" to="//@securitylevel.144"/>
+    <flowrelation from="//@securitylevel.144" to="//@securitylevel.16"/>
+    <flowrelation from="//@securitylevel.146" to="//@securitylevel.18"/>
+    <flowrelation from="//@securitylevel.144" to="//@securitylevel.128"/>
+    <flowrelation from="//@securitylevel.144" to="//@securitylevel.143"/>
+    <flowrelation from="//@securitylevel.143" to="//@securitylevel.15"/>
+    <flowrelation from="//@securitylevel.143" to="//@securitylevel.127"/>
+    <flowrelation from="//@securitylevel.146" to="//@securitylevel.145"/>
+    <flowrelation from="//@securitylevel.145" to="//@securitylevel.17"/>
+    <flowrelation from="//@securitylevel.145" to="//@securitylevel.129"/>
+    <flowrelation from="//@securitylevel.145" to="//@securitylevel.143"/>
+    <flowrelation from="//@securitylevel.150" to="//@securitylevel.148"/>
+    <flowrelation from="//@securitylevel.148" to="//@securitylevel.20"/>
+    <flowrelation from="//@securitylevel.150" to="//@securitylevel.22"/>
+    <flowrelation from="//@securitylevel.148" to="//@securitylevel.132"/>
+    <flowrelation from="//@securitylevel.150" to="//@securitylevel.134"/>
+    <flowrelation from="//@securitylevel.148" to="//@securitylevel.144"/>
+    <flowrelation from="//@securitylevel.148" to="//@securitylevel.147"/>
+    <flowrelation from="//@securitylevel.147" to="//@securitylevel.19"/>
+    <flowrelation from="//@securitylevel.147" to="//@securitylevel.131"/>
+    <flowrelation from="//@securitylevel.147" to="//@securitylevel.143"/>
+    <flowrelation from="//@securitylevel.150" to="//@securitylevel.149"/>
+    <flowrelation from="//@securitylevel.149" to="//@securitylevel.21"/>
+    <flowrelation from="//@securitylevel.149" to="//@securitylevel.133"/>
+    <flowrelation from="//@securitylevel.149" to="//@securitylevel.145"/>
+    <flowrelation from="//@securitylevel.149" to="//@securitylevel.147"/>
+    <flowrelation from="//@securitylevel.154" to="//@securitylevel.152"/>
+    <flowrelation from="//@securitylevel.152" to="//@securitylevel.24"/>
+    <flowrelation from="//@securitylevel.154" to="//@securitylevel.26"/>
+    <flowrelation from="//@securitylevel.152" to="//@securitylevel.136"/>
+    <flowrelation from="//@securitylevel.154" to="//@securitylevel.138"/>
+    <flowrelation from="//@securitylevel.152" to="//@securitylevel.144"/>
+    <flowrelation from="//@securitylevel.152" to="//@securitylevel.151"/>
+    <flowrelation from="//@securitylevel.151" to="//@securitylevel.23"/>
+    <flowrelation from="//@securitylevel.151" to="//@securitylevel.135"/>
+    <flowrelation from="//@securitylevel.151" to="//@securitylevel.143"/>
+    <flowrelation from="//@securitylevel.154" to="//@securitylevel.153"/>
+    <flowrelation from="//@securitylevel.153" to="//@securitylevel.25"/>
+    <flowrelation from="//@securitylevel.153" to="//@securitylevel.137"/>
+    <flowrelation from="//@securitylevel.153" to="//@securitylevel.145"/>
+    <flowrelation from="//@securitylevel.153" to="//@securitylevel.151"/>
+    <flowrelation from="//@securitylevel.158" to="//@securitylevel.156"/>
+    <flowrelation from="//@securitylevel.156" to="//@securitylevel.28"/>
+    <flowrelation from="//@securitylevel.158" to="//@securitylevel.30"/>
+    <flowrelation from="//@securitylevel.156" to="//@securitylevel.140"/>
+    <flowrelation from="//@securitylevel.158" to="//@securitylevel.142"/>
+    <flowrelation from="//@securitylevel.156" to="//@securitylevel.148"/>
+    <flowrelation from="//@securitylevel.158" to="//@securitylevel.150"/>
+    <flowrelation from="//@securitylevel.156" to="//@securitylevel.152"/>
+    <flowrelation from="//@securitylevel.156" to="//@securitylevel.155"/>
+    <flowrelation from="//@securitylevel.155" to="//@securitylevel.27"/>
+    <flowrelation from="//@securitylevel.155" to="//@securitylevel.139"/>
+    <flowrelation from="//@securitylevel.155" to="//@securitylevel.147"/>
+    <flowrelation from="//@securitylevel.155" to="//@securitylevel.151"/>
+    <flowrelation from="//@securitylevel.158" to="//@securitylevel.157"/>
+    <flowrelation from="//@securitylevel.157" to="//@securitylevel.29"/>
+    <flowrelation from="//@securitylevel.157" to="//@securitylevel.141"/>
+    <flowrelation from="//@securitylevel.157" to="//@securitylevel.149"/>
+    <flowrelation from="//@securitylevel.157" to="//@securitylevel.153"/>
+    <flowrelation from="//@securitylevel.157" to="//@securitylevel.155"/>
+    <flowrelation from="//@securitylevel.162" to="//@securitylevel.160"/>
+    <flowrelation from="//@securitylevel.160" to="//@securitylevel.32"/>
+    <flowrelation from="//@securitylevel.162" to="//@securitylevel.34"/>
+    <flowrelation from="//@securitylevel.160" to="//@securitylevel.128"/>
+    <flowrelation from="//@securitylevel.160" to="//@securitylevel.159"/>
+    <flowrelation from="//@securitylevel.159" to="//@securitylevel.31"/>
+    <flowrelation from="//@securitylevel.159" to="//@securitylevel.127"/>
+    <flowrelation from="//@securitylevel.162" to="//@securitylevel.161"/>
+    <flowrelation from="//@securitylevel.161" to="//@securitylevel.33"/>
+    <flowrelation from="//@securitylevel.161" to="//@securitylevel.129"/>
+    <flowrelation from="//@securitylevel.161" to="//@securitylevel.159"/>
+    <flowrelation from="//@securitylevel.166" to="//@securitylevel.164"/>
+    <flowrelation from="//@securitylevel.164" to="//@securitylevel.36"/>
+    <flowrelation from="//@securitylevel.166" to="//@securitylevel.38"/>
+    <flowrelation from="//@securitylevel.164" to="//@securitylevel.132"/>
+    <flowrelation from="//@securitylevel.166" to="//@securitylevel.134"/>
+    <flowrelation from="//@securitylevel.164" to="//@securitylevel.160"/>
+    <flowrelation from="//@securitylevel.164" to="//@securitylevel.163"/>
+    <flowrelation from="//@securitylevel.163" to="//@securitylevel.35"/>
+    <flowrelation from="//@securitylevel.163" to="//@securitylevel.131"/>
+    <flowrelation from="//@securitylevel.163" to="//@securitylevel.159"/>
+    <flowrelation from="//@securitylevel.166" to="//@securitylevel.165"/>
+    <flowrelation from="//@securitylevel.165" to="//@securitylevel.37"/>
+    <flowrelation from="//@securitylevel.165" to="//@securitylevel.133"/>
+    <flowrelation from="//@securitylevel.165" to="//@securitylevel.161"/>
+    <flowrelation from="//@securitylevel.165" to="//@securitylevel.163"/>
+    <flowrelation from="//@securitylevel.170" to="//@securitylevel.168"/>
+    <flowrelation from="//@securitylevel.168" to="//@securitylevel.40"/>
+    <flowrelation from="//@securitylevel.170" to="//@securitylevel.42"/>
+    <flowrelation from="//@securitylevel.168" to="//@securitylevel.136"/>
+    <flowrelation from="//@securitylevel.170" to="//@securitylevel.138"/>
+    <flowrelation from="//@securitylevel.168" to="//@securitylevel.160"/>
+    <flowrelation from="//@securitylevel.168" to="//@securitylevel.167"/>
+    <flowrelation from="//@securitylevel.167" to="//@securitylevel.39"/>
+    <flowrelation from="//@securitylevel.167" to="//@securitylevel.135"/>
+    <flowrelation from="//@securitylevel.167" to="//@securitylevel.159"/>
+    <flowrelation from="//@securitylevel.170" to="//@securitylevel.169"/>
+    <flowrelation from="//@securitylevel.169" to="//@securitylevel.41"/>
+    <flowrelation from="//@securitylevel.169" to="//@securitylevel.137"/>
+    <flowrelation from="//@securitylevel.169" to="//@securitylevel.161"/>
+    <flowrelation from="//@securitylevel.169" to="//@securitylevel.167"/>
+    <flowrelation from="//@securitylevel.174" to="//@securitylevel.172"/>
+    <flowrelation from="//@securitylevel.172" to="//@securitylevel.44"/>
+    <flowrelation from="//@securitylevel.174" to="//@securitylevel.46"/>
+    <flowrelation from="//@securitylevel.172" to="//@securitylevel.140"/>
+    <flowrelation from="//@securitylevel.174" to="//@securitylevel.142"/>
+    <flowrelation from="//@securitylevel.172" to="//@securitylevel.164"/>
+    <flowrelation from="//@securitylevel.174" to="//@securitylevel.166"/>
+    <flowrelation from="//@securitylevel.172" to="//@securitylevel.168"/>
+    <flowrelation from="//@securitylevel.172" to="//@securitylevel.171"/>
+    <flowrelation from="//@securitylevel.171" to="//@securitylevel.43"/>
+    <flowrelation from="//@securitylevel.171" to="//@securitylevel.139"/>
+    <flowrelation from="//@securitylevel.171" to="//@securitylevel.163"/>
+    <flowrelation from="//@securitylevel.171" to="//@securitylevel.167"/>
+    <flowrelation from="//@securitylevel.174" to="//@securitylevel.173"/>
+    <flowrelation from="//@securitylevel.173" to="//@securitylevel.45"/>
+    <flowrelation from="//@securitylevel.173" to="//@securitylevel.141"/>
+    <flowrelation from="//@securitylevel.173" to="//@securitylevel.165"/>
+    <flowrelation from="//@securitylevel.173" to="//@securitylevel.169"/>
+    <flowrelation from="//@securitylevel.173" to="//@securitylevel.171"/>
+    <flowrelation from="//@securitylevel.178" to="//@securitylevel.176"/>
+    <flowrelation from="//@securitylevel.176" to="//@securitylevel.48"/>
+    <flowrelation from="//@securitylevel.178" to="//@securitylevel.50"/>
+    <flowrelation from="//@securitylevel.176" to="//@securitylevel.144"/>
+    <flowrelation from="//@securitylevel.178" to="//@securitylevel.146"/>
+    <flowrelation from="//@securitylevel.176" to="//@securitylevel.160"/>
+    <flowrelation from="//@securitylevel.176" to="//@securitylevel.175"/>
+    <flowrelation from="//@securitylevel.175" to="//@securitylevel.47"/>
+    <flowrelation from="//@securitylevel.175" to="//@securitylevel.143"/>
+    <flowrelation from="//@securitylevel.175" to="//@securitylevel.159"/>
+    <flowrelation from="//@securitylevel.178" to="//@securitylevel.177"/>
+    <flowrelation from="//@securitylevel.177" to="//@securitylevel.49"/>
+    <flowrelation from="//@securitylevel.177" to="//@securitylevel.145"/>
+    <flowrelation from="//@securitylevel.177" to="//@securitylevel.161"/>
+    <flowrelation from="//@securitylevel.177" to="//@securitylevel.175"/>
+    <flowrelation from="//@securitylevel.182" to="//@securitylevel.180"/>
+    <flowrelation from="//@securitylevel.180" to="//@securitylevel.52"/>
+    <flowrelation from="//@securitylevel.182" to="//@securitylevel.54"/>
+    <flowrelation from="//@securitylevel.180" to="//@securitylevel.148"/>
+    <flowrelation from="//@securitylevel.182" to="//@securitylevel.150"/>
+    <flowrelation from="//@securitylevel.180" to="//@securitylevel.164"/>
+    <flowrelation from="//@securitylevel.182" to="//@securitylevel.166"/>
+    <flowrelation from="//@securitylevel.180" to="//@securitylevel.176"/>
+    <flowrelation from="//@securitylevel.180" to="//@securitylevel.179"/>
+    <flowrelation from="//@securitylevel.179" to="//@securitylevel.51"/>
+    <flowrelation from="//@securitylevel.179" to="//@securitylevel.147"/>
+    <flowrelation from="//@securitylevel.179" to="//@securitylevel.163"/>
+    <flowrelation from="//@securitylevel.179" to="//@securitylevel.175"/>
+    <flowrelation from="//@securitylevel.182" to="//@securitylevel.181"/>
+    <flowrelation from="//@securitylevel.181" to="//@securitylevel.53"/>
+    <flowrelation from="//@securitylevel.181" to="//@securitylevel.149"/>
+    <flowrelation from="//@securitylevel.181" to="//@securitylevel.165"/>
+    <flowrelation from="//@securitylevel.181" to="//@securitylevel.177"/>
+    <flowrelation from="//@securitylevel.181" to="//@securitylevel.179"/>
+    <flowrelation from="//@securitylevel.186" to="//@securitylevel.184"/>
+    <flowrelation from="//@securitylevel.184" to="//@securitylevel.56"/>
+    <flowrelation from="//@securitylevel.186" to="//@securitylevel.58"/>
+    <flowrelation from="//@securitylevel.184" to="//@securitylevel.152"/>
+    <flowrelation from="//@securitylevel.186" to="//@securitylevel.154"/>
+    <flowrelation from="//@securitylevel.184" to="//@securitylevel.168"/>
+    <flowrelation from="//@securitylevel.186" to="//@securitylevel.170"/>
+    <flowrelation from="//@securitylevel.184" to="//@securitylevel.176"/>
+    <flowrelation from="//@securitylevel.184" to="//@securitylevel.183"/>
+    <flowrelation from="//@securitylevel.183" to="//@securitylevel.55"/>
+    <flowrelation from="//@securitylevel.183" to="//@securitylevel.151"/>
+    <flowrelation from="//@securitylevel.183" to="//@securitylevel.167"/>
+    <flowrelation from="//@securitylevel.183" to="//@securitylevel.175"/>
+    <flowrelation from="//@securitylevel.186" to="//@securitylevel.185"/>
+    <flowrelation from="//@securitylevel.185" to="//@securitylevel.57"/>
+    <flowrelation from="//@securitylevel.185" to="//@securitylevel.153"/>
+    <flowrelation from="//@securitylevel.185" to="//@securitylevel.169"/>
+    <flowrelation from="//@securitylevel.185" to="//@securitylevel.177"/>
+    <flowrelation from="//@securitylevel.185" to="//@securitylevel.183"/>
+    <flowrelation from="//@securitylevel.190" to="//@securitylevel.188"/>
+    <flowrelation from="//@securitylevel.188" to="//@securitylevel.60"/>
+    <flowrelation from="//@securitylevel.190" to="//@securitylevel.62"/>
+    <flowrelation from="//@securitylevel.188" to="//@securitylevel.156"/>
+    <flowrelation from="//@securitylevel.190" to="//@securitylevel.158"/>
+    <flowrelation from="//@securitylevel.188" to="//@securitylevel.172"/>
+    <flowrelation from="//@securitylevel.190" to="//@securitylevel.174"/>
+    <flowrelation from="//@securitylevel.188" to="//@securitylevel.180"/>
+    <flowrelation from="//@securitylevel.190" to="//@securitylevel.182"/>
+    <flowrelation from="//@securitylevel.188" to="//@securitylevel.184"/>
+    <flowrelation from="//@securitylevel.188" to="//@securitylevel.187"/>
+    <flowrelation from="//@securitylevel.187" to="//@securitylevel.59"/>
+    <flowrelation from="//@securitylevel.187" to="//@securitylevel.155"/>
+    <flowrelation from="//@securitylevel.187" to="//@securitylevel.171"/>
+    <flowrelation from="//@securitylevel.187" to="//@securitylevel.179"/>
+    <flowrelation from="//@securitylevel.187" to="//@securitylevel.183"/>
+    <flowrelation from="//@securitylevel.190" to="//@securitylevel.189"/>
+    <flowrelation from="//@securitylevel.189" to="//@securitylevel.61"/>
+    <flowrelation from="//@securitylevel.189" to="//@securitylevel.157"/>
+    <flowrelation from="//@securitylevel.189" to="//@securitylevel.173"/>
+    <flowrelation from="//@securitylevel.189" to="//@securitylevel.181"/>
+    <flowrelation from="//@securitylevel.189" to="//@securitylevel.185"/>
+    <flowrelation from="//@securitylevel.189" to="//@securitylevel.187"/>
+    <flowrelation from="//@securitylevel.194" to="//@securitylevel.192"/>
+    <flowrelation from="//@securitylevel.192" to="//@securitylevel.64"/>
+    <flowrelation from="//@securitylevel.194" to="//@securitylevel.66"/>
+    <flowrelation from="//@securitylevel.192" to="//@securitylevel.128"/>
+    <flowrelation from="//@securitylevel.192" to="//@securitylevel.191"/>
+    <flowrelation from="//@securitylevel.191" to="//@securitylevel.63"/>
+    <flowrelation from="//@securitylevel.191" to="//@securitylevel.127"/>
+    <flowrelation from="//@securitylevel.194" to="//@securitylevel.193"/>
+    <flowrelation from="//@securitylevel.193" to="//@securitylevel.65"/>
+    <flowrelation from="//@securitylevel.193" to="//@securitylevel.129"/>
+    <flowrelation from="//@securitylevel.193" to="//@securitylevel.191"/>
+    <flowrelation from="//@securitylevel.198" to="//@securitylevel.196"/>
+    <flowrelation from="//@securitylevel.196" to="//@securitylevel.68"/>
+    <flowrelation from="//@securitylevel.198" to="//@securitylevel.70"/>
+    <flowrelation from="//@securitylevel.196" to="//@securitylevel.132"/>
+    <flowrelation from="//@securitylevel.198" to="//@securitylevel.134"/>
+    <flowrelation from="//@securitylevel.196" to="//@securitylevel.192"/>
+    <flowrelation from="//@securitylevel.196" to="//@securitylevel.195"/>
+    <flowrelation from="//@securitylevel.195" to="//@securitylevel.67"/>
+    <flowrelation from="//@securitylevel.195" to="//@securitylevel.131"/>
+    <flowrelation from="//@securitylevel.195" to="//@securitylevel.191"/>
+    <flowrelation from="//@securitylevel.198" to="//@securitylevel.197"/>
+    <flowrelation from="//@securitylevel.197" to="//@securitylevel.69"/>
+    <flowrelation from="//@securitylevel.197" to="//@securitylevel.133"/>
+    <flowrelation from="//@securitylevel.197" to="//@securitylevel.193"/>
+    <flowrelation from="//@securitylevel.197" to="//@securitylevel.195"/>
+    <flowrelation from="//@securitylevel.202" to="//@securitylevel.200"/>
+    <flowrelation from="//@securitylevel.200" to="//@securitylevel.72"/>
+    <flowrelation from="//@securitylevel.202" to="//@securitylevel.74"/>
+    <flowrelation from="//@securitylevel.200" to="//@securitylevel.136"/>
+    <flowrelation from="//@securitylevel.202" to="//@securitylevel.138"/>
+    <flowrelation from="//@securitylevel.200" to="//@securitylevel.192"/>
+    <flowrelation from="//@securitylevel.200" to="//@securitylevel.199"/>
+    <flowrelation from="//@securitylevel.199" to="//@securitylevel.71"/>
+    <flowrelation from="//@securitylevel.199" to="//@securitylevel.135"/>
+    <flowrelation from="//@securitylevel.199" to="//@securitylevel.191"/>
+    <flowrelation from="//@securitylevel.202" to="//@securitylevel.201"/>
+    <flowrelation from="//@securitylevel.201" to="//@securitylevel.73"/>
+    <flowrelation from="//@securitylevel.201" to="//@securitylevel.137"/>
+    <flowrelation from="//@securitylevel.201" to="//@securitylevel.193"/>
+    <flowrelation from="//@securitylevel.201" to="//@securitylevel.199"/>
+    <flowrelation from="//@securitylevel.206" to="//@securitylevel.204"/>
+    <flowrelation from="//@securitylevel.204" to="//@securitylevel.76"/>
+    <flowrelation from="//@securitylevel.206" to="//@securitylevel.78"/>
+    <flowrelation from="//@securitylevel.204" to="//@securitylevel.140"/>
+    <flowrelation from="//@securitylevel.206" to="//@securitylevel.142"/>
+    <flowrelation from="//@securitylevel.204" to="//@securitylevel.196"/>
+    <flowrelation from="//@securitylevel.206" to="//@securitylevel.198"/>
+    <flowrelation from="//@securitylevel.204" to="//@securitylevel.200"/>
+    <flowrelation from="//@securitylevel.204" to="//@securitylevel.203"/>
+    <flowrelation from="//@securitylevel.203" to="//@securitylevel.75"/>
+    <flowrelation from="//@securitylevel.203" to="//@securitylevel.139"/>
+    <flowrelation from="//@securitylevel.203" to="//@securitylevel.195"/>
+    <flowrelation from="//@securitylevel.203" to="//@securitylevel.199"/>
+    <flowrelation from="//@securitylevel.206" to="//@securitylevel.205"/>
+    <flowrelation from="//@securitylevel.205" to="//@securitylevel.77"/>
+    <flowrelation from="//@securitylevel.205" to="//@securitylevel.141"/>
+    <flowrelation from="//@securitylevel.205" to="//@securitylevel.197"/>
+    <flowrelation from="//@securitylevel.205" to="//@securitylevel.201"/>
+    <flowrelation from="//@securitylevel.205" to="//@securitylevel.203"/>
+    <flowrelation from="//@securitylevel.210" to="//@securitylevel.208"/>
+    <flowrelation from="//@securitylevel.208" to="//@securitylevel.80"/>
+    <flowrelation from="//@securitylevel.210" to="//@securitylevel.82"/>
+    <flowrelation from="//@securitylevel.208" to="//@securitylevel.144"/>
+    <flowrelation from="//@securitylevel.210" to="//@securitylevel.146"/>
+    <flowrelation from="//@securitylevel.208" to="//@securitylevel.192"/>
+    <flowrelation from="//@securitylevel.208" to="//@securitylevel.207"/>
+    <flowrelation from="//@securitylevel.207" to="//@securitylevel.79"/>
+    <flowrelation from="//@securitylevel.207" to="//@securitylevel.143"/>
+    <flowrelation from="//@securitylevel.207" to="//@securitylevel.191"/>
+    <flowrelation from="//@securitylevel.210" to="//@securitylevel.209"/>
+    <flowrelation from="//@securitylevel.209" to="//@securitylevel.81"/>
+    <flowrelation from="//@securitylevel.209" to="//@securitylevel.145"/>
+    <flowrelation from="//@securitylevel.209" to="//@securitylevel.193"/>
+    <flowrelation from="//@securitylevel.209" to="//@securitylevel.207"/>
+    <flowrelation from="//@securitylevel.214" to="//@securitylevel.212"/>
+    <flowrelation from="//@securitylevel.212" to="//@securitylevel.84"/>
+    <flowrelation from="//@securitylevel.214" to="//@securitylevel.86"/>
+    <flowrelation from="//@securitylevel.212" to="//@securitylevel.148"/>
+    <flowrelation from="//@securitylevel.214" to="//@securitylevel.150"/>
+    <flowrelation from="//@securitylevel.212" to="//@securitylevel.196"/>
+    <flowrelation from="//@securitylevel.214" to="//@securitylevel.198"/>
+    <flowrelation from="//@securitylevel.212" to="//@securitylevel.208"/>
+    <flowrelation from="//@securitylevel.212" to="//@securitylevel.211"/>
+    <flowrelation from="//@securitylevel.211" to="//@securitylevel.83"/>
+    <flowrelation from="//@securitylevel.211" to="//@securitylevel.147"/>
+    <flowrelation from="//@securitylevel.211" to="//@securitylevel.195"/>
+    <flowrelation from="//@securitylevel.211" to="//@securitylevel.207"/>
+    <flowrelation from="//@securitylevel.214" to="//@securitylevel.213"/>
+    <flowrelation from="//@securitylevel.213" to="//@securitylevel.85"/>
+    <flowrelation from="//@securitylevel.213" to="//@securitylevel.149"/>
+    <flowrelation from="//@securitylevel.213" to="//@securitylevel.197"/>
+    <flowrelation from="//@securitylevel.213" to="//@securitylevel.209"/>
+    <flowrelation from="//@securitylevel.213" to="//@securitylevel.211"/>
+    <flowrelation from="//@securitylevel.218" to="//@securitylevel.216"/>
+    <flowrelation from="//@securitylevel.216" to="//@securitylevel.88"/>
+    <flowrelation from="//@securitylevel.218" to="//@securitylevel.90"/>
+    <flowrelation from="//@securitylevel.216" to="//@securitylevel.152"/>
+    <flowrelation from="//@securitylevel.218" to="//@securitylevel.154"/>
+    <flowrelation from="//@securitylevel.216" to="//@securitylevel.200"/>
+    <flowrelation from="//@securitylevel.218" to="//@securitylevel.202"/>
+    <flowrelation from="//@securitylevel.216" to="//@securitylevel.208"/>
+    <flowrelation from="//@securitylevel.216" to="//@securitylevel.215"/>
+    <flowrelation from="//@securitylevel.215" to="//@securitylevel.87"/>
+    <flowrelation from="//@securitylevel.215" to="//@securitylevel.151"/>
+    <flowrelation from="//@securitylevel.215" to="//@securitylevel.199"/>
+    <flowrelation from="//@securitylevel.215" to="//@securitylevel.207"/>
+    <flowrelation from="//@securitylevel.218" to="//@securitylevel.217"/>
+    <flowrelation from="//@securitylevel.217" to="//@securitylevel.89"/>
+    <flowrelation from="//@securitylevel.217" to="//@securitylevel.153"/>
+    <flowrelation from="//@securitylevel.217" to="//@securitylevel.201"/>
+    <flowrelation from="//@securitylevel.217" to="//@securitylevel.209"/>
+    <flowrelation from="//@securitylevel.217" to="//@securitylevel.215"/>
+    <flowrelation from="//@securitylevel.222" to="//@securitylevel.220"/>
+    <flowrelation from="//@securitylevel.220" to="//@securitylevel.92"/>
+    <flowrelation from="//@securitylevel.222" to="//@securitylevel.94"/>
+    <flowrelation from="//@securitylevel.220" to="//@securitylevel.156"/>
+    <flowrelation from="//@securitylevel.222" to="//@securitylevel.158"/>
+    <flowrelation from="//@securitylevel.220" to="//@securitylevel.204"/>
+    <flowrelation from="//@securitylevel.222" to="//@securitylevel.206"/>
+    <flowrelation from="//@securitylevel.220" to="//@securitylevel.212"/>
+    <flowrelation from="//@securitylevel.222" to="//@securitylevel.214"/>
+    <flowrelation from="//@securitylevel.220" to="//@securitylevel.216"/>
+    <flowrelation from="//@securitylevel.220" to="//@securitylevel.219"/>
+    <flowrelation from="//@securitylevel.219" to="//@securitylevel.91"/>
+    <flowrelation from="//@securitylevel.219" to="//@securitylevel.155"/>
+    <flowrelation from="//@securitylevel.219" to="//@securitylevel.203"/>
+    <flowrelation from="//@securitylevel.219" to="//@securitylevel.211"/>
+    <flowrelation from="//@securitylevel.219" to="//@securitylevel.215"/>
+    <flowrelation from="//@securitylevel.222" to="//@securitylevel.221"/>
+    <flowrelation from="//@securitylevel.221" to="//@securitylevel.93"/>
+    <flowrelation from="//@securitylevel.221" to="//@securitylevel.157"/>
+    <flowrelation from="//@securitylevel.221" to="//@securitylevel.205"/>
+    <flowrelation from="//@securitylevel.221" to="//@securitylevel.213"/>
+    <flowrelation from="//@securitylevel.221" to="//@securitylevel.217"/>
+    <flowrelation from="//@securitylevel.221" to="//@securitylevel.219"/>
+    <flowrelation from="//@securitylevel.226" to="//@securitylevel.224"/>
+    <flowrelation from="//@securitylevel.224" to="//@securitylevel.96"/>
+    <flowrelation from="//@securitylevel.226" to="//@securitylevel.98"/>
+    <flowrelation from="//@securitylevel.224" to="//@securitylevel.160"/>
+    <flowrelation from="//@securitylevel.226" to="//@securitylevel.162"/>
+    <flowrelation from="//@securitylevel.224" to="//@securitylevel.192"/>
+    <flowrelation from="//@securitylevel.224" to="//@securitylevel.223"/>
+    <flowrelation from="//@securitylevel.223" to="//@securitylevel.95"/>
+    <flowrelation from="//@securitylevel.223" to="//@securitylevel.159"/>
+    <flowrelation from="//@securitylevel.223" to="//@securitylevel.191"/>
+    <flowrelation from="//@securitylevel.226" to="//@securitylevel.225"/>
+    <flowrelation from="//@securitylevel.225" to="//@securitylevel.97"/>
+    <flowrelation from="//@securitylevel.225" to="//@securitylevel.161"/>
+    <flowrelation from="//@securitylevel.225" to="//@securitylevel.193"/>
+    <flowrelation from="//@securitylevel.225" to="//@securitylevel.223"/>
+    <flowrelation from="//@securitylevel.230" to="//@securitylevel.228"/>
+    <flowrelation from="//@securitylevel.228" to="//@securitylevel.100"/>
+    <flowrelation from="//@securitylevel.230" to="//@securitylevel.102"/>
+    <flowrelation from="//@securitylevel.228" to="//@securitylevel.164"/>
+    <flowrelation from="//@securitylevel.230" to="//@securitylevel.166"/>
+    <flowrelation from="//@securitylevel.228" to="//@securitylevel.196"/>
+    <flowrelation from="//@securitylevel.230" to="//@securitylevel.198"/>
+    <flowrelation from="//@securitylevel.228" to="//@securitylevel.224"/>
+    <flowrelation from="//@securitylevel.228" to="//@securitylevel.227"/>
+    <flowrelation from="//@securitylevel.227" to="//@securitylevel.99"/>
+    <flowrelation from="//@securitylevel.227" to="//@securitylevel.163"/>
+    <flowrelation from="//@securitylevel.227" to="//@securitylevel.195"/>
+    <flowrelation from="//@securitylevel.227" to="//@securitylevel.223"/>
+    <flowrelation from="//@securitylevel.230" to="//@securitylevel.229"/>
+    <flowrelation from="//@securitylevel.229" to="//@securitylevel.101"/>
+    <flowrelation from="//@securitylevel.229" to="//@securitylevel.165"/>
+    <flowrelation from="//@securitylevel.229" to="//@securitylevel.197"/>
+    <flowrelation from="//@securitylevel.229" to="//@securitylevel.225"/>
+    <flowrelation from="//@securitylevel.229" to="//@securitylevel.227"/>
+    <flowrelation from="//@securitylevel.234" to="//@securitylevel.232"/>
+    <flowrelation from="//@securitylevel.232" to="//@securitylevel.104"/>
+    <flowrelation from="//@securitylevel.234" to="//@securitylevel.106"/>
+    <flowrelation from="//@securitylevel.232" to="//@securitylevel.168"/>
+    <flowrelation from="//@securitylevel.234" to="//@securitylevel.170"/>
+    <flowrelation from="//@securitylevel.232" to="//@securitylevel.200"/>
+    <flowrelation from="//@securitylevel.234" to="//@securitylevel.202"/>
+    <flowrelation from="//@securitylevel.232" to="//@securitylevel.224"/>
+    <flowrelation from="//@securitylevel.232" to="//@securitylevel.231"/>
+    <flowrelation from="//@securitylevel.231" to="//@securitylevel.103"/>
+    <flowrelation from="//@securitylevel.231" to="//@securitylevel.167"/>
+    <flowrelation from="//@securitylevel.231" to="//@securitylevel.199"/>
+    <flowrelation from="//@securitylevel.231" to="//@securitylevel.223"/>
+    <flowrelation from="//@securitylevel.234" to="//@securitylevel.233"/>
+    <flowrelation from="//@securitylevel.233" to="//@securitylevel.105"/>
+    <flowrelation from="//@securitylevel.233" to="//@securitylevel.169"/>
+    <flowrelation from="//@securitylevel.233" to="//@securitylevel.201"/>
+    <flowrelation from="//@securitylevel.233" to="//@securitylevel.225"/>
+    <flowrelation from="//@securitylevel.233" to="//@securitylevel.231"/>
+    <flowrelation from="//@securitylevel.238" to="//@securitylevel.236"/>
+    <flowrelation from="//@securitylevel.236" to="//@securitylevel.108"/>
+    <flowrelation from="//@securitylevel.238" to="//@securitylevel.110"/>
+    <flowrelation from="//@securitylevel.236" to="//@securitylevel.172"/>
+    <flowrelation from="//@securitylevel.238" to="//@securitylevel.174"/>
+    <flowrelation from="//@securitylevel.236" to="//@securitylevel.204"/>
+    <flowrelation from="//@securitylevel.238" to="//@securitylevel.206"/>
+    <flowrelation from="//@securitylevel.236" to="//@securitylevel.228"/>
+    <flowrelation from="//@securitylevel.238" to="//@securitylevel.230"/>
+    <flowrelation from="//@securitylevel.236" to="//@securitylevel.232"/>
+    <flowrelation from="//@securitylevel.236" to="//@securitylevel.235"/>
+    <flowrelation from="//@securitylevel.235" to="//@securitylevel.107"/>
+    <flowrelation from="//@securitylevel.235" to="//@securitylevel.171"/>
+    <flowrelation from="//@securitylevel.235" to="//@securitylevel.203"/>
+    <flowrelation from="//@securitylevel.235" to="//@securitylevel.227"/>
+    <flowrelation from="//@securitylevel.235" to="//@securitylevel.231"/>
+    <flowrelation from="//@securitylevel.238" to="//@securitylevel.237"/>
+    <flowrelation from="//@securitylevel.237" to="//@securitylevel.109"/>
+    <flowrelation from="//@securitylevel.237" to="//@securitylevel.173"/>
+    <flowrelation from="//@securitylevel.237" to="//@securitylevel.205"/>
+    <flowrelation from="//@securitylevel.237" to="//@securitylevel.229"/>
+    <flowrelation from="//@securitylevel.237" to="//@securitylevel.233"/>
+    <flowrelation from="//@securitylevel.237" to="//@securitylevel.235"/>
+    <flowrelation from="//@securitylevel.242" to="//@securitylevel.240"/>
+    <flowrelation from="//@securitylevel.240" to="//@securitylevel.112"/>
+    <flowrelation from="//@securitylevel.242" to="//@securitylevel.114"/>
+    <flowrelation from="//@securitylevel.240" to="//@securitylevel.176"/>
+    <flowrelation from="//@securitylevel.242" to="//@securitylevel.178"/>
+    <flowrelation from="//@securitylevel.240" to="//@securitylevel.208"/>
+    <flowrelation from="//@securitylevel.242" to="//@securitylevel.210"/>
+    <flowrelation from="//@securitylevel.240" to="//@securitylevel.224"/>
+    <flowrelation from="//@securitylevel.240" to="//@securitylevel.239"/>
+    <flowrelation from="//@securitylevel.239" to="//@securitylevel.111"/>
+    <flowrelation from="//@securitylevel.239" to="//@securitylevel.175"/>
+    <flowrelation from="//@securitylevel.239" to="//@securitylevel.207"/>
+    <flowrelation from="//@securitylevel.239" to="//@securitylevel.223"/>
+    <flowrelation from="//@securitylevel.242" to="//@securitylevel.241"/>
+    <flowrelation from="//@securitylevel.241" to="//@securitylevel.113"/>
+    <flowrelation from="//@securitylevel.241" to="//@securitylevel.177"/>
+    <flowrelation from="//@securitylevel.241" to="//@securitylevel.209"/>
+    <flowrelation from="//@securitylevel.241" to="//@securitylevel.225"/>
+    <flowrelation from="//@securitylevel.241" to="//@securitylevel.239"/>
+    <flowrelation from="//@securitylevel.246" to="//@securitylevel.244"/>
+    <flowrelation from="//@securitylevel.244" to="//@securitylevel.116"/>
+    <flowrelation from="//@securitylevel.246" to="//@securitylevel.118"/>
+    <flowrelation from="//@securitylevel.244" to="//@securitylevel.180"/>
+    <flowrelation from="//@securitylevel.246" to="//@securitylevel.182"/>
+    <flowrelation from="//@securitylevel.244" to="//@securitylevel.212"/>
+    <flowrelation from="//@securitylevel.246" to="//@securitylevel.214"/>
+    <flowrelation from="//@securitylevel.244" to="//@securitylevel.228"/>
+    <flowrelation from="//@securitylevel.246" to="//@securitylevel.230"/>
+    <flowrelation from="//@securitylevel.244" to="//@securitylevel.240"/>
+    <flowrelation from="//@securitylevel.244" to="//@securitylevel.243"/>
+    <flowrelation from="//@securitylevel.243" to="//@securitylevel.115"/>
+    <flowrelation from="//@securitylevel.243" to="//@securitylevel.179"/>
+    <flowrelation from="//@securitylevel.243" to="//@securitylevel.211"/>
+    <flowrelation from="//@securitylevel.243" to="//@securitylevel.227"/>
+    <flowrelation from="//@securitylevel.243" to="//@securitylevel.239"/>
+    <flowrelation from="//@securitylevel.246" to="//@securitylevel.245"/>
+    <flowrelation from="//@securitylevel.245" to="//@securitylevel.117"/>
+    <flowrelation from="//@securitylevel.245" to="//@securitylevel.181"/>
+    <flowrelation from="//@securitylevel.245" to="//@securitylevel.213"/>
+    <flowrelation from="//@securitylevel.245" to="//@securitylevel.229"/>
+    <flowrelation from="//@securitylevel.245" to="//@securitylevel.241"/>
+    <flowrelation from="//@securitylevel.245" to="//@securitylevel.243"/>
+    <flowrelation from="//@securitylevel.250" to="//@securitylevel.248"/>
+    <flowrelation from="//@securitylevel.248" to="//@securitylevel.120"/>
+    <flowrelation from="//@securitylevel.250" to="//@securitylevel.122"/>
+    <flowrelation from="//@securitylevel.248" to="//@securitylevel.184"/>
+    <flowrelation from="//@securitylevel.250" to="//@securitylevel.186"/>
+    <flowrelation from="//@securitylevel.248" to="//@securitylevel.216"/>
+    <flowrelation from="//@securitylevel.250" to="//@securitylevel.218"/>
+    <flowrelation from="//@securitylevel.248" to="//@securitylevel.232"/>
+    <flowrelation from="//@securitylevel.250" to="//@securitylevel.234"/>
+    <flowrelation from="//@securitylevel.248" to="//@securitylevel.240"/>
+    <flowrelation from="//@securitylevel.248" to="//@securitylevel.247"/>
+    <flowrelation from="//@securitylevel.247" to="//@securitylevel.119"/>
+    <flowrelation from="//@securitylevel.247" to="//@securitylevel.183"/>
+    <flowrelation from="//@securitylevel.247" to="//@securitylevel.215"/>
+    <flowrelation from="//@securitylevel.247" to="//@securitylevel.231"/>
+    <flowrelation from="//@securitylevel.247" to="//@securitylevel.239"/>
+    <flowrelation from="//@securitylevel.250" to="//@securitylevel.249"/>
+    <flowrelation from="//@securitylevel.249" to="//@securitylevel.121"/>
+    <flowrelation from="//@securitylevel.249" to="//@securitylevel.185"/>
+    <flowrelation from="//@securitylevel.249" to="//@securitylevel.217"/>
+    <flowrelation from="//@securitylevel.249" to="//@securitylevel.233"/>
+    <flowrelation from="//@securitylevel.249" to="//@securitylevel.241"/>
+    <flowrelation from="//@securitylevel.249" to="//@securitylevel.247"/>
+    <flowrelation from="//@securitylevel.254" to="//@securitylevel.252"/>
+    <flowrelation from="//@securitylevel.252" to="//@securitylevel.124"/>
+    <flowrelation from="//@securitylevel.254" to="//@securitylevel.126"/>
+    <flowrelation from="//@securitylevel.252" to="//@securitylevel.188"/>
+    <flowrelation from="//@securitylevel.254" to="//@securitylevel.190"/>
+    <flowrelation from="//@securitylevel.252" to="//@securitylevel.220"/>
+    <flowrelation from="//@securitylevel.254" to="//@securitylevel.222"/>
+    <flowrelation from="//@securitylevel.252" to="//@securitylevel.236"/>
+    <flowrelation from="//@securitylevel.254" to="//@securitylevel.238"/>
+    <flowrelation from="//@securitylevel.252" to="//@securitylevel.244"/>
+    <flowrelation from="//@securitylevel.254" to="//@securitylevel.246"/>
+    <flowrelation from="//@securitylevel.252" to="//@securitylevel.248"/>
+    <flowrelation from="//@securitylevel.252" to="//@securitylevel.251"/>
+    <flowrelation from="//@securitylevel.251" to="//@securitylevel.123"/>
+    <flowrelation from="//@securitylevel.251" to="//@securitylevel.187"/>
+    <flowrelation from="//@securitylevel.251" to="//@securitylevel.219"/>
+    <flowrelation from="//@securitylevel.251" to="//@securitylevel.235"/>
+    <flowrelation from="//@securitylevel.251" to="//@securitylevel.243"/>
+    <flowrelation from="//@securitylevel.251" to="//@securitylevel.247"/>
+    <flowrelation from="//@securitylevel.254" to="//@securitylevel.253"/>
+    <flowrelation from="//@securitylevel.253" to="//@securitylevel.125"/>
+    <flowrelation from="//@securitylevel.253" to="//@securitylevel.189"/>
+    <flowrelation from="//@securitylevel.253" to="//@securitylevel.221"/>
+    <flowrelation from="//@securitylevel.253" to="//@securitylevel.237"/>
+    <flowrelation from="//@securitylevel.253" to="//@securitylevel.245"/>
+    <flowrelation from="//@securitylevel.253" to="//@securitylevel.249"/>
+    <flowrelation from="//@securitylevel.253" to="//@securitylevel.251"/>
+  </lattice>
+  <securitylevel name="CreditCardInformation"/>
+  <securitylevel name="TravelData"/>
+  <securitylevel name="CreditCardInformation,TravelData"/>
+  <securitylevel name="CreditCardInformationDeclassified"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified"/>
+  <securitylevel name="CreditCardInformationDeclassified,TravelData"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,TravelData"/>
+  <securitylevel name="FlightOffer"/>
+  <securitylevel name="CreditCardInformation,FlightOffer"/>
+  <securitylevel name="FlightOffer,TravelData"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,TravelData"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,TravelData"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TravelData"/>
+  <securitylevel name="Selection"/>
+  <securitylevel name="CreditCardInformation,Selection"/>
+  <securitylevel name="Selection,TravelData"/>
+  <securitylevel name="CreditCardInformation,Selection,TravelData"/>
+  <securitylevel name="CreditCardInformationDeclassified,Selection"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,Selection"/>
+  <securitylevel name="CreditCardInformationDeclassified,Selection,TravelData"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,Selection,TravelData"/>
+  <securitylevel name="FlightOffer,Selection"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,Selection"/>
+  <securitylevel name="FlightOffer,Selection,TravelData"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,Selection,TravelData"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,Selection"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,Selection,TravelData"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TravelData"/>
+  <securitylevel name="TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformation,TechnicalSupportInformation"/>
+  <securitylevel name="TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformation,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformationDeclassified,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformationDeclassified,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="FlightOffer,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,TechnicalSupportInformation"/>
+  <securitylevel name="FlightOffer,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Selection,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformation,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformation,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformationDeclassified,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="FlightOffer,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="FlightOffer,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning"/>
+  <securitylevel name="Comissioning,CreditCardInformation"/>
+  <securitylevel name="Comissioning,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,TravelData"/>
+  <securitylevel name="Comissioning,FlightOffer"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer"/>
+  <securitylevel name="Comissioning,FlightOffer,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TravelData"/>
+  <securitylevel name="Comissioning,Selection"/>
+  <securitylevel name="Comissioning,CreditCardInformation,Selection"/>
+  <securitylevel name="Comissioning,Selection,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,Selection,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,Selection"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,Selection"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,Selection,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,Selection,TravelData"/>
+  <securitylevel name="Comissioning,FlightOffer,Selection"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,Selection"/>
+  <securitylevel name="Comissioning,FlightOffer,Selection,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,Selection,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,Selection"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,Selection,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TravelData"/>
+  <securitylevel name="Comissioning,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformation,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,FlightOffer,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,FlightOffer,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformation,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,FlightOffer,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,FlightOffer,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,TravelData"/>
+  <securitylevel name="UserDetails"/>
+  <securitylevel name="CreditCardInformation,UserDetails"/>
+  <securitylevel name="TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,TravelData,UserDetails"/>
+  <securitylevel name="FlightOffer,UserDetails"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,UserDetails"/>
+  <securitylevel name="FlightOffer,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TravelData,UserDetails"/>
+  <securitylevel name="Selection,UserDetails"/>
+  <securitylevel name="CreditCardInformation,Selection,UserDetails"/>
+  <securitylevel name="Selection,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,Selection,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,Selection,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,Selection,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,Selection,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,Selection,TravelData,UserDetails"/>
+  <securitylevel name="FlightOffer,Selection,UserDetails"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,Selection,UserDetails"/>
+  <securitylevel name="FlightOffer,Selection,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,Selection,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,Selection,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,Selection,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TravelData,UserDetails"/>
+  <securitylevel name="TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformation,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="FlightOffer,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="FlightOffer,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformation,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="FlightOffer,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="FlightOffer,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,FlightOffer,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,UserDetails"/>
+  <securitylevel name="Comissioning,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,FlightOffer,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,UserDetails"/>
+  <securitylevel name="Comissioning,FlightOffer,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,Selection,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,Selection,UserDetails"/>
+  <securitylevel name="Comissioning,Selection,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,Selection,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,Selection,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,Selection,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,Selection,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,Selection,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,FlightOffer,Selection,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,Selection,UserDetails"/>
+  <securitylevel name="Comissioning,FlightOffer,Selection,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,Selection,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,Selection,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,Selection,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,FlightOffer,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,FlightOffer,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,FlightOffer,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,FlightOffer,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,FlightOffer,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <securitylevel name="Comissioning,CreditCardInformation,CreditCardInformationDeclassified,FlightOffer,Selection,TechnicalSupportInformation,TravelData,UserDetails"/>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.7">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/AirlineAdministration.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/AirlineAdministration.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.7">
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/AirlineAdministration.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/AirlineAdministration.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.7">
+    <tag>Input.getSingleSelection</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Input.java#//@classifiers.0/@members.1"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Input.java#//@classifiers.0/@members.1/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.7">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Input.java#//@classifiers.0/@members.1"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Input.java#//@classifiers.0/@members.1/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.1">
+    <tag>BookingSelection.getFlightOffers</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.1"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.1/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.1">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.1"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.1/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.25">
+    <tag>BookingSelection.bookSelected</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.25">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.0">
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/CreditCardConfiguration.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/CreditCardConfiguration.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.0">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/CreditCardConfiguration.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/CreditCardConfiguration.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.25">
+    <tag>Confirmation.confirmRelease</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Confirmation.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Confirmation.java#//@classifiers.0/@members.0/@parameters.1"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.25">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Confirmation.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Confirmation.java#//@classifiers.0/@members.0/@parameters.1"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.0">
+    <tag>Confirmation.confirmRelease</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Confirmation.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Confirmation.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.0">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Confirmation.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Confirmation.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.25">
+    <tag>Booking.bookFlightOffer</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Booking.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Booking.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.25">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <tag>Confirmation.confirmRelease</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Booking.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Booking.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.3">
+    <tag>Booking.bookFlightOffer</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Booking.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Booking.java#//@classifiers.0/@members.0/@parameters.1"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.3">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <tag>Confirmation.confirmRelease</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Booking.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Booking.java#//@classifiers.0/@members.0/@parameters.1"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.1">
+    <tag>FlightOffers.getFlightOffers</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/FlightOffers.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.1/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.1">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <tag>Confirmation.confirmRelease</tag>
+    <tag>Booking.bookFlightOffer</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/FlightOffers.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/BookingSelection.java#//@classifiers.0/@members.1/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.25">
+    <tag>Declassification.releaseCCD</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Declassification.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Declassification.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.25">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <tag>Confirmation.confirmRelease</tag>
+    <tag>Booking.bookFlightOffer</tag>
+    <tag>FlightOffers.getFlightOffers</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/Declassification.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/Declassification.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.31">
+    <tag>AirlineLogging.log</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/AirlineLogging.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/AirlineLogging.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.31">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <tag>Confirmation.confirmRelease</tag>
+    <tag>Booking.bookFlightOffer</tag>
+    <tag>FlightOffers.getFlightOffers</tag>
+    <tag>Declassification.releaseCCD</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/AirlineLogging.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/AirlineLogging.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.127">
+    <tag>UserIdentityConfiguration.setCredentials</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/UserIdentityConfiguration.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/UserIdentityConfiguration.java#//@classifiers.0/@members.0/@parameters.1"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.127">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <tag>Confirmation.confirmRelease</tag>
+    <tag>Booking.bookFlightOffer</tag>
+    <tag>FlightOffers.getFlightOffers</tag>
+    <tag>Declassification.releaseCCD</tag>
+    <tag>AirlineLogging.log</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/UserIdentityConfiguration.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/UserIdentityConfiguration.java#//@classifiers.0/@members.0/@parameters.1"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Source" securitylevel="//@securitylevel.1">
+    <tag>UserIdentityConfiguration.setCredentials</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/UserIdentityConfiguration.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/UserIdentityConfiguration.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+  <annotation xsi:type="edu.kit.kastel.scbs.pcm2java4joana.joana:Sink" securitylevel="//@securitylevel.1">
+    <tag>AirlineAdministration.setAvailableFlights</tag>
+    <tag>Input.getSingleSelection</tag>
+    <tag>BookingSelection.getFlightOffers</tag>
+    <tag>BookingSelection.bookSelected</tag>
+    <tag>CreditCardConfiguration.setCreditCard</tag>
+    <tag>Confirmation.confirmRelease</tag>
+    <tag>Booking.bookFlightOffer</tag>
+    <tag>FlightOffers.getFlightOffers</tag>
+    <tag>Declassification.releaseCCD</tag>
+    <tag>AirlineLogging.log</tag>
+    <annotatedMethod xsi:type="members:InterfaceMethod" href="../src/defaultRepository/contracts/UserIdentityConfiguration.java#//@classifiers.0/@members.0"/>
+    <annotatedParameter xsi:type="parameters:OrdinaryParameter" href="../src/defaultRepository/contracts/UserIdentityConfiguration.java#//@classifiers.0/@members.0/@parameters.0"/>
+  </annotation>
+</edu.kit.kastel.scbs.pcm2java4joana.joana:JOANARoot>

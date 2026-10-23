@@ -49,17 +49,17 @@
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
-        <version>1.9.0.202311201524</version>
+        <version>[1.10.0,1.11.0)</version>
       </dependency>
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
-        <version>1.9.0.202311201524</version>
+        <version>[1.10.0,1.11.0)</version>
       </dependency>
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
-        <version>1.9.0.202311201524</version>
+        <version>[1.10.0,1.11.0)</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

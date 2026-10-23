@@ -27,6 +27,7 @@
     <module>demo</module>
     <module>umljava</module>
     <module>pcmjava</module>
+    <module>c4cbse2joana</module>
     <module>pcmumlclass</module>
     <module>simulinkautosar</module>
     <module>testutility</module>
@@ -54,7 +55,7 @@
     <maven.compiler.target>21</maven.compiler.target>
     <xtend.version>2.44.0</xtend.version>
     <!-- p2 updatesite versions -->
-    <repo.sdq-demo-metamodels.version>1.9.0</repo.sdq-demo-metamodels.version>
+    <repo.sdq-demo-metamodels.version>1.10.0</repo.sdq-demo-metamodels.version>
     <repo.sdq-commons.version>2.2.0</repo.sdq-commons.version>
     <repo.xannotations.version>1.6.0</repo.xannotations.version>
     <repo.emftext-jamopp.version>latest</repo.emftext-jamopp.version> <!-- should be 1.0.0 -->
@@ -343,27 +344,37 @@
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.autosar</artifactId>
-        <version>1.9.0.202311201524</version>
+        <version>[1.10.0,1.11.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>sdq-demo-metamodels</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.confidentiality4cbse</artifactId>
+        <version>[1.10.0,1.11.0)</version>
       </dependency>
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
-        <version>1.9.0.202311201524</version>
+        <version>[1.10.0,1.11.0)</version>
       </dependency>
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
-        <version>1.9.0.202311201524</version>
+        <version>[1.10.0,1.11.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>sdq-demo-metamodels</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.joana</artifactId>
+        <version>[1.10.0,1.11.0)</version>
       </dependency>
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
-        <version>1.9.0.202311201524</version>
+        <version>[1.10.0,1.11.0)</version>
       </dependency>
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
-        <version>1.9.0.202311201524</version>
+        <version>[1.10.0,1.11.0)</version>
       </dependency>
       <dependency>
         <groupId>sdq-commons</groupId>

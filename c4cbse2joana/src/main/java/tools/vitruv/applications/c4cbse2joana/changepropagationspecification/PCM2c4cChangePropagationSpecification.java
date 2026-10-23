@@ -1,0 +1,3 @@
+package tools.vitruv.applications.c4cbse2joana.changepropagationspecification;
+
+public class PCM2c4cChangePropagationSpecification extends mir.reactions.pcm2c4c.Pcm2c4cChangePropagationSpecification {}
