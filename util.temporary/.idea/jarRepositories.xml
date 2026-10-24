@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="xannotations" />
+      <option name="name" value="XAnnotations" />
+      <option name="url" value="https://kit-sdq.github.io/updatesite/release/xannotations/1.6.0" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sonatype-snapshots" />
+      <option name="name" value="Sonatype Snapshots" />
+      <option name="url" value="https://oss.sonatype.org/content/repositories/snapshots" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="emftext-jamopp" />
+      <option name="name" value="EMFText and JaMoPP (P2 Wrapper)" />
+      <option name="url" value="https://kit-sdq.github.io/updatesite/release/p2-wrapper/latest/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="eclipse" />
+      <option name="name" value="Eclipse" />
+      <option name="url" value="http://download.eclipse.org/releases/2023-03" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central" />
+      <option name="url" value="https://repo1.maven.org/maven2/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="ossrh-snapshots" />
+      <option name="name" value="OSSRH Snapshots" />
+      <option name="url" value="https://oss.sonatype.org/content/repositories/snapshots" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="palladio" />
+      <option name="name" value="Palladio Simulator" />
+      <option name="url" value="https://updatesite.palladio-simulator.com/palladio-build-updatesite/releases/5.0.0/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sdq-demo-metamodels" />
+      <option name="name" value="SDQ Demo Metamodels" />
+      <option name="url" value="https://kit-sdq.github.io/updatesite/release/metamodels/demo/1.9.0" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sdq-commons" />
+      <option name="name" value="SDQ Commons" />
+      <option name="url" value="https://kit-sdq.github.io/updatesite/release/commons/2.2.0" />
+    </remote-repository>
+  </component>
+</project>

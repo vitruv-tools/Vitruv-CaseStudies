@@ -1,0 +1,140 @@
+import edu.kit.ipd.sdq.metamodels.autosar.AutoSARPackage
+import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
+import edu.kit.ipd.sdq.metamodels.simulink.SimuLinkFactory
+import edu.kit.ipd.sdq.metamodels.simulink.SimuLinkPackage
+import edu.kit.ipd.sdq.metamodels.simulink.SimulinkModel
+import tools.vitruv.dsls.^reactions.runtime.helper.PersistenceHelper
+
+import "edu.kit.ipd.sdq.metamodels.autosar" as AutoSAR
+import "edu.kit.ipd.sdq.metamodels.simulink" as SimuLink
+
+reactions: autoSARToSimulinkTypePropagation
+in reaction to changes in AutoSAR
+execute actions in SimuLink
+
+
+
+
+routine detectOrCreateSimuLinkModel(EObject alreadyPersistedEObject) { 
+	match {
+		require absence of SimuLink::SimulinkModel corresponding to SimuLinkPackage.Literals.SIMULINK_MODEL
+	}
+	update {
+		
+		val rootModelFile = "model" + "/" + "model" + ".arxml"
+		// Check if a model at the specified path already exists; create one if necessary
+		var SimulinkModel SimuLinkRootModel = null
+		if (alreadyPersistedEObject === null) {
+			// no objects persisted jet -> can't automatically retrieve projectPath
+			throw new UnsupportedOperationException(
+				"Cannot persist/load a SimuLink::SimuLinkModel  without any previously persisted elements.")
+		}
+		val uri = PersistenceHelper.getURIFromSourceProjectFolder(alreadyPersistedEObject, rootModelFile)
+		if (URIUtil.existsResourceAtUri(uri)) {
+			// The resource is only found if it was previously persisted, which only happens after the change propagation terminates.
+			// This should not be a problem, as long as any created model is registered on creation, to prevent creating a second one.
+			val resource = alreadyPersistedEObject.eResource.resourceSet.getResource(uri, true)
+			SimuLinkRootModel = resource.allContents.filter(SimulinkModel).head
+		}
+		if (SimuLinkRootModel === null) {
+			// The resource didn't exist, or did not contain a uml::Model object
+			SimuLinkRootModel = SimuLinkFactory.eINSTANCE.createSimulinkModel()
+			SimuLinkRootModel.name = "model"
+			persistProjectRelative(alreadyPersistedEObject, SimuLinkRootModel, rootModelFile)
+		}
+		if (SimuLinkRootModel !== null) {
+			registerSimuLinkModelInCorrespondenceModel(SimuLinkRootModel)
+		}
+	}
+}
+
+
+routine registerSimuLinkModelInCorrespondenceModel(SimuLink::SimulinkModel uModel) {
+	match {
+		require absence of SimuLink::SimulinkModel corresponding to SimuLinkPackage.Literals.SIMULINK_MODEL
+	}
+	update {
+		addCorrespondenceBetween(uModel, SimuLinkPackage.Literals.SIMULINK_MODEL)
+	}
+}
+
+
+reaction AutoSARModelAdded{
+	
+	after element AutoSAR::AutoSARModel inserted as root
+	call  {
+		
+		checkIfModelCorrespondenceExists(newValue)
+		createOrFindSimuLinkModel(newValue)
+	}
+}
+
+
+routine createOrFindSimuLinkModel(AutoSAR::AutoSARModel autoSARModel) {
+	match {
+		require absence of  SimuLink::SimulinkModel corresponding to autoSARModel
+	}
+	update {
+		checkIfModelExists(autoSARModel)
+		
+	}
+}
+
+routine checkIfModelExists(AutoSAR::AutoSARModel autoSARModel){
+	match{
+		val SimuLinkModel = retrieve optional SimuLink::SimulinkModel corresponding to SimuLinkPackage.Literals.SIMULINK_MODEL
+	}
+	update{
+		
+		if(!SimuLinkModel.isPresent){
+			createSimuLinkModel(autoSARModel)
+		}
+		
+		
+	}
+	
+	
+}
+
+
+routine createSimuLinkModel(AutoSAR::AutoSARModel autoSARModel) {
+	update {
+		val simuLinkModel = SimuLinkFactory.eINSTANCE.createSimulinkModel()
+		simuLinkModel.name = autoSARModel.name
+		var rootModelFile = "model" + "/" + "model" + ".arxml"
+		persistProjectRelative(autoSARModel,simuLinkModel,rootModelFile)
+		addCorrespondenceBetween(SimuLinkPackage.Literals.SIMULINK_MODEL, simuLinkModel)
+		addCorrespondenceBetween(simuLinkModel, autoSARModel)
+	}
+}
+
+
+
+routine checkIfModelCorrespondenceExists(AutoSAR::AutoSARModel newModel){
+	
+	match{
+		val alreadyCorrespondingModels = retrieve many AutoSAR::AutoSARModel corresponding to AutoSARPackage.Literals.AUTO_SAR_MODEL
+		check !alreadyCorrespondingModels.contains(newModel)
+	}
+	update{
+		
+		addCorrespondenceBetween(newModel,AutoSARPackage.Literals.AUTO_SAR_MODEL)
+	}
+	
+}
+
+
+reaction AutoSARElementNameChanged{
+	after attribute replaced at AutoSAR::AutoSARElement[name]
+	call changeSimulinkElementName(affectedEObject)
+}
+
+
+routine changeSimulinkElementName(AutoSAR::AutoSARElement autoSARElement){
+	match {
+		val SimuLinkElement = retrieve SimuLink::SimulinkElement corresponding to autoSARElement
+	}
+	update{
+		SimuLinkElement.name = autoSARElement.name
+	}
+}
