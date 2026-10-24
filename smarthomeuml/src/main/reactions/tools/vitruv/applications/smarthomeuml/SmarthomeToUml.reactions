@@ -75,7 +75,7 @@ reaction DeviceInserted {
 routine createDeviceUmlClass(smarthome::Device device) {
 	match {
 //		require absence of uml::Action corresponding to service
-		val model = retrieve uml::Model corresponding to UMLPackage.eINSTANCE
+		val model = retrieve uml::Model corresponding to device.eContainer
 	}
 	create {
 		val umlClass = new uml::Class
@@ -96,7 +96,7 @@ reaction ServerInserted {
 routine createServerUmlClass(smarthome::Server server) {
 	match {
 //		require absence of uml::Action corresponding to service
-		val model = retrieve uml::Model corresponding to UMLPackage.eINSTANCE
+		val model = retrieve uml::Model corresponding to server.eContainer
 	}
 	create {
 		val umlClass = new uml::Class
