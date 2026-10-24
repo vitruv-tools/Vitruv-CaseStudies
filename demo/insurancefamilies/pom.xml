@@ -82,9 +82,14 @@
             <version>${vitruv.version}</version>
           </dependency>
           <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
-            <version>${project.version}</version>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+            <version>${demo-metamodels.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+            <version>${demo-metamodels.version}</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -182,12 +187,17 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- p2 dependencies -->
+    <!-- demo metamodels -->
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
-      <version>${project.version}</version>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
     </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+    </dependency>
+
+    <!-- p2 dependencies -->
     <dependency>
       <groupId>sdq-commons</groupId>
       <artifactId>edu.kit.ipd.sdq.commons.util.java</artifactId>

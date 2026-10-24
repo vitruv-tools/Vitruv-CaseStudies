@@ -69,6 +69,16 @@
             <version>${vitruv.version}</version>
           </dependency>
           <dependency>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.confidentiality4cbse</artifactId>
+            <version>${demo-metamodels.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.joana</artifactId>
+            <version>${demo-metamodels.version}</version>
+          </dependency>
+          <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
             <version>${project.version}</version>
@@ -176,11 +186,11 @@
       <artifactId>edu.kit.ipd.sdq.commons.util.java</artifactId>
     </dependency>
     <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
+      <groupId>tools.vitruv</groupId>
       <artifactId>edu.kit.ipd.sdq.metamodels.confidentiality4cbse</artifactId>
     </dependency>
     <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
+      <groupId>tools.vitruv</groupId>
       <artifactId>edu.kit.ipd.sdq.metamodels.joana</artifactId>
     </dependency>
     <dependency>

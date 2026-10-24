@@ -83,9 +83,14 @@
             <version>${vitruv.version}</version>
           </dependency>
           <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
-            <version>${project.version}</version>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+            <version>${demo-metamodels.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
+            <version>${demo-metamodels.version}</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -140,7 +145,6 @@
     <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.common</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.emf</groupId>
@@ -165,11 +169,14 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- p2 dependencies -->
+    <!-- demo metamodels -->
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
-      <version>${project.version}</version>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
     </dependency>
   </dependencies>
 </project>
