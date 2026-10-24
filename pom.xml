@@ -30,6 +30,7 @@
     <module>c4cbse2joana</module>
     <module>pcmumlclass</module>
     <module>simulinkautosar</module>
+    <module>smarthomeuml</module>
     <module>testutility</module>
     <module>testutility.integration</module>
     <module>transitivechange</module>
@@ -374,6 +375,11 @@
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
+        <version>[1.10.0,1.11.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>sdq-demo-metamodels</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.smarthome</artifactId>
         <version>[1.10.0,1.11.0)</version>
       </dependency>
       <dependency>

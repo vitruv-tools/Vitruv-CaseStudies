@@ -1,4 +1,0 @@
-package tools.vitruv.applications.smarthomeuml
-
-class SmarthomeToUmlChangePropagationSpecification extends mir.reactions.smarthomeToUml.SmarthomeToUmlChangePropagationSpecification {
-}
