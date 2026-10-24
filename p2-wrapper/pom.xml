@@ -76,10 +76,6 @@
       <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
     </dependency>
     <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
-      <artifactId>edu.kit.ipd.sdq.metamodels.smarthome</artifactId>
-    </dependency>
-    <dependency>
       <groupId>emftext-jamopp</groupId>
       <artifactId>org.emftext.language.java</artifactId>
     </dependency>

@@ -55,6 +55,8 @@
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
     <xtend.version>2.44.0</xtend.version>
+    <!-- also used for build plugin dependencies, which are not covered by dependencyManagement -->
+    <demo-metamodels.version>2.0.1</demo-metamodels.version>
     <!-- p2 updatesite versions -->
     <repo.sdq-demo-metamodels.version>1.10.0</repo.sdq-demo-metamodels.version>
     <repo.sdq-commons.version>2.2.0</repo.sdq-commons.version>
@@ -341,6 +343,13 @@
         <version>20260814</version>
       </dependency>
 
+      <!-- demo metamodels -->
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.smarthome</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+
       <!-- p2 dependencies -->
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
@@ -375,11 +384,6 @@
       <dependency>
         <groupId>sdq-demo-metamodels</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
-        <version>[1.10.0,1.11.0)</version>
-      </dependency>
-      <dependency>
-        <groupId>sdq-demo-metamodels</groupId>
-        <artifactId>edu.kit.ipd.sdq.metamodels.smarthome</artifactId>
         <version>[1.10.0,1.11.0)</version>
       </dependency>
       <dependency>

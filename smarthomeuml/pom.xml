@@ -77,6 +77,11 @@
             <version>${vitruv.version}</version>
           </dependency>
           <dependency>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.smarthome</artifactId>
+            <version>${demo-metamodels.version}</version>
+          </dependency>
+          <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
             <version>${project.version}</version>
@@ -180,6 +185,11 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.smarthome</artifactId>
     </dependency>
 
     <!-- p2 dependencies -->
