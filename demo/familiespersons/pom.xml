@@ -69,22 +69,27 @@
           <dependency>
             <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.dsls.common</artifactId>
-            <version>${vitruv.version}</version>
+            <version>${vitruv-dsls.version}</version>
           </dependency>
           <dependency>
             <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.dsls.reactions.language</artifactId>
-            <version>${vitruv.version}</version>
+            <version>${vitruv-dsls.version}</version>
           </dependency>
           <dependency>
             <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.dsls.reactions.runtime</artifactId>
-            <version>${vitruv.version}</version>
+            <version>${vitruv-dsls.version}</version>
           </dependency>
           <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
-            <version>${project.version}</version>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+            <version>${demo-metamodels.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
+            <version>${demo-metamodels.version}</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -106,7 +111,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>tools.vitruv.dsls.reactions.runtime</artifactId>
-      <version>${vitruv.version}</version>
+      <version>${vitruv-dsls.version}</version>
     </dependency>
 
     <!-- Vitruvius compile dependencies -->
@@ -163,11 +168,11 @@
       <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
     </dependency>
     <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
+      <groupId>tools.vitruv</groupId>
       <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
     </dependency>
     <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
+      <groupId>tools.vitruv</groupId>
       <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
     </dependency>
 
@@ -175,7 +180,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>tools.vitruv.dsls.p2wrappers.activextendannotations</artifactId>
-      <version>${vitruv.version}</version>
+      <version>${vitruv-dsls.version}</version>
     </dependency>
   </dependencies>
 </project>
