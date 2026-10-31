@@ -16,7 +16,7 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 	def void testAddRepository() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val repositoryPackage = createPackage [
 				name = Pcm2JavaTestUtils.REPOSITORY_NAME
 			]
@@ -36,13 +36,13 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 	def void testRepositoryNameChange() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val repositoryPackage = createPackage [
 				name = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
@@ -61,19 +61,19 @@ class RepositoryMappingTransformationTest extends Pcm2JavaTransformationTest {
 	@Test
 	def void testRepositoryNameChangeWithComponents() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				it.components__Repository += createBasicComponent(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME)
 			]
 		]
 
-		changePcmView[
+		viewFactory.changePcmView[
 			claimSinglePcmRepository(it) => [
 				entityName = Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX
 			]
 		]
 
-		validateJavaView [
+		viewFactory.validateJavaView [
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.IMPL_SUFFIX,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME_SUFFIX + "." +

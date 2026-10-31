@@ -24,14 +24,14 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 	@Test
 	def void testAddInnerDeclaration() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 				dataTypes__Repository += createPrimitiveDataType(PrimitiveTypeEnum.INT)
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val compositeDataType = claimCompositeDataType(it, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 				val innerDataType = claimPrimitiveDataType(it, PrimitiveTypeEnum.INT)
@@ -40,7 +40,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
@@ -54,7 +54,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 	@Test
 	def void testRenameInnerDeclaration() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val compositeDataType = createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 				val innerDataType = createPrimitiveDataType(PrimitiveTypeEnum.INT)
@@ -66,7 +66,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val innerDeclaration = claimCompositeDataType(it, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME).
 					innerDeclaration_CompositeDataType.claimOne
@@ -74,7 +74,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX
@@ -89,7 +89,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 	@Test
 	def void testChangeInnerDeclarationType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val compositeDataType = createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 				val innerDataType = createPrimitiveDataType(PrimitiveTypeEnum.INT)
@@ -102,7 +102,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 			]
 		]
 
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val innerDeclaration = claimCompositeDataType(it, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME).
 					innerDeclaration_CompositeDataType.claimOne
@@ -111,7 +111,7 @@ class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTe
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val expectedCompilationUnit = new FluentJavaClassBuilder(
 				Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME,
 				Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.DATATYPES_SUFFIX

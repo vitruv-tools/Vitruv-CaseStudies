@@ -15,11 +15,11 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvid
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 import tools.vitruv.applications.util.temporary.java.JavaSetup
 import tools.vitruv.change.propagation.ChangePropagationMode
-import tools.vitruv.framework.testutils.deprecated.LegacyVitruvApplicationTest
+import tools.vitruv.applications.testutility.integration.NonTransactionalVitruvApplicationTest
 import tools.vitruv.change.testutils.RegisterMetamodelsInStandalone
 
 @ExtendWith(RegisterMetamodelsInStandalone)
-abstract class CBSCommonalitiesExecutionTest extends LegacyVitruvApplicationTest {	
+abstract class CBSCommonalitiesExecutionTest extends NonTransactionalVitruvApplicationTest {
 	def <T> T getModels(DomainModelsProvider<T> modelsProvider) {
 		return modelsProvider.getModels(vitruvApplicationTestAdapter)
 	}

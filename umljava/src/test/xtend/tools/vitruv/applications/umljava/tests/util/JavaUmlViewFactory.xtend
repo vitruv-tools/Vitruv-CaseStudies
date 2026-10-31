@@ -5,7 +5,7 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
 import tools.vitruv.framework.views.View
-import tools.vitruv.framework.testutils.view.TestViewFactory
+import tools.vitruv.framework.testutils.integration.TestViewFactory
 
 @FinalFieldsConstructor
 class JavaUmlViewFactory extends TestViewFactory {

@@ -3,7 +3,7 @@ import edu.kit.ipd.sdq.metamodels.autosar.AutoSARModel
 import edu.kit.ipd.sdq.metamodels.autosar.AutoSARPackage
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import edu.kit.ipd.sdq.metamodels.simulink.SimuLinkPackage
-import tools.vitruv.dsls.reactions.runtime.helper.PersistenceHelper
+import tools.vitruv.dsls.^reactions.runtime.helper.PersistenceHelper
 import "edu.kit.ipd.sdq.metamodels.autosar" as AutoSAR
 import "edu.kit.ipd.sdq.metamodels.simulink" as SimuLink
 

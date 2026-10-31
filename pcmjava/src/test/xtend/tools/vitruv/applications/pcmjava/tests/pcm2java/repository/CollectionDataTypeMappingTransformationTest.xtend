@@ -26,13 +26,13 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
 
 		this.getUserInteraction().addNextSingleSelection(0);
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				it.dataTypes__Repository += createCollectionDataType(Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null)
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val stdLibHelper = new JavaStdLibCompilationUnitHelper(it)
 			val voidCompilationUnit = stdLibHelper.voidCompilationUnit
 			val arrayListCompilationUnit = stdLibHelper.arrayListCompilationUnit
@@ -57,14 +57,14 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testAddCollectionDataTypeWithPrimitiveTypeIntAsInnerType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				it.dataTypes__Repository += createPrimitiveDataType(PrimitiveTypeEnum.INT)
 			]
 		]
 
 		this.getUserInteraction().addNextSingleSelection(0);
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val PrimitiveDataType innerType = claimPrimitiveDataType(it, PrimitiveTypeEnum.INT)
 				it.dataTypes__Repository +=
@@ -72,7 +72,7 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val stdLibHelper = new JavaStdLibCompilationUnitHelper(it)
 			val listCompilationUnit = stdLibHelper.arrayListCompilationUnit
 			val integerCompilationUnit = stdLibHelper.integerCompilationUnit
@@ -91,14 +91,14 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 	@Test
 	def void testAddCollectionDataTypeWithComplexInnerType() {
 		createRepository(Pcm2JavaTestUtils.REPOSITORY_NAME)
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				it.dataTypes__Repository += createCompositeDataType(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 			]
 		]
 
 		this.getUserInteraction().addNextSingleSelection(0);
-		changePcmView [
+		viewFactory.changePcmView [
 			claimSinglePcmRepository(it) => [
 				val CompositeDataType innerType = claimCompositeDataType(it, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME)
 				it.dataTypes__Repository +=
@@ -106,7 +106,7 @@ class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformation
 			]
 		]
 
-		validateJavaView[
+		viewFactory.validateJavaView[
 			val stdLibHelper = new JavaStdLibCompilationUnitHelper(it)
 			val arrayListCompilationUnit = stdLibHelper.getArrayListCompilationUnit()
 
