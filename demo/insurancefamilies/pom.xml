@@ -17,7 +17,6 @@
   <description>The insurance families demo case study</description>
 
   <properties>
-    <vitruv.version>4.0.0</vitruv.version>
     <wrapper.version>3.1.2</wrapper.version>
   </properties>
 
