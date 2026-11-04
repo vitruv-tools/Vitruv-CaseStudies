@@ -1,26 +1,29 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm;
 
+import static tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelHelper.newPcmRepository;
+
 import java.util.List;
+
+import org.eclipse.emf.ecore.EObject;
+import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import tools.vitruv.applications.cbs.commonalities.pcm.PcmPrimitiveDataType;
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.OperationTest;
-import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelHelper;
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel;
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter;
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsBase;
-import static tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelHelper.newPcmRepository;
+import tools.vitruv.applications.cbs.operators.pcm.PcmPrimitiveDataType;
 
 public class PcmOperationTestModels extends PcmTestModelsBase implements OperationTest.DomainModels {
 
     private static OperationInterface newPcmOperationInterface() {
-        OperationInterface opInterface = RepositoryFactory.eINSTANCE.createOperationInterface();
-        opInterface.setEntityName(INTERFACE_NAME);
-        return opInterface;
+        OperationInterface operationInterface = RepositoryFactory.eINSTANCE.createOperationInterface();
+        operationInterface.setEntityName(INTERFACE_NAME);
+        return operationInterface;
     }
 
     private static OperationSignature newPcmOperationSignature() {
@@ -29,224 +32,106 @@ public class PcmOperationTestModels extends PcmTestModelsBase implements Operati
         return signature;
     }
 
-    private static Parameter newPcmParameter() {
-        return RepositoryFactory.eINSTANCE.createParameter();
+    private static OperationSignature newPcmOperationSignature(DataType returnType, Parameter... parameters) {
+        OperationSignature signature = newPcmOperationSignature();
+        signature.setReturnType__OperationSignature(returnType);
+        signature.getParameters__OperationSignature().addAll(List.of(parameters));
+        return signature;
+    }
+
+    private static OperationSignature newPcmOperationSignatureWithParameters(Parameter... parameters) {
+        OperationSignature signature = newPcmOperationSignature();
+        signature.getParameters__OperationSignature().addAll(List.of(parameters));
+        return signature;
+    }
+
+    private static Parameter newPcmParameter(String name, DataType dataType) {
+        Parameter parameter = RepositoryFactory.eINSTANCE.createParameter();
+        parameter.setParameterName(name);
+        parameter.setDataType__Parameter(dataType);
+        return parameter;
+    }
+
+    /**
+     * The PCM repository containing an operation interface with the given
+     * signatures.
+     */
+    private static List<EObject> interfaceWithSignatures(OperationSignature... signatures) {
+        Repository pcmRepository = newPcmRepository();
+        OperationInterface operationInterface = newPcmOperationInterface();
+        operationInterface.getSignatures__OperationInterface().addAll(List.of(signatures));
+        pcmRepository.getInterfaces__Repository().add(operationInterface);
+        return List.of(pcmRepository);
     }
 
     public PcmOperationTestModels(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
         super(vitruvApplicationTestAdapter);
     }
 
+    // Empty
+
     @Override
     public DomainModel emptyOperationCreation() {
-        return newModel(() -> {
-            Repository pcmRepository = newPcmRepository();
-
-            // Create operation interface with empty signature
-            OperationInterface opInterface = newPcmOperationInterface();
-            opInterface.getSignatures__OperationInterface().add(newPcmOperationSignature());
-            pcmRepository.getInterfaces__Repository().add(opInterface);
-
-            return List.of(pcmRepository);
-        });
+        return newModel(() -> interfaceWithSignatures(newPcmOperationSignature()));
     }
+
+    // Return type
 
     @Override
     public DomainModel operationWithIntegerReturnCreation() {
-        return newModel(() -> {
-            Repository pcmRepository = newPcmRepository();
-
-            // Create operation interface with int return signature
-            OperationInterface opInterface = newPcmOperationInterface();
-            OperationSignature signature = newPcmOperationSignature();
-            signature.setReturnType__OperationSignature(PcmPrimitiveDataType.INT.getPcmType());
-            opInterface.getSignatures__OperationInterface().add(signature);
-            pcmRepository.getInterfaces__Repository().add(opInterface);
-
-            return List.of(pcmRepository);
-        });
-    }
-
-    // ...similar pattern for other methods...
-
-    @Override
-    public DomainModel multipleOperationsCreation() {
-        return newModel(() -> {
-            Repository pcmRepository = newPcmRepository();
-            OperationInterface opInterface = newPcmOperationInterface();
-
-            // First operation with boolean parameter
-            OperationSignature signature1 = newPcmOperationSignature();
-            signature1.setReturnType__OperationSignature(PcmPrimitiveDataType.INT.getPcmType());
-
-            Parameter boolParam = newPcmParameter();
-            boolParam.setParameterName(BOOLEAN_PARAMETER_NAME);
-            boolParam.setDataType__Parameter(PcmPrimitiveDataType.BOOL.getPcmType());
-            signature1.getParameters__OperationSignature().add(boolParam);
-
-            opInterface.getSignatures__OperationInterface().add(signature1);
-
-            // Second operation with string parameter
-            OperationSignature signature2 = newPcmOperationSignature();
-            signature2.setEntityName(OPERATION_2_NAME);
-            signature2.setReturnType__OperationSignature(PcmPrimitiveDataType.INT.getPcmType());
-
-            Parameter stringParam = newPcmParameter();
-            stringParam.setParameterName(STRING_PARAMETER_NAME);
-            stringParam.setDataType__Parameter(PcmPrimitiveDataType.STRING.getPcmType());
-            signature2.getParameters__OperationSignature().add(stringParam);
-
-            opInterface.getSignatures__OperationInterface().add(signature2);
-
-            pcmRepository.getInterfaces__Repository().add(opInterface);
-
-            return List.of(pcmRepository);
-        });
+        return newModel(() -> interfaceWithSignatures(
+                newPcmOperationSignature(PcmPrimitiveDataType.INT.getPcmType())));
     }
 
     @Override
     public DomainModel operationWithStringReturnCreation() {
-        return newModel(() -> {
-            // Create repository
-            Repository pcmRepository = PcmTestModelHelper.newPcmRepository();
-
-            // Create operation interface
-            OperationInterface opInterface = newPcmOperationInterface();
-
-            // Create operation signature with string return type
-            OperationSignature signature = newPcmOperationSignature();
-            signature.setReturnType__OperationSignature(PcmPrimitiveDataType.STRING.getPcmType());
-
-            // Add signature to interface
-            opInterface.getSignatures__OperationInterface().add(signature);
-
-            // Add interface to repository
-            pcmRepository.getInterfaces__Repository().add(opInterface);
-
-            return List.of(pcmRepository);
-        });
+        return newModel(() -> interfaceWithSignatures(
+                newPcmOperationSignature(PcmPrimitiveDataType.STRING.getPcmType())));
     }
+
+    // Input parameters
 
     @Override
     public DomainModel operationWithIntegerInputCreation() {
-        return newModel(() -> {
-            // Create repository
-            Repository pcmRepository = PcmTestModelHelper.newPcmRepository();
-
-            // Create operation interface
-            OperationInterface opInterface = newPcmOperationInterface();
-
-            // Create operation signature
-            OperationSignature signature = newPcmOperationSignature();
-
-            // Create and configure integer parameter
-            Parameter parameter = newPcmParameter();
-            parameter.setParameterName(OperationTest.DomainModels.INTEGER_PARAMETER_NAME);
-            parameter.setDataType__Parameter(PcmPrimitiveDataType.INT.getPcmType());
-
-            // Build hierarchy
-            signature.getParameters__OperationSignature().add(parameter);
-            opInterface.getSignatures__OperationInterface().add(signature);
-            pcmRepository.getInterfaces__Repository().add(opInterface);
-
-            return List.of(pcmRepository);
-        });
+        return newModel(() -> interfaceWithSignatures(newPcmOperationSignatureWithParameters(
+                newPcmParameter(INTEGER_PARAMETER_NAME, PcmPrimitiveDataType.INT.getPcmType()))));
     }
 
     @Override
     public DomainModel operationWithMultiplePrimitiveInputsCreation() {
-        return newModel(() -> {
-            // Create repository
-            Repository pcmRepository = PcmTestModelHelper.newPcmRepository();
-
-            // Create operation interface
-            OperationInterface opInterface = newPcmOperationInterface();
-
-            // Create operation signature
-            OperationSignature signature = newPcmOperationSignature();
-
-            // Create and configure boolean parameter
-            Parameter boolParam = newPcmParameter();
-            boolParam.setParameterName(OperationTest.DomainModels.BOOLEAN_PARAMETER_NAME);
-            boolParam.setDataType__Parameter(PcmPrimitiveDataType.BOOL.getPcmType());
-            signature.getParameters__OperationSignature().add(boolParam);
-
-            // Create and configure integer parameter
-            Parameter intParam = newPcmParameter();
-            intParam.setParameterName(OperationTest.DomainModels.INTEGER_PARAMETER_NAME);
-            intParam.setDataType__Parameter(PcmPrimitiveDataType.INT.getPcmType());
-            signature.getParameters__OperationSignature().add(intParam);
-
-            // Create and configure double parameter
-            Parameter doubleParam = newPcmParameter();
-            doubleParam.setParameterName(OperationTest.DomainModels.DOUBLE_PARAMETER_NAME);
-            doubleParam.setDataType__Parameter(PcmPrimitiveDataType.DOUBLE.getPcmType());
-            signature.getParameters__OperationSignature().add(doubleParam);
-
-            // Build model hierarchy
-            opInterface.getSignatures__OperationInterface().add(signature);
-            pcmRepository.getInterfaces__Repository().add(opInterface);
-
-            return List.of(pcmRepository);
-        });
+        return newModel(() -> interfaceWithSignatures(newPcmOperationSignatureWithParameters(
+                newPcmParameter(BOOLEAN_PARAMETER_NAME, PcmPrimitiveDataType.BOOL.getPcmType()),
+                newPcmParameter(INTEGER_PARAMETER_NAME, PcmPrimitiveDataType.INT.getPcmType()),
+                newPcmParameter(DOUBLE_PARAMETER_NAME, PcmPrimitiveDataType.DOUBLE.getPcmType()))));
     }
 
     @Override
     public DomainModel operationWithStringInputCreation() {
-        return newModel(() -> {
-            // Create repository
-            Repository pcmRepository = PcmTestModelHelper.newPcmRepository();
-
-            // Create operation interface
-            OperationInterface opInterface = newPcmOperationInterface();
-
-            // Create operation signature with string parameter
-            OperationSignature signature = newPcmOperationSignature();
-
-            // Create and configure string parameter
-            Parameter stringParam = newPcmParameter();
-            stringParam.setParameterName(OperationTest.DomainModels.STRING_PARAMETER_NAME);
-            stringParam.setDataType__Parameter(PcmPrimitiveDataType.STRING.getPcmType());
-
-            // Build model hierarchy
-            signature.getParameters__OperationSignature().add(stringParam);
-            opInterface.getSignatures__OperationInterface().add(signature);
-            pcmRepository.getInterfaces__Repository().add(opInterface);
-
-            return List.of(pcmRepository);
-        });
+        return newModel(() -> interfaceWithSignatures(newPcmOperationSignatureWithParameters(
+                newPcmParameter(STRING_PARAMETER_NAME, PcmPrimitiveDataType.STRING.getPcmType()))));
     }
+
+    // Mixed input and return types
 
     @Override
     public DomainModel operationWithMixedInputsAndReturnCreation() {
+        return newModel(() -> interfaceWithSignatures(newPcmOperationSignature(
+                PcmPrimitiveDataType.INT.getPcmType(),
+                newPcmParameter(INTEGER_PARAMETER_NAME, PcmPrimitiveDataType.INT.getPcmType()),
+                newPcmParameter(STRING_PARAMETER_NAME, PcmPrimitiveDataType.STRING.getPcmType()))));
+    }
+
+    // Multiple operations
+
+    @Override
+    public DomainModel multipleOperationsCreation() {
         return newModel(() -> {
-            // Create repository
-            Repository pcmRepository = PcmTestModelHelper.newPcmRepository();
-
-            // Create operation interface
-            OperationInterface opInterface = newPcmOperationInterface();
-
-            // Create operation signature with return type and parameters
-            OperationSignature signature = newPcmOperationSignature();
-            signature.setReturnType__OperationSignature(PcmPrimitiveDataType.INT.getPcmType());
-
-            // Create and configure integer parameter
-            Parameter intParam = newPcmParameter();
-            intParam.setParameterName(OperationTest.DomainModels.INTEGER_PARAMETER_NAME);
-            intParam.setDataType__Parameter(PcmPrimitiveDataType.INT.getPcmType());
-            signature.getParameters__OperationSignature().add(intParam);
-
-            // Create and configure string parameter
-            Parameter stringParam = newPcmParameter();
-            stringParam.setParameterName(OperationTest.DomainModels.STRING_PARAMETER_NAME);
-            stringParam.setDataType__Parameter(PcmPrimitiveDataType.STRING.getPcmType());
-            signature.getParameters__OperationSignature().add(stringParam);
-
-            // Build model hierarchy
-            opInterface.getSignatures__OperationInterface().add(signature);
-            pcmRepository.getInterfaces__Repository().add(opInterface);
-
-            return List.of(pcmRepository);
+            OperationSignature signature1 = newPcmOperationSignature(PcmPrimitiveDataType.INT.getPcmType(),
+                    newPcmParameter(BOOLEAN_PARAMETER_NAME, PcmPrimitiveDataType.BOOL.getPcmType()));
+            OperationSignature signature2 = newPcmOperationSignature(PcmPrimitiveDataType.INT.getPcmType(),
+                    newPcmParameter(STRING_PARAMETER_NAME, PcmPrimitiveDataType.STRING.getPcmType()));
+            signature2.setEntityName(OPERATION_2_NAME);
+            return interfaceWithSignatures(signature1, signature2);
         });
     }
 }

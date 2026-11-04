@@ -12,7 +12,8 @@ import org.emftext.language.java.modifiers.Public;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import edu.kit.ipd.sdq.activextendannotations.Utility;
+import com.google.common.collect.Lists;
+
 import tools.vitruv.applications.cbs.operators.oo.Visibility;
 import tools.vitruv.applications.util.temporary.java.JavaModifierUtil;
 import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.assertTrue;
@@ -22,7 +23,6 @@ import static tools.vitruv.dsls.commonalities.runtime.helper.XtendAssertHelper.a
  * Helper class for the mapping between Java's visibility modifiers and
  * {@link Visibility}.
  */
-@Utility
 public final class JavaVisibilityHelper {
 
     private JavaVisibilityHelper() {
@@ -39,7 +39,7 @@ public final class JavaVisibilityHelper {
      */
     public static Visibility getVisibility(List<AnnotationInstanceOrModifier> modifiers) {
         checkNotNull(modifiers, "modifiers is null");
-        List<Modifier> visibilityModifiers = (List<Modifier>) JavaModifierUtil.getVisibilityModifiers(modifiers);
+        List<Modifier> visibilityModifiers = Lists.newArrayList(JavaModifierUtil.getVisibilityModifiers(modifiers));
 
         if (visibilityModifiers.size() > 1) {
             throw new IllegalStateException("Java object has more than one visibility modifier: "

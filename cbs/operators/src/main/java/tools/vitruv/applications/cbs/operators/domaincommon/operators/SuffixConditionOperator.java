@@ -64,10 +64,8 @@ public class SuffixConditionOperator extends AbstractSingleArgumentConditionOper
 
         if (!result) {
             logger.debug(String.format(
-                    "Condition check failed. leftObject=getLeftOperandObject(), leftFeature=getLeftOperandFeature(), " +
-                            "leftAttributeValue='%s', suffix='%s'.",
-                    leftAttributeValue,
-                    suffix));
+                    "Condition check failed. leftObject='%s', leftFeature='%s', leftAttributeValue='%s', suffix='%s'.",
+                    leftOperandObject, leftOperandFeature, leftAttributeValue, suffix));
         }
         return result;
     }

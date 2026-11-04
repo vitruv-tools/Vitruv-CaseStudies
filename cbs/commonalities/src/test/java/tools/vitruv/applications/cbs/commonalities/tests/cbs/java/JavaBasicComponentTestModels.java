@@ -1,8 +1,9 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.java;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.eclipse.emf.ecore.EObject;
+import static tools.vitruv.applications.cbs.commonalities.tests.util.common.NamingUtil.toFirstLower;
+import static tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.insertJavaPackage;
+import static tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.newCompilationUnit;
+
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.classifiers.ClassifiersFactory;
 import org.emftext.language.java.containers.CompilationUnit;
@@ -14,14 +15,12 @@ import tools.vitruv.applications.cbs.commonalities.tests.cbs.BasicComponentTest;
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel;
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter;
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsBase;
-import static tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.insertJavaPackage;
-import static tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.newCompilationUnit;
 
 public class JavaBasicComponentTestModels extends JavaTestModelsBase implements BasicComponentTest.DomainModels {
 
     private static Package newJavaComponentPackage() {
         Package componentPackage = ContainersFactory.eINSTANCE.createPackage();
-        componentPackage.setName(COMPONENT_NAME.toLowerCase());
+        componentPackage.setName(toFirstLower(COMPONENT_NAME));
         return componentPackage;
     }
 
@@ -41,17 +40,10 @@ public class JavaBasicComponentTestModels extends JavaTestModelsBase implements 
         return newModel(() -> {
             JavaRepositoryModel javaRepositoryModel = new JavaRepositoryModel();
             Package repositoryPackage = javaRepositoryModel.getRepositoryPackage();
-
             Package componentPackage = insertJavaPackage(repositoryPackage, newJavaComponentPackage());
-
             Class componentClass = newJavaComponentClass();
             CompilationUnit compilationUnit = newCompilationUnit(componentPackage, componentClass);
-
-            List<EObject> rootObjects = new ArrayList<>(javaRepositoryModel.getRootObjects());
-            rootObjects.add(componentPackage);
-            rootObjects.add(compilationUnit);
-
-            return rootObjects;
+            return javaRepositoryModel.getRootObjectsWith(componentPackage, compilationUnit);
         });
     }
 }

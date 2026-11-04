@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -67,16 +68,14 @@ public class JavaSubPackagesOperator extends AbstractReferenceMappingOperator {
         logger.trace(String.format("Searching container for Java package: %s", subPackage));
         // TODO avoid brute force search
         // TODO only finds packages with an correspondence
-        List<EObject> knownPackages = this.executionState.getCorrespondenceModel()
-                .getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE)
-                .stream().filter(ContainersPackage.Literals.PACKAGE.getEPackage()::equals) // defensive; keep original
-                                                                                           // behaviour
-                .collect(Collectors.toList());
-        return knownPackages.stream()
+        List<Package> knownPackages = executionState.getCorrespondenceModel()
+                .getCorrespondingEObjects(ContainersPackage.Literals.PACKAGE).stream()
                 .filter(Package.class::isInstance)
                 .map(Package.class::cast)
-                .peek(p -> logger.trace(String.format("  Found candidate package: %s", p)))
-                .filter(p -> getPackageString(p).equals(subPackageNamespacesString))
+                .toList();
+        return knownPackages.stream()
+                .peek(candidate -> logger.trace(String.format("  Found candidate package: %s", candidate)))
+                .filter(candidate -> Objects.equals(getPackageString(candidate), subPackageNamespacesString))
                 .findFirst()
                 .orElse(null);
     }
@@ -87,7 +86,7 @@ public class JavaSubPackagesOperator extends AbstractReferenceMappingOperator {
 
     private String getPackageString(Package javaPackage) {
         String namespacesString = getNamespacesString(javaPackage);
-        if (namespacesString == null || namespacesString.isEmpty()) {
+        if (namespacesString.isEmpty()) {
             return javaPackage.getName();
         } else {
             return namespacesString + JavaUniquePathConstructor.PACKAGE_SEPARATOR + javaPackage.getName();
@@ -99,8 +98,8 @@ public class JavaSubPackagesOperator extends AbstractReferenceMappingOperator {
         Package pkg = validateContainer(container);
         Package subPackage = validateObject(object);
         String packageString = getPackageString(pkg);
-        String subPackageNamespacesString = subPackage.getNamespacesAsString();
-        return packageString.equals(subPackageNamespacesString);
+        String subPackageNamespacesString = getNamespacesString(subPackage);
+        return Objects.equals(packageString, subPackageNamespacesString);
     }
 
     @Override
@@ -116,22 +115,13 @@ public class JavaSubPackagesOperator extends AbstractReferenceMappingOperator {
 
         JavaContainerAndClassifierUtil.updateNamespaces(subPackage, pkg);
 
-        EObject resourceBridge = IntermediateModelHelper
+        var resourceBridge = IntermediateModelHelper
                 .getCorrespondingResourceBridge(executionState.getCorrespondenceModel(), subPackage);
-
         assertTrue(resourceBridge != null);
         // TODO specify source folder as operator argument
-        String newPath = JavaPersistenceHelper.buildJavaPackagePath("src/", subPackage.getNamespaces(),
-                subPackage.getName());
-        // resourceBridge.path = newPath; -- resourceBridge is a generic EObject, the
-        // original code set a 'path' feature.
-        IntermediateModelHelper
-                .getCorrespondingResourceBridge(executionState.getCorrespondenceModel(), subPackage)
-                .eSet(IntermediateModelHelper
-                        .getCorrespondingResourceBridge(executionState.getCorrespondenceModel(), subPackage).eClass()
-                        .getEStructuralFeature("path"), newPath);
-
-        logger.trace(String.format("  Updated sub-package resource path to: %s", newPath));
+        resourceBridge.setPath(JavaPersistenceHelper.buildJavaPackagePath("src/", subPackage.getNamespaces(),
+                subPackage.getName()));
+        logger.trace(String.format("  Updated sub-package resource path to: %s", resourceBridge.getPath()));
     }
 
     // parentPackage needs to already be persisted

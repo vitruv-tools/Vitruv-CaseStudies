@@ -1,7 +1,9 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs;
 
-import java.util.ArrayList;
+import static tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.orderedPairs;
+
 import java.util.List;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -15,30 +17,27 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModel
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsProvider;
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider;
 
-import static tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.orderedPairs;
-
 public class RepositoryTest extends CBSCommonalitiesExecutionTest {
 
     public static List<Object[]> testParameters() {
-        List<DomainModelsProvider<DomainModels>> domainModelsProviders = new ArrayList<>();
-        domainModelsProviders.add(new PcmTestModelsProvider<>(context -> new PcmRepositoryTestModels(context)));
-        domainModelsProviders.add(new UmlTestModelsProvider<>(context -> new UmlRepositoryTestModels(context)));
-        domainModelsProviders.add(new JavaTestModelsProvider<>(context -> new JavaRepositoryTestModels(context)));
+        List<DomainModelsProvider<DomainModels>> domainModelsProviders = List.of(
+                new PcmTestModelsProvider<DomainModels>(PcmRepositoryTestModels::new),
+                new UmlTestModelsProvider<DomainModels>(UmlRepositoryTestModels::new),
+                new JavaTestModelsProvider<DomainModels>(JavaRepositoryTestModels::new));
         return orderedPairs(domainModelsProviders);
     }
 
     public interface DomainModels {
+
         DomainModel emptyRepositoryCreation();
     }
 
     @ParameterizedTest(name = "{0} to {1}")
     @MethodSource("testParameters")
-    public void emptyRepositoryCreation(
-            DomainModelsProvider<DomainModels> sourceModelsProvider,
+    public void emptyRepositoryCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
             DomainModelsProvider<DomainModels> targetModelsProvider) {
-        sourceModelsProvider.getModels(this.getVitruvApplicationTestAdapter()).emptyRepositoryCreation()
-                .createAndSynchronize();
-        targetModelsProvider.getModels(this.getVitruvApplicationTestAdapter()).emptyRepositoryCreation().check();
+        getModels(sourceModelsProvider).emptyRepositoryCreation().createAndSynchronize();
+        getModels(targetModelsProvider).emptyRepositoryCreation().check();
     }
 
     // TODO repository renaming

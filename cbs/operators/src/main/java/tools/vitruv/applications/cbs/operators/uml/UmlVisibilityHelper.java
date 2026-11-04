@@ -2,10 +2,8 @@ package tools.vitruv.applications.cbs.operators.uml;
 
 import org.eclipse.uml2.uml.VisibilityKind;
 
-import edu.kit.ipd.sdq.activextendannotations.Utility;
 import tools.vitruv.applications.cbs.operators.oo.Visibility;
 
-@Utility
 public final class UmlVisibilityHelper {
 
     private UmlVisibilityHelper() {

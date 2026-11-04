@@ -1,6 +1,7 @@
 package tools.vitruv.applications.cbs.operators.java.operators;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -72,7 +73,7 @@ public class JavaPackageCompilationUnitsOperator extends AbstractReferenceMappin
 
         return knownPackages.stream()
                 .peek(pkg -> logger.trace(String.format("Found candidate package: %s", pkg)))
-                .filter(pkg -> getPackageString(pkg).equals(compilationUnitNamespacesString))
+                .filter(pkg -> Objects.equals(getPackageString(pkg), compilationUnitNamespacesString))
                 .findFirst()
                 .orElse(null);
     }
@@ -96,7 +97,7 @@ public class JavaPackageCompilationUnitsOperator extends AbstractReferenceMappin
         CompilationUnit compilationUnit = validateObject(object);
         String packageString = getPackageString(pkg);
         String compilationUnitNamespacesString = getNamespacesString(compilationUnit);
-        return packageString.equals(compilationUnitNamespacesString);
+        return Objects.equals(packageString, compilationUnitNamespacesString);
     }
 
     @Override

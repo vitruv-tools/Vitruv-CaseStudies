@@ -16,18 +16,6 @@
   <name>Component-Based Applications Equivalence Tests</name>
   <description>The equivalence project</description>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.eclipse.xtext</groupId>
-        <artifactId>xtend-maven-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
 
   <dependencies>
     <!-- internal dependencies -->
@@ -83,11 +71,6 @@
     <dependency>
       <groupId>sdq-commons</groupId>
       <artifactId>edu.kit.ipd.sdq.commons.util.emf</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>xannotations</groupId>
-      <artifactId>edu.kit.ipd.sdq.activextendannotations</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

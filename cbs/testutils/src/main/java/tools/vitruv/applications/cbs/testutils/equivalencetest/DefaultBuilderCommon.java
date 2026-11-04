@@ -1,30 +1,34 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest;
 
-import java.util.*;
-import java.util.function.Consumer;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Comparator.comparing;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.Consumer;
+
 import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor;
 import tools.vitruv.change.testutils.TestUserInteraction;
-import tools.vitruv.change.testutils.views.TestView;
 
-public abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
+abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
+    /* both maps always contain lists for all metamodels */
     protected final Map<MetamodelDescriptor, List<MetamodelStep>> dependencySteps;
     protected final Map<MetamodelDescriptor, List<MetamodelStep>> steps;
     protected Consumer<TestUserInteraction> userInteractionConfiguration = null;
-    protected final Checks checks;
+    protected final Checks checks = new Checks(this);
 
     protected DefaultBuilderCommon(Set<MetamodelDescriptor> targetMetamodels) {
         this.dependencySteps = mapForMetamodels(targetMetamodels);
         this.steps = mapForMetamodels(targetMetamodels);
-        this.checks = new Checks(this);
     }
 
-    private static Map<MetamodelDescriptor, List<MetamodelStep>> mapForMetamodels(Set<MetamodelDescriptor> metamodels) {
-        TreeMap<MetamodelDescriptor, List<MetamodelStep>> result = new TreeMap<>(
-                comparing(MetamodelDescriptor::getName));
+    private static Map<MetamodelDescriptor, List<MetamodelStep>> mapForMetamodels(
+            Set<MetamodelDescriptor> metamodels) {
+        Map<MetamodelDescriptor, List<MetamodelStep>> result = new TreeMap<>(comparing(MetamodelDescriptor::getName));
         for (MetamodelDescriptor metamodel : metamodels) {
             result.put(metamodel, new LinkedList<>());
         }
@@ -45,49 +49,49 @@ public abstract class DefaultBuilderCommon implements EquivalenceTestBuilder {
         this.userInteractionConfiguration = interactionsProvider;
     }
 
+    /**
+     * Adds the step to the list of its target metamodel in {@code steps}.
+     */
+    protected static <T extends MetamodelStep> T addStep(Map<MetamodelDescriptor, List<MetamodelStep>> steps,
+            T metamodelStep) {
+        steps.computeIfAbsent(metamodelStep.getTargetMetamodel(), metamodel -> new LinkedList<>()).add(metamodelStep);
+        return metamodelStep;
+    }
+
     protected static class Checks {
         private final DefaultBuilderCommon target;
         private boolean active = true;
 
-        public Checks(DefaultBuilderCommon target) {
+        Checks(DefaultBuilderCommon target) {
             this.target = target;
         }
 
-        public void forStep(MetamodelDescriptor metamodel) {
+        void forStep(MetamodelDescriptor metamodel) {
             checkActive();
         }
 
-        public void forVariant(MetamodelDescriptor metamodel, String name) {
+        void forVariant(MetamodelDescriptor metamodel, String name) {
             forStep(metamodel);
-            checkState(
-                    !target.steps.get(metamodel).isEmpty(),
-                    String.format("You must first register a proper step in %s before registering a variant!",
-                            metamodel.getName()));
+            checkState(!target.steps.get(metamodel).isEmpty(),
+                    "You must first register a proper step in %s before registering a variant!", metamodel.getName());
             checkArgument(name != null && !name.isBlank(), "You must provide a name for a variant!");
         }
 
-        public void forDependency() {
+        void forDependency() {
             checkActive();
         }
 
         private void checkActive() {
-            checkState(
-                    active,
-                    "You have already requested the tests from this builder. No more steps can be added.");
+            checkState(active, "You have already requested the tests from this builder. No more steps can be added.");
         }
 
-        public void forUserInteractionConfiguration() {
-            checkState(
-                    target.userInteractionConfiguration == null,
-                    "User interactions have already been configured!");
+        void forUserInteractionConfiguration() {
+            checkState(target.userInteractionConfiguration == null, "User interactions have already been configured!");
         }
 
-        public void forFinalizing() {
-            checkState(
-                    target.steps.entrySet().stream()
-                            .filter(entry -> !entry.getValue().isEmpty())
-                            .count() >= 2,
-                    "Please register steps for at least two metamodels!");
+        void forFinalizing() {
+            long metamodelsWithSteps = target.steps.values().stream().filter(stepList -> !stepList.isEmpty()).count();
+            checkState(metamodelsWithSteps >= 2, "Please register steps for at least two metamodels!");
             active = false;
         }
     }

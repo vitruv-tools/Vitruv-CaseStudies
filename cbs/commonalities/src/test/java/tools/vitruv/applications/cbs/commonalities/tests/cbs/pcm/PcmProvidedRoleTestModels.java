@@ -1,6 +1,9 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm;
 
+import static tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelHelper.newPcmRepository;
+
 import java.util.List;
+
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
@@ -11,30 +14,35 @@ import tools.vitruv.applications.cbs.commonalities.tests.cbs.ProvidedRoleTest;
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel;
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter;
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsBase;
-import static tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelHelper.newPcmRepository;
 
 public class PcmProvidedRoleTestModels extends PcmTestModelsBase implements ProvidedRoleTest.DomainModels {
 
-    private static BasicComponent newPcmBasicComponent() {
-        BasicComponent component = RepositoryFactory.eINSTANCE.createBasicComponent();
-        component.setEntityName(COMPONENT_NAME);
-        return component;
+    private static BasicComponent newPcmBasicComponent(OperationInterface... providedInterfaces) {
+        BasicComponent basicComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
+        basicComponent.setEntityName(COMPONENT_NAME);
+        for (OperationInterface providedInterface : providedInterfaces) {
+            basicComponent.getProvidedRoles_InterfaceProvidingEntity()
+                    .add(newPcmOperationProvidedRole(providedInterface));
+        }
+        return basicComponent;
     }
 
-    private static OperationProvidedRole newPcmOperationProvidedRole() {
-        return RepositoryFactory.eINSTANCE.createOperationProvidedRole();
+    private static OperationProvidedRole newPcmOperationProvidedRole(OperationInterface providedInterface) {
+        OperationProvidedRole providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole();
+        providedRole.setProvidedInterface__OperationProvidedRole(providedInterface);
+        return providedRole;
     }
 
     private static OperationInterface newPcmOperationInterface1() {
-        OperationInterface opInterface = RepositoryFactory.eINSTANCE.createOperationInterface();
-        opInterface.setEntityName(INTERFACE_1_NAME);
-        return opInterface;
+        OperationInterface operationInterface = RepositoryFactory.eINSTANCE.createOperationInterface();
+        operationInterface.setEntityName(INTERFACE_1_NAME);
+        return operationInterface;
     }
 
     private static OperationInterface newPcmOperationInterface2() {
-        OperationInterface opInterface = newPcmOperationInterface1();
-        opInterface.setEntityName(INTERFACE_2_NAME);
-        return opInterface;
+        OperationInterface operationInterface = newPcmOperationInterface1();
+        operationInterface.setEntityName(INTERFACE_2_NAME);
+        return operationInterface;
     }
 
     public PcmProvidedRoleTestModels(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
@@ -44,22 +52,10 @@ public class PcmProvidedRoleTestModels extends PcmTestModelsBase implements Prov
     @Override
     public DomainModel componentWithProvidedRoleCreation() {
         return newModel(() -> {
-            // Create repository
             Repository pcmRepository = newPcmRepository();
-
-            // Create and add interface
             OperationInterface interface1 = newPcmOperationInterface1();
             pcmRepository.getInterfaces__Repository().add(interface1);
-
-            // Create component with provided role
-            BasicComponent component = newPcmBasicComponent();
-            OperationProvidedRole providedRole = newPcmOperationProvidedRole();
-            providedRole.setProvidedInterface__OperationProvidedRole(interface1);
-            component.getProvidedRoles_InterfaceProvidingEntity().add(providedRole);
-
-            // Add component to repository
-            pcmRepository.getComponents__Repository().add(component);
-
+            pcmRepository.getComponents__Repository().add(newPcmBasicComponent(interface1));
             return List.of(pcmRepository);
         });
     }
@@ -67,31 +63,12 @@ public class PcmProvidedRoleTestModels extends PcmTestModelsBase implements Prov
     @Override
     public DomainModel componentWithMultipleProvidedRolesCreation() {
         return newModel(() -> {
-            // Create repository
             Repository pcmRepository = newPcmRepository();
-
-            // Create and add interfaces
             OperationInterface interface1 = newPcmOperationInterface1();
             OperationInterface interface2 = newPcmOperationInterface2();
             pcmRepository.getInterfaces__Repository().add(interface1);
             pcmRepository.getInterfaces__Repository().add(interface2);
-
-            // Create component with provided roles
-            BasicComponent component = newPcmBasicComponent();
-
-            // Add first provided role
-            OperationProvidedRole providedRole1 = newPcmOperationProvidedRole();
-            providedRole1.setProvidedInterface__OperationProvidedRole(interface1);
-            component.getProvidedRoles_InterfaceProvidingEntity().add(providedRole1);
-
-            // Add second provided role
-            OperationProvidedRole providedRole2 = newPcmOperationProvidedRole();
-            providedRole2.setProvidedInterface__OperationProvidedRole(interface2);
-            component.getProvidedRoles_InterfaceProvidingEntity().add(providedRole2);
-
-            // Add component to repository
-            pcmRepository.getComponents__Repository().add(component);
-
+            pcmRepository.getComponents__Repository().add(newPcmBasicComponent(interface1, interface2));
             return List.of(pcmRepository);
         });
     }

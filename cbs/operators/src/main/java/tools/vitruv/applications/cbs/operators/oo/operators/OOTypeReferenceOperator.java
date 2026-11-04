@@ -32,6 +32,7 @@ public class OOTypeReferenceOperator extends AbstractTypeReferenceOperator<Strin
         }
     }
 
+    @Override
     protected String getDomainTypeReference(Object domainType) {
         assertTrue(domainType != null);
         if (domainType instanceof Intermediate intermediate) {
@@ -73,14 +74,10 @@ public class OOTypeReferenceOperator extends AbstractTypeReferenceOperator<Strin
         return null;
     }
 
+    @Override
     protected String toPrimitiveDomainTypeReference(CommonPrimitiveType commonPrimitiveType) {
         // OO and CBS use the same common primitive types:
         return commonPrimitiveType.name();
     }
-
-    @Override
-    protected String toDomainTypeReference(String intermediateTypeReference) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toDomainTypeReference'");
-    }
 }
+
