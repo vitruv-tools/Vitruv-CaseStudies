@@ -10,7 +10,7 @@ import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.Attri
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeType;
 import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState;
 
-@AttributeMappingOperator(name = "javaAbstractModifier", commonalityAttributeType = @AttributeType(multiValued = false, type = Boolean.class), participationAttributeType = @AttributeType(multiValued = true, type = AnnotationInstanceOrModifier.class))
+@AttributeMappingOperator(name = "javaAbstractModifier", commonalityAttributeType = @AttributeType(multiValued = false, type = boolean.class), participationAttributeType = @AttributeType(multiValued = true, type = AnnotationInstanceOrModifier.class))
 public class JavaAbstractModifierOperator extends AbstractJavaModifierOperator {
 
     /**
