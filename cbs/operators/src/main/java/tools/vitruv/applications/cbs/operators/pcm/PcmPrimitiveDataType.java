@@ -29,9 +29,8 @@ public enum PcmPrimitiveDataType {
 	BOOL(PrimitiveTypeEnum.BOOL),
 	DOUBLE(PrimitiveTypeEnum.DOUBLE),
 	CHAR(PrimitiveTypeEnum.CHAR),
-	BYTE(PrimitiveTypeEnum.BYTE);
-	// TODO Missing in PCM's PrimitiveTypes.repository and therefore not supported by us currently.
-	// LONG(PrimitiveTypeEnum.LONG);
+	BYTE(PrimitiveTypeEnum.BYTE),
+	LONG(PrimitiveTypeEnum.LONG);
 
 	private static final Logger logger = LogManager.getLogger(PcmPrimitiveDataType.class);
 
