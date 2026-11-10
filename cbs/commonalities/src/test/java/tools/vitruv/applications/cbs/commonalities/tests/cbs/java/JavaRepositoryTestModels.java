@@ -13,9 +13,6 @@ public class JavaRepositoryTestModels extends JavaTestModelsBase implements Repo
 
     @Override
     public DomainModel emptyRepositoryCreation() {
-        return newModel(() -> {
-            JavaRepositoryModel javaRepositoryModel = new JavaRepositoryModel();
-            return javaRepositoryModel.getRootObjects();
-        });
+        return newModel(() -> new JavaRepositoryModel().getRootObjects());
     }
 }

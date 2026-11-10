@@ -8,10 +8,8 @@ import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.ContainersFactory;
 import org.emftext.language.java.containers.Package;
 
-import edu.kit.ipd.sdq.activextendannotations.Utility;
 import static tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaFilePathHelper.getCompilationUnitName;
 
-@Utility
 public final class JavaModelHelper {
 
     private JavaModelHelper() {

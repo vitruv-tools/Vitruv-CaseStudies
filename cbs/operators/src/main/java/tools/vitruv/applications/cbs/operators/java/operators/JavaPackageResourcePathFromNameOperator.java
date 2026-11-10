@@ -41,7 +41,7 @@ public class JavaPackageResourcePathFromNameOperator extends AbstractAttributeMa
     // resource path -> package name
     @Override
     public String applyTowardsCommonality(String resourcePath) {
-        String normalizedPath = normalizeResourcePathStatic(resourcePath); // can be null
+        String normalizedPath = normalizeResourcePath(resourcePath); // can be null
         String pathRelativeToSource = (normalizedPath == null) ? null
                 : stripJavaSourcePath(normalizedPath, sourcePath);
         String packageName = getPackageName(pathRelativeToSource);
@@ -93,12 +93,8 @@ public class JavaPackageResourcePathFromNameOperator extends AbstractAttributeMa
         return (packageName == null || packageName.isEmpty()) ? null : packageName;
     }
 
-    /*
-     * Call JavaPersistenceHelper static methods (these are the Xtend extension
-     * methods in the original). This avoids accidental name clashes with local
-     * helpers.
-     */
-    private static String normalizeResourcePathStatic(String resourcePath) {
+    // Returns null for null or empty paths, and otherwise ensures a trailing path separator.
+    private static String normalizeResourcePath(String resourcePath) {
         if (resourcePath == null || resourcePath.isEmpty())
             return null;
         // Append the path separator if it is missing:

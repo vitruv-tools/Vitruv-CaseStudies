@@ -1,11 +1,27 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static tools.vitruv.change.testutils.matchers.ModelMatchers.containsModelOf;
+import static tools.vitruv.change.testutils.printing.ModelPrinting.appendModelValueSet;
+import static tools.vitruv.change.testutils.printing.ModelPrinting.appendPrintResult;
+import static tools.vitruv.change.testutils.printing.PrintMode.MULTI_LINE_LIST;
+
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -13,7 +29,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.xtext.xbase.lib.Pair;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -23,9 +38,9 @@ import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor;
 import tools.vitruv.applications.cbs.testutils.ModelComparisonSettings;
 import tools.vitruv.change.composite.description.PropagatedChange;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
-import tools.vitruv.framework.vsum.VirtualModelBuilder;
 import tools.vitruv.change.testutils.TestProjectManager;
 import tools.vitruv.change.testutils.TestUserInteraction;
+import tools.vitruv.change.testutils.matchers.ModelDeepEqualityOption;
 import tools.vitruv.change.testutils.printing.DefaultPrintIdProvider;
 import tools.vitruv.change.testutils.printing.ModelPrinting;
 import tools.vitruv.change.testutils.printing.PrintIdProvider;
@@ -34,17 +49,15 @@ import tools.vitruv.change.testutils.views.BasicTestView;
 import tools.vitruv.change.testutils.views.ChangePublishingTestView;
 import tools.vitruv.change.testutils.views.TestView;
 import tools.vitruv.change.testutils.views.UriMode;
+import tools.vitruv.framework.vsum.VirtualModelBuilder;
+import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
+import tools.vitruv.framework.vsum.internal.ModelInstance;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import static java.nio.file.FileVisitResult.*;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import tools.vitruv.change.testutils.matchers.ModelDeepEqualityOption;
-import static tools.vitruv.change.testutils.matchers.ModelMatchers.containsModelOf;
-
-public class EquivalenceTestExecutable implements Executable, AutoCloseable {
+/**
+ * Executes one equivalence test: runs the dependencies and the test step in a view backed by a virtual model, runs
+ * the reference steps in a plain view, and checks that both views contain the same models.
+ */
+class EquivalenceTestExecutable implements Executable, AutoCloseable {
     private static final TestProjectManager testProjectManager = new TestProjectManager();
     private final MetamodelStep testStep;
     private final Map<MetamodelDescriptor, List<MetamodelStep>> dependencySteps;
@@ -54,14 +67,10 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
     private final ModelComparisonSettings comparisonSettings;
     private final EquivalenceTestExtensionContext extensionContext;
 
-    public EquivalenceTestExecutable(
-            MetamodelStep testStep,
-            Map<MetamodelDescriptor, List<MetamodelStep>> dependencySteps,
+    EquivalenceTestExecutable(MetamodelStep testStep, Map<MetamodelDescriptor, List<MetamodelStep>> dependencySteps,
             Map<MetamodelDescriptor, MetamodelStep> referenceSteps,
-            Collection<ChangePropagationSpecification> changePropagationSpecifications,
-            UriMode uriMode,
-            ModelComparisonSettings comparisonSettings,
-            EquivalenceTestExtensionContext extensionContext) {
+            Collection<ChangePropagationSpecification> changePropagationSpecifications, UriMode uriMode,
+            ModelComparisonSettings comparisonSettings, EquivalenceTestExtensionContext extensionContext) {
         this.testStep = testStep;
         this.dependencySteps = dependencySteps;
         this.referenceSteps = referenceSteps;
@@ -73,48 +82,39 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
     @Override
     public void execute() throws Throwable {
-        try (
-                DirectoryTestView testView = setupTestView();
+        try (DirectoryTestView testView = setupTestView();
                 DirectoryTestView referenceView = setupReferenceView();
                 AutoCloseable printerChange = installViewDirectoryUriReplacement(testView, referenceView)) {
             checkNotNull(printerChange); // Suppress warning for variable not being used
             executeDependencies(testView, referenceView);
 
             testStep.executeIn(testView);
-            for (MetamodelStep step : referenceSteps.values()) {
-                step.executeIn(referenceView);
-            }
+            referenceSteps.values().forEach(step -> step.executeIn(referenceView));
             verifyTestViewResults();
-        } catch (Throwable t) {
-            extensionContext.getExecutionException().ifPresentOrElse(
-                    original -> {
-                        original.addSuppressed(t);
-                        throw new RuntimeException(original);
-                    },
-                    () -> {
-                        throw new RuntimeException(t);
-                    });
-            throw t;
+        } catch (Throwable throwable) {
+            extensionContext.setExecutionException(Optional.of(throwable));
+            throw throwable;
         } finally {
             close();
         }
     }
 
-    private DirectoryTestView setupTestView() {
+    private DirectoryTestView setupTestView() throws IOException {
         Path viewDirectory = testProjectManager.getProject("", extensionContext);
         Path vsumDirectory = testProjectManager.getProject("vsum", extensionContext);
 
-        Collection<ChangePropagationSpecification> changePropagationSpecifications = this.changePropagationSpecifications;
         TestUserInteraction userInteraction = new TestUserInteraction();
-        var vsum = new VirtualModelBuilder()
+        InternalVirtualModel vsum = new VirtualModelBuilder()
                 .withStorageFolder(vsumDirectory)
                 .withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(userInteraction))
                 .withChangePropagationSpecifications(changePropagationSpecifications)
                 .buildAndInitialize();
-
         return new DirectoryTestView(
-                new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum,
-                        (resource, resolver) -> vsum.getUuidResolver()),
+                new ChangePublishingTestView(viewDirectory, userInteraction, uriMode, vsum, vsum.getUuidResolver(),
+                        uri -> {
+                            ModelInstance modelInstance = vsum.getModelInstance(uri);
+                            return modelInstance != null ? modelInstance.getResource() : null;
+                        }),
                 viewDirectory);
     }
 
@@ -126,43 +126,39 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
         return newBasicView(testProjectManager.getProject("", extensionContext));
     }
 
-    private void executeDependencies(TestView testView, TestView referenceView) {
+    private void executeDependencies(TestView testView, TestView referenceView) throws Throwable {
         for (MetamodelStep dependencyTestStep : dependencySteps.getOrDefault(testStep.getTargetMetamodel(),
-                Collections.emptyList())) {
+                List.of())) {
             dependencyTestStep.executeIn(testView);
         }
         for (MetamodelDescriptor referenceMetamodel : getReferenceMetamodels()) {
-            for (MetamodelStep dependencyReferenceStep : this.dependencySteps.getOrDefault(referenceMetamodel,
-                    Collections.emptyList())) {
+            for (MetamodelStep dependencyReferenceStep : dependencySteps.getOrDefault(referenceMetamodel,
+                    List.of())) {
                 dependencyReferenceStep.executeIn(referenceView);
             }
         }
-        try {
-            verifyTestViewResults();
-        } catch (Throwable throwable) {
-            throw new RuntimeException(throwable);
-        }
+        verifyTestViewResults();
     }
 
     private void verifyTestViewResults() throws Throwable {
-        try (
-                DirectoryTestView testView = setupReadOnlyTestView();
+        // use new views to reload the actual resources from disk
+        try (DirectoryTestView testView = setupReadOnlyTestView();
                 DirectoryTestView referenceView = setupReferenceView()) {
-            Set<Path> referenceFiles = dataFiles(referenceView.directory,
-                    file -> getReferenceMetamodels().stream().anyMatch(m -> belongsTo(file, m)));
+            Set<Path> referenceFiles = dataFiles(referenceView.getDirectory(), this::belongsToReferenceMetamodel);
 
             assertThat(testView, containsExactlyResources(referenceView, referenceFiles));
 
             for (Path model : referenceFiles) {
                 Resource referenceResource = referenceView.resourceAt(model);
-                MetamodelDescriptor referenceMetamodel = getReferenceMetamodels().stream()
-                        .filter(m -> belongsTo(referenceResource, m))
-                        .findFirst()
-                        .orElseThrow(
-                                () -> new IllegalStateException("Cannot find metamodel of " + referenceResource + "!"));
-                List<? extends ModelDeepEqualityOption> filterList = comparisonSettings
-                        .getEqualityOptionsForMetamodel(referenceMetamodel);
-                ModelDeepEqualityOption[] filters = filterList.toArray(new ModelDeepEqualityOption[0]);
+                MetamodelDescriptor referenceMetamodel = checkNotNull(
+                        getReferenceMetamodels().stream()
+                                .filter(metamodel -> belongsTo(referenceResource, metamodel))
+                                .findFirst()
+                                .orElse(null),
+                        "Cannot find metamodel of %s!", referenceResource);
+                ModelDeepEqualityOption[] filters = comparisonSettings
+                        .getEqualityOptionsForMetamodel(referenceMetamodel)
+                        .toArray(ModelDeepEqualityOption[]::new);
 
                 assertThat(testView.resourceAt(model), containsModelOf(referenceResource, filters));
             }
@@ -170,40 +166,34 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
     }
 
     private AutoCloseable installViewDirectoryUriReplacement(TestView testView, TestView referenceView) {
-        Map<URI, URI> replacements = Map.of(
-                referenceView.getUri(Path.of(".")).appendSegment(""),
-                URI.createFileURI("[reference view]/"),
-                testView.getUri(Path.of(".")).appendSegment(""),
-                URI.createFileURI("[test view]/"));
-        return ModelPrinting.prepend(new UriReplacingPrinter((List<Pair<URI, URI>>) replacements));
+        return ModelPrinting.prepend(new UriReplacingPrinter(List.of(
+                // mind the order, the test view is a prefix of the reference view!
+                Map.entry(referenceView.getUri(Path.of(".")).appendSegment(""),
+                        URI.createFileURI("[reference view]/")),
+                Map.entry(testView.getUri(Path.of(".")).appendSegment(""), URI.createFileURI("[test view]/")))));
     }
 
     @Override
-    public void close() {
-        try {
-            testProjectManager.afterEach(extensionContext);
-        } catch (Exception e) {
-            throw new RuntimeException("Exception during afterEach", e);
-        }
+    public void close() throws Exception {
+        testProjectManager.afterEach(extensionContext);
         extensionContext.close();
     }
 
     private static Set<Path> dataFiles(Path path, Predicate<Path> predicate) {
         Set<Path> result = new LinkedHashSet<>();
         try {
-            java.nio.file.Files.walkFileTree(path, new SimpleFileVisitor<>() {
+            Files.walkFileTree(path, new SimpleFileVisitor<>() {
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                     String dirName = dir.getFileName().toString();
                     if (dirName.startsWith("[") && dirName.endsWith("]") && !dir.equals(path)) {
                         return SKIP_SUBTREE;
-                    } else {
-                        return CONTINUE;
                     }
+                    return CONTINUE;
                 }
 
                 @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                     Path relativized = path.relativize(file);
                     if (predicate.test(relativized)) {
                         result.add(relativized);
@@ -212,17 +202,21 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
                 }
             });
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
         return result;
     }
 
+    private boolean belongsToReferenceMetamodel(Path file) {
+        return getReferenceMetamodels().stream().anyMatch(metamodel -> belongsTo(file, metamodel));
+    }
+
     private static boolean belongsTo(Path path, MetamodelDescriptor metamodel) {
-        return metamodel.fileExtensions.stream().anyMatch(ext -> path.toString().endsWith("." + ext));
+        return metamodel.getFileExtensions().stream().anyMatch(extension -> path.toString().endsWith("." + extension));
     }
 
     private static boolean belongsTo(Resource resource, MetamodelDescriptor metamodel) {
-        return metamodel.fileExtensions.contains(resource.getURI().fileExtension());
+        return metamodel.getFileExtensions().contains(resource.getURI().fileExtension());
     }
 
     private Matcher<? super DirectoryTestView> containsExactlyResources(TestView referenceView,
@@ -238,76 +232,81 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
         return new DirectoryTestView(new BasicTestView(viewDirectory, uriMode), viewDirectory);
     }
 
-    public static class DirectoryTestView implements TestView, AutoCloseable {
+    /**
+     * A {@link TestView} that knows the directory it stores its models in.
+     */
+    private static class DirectoryTestView implements TestView {
         private final TestView delegate;
         private final Path directory;
 
-        public DirectoryTestView(TestView delegate, Path directory) {
+        DirectoryTestView(TestView delegate, Path directory) {
             this.delegate = delegate;
             this.directory = directory;
         }
 
-        public Path getDirectory() {
+        Path getDirectory() {
             return directory;
         }
 
         @Override
-        public void close() throws Exception {
-            if (delegate instanceof AutoCloseable) {
-                ((AutoCloseable) delegate).close();
-            }
+        public Resource resourceAt(URI modelUri) {
+            return delegate.resourceAt(modelUri);
         }
 
         @Override
-        public <T extends EObject> T from(Class<T> arg0, URI arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'from'");
+        public Resource resourceAt(Path modelPathInProject) {
+            return delegate.resourceAt(modelPathInProject);
         }
 
         @Override
-        public URI getUri(Path arg0) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getUri'");
+        public <T extends EObject> T from(Class<T> clazz, URI modelUri) {
+            return delegate.from(clazz, modelUri);
+        }
+
+        @Override
+        public <T extends EObject> T from(Class<T> clazz, Resource resource) {
+            return delegate.from(clazz, resource);
+        }
+
+        @Override
+        public <T extends EObject> T from(Class<T> clazz, Path modelPathInProject) {
+            return delegate.from(clazz, modelPathInProject);
+        }
+
+        @Override
+        public URI getUri(Path viewRelativePath) {
+            return delegate.getUri(viewRelativePath);
+        }
+
+        @Override
+        public void moveTo(Resource resource, Path newViewRelativePath) {
+            delegate.moveTo(resource, newViewRelativePath);
+        }
+
+        @Override
+        public void moveTo(Resource resource, URI newUri) {
+            delegate.moveTo(resource, newUri);
+        }
+
+        @Override
+        public <T extends Notifier> T record(T notifier, Consumer<T> consumer) {
+            return delegate.record(notifier, consumer);
+        }
+
+        @Override
+        public <T extends Notifier> List<PropagatedChange> propagate(T notifier, Consumer<T> consumer) {
+            return delegate.propagate(notifier, consumer);
         }
 
         @Override
         public TestUserInteraction getUserInteraction() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getUserInteraction'");
+            return delegate.getUserInteraction();
         }
 
         @Override
-        public void moveTo(Resource arg0, Path arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'moveTo'");
+        public void close() throws Exception {
+            delegate.close();
         }
-
-        @Override
-        public void moveTo(Resource arg0, URI arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'moveTo'");
-        }
-
-        @Override
-        public <T extends Notifier> List<PropagatedChange> propagate(T arg0, Consumer<T> arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'propagate'");
-        }
-
-        @Override
-        public <T extends Notifier> T record(T arg0, Consumer<T> arg1) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'record'");
-        }
-
-        @Override
-        public Resource resourceAt(URI arg0) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'resourceAt'");
-        }
-
-        // Delegate all TestView methods to 'delegate'
-        // ... (implement as needed)
     }
 
     private static class ModelFilesMatcher extends TypeSafeMatcher<DirectoryTestView> {
@@ -317,7 +316,7 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
         private Set<Path> testFiles;
         private final PrintIdProvider idProvider = new DefaultPrintIdProvider();
 
-        public ModelFilesMatcher(Set<Path> referenceFiles, TestView referenceView,
+        ModelFilesMatcher(Set<Path> referenceFiles, TestView referenceView,
                 Set<MetamodelDescriptor> referenceMetamodels) {
             this.referenceFiles = referenceFiles;
             this.referenceView = referenceView;
@@ -326,38 +325,48 @@ public class EquivalenceTestExecutable implements Executable, AutoCloseable {
 
         @Override
         public void describeTo(Description description) {
-            description.appendText("exactly these resource paths to exist in the test view: ");
-            // Implement appendPrintResult and printSet as needed
-            // description.appendPrintResult(...);
+            appendPrintResult(description.appendText("exactly these resource paths to exist in the test view: "),
+                    target -> target.printSet(referenceFiles, MULTI_LINE_LIST,
+                            (subTarget, path) -> subTarget.print(path.toString())));
         }
 
         @Override
         protected boolean matchesSafely(DirectoryTestView testView) {
             testFiles = dataFiles(testView.getDirectory(),
-                    file -> referenceMetamodels.stream().anyMatch(m -> belongsTo(file, m)));
+                    file -> referenceMetamodels.stream().anyMatch(metamodel -> belongsTo(file, metamodel)));
             return testFiles.equals(referenceFiles);
         }
 
         @Override
         protected void describeMismatchSafely(DirectoryTestView testView, Description mismatchDescription) {
-            Set<Path> missingResources = new LinkedHashSet<>(referenceFiles);
-            missingResources.removeAll(testFiles);
-            Set<Path> unexpectedResources = new LinkedHashSet<>(testFiles);
-            unexpectedResources.removeAll(referenceFiles);
+            Set<Resource> missingResources = resourcesInReferenceView(difference(referenceFiles, testFiles));
+            Set<Resource> unexpectedResources = resourcesInReferenceView(difference(testFiles, referenceFiles));
 
-            // Map missing/unexpected resources to model values if needed
-            // and append to mismatchDescription using appendModelValueSet
             if (!missingResources.isEmpty()) {
-                mismatchDescription.appendText("the following resources are missing in the test view: ");
-                // mismatchDescription.appendModelValueSet(...);
+                appendModelValueSet(
+                        mismatchDescription.appendText("the following resources are missing in the test view: "),
+                        missingResources, MULTI_LINE_LIST, idProvider);
             }
             if (!unexpectedResources.isEmpty()) {
                 if (!missingResources.isEmpty()) {
                     mismatchDescription.appendText(System.lineSeparator()).appendText("    and ");
                 }
-                mismatchDescription.appendText("the test view contains the following unexpected resources: ");
-                // mismatchDescription.appendModelValueSet(...);
+                appendModelValueSet(
+                        mismatchDescription.appendText("the test view contains the following unexpected resources: "),
+                        unexpectedResources, MULTI_LINE_LIST, idProvider);
             }
+        }
+
+        private static Set<Path> difference(Set<Path> minuend, Set<Path> subtrahend) {
+            Set<Path> result = new LinkedHashSet<>(minuend);
+            result.removeAll(subtrahend);
+            return result;
+        }
+
+        private Set<Resource> resourcesInReferenceView(Set<Path> paths) {
+            Set<Resource> resources = new LinkedHashSet<>();
+            paths.forEach(path -> resources.add(referenceView.resourceAt(path)));
+            return resources;
         }
     }
 }
