@@ -47,45 +47,31 @@ public class JavaTypeReferenceOperator extends AbstractTypeReferenceOperator<Typ
 
         // Check for wrapper Void type:
         Type domainType = getReferencedDomainType(domainTypeReference);
-        if (domainType instanceof Class aClass) {
-            Type unwrapped = null;
-            try {
-                unwrapped = aClass.unWrapPrimitiveType();
-            } catch (Throwable t) {
-                // If getter name differs in generated API, fall back to null -> not a Void
-                // wrapper
-            }
-            if (unwrapped instanceof Void) {
-                return true;
-            }
+        if (domainType instanceof Class aClass && aClass.unWrapPrimitiveType() instanceof Void) {
+            return true;
         }
 
         return false;
     }
 
+    @Override
     protected TypeReference getDomainVoidReference() {
         return TypesFactory.eINSTANCE.createVoid();
     }
 
     @Override
     protected Type getReferencedDomainType(TypeReference domainTypeReference) {
-        // Xtend used 'target' property; EMF getter is getTarget()
-        try {
-            return domainTypeReference.getTarget();
-        } catch (Throwable t) {
-            // fallback in case API differs
-            return null;
-        }
+        return domainTypeReference.getTarget();
     }
 
+    @Override
     protected TypeReference getDomainTypeReference(Type domainType) {
         assertTrue(domainType != null);
-        if (domainType instanceof PrimitiveType) {
-            // primitive types are used directly as type references in this operator
-            return (TypeReference) domainType;
-        } else if (domainType instanceof ConcreteClassifier) {
+        if (domainType instanceof PrimitiveType primitiveType) {
+            return primitiveType;
+        } else if (domainType instanceof ConcreteClassifier concreteClassifier) {
             // TODO If possible, use a regular ClassifierReference + import instead?
-            return JavaModificationUtil.createNamespaceClassifierReference((ConcreteClassifier) domainType);
+            return JavaModificationUtil.createNamespaceClassifierReference(concreteClassifier);
         } else {
             throw new IllegalStateException("Unhandled Java type: " + domainType.getClass().getName());
         }
@@ -125,24 +111,20 @@ public class JavaTypeReferenceOperator extends AbstractTypeReferenceOperator<Typ
             return toCommonPrimitiveType(primitiveType);
         } else if (domainType instanceof Class aClass) {
             // Check for wrapped primitive types:
-            Type javaPrimitiveType = null;
-            try {
-                javaPrimitiveType = aClass.unWrapPrimitiveType();
-            } catch (Throwable t) {
-                // ignore, treat as non-primitive wrapper
-            }
-            if (javaPrimitiveType != null && javaPrimitiveType instanceof PrimitiveType) {
-                return toCommonPrimitiveType((PrimitiveType) javaPrimitiveType);
+            PrimitiveType javaPrimitiveType = aClass.unWrapPrimitiveType();
+            if (javaPrimitiveType != null) {
+                return toCommonPrimitiveType(javaPrimitiveType);
             }
 
             // Check for String type:
-            if (aClass.getQualifiedName().equals(String.class.getName())) {
+            if (String.class.getName().equals(aClass.getQualifiedName())) {
                 return CommonPrimitiveType.STRING;
             }
         }
         return null;
     }
 
+    @Override
     protected TypeReference toPrimitiveDomainTypeReference(CommonPrimitiveType commonPrimitiveType) {
         assertTrue(commonPrimitiveType != null);
         switch (commonPrimitiveType) {
@@ -159,10 +141,5 @@ public class JavaTypeReferenceOperator extends AbstractTypeReferenceOperator<Typ
                 throw new IllegalArgumentException("Unsupported common primitive type: " + commonPrimitiveType.name());
         }
     }
-
-    @Override
-    protected TypeReference toDomainTypeReference(String intermediateTypeReference) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toDomainTypeReference'");
-    }
 }
+

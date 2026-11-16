@@ -46,7 +46,7 @@ public class JavaVisibilityConditionOperator extends AbstractSingleArgumentCondi
     public void enforce() {
         List<AnnotationInstanceOrModifier> modifiers = getLeftAnnotableAndModifiable().getAnnotationsAndModifiers();
         List<AnnotationInstanceOrModifier> newModifiers = setVisibility(modifiers, getRightVisibility());
-        if (modifiers != newModifiers) {
+        if (!modifiers.equals(newModifiers)) {
             modifiers.clear();
             modifiers.addAll(newModifiers);
         }

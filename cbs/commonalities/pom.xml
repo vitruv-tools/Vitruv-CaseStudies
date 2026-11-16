@@ -8,7 +8,7 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>tools.vitruv.applications.cbs</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>tools.vitruv.applications.cbs.commonalities</artifactId>
@@ -41,7 +41,6 @@
       <plugin>
         <groupId>org.eclipse.xtext</groupId>
         <artifactId>xtext-maven-plugin</artifactId>
-        <version>2.40.0</version>
         <configuration>
           <languages>
             <language>
@@ -60,17 +59,18 @@
                 </outputConfiguration>
               </outputConfigurations>
             </language>
-            <language>
-              <setup>org.eclipse.xtend.core.XtendStandaloneSetup</setup>
-              <outputConfigurations>
-                <outputConfiguration>
-                  <outputDirectory>${project.build.directory}/generated-sources/xtend</outputDirectory>
-                </outputConfiguration>
-              </outputConfigurations>
-            </language>
           </languages>
         </configuration>
         <dependencies>
+          <!-- Must come first: cbs.operators pulls in an older, differently signed copy via
+               sdq-commons, and the split org.eclipse.core.runtime package then fails with
+               "signer information does not match". Plugin dependencies are not managed by
+               dependencyManagement, so the version is repeated here (see the root pom). -->
+          <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.registry</artifactId>
+            <version>3.12.600</version>
+          </dependency>
           <dependency>
             <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.dsls.common</artifactId>
@@ -111,22 +111,7 @@
             <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
             <version>${project.version}</version>
           </dependency>
-          <dependency>
-            <groupId>org.eclipse.xtend</groupId>
-            <artifactId>org.eclipse.xtend.core</artifactId>
-            <version>${xtend.version}</version>
-          </dependency>
         </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.eclipse.xtext</groupId>
-        <artifactId>xtend-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>compile-xtend</id>
-            <phase />
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
@@ -214,11 +199,6 @@
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.equinox.common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.xtend</groupId>
-      <artifactId>org.eclipse.xtend.lib</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.xtext</groupId>

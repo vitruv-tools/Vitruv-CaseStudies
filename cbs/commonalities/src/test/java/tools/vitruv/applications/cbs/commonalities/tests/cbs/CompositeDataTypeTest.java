@@ -1,7 +1,9 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs;
 
-import java.util.ArrayList;
+import static tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.orderedPairs;
+
 import java.util.List;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -15,20 +17,18 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModel
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsProvider;
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider;
 
-import static tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.orderedPairs;
-
 public class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
     public static List<Object[]> testParameters() {
-        List<DomainModelsProvider<DomainModels>> domainModelsProviders = new ArrayList<>();
-        domainModelsProviders.add(new PcmTestModelsProvider<>(context -> new PcmCompositeDataTypeTestModels(context)));
-        domainModelsProviders.add(new UmlTestModelsProvider<>(context -> new UmlCompositeDataTypeTestModels(context)));
-        domainModelsProviders
-                .add(new JavaTestModelsProvider<>(context -> new JavaCompositeDataTypeTestModels(context)));
+        List<DomainModelsProvider<DomainModels>> domainModelsProviders = List.of(
+                new PcmTestModelsProvider<DomainModels>(PcmCompositeDataTypeTestModels::new),
+                new UmlTestModelsProvider<DomainModels>(UmlCompositeDataTypeTestModels::new),
+                new JavaTestModelsProvider<DomainModels>(JavaCompositeDataTypeTestModels::new));
         return orderedPairs(domainModelsProviders);
     }
 
     public interface DomainModels {
+
         String COMPOSITE_DATATYPE_1_NAME = "CompositeDataType1";
         String COMPOSITE_DATATYPE_2_NAME = "CompositeDataType2";
         String BOOLEAN_ELEMENT_NAME = "booleanElement";
@@ -38,14 +38,15 @@ public class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
         String COMPOSITE_ELEMENT_1_NAME = "compositeElement1";
         String COMPOSITE_ELEMENT_2_NAME = "compositeElement2";
 
+        // Empty CompositeDataType
+
         DomainModel emptyCompositeDataTypeCreation();
 
+        // Primitive inner elements
+
         DomainModel compositeDataTypeWithBooleanElementCreation();
-
         DomainModel compositeDataTypeWithIntegerElementCreation();
-
         DomainModel compositeDataTypeWithDoubleElementCreation();
-
         DomainModel compositeDataTypeWithStringElementCreation();
 
         /**
@@ -59,6 +60,8 @@ public class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
          * </ul>
          */
         DomainModel compositeDataTypeWithWithMultiplePrimitiveElementsCreation();
+
+        // Multiple CompositeDataTypes
 
         /**
          * Two composite data types, one with a <code>boolean</code> typed
@@ -74,28 +77,75 @@ public class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
         DomainModel compositeDataTypeWithCompositeElementsCreation();
     }
 
+    // Empty CompositeDataType
+
     @ParameterizedTest(name = "{0} to {1}")
     @MethodSource("testParameters")
-    public void emptyCompositeDataTypeCreation(
-            DomainModelsProvider<DomainModels> sourceModelsProvider,
+    public void emptyCompositeDataTypeCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
             DomainModelsProvider<DomainModels> targetModelsProvider) {
-        sourceModelsProvider.getModels(this.getVitruvApplicationTestAdapter()).emptyCompositeDataTypeCreation()
-                .createAndSynchronize();
-        targetModelsProvider.getModels(this.getVitruvApplicationTestAdapter()).emptyCompositeDataTypeCreation().check();
+        getModels(sourceModelsProvider).emptyCompositeDataTypeCreation().createAndSynchronize();
+        getModels(targetModelsProvider).emptyCompositeDataTypeCreation().check();
+    }
+
+    // Primitive inner elements
+
+    @ParameterizedTest(name = "{0} to {1}")
+    @MethodSource("testParameters")
+    public void compositeDataTypeWithBooleanElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+            DomainModelsProvider<DomainModels> targetModelsProvider) {
+        getModels(sourceModelsProvider).compositeDataTypeWithBooleanElementCreation().createAndSynchronize();
+        getModels(targetModelsProvider).compositeDataTypeWithBooleanElementCreation().check();
     }
 
     @ParameterizedTest(name = "{0} to {1}")
     @MethodSource("testParameters")
-    public void compositeDataTypeWithBooleanElementCreation(
-            DomainModelsProvider<DomainModels> sourceModelsProvider,
+    public void compositeDataTypeWithIntegerElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
             DomainModelsProvider<DomainModels> targetModelsProvider) {
-        sourceModelsProvider.getModels(this.getVitruvApplicationTestAdapter())
-                .compositeDataTypeWithBooleanElementCreation().createAndSynchronize();
-        targetModelsProvider.getModels(this.getVitruvApplicationTestAdapter())
-                .compositeDataTypeWithBooleanElementCreation().check();
+        getModels(sourceModelsProvider).compositeDataTypeWithIntegerElementCreation().createAndSynchronize();
+        getModels(targetModelsProvider).compositeDataTypeWithIntegerElementCreation().check();
     }
 
-    // ... remaining test methods follow the same pattern ...
+    @ParameterizedTest(name = "{0} to {1}")
+    @MethodSource("testParameters")
+    public void compositeDataTypeWithDoubleElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+            DomainModelsProvider<DomainModels> targetModelsProvider) {
+        getModels(sourceModelsProvider).compositeDataTypeWithDoubleElementCreation().createAndSynchronize();
+        getModels(targetModelsProvider).compositeDataTypeWithDoubleElementCreation().check();
+    }
+
+    @ParameterizedTest(name = "{0} to {1}")
+    @MethodSource("testParameters")
+    public void compositeDataTypeWithStringElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+            DomainModelsProvider<DomainModels> targetModelsProvider) {
+        getModels(sourceModelsProvider).compositeDataTypeWithStringElementCreation().createAndSynchronize();
+        getModels(targetModelsProvider).compositeDataTypeWithStringElementCreation().check();
+    }
+
+    @ParameterizedTest(name = "{0} to {1}")
+    @MethodSource("testParameters")
+    public void compositeDataTypeWithWithMultiplePrimitiveElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+            DomainModelsProvider<DomainModels> targetModelsProvider) {
+        getModels(sourceModelsProvider).compositeDataTypeWithWithMultiplePrimitiveElementsCreation().createAndSynchronize();
+        getModels(targetModelsProvider).compositeDataTypeWithWithMultiplePrimitiveElementsCreation().check();
+    }
+
+    // Multiple CompositeDataTypes
+
+    @ParameterizedTest(name = "{0} to {1}")
+    @MethodSource("testParameters")
+    public void multipleCompositeDataTypesWithPrimitiveElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+            DomainModelsProvider<DomainModels> targetModelsProvider) {
+        getModels(sourceModelsProvider).multipleCompositeDataTypesWithPrimitiveElementsCreation().createAndSynchronize();
+        getModels(targetModelsProvider).multipleCompositeDataTypesWithPrimitiveElementsCreation().check();
+    }
+
+    @ParameterizedTest(name = "{0} to {1}")
+    @MethodSource("testParameters")
+    public void compositeDataTypeWithCompositeElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+            DomainModelsProvider<DomainModels> targetModelsProvider) {
+        getModels(sourceModelsProvider).compositeDataTypeWithCompositeElementsCreation().createAndSynchronize();
+        getModels(targetModelsProvider).compositeDataTypeWithCompositeElementsCreation().check();
+    }
 
     // TODO renaming
 }
