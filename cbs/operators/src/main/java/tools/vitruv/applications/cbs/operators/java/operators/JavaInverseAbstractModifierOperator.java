@@ -14,7 +14,7 @@ import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState;
  * Similar to {@link JavaAbstractModifierOperator}, but inverts the value of
  * the boolean modifier flag.
  */
-@AttributeMappingOperator(name = "javaInverseAbstractModifier", commonalityAttributeType = @AttributeType(multiValued = false, type = Boolean.class), participationAttributeType = @AttributeType(multiValued = true, type = AnnotationInstanceOrModifier.class))
+@AttributeMappingOperator(name = "javaInverseAbstractModifier", commonalityAttributeType = @AttributeType(multiValued = false, type = boolean.class), participationAttributeType = @AttributeType(multiValued = true, type = AnnotationInstanceOrModifier.class))
 public class JavaInverseAbstractModifierOperator extends JavaAbstractModifierOperator {
 
     /**

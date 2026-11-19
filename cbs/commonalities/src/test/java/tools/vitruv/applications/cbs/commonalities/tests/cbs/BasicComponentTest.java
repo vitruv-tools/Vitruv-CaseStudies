@@ -1,7 +1,9 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs;
 
-import java.util.Arrays;
+import static tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.orderedPairs;
+
 import java.util.List;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -14,20 +16,19 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvid
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider;
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsProvider;
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider;
-import static tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.orderedPairs;
 
 public class BasicComponentTest extends CBSCommonalitiesExecutionTest {
 
     public static List<Object[]> testParameters() {
-        List<DomainModelsProvider<DomainModels>> domainModelsProviders = Arrays
-                .<DomainModelsProvider<DomainModels>>asList(
-                        new PcmTestModelsProvider<DomainModels>(context -> new PcmBasicComponentTestModels(context)),
-                        new UmlTestModelsProvider<DomainModels>(context -> new UmlBasicComponentTestModels(context)),
-                        new JavaTestModelsProvider<DomainModels>(context -> new JavaBasicComponentTestModels(context)));
+        List<DomainModelsProvider<DomainModels>> domainModelsProviders = List.of(
+                new PcmTestModelsProvider<DomainModels>(PcmBasicComponentTestModels::new),
+                new UmlTestModelsProvider<DomainModels>(UmlBasicComponentTestModels::new),
+                new JavaTestModelsProvider<DomainModels>(JavaBasicComponentTestModels::new));
         return orderedPairs(domainModelsProviders);
     }
 
     public interface DomainModels {
+
         String COMPONENT_NAME = "SomeBasicComponent";
 
         DomainModel emptyBasicComponentCreation();
@@ -35,12 +36,10 @@ public class BasicComponentTest extends CBSCommonalitiesExecutionTest {
 
     @ParameterizedTest(name = "{0} to {1}")
     @MethodSource("testParameters")
-    public void emptyBasicComponentCreation(
-            DomainModelsProvider<DomainModels> sourceModelsProvider,
+    public void emptyBasicComponentCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
             DomainModelsProvider<DomainModels> targetModelsProvider) {
-        sourceModelsProvider.getModels(this.getVitruvApplicationTestAdapter()).emptyBasicComponentCreation()
-                .createAndSynchronize();
-        targetModelsProvider.getModels(this.getVitruvApplicationTestAdapter()).emptyBasicComponentCreation().check();
+        getModels(sourceModelsProvider).emptyBasicComponentCreation().createAndSynchronize();
+        getModels(targetModelsProvider).emptyBasicComponentCreation().check();
     }
 
     // TODO component renaming

@@ -12,7 +12,7 @@ import tools.vitruv.dsls.reactions.runtime.state.ReactionExecutionState;
  * Converts between two boolean attributes, with one being the inverse of the
  * other.
  */
-@AttributeMappingOperator(name = "inverse", commonalityAttributeType = @AttributeType(multiValued = false, type = Boolean.class), participationAttributeType = @AttributeType(multiValued = false, type = Boolean.class))
+@AttributeMappingOperator(name = "inverse", commonalityAttributeType = @AttributeType(multiValued = false, type = boolean.class), participationAttributeType = @AttributeType(multiValued = false, type = boolean.class))
 public class InverseOperator extends AbstractAttributeMappingOperator<Boolean, Boolean> {
 
     private static final Logger logger = Logger.getLogger(InverseOperator.class);

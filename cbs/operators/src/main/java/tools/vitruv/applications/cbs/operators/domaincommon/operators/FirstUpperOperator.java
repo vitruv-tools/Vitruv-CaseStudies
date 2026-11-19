@@ -1,7 +1,6 @@
 package tools.vitruv.applications.cbs.operators.domaincommon.operators;
 
 import org.apache.log4j.Logger;
-import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AbstractAttributeMappingOperator;
 import tools.vitruv.dsls.commonalities.runtime.operators.mapping.attribute.AttributeMappingOperator;
@@ -29,7 +28,7 @@ public class FirstUpperOperator extends AbstractAttributeMappingOperator<String,
 
     @Override
     public String applyTowardsCommonality(String string) {
-        String firstUpper = StringExtensions.toFirstUpper(string);
+        String firstUpper = toFirstUpper(string);
         logger.debug(String.format("Mapping string '%s' to firstUpper '%s'.",
                 string, firstUpper));
         return firstUpper;
@@ -37,9 +36,24 @@ public class FirstUpperOperator extends AbstractAttributeMappingOperator<String,
 
     @Override
     public String applyTowardsParticipation(String string) {
-        String firstLower = StringExtensions.toFirstLower(string);
+        String firstLower = toFirstLower(string);
         logger.debug(String.format("Mapping string '%s' to firstLower '%s'.",
                 string, firstLower));
         return firstLower;
+    }
+
+    // Like Xtend's StringExtensions: null and empty strings are returned unchanged.
+    private static String toFirstUpper(String string) {
+        if (string == null || string.isEmpty()) {
+            return string;
+        }
+        return Character.toUpperCase(string.charAt(0)) + string.substring(1);
+    }
+
+    private static String toFirstLower(String string) {
+        if (string == null || string.isEmpty()) {
+            return string;
+        }
+        return Character.toLowerCase(string.charAt(0)) + string.substring(1);
     }
 }

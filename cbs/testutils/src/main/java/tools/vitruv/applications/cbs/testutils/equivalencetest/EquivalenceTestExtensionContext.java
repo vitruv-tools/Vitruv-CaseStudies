@@ -1,41 +1,46 @@
 package tools.vitruv.applications.cbs.testutils.equivalencetest;
 
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExecutableInvoker;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
-import org.junit.jupiter.api.extension.ExtensionContextException;
-import org.junit.jupiter.api.extension.ExtensionContext.Store;
-import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
-import org.junit.jupiter.api.extension.MediaType;
-import org.junit.jupiter.api.extension.TestInstances;
-import org.junit.jupiter.api.function.ThrowingConsumer;
-import org.junit.jupiter.api.parallel.ExecutionMode;
-import org.junit.platform.engine.support.hierarchical.ThrowableCollector;
-import org.opentest4j.TestAbortedException;
-import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor;
-
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-public class EquivalenceTestExtensionContext implements ExtensionContext {
-    private String name;
-    private int executionIndex;
-    private ExtensionContext parentContext;
-    private MetamodelDescriptor testMetamodel;
-    private Optional<Throwable> executionException = Optional.empty();
-    private Map<Namespace, NamespaceStore> namespaceStores = new HashMap<>();
+import org.junit.jupiter.api.MediaType;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExecutableInvoker;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ExtensionContextException;
+import org.junit.jupiter.api.extension.TestInstances;
+import org.junit.jupiter.api.function.ThrowingConsumer;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.platform.engine.support.hierarchical.ThrowableCollector;
+import org.opentest4j.TestAbortedException;
 
-    public EquivalenceTestExtensionContext(String name, int executionIndex, ExtensionContext parentContext) {
+import tools.vitruv.applications.cbs.testutils.MetamodelDescriptor;
+
+/**
+ * The {@link ExtensionContext} of a single dynamic equivalence test. Delegates everything but the display name, the
+ * unique ID, the tags and the stores to the context of the test factory method.
+ */
+class EquivalenceTestExtensionContext implements ExtensionContext {
+    private final String name;
+    private final int executionIndex;
+    private final ExtensionContext parentContext;
+    private final MetamodelDescriptor testMetamodel;
+    private Optional<Throwable> executionException = Optional.empty();
+    private final Map<Namespace, NamespaceStore> namespaceStores = new HashMap<>();
+
+    EquivalenceTestExtensionContext(String name, int executionIndex, ExtensionContext parentContext) {
         this(name, executionIndex, parentContext, null);
     }
 
-    public EquivalenceTestExtensionContext(String name, int executionIndex, ExtensionContext parentContext,
+    EquivalenceTestExtensionContext(String name, int executionIndex, ExtensionContext parentContext,
             MetamodelDescriptor testMetamodel) {
         this.name = name;
         this.executionIndex = executionIndex;
@@ -59,8 +64,13 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
     }
 
     @Override
-    public Optional<java.lang.reflect.AnnotatedElement> getElement() {
+    public Optional<AnnotatedElement> getElement() {
         return parentContext.getElement();
+    }
+
+    @Override
+    public ExecutionMode getExecutionMode() {
+        return parentContext.getExecutionMode();
     }
 
     @Override
@@ -75,12 +85,14 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
 
     @Override
     public Store getStore(Namespace namespace) {
-        return namespaceStores.computeIfAbsent(namespace, ns -> new NamespaceStore());
+        return namespaceStores.computeIfAbsent(namespace, ignored -> new NamespaceStore());
     }
 
+    /**
+     * Store scopes did not exist when this context was written. All scopes share the stores of this context.
+     */
     @Override
     public Store getStore(StoreScope scope, Namespace namespace) {
-        // For simplicity, ignore scope and delegate to the existing getStore(Namespace)
         return getStore(namespace);
     }
 
@@ -88,11 +100,10 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
     public Set<String> getTags() {
         if (testMetamodel == null) {
             return parentContext.getTags();
-        } else {
-            Set<String> tags = parentContext.getTags();
-            tags.add(testMetamodel.name);
-            return tags;
         }
+        Set<String> tags = new LinkedHashSet<>(parentContext.getTags());
+        tags.add(testMetamodel.getName());
+        return tags;
     }
 
     @Override
@@ -116,7 +127,7 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
     }
 
     @Override
-    public Optional<java.lang.reflect.Method> getTestMethod() {
+    public Optional<Method> getTestMethod() {
         return parentContext.getTestMethod();
     }
 
@@ -131,9 +142,18 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
     }
 
     @Override
+    public Optional<Throwable> getExecutionException() {
+        return executionException;
+    }
+
+    void setExecutionException(Optional<Throwable> executionException) {
+        this.executionException = executionException;
+    }
+
+    @Override
     public void publishReportEntry(Map<String, String> map) {
         throw new UnsupportedOperationException(
-                "Reporting is not supported for " + this.getClass().getSimpleName() + "!");
+                "Reporting is not supported for " + getClass().getSimpleName() + "!");
     }
 
     @Override
@@ -147,24 +167,18 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
     }
 
     @Override
-    public Optional<Throwable> getExecutionException() {
-        return executionException;
-    }
-
-    @Override
-    public ExecutionMode getExecutionMode() {
-        // Delegate to parent or return a default
-        return parentContext.getExecutionMode();
+    public List<Class<?>> getEnclosingTestClasses() {
+        throw new UnsupportedOperationException();
     }
 
     void close() {
-        ThrowableCollector throwableCollector = new ThrowableCollector(t -> t instanceof TestAbortedException);
+        ThrowableCollector throwableCollector = new ThrowableCollector(TestAbortedException.class::isInstance);
         // make a snapshot before iterating in case some concurrent modification happens
-        namespaceStores.values().stream().toList().forEach(store -> store.close(throwableCollector));
+        List.copyOf(namespaceStores.values()).forEach(store -> store.close(throwableCollector));
         throwableCollector.assertEmpty();
     }
 
-    private static class NamespaceStore implements ExtensionContext.Store {
+    private static class NamespaceStore implements Store {
         private final Map<Object, Object> values = new HashMap<>();
 
         @Override
@@ -178,28 +192,26 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
-        public <K, V> V getOrComputeIfAbsent(K key,
-                java.util.function.Function<? super K, ? extends V> defaultCreator) {
-            return (V) ((Map<K, Object>) values).computeIfAbsent(key, defaultCreator);
+        public <K, V> Object getOrComputeIfAbsent(K key, Function<? super K, ? extends V> defaultCreator) {
+            return computeIfAbsent(key, defaultCreator);
         }
 
         @Override
-        public <K, V> V getOrComputeIfAbsent(K key, java.util.function.Function<? super K, ? extends V> defaultCreator,
+        public <K, V> V getOrComputeIfAbsent(K key, Function<? super K, ? extends V> defaultCreator,
                 Class<V> requiredType) {
-            return checkResultType(key, getOrComputeIfAbsent(key, defaultCreator), requiredType);
+            return computeIfAbsent(key, defaultCreator, requiredType);
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public <K, V> V computeIfAbsent(K key, java.util.function.Function<? super K, ? extends V> mappingFunction) {
-            return (V) ((Map<K, Object>) values).computeIfAbsent(key, mappingFunction);
+        public <K, V> Object computeIfAbsent(K key, Function<? super K, ? extends V> defaultCreator) {
+            return values.computeIfAbsent(key, ignored -> defaultCreator.apply((K) key));
         }
 
         @Override
-        public <K, V> V computeIfAbsent(K key, java.util.function.Function<? super K, ? extends V> mappingFunction,
+        public <K, V> V computeIfAbsent(K key, Function<? super K, ? extends V> defaultCreator,
                 Class<V> requiredType) {
-            return checkResultType(key, computeIfAbsent(key, mappingFunction), requiredType);
+            return checkResultType(key, computeIfAbsent(key, defaultCreator), requiredType);
         }
 
         @Override
@@ -217,9 +229,10 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
             return checkResultType(key, remove(key), requiredType);
         }
 
-        private <V> V checkResultType(Object key, Object value, Class<V> requiredType) {
-            if (value == null)
+        private static <V> V checkResultType(Object key, Object value, Class<V> requiredType) {
+            if (value == null) {
                 return null;
+            }
             if (!requiredType.isInstance(value)) {
                 throw new ExtensionContextException(
                         "Object stored under key [" + key + "] is not of required type [" + requiredType + "]");
@@ -227,6 +240,7 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
             return requiredType.cast(value);
         }
 
+        @SuppressWarnings("deprecation") // CloseableResource is what the original closed; AutoCloseable came later
         private void close(ThrowableCollector throwableCollector) {
             // make a snapshot before iterating in case some concurrent modification happens
             values.values().stream()
@@ -235,15 +249,5 @@ public class EquivalenceTestExtensionContext implements ExtensionContext {
                     .toList()
                     .forEach(resource -> throwableCollector.execute(resource::close));
         }
-    }
-
-    @Override
-    public List<Class<?>> getEnclosingTestClasses() {
-        throw new UnsupportedOperationException("Unimplemented method 'getEnclosingTestClasses'");
-    }
-
-    @Override
-    public void publishFile(String arg0, org.junit.jupiter.api.MediaType arg1, ThrowingConsumer<Path> arg2) {
-        throw new UnsupportedOperationException("Unimplemented method 'publishFile'");
     }
 }
