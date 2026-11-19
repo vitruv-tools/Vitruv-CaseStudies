@@ -6,32 +6,7 @@ target/
 *.log
 .mvn/wrapper/*.jar
 
-# Eclipse/Java
+# Eclipse
 META-INF
 build.properties
 plugin.properties
-.metadata
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*.class
-*.classpath
-*.project
-.settings/
-
-# Genenerated Files
-src-gen/
-
-# Xtend
-xtend-gen/
-*._trace
-*.xtendbin
-
-
-# Custom
-EvaluationData
-*.DS_Store
-*.polyglot
-*.pom.tycho

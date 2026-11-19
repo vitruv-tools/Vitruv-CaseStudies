@@ -53,6 +53,7 @@
     <vitruv-change.version>4.0.2</vitruv-change.version>
     <vitruv-dsls.version>4.0.2</vitruv-dsls.version>
     <vitruv.version>4.0.2</vitruv.version>
+    <vitruv-server.version>4.0.2</vitruv-server.version>
     <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
