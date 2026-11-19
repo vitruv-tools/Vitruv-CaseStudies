@@ -30,6 +30,7 @@
     <module>c4cbse2joana</module>
     <module>pcmumlclass</module>
     <module>simulinkautosar</module>
+    <module>smarthomeuml</module>
     <module>testutility</module>
     <module>testutility.integration</module>
     <module>transitivechange</module>
@@ -58,7 +59,7 @@
     <maven.compiler.target>21</maven.compiler.target>
     <xtend.version>2.44.0</xtend.version>
     <!-- also used for build plugin dependencies, which are not covered by dependencyManagement -->
-    <demo-metamodels.version>2.0.0</demo-metamodels.version>
+    <demo-metamodels.version>2.0.1</demo-metamodels.version>
     <!-- p2 updatesite versions -->
     <repo.sdq-commons.version>2.2.0</repo.sdq-commons.version>
     <repo.xannotations.version>1.6.0</repo.xannotations.version>
@@ -252,6 +253,11 @@
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.smarthome</artifactId>
         <version>${demo-metamodels.version}</version>
       </dependency>
 
