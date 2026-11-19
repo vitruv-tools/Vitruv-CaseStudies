@@ -17,7 +17,6 @@
   <description>The insurance families demo case study</description>
 
   <properties>
-    <vitruv.version>4.0.0</vitruv.version>
     <wrapper.version>3.1.2</wrapper.version>
   </properties>
 
@@ -69,22 +68,27 @@
           <dependency>
             <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.dsls.common</artifactId>
-            <version>${vitruv.version}</version>
+            <version>${vitruv-dsls.version}</version>
           </dependency>
           <dependency>
             <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.dsls.reactions.language</artifactId>
-            <version>${vitruv.version}</version>
+            <version>${vitruv-dsls.version}</version>
           </dependency>
           <dependency>
             <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.dsls.reactions.runtime</artifactId>
-            <version>${vitruv.version}</version>
+            <version>${vitruv-dsls.version}</version>
           </dependency>
           <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
-            <version>${project.version}</version>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+            <version>${demo-metamodels.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+            <version>${demo-metamodels.version}</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -106,7 +110,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>tools.vitruv.dsls.reactions.runtime</artifactId>
-      <version>${vitruv.version}</version>
+      <version>${vitruv-dsls.version}</version>
     </dependency>
     <!-- Vitruvius compile dependencies -->
     <dependency>
@@ -182,12 +186,17 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- p2 dependencies -->
+    <!-- demo metamodels -->
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>tools.vitruv.applications.p2-wrapper</artifactId>
-      <version>${project.version}</version>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
     </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+    </dependency>
+
+    <!-- p2 dependencies -->
     <dependency>
       <groupId>sdq-commons</groupId>
       <artifactId>edu.kit.ipd.sdq.commons.util.java</artifactId>
@@ -197,7 +206,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>tools.vitruv.dsls.p2wrappers.activextendannotations</artifactId>
-      <version>${vitruv.version}</version>
+      <version>${vitruv-dsls.version}</version>
     </dependency>
   </dependencies>
 </project>
