@@ -41,6 +41,7 @@ public class PcmTypeReferenceOperator extends AbstractTypeReferenceOperator<EObj
         return domainTypeReference;
     }
 
+    @Override
     protected EObject getDomainTypeReference(EObject domainType) {
         // PCM does not use a separate type to represent type references:
         return domainType;
@@ -83,6 +84,7 @@ public class PcmTypeReferenceOperator extends AbstractTypeReferenceOperator<EObj
         return null;
     }
 
+    @Override
     protected EObject toPrimitiveDomainTypeReference(CommonPrimitiveType commonPrimitiveType) {
         assertTrue(commonPrimitiveType != null);
         switch (commonPrimitiveType) {
@@ -99,10 +101,5 @@ public class PcmTypeReferenceOperator extends AbstractTypeReferenceOperator<EObj
                         commonPrimitiveType.name());
         }
     }
-
-    @Override
-    protected EObject toDomainTypeReference(String intermediateTypeReference) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toDomainTypeReference'");
-    }
 }
+

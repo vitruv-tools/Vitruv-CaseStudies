@@ -28,6 +28,7 @@ public class UmlTypeReferenceOperator extends AbstractTypeReferenceOperator<Type
         return domainTypeReference;
     }
 
+    @Override
     protected Type getDomainTypeReference(Type domainType) {
         // UML does not use a separate type to represent type references:
         return domainType;
@@ -41,13 +42,13 @@ public class UmlTypeReferenceOperator extends AbstractTypeReferenceOperator<Type
     private CommonPrimitiveType toCommonPrimitiveType(PrimitiveType primitiveType) {
         assertTrue(primitiveType != null);
         String name = primitiveType.getName();
-        if (name.equals(UmlPrimitiveType.BOOLEAN.getUmlTypeName())) {
+        if (UmlPrimitiveType.BOOLEAN.getUmlTypeName().equals(name)) {
             return CommonPrimitiveType.BOOLEAN;
-        } else if (name.equals(UmlPrimitiveType.INTEGER.getUmlTypeName())) {
+        } else if (UmlPrimitiveType.INTEGER.getUmlTypeName().equals(name)) {
             return CommonPrimitiveType.INTEGER;
-        } else if (name.equals(UmlPrimitiveType.REAL.getUmlTypeName())) {
+        } else if (UmlPrimitiveType.REAL.getUmlTypeName().equals(name)) {
             return CommonPrimitiveType.DOUBLE;
-        } else if (name.equals(UmlPrimitiveType.STRING.getUmlTypeName())) {
+        } else if (UmlPrimitiveType.STRING.getUmlTypeName().equals(name)) {
             return CommonPrimitiveType.STRING;
         } else {
             throw new IllegalArgumentException("Unsupported UML primitive type: " + name);
@@ -63,6 +64,7 @@ public class UmlTypeReferenceOperator extends AbstractTypeReferenceOperator<Type
         return null;
     }
 
+    @Override
     protected Type toPrimitiveDomainTypeReference(CommonPrimitiveType commonPrimitiveType) {
         assertTrue(commonPrimitiveType != null);
         switch (commonPrimitiveType) {
@@ -82,10 +84,5 @@ public class UmlTypeReferenceOperator extends AbstractTypeReferenceOperator<Type
                 throw new IllegalArgumentException("Unsupported common primitive type: " + commonPrimitiveType.name());
         }
     }
-
-    @Override
-    protected Type toDomainTypeReference(String intermediateTypeReference) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toDomainTypeReference'");
-    }
 }
+

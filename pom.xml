@@ -23,7 +23,7 @@
   <!-- Build Specification -->
   <modules>
     <module>util.temporary</module>
-    <!-- <module>cbs</module> -->
+    <module>cbs</module>
     <module>demo</module>
     <module>umljava</module>
     <module>pcmjava</module>
@@ -51,9 +51,9 @@
   <!-- Dependency Management -->
   <properties>
     <!-- Vitruvius repositories are released independently -->
-    <vitruv-change.version>4.0.1</vitruv-change.version>
-    <vitruv-dsls.version>4.0.1</vitruv-dsls.version>
-    <vitruv.version>4.0.1</vitruv.version>
+    <vitruv-change.version>4.0.2</vitruv-change.version>
+    <vitruv-dsls.version>4.0.2</vitruv-dsls.version>
+    <vitruv.version>4.0.2</vitruv.version>
     <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
@@ -61,11 +61,10 @@
     <!-- also used for build plugin dependencies, which are not covered by dependencyManagement -->
     <demo-metamodels.version>2.0.1</demo-metamodels.version>
     <!-- p2 updatesite versions -->
-    <repo.sdq-demo-metamodels.version>1.10.0</repo.sdq-demo-metamodels.version>
     <repo.sdq-commons.version>2.2.0</repo.sdq-commons.version>
     <repo.xannotations.version>1.6.0</repo.xannotations.version>
     <repo.emftext-jamopp.version>latest</repo.emftext-jamopp.version> <!-- should be 1.0.0 -->
-    <repo.palladio.version>5.0.0</repo.palladio.version>
+    <repo.palladio.version>5.1.0</repo.palladio.version>
     <repo.eclipse.version>2023-03</repo.eclipse.version>
   </properties>
 
@@ -89,12 +88,6 @@
       </releases>
     </repository>
 
-    <repository>
-      <id>sdq-demo-metamodels</id>
-      <name>SDQ Demo Metamodels</name>
-      <url>https://kit-sdq.github.io/updatesite/release/metamodels/demo/${repo.sdq-demo-metamodels.version}</url>
-      <layout>p2</layout>
-    </repository>
     <repository>
       <id>sdq-commons</id>
       <name>SDQ Commons</name>
@@ -226,6 +219,48 @@
         <version>${vitruv.version}</version>
       </dependency>
 
+      <!-- demo metamodels -->
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.autosar</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.confidentiality4cbse</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.joana</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.vitruv</groupId>
+        <artifactId>edu.kit.ipd.sdq.metamodels.smarthome</artifactId>
+        <version>${demo-metamodels.version}</version>
+      </dependency>
+
       <!-- external dependencies -->
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -346,49 +381,7 @@
         <version>20260814</version>
       </dependency>
 
-      <!-- demo metamodels -->
-      <dependency>
-        <groupId>tools.vitruv</groupId>
-        <artifactId>edu.kit.ipd.sdq.metamodels.smarthome</artifactId>
-        <version>${demo-metamodels.version}</version>
-      </dependency>
-
       <!-- p2 dependencies -->
-      <dependency>
-        <groupId>sdq-demo-metamodels</groupId>
-        <artifactId>edu.kit.ipd.sdq.metamodels.autosar</artifactId>
-        <version>[1.10.0,1.11.0)</version>
-      </dependency>
-      <dependency>
-        <groupId>sdq-demo-metamodels</groupId>
-        <artifactId>edu.kit.ipd.sdq.metamodels.confidentiality4cbse</artifactId>
-        <version>[1.10.0,1.11.0)</version>
-      </dependency>
-      <dependency>
-        <groupId>sdq-demo-metamodels</groupId>
-        <artifactId>edu.kit.ipd.sdq.metamodels.families</artifactId>
-        <version>[1.10.0,1.11.0)</version>
-      </dependency>
-      <dependency>
-        <groupId>sdq-demo-metamodels</groupId>
-        <artifactId>edu.kit.ipd.sdq.metamodels.insurance</artifactId>
-        <version>[1.10.0,1.11.0)</version>
-      </dependency>
-      <dependency>
-        <groupId>sdq-demo-metamodels</groupId>
-        <artifactId>edu.kit.ipd.sdq.metamodels.joana</artifactId>
-        <version>[1.10.0,1.11.0)</version>
-      </dependency>
-      <dependency>
-        <groupId>sdq-demo-metamodels</groupId>
-        <artifactId>edu.kit.ipd.sdq.metamodels.persons</artifactId>
-        <version>[1.10.0,1.11.0)</version>
-      </dependency>
-      <dependency>
-        <groupId>sdq-demo-metamodels</groupId>
-        <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
-        <version>[1.10.0,1.11.0)</version>
-      </dependency>
       <dependency>
         <groupId>sdq-commons</groupId>
         <artifactId>edu.kit.ipd.sdq.commons.util.emf</artifactId>
@@ -432,12 +425,12 @@
       <dependency>
         <groupId>palladio</groupId>
         <artifactId>org.palladiosimulator.pcm</artifactId>
-        <version>5.0.0.202102051710</version>
+        <version>5.1.0.202201251356</version>
       </dependency>
       <dependency>
         <groupId>palladio</groupId>
         <artifactId>org.palladiosimulator.pcm.resources</artifactId>
-        <version>5.0.0.202102051710</version>
+        <version>5.1.0.202201251356</version>
       </dependency>
       <dependency>
         <groupId>eclipse</groupId>

@@ -1,9 +1,11 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.List;
+
 import org.eclipse.emf.ecore.resource.Resource;
 import org.palladiosimulator.pcm.repository.Repository;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.MediaStoreTest;
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel;
@@ -12,9 +14,9 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsB
 
 public class PcmMediaStoreTestModels extends PcmTestModelsBase implements MediaStoreTest.DomainModels {
 
-    // private static final String PCM_MEDIA_STORE_REPOSITORY_PATH =
-    // "src/test/resources/model/pcm/MediaStore.repository";
-    private static final String PCM_MEDIA_STORE_REPOSITORY_PATH = "src/test/resources/model/pcm/MediaStore_NoSEFF.repository";
+    // private static final String PCM_MEDIA_STORE_REPOSITORY_PATH = "src/test/resources/model/pcm/MediaStore.repository";
+    private static final String PCM_MEDIA_STORE_REPOSITORY_PATH =
+            "src/test/resources/model/pcm/MediaStore_NoSEFF.repository";
 
     public PcmMediaStoreTestModels(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
         super(vitruvApplicationTestAdapter);
@@ -23,14 +25,11 @@ public class PcmMediaStoreTestModels extends PcmTestModelsBase implements MediaS
     @Override
     public DomainModel mediaStoreCreation() {
         return newModel(() -> {
-            // Load media store repository from test resource
-            Resource pcmMediaStoreResource = this.vitruvApplicationTestAdapter
+            Resource pcmMediaStoreResource = vitruvApplicationTestAdapter
                     .getTestResource(PCM_MEDIA_STORE_REPOSITORY_PATH);
-            Repository pcmMediaStoreRepository = (Repository) pcmMediaStoreResource.getContents().get(0);
-
-            // Verify repository was loaded
+            Repository pcmMediaStoreRepository = pcmMediaStoreResource.getContents().isEmpty() ? null
+                    : (Repository) pcmMediaStoreResource.getContents().get(0);
             assertNotNull(pcmMediaStoreRepository, "Could not find PCM MediaStore repository!");
-
             return List.of(pcmMediaStoreRepository);
         });
     }

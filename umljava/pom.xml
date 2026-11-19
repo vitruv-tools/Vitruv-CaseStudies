@@ -198,11 +198,11 @@
 
     <!-- p2 dependencies -->
     <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
+      <groupId>tools.vitruv</groupId>
       <artifactId>edu.kit.ipd.sdq.metamodels.autosar</artifactId>
     </dependency>
     <dependency>
-      <groupId>sdq-demo-metamodels</groupId>
+      <groupId>tools.vitruv</groupId>
       <artifactId>edu.kit.ipd.sdq.metamodels.simulink</artifactId>
     </dependency>
     <dependency>
