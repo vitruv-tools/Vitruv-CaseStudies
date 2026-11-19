@@ -75,7 +75,7 @@ public class FamiliesPersonsVsumWrapper {
 		viewTypes.put(DemoUtility.PERSONS_VIEW_TYPE_NAME, ViewTypeFactory.createIdentityMappingViewType(DemoUtility.PERSONS_VIEW_TYPE_NAME));
 	}
 	
-	private void buildInternalVirtualModel(Path storage) {
+	private void buildInternalVirtualModel(Path storage) throws IOException {
 		this.vsum = new VirtualModelBuilder()
 			.withChangePropagationSpecification(new FamiliesToPersonsChangePropagationSpecification())
 			.withChangePropagationSpecification(new PersonsToFamiliesChangePropagationSpecification())
